@@ -24,5 +24,9 @@ This repository begins from the consolidated product and operational plan suppli
 - [Decision log](docs/decisions.md)
 - [Change log](docs/change-log.md)
 - [Backlog](docs/backlog.md)
+- [Implementation plan](docs/build-plan.md)
+- [Current implementation checkpoint](docs/implementation-status.md)
 
 Regenerate the readable artifacts with the bundled Python runtime by running `tools/build_bop_artifacts.py --outdir artifacts` from the repository root.
+
+Validate the restart/status ledger with `node tools/verify-implementation-status.mjs`.

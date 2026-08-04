@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "updated": "2026-08-04",
+  "branch": "codex/implementation-foundation",
+  "baselineCommit": "da70e30",
+  "authority": "digistaybook_WIP_v3.md",
+  "currentMilestone": "A - executable foundation",
+  "statusDefinitions": [
+    "not_started",
+    "started",
+    "in_progress",
+    "verified",
+    "blocked",
+    "deferred"
+  ],
+  "workstreams": [
+    {
+      "id": "WS-00",
+      "name": "Delivery control",
+      "status": "in_progress",
+      "bopRefs": ["DSB-BOP-P1-001"],
+      "tasks": [
+        {
+          "id": "IMP-0001",
+          "title": "Create persistent implementation plan and status authority",
+          "status": "verified",
+          "evidence": ["docs/build-plan.md", "docs/implementation-status.json", "docs/implementation-status.md"],
+          "verification": "node tools/verify-implementation-status.mjs"
+        },
+        {
+          "id": "IMP-0002",
+          "title": "Validate BOP references, evidence paths and restart metadata",
+          "status": "started",
+          "evidence": ["tools/verify-implementation-status.mjs"],
+          "verification": "node tools/verify-implementation-status.mjs"
+        }
+      ]
+    },
+    {
+      "id": "WS-10",
+      "name": "Platform foundation",
+      "status": "started",
+      "bopRefs": ["DSB-BOP-P2-001", "DSB-BOP-P3-003", "DSB-BOP-P6-003", "DSB-BOP-P6-004", "DSB-BOP-P6-005"],
+      "tasks": [
+        {
+          "id": "IMP-1001",
+          "title": "Scaffold web application, Firebase boundaries and local verification",
+          "status": "started",
+          "evidence": ["docs/build-plan.md"],
+          "verification": "npm run check"
+        }
+      ]
+    },
+    {
+      "id": "WS-20",
+      "name": "Guest experience",
+      "status": "started",
+      "bopRefs": ["DSB-BOP-P2-003", "DSB-BOP-P2-004", "DSB-BOP-P2-005", "DSB-BOP-P6-009"],
+      "tasks": [
+        {
+          "id": "IMP-2001",
+          "title": "Create public Guest Wall and consent-aware contribution slice",
+          "status": "started",
+          "evidence": ["docs/build-plan.md"],
+          "verification": "npm run check"
+        }
+      ]
+    },
+    {
+      "id": "WS-30",
+      "name": "Host experience",
+      "status": "started",
+      "bopRefs": ["DSB-BOP-P2-001", "DSB-BOP-P2-002", "DSB-BOP-P6-004", "DSB-BOP-P6-005"],
+      "tasks": [
+        {
+          "id": "IMP-3001",
+          "title": "Create Host shell, property setup and sandbox/live contracts",
+          "status": "started",
+          "evidence": ["docs/build-plan.md"],
+          "verification": "npm run check"
+        }
+      ]
+    },
+    {
+      "id": "WS-40",
+      "name": "Trust and safety",
+      "status": "started",
+      "bopRefs": ["DSB-BOP-P2-005", "DSB-BOP-P4-005", "DSB-BOP-P9-002"],
+      "tasks": [
+        {
+          "id": "IMP-4001",
+          "title": "Implement reporting state-machine contract and threshold tests",
+          "status": "started",
+          "evidence": ["docs/build-plan.md"],
+          "verification": "npm run check"
+        }
+      ]
+    },
+    {
+      "id": "WS-50",
+      "name": "Commercial and communications",
+      "status": "started",
+      "bopRefs": ["DSB-BOP-P3-004", "DSB-BOP-P4-001", "DSB-BOP-P4-002", "DSB-BOP-P4-003", "DSB-BOP-P4-004", "DSB-BOP-P9-001", "DSB-BOP-P9-006"],
+      "tasks": [
+        {
+          "id": "IMP-5001",
+          "title": "Implement billing, email classification, consent and suppression contracts",
+          "status": "started",
+          "evidence": ["docs/build-plan.md"],
+          "verification": "npm run check"
+        }
+      ]
+    },
+    {
+      "id": "WS-60",
+      "name": "Privacy and retention",
+      "status": "started",
+      "bopRefs": ["DSB-BOP-P6-008", "DSB-BOP-P8-001", "DSB-BOP-P8-003", "DSB-BOP-P8-005", "DSB-BOP-P8-009", "DSB-BOP-P8-010"],
+      "tasks": [
+        {
+          "id": "IMP-6001",
+          "title": "Implement Privacy and Safety route plus retention/deletion contracts",
+          "status": "started",
+          "evidence": ["docs/build-plan.md"],
+          "verification": "npm run check"
+        }
+      ]
+    },
+    {
+      "id": "WS-70",
+      "name": "Quality and release",
+      "status": "started",
+      "bopRefs": ["DSB-BOP-P8-010"],
+      "tasks": [
+        {
+          "id": "IMP-7001",
+          "title": "Add CI and distinguish local, emulator, deployed and manual evidence",
+          "status": "started",
+          "evidence": ["docs/build-plan.md"],
+          "verification": "npm run check"
+        }
+      ]
+    },
+    {
+      "id": "WS-80",
+      "name": "Post-MVP guardrails",
+      "status": "started",
+      "bopRefs": ["DSB-BOP-P5-001", "DSB-BOP-P5-002", "DSB-BOP-P5-003", "DSB-BOP-P5-004", "DSB-BOP-P5-005"],
+      "tasks": [
+        {
+          "id": "IMP-8001",
+          "title": "Create disabled-by-default post-MVP feature registry",
+          "status": "started",
+          "evidence": ["docs/build-plan.md"],
+          "verification": "npm run check"
+        }
+      ]
+    }
+  ]
+}

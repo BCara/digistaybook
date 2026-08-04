@@ -12,6 +12,7 @@
 - Removed corrupted icon strings from all Appendix email CTA labels and retained plain-text button labels.
 - Added 79 permanent BOP requirement/template IDs, cross-referenced them from the product specification, decisions and backlog, and adopted the no-renumber/no-reuse convention.
 - Generated a readable v3 DOCX, a standalone v3 HTML document and a standalone v2-to-v3 HTML comparison from the Markdown sources.
+- Replaced the stale pre-BOP build plan with an autonomous BOP-linked implementation plan, persistent status ledger, restart procedure and status validator; recorded the implementation architecture as D-009.
 
 ## 2026-08-03
 
