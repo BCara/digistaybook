@@ -11,7 +11,7 @@ The restart authority is `docs/implementation-status.json`. A task is not “imp
 ## Chosen architecture
 
 - React, TypeScript and Vite for the mobile-first web application.
-- React Router for public, Host and legal routes.
+- A small pathname router for the current public, Host and legal routes; introduce a routing dependency only when route complexity justifies it.
 - Firebase Authentication for Hosts; Guests do not require accounts.
 - Cloud Firestore and Cloud Storage behind default-deny rules.
 - Cloud Functions for privileged reporting, moderation, billing, email, retention and deletion workflows.
@@ -75,4 +75,3 @@ Run accessibility, responsive browser, security, emulator and integration suites
 4. Run the verification commands listed for the active tasks.
 5. Continue the lowest-numbered active task whose dependencies are satisfied.
 6. Update both status files and commit before moving to the next meaningful batch.
-

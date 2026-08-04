@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function ownsProperty(propertyId) {
+      return signedIn() && get(/databases/$(database)/documents/properties/$(propertyId)).data.ownerUid == request.auth.uid;
+    }
+    function propertyIsPublic(propertyId) {
+      let property = get(/databases/$(database)/documents/properties/$(propertyId)).data;
+      return property.mode == 'live' && property.lifecycle in ['trialing', 'active', 'grace_period'];
+    }
+
+    match /users/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['displayName', 'email', 'createdAt', 'updatedAt']);
+      allow update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'updatedAt']);
+      allow delete: if false;
+    }
+
+    match /properties/{propertyId} {
+      allow read: if (resource.data.mode == 'live' && resource.data.lifecycle in ['trialing', 'active', 'grace_period']) || ownsProperty(propertyId);
+      allow create: if signedIn() && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.lifecycle == 'draft' && request.resource.data.mode == 'sandbox';
+      allow update: if ownsProperty(propertyId)
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['ownerUid', 'lifecycle', 'billing', 'retentionState']);
+      allow delete: if false;
+
+      match /posts/{postId} {
+        allow read: if (resource.data.visibility == 'visible' && propertyIsPublic(propertyId)) || ownsProperty(propertyId);
+        allow write: if false;
+      }
+      match /{document=**} { allow read, write: if false; }
+    }
+
+    match /{document=**} { allow read, write: if false; }
+  }
+}

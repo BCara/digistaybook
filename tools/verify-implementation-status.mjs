@@ -7,6 +7,7 @@ const statusPath = resolve(root, "docs", "implementation-status.json");
 const status = JSON.parse(readFileSync(statusPath, "utf8"));
 const bop = readFileSync(resolve(root, status.authority), "utf8");
 const allowed = new Set(status.statusDefinitions);
+const allowedEvidenceLevels = new Set(status.evidenceLevels);
 const seenWorkstreams = new Set();
 const seenTasks = new Set();
 const errors = [];
@@ -22,6 +23,9 @@ for (const workstream of status.workstreams) {
     if (seenTasks.has(task.id)) errors.push(`Duplicate task: ${task.id}`);
     seenTasks.add(task.id);
     if (!allowed.has(task.status)) errors.push(`Invalid status on ${task.id}: ${task.status}`);
+    if (!allowedEvidenceLevels.has(task.evidenceLevel)) {
+      errors.push(`Invalid evidence level on ${task.id}: ${task.evidenceLevel}`);
+    }
     if (!task.verification) errors.push(`Missing verification command on ${task.id}`);
     if (!Array.isArray(task.evidence) || task.evidence.length === 0) {
       errors.push(`Missing evidence on ${task.id}`);
@@ -46,5 +50,14 @@ const counts = status.workstreams
     return summary;
   }, {});
 
+const evidenceCounts = status.workstreams
+  .flatMap((workstream) => workstream.tasks)
+  .reduce((summary, task) => {
+    summary[task.evidenceLevel] = (summary[task.evidenceLevel] ?? 0) + 1;
+    return summary;
+  }, {});
+
 console.log(`Implementation status OK: ${status.workstreams.length} workstreams, ${seenTasks.size} tasks`);
 console.log(JSON.stringify(counts, null, 2));
+console.log("Evidence levels:");
+console.log(JSON.stringify(evidenceCounts, null, 2));

@@ -1,0 +1,5 @@
+export function PrivacySafetyPage() {
+  return (
+    <div className="page narrow-page"><p className="eyebrow">Public support route</p><h1>Privacy &amp; Safety</h1><p>Use this route for a personal-data request, content takedown request or urgent platform safety concern. Booking, property and in-stay support remain with the Host or booking provider.</p><form className="stacked-form"><label htmlFor="request-kind">Request type</label><select id="request-kind" defaultValue="privacy"><option value="privacy">Privacy request</option><option value="takedown">Content takedown</option><option value="urgent_safety">Urgent safety concern</option></select><label htmlFor="request-details">Details</label><textarea id="request-details" maxLength={2000} /><label htmlFor="contact">Contact email</label><input id="contact" type="email" /><button type="button" disabled>Submit after secure endpoint is connected</button></form><p className="form-feedback">Requests will receive a neutral acknowledgement and unresolved verified requests escalate automatically within the defined SLA.</p></div>
+  );
+}

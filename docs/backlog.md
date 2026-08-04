@@ -3,7 +3,7 @@
 ## Discovery and foundations
 
 - [ ] Confirm the first release surface and deployment target.
-- [ ] Choose the application framework and hosting architecture.
+- [x] Choose the application framework and hosting architecture. See D-009 and `docs/build-plan.md`.
 - [ ] Define the data model for hosts, properties, posts, moderation states, and subscriptions.
 - [ ] Define authentication and role boundaries.
 - [ ] Define privacy, retention, deletion, and trust-and-safety acceptance criteria.

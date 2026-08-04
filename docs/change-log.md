@@ -13,6 +13,8 @@
 - Added 79 permanent BOP requirement/template IDs, cross-referenced them from the product specification, decisions and backlog, and adopted the no-renumber/no-reuse convention.
 - Generated a readable v3 DOCX, a standalone v3 HTML document and a standalone v2-to-v3 HTML comparison from the Markdown sources.
 - Replaced the stale pre-BOP build plan with an autonomous BOP-linked implementation plan, persistent status ledger, restart procedure and status validator; recorded the implementation architecture as D-009.
+- Started every implementation workstream with an executable foundation: React/TypeScript/Vite application shell, Firebase fail-closed boundaries, Guest and Host slices, moderation/billing/marketing/retention contracts, disabled post-MVP flags, tests and CI.
+- Added a release-evidence record and security baseline that distinguish local, emulator, deployed and manual proof, including an explicit Functions dependency-advisory release gate.
 
 ## 2026-08-03
 
