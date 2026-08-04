@@ -5,7 +5,7 @@
   "baselineCommit": "da70e30",
   "authority": "digistaybook_WIP_v3.md",
   "currentMilestone": "B - server-controlled persistence slice",
-  "lastCompletedCheckpoint": "Milestone B - Firestore security-rule slice",
+  "lastCompletedCheckpoint": "Milestone B - Guest Wall micro-branding slice",
   "evidenceLevels": ["planned", "local", "emulator", "deployed", "manual"],
   "statusDefinitions": [
     "not_started",
@@ -68,7 +68,7 @@
       "id": "WS-20",
       "name": "Guest experience",
       "status": "in_progress",
-      "bopRefs": ["DSB-BOP-P2-003", "DSB-BOP-P2-004", "DSB-BOP-P2-005", "DSB-BOP-P6-009"],
+      "bopRefs": ["DSB-BOP-P2-003", "DSB-BOP-P2-004", "DSB-BOP-P2-005", "DSB-BOP-P6-009", "DSB-BOP-P6-010"],
       "tasks": [
         {
           "id": "IMP-2001",
@@ -85,6 +85,14 @@
           "evidenceLevel": "planned",
           "evidence": ["src/domain/guestContribution.ts", "docs/build-plan.md"],
           "verification": "npm run test:emulators"
+        },
+        {
+          "id": "IMP-2003",
+          "title": "Document and implement discreet Guest Wall micro-branding acquisition link",
+          "status": "verified",
+          "evidenceLevel": "local",
+          "evidence": ["digistaybook_WIP_v3.md", "artifacts/digistaybook_WIP_v3.html", "artifacts/digistaybook_WIP_v3.docx", "src/ui/pages/GuestWallPage.tsx", "src/styles.css", "src/ui/pages/pages.test.tsx", "docs/release-evidence.md"],
+          "verification": "npm run check"
         }
       ]
     },

@@ -46,3 +46,15 @@ Run `npm run check`, then continue from the first `started` or `in_progress` tas
 - CI now installs Java 21 and runs the local gate plus the emulator suite with `npm run check:all`.
 
 This evidence proves Firestore rules only. It does not prove Auth UI, server-controlled contribution/report endpoints, Storage rules or any deployed environment.
+
+## Milestone B - Guest Wall micro-branding slice
+
+- **Evidence level:** local and manual browser inspection
+- Added permanent requirement `DSB-BOP-P6-010` to the Markdown authority and regenerated the readable HTML, DOCX and v2-to-v3 comparison; the artifact builder validates 80 unique requirement/template IDs.
+- Added the exact requested public Guest Wall acquisition copy with a direct `/` landing-page destination, descriptive accessible name and visually secondary presentation.
+- Unit/UI coverage now contains 20 tests, including the footer destination and accessible container.
+- Desktop inspection confirmed the footer follows contribution controls without obscuring content.
+- Mobile inspection at 390 by 844 pixels confirmed readable wrapping and no horizontal overflow; the measured document scroll width was 375 pixels within the 390-pixel viewport.
+- Clicking the footer link navigated to `http://localhost:5187/`.
+
+The DOCX was rebuilt and structurally inspected, but page-image rendering could not run because LibreOffice is not installed in the available workspace runtime. This is not recorded as visual DOCX evidence.

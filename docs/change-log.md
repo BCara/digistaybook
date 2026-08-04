@@ -16,6 +16,7 @@
 - Started every implementation workstream with an executable foundation: React/TypeScript/Vite application shell, Firebase fail-closed boundaries, Guest and Host slices, moderation/billing/marketing/retention contracts, disabled post-MVP flags, tests and CI.
 - Added a release-evidence record and security baseline that distinguish local, emulator, deployed and manual proof, including an explicit Functions dependency-advisory release gate.
 - Added an isolated Firebase Emulator Suite gate with eight Firestore rules tests covering public visibility, draft/hidden denial, Host ownership, bounded creation and direct guest-write denial; wired it into CI with Java 21.
+- Added `DSB-BOP-P6-010` and implemented its discreet, accessible "Powered by DigiStayBook" link after the public Guest Wall, directing interested visitors to the main landing page without popups or contribution friction.
 
 ## 2026-08-03
 

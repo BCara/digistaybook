@@ -40,6 +40,11 @@ textarea { min-height: 130px; resize: vertical; }
 .check-row input { width: auto; margin-top: 5px; }
 button:disabled { cursor: not-allowed; opacity: .55; }
 .form-feedback { color: #4d6070; background: #eef2f3; border-radius: 10px; padding: 12px; }
+.guest-wall-powered-by { margin: 30px auto 0; max-width: 680px; text-align: center; color: #6f7e89; font-size: .88rem; }
+.guest-wall-powered-by p { margin: 0; }
+.guest-wall-powered-by a { color: #405a6f; font-weight: 700; text-decoration-color: #a8b2ba; text-underline-offset: 3px; }
+.guest-wall-powered-by a:hover { color: #173047; text-decoration-color: currentColor; }
+.guest-wall-powered-by a:focus-visible { outline: 3px solid #b1583b; outline-offset: 4px; border-radius: 4px; }
 .notice { margin: 20px 0; border-left: 5px solid #b1583b; }
 .site-footer { font-size: .9rem; }
 @media (max-width: 760px) { .site-header, .site-footer { align-items: flex-start; flex-direction: column; } .feature-grid { grid-template-columns: 1fr; } .page { padding-top: 42px; } }

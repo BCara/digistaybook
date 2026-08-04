@@ -2,7 +2,7 @@
 **Target Audience:** Joseph (Operations) & Cara (Lead Developer)  
 **Project Blueprint:** B2B Short-Term Rental SaaS  
 **Status:** Work In Progress (WIP)
-**Revision:** v3 — Guest-experience marketing position and booking-provider operational boundary  
+**Revision:** v3 — Guest-experience marketing, booking-provider boundary and Guest Wall micro-branding
 **Revision Date:** 4th August 2026
 
 **Stable requirement ID convention:** Each normative section carries a permanent identifier in the form `DSB-BOP-P<part>-<number>`. Appendix email templates use a child suffix such as `DSB-BOP-P9-001A`. IDs must never be renumbered or reused when content moves or is retired. Implementation work, tests, decisions and GitHub issues/commits should cite the applicable ID; new requirements receive the next unused ID in their Part.
@@ -335,6 +335,13 @@ Trial Expiry Notice: As a courtesy, we will send an automated email reminder to 
 **What to display:** The live, mobile-first visual timeline of approved photos and notes. It displays the specific layout/theme chosen on the Property Page, showing pinned posts at the top and standard posts below.
 **Required Buttons:** "Add a Memory/Post" (opens the multi-image upload tool), self-service edit/delete buttons for the Guest's own content, and a universal "Report" flag on all posts.
 **Button Destination:** Self-deletion hides the Guest's own post immediately and schedules deletion. An ordinary server-accepted report hides the post immediately and creates `hidden_pending_review`. A report received while the reporter or wall circuit breaker is active creates `suspected_abuse_no_visibility_change`; it is recorded for internal review without changing visibility. The client never writes these states directly.
+## 6.10 "Powered by DigiStayBook" Guest Wall Micro-Branding [DSB-BOP-P6-010]
+
+**Purpose:** Turn appropriate Guest Wall exposure into a potential host-acquisition path without interrupting the guest experience. Some Guests may themselves own or manage short-term rentals, or be considering hosting; this is a commercial rationale, not a claim that a particular percentage will convert.
+**Required placement and copy:** Every live public Guest Wall, including the public demo, displays a discreet text link after the wall content and contribution controls: "Loved your stay? Powered by DigiStayBook — Create a digital guestbook for your property."
+**Destination:** The link directs to the DigiStayBook main landing page. It must use a descriptive accessible label and remain usable on mobile and desktop.
+**Experience guardrail:** The micro-branding must remain visually secondary to the property's identity and Guest Wall content. It must not appear as a popup, interstitial, modal, forced redirect or contribution requirement, and it must not obscure host content or guest controls.
+**Marketing boundary:** Advertising may describe this placement as a product-discovery or host-acquisition loop. DigiStayBook must not publish an unsubstantiated conversion percentage or guarantee that Guest Wall visitors will become Host customers.
 # Part 7: Terms and Conditions (Legal Copy)
 
 > **Draft — not approved for publication. Professional legal review is required before these Terms are used.**

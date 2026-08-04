@@ -40,6 +40,9 @@ export function GuestWallPage({ propertySlug = "property" }: { propertySlug?: st
         <button type="submit">Continue</button>
         {feedback && <p className="form-feedback" role="status">{feedback}</p>}
       </form>
+      <aside className="guest-wall-powered-by" aria-label="About DigiStayBook">
+        <p>Loved your stay? <a href="/">Powered by DigiStayBook &mdash; Create a digital guestbook for your property.</a></p>
+      </aside>
     </div>
   );
 }

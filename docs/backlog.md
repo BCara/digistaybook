@@ -19,6 +19,7 @@
 - [ ] Build a mobile-first public wall. (`DSB-BOP-P2-004`, `DSB-BOP-P6-009`)
 - [ ] Add guest text and multi-image submission. (`DSB-BOP-P2-004`)
 - [ ] Add consent, pending, report, edit, delete, and copy-text flows. (`DSB-BOP-P2-004`, `DSB-BOP-P2-005`)
+- [x] Add the discreet public Guest Wall "Powered by DigiStayBook" landing-page link and responsive UI test. (`DSB-BOP-P6-010`)
 - [ ] Implement the D-005 transactional reporting endpoint, App Check verification, report deduplication, reporter/wall thresholds, state transitions, Host/internal alerts, restoration rules and abuse-key expiry tests. (`DSB-BOP-P2-005`)
 
 ## Host experience

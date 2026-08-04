@@ -5,6 +5,7 @@ export const bopRequirements = {
   propertyManagement: "DSB-BOP-P6-005",
   privacySafety: "DSB-BOP-P6-008",
   guestWall: "DSB-BOP-P6-009",
+  guestWallMicroBranding: "DSB-BOP-P6-010",
   commercialMessaging: "DSB-BOP-P4-001",
   billing: "DSB-BOP-P3-004",
   retention: "DSB-BOP-P8-005",

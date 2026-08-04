@@ -14,6 +14,13 @@ describe("first UI slices", () => {
     expect(screen.getByRole("status")).toHaveTextContent(/validated locally/i);
   });
 
+  it("provides discreet Guest Wall attribution back to the main landing page", () => {
+    render(<GuestWallPage propertySlug="demo-cottage" />);
+    const attribution = screen.getByRole("link", { name: /Powered by DigiStayBook/i });
+    expect(attribution).toHaveAttribute("href", "/");
+    expect(screen.getByLabelText("About DigiStayBook")).toContainElement(attribution);
+  });
+
   it("fails the Host dashboard closed without Firebase configuration", () => {
     render(<HostDashboardPage />);
     expect(screen.getByRole("heading", { name: "Dashboard unavailable" })).toBeInTheDocument();

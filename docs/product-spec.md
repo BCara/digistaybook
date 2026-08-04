@@ -22,6 +22,7 @@ DigiStayBook is a mobile-first digital guestbook for short-term rental hosts. Gu
 8. A data-class retention engine with scheduled deletion, content-free audit events, backup-expiry controls and scoped legal holds based on the approved retention matrix. (`DSB-BOP-P8-005`)
 9. A server-controlled reporting state machine with immediate hiding for ordinary reports, bounded reporter/wall circuit breakers, neutral acknowledgements, auditable outcomes, restoration rules and 14-day privacy escalation. (`DSB-BOP-P2-005`)
 10. A central marketing-preference and suppression service with versioned express-consent evidence, send-time enforcement, classified email templates and automated suppression/content-boundary tests. (`DSB-BOP-P4-001`, `DSB-BOP-P8-001`)
+11. A discreet "Powered by DigiStayBook" link after every public Guest Wall that sends interested visitors to the main landing page without interrupting contribution or obscuring property content. (`DSB-BOP-P6-010`)
 
 ## Explicit MVP boundaries
 
