@@ -6,6 +6,7 @@ This file records what has actually been demonstrated. It does not treat a local
 
 - **Branch:** `codex/implementation-foundation`
 - **Plan checkpoint:** `c0931bb` (`docs: establish autonomous implementation checkpoint`)
+- **Application foundation checkpoint:** `3fa47ac` (`feat: start DigiStayBook implementation workstreams`)
 - **Authority:** `digistaybook_WIP_v3.md`
 - **Evidence level:** local
 
@@ -35,3 +36,13 @@ This file records what has actually been demonstrated. It does not treat a local
 ## Resume rule
 
 Run `npm run check`, then continue from the first `started` or `in_progress` task in `docs/implementation-status.json`. Upgrade an evidence level only when that level has been directly demonstrated.
+
+## Milestone B - Firestore security-rule slice
+
+- **Evidence level:** emulator
+- Firebase CLI `15.25.1`, Firestore Emulator `1.22.0` and Java 21 were used with the isolated demo project `demo-digistaybook`.
+- One emulator test file containing eight tests passes.
+- Demonstrated: unauthenticated reads of eligible live properties and visible posts; denial of draft properties and hidden posts; denial of direct guest create/delete; owner access to draft and hidden content; cross-Host denial; sandbox-draft creation constraints; immutable ownership/lifecycle fields; bounded self-profile creation.
+- CI now installs Java 21 and runs the local gate plus the emulator suite with `npm run check:all`.
+
+This evidence proves Firestore rules only. It does not prove Auth UI, server-controlled contribution/report endpoints, Storage rules or any deployed environment.

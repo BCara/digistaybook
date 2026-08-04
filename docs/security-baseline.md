@@ -9,7 +9,7 @@
 - Post-MVP features are disabled by default.
 - Root production dependencies currently report zero known vulnerabilities with `npm audit --omit=dev`.
 
-These controls are source-level evidence only until the Emulator Suite proves the rules and endpoints together.
+The Firestore access controls now have Emulator Suite evidence. Server endpoints, App Check and Storage remain unproved.
 
 ## Open dependency advisory gate
 
@@ -22,4 +22,6 @@ The current Functions dependency tree reports seven moderate transitive advisori
 
 ## Next security evidence
 
-`IMP-1002` and `IMP-7002` must add Emulator Suite tests for public/private reads, Host ownership, guest direct-write denial, hidden-content visibility, App Check enforcement and transaction-safe moderation changes.
+`IMP-1002` and `IMP-7002` now prove public/private reads, Host ownership, guest direct-write denial and hidden-content visibility in the Firestore Emulator. `IMP-2002` and `IMP-4002` must next prove App Check enforcement, bounded ownership proof and transaction-safe contribution/report changes through server-controlled endpoints.
+
+The root production audit remains clear. Installing the current Firebase CLI for emulator execution adds six moderate development-tooling advisories to the full root audit; these are not included in the production bundle. They remain visible and must be rechecked when Firebase tooling is upgraded.

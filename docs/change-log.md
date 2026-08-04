@@ -15,6 +15,7 @@
 - Replaced the stale pre-BOP build plan with an autonomous BOP-linked implementation plan, persistent status ledger, restart procedure and status validator; recorded the implementation architecture as D-009.
 - Started every implementation workstream with an executable foundation: React/TypeScript/Vite application shell, Firebase fail-closed boundaries, Guest and Host slices, moderation/billing/marketing/retention contracts, disabled post-MVP flags, tests and CI.
 - Added a release-evidence record and security baseline that distinguish local, emulator, deployed and manual proof, including an explicit Functions dependency-advisory release gate.
+- Added an isolated Firebase Emulator Suite gate with eight Firestore rules tests covering public visibility, draft/hidden denial, Host ownership, bounded creation and direct guest-write denial; wired it into CI with Java 21.
 
 ## 2026-08-03
 

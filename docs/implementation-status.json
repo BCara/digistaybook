@@ -4,8 +4,8 @@
   "branch": "codex/implementation-foundation",
   "baselineCommit": "da70e30",
   "authority": "digistaybook_WIP_v3.md",
-  "currentMilestone": "B - local Firebase vertical slice",
-  "lastCompletedCheckpoint": "Milestone A - first executable slice",
+  "currentMilestone": "B - server-controlled persistence slice",
+  "lastCompletedCheckpoint": "Milestone B - Firestore security-rule slice",
   "evidenceLevels": ["planned", "local", "emulator", "deployed", "manual"],
   "statusDefinitions": [
     "not_started",
@@ -57,9 +57,9 @@
         {
           "id": "IMP-1002",
           "title": "Connect Firebase emulators and add security-rules integration tests",
-          "status": "started",
-          "evidenceLevel": "planned",
-          "evidence": ["firebase.json", "docs/build-plan.md"],
+          "status": "verified",
+          "evidenceLevel": "emulator",
+          "evidence": ["firebase.json", "firestore.rules", "tests/firestore.rules.test.ts", "docs/release-evidence.md"],
           "verification": "npm run test:emulators"
         }
       ]
@@ -105,9 +105,9 @@
         {
           "id": "IMP-3002",
           "title": "Connect Host authentication, profile creation and property persistence to emulators",
-          "status": "started",
-          "evidenceLevel": "planned",
-          "evidence": ["src/lib/firebase.ts", "firestore.rules", "docs/build-plan.md"],
+          "status": "in_progress",
+          "evidenceLevel": "emulator",
+          "evidence": ["src/lib/firebase.ts", "firestore.rules", "tests/firestore.rules.test.ts", "docs/build-plan.md"],
           "verification": "npm run test:emulators"
         }
       ]
@@ -201,9 +201,9 @@
         {
           "id": "IMP-7002",
           "title": "Add emulator security suite and make unresolved production advisories explicit release gates",
-          "status": "started",
-          "evidenceLevel": "planned",
-          "evidence": ["docs/security-baseline.md", "firebase.json"],
+          "status": "verified",
+          "evidenceLevel": "emulator",
+          "evidence": ["docs/security-baseline.md", "firebase.json", "tests/firestore.rules.test.ts", ".github/workflows/ci.yml"],
           "verification": "npm run test:emulators"
         }
       ]
