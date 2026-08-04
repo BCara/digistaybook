@@ -58,3 +58,10 @@ This evidence proves Firestore rules only. It does not prove Auth UI, server-con
 - Clicking the footer link navigated to `http://localhost:5187/`.
 
 The DOCX was rebuilt and structurally inspected, but page-image rendering could not run because LibreOffice is not installed in the available workspace runtime. This is not recorded as visual DOCX evidence.
+
+## Content-only v2-to-v3 comparison
+
+- The comparison generator normalises requirement-ID suffixes out of both source versions and excludes the v3 ID-convention metadata before matching lines.
+- Consecutive blank-line formatting differences are collapsed so they do not become content-change blocks.
+- The regenerated comparison contains 110 content-change blocks, down from 132 mixed content/ID blocks.
+- Automated artifact checks confirm that the comparison contains no `DSB-BOP-` identifiers or stable-ID convention text while retaining genuine additions such as the Guest Wall micro-branding requirement.

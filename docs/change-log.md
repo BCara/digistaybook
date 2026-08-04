@@ -17,6 +17,7 @@
 - Added a release-evidence record and security baseline that distinguish local, emulator, deployed and manual proof, including an explicit Functions dependency-advisory release gate.
 - Added an isolated Firebase Emulator Suite gate with eight Firestore rules tests covering public visibility, draft/hidden denial, Host ownership, bounded creation and direct guest-write denial; wired it into CI with Java 21.
 - Added `DSB-BOP-P6-010` and implemented its discreet, accessible "Powered by DigiStayBook" link after the public Guest Wall, directing interested visitors to the main landing page without popups or contribution friction.
+- Rebuilt the v2-to-v3 HTML comparison as a content-only review, excluding requirement-ID suffix additions and the ID-convention metadata from change blocks while retaining genuine wording and product changes.
 
 ## 2026-08-03
 

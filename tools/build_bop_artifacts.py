@@ -591,18 +591,52 @@ def html_shell(
 <main class="content"><div class="top-actions">{actions}</div>{body}</main></div></body></html>"""
 
 
-def nearest_heading(lines: list[str], index: int) -> str:
+@dataclass(frozen=True)
+class DiffLine:
+    text: str
+    source_line: int
+
+
+def prepare_diff_lines(text: str) -> list[DiffLine]:
+    lines: list[DiffLine] = []
+    for source_line, line in enumerate(text.splitlines(), start=1):
+        if line.startswith("**Stable requirement ID convention:**"):
+            continue
+        cleaned = REQ_RE.sub("", line).rstrip()
+        if not cleaned and lines and not lines[-1].text:
+            continue
+        lines.append(DiffLine(cleaned, source_line))
+    return lines
+
+
+def nearest_heading(lines: list[DiffLine], index: int) -> str:
     for pos in range(min(index, len(lines) - 1), -1, -1):
-        match = HEADING_RE.match(lines[pos])
+        match = HEADING_RE.match(lines[pos].text)
         if match:
             return match.group(2)
     return "Document opening"
 
 
+def source_range(lines: list[DiffLine], start: int, end: int) -> str:
+    if start < end:
+        return f"{lines[start].source_line}-{lines[end - 1].source_line}"
+    if start < len(lines):
+        anchor = lines[start].source_line
+    elif lines:
+        anchor = lines[-1].source_line + 1
+    else:
+        anchor = 1
+    return f"{anchor}-{anchor}"
+
+
 def build_diff_html(v2_text: str, v3_text: str) -> str:
-    old = v2_text.splitlines()
-    new = v3_text.splitlines()
-    matcher = difflib.SequenceMatcher(a=old, b=new, autojunk=False)
+    old = prepare_diff_lines(v2_text)
+    new = prepare_diff_lines(v3_text)
+    matcher = difflib.SequenceMatcher(
+        a=[line.text for line in old],
+        b=[line.text for line in new],
+        autojunk=False,
+    )
     changes: list[str] = []
     added = deleted = replaced = 0
     change_number = 0
@@ -619,18 +653,18 @@ def build_diff_html(v2_text: str, v3_text: str) -> str:
             added += j2 - j1
             deleted += i2 - i1
         heading = nearest_heading(new if j1 < len(new) else old, j1 if j1 < len(new) else i1)
-        before = "\n".join(old[i1:i2]) or "(no text)"
-        after = "\n".join(new[j1:j2]) or "(no text)"
+        before = "\n".join(line.text for line in old[i1:i2]) or "(no text)"
+        after = "\n".join(line.text for line in new[j1:j2]) or "(no text)"
         changes.append(
             f'<section class="change" id="change-{change_number}"><h2>Change {change_number}: {html.escape(heading)}</h2>'
-            f'<div class="line-ref">v2 lines {i1+1}-{max(i1+1,i2)} → v3 lines {j1+1}-{max(j1+1,j2)}</div>'
+            f'<div class="line-ref">v2 lines {source_range(old, i1, i2)} → v3 lines {source_range(new, j1, j2)}</div>'
             f'<div class="compare"><div class="before"><h3>v2</h3><pre>{html.escape(before)}</pre></div>'
             f'<div class="after"><h3>v3</h3><pre>{html.escape(after)}</pre></div></div></section>'
         )
     nav = "".join(f'<a href="#change-{i}">Change {i}</a>' for i in range(1, change_number + 1))
     summary = f"""
-<h1>DigiStayBook BOP: v2 → v3 change review</h1>
-<p>This standalone comparison groups changed source lines into reviewable before/after blocks. Unchanged lines are intentionally hidden.</p>
+<h1>DigiStayBook BOP: v2 → v3 content changes</h1>
+<p>This standalone comparison shows wording and product-content changes only. Requirement-ID suffixes and the ID-convention metadata are intentionally excluded, and unchanged content is hidden.</p>
 <div class="stats"><div><strong>{change_number}</strong><span>change blocks</span></div><div><strong>{added}</strong><span>v3 lines added</span></div><div><strong>{deleted}</strong><span>v2 lines removed</span></div><div><strong>{replaced}</strong><span>replacement blocks</span></div></div>
 <p><a class="button" href="digistaybook_WIP_v3.html">Read the complete v3 plan</a></p>
 """
@@ -640,11 +674,11 @@ def build_diff_html(v2_text: str, v3_text: str) -> str:
 """
     actions = '<a class="button" href="digistaybook_WIP_v3.html">Read complete v3</a><a class="button" href="digistaybook_WIP_v3.docx">Open DOCX</a>'
     return html_shell(
-        "DigiStayBook BOP v2 to v3 comparison",
+        "DigiStayBook BOP v2 to v3 content comparison",
         summary + "\n".join(changes),
         nav,
         css,
-        side_note="v2 to v3 change review",
+        side_note="v2 to v3 content changes",
         actions=actions,
     )
 
@@ -670,6 +704,7 @@ def main():
     parser.add_argument("--v2", type=Path, default=Path("digistaybook_WIP_v2.md"))
     parser.add_argument("--v3", type=Path, default=Path("digistaybook_WIP_v3.md"))
     parser.add_argument("--outdir", type=Path, default=Path("artifacts"))
+    parser.add_argument("--diff-only", action="store_true", help="Rebuild only the content-only v2-to-v3 comparison")
     args = parser.parse_args()
 
     v2_text = args.v2.read_text(encoding="utf-8")
@@ -681,12 +716,14 @@ def main():
     docx_path = args.outdir / "digistaybook_WIP_v3.docx"
     html_path = args.outdir / "digistaybook_WIP_v3.html"
     diff_path = args.outdir / "digistaybook_WIP_v2-to-v3-diff.html"
-    build_docx(blocks, docx_path)
-    body, toc = blocks_to_html(blocks)
-    html_path.write_text(html_shell("DigiStayBook BOP v3", body, toc), encoding="utf-8")
+    if not args.diff_only:
+        build_docx(blocks, docx_path)
+        body, toc = blocks_to_html(blocks)
+        html_path.write_text(html_shell("DigiStayBook BOP v3", body, toc), encoding="utf-8")
     diff_path.write_text(build_diff_html(v2_text, v3_text), encoding="utf-8")
-    print(f"Built {docx_path}")
-    print(f"Built {html_path}")
+    if not args.diff_only:
+        print(f"Built {docx_path}")
+        print(f"Built {html_path}")
     print(f"Built {diff_path}")
     print(f"Validated {id_count} unique requirement/template IDs")
 

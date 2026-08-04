@@ -5,7 +5,7 @@
 - **Authority:** `digistaybook_WIP_v3.md`
 - **Branch:** `codex/implementation-foundation`
 - **Baseline:** `da70e30` (`docs: publish reviewed DigiStayBook BOP v3`)
-- **Last completed checkpoint:** Milestone B - Guest Wall micro-branding slice
+- **Last completed checkpoint:** Documentation - content-only BOP comparison
 - **Current milestone:** B - server-controlled persistence slice
 - **Machine-readable authority:** `docs/implementation-status.json`
 - **Resume command:** `npm run check`
@@ -16,7 +16,7 @@ The plan/status checkpoint was committed before application scaffolding as `c093
 
 | Workstream | State | Locally verified first slice | Active next task |
 |---|---|---|---|
-| `WS-00` Delivery control | In progress | Persistent plan, ledger, evidence and validator | Maintain checkpoint after each verified slice |
+| `WS-00` Delivery control | In progress | Persistent plan, ledger, validator and content-only BOP comparison tooling | Maintain checkpoint after each verified slice |
 | `WS-10` Platform foundation | In progress | React/TypeScript/Vite, Firebase boundaries and emulator-verified Firestore rules | Server-controlled persistence endpoints |
 | `WS-20` Guest experience | In progress | Guest Wall, consent contract and responsive acquisition footer | `IMP-2002` server-controlled contribution persistence |
 | `WS-30` Host experience | In progress | Host shell, fail-closed auth entry, property contracts and emulator-verified ownership rules | Complete `IMP-3002` Auth UI and data adapters |
@@ -36,6 +36,7 @@ The plan/status checkpoint was committed before application scaffolding as `c093
 - The public privacy/safety route preserves the support boundary.
 - Eight Firestore Emulator tests prove public/private visibility, Host ownership, bounded create/update behaviour and direct guest-write denial.
 - `DSB-BOP-P6-010` is present in the Markdown, DOCX and readable HTML; its public Guest Wall link is responsive and navigates to the main landing page.
+- The v2-to-v3 comparison contains 110 genuine content-change blocks, with requirement-ID suffixes and ID-convention metadata excluded.
 
 See `docs/release-evidence.md` for the exact evidence boundary and `docs/security-baseline.md` for unresolved release gates.
 
