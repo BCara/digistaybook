@@ -8,10 +8,10 @@ Outputs:
 """
 
 from __future__ import annotations
+import html
 
 import argparse
 import difflib
-import html
 import math
 import re
 from dataclasses import dataclass
@@ -97,6 +97,17 @@ def parse_markdown(text: str) -> list[Block]:
                 quote.append(lines[i][1:].strip())
                 i += 1
             blocks.append(Block("quote", " ".join(quote)))
+            continue
+
+        if line.startswith("`"):
+            lang = line[3:].strip()
+            code_lines = []
+            i += 1
+            while i < len(lines) and not lines[i].strip().startswith("`"):
+                code_lines.append(lines[i].rstrip())
+                i += 1
+            i += 1 # skip closing `
+            blocks.append(Block("code", {"lang": lang, "code": "\n".join(code_lines)}))
             continue
 
         paragraph = [stripped]
@@ -481,6 +492,12 @@ def build_docx(blocks: list[Block], output: Path):
             add_inline_runs(p, str(block.value), size=10)
             for run in p.runs:
                 run.italic = True
+        elif block.kind == "code":
+            lang = block.value["lang"]
+            code = block.value["code"]
+            p = doc.add_paragraph()
+            run = p.add_run(f"[{lang} code block]\n{code}")
+            run.font.name = "Courier New"
         elif block.kind == "rule":
             p = doc.add_paragraph()
             p.paragraph_format.space_after = Pt(4)
@@ -515,6 +532,9 @@ def inline_html(text: str) -> str:
     escaped = html.escape(text)
     escaped = re.sub(r"`([^`]+)`", r"<code>\1</code>", escaped)
     escaped = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", escaped)
+    escaped = re.sub(r"\[COLOR:([^\]]+)\](.*?)\[/COLOR\]", r'<span style="color: \1">\2</span>', escaped)
+    escaped = re.sub(r"&lt;u&gt;(.*?)&lt;/u&gt;", r"<u>\1</u>", escaped)
+    escaped = re.sub(r"\[COLOR:([^\]]+)\](.*?)\[/COLOR\]", r'<span style="color: \1">\2</span>', escaped)
     escaped = re.sub(r"(?<!\*)\*([^*]+?)\*(?!\*)", r"<em>\1</em>", escaped)
     return escaped
 
@@ -550,6 +570,13 @@ def blocks_to_html(blocks: list[Block]) -> tuple[str, str]:
             body.append(f"<{tag}>{items}</{tag}>")
         elif block.kind == "quote":
             body.append(f"<blockquote>{inline_html(str(block.value))}</blockquote>")
+        elif block.kind == "code":
+            lang = block.value["lang"]
+            code = block.value["code"]
+            if lang == "mermaid":
+                body.append(f'<pre class="mermaid">{html.escape(code)}</pre>')
+            else:
+                body.append(f'<pre><code class="language-{html.escape(lang)}">{html.escape(code)}</code></pre>')
         elif block.kind == "rule":
             body.append("<hr>")
         elif block.kind == "table":
@@ -586,7 +613,7 @@ def html_shell(
         actions = '<a class="button" href="digistaybook_WIP_v2-to-v3-diff.html">View v2 → v3 changes</a><a class="button" href="digistaybook_WIP_v3.docx">Open DOCX</a>'
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{html.escape(title)}</title><style>{BASE_CSS}{extra_css}</style></head>
+<title>{html.escape(title)}</title><style>{BASE_CSS}{extra_css}</style>\n<script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'; mermaid.initialize({{ startOnLoad: true }});</script>\n</head>
 <body><div class="layout"><nav class="sidebar"><div class="brand">DigiStayBook</div><div class="side-note">{html.escape(side_note)}</div>{toc}</nav>
 <main class="content"><div class="top-actions">{actions}</div>{body}</main></div></body></html>"""
 

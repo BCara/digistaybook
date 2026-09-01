@@ -1,45 +1,62 @@
-import { useState, type FormEvent } from "react";
-import { guestContributionSchema, type GuestPost } from "../../domain/guestContribution";
+import { MemoryWall } from "../wall/MemoryWall";
+import { DEMO_SLUG, demoPosts, demoProperty } from "../wall/demoWall";
 
-const demoPosts: GuestPost[] = [
-  { id: "welcome", message: "Welcome to the cottage. The sunset from the back deck is worth waiting for.", displayName: "Your hosts", createdAt: "2026-08-01T08:00:00.000Z", visibility: "visible", pinned: true },
-  { id: "memory-1", message: "We loved the coastal walk and the tiny bakery near the lighthouse.", displayName: "Mia & Sam", createdAt: "2026-08-03T10:30:00.000Z", visibility: "visible", pinned: false }
-];
-
+/**
+ * The public wall — the link a host shares or embeds on their own site.
+ *
+ * It carries the property, the hosts and the memories guests left. It
+ * deliberately carries no house guidance: Wi-Fi passwords, bin days and
+ * checkout arrangements only appear on the in-stay wall behind the QR display.
+ */
 export function GuestWallPage({ propertySlug = "property" }: { propertySlug?: string }) {
-  const [message, setMessage] = useState("");
-  const [consent, setConsent] = useState(false);
-  const [feedback, setFeedback] = useState<string | null>(null);
-
-  function submit(event: FormEvent) {
-    event.preventDefault();
-    const result = guestContributionSchema.safeParse({
-      propertyId: propertySlug,
-      sessionId: "demo-session-0000000001",
-      message,
-      consent: { accepted: consent, wordingVersion: "guest-content-v1", acceptedAt: new Date().toISOString() }
-    });
-    if (!result.success) {
-      setFeedback("Add a message and accept the content consent before continuing.");
-      return;
-    }
-    setFeedback("Draft validated locally. Server submission will be enabled after emulator security tests pass.");
-  }
+  const isDemo = propertySlug === DEMO_SLUG;
+  const property = demoProperty;
 
   return (
     <div className="page wall-page">
-      <section className="wall-intro"><p className="eyebrow">Demo property</p><h1>Seabreeze Cottage</h1><p>Useful notes and shared memories from this stay.</p></section>
-      <section className="post-list" aria-label="Guest wall posts">
-        {demoPosts.map((post) => <article className={post.pinned ? "post pinned" : "post"} key={post.id}>{post.pinned && <span className="status-pill">Pinned by host</span>}<p>{post.message}</p><small>{post.displayName}</small></article>)}
-      </section>
-      <form className="contribution-card" onSubmit={submit} noValidate>
-        <h2>Add a memory</h2>
-        <label htmlFor="message">Your message</label>
-        <textarea id="message" value={message} onChange={(event) => setMessage(event.target.value)} maxLength={1200} />
-        <label className="check-row"><input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />I consent to this message being displayed on the public Guest Wall under the current Guest Content Policy.</label>
-        <button type="submit">Continue</button>
-        {feedback && <p className="form-feedback" role="status">{feedback}</p>}
-      </form>
+      {isDemo && (
+        <p className="demo-ribbon">
+          <span className="demo-ribbon-tag">Demo</span>
+          A public wall, ready to share or embed on your own site.
+          <a href={`/stay/${DEMO_SLUG}`}>See what guests see &rarr;</a>
+        </p>
+      )}
+
+      <header className="wall-cover">
+        <img
+          className="wall-cover-photo"
+          src={property.cover.src}
+          alt={property.cover.alt}
+          width={property.cover.width}
+          height={property.cover.height}
+          fetchPriority="high"
+        />
+        <div className="wall-cover-body">
+          <div className="wall-monogram" aria-hidden="true">{property.monogram}</div>
+          <p className="eyebrow">The wall at</p>
+          <h1>{property.name}</h1>
+          <p className="wall-location">{property.location}</p>
+          <p className="wall-welcome">{property.welcome}</p>
+          <div className="host-byline">
+            <span className="avatar avatar-lg tone-2" aria-hidden="true">{property.hostInitials}</span>
+            <span>
+              <b>{property.hosts}</b>
+              <small>{property.hostSince}</small>
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <MemoryWall posts={demoPosts} heading={`${demoPosts.length} memories left here`} />
+
+      <aside className="wall-invite" aria-label="Staying here soon">
+        <h2>Staying here soon?</h2>
+        <p>
+          Your hosts&rsquo; welcome notes, the Wi-Fi and everything else you need are on the wall you reach by
+          scanning the QR display when you arrive. That is also where you add your own memory.
+        </p>
+      </aside>
+
       <aside className="guest-wall-powered-by" aria-label="About DigiStayBook">
         <p>Loved your stay? <a href="/">Powered by DigiStayBook &mdash; Create a digital guestbook for your property.</a></p>
       </aside>

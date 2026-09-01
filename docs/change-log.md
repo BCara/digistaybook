@@ -1,5 +1,14 @@
 # Change log
 
+## 2026-08-11
+
+- Established a DigiStayBook brand and design system: token-driven palette (harbour blue, linen paper, ember accent), display-serif and sans type pairing, spacing/radius/shadow scales, light and dark schemes, and shared button, card, form and section primitives in `src/styles.css`.
+- Added an inline SVG brand mark, wordmark and icon set (`src/ui/Brand.tsx`), an SVG favicon and expanded document metadata. No external font, icon or image request is made, so the site adds no third-party data transfer.
+- Rebuilt the application shell with a sticky header, disclosure-based mobile navigation, a skip link and a structured footer carrying product, support and legal routes.
+- Rebuilt the landing page against `DSB-BOP-P6-001` and `DSB-BOP-P6-002`: hero with an illustrative wall/placard composition, how-it-works steps, feature grid, guest-experience section using only the approved `DSB-BOP-P1-002`/`DSB-BOP-P3-005` wording, and a pricing section carrying the 28-day trial callout, per-property billing note, verbatim tax wording and cancellation link.
+- Restyled the Guest Wall, Host sign-in, Host dashboard, Privacy & Safety, legal draft and not-found pages on the same system, and added the `DSB-BOP-P6-008` boundary copy to the public Privacy & Safety route.
+- Preserved every existing behavioural contract: consent gating, fail-closed host access, the support boundary and the `DSB-BOP-P6-010` Guest Wall attribution link.
+
 ## 2026-08-04
 
 - Created `digistaybook_WIP_v3.md` while preserving the downloaded v2 source.

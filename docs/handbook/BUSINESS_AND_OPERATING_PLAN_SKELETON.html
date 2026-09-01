@@ -1,0 +1,1391 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Business &amp; Operating Plan Skeleton</title>
+  <style>
+    :root {
+      --ink: #24312c;
+      --muted: #5d6963;
+      --paper: #fffdf8;
+      --page: #f1eee6;
+      --line: #d9d2c5;
+      --green: #245f50;
+      --green-soft: #e7f2ed;
+      --gold-soft: #fff0bd;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--page);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.62;
+    }
+    a { color: var(--green); }
+    a:focus-visible { outline: 3px solid #d49732; outline-offset: 3px; }
+    .skip-link { position: fixed; left: 12px; top: -60px; z-index: 20; padding: 9px 12px; background: white; }
+    .skip-link:focus { top: 12px; }
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+      width: min(1400px, calc(100% - 30px));
+      margin: 28px auto 60px;
+    }
+    .contents, .cover, .plan-section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      box-shadow: 0 12px 32px rgba(45, 51, 46, .07);
+    }
+    .contents {
+      position: sticky;
+      top: 20px;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      padding: 22px 20px;
+    }
+    .contents h2 { margin: 0 0 10px; font-size: 1.25rem; }
+    .contents ol { margin: 0; padding-left: 22px; }
+    .contents li { margin: 7px 0; }
+    .contents a { display: block; line-height: 1.35; text-underline-offset: 3px; }
+    .document { min-width: 0; }
+    .cover { padding: clamp(30px, 6vw, 75px); background: linear-gradient(135deg, #fffdf8, #e9f3ef); }
+    .eyebrow { margin: 0 0 10px; color: var(--green); font-size: .78rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { max-width: 900px; margin: 0; font-size: clamp(2.2rem, 5vw, 4.3rem); line-height: 1.04; letter-spacing: -.04em; }
+    .subtitle { max-width: 800px; margin: 22px 0; color: var(--muted); font-size: 1.12rem; }
+    .meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 24px; max-width: 760px; margin-top: 28px; }
+    .meta div { padding: 8px 0; border-bottom: 1px solid var(--line); }
+    .meta strong { display: block; color: var(--muted); font-size: .77rem; letter-spacing: .06em; text-transform: uppercase; }
+    .blank { padding: 1px 5px; border-radius: 4px; color: #714b10; background: var(--gold-soft); font-weight: 700; }
+    .plan-section { margin-top: 22px; padding: clamp(25px, 5vw, 52px); }
+    .section-number { display: inline-grid; place-items: center; width: 38px; height: 38px; margin-right: 8px; border-radius: 50%; color: white; background: var(--green); font-size: .95rem; vertical-align: 4px; }
+    h2 { margin: 0 0 10px; font-size: clamp(1.7rem, 3vw, 2.35rem); line-height: 1.16; letter-spacing: -.025em; }
+    h3 { margin: 34px 0 8px; padding-bottom: 7px; border-bottom: 2px solid var(--green-soft); font-size: 1.35rem; }
+    h4 { margin: 24px 0 6px; font-size: 1.05rem; }
+    p { margin: 8px 0 14px; }
+    ul, ol { margin: 8px 0 18px; padding-left: 24px; }
+    li { margin: 5px 0; }
+    .lead { max-width: 880px; color: var(--muted); font-size: 1.04rem; }
+    .statement { margin: 18px 0; padding: 15px 18px; border-left: 5px solid var(--green); border-radius: 8px; background: var(--green-soft); }
+    .table-wrap { margin: 14px 0 24px; overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+    table { width: 100%; min-width: 720px; border-collapse: collapse; background: white; }
+    th, td { padding: 11px 13px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: white; background: var(--green); font-size: .86rem; }
+    tbody tr:nth-child(even) { background: #fbfaf6; }
+    tr:last-child td { border-bottom: 0; }
+    td:first-child { font-weight: 700; }
+    .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .card { padding: 17px; border: 1px solid var(--line); border-radius: 10px; background: white; }
+    .card h4 { margin-top: 0; }
+    .checklist { list-style: none; padding-left: 0; }
+    .checklist li { position: relative; padding-left: 29px; margin: 8px 0; }
+    .checklist li::before { content: "□"; position: absolute; left: 1px; top: -2px; color: var(--green); font-size: 1.25rem; font-weight: 800; }
+    .footer { padding: 24px 8px 0; color: var(--muted); font-size: .86rem; text-align: center; }
+
+    @media (max-width: 900px) {
+      .layout { display: block; width: min(100% - 18px, 1120px); margin-top: 9px; }
+      .contents { position: static; max-height: none; margin-bottom: 18px; overflow: visible; }
+      .contents ol { columns: 2; column-gap: 35px; }
+    }
+    @media (max-width: 720px) {
+      .contents ol { columns: 1; }
+      .meta, .cards { grid-template-columns: 1fr; }
+      .plan-section { padding: 24px 20px; }
+      h2 { display: grid; grid-template-columns: 38px 1fr; gap: 7px; }
+      .section-number { margin: 0; }
+    }
+    @media print {
+      @page { size: A4; margin: 15mm; }
+      body { background: white; font-size: 10pt; }
+      .layout { display: block; width: 100%; margin: 0; }
+      .contents { display: none; }
+      .cover, .plan-section { border: 0; box-shadow: none; padding: 0; }
+      .cover { min-height: 240mm; display: flex; flex-direction: column; justify-content: center; break-after: page; }
+      .plan-section { margin: 0 0 25px; }
+      h2, h3, h4 { break-after: avoid; }
+      table, .statement, .card { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+  <style id="reference-visual-system">
+    :root {
+      --navy: #0b2545;
+      --blue: #2e74b5;
+      --ink: #172033;
+      --muted: #5c6778;
+      --line: #d9e1ea;
+      --paper: #ffffff;
+      --page: #f5f7fa;
+      --green: #2e74b5;
+      --green-soft: #f2f6fa;
+      --gold-soft: #e8eef5;
+    }
+
+    body {
+      background: var(--page);
+      color: var(--ink);
+      font: 16px/1.62 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    a { color: var(--blue); }
+    a:focus-visible { outline-color: #8fc3ef; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 310px minmax(0, 1fr);
+      gap: 0;
+      align-items: stretch;
+      width: 100%;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .contents {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      max-height: none;
+      overflow: auto;
+      padding: 24px 20px;
+      border: 0;
+      border-radius: 0;
+      background: var(--navy);
+      color: #ffffff;
+      box-shadow: none;
+    }
+    .contents h2 {
+      margin: 0 0 18px;
+      color: #ffffff;
+      font-size: 20px;
+      font-weight: 750;
+      line-height: 1.25;
+    }
+    .contents ol { margin: 0; padding: 0; list-style: none; }
+    .contents > ol { display: grid; gap: 12px; }
+    .contents li { margin: 0; }
+    .contents .toc-card {
+      padding: 9px 8px 10px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 4px;
+      background: #102f50;
+    }
+    .contents .toc-card > ol {
+      margin-top: 5px;
+      padding-top: 5px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+    }
+    .contents a {
+      display: block;
+      padding: 7px 8px;
+      border-left: 2px solid transparent;
+      color: #eaf2fa;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.4;
+      text-decoration: none;
+    }
+    .contents .toc-card > a {
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 760;
+    }
+    .contents .toc-card ol a {
+      padding: 5px 8px 5px 18px;
+      color: #dce9f5;
+      font-size: 13px;
+      font-weight: 520;
+    }
+    .contents .toc-card ol ol a {
+      padding-left: 30px;
+      color: #bfd3e6;
+      font-size: 12px;
+    }
+    .contents a:hover,
+    .contents a:focus-visible {
+      border-left-color: #8fc3ef;
+      background: #153657;
+      outline: none;
+    }
+
+    .document {
+      width: min(1120px, calc(100% - 48px));
+      min-width: 0;
+      margin: 28px auto 80px;
+      padding: 54px 64px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      box-shadow: 0 10px 28px rgba(20, 38, 60, .08);
+    }
+
+    .cover,
+    .plan-section {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .cover { padding-bottom: 10px; }
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: none;
+    }
+    .cover h1 {
+      max-width: none;
+      margin: 0 0 18px;
+      padding: 0;
+      border: 0;
+      color: var(--navy);
+      font-size: 42px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    .cover h1 .blank,
+    .subtitle .blank {
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+    }
+    .subtitle {
+      max-width: 860px;
+      margin: 0 0 18px;
+      color: var(--ink);
+      font-size: 16px;
+    }
+    .meta {
+      display: block;
+      max-width: none;
+      margin: 0;
+    }
+    .meta div { margin: 0 0 7px; padding: 0; border: 0; }
+    .meta strong {
+      display: inline;
+      margin-right: 5px;
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 750;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .meta strong::after { content: ":"; }
+
+    .blank {
+      display: inline;
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #e8eef5;
+      color: #315d82;
+      font-weight: 650;
+    }
+
+    h1, h2, h3, h4 {
+      color: var(--navy);
+      line-height: 1.2;
+      letter-spacing: 0;
+      scroll-margin-top: 20px;
+    }
+    .plan-section h2 {
+      display: block;
+      margin: 52px 0 18px;
+      padding: 0 0 9px;
+      border-bottom: 2px solid var(--line);
+      color: var(--navy);
+      font-size: 30px;
+    }
+    .section-number {
+      display: inline;
+      width: auto;
+      height: auto;
+      margin: 0 8px 0 0;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      color: inherit;
+      font-size: inherit;
+      vertical-align: baseline;
+    }
+    h3 {
+      margin: 38px 0 13px;
+      padding: 0;
+      border: 0;
+      color: var(--navy);
+      font-size: 23px;
+    }
+    h4 { margin: 28px 0 10px; color: var(--navy); font-size: 18px; }
+    p { margin: 0 0 13px; }
+    ul, ol { margin: 8px 0 18px; padding-left: 25px; }
+    li { margin: 6px 0; }
+    .lead { max-width: none; color: var(--ink); font-size: 16px; }
+    .section-guidance {
+      margin: -4px 0 16px;
+      color: var(--muted);
+      font-size: 14px;
+      font-style: italic;
+      line-height: 1.5;
+    }
+    .section-guidance {
+      margin: -4px 0 16px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .statement {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border: 0;
+      border-left: 4px solid var(--blue);
+      border-radius: 0;
+      background: #f2f6fa;
+      color: #30445c;
+    }
+
+    .table-wrap {
+      margin: 20px 0 30px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+    }
+    table {
+      width: 100%;
+      min-width: 0;
+      border-collapse: collapse;
+      background: #ffffff;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    th, td {
+      min-width: 145px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      position: sticky;
+      top: 0;
+      background: #e8eef5;
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 750;
+    }
+    tbody tr:nth-child(even) { background: transparent; }
+
+    .navigation-flow {
+      margin: 24px 0 30px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+    .navigation-flow figcaption {
+      margin-bottom: 16px;
+      color: var(--navy);
+      font-size: 17px;
+      font-weight: 750;
+    }
+    .navigation-flow-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .navigation-lane {
+      min-width: 0;
+      padding: 14px;
+      border: 1px solid #cbd8e5;
+      border-top: 4px solid var(--blue);
+      border-radius: 6px;
+      background: #ffffff;
+    }
+    .navigation-role {
+      display: block;
+      margin-bottom: 11px;
+      color: var(--navy);
+      font-size: 14px;
+    }
+    .navigation-steps {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+    }
+    .navigation-step {
+      display: inline-block;
+      padding: 6px 8px;
+      border: 1px solid #d5e0ea;
+      border-radius: 4px;
+      background: #f2f6fa;
+      color: #273d55;
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+    .navigation-arrow {
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .navigation-boundary {
+      margin: 11px 0 0;
+      padding-top: 9px;
+      border-top: 1px dashed #cbd8e5;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .navigation-lane.guest { border-top-color: #4f8b73; }
+    .navigation-lane.internal { border-top-color: #8b5e83; }
+
+    .cards { display: block; }
+    .card {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+    }
+    .card h4 { margin: 28px 0 10px; }
+    .checklist { padding-left: 25px; list-style: disc; }
+    .checklist li { padding-left: 0; }
+    .checklist li::before { content: none; }
+    .footer { padding: 24px 0 0; color: var(--muted); font-size: 13px; text-align: left; }
+
+    @media (max-width: 900px) {
+      .layout { display: block; min-height: 0; }
+      .contents {
+        position: relative;
+        height: auto;
+        max-height: none;
+        margin: 0;
+        overflow: visible;
+      }
+      .contents ol { columns: 1; }
+      .document { width: calc(100% - 24px); margin: 12px; padding: 30px 24px; }
+      .cover h1 { font-size: 34px; }
+    }
+
+    @media (max-width: 620px) {
+      .contents ol { columns: 1; }
+      .document { padding: 26px 20px; }
+      .plan-section h2 { font-size: 26px; }
+      h3 { font-size: 21px; }
+      .navigation-flow { padding: 14px; }
+      .navigation-flow-grid { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: #ffffff; }
+      .layout { display: block; }
+      .contents { display: none; }
+      .document { width: auto; margin: 0; padding: 0; border: 0; box-shadow: none; }
+      .cover { min-height: 0; display: block; break-after: auto; }
+      .table-wrap { overflow: visible; }
+      .plan-section h2 { break-before: page; }
+      .navigation-flow, .navigation-lane { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#plan">Skip to plan</a>
+  <main class="layout" id="plan">
+    <nav class="contents" aria-label="Contents">
+      <h2>Contents</h2>
+      <ol>
+        <li class="toc-card">
+          <a href="#executive-summary">1 Executive summary</a>
+          <ol>
+            <li><a href="#business-objective">1.1 Business objective</a></li>
+          </ol>
+        </li>
+        <li class="toc-card">
+          <a href="#business-overview">2 Business overview</a>
+          <ol>
+            <li><a href="#product">2.1 Product</a></li>
+            <li><a href="#customer">2.2 Customer</a></li>
+            <li><a href="#customer-roles">2.3 Customer roles</a></li>
+            <li><a href="#product-scope">2.4 Product scope</a></li>
+          </ol>
+        </li>
+        <li class="toc-card">
+          <a href="#market-position">3 Market position</a>
+          <ol>
+            <li><a href="#customer-problem">3.1 Customer problem</a></li>
+            <li><a href="#existing-alternatives">3.2 Existing alternatives</a></li>
+            <li><a href="#positioning">3.3 Positioning</a></li>
+          </ol>
+        </li>
+        <li class="toc-card">
+          <a href="#offer-revenue">4 Offer and revenue model</a>
+          <ol>
+            <li><a href="#plans-and-pricing">4.1 Plans and pricing</a></li>
+            <li><a href="#revenue-model">4.2 Revenue model</a></li>
+            <li><a href="#commercial-principles">4.3 Commercial principles</a></li>
+          </ol>
+        </li>
+        <li class="toc-card">
+          <a href="#operating-plan">5 Operating plan</a>
+          <ol>
+            <li><a href="#how-the-service-works">5.1 How the service works</a></li>
+            <li><a href="#live-wall-private-view">5.2 Live wall and private host view</a></li>
+            <li><a href="#guest-content">5.3 Guest content</a></li>
+            <li><a href="#content-moderation">5.4 Content moderation and safety</a></li>
+            <li><a href="#host-dashboard">5.5 Host dashboard</a></li>
+            <li><a href="#host-emails">5.6 Host emails and notifications</a></li>
+            <li><a href="#billing-operations">5.7 Billing operations</a></li>
+            <li><a href="#support-complaints-refunds">5.8 Customer support, complaints and refunds</a></li>
+            <li><a href="#incidents-reliability">5.9 Incidents and reliability</a></li>
+            <li><a href="#retention-deletion-backups">5.10 Retention, deletion and backups</a></li>
+            <li><a href="#privacy-security">5.11 Privacy and security</a></li>
+            <li><a href="#suppliers">5.12 Suppliers</a></li>
+          </ol>
+        </li>
+        <li class="toc-card">
+          <a href="#technology">6 Technology and delivery</a>
+          <ol>
+            <li><a href="#standard-architecture">6.1 Standard architecture</a></li>
+            <li><a href="#authentication-access">6.2 Authentication and access control</a></li>
+            <li>
+              <a href="#website-architecture">6.3 Website architecture and core user interface</a>
+              <ol>
+                <li><a href="#site-navigation">6.3.1 Site navigation</a></li>
+                <li><a href="#page-flow">6.3.2 Page flow</a></li>
+                <li><a href="#landing-page">6.3.3 Home or landing page</a></li>
+                <li><a href="#pricing-page">6.3.4 Pricing and plan selection</a></li>
+                <li><a href="#authentication-page">6.3.5 Sign-up and sign-in</a></li>
+                <li><a href="#dashboard-page">6.3.6 Host dashboard</a></li>
+                <li><a href="#management-page">6.3.7 Product-space management</a></li>
+                <li><a href="#contribution-page">6.3.8 Guest contribution</a></li>
+                <li><a href="#wall-page">6.3.9 Live wall or private host view</a></li>
+                <li><a href="#account-support-pages">6.3.10 Account, billing, support and policy pages</a></li>
+              </ol>
+            </li>
+            <li>
+              <a href="#brand-system">6.4 Brand identity and design system</a>
+              <ol>
+                <li><a href="#brand-foundations">6.4.1 Brand foundations</a></li>
+                <li><a href="#logo-marks">6.4.2 Logo and brand marks</a></li>
+                <li><a href="#colour-system">6.4.3 Colour system</a></li>
+                <li><a href="#typography-system">6.4.4 Typography</a></li>
+                <li><a href="#interface-style">6.4.5 Iconography and interface style</a></li>
+                <li><a href="#brand-voice">6.4.6 Brand voice and written style</a></li>
+                <li><a href="#brand-governance">6.4.7 Accessibility, assets and governance</a></li>
+              </ol>
+            </li>
+            <li><a href="#environments">6.5 Environments</a></li>
+            <li><a href="#quality-requirements">6.6 Quality requirements</a></li>
+          </ol>
+        </li>
+        <li class="toc-card">
+          <a href="#launch-growth">7 Launch and growth</a>
+          <ol>
+            <li><a href="#launch-approach">7.1 Launch approach</a></li>
+            <li><a href="#partnerships-referrals">7.2 Partnerships and referrals</a></li>
+          </ol>
+        </li>
+        <li class="toc-card">
+          <a href="#financial-management">8 Financial management</a>
+          <ol>
+            <li><a href="#primary-costs">8.1 Primary costs</a></li>
+            <li><a href="#monthly-financial-review">8.2 Monthly financial review</a></li>
+          </ol>
+        </li>
+        <li class="toc-card">
+          <a href="#appendix-operational-templates">Appendix A Operational templates and reference material</a>
+          <ol>
+            <li><a href="#appendix-email-templates">A.1 Email templates</a></li>
+            <li><a href="#appendix-support-responses">A.2 Support response templates</a></li>
+            <li><a href="#appendix-operational-checklists">A.3 Operational checklists</a></li>
+            <li><a href="#appendix-review-records">A.4 Decision and review records</a></li>
+            <li><a href="#appendix-technical-reference">A.5 Technical and visual reference material</a></li>
+          </ol>
+        </li>
+      </ol>
+    </nav>
+
+    <article class="document">
+      <header class="cover">
+        <p class="eyebrow">Business and operating plan</p>
+        <h1><span class="blank">[Product Name]</span></h1>
+        <p class="subtitle"><span class="blank">[One sentence explaining who the product is for, what it enables and the result it provides.]</span></p>
+        <div class="meta">
+          <div><strong>Business owner</strong><span class="blank">[Owner]</span></div>
+          <div><strong>Legal operator</strong>codebertcreations</div>
+          <div><strong>Primary region</strong><span class="blank">[Country or region]</span></div>
+        </div>
+      </header>
+
+      <section class="plan-section" id="executive-summary">
+        <h2><span class="section-number">1</span><span>Executive summary</span></h2>
+        <p class="section-guidance">Summarise the business, intended customer, core outcome, commercial model, operating approach and reason the plan should proceed.</p>
+        <p><span class="blank">[Product Name]</span> will be a web-based service for <span class="blank">[primary customer]</span>. It will allow a host or organiser to create a managed digital space where guests or contributors can add <span class="blank">[text, images, audio and/or video]</span>. Approved content will be available through <span class="blank">[a public live wall, a private host view, or both]</span>.</p>
+        <p>The product will operate on a self-service subscription model. Hosts will create and manage their own product spaces, guest contributions will be screened automatically, billing will be handled through Stripe and routine onboarding, notifications, moderation, retention and reporting will be automated wherever practical.</p>
+        <p>The business will use a shared portfolio architecture based on React, Vite, Firebase, Stripe and GitHub. This approach is intended to keep the product inexpensive to launch, consistent with the wider portfolio and capable of operating with minimal routine manual intervention.</p>
+
+        <h3 id="business-objective">1.1 Business objective</h3>
+        <p class="section-guidance">State the specific result the business is trying to achieve, for whom, and the evidence or milestone that would demonstrate progress.</p>
+        <p>The initial objective is to launch a focused product that solves <span class="blank">[specific customer problem]</span>, demonstrates that customers will pay for the outcome and can be supported within the portfolio's available time and operating budget.</p>
+      </section>
+
+      <section class="plan-section" id="business-overview">
+        <h2><span class="section-number">2</span><span>Business overview</span></h2>
+        <p class="section-guidance">Describe what the business provides, who participates, how the main roles differ and what is inside or outside the first release.</p>
+
+        <h3 id="product">2.1 Product</h3>
+        <p class="section-guidance">Explain the core service, the customer outcome and the principal capabilities included in the product.</p>
+        <p>The product will provide <span class="blank">[core service]</span>. The customer will be able to create and configure a product space, invite guests or contributors, manage submitted content and use the resulting content through the product's selected wall or host-view experience.</p>
+
+        <h3 id="customer">2.2 Customer</h3>
+        <p class="section-guidance">Identify the paying customer, Guests or contributors, their circumstances and the needs the product must satisfy.</p>
+        <p>The primary paying customer will be <span class="blank">[customer description]</span>. Guests or contributors will be <span class="blank">[contributor description]</span>. The product will be designed around the host's need to organise and control the experience and the guest's need to contribute quickly without unnecessary registration or technical effort.</p>
+
+        <h3 id="customer-roles">2.3 Customer roles</h3>
+        <p class="section-guidance">List every user and internal role, explaining its purpose, permitted access and important boundaries.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Role</th><th>Purpose</th><th>Access</th></tr></thead>
+            <tbody>
+              <tr><td>Host or customer</td><td>Creates, pays for and manages the product space.</td><td>Authenticated dashboard, settings, guest content, billing, exports and deletion.</td></tr>
+              <tr><td>Guest or contributor</td><td>Adds permitted content through a shared link or QR code.</td><td>Limited contribution route; no access to host or operator information.</td></tr>
+              <tr><td>Viewer</td><td>Views approved content where a public wall is enabled.</td><td>Approved public content and public-safe presentation settings only.</td></tr>
+              <tr><td>Platform administrator (internal)</td><td>Runs support, incidents, escalated moderation and business administration.</td><td>Protected, role-based administrative access with auditable actions.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The access described here is established and enforced through the identity decisions and security rules recorded in section 6.2.</p>
+
+        <h3 id="product-scope">2.4 Product scope</h3>
+        <p class="section-guidance">Record the capabilities included in the initial release, explicit exclusions and the conditions for considering later additions.</p>
+        <p>The first release will include <span class="blank">[core scope]</span>. It will not include <span class="blank">[explicit exclusions]</span>. Additional features will be considered only after the core customer journey and willingness to pay have been demonstrated.</p>
+      </section>
+
+      <section class="plan-section" id="market-position">
+        <h2><span class="section-number">3</span><span>Market position</span></h2>
+        <p class="section-guidance">Set out the customer problem, current alternatives, available evidence and the position the product will occupy in the market.</p>
+
+        <h3 id="customer-problem">3.1 Customer problem</h3>
+        <p class="section-guidance">Describe the customer’s current difficulty, when it occurs, its practical or commercial impact and why solving it matters.</p>
+        <p><span class="blank">[Describe the current problem, when it occurs and why the customer cares about solving it.]</span></p>
+
+        <h3 id="existing-alternatives">3.2 Existing alternatives</h3>
+        <p class="section-guidance">Describe competing products, manual workarounds and the reasons a customer might choose or reject each alternative.</p>
+        <p>Customers currently use <span class="blank">[existing products, social platforms, shared drives, paper processes or manual workarounds]</span>. The proposed product will be chosen when its focused workflow, host control, guest simplicity and integrated display or private-view experience provide a clearer result.</p>
+
+        <h3 id="positioning">3.3 Positioning</h3>
+        <p class="section-guidance">Define the intended audience, category, distinctive value, approved market message and claims the business will avoid.</p>
+        <p><span class="blank">[Product Name]</span> will be positioned as <span class="blank">[simple product position]</span>. It will not be presented as a general-purpose social network, file-storage service or communication platform unless the product scope explicitly requires those functions.</p>
+      </section>
+
+      <section class="plan-section" id="offer-revenue">
+        <h2><span class="section-number">4</span><span>Offer and revenue model</span></h2>
+        <p class="section-guidance">Explain what customers can buy, how pricing works, what each offer includes and the commercial rules that must remain consistent.</p>
+
+        <h3 id="plans-and-pricing">4.1 Plans and pricing</h3>
+        <p class="section-guidance">List each plan, price, billing frequency, included service, meaningful limits, trial terms and any add-ons.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Offer</th><th>Price</th><th>Included service</th><th>Limits</th></tr></thead>
+            <tbody>
+              <tr><td>Free or trial</td><td><span class="blank">[Price]</span></td><td><span class="blank">[Included features]</span></td><td><span class="blank">[Limits]</span></td></tr>
+              <tr><td>Primary paid offer</td><td><span class="blank">[Price and frequency]</span></td><td><span class="blank">[Included features]</span></td><td><span class="blank">[Limits]</span></td></tr>
+              <tr><td>Higher offer or add-on</td><td><span class="blank">[Price]</span></td><td><span class="blank">[Additional value]</span></td><td><span class="blank">[Limits]</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="revenue-model">4.2 Revenue model</h3>
+        <p class="section-guidance">Describe how revenue is earned, when customers are charged, how recurring billing is managed and how entitlements are granted.</p>
+        <p>Revenue will be generated through <span class="blank">[monthly subscription, annual subscription, per-event payment or another defined model]</span>. Stripe Checkout will be used for customer payment, Stripe Billing for recurring subscriptions where applicable and the Stripe Customer Portal for self-service billing management.</p>
+
+        <h3 id="commercial-principles">4.3 Commercial principles</h3>
+        <p class="section-guidance">Record the non-negotiable rules for offer consistency, limits, cancellation, refunds, retention promises and customer communications.</p>
+        <ul>
+          <li>Marketing, pricing, checkout, dashboard entitlements and customer policies will describe the same offer.</li>
+          <li>Limits will be visible before they are reached and the exact reason will be shown when an action is blocked.</li>
+          <li>Cancellation will be self-service where supported. The customer will be told when access ends and what happens to stored content.</li>
+          <li>Refunds will follow the published policy, with documented authority for reasonable goodwill exceptions.</li>
+          <li>The business will not promise unlimited storage, indefinite retention or original-quality media unless those promises are implemented and costed.</li>
+        </ul>
+      </section>
+
+      <section class="plan-section" id="operating-plan">
+        <h2><span class="section-number">5</span><span>Operating plan</span></h2>
+        <p class="section-guidance">Describe how the service operates from discovery through closure, including customer journeys, routine automation, human responsibilities and control points.</p>
+        <p class="lead">The product will be designed as a largely self-service service. Routine onboarding, billing, moderation, email, retention and reporting will be automated. Human involvement will focus on support exceptions, complaints, refunds, serious incidents and escalated content decisions.</p>
+
+        <h3 id="how-the-service-works">5.1 How the service works</h3>
+        <p class="section-guidance">Map the complete service lifecycle, showing the customer experience and corresponding system operation at each stage.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Stage</th><th>Customer experience</th><th>System operation</th></tr></thead>
+            <tbody>
+              <tr><td>Discover</td><td>The customer understands the product outcome, plans, limits and relevant examples.</td><td>Marketing, pricing, FAQs and policies use consistent claims.</td></tr>
+              <tr><td>Create an account</td><td>The host signs up or signs in through a familiar web flow.</td><td>Firebase Authentication establishes the host identity using the methods recorded in section 6.2.</td></tr>
+              <tr><td>Create a product space</td><td>The host creates the event, wall, property, group or equivalent space.</td><td>Firestore creates an owner-linked record with safe default settings and status.</td></tr>
+              <tr><td>Select a plan</td><td>The host chooses the relevant offer and completes hosted checkout.</td><td>A verified Stripe webhook grants the purchased entitlement.</td></tr>
+              <tr><td>Configure</td><td>The host sets branding, guest instructions, content types, moderation, notifications and display behaviour.</td><td>Validated configuration is saved to the host-owned record.</td></tr>
+              <tr><td>Share</td><td>The host opens contributions and shares a QR code or web link.</td><td>The guest route confirms that the product is open, available and permitted to accept content.</td></tr>
+              <tr><td>Contribute</td><td>The guest adds content without unnecessary account creation.</td><td>Content is validated, stored as pending and screened before public display.</td></tr>
+              <tr><td>Review and display</td><td>Low-risk content appears promptly; held content is reviewed through the host dashboard.</td><td>Only approved, visible content is eligible for a public wall.</td></tr>
+              <tr><td>Manage and export</td><td>The host manages content and downloads available records or media.</td><td>Owner permissions and plan entitlements are checked before access or export.</td></tr>
+              <tr><td>Renew, cancel or delete</td><td>The host manages billing and receives clear access, retention and deletion dates.</td><td>Stripe events and scheduled Firebase jobs update access and content lifecycle safely.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="live-wall-private-view">5.2 Live wall and private host view</h3>
+        <p class="section-guidance">Explain the supported presentation modes, who can see each mode and the rules governing approved, private, held and unavailable content.</p>
+        <h4>Live wall</h4>
+        <p class="section-guidance">Describe the public or shared display experience, supported devices, content ordering, preview behaviour and closed states.</p>
+        <p>Where enabled, the live wall will display only approved and visible guest content. Firestore real-time updates will add newly approved contributions automatically. A new contribution may be featured briefly before joining the normal display rotation. When the wall contains more content than fits on screen, it will rotate through contributions rather than rely on continuous scrolling.</p>
+        <p>The wall will support common laptop, television, tablet and phone displays. The host will be able to preview and configure the wall before opening it publicly. If the product is closed, public viewers will receive a clear closed message while the authenticated host retains appropriate preview access.</p>
+
+        <h4>Private host view</h4>
+        <p class="section-guidance">Describe authenticated-only content access, status distinctions and the controls available to authorised Hosts.</p>
+        <p>Where the product uses a private host view, content will remain visible only to the authenticated host and authorised operators. Approved, held and hidden content will have distinct statuses. Held content will never be presented as approved.</p>
+
+        <h3 id="guest-content">5.3 Guest content</h3>
+        <p class="section-guidance">Define the Guest contribution journey, permitted content types, validation, consent, limits, progress feedback and error handling.</p>
+        <p>The guest contribution experience will be mobile-first and accessible through a QR code or shared link. Guests will see the permitted content types, where their content may appear and any required consent statement before submission.</p>
+        <p>The product will accept <span class="blank">[text, images, audio and/or video]</span>. File type, size, duration and other relevant limits will be checked before processing. Upload progress and recoverable error messages will be shown. Duplicate submissions will be prevented where practical.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Content type</th><th>Operating treatment</th></tr></thead>
+            <tbody>
+              <tr><td>Text</td><td>Length limits, spam controls and automated checks for harassment, threats, hate, obscene content and personal information.</td></tr>
+              <tr><td>Images</td><td>File validation, safe decoding, metadata handling, moderation before public display and storage under the owning product path.</td></tr>
+              <tr><td>Audio</td><td>File and duration limits, safe playback and transcription for moderation where practical.</td></tr>
+              <tr><td>Video</td><td>File and duration limits, processing of sampled frames and audio transcription before public display.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="content-moderation">5.4 Content moderation and safety</h3>
+        <p class="section-guidance">Document moderation categories, automated and human decisions, fail-closed behaviour, audit records, notifications and escalation rules.</p>
+        <p>Guest content will be screened automatically before it can appear publicly. Automated moderation will be treated as a risk-control tool rather than a guarantee. Low-risk content will be approved automatically. Uncertain or likely harmful content will be held for review. Clearly disallowed content may be rejected according to the product policy.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Content concern</th><th>Default response</th></tr></thead>
+            <tbody>
+              <tr><td>Harassment or bullying</td><td>Hold for review and remove targeted abuse.</td></tr>
+              <tr><td>Nudity or sexual material</td><td>Hold. Explicit content is normally rejected for public or family-oriented products.</td></tr>
+              <tr><td>Obscene or highly offensive material</td><td>Hold according to the stated audience tolerance.</td></tr>
+              <tr><td>Threats or violence</td><td>Hold and escalate serious or credible threats to an internal Platform administrator.</td></tr>
+              <tr><td>Hate</td><td>Hold or reject attacks based on protected characteristics.</td></tr>
+              <tr><td>Spam, scams or malicious links</td><td>Reject or quarantine.</td></tr>
+              <tr><td>Personal or sensitive information</td><td>Hold before public display.</td></tr>
+              <tr><td>Illegal or clearly dangerous material</td><td>Reject and follow the documented incident and legal process.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>If moderation is unavailable, new content will remain pending and will not appear on a public wall. A host-only product may retain it privately with a clear held-for-review status. Moderation actions will record the previous status, new status, actor, time and reason. Hosts will receive batched moderation notices rather than one email for every held item.</p>
+
+        <h3 id="host-dashboard">5.5 Host dashboard</h3>
+        <p class="section-guidance">Describe the authenticated management areas, information hierarchy, primary Host actions and statuses requiring attention.</p>
+        <div class="cards">
+          <div class="card"><h4>Overview</h4><p class="section-guidance">Include product status, plan, usage, next action and setup progress.</p></div>
+          <div class="card"><h4>Guest access</h4><p class="section-guidance">Include the QR code, share link, open or closed state and Guest instructions.</p></div>
+          <div class="card"><h4>Content</h4><p class="section-guidance">Include approved, held and hidden views with the appropriate management actions.</p></div>
+          <div class="card"><h4>Display</h4><p class="section-guidance">Include live-wall or private-view layout, branding, rotation and preview controls.</p></div>
+          <div class="card"><h4>Exports</h4><p class="section-guidance">Include available formats, preparation status, retry behaviour and consistent hidden-content rules.</p></div>
+          <div class="card"><h4>Billing and account</h4><p class="section-guidance">Include the plan, invoices, payment method, renewal, cancellation, retention dates and security actions.</p></div>
+        </div>
+
+        <h3 id="host-emails">5.6 Host emails and notifications</h3>
+        <p class="section-guidance">List each Host communication, its verified trigger, purpose, delivery channel, recipient and corresponding in-product message.</p>
+        <p>Transactional emails will be sent from Firebase Functions through the approved email provider. The initial portfolio provider will be Resend. Important notices will also be visible in the host dashboard so delivery does not depend entirely on an inbox.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Email</th><th>Trigger</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>Welcome</td><td>Host account created.</td><td>Confirm the account and link to the first useful action.</td></tr>
+              <tr><td>Security</td><td>Email verification, reset, email change or relevant security event.</td><td>Provide a time-limited action and explain what to do if it was not requested.</td></tr>
+              <tr><td>Product created</td><td>New product space created.</td><td>Confirm creation and link directly to setup.</td></tr>
+              <tr><td>Setup reminder</td><td>Required setup remains incomplete.</td><td>Identify the next incomplete action and stop once it is complete.</td></tr>
+              <tr><td>Ready to share</td><td>Setup complete or contributions opened.</td><td>Provide the guest link, QR route and preview action.</td></tr>
+              <tr><td>First contribution</td><td>First approved or reviewable guest contribution.</td><td>Confirm that the service is working and link to the content.</td></tr>
+              <tr><td>Moderation digest</td><td>Content remains held for review.</td><td>State the count and link to the review queue.</td></tr>
+              <tr><td>Usage warning</td><td>An allowance approaches or reaches its limit.</td><td>Explain the limit, current use and available action.</td></tr>
+              <tr><td>Purchase confirmation</td><td>Verified Stripe payment is fulfilled.</td><td>Confirm the plan, product and new entitlement.</td></tr>
+              <tr><td>Payment failed</td><td>Verified invoice or renewal failure.</td><td>Link to secure billing management and state the grace period.</td></tr>
+              <tr><td>Renewal notice</td><td>Before renewal or retention expiry.</td><td>State the date, amount or options and link to billing.</td></tr>
+              <tr><td>Final retention notice</td><td>Shortly before access closes or deletion eligibility.</td><td>State the exact date and available renewal or export action.</td></tr>
+              <tr><td>Cancellation</td><td>Cancellation confirmed or scheduled.</td><td>Confirm the effective date and what happens to content.</td></tr>
+              <tr><td>Access closed</td><td>Paid access or hosting period ends.</td><td>Confirm closure, grace period and recovery options.</td></tr>
+              <tr><td>Deletion requested</td><td>Host confirms deletion.</td><td>Confirm immediate effect, grace period and undo route where available.</td></tr>
+              <tr><td>Deletion completed</td><td>Hard deletion finishes.</td><td>Confirm completion within the documented deletion scope.</td></tr>
+              <tr><td>Export status</td><td>A long-running export succeeds or fails.</td><td>Provide a time-limited download or retry/support route.</td></tr>
+              <tr><td>Support receipt</td><td>Support request or complaint submitted.</td><td>Provide a reference and response expectation.</td></tr>
+              <tr><td>Incident notice</td><td>A material incident affects the customer.</td><td>Explain impact, action, workaround and update route.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="billing-operations">5.7 Billing operations</h3>
+        <p class="section-guidance">Describe checkout, verified fulfilment, renewals, failures, refunds, cancellation, reconciliation and customer self-service.</p>
+        <ul>
+          <li>Stripe-hosted checkout will collect payment details. The product will not handle raw card details.</li>
+          <li>Entitlements will be granted or changed only after a signature-verified webhook is processed.</li>
+          <li>Webhook processing will be idempotent so retries cannot duplicate fulfilment.</li>
+          <li>Failed payments will trigger a customer notice, safe retry route and documented grace period.</li>
+          <li>Cancellation, renewal and refunds will be reconciled with the customer's access and communications.</li>
+          <li>Stripe revenue, refunds and disputes will be reviewed against the product database each month.</li>
+        </ul>
+
+        <h3 id="support-complaints-refunds">5.8 Customer support, complaints and refunds</h3>
+        <p class="section-guidance">Define support channels, ownership, response expectations, complaint records, escalation routes and refund authority.</p>
+        <p>Support will be available through <span class="blank">[support address or channel]</span>. Requests will be acknowledged automatically and routed to <span class="blank">[responsible owner]</span>. The target initial response will be <span class="blank">[response period]</span>.</p>
+        <p>Complaints will record the customer, affected product space, issue category, owner, response date, actions and outcome. Privacy, safety, billing and accessibility complaints will have explicit escalation routes. Refund decisions will follow the published policy and be reconciled with Stripe and product access.</p>
+
+        <h3 id="incidents-reliability">5.9 Incidents and reliability</h3>
+        <p class="section-guidance">Identify monitored journeys, retry and alert behaviour, incident ownership, severity, recovery and customer-notification rules.</p>
+        <p>The business will monitor signup, product creation, guest submission, media upload, moderation, live-wall delivery, checkout, webhook fulfilment, email, exports and deletion jobs. Temporary failures will use limited retries and deduplication. Repeated failures will generate an actionable alert.</p>
+        <p>Material incidents will have a named owner, severity, timeline, customer impact statement and recovery decision. Customers will be notified when the impact is significant or when required by law or policy.</p>
+
+        <h3 id="retention-deletion-backups">5.10 Retention, deletion and backups</h3>
+        <p class="section-guidance">Specify active retention, grace periods, deletion scope, customer notices, backup controls and restoration testing.</p>
+        <p>Active content will be retained for <span class="blank">[active retention period]</span>. After expiry or host deletion, the product will use a <span class="blank">[grace period]</span> before hard deletion where appropriate. Access, warning and deletion dates will agree across the dashboard, emails and policies.</p>
+        <p>Hard deletion will remove the primary record, child records, guest contributions, derived files and related Firebase Storage objects through a controlled process. Backups will have documented scope, encryption, access and retention. Restoration will be tested <span class="blank">[frequency]</span>.</p>
+
+        <h3 id="privacy-security">5.11 Privacy and security</h3>
+        <p class="section-guidance">Record data-minimisation, access-control, public-data, secret-management, account-security and review requirements.</p>
+        <ul>
+          <li>Only personal data required for the service will be collected.</li>
+          <li>Guest account creation and guest email collection will be avoided unless necessary.</li>
+          <li>Public viewers will receive only approved public content and public-safe configuration.</li>
+          <li>Hosts will access only the product spaces they own or are authorised to manage.</li>
+          <li>Billing, moderation results and administrative roles will be controlled by trusted server code.</li>
+          <li>Secrets will remain in approved provider secret stores and supplier accounts will use multi-factor authentication.</li>
+          <li>Access reviews, dependency updates and security/privacy ownership will form part of routine operations.</li>
+        </ul>
+        <p>The sign-in methods, session rules and role model that give effect to these commitments are recorded in section 6.2.</p>
+
+        <h3 id="suppliers">5.12 Suppliers</h3>
+        <p class="section-guidance">List each external supplier, the service it provides, its primary control, owner, cost dependency and exit consideration.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Supplier</th><th>Purpose</th><th>Primary control</th></tr></thead>
+            <tbody>
+              <tr><td>GitHub</td><td>Code, issues, decisions and automated checks.</td><td>Protected access and review history.</td></tr>
+              <tr><td>Firebase / Google Cloud</td><td>Authentication, Firestore, Storage, Functions and Hosting.</td><td>Budgets, permissions, backups and environment separation.</td></tr>
+              <tr><td>Stripe</td><td>Checkout, billing, invoices, portal and refunds.</td><td>Verified webhooks and monthly reconciliation.</td></tr>
+              <tr><td>Resend</td><td>Transactional email.</td><td>Domain authentication, delivery monitoring and sending limits.</td></tr>
+              <tr><td>Moderation provider</td><td>Text and media safety screening.</td><td>Policy mapping, outage behaviour, costs and data terms.</td></tr>
+              <tr><td>Domain and DNS provider</td><td>Customer domain and email records.</td><td>Renewal, account security and recovery access.</td></tr>
+              <tr><td>ChatGPT and Claude</td><td>AI-assisted development and documentation.</td><td>No credentials or customer data; human review remains required.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="plan-section" id="technology">
+        <h2><span class="section-number">6</span><span>Technology and delivery</span></h2>
+        <p class="section-guidance">Describe the technical architecture, identity and access model, website and page structure, brand and interface system, delivery environments and quality requirements needed to operate the service safely and consistently.</p>
+
+        <h3 id="standard-architecture">6.1 Standard architecture</h3>
+        <p class="section-guidance">Identify the selected approach for source control, application delivery, identity, data, media, privileged operations, payments and communications.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Area</th><th>Selected approach</th></tr></thead>
+            <tbody>
+              <tr><td>Repository and work tracking</td><td>GitHub repositories, issues and automated checks.</td></tr>
+              <tr><td>Web application</td><td>React and Vite with responsive, accessible semantic HTML.</td></tr>
+              <tr><td>Authentication</td><td>Firebase Authentication for hosts and operators; methods, session rules and roles are recorded in section 6.2.</td></tr>
+              <tr><td>Application data</td><td>Cloud Firestore with explicit owner, status and timestamp fields.</td></tr>
+              <tr><td>Guest media</td><td>Firebase Storage using product-owned paths and lifecycle cleanup.</td></tr>
+              <tr><td>Privileged operations</td><td>Firebase Functions for billing, moderation, email and scheduled work.</td></tr>
+              <tr><td>Hosting</td><td>Firebase Hosting.</td></tr>
+              <tr><td>Payments</td><td>Stripe Checkout, Billing, Customer Portal and verified webhooks.</td></tr>
+              <tr><td>Email</td><td>Resend called from Firebase Functions with delivery logging.</td></tr>
+              <tr><td>Development process</td><td>AI-assisted implementation using ChatGPT and Claude, with human review and testing.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="authentication-access">6.2 Authentication and access control</h3>
+        <p class="section-guidance">Record the sign-in methods, account and session rules, role model, guest access route, access enforcement and account lifecycle on which the rest of the plan depends.</p>
+        <p>This section is the single record of how identity works across the product. The decisions below are what will be configured in Firebase Authentication and enforced in Firestore and Storage security rules. Section 2.3 defines what each role is permitted to do, section 6.3.5 specifies the sign-up and sign-in interface and section 5.11 sets the wider privacy and security obligations; each of those relies on the decisions recorded here rather than restating them.</p>
+
+        <p><strong>Sign-in methods:</strong> record every method as enabled or not enabled. A method that is not enabled must still carry its reason, so the decision is not quietly revisited later.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Method</th><th>Decision</th><th>Reason and operating boundary</th></tr></thead>
+            <tbody>
+              <tr><td>Email and password</td><td><span class="blank">[Enabled / not enabled]</span></td><td>Requires a password policy, a verification step and a working recovery route before launch.</td></tr>
+              <tr><td>Email link (passwordless)</td><td><span class="blank">[Enabled / not enabled]</span></td><td>Removes password handling but depends on reliable email delivery; link expiry and single use must be defined.</td></tr>
+              <tr><td>Google</td><td><span class="blank">[Enabled / not enabled]</span></td><td>Reduces sign-up effort; the consent screen, requested scopes and displayed branding must be approved.</td></tr>
+              <tr><td>Other federated providers</td><td><span class="blank">[Apple, Microsoft, Facebook or none]</span></td><td>Apple sign-in may become mandatory if the product is ever distributed through an app store.</td></tr>
+              <tr><td>Phone or SMS</td><td><span class="blank">[Enabled / not enabled]</span></td><td>Charged for every message sent; expected volume must be recorded against section 8.1 before it is enabled.</td></tr>
+              <tr><td>Anonymous</td><td><span class="blank">[Enabled / not enabled]</span></td><td>Only for the Guest contribution route where a Guest must not create an account; see the guest access decision below.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>Account and session rules:</strong> these determine how an identity is trusted over time and which actions require fresh proof of it.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Requirement</th><th>Decision to record</th><th>Important boundary</th></tr></thead>
+            <tbody>
+              <tr><td>Email verification</td><td><span class="blank">[Required before first useful action / not required]</span></td><td>An unverified account must not reach billing, guest invitations or any published route.</td></tr>
+              <tr><td>Password policy</td><td><span class="blank">[Minimum length, complexity and reuse rules]</span></td><td>Stated on the sign-up page before submission rather than only in an error message.</td></tr>
+              <tr><td>Account recovery</td><td><span class="blank">[Reset route, link expiry and reuse rules]</span></td><td>Recovery messages must not disclose whether an account exists.</td></tr>
+              <tr><td>Multi-factor authentication</td><td><span class="blank">[Required for administrators / offered to Hosts / not used]</span></td><td>Any internal administrative account is protected regardless of the Host decision.</td></tr>
+              <tr><td>Session persistence</td><td><span class="blank">[Local, session-only or none, with expected duration]</span></td><td>Shared or public display devices must not retain a signed-in Host session.</td></tr>
+              <tr><td>Re-authentication</td><td><span class="blank">[Actions requiring recent sign-in]</span></td><td>Applies at least to password or email change, plan cancellation and deletion of a product space.</td></tr>
+              <tr><td>Abuse protection</td><td><span class="blank">[Rate limits, lockout behaviour and authorised domains]</span></td><td>Authorised domains must be restricted before launch so credentials cannot be used from unknown origins.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>Roles and how they are granted:</strong> the roles below are those defined in section 2.3. This table records how each one is established and withdrawn in practice.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Role</th><th>How identity is established</th><th>How the role is granted and removed</th></tr></thead>
+            <tbody>
+              <tr><td>Host or customer</td><td>An authenticated Firebase Authentication account created through an enabled sign-in method.</td><td>Granted on account creation; ownership of each product space is recorded against the account identifier.</td></tr>
+              <tr><td>Guest or contributor</td><td><span class="blank">[Anonymous session, server-verified link token or unauthenticated function call]</span></td><td>Granted only for the duration of a contribution to one open product space; never carried between spaces.</td></tr>
+              <tr><td>Viewer</td><td>No authentication; public read of approved content only where a public wall is enabled.</td><td>Not granted or removed; controlled entirely by the product space's open or closed state.</td></tr>
+              <tr><td>Platform administrator (internal)</td><td>A named internal account with multi-factor authentication.</td><td><span class="blank">[Who may grant it, how it is recorded and how it is reviewed]</span>; every administrative action must be attributable.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>Guest access:</strong> the Guest contribution route will use <span class="blank">[an anonymous authentication session, a signed link with a server-verified token, or an unauthenticated write handled entirely by a Function]</span>. Whichever route is selected, a Guest must never gain read access to host records, held content or operator information, and the route must remain usable without registration. Where anonymous sessions are used, the plan must also state how abandoned anonymous accounts are cleaned up.</p>
+
+        <p><strong>Access enforcement:</strong> the following must hold before launch, and are the conditions the security rules are written against.</p>
+        <ul class="checklist">
+          <li>Every application record carries an explicit owner field, and rules compare it with the authenticated account identifier rather than any client-supplied value</li>
+          <li>Storage paths are product-owned, with write access limited by size, content type and the contribution route in force</li>
+          <li>Roles are carried as verified custom claims or server-held records, never as client state, and are re-checked on every privileged operation</li>
+          <li>Billing, moderation, email and administrative operations run only in Firebase Functions against a verified identity token</li>
+          <li>The public wall exposes approved content only, and fails closed where status cannot be confirmed</li>
+          <li>Platform administrator access uses a separate protected route with multi-factor authentication and an explicit account allowlist</li>
+          <li>Rules are exercised for host, guest, public and unauthorised access before launch, as required by section 6.6</li>
+        </ul>
+
+        <p><strong>Account lifecycle:</strong> the plan must state what happens to the authentication record when a Host cancels, is disabled or requests deletion, including whether the identity is retained for billing history, at what point the Firebase Authentication user is removed, and what becomes of the product spaces that account owns. These outcomes must match the retention and deletion commitments in section 5.10.</p>
+
+        <h3 id="website-architecture">6.3 Website architecture and core user interface</h3>
+        <p class="section-guidance">Define the site’s information architecture, role-based journeys, page responsibilities, actions, destinations and important interface states.</p>
+        <p>The website architecture will define how public visitors, authenticated Hosts, Guests and internal Platform administrators move through the service. Each page will have one clear purpose, a primary action and an explicit destination. Public marketing, secure Host administration and Guest contribution routes will remain visibly and technically distinct.</p>
+        <p>A labelled screenshot or wireframe may be added after the page design is stable, but it will support rather than replace the written page specification below.</p>
+
+        <h4 id="site-navigation">6.3.1 Site navigation</h4>
+        <p class="section-guidance">List the navigation available to public visitors, signed-in Hosts, Guests and internal administrators, including labels and access boundaries.</p>
+        <ul>
+          <li><strong>Public navigation:</strong> home, pricing, product explanation or demo, frequently asked questions, contact/support, privacy and terms.</li>
+          <li><strong>Authentication actions:</strong> a consistently placed sign-up or sign-in action, with signed-in Hosts directed to their dashboard rather than back through acquisition pages.</li>
+          <li><strong>Host navigation:</strong> dashboard, individual product spaces, content, display or presentation settings, guest access, billing, account and support.</li>
+          <li><strong>Guest navigation:</strong> direct entry through a QR code or shared link to the correct contribution or viewing route, without exposing Host-only navigation.</li>
+          <li><strong>Internal administrator navigation:</strong> protected administration for support exceptions, incidents, escalated moderation and business operations; never linked from a public or Guest-facing menu.</li>
+        </ul>
+
+        <figure class="navigation-flow" aria-labelledby="navigation-flow-title">
+          <figcaption id="navigation-flow-title">Role-based site navigation flow</figcaption>
+          <div class="navigation-flow-grid">
+            <div class="navigation-lane">
+              <strong class="navigation-role">Public visitor</strong>
+              <div class="navigation-steps">
+                <span class="navigation-step">Home</span><span class="navigation-arrow" aria-hidden="true">→</span>
+                <span class="navigation-step">Product explanation, demo or FAQ</span><span class="navigation-arrow" aria-hidden="true">→</span>
+                <span class="navigation-step">Pricing</span><span class="navigation-arrow" aria-hidden="true">→</span>
+                <span class="navigation-step">Sign up or sign in</span>
+              </div>
+              <p class="navigation-boundary">Contact, privacy and terms remain publicly accessible. Successful authentication moves a Host into the protected Host journey.</p>
+            </div>
+
+            <div class="navigation-lane">
+              <strong class="navigation-role">Signed-in Host</strong>
+              <div class="navigation-steps">
+                <span class="navigation-step">Sign in</span><span class="navigation-arrow" aria-hidden="true">→</span>
+                <span class="navigation-step">Dashboard</span><span class="navigation-arrow" aria-hidden="true">→</span>
+                <span class="navigation-step">Product space</span><span class="navigation-arrow" aria-hidden="true">→</span>
+                <span class="navigation-step">Content, display, Guest access, billing, account or support</span>
+              </div>
+              <p class="navigation-boundary">Host identity, ownership and entitlement checks protect every management destination.</p>
+            </div>
+
+            <div class="navigation-lane guest">
+              <strong class="navigation-role">Guest or contributor</strong>
+              <div class="navigation-steps">
+                <span class="navigation-step">QR code or shared link</span><span class="navigation-arrow" aria-hidden="true">→</span>
+                <span class="navigation-step">Contribution or viewing route</span><span class="navigation-arrow" aria-hidden="true">→</span>
+                <span class="navigation-step">Confirmation or approved wall</span>
+              </div>
+              <p class="navigation-boundary">No Host dashboard, account, billing or internal administration navigation is exposed.</p>
+            </div>
+
+            <div class="navigation-lane internal">
+              <strong class="navigation-role">Platform administrator (internal)</strong>
+              <div class="navigation-steps">
+                <span class="navigation-step">Protected staff sign-in</span><span class="navigation-arrow" aria-hidden="true">→</span>
+                <span class="navigation-step">Internal administration</span><span class="navigation-arrow" aria-hidden="true">→</span>
+                <span class="navigation-step">Support, incidents, escalated moderation or business operations</span>
+              </div>
+              <p class="navigation-boundary">The internal route is role-restricted, audited and never linked from public, Host or Guest navigation.</p>
+            </div>
+          </div>
+        </figure>
+
+        <p>Desktop and mobile navigation will use the same labels and destinations. The current location, back path and next useful action will remain clear. Legal, privacy, accessibility and support routes will be reachable without requiring an account where the user may reasonably need them before signing up.</p>
+
+        <h4 id="page-flow">6.3.2 Page flow</h4>
+        <p class="section-guidance">Map the principal end-to-end journeys and show the intended result at the end of each path.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Journey</th><th>Typical page flow</th><th>Intended result</th></tr></thead>
+            <tbody>
+              <tr><td>New Host</td><td>Home → pricing or demo → sign up → dashboard → create product space → configure → select plan where required → share</td><td>The Host reaches the first useful, shareable product state without unnecessary setup.</td></tr>
+              <tr><td>Returning Host</td><td>Sign in → dashboard → select product space → review content, settings, status or billing</td><td>The Host reaches the relevant management action quickly.</td></tr>
+              <tr><td>Guest or contributor</td><td>QR code or shared link → product-specific Guest page → contribute or view → confirmation</td><td>The Guest completes the permitted action without an unnecessary account.</td></tr>
+              <tr><td>Support, privacy or policy visitor</td><td>Relevant public or account page → clear information → secure self-service action or scoped contact route</td><td>The user understands the policy and reaches the correct resolution channel.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 id="landing-page">6.3.3 Home or landing page</h4>
+        <p class="section-guidance">Specify the audience, value proposition, supporting proof, principal content, calls to action, destinations and signed-in state.</p>
+        <p><strong>Purpose:</strong> explain who the product is for, the problem it solves and the useful outcome it provides.</p>
+        <p><strong>Content and actions:</strong> the primary value proposition; a short explanation of how the service works; the most important customer benefits; a product preview, example or demo where available; trust information; a concise pricing prompt; frequently asked questions; and one primary sign-up or start action. Secondary actions may open pricing, a demo or sign-in.</p>
+        <p><strong>Destination and states:</strong> the primary action directs a new visitor to sign-up or plan selection according to the agreed commercial flow. A signed-in Host is offered a direct route to the dashboard.</p>
+
+        <h4 id="pricing-page">6.3.4 Pricing and plan selection</h4>
+        <p class="section-guidance">Specify the offers, prices, inclusions, limits, trial terms, policies, purchase actions and signed-in or signed-out behaviour.</p>
+        <p><strong>Purpose:</strong> let the customer understand the complete offer, compare any plans and limits, and make an informed purchase or trial decision.</p>
+        <p><strong>Content and actions:</strong> price and billing frequency; what every offer includes; meaningful limits; trial or free-entitlement terms; multi-product or per-space charging where applicable; cancellation and refund summary; relevant taxes or currency treatment; and links to the full customer policies. The call to action must use the same offer wording as checkout and the dashboard.</p>
+        <p><strong>Destination and states:</strong> signed-out customers continue to account creation before secure checkout where required. Signed-in customers continue to the relevant product-space or billing action without creating a duplicate account.</p>
+
+        <h4 id="authentication-page">6.3.5 Sign-up and sign-in</h4>
+        <p class="section-guidance">Specify how the identity methods recorded in section 6.2 are presented, together with required information, validation, recovery, legal links, destination and all important success or error states.</p>
+        <p><strong>Purpose:</strong> create or restore Host access with the minimum information needed to operate the account securely. This page presents the methods and rules decided in section 6.2 rather than defining them.</p>
+        <p><strong>Content and actions:</strong> the identity methods enabled in section 6.2; clear switching between sign-up and sign-in; password recovery where relevant; acceptance links for applicable terms and privacy information; understandable validation; and safe messages that do not expose account existence unnecessarily.</p>
+        <p><strong>Destination and states:</strong> successful authentication returns the Host to the intended safe destination or dashboard. Loading, verification, expired-link, cancelled and recoverable-error states must all provide a clear next action.</p>
+
+        <h4 id="dashboard-page">6.3.6 Host dashboard</h4>
+        <p class="section-guidance">Specify product-space summaries, status indicators, setup progress, attention items, primary actions and empty or error states.</p>
+        <p><strong>Purpose:</strong> show the Host every product space they own or manage, its current status and the next useful action.</p>
+        <p><strong>Content and actions:</strong> product-space cards or rows; active, trial, unpaid, closed or attention-required states; setup progress; recent activity requiring review; usage or plan information where relevant; and a clear create-product action. Each item links to its dedicated management page.</p>
+        <p><strong>Destination and states:</strong> the empty state guides the Host through creating the first product space. Error and partial-data states retain navigation and explain what can be retried safely.</p>
+
+        <h4 id="management-page">6.3.7 Product-space management</h4>
+        <p class="section-guidance">Specify the controls, content, settings, Guest access, preview, billing and destructive actions available for one managed product space.</p>
+        <p><strong>Purpose:</strong> act as the dedicated control centre for one event, property, wall, group or equivalent product space.</p>
+        <p><strong>Content and actions:</strong> status and setup; guest-access link and QR code; content and moderation; approved, held and hidden views; branding and display settings; live preview; uploads and featured or pinned content; export; plan or billing status; closure and deletion controls. Actions that affect public visibility, billing or deletion require clear confirmation and outcome feedback.</p>
+        <p><strong>Destination and states:</strong> the page retains an obvious route back to the dashboard and provides direct preview or public-view actions only when the current entitlement and product state permit them.</p>
+
+        <h4 id="contribution-page">6.3.8 Guest contribution</h4>
+        <p class="section-guidance">Specify Guest instructions, permitted inputs, limits, consent, upload progress, submission outcomes and closed or failure states.</p>
+        <p><strong>Purpose:</strong> allow a Guest to add the permitted content quickly from a phone without entering the Host interface.</p>
+        <p><strong>Content and actions:</strong> product identity; Host-provided instructions; allowed content types and limits; contribution fields; upload progress; consent and public-display explanation where required; submit action; and any permitted edit, delete or report controls. The page will not collect unrelated Guest details.</p>
+        <p><strong>Destination and states:</strong> success confirms what happened and whether content is live, pending review or privately delivered. Full, closed, expired, offline, rejected, held and retryable upload states explain the exact cause and available action.</p>
+
+        <h4 id="wall-page">6.3.9 Live wall or private host view</h4>
+        <p class="section-guidance">Specify visible content, ordering, contribution and reporting controls, preview distinction, device support and unavailable states.</p>
+        <p><strong>Purpose:</strong> present approved content in the product's selected public display, or keep content within an authenticated Host-only view where public display is not part of the offer.</p>
+        <p><strong>Content and actions:</strong> product identity and approved content; featured or pinned material; an appropriate contribution action; accessible display controls where required; report or self-service removal controls where permitted; and a clear closed or unavailable state. Public rendering must never reveal held, hidden, private or Host-only information.</p>
+        <p><strong>Destination and states:</strong> public and preview modes are visibly distinguishable. The layout adapts to phone, tablet, laptop and large display use where those devices are supported by the product.</p>
+
+        <h4 id="account-support-pages">6.3.10 Account, billing, support and policy pages</h4>
+        <p class="section-guidance">Specify the secondary self-service pages, sensitive actions, support boundaries, policies, confirmations and authentication requirements.</p>
+        <p><strong>Purpose:</strong> group secondary but essential self-service actions without overloading the dashboard or product-space page.</p>
+        <p><strong>Content and actions:</strong> account profile and security; invoices, payment method, renewal and cancellation through the approved billing route; scoped customer support; accessibility information; privacy requests; terms; privacy policy; cancellation and refund policy; and any product-specific safety guidance. Guest, Host and operator support boundaries must be explicit.</p>
+        <p><strong>Destination and states:</strong> every action confirms whether it completed, is pending or requires another verified step. Sensitive operations must require recent authentication or equivalent protection where appropriate.</p>
+
+        <h3 id="brand-system">6.4 Brand identity and design system</h3>
+        <p class="section-guidance">Define the visual and verbal system that makes the product recognisable, consistent, accessible and practical to reproduce across the website, application, email, social media, support and printed material.</p>
+        <p>The brand system will provide one approved source for identity decisions rather than allowing each page or campaign to introduce new colours, fonts, imagery or language. Final choices will be recorded as usable design values and reusable assets, not only as descriptive preferences.</p>
+
+        <h4 id="brand-foundations">6.4.1 Brand foundations</h4>
+        <p class="section-guidance">Record the audience, promise, personality, values, positioning and short message that every visual and written decision should reinforce.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Foundation</th><th>Approved definition</th><th>How it should influence the brand</th></tr></thead>
+            <tbody>
+              <tr><td>Primary audience</td><td><span class="blank">[Who the brand must speak to first]</span></td><td>Determines language, imagery, level of explanation and the situations shown.</td></tr>
+              <tr><td>Brand promise</td><td><span class="blank">[The reliable outcome customers should associate with the product]</span></td><td>Guides the main message, proof and priority of information.</td></tr>
+              <tr><td>Personality</td><td><span class="blank">[Three to five traits, for example warm, clear, capable and reassuring]</span></td><td>Shapes colour, typography, imagery, motion and tone without becoming a list of vague adjectives.</td></tr>
+              <tr><td>Values and principles</td><td><span class="blank">[The behaviours the business will demonstrate]</span></td><td>Provides a test for claims, customer treatment and design decisions.</td></tr>
+              <tr><td>Positioning statement</td><td><span class="blank">[Audience + need + category + distinctive benefit + reason to believe]</span></td><td>Keeps the website, advertising and sales material aligned.</td></tr>
+              <tr><td>Tagline or short descriptor</td><td><span class="blank">[Approved wording and any permitted variants]</span></td><td>Used consistently beside the name where the product needs a concise explanation.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 id="logo-marks">6.4.2 Logo and brand marks</h4>
+        <p class="section-guidance">Specify the approved logo versions, file formats, spacing, minimum size, background treatments, small-format mark and prohibited alterations.</p>
+        <ul>
+          <li><strong>Primary logo:</strong> <span class="blank">[Approved full-colour horizontal or stacked version]</span> for normal website, document and campaign use.</li>
+          <li><strong>Secondary versions:</strong> <span class="blank">[Single-colour, reversed, compact and small-format versions]</span> for dark backgrounds, constrained spaces, app icons, favicons and social profiles.</li>
+          <li><strong>Clear space and minimum size:</strong> define the protected area around the mark and the smallest digital and printed size at which it remains legible.</li>
+          <li><strong>Background rules:</strong> identify the approved light, dark, photographic and single-colour treatments, including when a containing shape is required.</li>
+          <li><strong>Prohibited use:</strong> do not stretch, rotate, recolour, add effects, rearrange elements, use low-resolution copies or place the mark on a background with inadequate contrast.</li>
+          <li><strong>Master files:</strong> retain editable vector artwork plus SVG, PNG and print-ready exports with clear filenames and version ownership.</li>
+        </ul>
+
+        <h4 id="colour-system">6.4.3 Colour system</h4>
+        <p class="section-guidance">Define the primary, secondary, accent, neutral and semantic colours with exact values, approved combinations, proportional use and accessible contrast requirements.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Colour role</th><th>Purpose</th><th>Approved value</th><th>Usage rules</th></tr></thead>
+            <tbody>
+              <tr><td>Primary brand colour</td><td>Main brand recognition, primary actions and selected states.</td><td><span class="blank">[Name / HEX / RGB / CMYK]</span></td><td>Use deliberately for the strongest brand and action emphasis; confirm white and dark-text contrast combinations.</td></tr>
+              <tr><td>Primary dark / hover</td><td>Hover, pressed, active and high-contrast brand treatment.</td><td><span class="blank">[HEX / RGB]</span></td><td>Must remain visibly distinct from the default state and meet contrast requirements.</td></tr>
+              <tr><td>Secondary brand colour</td><td>Supporting sections, illustrations, secondary actions and complementary emphasis.</td><td><span class="blank">[Name / HEX / RGB / CMYK]</span></td><td>Should support rather than compete with the primary action colour.</td></tr>
+              <tr><td>Accent colour</td><td>Small highlights, badges or moments requiring limited emphasis.</td><td><span class="blank">[Name / HEX / RGB]</span></td><td>Use sparingly; do not use as the sole indicator of meaning.</td></tr>
+              <tr><td>Page background</td><td>Default canvas behind content.</td><td><span class="blank">[HEX / RGB]</span></td><td>Must provide comfortable contrast with body text, cards and controls.</td></tr>
+              <tr><td>Surface / card background</td><td>Cards, panels, menus, dialogs and form areas.</td><td><span class="blank">[HEX / RGB]</span></td><td>Provide sufficient separation from the page without relying on heavy decoration.</td></tr>
+              <tr><td>Primary text</td><td>Headings and body copy.</td><td><span class="blank">[HEX / RGB]</span></td><td>Use for the default readable text colour and test against every approved background.</td></tr>
+              <tr><td>Muted text and borders</td><td>Supporting information, dividers, disabled or low-emphasis elements.</td><td><span class="blank">[HEX / RGB]</span></td><td>Muted text must still be readable; disabled styling must not obscure essential information.</td></tr>
+              <tr><td>Success</td><td>Confirmed completion and positive status.</td><td><span class="blank">[HEX / RGB]</span></td><td>Pair with an icon and plain-language label.</td></tr>
+              <tr><td>Warning</td><td>Attention required or potentially risky action.</td><td><span class="blank">[HEX / RGB]</span></td><td>Distinguish from errors and provide the action needed.</td></tr>
+              <tr><td>Error / destructive</td><td>Failure, invalid input, deletion and irreversible action.</td><td><span class="blank">[HEX / RGB]</span></td><td>Pair with text and an icon; reserve the strongest treatment for genuine errors or destructive actions.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 id="typography-system">6.4.4 Typography</h4>
+        <p class="section-guidance">Select the approved font families, fallbacks, weights, hierarchy, sizes, spacing and licensing rules for digital and printed use.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Typography role</th><th>Approved specification</th><th>Required use</th></tr></thead>
+            <tbody>
+              <tr><td>Display or campaign heading</td><td><span class="blank">[Font family, weight, size range and line height]</span></td><td>Limited to major brand statements and campaign moments where its character remains legible.</td></tr>
+              <tr><td>Page and section headings</td><td><span class="blank">[Font family, weights and H1-H4 scale]</span></td><td>Use a consistent semantic hierarchy; do not choose heading levels for appearance alone.</td></tr>
+              <tr><td>Body and interface text</td><td><span class="blank">[Font family, regular and emphasis weights, base size and line height]</span></td><td>Optimised for reading on small screens, forms, buttons, tables, emails and longer guidance.</td></tr>
+              <tr><td>Labels, captions and metadata</td><td><span class="blank">[Font family, minimum size, weight and letter spacing]</span></td><td>Remain readable and visually secondary without using very small or low-contrast text.</td></tr>
+              <tr><td>Fallback and system fonts</td><td><span class="blank">[Approved font stack]</span></td><td>Preserve layout and readability when web fonts fail or are unavailable.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Record font licences, hosted files, permitted channels and performance implications. Avoid unnecessary font families and weights; the design must remain usable while fonts load and when users enlarge text.</p>
+
+        <h4 id="interface-style">6.4.5 Iconography and interface style</h4>
+        <p class="section-guidance">Define the visual rules for icons, controls, spacing, shapes, elevation, motion and responsive behaviour so the application feels like one coherent product.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Interface element</th><th>System decision to record</th><th>Important boundary</th></tr></thead>
+            <tbody>
+              <tr><td>Icons</td><td><span class="blank">[Icon family, filled or outline style, stroke weight and standard sizes]</span></td><td>Pair unfamiliar icons with visible labels and do not mix unrelated icon families.</td></tr>
+              <tr><td>Buttons and links</td><td><span class="blank">[Primary, secondary, tertiary and destructive styles]</span></td><td>Each screen has one clear primary action; hover, focus, loading and disabled states remain distinguishable.</td></tr>
+              <tr><td>Forms</td><td><span class="blank">[Field shape, label position, help, validation and error treatment]</span></td><td>Use persistent labels and explain the correction required; colour alone never communicates an error.</td></tr>
+              <tr><td>Cards and containers</td><td><span class="blank">[Corner radius, border, shadow, background and internal spacing]</span></td><td>Use grouping to clarify hierarchy rather than decorating every element as a separate card.</td></tr>
+              <tr><td>Spacing and layout</td><td><span class="blank">[Base spacing unit, content widths, grid and breakpoints]</span></td><td>Apply the same scale across desktop and mobile while allowing content to reflow naturally.</td></tr>
+              <tr><td>Motion</td><td><span class="blank">[Approved duration, easing and permitted uses]</span></td><td>Motion explains change or progress, respects reduced-motion preferences and never delays routine work.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 id="brand-voice">6.4.6 Brand voice and written style</h4>
+        <p class="section-guidance">Define the consistent voice, terminology, sentence style, calls to action and tone adjustments required for marketing, product guidance, support and difficult situations.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Context</th><th>Required tone</th><th>Writing rules</th></tr></thead>
+            <tbody>
+              <tr><td>Marketing and acquisition</td><td><span class="blank">[For example clear, warm and confident]</span></td><td>Lead with the useful outcome, support claims with evidence and avoid hype or guarantees the product cannot support.</td></tr>
+              <tr><td>Product instructions</td><td>Direct, concise and action-oriented.</td><td>Use familiar labels, active verbs and one unambiguous next step.</td></tr>
+              <tr><td>Success messages</td><td>Positive but specific.</td><td>Confirm what completed, what happens next and where the user can review it.</td></tr>
+              <tr><td>Errors and incidents</td><td>Calm, factual and helpful.</td><td>State the cause where known, what was preserved, what the user can do and where to obtain help.</td></tr>
+              <tr><td>Billing, privacy and safety</td><td>Precise, respectful and non-promotional.</td><td>Use defined terms consistently and never hide material conditions in playful or vague language.</td></tr>
+              <tr><td>Approved terminology</td><td><span class="blank">[Product name, role names, feature names, capitalisation and words to avoid]</span></td><td>Maintain a shared terminology list for the website, product, email, support and policy documents.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 id="brand-governance">6.4.7 Accessibility, assets and governance</h4>
+        <p class="section-guidance">Set the accessibility tests, master-file location, ownership, approval process, version control and review cycle that keep the brand usable and consistent.</p>
+        <ul class="checklist">
+          <li>Approved colour pairs tested for text, controls, focus indicators, status messages and charts rather than judged by appearance alone</li>
+          <li>Typography checked at small screens, browser zoom and enlarged text settings</li>
+          <li>Keyboard focus, hover, selected, loading, disabled, success, warning and error states documented</li>
+          <li>Primary and secondary logo files supplied in editable vector, SVG, PNG and appropriate print formats</li>
+          <li>Colour tokens, typography tokens, spacing rules and reusable interface components recorded in the design and code systems</li>
+          <li>Templates prepared for the website, transactional email, social media, documents, presentations and any printed customer material actually required</li>
+          <li>Asset licences, customer permissions, model releases and AI-assisted creation records stored with the source files</li>
+        </ul>
+
+        <h3 id="environments">6.5 Environments</h3>
+        <p class="section-guidance">Describe local, preview or test and production environments, including their data boundaries, deployment authority and intended use.</p>
+        <p>The product will maintain separate local development, preview/test and production environments. Testing will not depend on production customer data or live production writes. Production deployment will be deliberate, recorded and limited to authorised maintainers.</p>
+
+        <h3 id="quality-requirements">6.6 Quality requirements</h3>
+        <p class="section-guidance">List the functional, responsive, accessibility, security, billing, email, lifecycle and recovery evidence required before launch.</p>
+        <ul class="checklist">
+          <li>Critical host and guest journeys tested on desktop and mobile</li>
+          <li>Keyboard operation, labels, focus, contrast and responsive layouts checked</li>
+          <li>Every enabled content type tested through allow, hold, reject and provider-error paths</li>
+          <li>Public wall unable to display unapproved content</li>
+          <li>Stripe payment, delayed payment, failure, refund, renewal and cancellation verified</li>
+          <li>Transactional email verified in a reachable inbox</li>
+          <li>Firestore and Storage permissions tested for host, guest, public and unauthorised access</li>
+          <li>Every sign-in method, session rule and role grant recorded in section 6.2 exercised as configured, including the failure and recovery paths</li>
+          <li>Retention, deletion, backup restoration and monitoring exercised before launch</li>
+        </ul>
+      </section>
+
+      <section class="plan-section" id="launch-growth">
+        <h2><span class="section-number">7</span><span>Launch and growth</span></h2>
+        <p class="section-guidance">Explain how the product will reach its initial audience, test demand and expand only when evidence supports further investment.</p>
+
+        <h3 id="launch-approach">7.1 Launch approach</h3>
+        <p class="section-guidance">Identify the initial audience, primary acquisition channel, customer-facing message, launch scope, owner and spending limit.</p>
+        <p>The first launch will focus on <span class="blank">[initial audience]</span> through <span class="blank">[one primary acquisition channel]</span>. The launch message will be <span class="blank">[customer-facing proposition]</span>.</p>
+
+        <h3 id="partnerships-referrals">7.2 Partnerships and referrals</h3>
+        <p class="section-guidance">Identify relevant partner types and document qualification, attribution, disclosure, payment, customer ownership and termination rules.</p>
+        <p>Potential partners include <span class="blank">[select the applicable categories]</span>. Illustrative categories include:</p>
+        <ul>
+          <li><strong>Venues and event operators:</strong> wedding venues, reception centres, hotels, function spaces and other organisations that host suitable events.</li>
+          <li><strong>Event professionals:</strong> wedding and event planners, coordinators, celebrants, masters of ceremonies and specialist event consultants.</li>
+          <li><strong>Creative and production suppliers:</strong> photographers, videographers, DJs, entertainment providers, stylists, decorators, photo-booth businesses and audio-visual suppliers.</li>
+          <li><strong>Print, signage and hire suppliers:</strong> invitation and stationery businesses, signage producers, QR-display suppliers and event-equipment hire companies.</li>
+          <li><strong>Industry organisations and communities:</strong> professional associations, venue networks, supplier collectives, business communities and relevant member organisations.</li>
+          <li><strong>Complementary technology providers:</strong> event-planning, guest-management, website, registration, media or display products that serve a compatible customer journey. Any integration would require separate technical, privacy and commercial approval.</li>
+          <li><strong>Education and content partners:</strong> event educators, training providers, directories, publications, bloggers, podcasters and creators with a relevant and trusted audience.</li>
+          <li><strong>Marketing and implementation partners:</strong> agencies or consultants that help suitable customers plan, launch or promote events and could introduce the product without controlling the customer account.</li>
+        </ul>
+        <p>The final partner categories should be selected according to audience fit, customer benefit, brand alignment, operating effort and measurable commercial value. Any referral arrangement will define qualification, attribution, payment, customer ownership, disclosure and termination.</p>
+
+        <p><strong>Potential partnership models:</strong></p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Partner type</th><th>How the relationship could work</th><th>Potential benefit</th></tr></thead>
+            <tbody>
+              <tr><td>Referral partner</td><td>Introduces suitable prospective customers through an approved tracked link, code or recorded introduction.</td><td>The partner may earn an agreed commission for qualified, retained customers without delivering the product itself.</td></tr>
+              <tr><td>Industry adviser or service provider</td><td>Recommends the product where it complements the partner’s existing professional service. Any implementation or advisory fee remains separate from the product subscription.</td><td>The partner can offer customers a useful complementary solution while keeping responsibilities and fees clear.</td></tr>
+              <tr><td>Association, community or network</td><td>Presents an approved member offer, educational session or resource to a relevant audience without sharing its membership data.</td><td>Members receive a relevant benefit or resource, while the organisation may receive an agreed sponsorship or referral return.</td></tr>
+              <tr><td>Technology or product partner</td><td>Coordinates compatible workflows, content or approved co-marketing. Any technical integration requires a separate security, privacy and delivery decision.</td><td>Both products may reach a better-matched audience or provide a more complete customer workflow.</td></tr>
+              <tr><td>Content or affiliate partner</td><td>Publishes approved, clearly disclosed content and refers prospective customers through a tracked route.</td><td>The partner may earn performance-based income while the business gains measurable exposure to a relevant audience.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>Partner application and operating process:</strong></p>
+        <ol>
+          <li><strong>Request or application:</strong> A prospective partner submits a public partner-interest form or contacts the approved business channel. The request should include the organisation or individual name, website or professional profile, audience, proposed partnership model, expected promotion method, relevant experience and any existing relationship with the business.</li>
+          <li><strong>Initial qualification:</strong> The business reviews customer and brand fit, audience relevance, reputation, proposed claims, promotional methods, privacy practices, conflicts of interest, support expectations and likely operating effort. Submission does not guarantee acceptance.</li>
+          <li><strong>Approval and agreement:</strong> An authorised owner records the decision. Approved partners receive written terms covering permitted activity, prohibited claims, brand use, disclosure, attribution, payment, confidentiality where relevant, customer ownership, data handling, review rights and termination.</li>
+          <li><strong>Onboarding:</strong> The partner receives approved product information, brand assets, disclosure wording, referral link or code, contact route and instructions for checking referral status. Partners must use current approved materials and must not invent discounts, guarantees or product capabilities.</li>
+          <li><strong>Referral and customer journey:</strong> The partner introduces the prospective customer using the approved tracked route. The customer reviews the normal offer, creates their own account and contracts directly with the business. The partner must not collect passwords, payment details or unnecessary customer information.</li>
+          <li><strong>Attribution and qualification:</strong> The agreement defines the attribution method and period, what constitutes a qualified referral, treatment of existing customers, duplicate referrals, self-referrals, refunds, cancellations, chargebacks, fraudulent activity and attribution disputes.</li>
+          <li><strong>Reporting and payment:</strong> Valid referrals are reconciled against verified payment and retention records. The partner receives a periodic statement showing qualified conversions, excluded or reversed items, the calculation method and payable amount. Payment timing, currency, threshold, tax documentation and method remain <span class="blank">[to be approved]</span>.</li>
+          <li><strong>Ongoing review:</strong> The business periodically reviews referral quality, customer outcomes, complaints, brand compliance, support burden, conversion, retention and commercial value. Terms, assets or participation may be adjusted when evidence or the product offer changes.</li>
+          <li><strong>Pause or termination:</strong> Either party may end the arrangement under the agreed notice terms. The business may suspend or terminate immediately for misleading promotion, unlawful conduct, privacy or security concerns, fraudulent referrals, misuse of customer data or material brand harm. The agreement states how pending referrals and final payments are treated.</li>
+        </ol>
+
+        <div class="statement">
+          <p><strong>Benefits and boundaries:</strong> A suitable partner gains a defined way to offer a complementary product and may receive an agreed commercial return. A referred customer receives a relevant introduction, transparent disclosure and a direct relationship with the business. The business gains access to a trusted, measurable audience without transferring control of customer accounts, support, billing or customer data to the partner.</p>
+          <p>Referred customers will receive the same product, service standards and statutory rights as other customers unless a genuine partner-specific offer is clearly disclosed. Partners cannot promise acceptance, guaranteed outcomes, unpublished discounts or preferential support.</p>
+        </div>
+      </section>
+
+      <section class="plan-section" id="financial-management">
+        <h2><span class="section-number">8</span><span>Financial management</span></h2>
+        <p class="section-guidance">Describe the business’s cost base, review process, spending boundaries and financial evidence used to continue, change or stop investment.</p>
+
+        <h3 id="primary-costs">8.1 Primary costs</h3>
+        <p class="section-guidance">List fixed and usage-based supplier costs, transaction fees, marketing expenditure and the activity that causes each cost to grow.</p>
+        <p>Direct operating costs will include Firebase usage, Stripe fees, transactional email, moderation, domain services and any paid AI or monitoring tools. Costs will be reviewed against active customers, stored media and guest activity rather than treated as fixed.</p>
+        <p><strong>Starter cost register:</strong> record both the supplier's unit rate and the product activity that creates the charge. The Firebase and Resend figures below were checked on 1 September 2026 and are indicative USD reference rates; the actual AUD invoice will depend on the supplier's billing currency, service location, taxes, selected plan and current pricing.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Cost item</th><th>Cost type</th><th>Current allowance or indicative rate</th><th>What causes it to grow</th><th>Monthly budget / actual</th></tr></thead>
+            <tbody>
+              <tr><td>Firebase / Google Cloud billing plan</td><td>Usage-based</td><td>No fixed Blaze-plan fee; eligible usage remains within no-cost allowances, then charges apply. Cloud Storage for Firebase requires the Blaze plan.</td><td>Use of paid-tier Firebase and Google Cloud services</td><td><span class="blank">[Budget / actual]</span></td></tr>
+              <tr><td>Cloud Firestore document reads</td><td>Usage-based</td><td>50,000 reads per day at no cost, then approximately USD $0.03 per 100,000 reads on Firestore Standard edition.</td><td>Page loads, live listeners, list views, queries and inefficient repeated reads</td><td><span class="blank">[Budget / actual]</span></td></tr>
+              <tr><td>Cloud Firestore document writes</td><td>Usage-based</td><td>20,000 writes per day at no cost, then approximately USD $0.09 per 100,000 writes on Firestore Standard edition.</td><td>Host setup, settings changes, guest contributions, moderation and status updates</td><td><span class="blank">[Budget / actual]</span></td></tr>
+              <tr><td>Cloud Firestore deletes and storage</td><td>Usage-based</td><td>20,000 deletes per day and 1 GiB stored data at no cost. Standard-edition reference rates are approximately USD $0.01 per 100,000 deletes and USD $0.15 per GiB-month beyond the allowance; TTL deletes are billed.</td><td>Stored records and indexes, retention activity, backups, restores and automated expiry</td><td><span class="blank">[Budget / actual]</span></td></tr>
+              <tr><td>Firebase Hosting</td><td>Usage-based</td><td>10 GB storage and 10 GB monthly data transfer at no cost; then USD $0.026 per GB stored and USD $0.15 per GB transferred.</td><td>Deployed asset size, release history, visitor traffic and media served through Hosting</td><td><span class="blank">[Budget / actual]</span></td></tr>
+              <tr><td>Cloud Storage for Firebase</td><td>Usage-based</td><td>Blaze plan required. New buckets follow Google Cloud Storage pricing, which varies by bucket region, data stored, operations and network transfer; confirm the exact Australian bucket SKU before setting the budget.</td><td>Photo, video and audio uploads; retained media; downloads; transformations and cross-region transfer</td><td><span class="blank">[Bucket region and budget]</span></td></tr>
+              <tr><td>Cloud Functions</td><td>Usage-based</td><td>First 2 million invocations per month at no cost, then USD $0.40 per million invocations; compute time, networking, build and container storage can add separate charges.</td><td>Uploads, moderation, billing webhooks, transactional emails, scheduled jobs and retries</td><td><span class="blank">[Budget / actual]</span></td></tr>
+              <tr><td>Firebase Authentication</td><td>Usage-based by method</td><td>Email and social sign-in are generally no cost for standard Firebase Authentication. Identity Platform includes up to 50,000 monthly active users; phone authentication is charged per SMS.</td><td>Monthly active Host accounts, identity features and SMS verification volume</td><td><span class="blank">[Method and budget]</span></td></tr>
+              <tr><td>Stripe processing and disputes</td><td>Per transaction / event</td><td><span class="blank">[Insert the current rate for the connected Stripe account and payment mix]</span></td><td>Payments, refunds, disputes, international cards and currency conversion</td><td><span class="blank">[Budget / actual]</span></td></tr>
+              <tr><td>Resend transactional email</td><td>Usage-based subscription</td><td>Free: USD $0 per month for up to 3,000 emails, limited to 100 emails per day. Pro: USD $20 per month for 50,000 emails, then USD $0.90 per additional 1,000 emails. Confirm the selected plan before launch.</td><td>Sign-up, verification, receipts, contribution alerts, support and lifecycle messages; each To, CC or BCC recipient counts separately</td><td><span class="blank">[Plan / budget / actual]</span></td></tr>
+              <tr><td>Moderation, AI and monitoring tools</td><td>Usage-based / subscription</td><td><span class="blank">[Provider, plan and unit rate]</span></td><td>Media screened, tokens or API calls, logs retained, alerts and monitored users</td><td><span class="blank">[Budget / actual]</span></td></tr>
+              <tr><td>Domain name registration and renewal</td><td>Fixed annual cost</td><td><span class="blank">[Domain name, registrar, registration or renewal date and annual rate]</span></td><td>Number of product domains, renewal price changes, premium names, privacy protection and defensive registrations</td><td><span class="blank">[Monthly equivalent / actual]</span></td></tr>
+              <tr><td>DNS and certificates</td><td>Fixed or usage-based</td><td><span class="blank">[Included service or paid provider and rate]</span></td><td>Premium DNS, traffic volume, managed zones and any certificates not already included with hosting</td><td><span class="blank">[Budget / actual]</span></td></tr>
+              <tr><td>Branding and creative assets</td><td>One-off setup plus periodic production</td><td><span class="blank">[Brand identity, logo, guidelines, templates, photography, illustration and design-tool costs]</span></td><td>New products or campaigns, asset refreshes, commissioned creative work, template production and licensed fonts or imagery</td><td><span class="blank">[Setup budget / ongoing actual]</span></td></tr>
+              <tr><td>Marketing, partnerships and referrals</td><td>Discretionary / performance-based</td><td><span class="blank">[Approved campaign budget, commission or referral payment]</span></td><td>Campaign spend, qualified referrals, conversions and partner payments</td><td><span class="blank">[Budget / actual]</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="section-guidance"><strong>Pricing controls:</strong> verify the live project region and supplier price before approving the budget; record both the allowance and paid rate; review usage by active Host, event, stored GiB and 1,000 Guest contributions. Budget alerts are notifications and do not automatically cap Firebase charges.</p>
+        <p class="section-guidance"><strong>Pricing sources:</strong> <a href="https://firebase.google.com/pricing">Firebase pricing</a>, <a href="https://cloud.google.com/firestore/pricing">Cloud Firestore pricing</a>, <a href="https://firebase.google.com/docs/hosting/usage-quotas-pricing">Firebase Hosting usage and pricing</a>, <a href="https://cloud.google.com/functions/pricing-1stgen">Cloud Functions pricing</a>, <a href="https://firebase.google.com/docs/storage/faqs-storage-changes-announced-sept-2024">Cloud Storage for Firebase billing changes</a> and <a href="https://resend.com/pricing">Resend pricing</a>.</p>
+
+        <h3 id="monthly-financial-review">8.2 Monthly financial review</h3>
+        <p class="section-guidance">Define the monthly reconciliation of revenue, refunds, disputes, supplier costs, margin, anomalies and resulting decisions.</p>
+        <p>The owner will reconcile Stripe receipts, refunds and disputes; review supplier invoices and usage; calculate revenue and direct contribution margin; identify unexpected cost growth; and record the next pricing, limit or supplier decision.</p>
+      </section>
+
+      <section class="plan-section" id="appendix-operational-templates">
+        <h2><span class="section-number">A</span><span>Operational templates and reference material</span></h2>
+        <p class="section-guidance">Store approved reusable materials that support the plan but would interrupt the main business and operating narrative.</p>
+        <p class="lead">The appendix holds reusable operating materials that support the plan but would interrupt the main narrative. Each item must identify its owner, approval status and last review point. Templates must remain consistent with the current product offer, customer policies and implemented system behaviour.</p>
+
+        <h3 id="appendix-email-templates">A.1 Email templates</h3>
+        <p class="section-guidance">Include the approved copy, trigger, recipient, classification, action, policy links, owner and status for every customer email.</p>
+        <p>The approved copy for each email described in section 5.6 will be maintained here. Transactional, essential service and marketing messages must be classified correctly. Marketing consent and unsubscribe controls must not prevent delivery of essential account, purchase, security, event or safety messages.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Template</th><th>Trigger and recipient</th><th>Required content</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Welcome and first action</td><td>Host account created; sent to the account email.</td><td>Product name, confirmation, first useful action, secure dashboard link and support route.</td><td><span class="blank">[Draft / approved]</span></td></tr>
+              <tr><td>Ready to share</td><td>Required setup completed; sent to the Host.</td><td>Product-space name, Guest link or QR action, preview action and any remaining limitation.</td><td><span class="blank">[Draft / approved]</span></td></tr>
+              <tr><td>Moderation digest</td><td>Reviewable content remains held; sent to the Host at the approved frequency.</td><td>Held-item count, neutral explanation, secure review-queue link and no sensitive content in the email body.</td><td><span class="blank">[Draft / approved]</span></td></tr>
+              <tr><td>Payment failed</td><td>Verified billing failure; sent to the paying Host.</td><td>Affected product or plan, safe billing-management link, grace period, access impact and support route.</td><td><span class="blank">[Draft / approved]</span></td></tr>
+              <tr><td>Cancellation and access end</td><td>Cancellation confirmed or scheduled; sent to the Host.</td><td>Effective date, access end, content treatment, export or renewal action and statutory-rights wording where relevant.</td><td><span class="blank">[Draft / approved]</span></td></tr>
+              <tr><td>Deletion requested or completed</td><td>Verified deletion lifecycle event; sent to the authorised Host.</td><td>Scope, immediate effect, grace or undo period where available, completion boundary and support route.</td><td><span class="blank">[Draft / approved]</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Standard email template structure</h4>
+        <p class="section-guidance">Use this structure to draft each email consistently before product, legal and operational approval.</p>
+        <div class="card">
+          <p><strong>Internal template name:</strong> <span class="blank">[Name]</span><br>
+          <strong>Message classification:</strong> <span class="blank">[Essential transactional / service / marketing]</span><br>
+          <strong>Trigger and recipient:</strong> <span class="blank">[Verified event and intended recipient]</span><br>
+          <strong>Subject:</strong> <span class="blank">[Clear, specific subject]</span><br>
+          <strong>Preview text:</strong> <span class="blank">[Short supporting line]</span></p>
+          <p><strong>Greeting:</strong> <span class="blank">[Personalisation rule]</span></p>
+          <p><span class="blank">[Explain what happened, which product space or account is affected, and why the recipient is receiving the message.]</span></p>
+          <p><strong>Primary action:</strong> <span class="blank">[One clear action label and secure destination]</span></p>
+          <p><span class="blank">[State deadlines, access effects, limits, alternatives and the correct support route. Avoid unsupported guarantees.]</span></p>
+          <p><strong>Sign-off and footer:</strong> <span class="blank">[Business identity, contact details, policy links and preference/unsubscribe control where applicable]</span></p>
+        </div>
+
+        <h3 id="appendix-support-responses">A.2 Support response templates</h3>
+        <p class="section-guidance">Include reusable responses for common account, billing, refund, accessibility, privacy and content-safety requests.</p>
+        <p>Maintain approved responses for common account, billing, refund, accessibility, privacy and content-safety requests. Each response will identify the issue, avoid promising an outcome before verification, state the next action and expected response period, and link to the correct secure self-service route where available.</p>
+
+        <h3 id="appendix-operational-checklists">A.3 Operational checklists</h3>
+        <p class="section-guidance">Include controlled checklists for launch, deployment, billing, moderation, incidents, backups, retention and deletion.</p>
+        <p>Store the current launch, deployment, billing reconciliation, moderation escalation, incident response, backup restoration, retention and deletion checklists here or link to their controlled source. A checklist must name its owner, prerequisites, evidence to retain and escalation point.</p>
+
+        <h3 id="appendix-review-records">A.4 Decision and review records</h3>
+        <p class="section-guidance">Attach or link dated evidence, decisions, owners, actions and review triggers from business and operational reviews.</p>
+        <p>Attach or link dated market-test results, launch approvals, monthly operating reviews, pricing decisions, supplier reviews and post-incident actions. Each record will state the evidence considered, decision, owner, date and next review trigger.</p>
+
+        <h3 id="appendix-technical-reference">A.5 Technical and visual reference material</h3>
+        <p class="section-guidance">Include approved diagrams, page flows, screenshots, wireframes and route or data-lifecycle references with version and environment labels.</p>
+        <p>Use this section for approved architecture diagrams, page-flow diagrams, labelled screenshots, wireframes, route maps, data-lifecycle diagrams and supplier configuration references. Visuals must identify the version or environment shown and must not be treated as proof of deployed behaviour unless that state was verified separately.</p>
+      </section>
+
+      <p class="footer">Business &amp; Operating Plan · Internal document · Do not include credentials or customer data</p>
+    </article>
+  </main>
+</body>
+</html>

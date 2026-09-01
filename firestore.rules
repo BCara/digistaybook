@@ -2,8 +2,13 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() { return request.auth != null; }
+    // Anonymous sessions exist only for Guest self-service (Terms 4.4). They are
+    // never Host sessions, so Host paths require a non-anonymous provider.
+    function isHost() {
+      return signedIn() && request.auth.token.firebase.sign_in_provider != 'anonymous';
+    }
     function ownsProperty(propertyId) {
-      return signedIn() && get(/databases/$(database)/documents/properties/$(propertyId)).data.ownerUid == request.auth.uid;
+      return isHost() && get(/databases/$(database)/documents/properties/$(propertyId)).data.ownerUid == request.auth.uid;
     }
     function propertyIsPublic(propertyId) {
       let property = get(/databases/$(database)/documents/properties/$(propertyId)).data;
@@ -11,17 +16,17 @@ service cloud.firestore {
     }
 
     match /users/{uid} {
-      allow read: if signedIn() && request.auth.uid == uid;
-      allow create: if signedIn() && request.auth.uid == uid
+      allow read: if isHost() && request.auth.uid == uid;
+      allow create: if isHost() && request.auth.uid == uid
         && request.resource.data.keys().hasOnly(['displayName', 'email', 'createdAt', 'updatedAt']);
-      allow update: if signedIn() && request.auth.uid == uid
+      allow update: if isHost() && request.auth.uid == uid
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'updatedAt']);
       allow delete: if false;
     }
 
     match /properties/{propertyId} {
       allow read: if (resource.data.mode == 'live' && resource.data.lifecycle in ['trialing', 'active', 'grace_period']) || ownsProperty(propertyId);
-      allow create: if signedIn() && request.resource.data.ownerUid == request.auth.uid
+      allow create: if isHost() && request.resource.data.ownerUid == request.auth.uid
         && request.resource.data.lifecycle == 'draft' && request.resource.data.mode == 'sandbox';
       allow update: if ownsProperty(propertyId)
         && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['ownerUid', 'lifecycle', 'billing', 'retentionState']);

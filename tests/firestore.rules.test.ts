@@ -142,3 +142,77 @@ describe("Host profile boundaries", () => {
     );
   });
 });
+
+describe("Guest anonymous session boundaries", () => {
+  const anonymous = () =>
+    testEnvironment
+      .authenticatedContext("guest-session-1", { firebase: { sign_in_provider: "anonymous" } })
+      .firestore();
+
+  it("still allows an anonymous Guest session to read the public wall", async () => {
+    const guest = anonymous();
+
+    await assertSucceeds(getDoc(doc(guest, "properties", "live-property")));
+    await assertSucceeds(getDoc(doc(guest, "properties", "live-property", "posts", "visible-post")));
+  });
+
+  it("denies an anonymous Guest session a Host profile document", async () => {
+    const guest = anonymous();
+
+    await assertFails(
+      setDoc(doc(guest, "users", "guest-session-1"), {
+        displayName: "Not a Host",
+        email: "guest@example.com",
+        createdAt: "server-controlled-placeholder",
+        updatedAt: "server-controlled-placeholder",
+      }),
+    );
+  });
+
+  it("denies an anonymous Guest session property creation", async () => {
+    const guest = anonymous();
+
+    await assertFails(
+      setDoc(doc(guest, "properties", "guest-created-property"), {
+        ownerUid: "guest-session-1",
+        name: "Property from a wall visitor",
+        mode: "sandbox",
+        lifecycle: "draft",
+      }),
+    );
+  });
+
+  it("denies an anonymous Guest session another Host's unpublished property", async () => {
+    const guest = anonymous();
+
+    await assertFails(getDoc(doc(guest, "properties", "draft-property")));
+  });
+});
+
+describe("Host sign-in providers", () => {
+  const host = (provider: "password" | "google.com") =>
+    testEnvironment.authenticatedContext("host-a", { firebase: { sign_in_provider: provider } }).firestore();
+
+  it("allows a password Host and an SSO Host the same owned draft creation", async () => {
+    await assertSucceeds(
+      setDoc(doc(host("password"), "properties", "password-draft"), {
+        ownerUid: "host-a",
+        name: "Password draft",
+        mode: "sandbox",
+        lifecycle: "draft",
+      }),
+    );
+    await assertSucceeds(
+      setDoc(doc(host("google.com"), "properties", "sso-draft"), {
+        ownerUid: "host-a",
+        name: "SSO draft",
+        mode: "sandbox",
+        lifecycle: "draft",
+      }),
+    );
+  });
+
+  it("allows an SSO Host to read their own unpublished property", async () => {
+    await assertSucceeds(getDoc(doc(host("google.com"), "properties", "draft-property")));
+  });
+});

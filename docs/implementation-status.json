@@ -63,6 +63,14 @@
           "verification": "npm run check"
         },
         {
+          "id": "IMP-1003",
+          "title": "Establish the brand and design system across public and Host surfaces",
+          "status": "verified",
+          "evidenceLevel": "local",
+          "evidence": ["src/styles.css", "src/ui/Brand.tsx", "src/ui/AppShell.tsx", "src/ui/pages/LandingPage.tsx", "src/ui/shell.test.tsx", "index.html", "public/favicon.svg", "docs/change-log.md"],
+          "verification": "npm run check"
+        },
+        {
           "id": "IMP-1002",
           "title": "Connect Firebase emulators and add security-rules integration tests",
           "status": "verified",
