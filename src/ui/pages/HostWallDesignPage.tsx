@@ -14,7 +14,7 @@ import {
 } from "../../domain/propertyProfile";
 import { useAuth } from "../auth/AuthProvider";
 import { CameraMark } from "../host/CameraMark";
-import { PhotoDialog } from "../host/PhotoDialog";
+
 import { PropertySettingsDialog } from "../host/PropertyDialog";
 import { navigate } from "../routing";
 import { CanvasLine, CanvasParagraph } from "../host/CanvasFields";
@@ -65,41 +65,6 @@ import { propertyBlock, usePropertyDraft } from "../host/usePropertyDraft";
  */
 
 type View = "public" | "stay";
-
-/**
- * The photographs on the wall itself, and what the dialog over one says about
- * it. The property's own small photograph is not here: it belongs to the band
- * overhead, and is taken there.
- *
- * A note's photograph is named for the note it is on, because a Host with
- * three notes on the wall would otherwise open the same dialog three times
- * over and be told nothing about which one they were changing.
- */
-type CanvasPhoto = Exclude<PhotoSlot, "avatar">;
-
-function canvasPhoto(
-  slot: CanvasPhoto,
-  position?: number,
-): { label: string; hint?: string } {
-  if (slot === "cover") {
-    return {
-      label: "Cover photo",
-      hint: "Across the top of both walls. A wide photograph of the property works best.",
-    };
-  }
-  if (slot === "hostPhoto") {
-    return {
-      label: "Your photograph",
-      hint: "Beside your names. Without one, guests see your initials.",
-    };
-  }
-  return {
-    label:
-      position === undefined
-        ? "The photograph on your note"
-        : `The photograph on note ${position}`,
-  };
-}
 
 /** The profile's plain-text lines: the ones a Host can leave off the wall. */
 type TextField = "stayHeading" | "stayWelcome" | "stayTip";
@@ -257,10 +222,7 @@ export function HostWallDesignPage({
 }) {
   const { user } = useAuth();
   const draft = usePropertyDraft(propertyId);
-  // Uploading is the one thing that cannot happen inline: a file has to be
-  // chosen off the device. It opens over the wall rather than in it — see
-  // `PhotoDialog` — so changing a photograph never moves the page underneath.
-  const [panel, setPanel] = useState<CanvasPhoto | null>(null);
+
   const photoInput = useRef<HTMLInputElement>(null);
   const coverInput = useRef<HTMLInputElement>(null);
   const [coverBusy, setCoverBusy] = useState(false);
@@ -271,6 +233,39 @@ export function HostWallDesignPage({
   const [portraitError, setPortraitError] = useState<string | null>(null);
   const latestDraft = useRef(draft);
   latestDraft.current = draft;
+
+  const noteInput = useRef<HTMLInputElement>(null);
+  const noteTarget = useRef<string | null>(null);
+  const [noteBusy, setNoteBusy] = useState<string | null>(null);
+  const [noteProgress, setNoteProgress] = useState(0);
+  const [noteError, setNoteError] = useState<{ id: string; message: string } | null>(null);
+
+  async function uploadNote(file: File) {
+    const target = noteTarget.current;
+    if (!target) return;
+    const problem = validatePhotoFile(file);
+    if (problem) {
+      setNoteError({ id: target, message: problem });
+      return;
+    }
+    setNoteError(null);
+    setNoteBusy(target);
+    setNoteProgress(0);
+    try {
+      const outcome = await uploadPropertyPhoto(propertyId, `hostNote:${target}`, file, setNoteProgress);
+      if (outcome.status === "error") {
+        setNoteError({ id: target, message: outcome.message });
+      } else {
+        const current = latestDraft.current;
+        current.setProfile(withPhotoInSlot(current.profile, `hostNote:${target}`, outcome.value));
+      }
+    } catch {
+      setNoteError({ id: target, message: "Your photograph could not upload. Please try again." });
+    } finally {
+      setNoteBusy(null);
+      noteTarget.current = null;
+    }
+  }
 
   async function uploadCover(file: File) {
     const problem = validatePhotoFile(file);
@@ -375,11 +370,7 @@ export function HostWallDesignPage({
   const profile = draft.profile;
   // Which note the open photograph dialog belongs to, numbered the way the
   // cards on the wall are numbered, so the window says which one it changes.
-  const panelNoteId = panel === null ? null : hostNoteOfSlot(panel);
-  const panelNote =
-    panelNoteId === null
-      ? undefined
-      : profile.hostNotes.findIndex((note) => note.id === panelNoteId) + 1 || undefined;
+
   const nameProblem = draft.problems.identity[0]?.message;
   const factProblem = (index: number) =>
     draft.problems.profile.find(
@@ -513,25 +504,47 @@ export function HostWallDesignPage({
           </div>
           
           <div className="host-note-body">
-            <button
-              type="button"
-              className="host-note-photo canvas-note-photo"
-              aria-label={
-                note.photo
-                  ? `Change the photograph on note ${index + 1}`
-                  : `Add a photograph to note ${index + 1}`
-              }
-              onClick={() => setPanel(hostNoteSlot(note))}
-            >
-              {note.photo ? (
-                <img src={note.photo.url} alt={note.photo.alt} />
-              ) : (
-                <span className="canvas-note-photo-empty">
-                  <CameraMark />
-                  <b>Add a photograph</b>
-                </span>
+            <div className="host-note-photo-wrap">
+              <button
+                type="button"
+                className="host-note-photo canvas-note-photo"
+                aria-label={
+                  note.photo
+                    ? `Change the photograph on note ${index + 1}`
+                    : `Add a photograph to note ${index + 1}`
+                }
+                disabled={draft.saving || noteBusy === note.id}
+                onClick={() => {
+                  noteTarget.current = note.id;
+                  noteInput.current?.click();
+                }}
+              >
+                {noteBusy === note.id ? (
+                  <span className="canvas-note-photo-empty">
+                    <b>{noteProgress >= 1 ? "Saving photo…" : noteProgress > 0 ? `Uploading ${Math.round(noteProgress * 100)}%…` : "Uploading…"}</b>
+                  </span>
+                ) : note.photo ? (
+                  <img src={note.photo.url} alt={note.photo.alt} />
+                ) : (
+                  <span className="canvas-note-photo-empty">
+                    <CameraMark />
+                    <b>Add a photograph</b>
+                  </span>
+                )}
+              </button>
+              {note.photo && (
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-sm"
+                  style={{ marginTop: 4 }}
+                  onClick={() => setNote(note.id, { photo: null })}
+                  disabled={draft.saving || noteBusy === note.id}
+                >
+                  Remove photo
+                </button>
               )}
-            </button>
+              {noteError?.id === note.id && <p className="form-feedback" role="alert">{noteError.message}</p>}
+            </div>
             <div className="host-note-words">
               <CanvasParagraph
                 label={`Note ${index + 1}: anything else you want to say`}
@@ -1280,27 +1293,6 @@ export function HostWallDesignPage({
         )}
       </div>
 
-      {/* One dialog for whichever photograph is being changed, rather than a
-          panel per frame: only one can be open, and the wall it sits over
-          stays exactly where the Host left it. */}
-      {panel && (
-        <PhotoDialog
-          propertyId={property.id}
-          slot={panel}
-          photo={photoInSlot(profile, panel)}
-          label={canvasPhoto(panel, panelNote).label}
-          hint={canvasPhoto(panel, panelNote).hint}
-          onChange={(photo) => {
-            draft.setProfile(withPhotoInSlot(profile, panel, photo));
-            // An uploaded photograph is already on the wall behind the dialog,
-            // so it closes rather than showing the same picture twice.
-            // Removing one leaves it open, because the next thing a Host wants
-            // is usually to choose another.
-            if (photo) setPanel(null);
-          }}
-          onClose={() => setPanel(null)}
-        />
-      )}
 
       {settings && (
         <PropertySettingsDialog
@@ -1310,6 +1302,19 @@ export function HostWallDesignPage({
           onClose={() => navigate(`/host/property/${property.id}`)}
         />
       )}
+
+      <input
+        ref={noteInput}
+        className="visually-hidden"
+        type="file"
+        accept={profileLimits.photoTypes.join(",")}
+        aria-label="Note photograph: choose an image file"
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+          event.target.value = "";
+          if (file && !noteBusy) void uploadNote(file);
+        }}
+      />
     </PropertyShell>
   );
 }
