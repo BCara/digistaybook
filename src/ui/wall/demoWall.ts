@@ -1,4 +1,5 @@
 import type { GuestPost } from "../../domain/guestContribution";
+import type { HostNoteStyle } from "../../domain/propertyProfile";
 
 /**
  * Demo content for the two public wall routes.
@@ -6,7 +7,7 @@ import type { GuestPost } from "../../domain/guestContribution";
  * Real properties load this from Firestore. The demo keeps it local so the
  * marketing routes render with no seeded project.
  *
- * Photographs are served from our own origin out of public/wall — they are
+ * Photographs are served from our own origin out of public/wall; they are
  * committed to the repo, not hotlinked, so the site still makes no third-party
  * request. Provenance and licence for every file are in
  * docs/demo-photo-credits.md.
@@ -39,7 +40,7 @@ export type PhotoKey = keyof typeof wallPhotos;
 export type WallPost = GuestPost & {
   /** Key into wallPhotos. Real posts carry an uploaded image instead. */
   photo?: PhotoKey;
-  /** When they stayed, not when they posted — a guestbook reads by visit. */
+  /** When they stayed, not when they posted; a guestbook reads by visit. */
   stayedOn: string;
 };
 
@@ -51,6 +52,7 @@ export type WallProperty = {
   cover: WallPhoto;
   hosts: string;
   hostInitials: string;
+  hostPhoto?: WallPhoto;
   hostSince: string;
   /** Shown on the public wall. Warm, and safe for anyone on the internet to read. */
   welcome: string;
@@ -75,7 +77,7 @@ export const demoProperty: WallProperty = {
 };
 
 /**
- * House guidance. Deliberately kept off the public wall — it carries the Wi-Fi
+ * House guidance. Deliberately kept off the public wall; it carries the Wi-Fi
  * password, the bin routine and the checkout arrangement, which only belong in
  * front of someone who is actually staying.
  */
@@ -90,10 +92,42 @@ export const hostWelcome = {
   heading: "Welcome to the cottage",
   body: [
     "The kettle is on the side and there is milk in the fridge. Everything you need for the week is below, and the sunset from the back deck is worth waiting for.",
-    "If something is not working, message us before you go hunting for it — we would rather fix it on day one than read about it later."
+    "If something is not working, message us before you go hunting for it. We would rather fix it on day one than read about it later."
   ],
   tip: "Our favourite: the bakery behind the lighthouse. Go before 9am or the pasties are gone."
 };
+
+/**
+ * The hosts' own note among the memories, on both walls.
+ *
+ * It is not the arrival note above: that is a welcome, read once by whoever
+ * has just let themselves in. This is a card on the wall itself, in the same
+ * voice a guest writes in, and it is the only note there that carries no stay.
+ */
+/**
+ * The hosts' own notes, above the memories on both demo walls.
+ *
+ * Two of them, fixed to the wall the two ways a Host can fix one: the first
+ * framed and squared to the page, the second tilted and pinned up like the
+ * memories under it. The demo is the only place both varieties stand on one
+ * wall, which is the point of it — a Host choosing between them on their own
+ * property can come here and see the difference rather than read it.
+ */
+export const hostWallNotes: { id: string; message: string; style: HostNoteStyle; photo?: PhotoKey }[] = [
+  {
+    id: "fire",
+    message:
+      "We lay the fire before every arrival, so it is ready to go on your first night. The kindling lives in the copper bucket and there is a note inside the cupboard door if you have never lit one. Get it going early — the whole cottage holds the heat by supper.",
+    style: "bordered",
+    photo: "fire"
+  },
+  {
+    id: "garden",
+    message:
+      "The bench at the end of the garden gets the last of the sun. We have watched a lot of evenings go from there, and the bakery on the lane opens at seven if you want to take breakfast down with you.",
+    style: "pinned"
+  }
+];
 
 function daysAgo(days: number): string {
   const date = new Date();
@@ -120,8 +154,10 @@ export const demoPosts: WallPost[] = [
     createdAt: daysAgo(9),
     stayedOn: "June 2026",
     visibility: "visible",
-    pinned: false,
-    photo: "fire"
+    pinned: false
+    // No photograph, deliberately: a wall where every single note carries one
+    // is not a wall anybody has actually kept. The fire is the hosts' own
+    // note, a few cards up, which is where that picture belongs.
   },
   {
     id: "memory-3",
@@ -199,7 +235,7 @@ export function initials(displayName: string): string {
 
 /**
  * Spreads avatars across four brand tones so the wall does not read as one
- * block of navy. FNV-1a, sampled from the high bits — the low bits of an FNV
+ * block of navy. FNV-1a, sampled from the high bits; the low bits of an FNV
  * hash correlate badly with a power-of-two modulus.
  */
 export function toneIndex(seed: string): number {

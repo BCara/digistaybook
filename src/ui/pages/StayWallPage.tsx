@@ -1,13 +1,16 @@
-import { useState, type FormEvent } from "react";
+import { useState, useRef, type FormEvent } from "react";
 import { guestContributionSchema } from "../../domain/guestContribution";
+import { HostNotes } from "../wall/HostNotes";
 import { MemoryWall } from "../wall/MemoryWall";
-import { DEMO_SLUG, demoPosts, demoProperty, houseEssentials, hostWelcome } from "../wall/demoWall";
+import { LiveWallPage } from "./LiveWallPage";
+import { DEMO_SLUG, demoPosts, demoProperty, houseEssentials, hostWallNotes, hostWelcome, wallPhotos } from "../wall/demoWall";
+import { memoriesHeading } from "../wall/memoryHeading";
 
 const MESSAGE_LIMIT = 1200;
 const NAME_LIMIT = 80;
 
 /**
- * The in-stay wall — what the QR display opens.
+ * The in-stay wall: what the QR display opens.
  *
  * This is the only wall that carries house guidance, and the only one that
  * accepts a contribution, because reaching it means holding the QR display.
@@ -19,6 +22,8 @@ export function StayWallPage({ propertySlug = "property" }: { propertySlug?: str
   const [message, setMessage] = useState("");
   const [consent, setConsent] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  if (propertySlug !== DEMO_SLUG) return <LiveWallPage key={propertySlug} slug={propertySlug} />;
 
   function submit(event: FormEvent) {
     event.preventDefault();
@@ -55,16 +60,23 @@ export function StayWallPage({ propertySlug = "property" }: { propertySlug?: str
           height={property.cover.height}
           fetchPriority="high"
         />
-        {/* Confirms at a glance that they scanned the right property. */}
+        {/* Confirms at a glance that they scanned the right property, so it
+            is the largest thing on the wall before the hosts' own words: a
+            guest arriving from the placard is asking "is this the place?"
+            before they are asking anything else. */}
         <p className="stay-cover-caption">
           <b>{property.name}</b>
-          {property.location}
+          <span>{property.location}</span>
         </p>
       </div>
 
       <header className="stay-welcome">
         <div className="stay-welcome-head">
-          <span className="avatar avatar-lg tone-2" aria-hidden="true">{property.hostInitials}</span>
+          {property.hostPhoto ? (
+            <img className="avatar avatar-lg avatar-photo" src={property.hostPhoto.src} alt={property.hostPhoto.alt} />
+          ) : property.hostInitials ? (
+            <span className="avatar avatar-lg tone-2" aria-hidden="true">{property.hostInitials}</span>
+          ) : null}
           <div>
             <p className="eyebrow">A note from your hosts</p>
             <h1>{hostWelcome.heading}</h1>
@@ -90,32 +102,56 @@ export function StayWallPage({ propertySlug = "property" }: { propertySlug?: str
         </dl>
       </section>
 
-      <MemoryWall posts={demoPosts} heading="Memories from people who stayed here" />
+      {/* Whatever else the hosts want said. It belongs with what they wrote
+          above rather than with the memories below: it is not a memory, and a
+          guest reading it as one would be reading it wrong. */}
+      <HostNotes
+        notes={hostWallNotes.map((note) => ({
+          id: note.id,
+          message: note.message,
+          style: note.style,
+          photo: note.photo ? wallPhotos[note.photo] : undefined
+        }))}
+        author={property.hosts}
+      />
 
-      <form className="contribution-card" onSubmit={submit} noValidate>
-        <h2>Add your own</h2>
-        <p className="field-hint">
-          No account and no app &mdash; write a note and it goes to {property.hosts} for the wall.
-        </p>
-        <label htmlFor="display-name">Your name <span className="label-optional">optional</span></label>
-        <input
-          id="display-name"
-          value={displayName}
-          onChange={(event) => setDisplayName(event.target.value)}
-          maxLength={NAME_LIMIT}
-          placeholder="Mia &amp; Sam"
-          autoComplete="off"
-        />
-        <label htmlFor="message">Your message</label>
-        <textarea id="message" value={message} onChange={(event) => setMessage(event.target.value)} maxLength={MESSAGE_LIMIT} />
-        <p className="field-hint">{MESSAGE_LIMIT - message.length} characters remaining</p>
-        <label className="check-row">
-          <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />
-          I consent to this message being displayed on the public Guest Wall under the current Guest Content Policy.
-        </label>
-        <button type="submit">Continue</button>
-        {feedback && <p className="form-feedback" role="status">{feedback}</p>}
-      </form>
+      <dialog ref={dialogRef} className="contribution-dialog" aria-labelledby="contribution-title">
+        <form className="contribution-card" onSubmit={submit} noValidate>
+          <h2 id="contribution-title">Add your own</h2>
+          <p className="field-hint">
+            No account and no app. Write a note and it goes to {property.hosts} for the wall.
+          </p>
+          <label htmlFor="display-name">Your name <span className="label-optional">optional</span></label>
+          <input
+            id="display-name"
+            value={displayName}
+            onChange={(event) => setDisplayName(event.target.value)}
+            maxLength={NAME_LIMIT}
+            placeholder="Mia &amp; Sam"
+            autoComplete="off"
+          />
+          <label htmlFor="message">Your message</label>
+          <textarea id="message" value={message} onChange={(event) => setMessage(event.target.value)} maxLength={MESSAGE_LIMIT} />
+          <p className="field-hint">{MESSAGE_LIMIT - message.length} characters remaining</p>
+          <label htmlFor="photo">Add a photo <span className="label-optional">optional</span></label>
+          <input id="photo" type="file" accept="image/jpeg, image/png, image/webp" />
+          <label className="check-row">
+            <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />
+            I consent to this message being displayed on the public Guest Wall under the current Guest Content Policy.
+          </label>
+          <div className="dialog-actions">
+            <button type="button" className="btn btn-secondary" onClick={() => dialogRef.current?.close()}>Cancel</button>
+            <button type="submit" className="btn btn-primary">Continue</button>
+          </div>
+          {feedback && <p className="form-feedback" role="status">{feedback}</p>}
+        </form>
+      </dialog>
+
+      <div className="stay-composer">
+        <button type="button" className="btn btn-primary btn-block" onClick={() => dialogRef.current?.showModal()}>Add a memory</button>
+      </div>
+
+      <MemoryWall posts={demoPosts} heading={memoriesHeading(demoPosts.length)} />
 
       <aside className="guest-wall-powered-by" aria-label="About DigiStayBook">
         <p>Loved your stay? <a href="/">Powered by DigiStayBook &mdash; Create a digital guestbook for your property.</a></p>

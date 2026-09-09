@@ -1,19 +1,35 @@
+import { HostNotes } from "../wall/HostNotes";
 import { MemoryWall } from "../wall/MemoryWall";
-import { DEMO_SLUG, demoPosts, demoProperty } from "../wall/demoWall";
+import { LiveWallPage } from "./LiveWallPage";
+import { DEMO_SLUG, demoPosts, demoProperty, hostWallNotes, wallPhotos } from "../wall/demoWall";
+import { memoriesHeading } from "../wall/memoryHeading";
 
 /**
- * The public wall — the link a host shares or embeds on their own site.
+ * The public wall: the link a host shares or embeds on their own site.
  *
  * It carries the property, the hosts and the memories guests left. It
  * deliberately carries no house guidance: Wi-Fi passwords, bin days and
  * checkout arrangements only appear on the in-stay wall behind the QR display.
  */
-export function GuestWallPage({ propertySlug = "property" }: { propertySlug?: string }) {
-  const isDemo = propertySlug === DEMO_SLUG;
+export function GuestWallPage({
+  propertySlug = "property",
+  embedded = false
+}: {
+  propertySlug?: string;
+  /**
+   * True on `/embed/wall/{slug}`, the rendering a Host puts in an iframe on
+   * their own site. The wall is the same wall; what goes is everything that
+   * only makes sense on our site — the demo ribbon here, and the site header
+   * and footer, which the embedded route never draws in the first place.
+   */
+  embedded?: boolean;
+}) {
+  const isDemo = propertySlug === DEMO_SLUG && !embedded;
   const property = demoProperty;
+  if (propertySlug !== DEMO_SLUG) return <LiveWallPage key={propertySlug} slug={propertySlug} />;
 
   return (
-    <div className="page wall-page">
+    <div className={embedded ? "page wall-page wall-embed" : "page wall-page"}>
       {isDemo && (
         <p className="demo-ribbon">
           <span className="demo-ribbon-tag">Demo</span>
@@ -38,7 +54,11 @@ export function GuestWallPage({ propertySlug = "property" }: { propertySlug?: st
           <p className="wall-location">{property.location}</p>
           <p className="wall-welcome">{property.welcome}</p>
           <div className="host-byline">
-            <span className="avatar avatar-lg tone-2" aria-hidden="true">{property.hostInitials}</span>
+            {property.hostPhoto ? (
+              <img className="avatar avatar-lg avatar-photo" src={property.hostPhoto.src} alt={property.hostPhoto.alt} />
+            ) : property.hostInitials ? (
+              <span className="avatar avatar-lg tone-2" aria-hidden="true">{property.hostInitials}</span>
+            ) : null}
             <span>
               <b>{property.hosts}</b>
               <small>{property.hostSince}</small>
@@ -47,7 +67,19 @@ export function GuestWallPage({ propertySlug = "property" }: { propertySlug?: st
         </div>
       </header>
 
-      <MemoryWall posts={demoPosts} heading={`${demoPosts.length} memories left here`} />
+      {/* Whatever else the hosts want said, in their own voice and above the
+          memories rather than among them: none of them is one. */}
+      <HostNotes
+        notes={hostWallNotes.map((note) => ({
+          id: note.id,
+          message: note.message,
+          style: note.style,
+          photo: note.photo ? wallPhotos[note.photo] : undefined
+        }))}
+        author={property.hosts}
+      />
+
+      <MemoryWall posts={demoPosts} heading={memoriesHeading(demoPosts.length)} />
 
       <aside className="wall-invite" aria-label="Staying here soon">
         <h2>Staying here soon?</h2>
