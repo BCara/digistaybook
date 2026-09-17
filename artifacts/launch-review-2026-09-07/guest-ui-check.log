@@ -1,0 +1,15 @@
+
+> digistaybook@0.1.0 test
+> vitest run --exclude "tests/**/*.rules.test.ts"
+
+
+ RUN  v4.1.10 C:/Users/clbbe/Documents/Projects/DigiStayBook
+
+Not implemented: navigation to another Document
+Not implemented: navigation to another Document
+
+ Test Files  29 passed (29)
+      Tests  283 passed (283)
+   Start at  02:32:01
+   Duration  11.33s (transform 9.73s, setup 20.79s, import 12.81s, tests 18.29s, environment 112.26s)
+

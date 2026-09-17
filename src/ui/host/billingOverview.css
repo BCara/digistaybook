@@ -1,0 +1,76 @@
+/* The account billing page.
+
+   Same stationery as the rest of the host area: hairline rules, squared
+   corners, one accent used only where money has gone wrong. The schedule is
+   a list of dated rows rather than a table because the date column is the
+   only one a Host reads down. */
+
+.billing-banner {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 20px;
+  margin: 24px 0 0; padding: 13px 16px;
+  border: 1px solid var(--accent); border-left-width: 3px;
+  background: var(--accent-soft); color: var(--accent-strong);
+  font-size: var(--step--1); line-height: 1.55;
+}
+.billing-banner strong { font-weight: 650; }
+.billing-banner .text-link { color: inherit; flex: none; }
+
+.billing-totals { margin-top: 28px; }
+/* Capped rather than stretched: an account holding one currency was giving a
+   single two-word figure the full width of the page. */
+.billing-total-cards {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 340px));
+  justify-content: start; gap: 16px;
+}
+.billing-total {
+  padding: 16px 18px; min-width: 0;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-sm);
+}
+.billing-total-label { margin: 0 0 6px; color: var(--text-muted); font-size: var(--step--1); }
+.billing-total-amount {
+  margin: 0; font-family: var(--font-display); font-size: var(--step-2); line-height: 1.1; letter-spacing: -.02em;
+}
+.billing-total-amount span { font-family: var(--font-sans); font-size: var(--step--1); color: var(--text-muted); letter-spacing: 0; }
+.billing-total-note { margin: 6px 0 0; color: var(--text-muted); font-size: var(--step--2); line-height: 1.5; }
+.billing-footnote { margin: 12px 0 0; color: var(--text-muted); font-size: var(--step--2); line-height: 1.55; max-width: 72ch; }
+
+/* The month a run of dates falls in, as a marker over them rather than a
+   heading competing with the section's own. */
+.billing-month {
+  margin: 22px 0 0; color: var(--text-muted);
+  font-size: var(--step--2); font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+}
+
+.billing-schedule, .billing-properties { list-style: none; padding: 0; margin: 0; }
+.billing-schedule li, .billing-properties li {
+  display: flex; align-items: baseline; gap: 16px;
+  padding: 13px 0; border-top: 1px solid var(--rule);
+}
+.billing-schedule li:last-child, .billing-properties li:last-child { border-bottom: 1px solid var(--rule); }
+/* A commitment that is ending, and a property that was never billed: present
+   because the page would be lying by omission without them, quiet because
+   neither is going to take any money. */
+.billing-row-quiet { color: var(--text-muted); }
+
+.billing-day { flex: none; width: 4.5em; font-family: var(--font-display); font-size: var(--step-0); }
+.billing-event { flex: 1; min-width: 0; display: grid; gap: 3px; overflow-wrap: anywhere; }
+.billing-event b { font-weight: 650; }
+.billing-event span { color: var(--text-muted); font-size: var(--step--1); }
+.billing-event-alert { color: var(--accent-strong) !important; }
+.billing-amount { flex: none; text-align: right; display: grid; gap: 3px; }
+.billing-amount span { color: var(--text-muted); font-size: var(--step--1); }
+.billing-schedule .text-link, .billing-properties .text-link { flex: none; font-size: var(--step--1); }
+
+.billing-property-name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.billing-properties .state-pill { flex: none; }
+.billing-property-rate { flex: none; text-align: right; font-size: var(--step--1); }
+
+@media (max-width: 640px) {
+  .billing-schedule li { flex-wrap: wrap; gap: 6px 12px; }
+  .billing-day { width: 100%; font-size: var(--step--1); color: var(--text-muted); }
+  .billing-event { flex: 1 1 100%; }
+  .billing-amount { text-align: left; }
+  .billing-properties li { flex-wrap: wrap; gap: 6px 12px; }
+  .billing-property-name { flex: 1 1 100%; }
+  .billing-property-rate { text-align: left; }
+}

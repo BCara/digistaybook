@@ -1,5 +1,5 @@
 export const bopRequirements = {
-  guestContribution: "DSB-BOP-P2-004",
+  guestContribution: "DSB-BOP-P6-011",
   reporting: "DSB-BOP-P2-005",
   hostDashboard: "DSB-BOP-P6-004",
   propertyManagement: "DSB-BOP-P6-005",

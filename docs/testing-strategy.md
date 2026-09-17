@@ -10,15 +10,22 @@
 ## 0. Read this first — what is actually testable
 
 This document is written against the code that exists, not against the product
-specification. Three capabilities named in the spec are **not implemented yet**, so
+specification. Two capabilities named in the spec are **not implemented yet**, so
 they cannot be tested. They are listed in Part D with the precondition each one needs,
 rather than being written as steps that would fail for the wrong reason.
 
 | Capability | State in code | Evidence |
 |---|---|---|
-| Host login | **Not implemented** | No `signInWith*`, `createUserWith*` or `onAuthStateChanged` call exists anywhere in `src/`. The sign-in form's buttons are hard-coded `disabled`. |
 | Outbound email | **Not implemented** | `functions/src/index.ts` exports only `health`. No mail provider dependency, no send call. `src/domain/marketing.ts` is a classification/consent policy module only. |
 | Guest post persistence | **Not implemented** | `StayWallPage` validates the form locally and displays "nothing is sent to a host yet". Walls read from `src/ui/wall/demoWall.ts`. |
+
+Host login **is** implemented: `src/ui/auth/hostAuth.ts` wraps `signInWithEmailAndPassword`,
+`signInWithPopup` (Google), `sendPasswordResetEmail` and `signOut`; `HostSignInPage`
+drives them and `AuthProvider` observes `onAuthStateChanged`. It is covered by
+`src/ui/auth/hostAuth.test.ts` and `src/ui/pages/HostSignInPage.test.tsx`, and was
+exercised against the Auth emulator (sign-in, rejected credentials, sign-out). The
+form still hard-disables itself when no Firebase environment is configured, so the
+fail-closed behaviour asserted elsewhere in this document is unchanged.
 
 **Consequence for the "known email address" requirement:** there is no send path to
 point at a test address. The routing convention is defined in Part D.1 so it is settled
@@ -174,7 +181,7 @@ behaviour.
 
 ---
 
-### B.6 — Firestore security rules (emulator)
+### B.6 — Firestore and Storage security rules (emulator)
 
 This is the highest-value automated gate in the repository: it is the only place where
 real access-control behaviour is exercised.
@@ -185,8 +192,12 @@ real access-control behaviour is exercised.
 npm run test:emulators
 ```
 
-**Expected outcome:** exit code `0`; the Firestore emulator starts on port `8080` under
-project `demo-digistaybook`, the rules suite passes, and the emulator shuts down cleanly.
+**Expected outcome:** exit code `0`; the Firestore emulator starts on port `8080` and the
+Storage emulator on port `9199` under project `demo-digistaybook`, both rules suites pass,
+and the emulators shut down cleanly. The two suites share one emulator project and each
+clears it between tests, so they run with `--no-file-parallelism` and must not be made
+concurrent. The Storage suite runs in the Node environment: the Storage SDK uploads
+through XHR, which jsdom does not carry a byte payload through.
 
 **If it fails to start:** the most likely causes are (a) Java not installed — the
 Firestore emulator requires a JRE, and (b) port `8080` already in use. Both are
@@ -202,6 +213,14 @@ environment faults, recorded as **BLOCKED**, not **FAIL**.
   subcollection). Persistence must go through a server endpoint, which is why Part D.3
   is blocked rather than broken.
 - The catch-all `match /{document=**}` denies everything not explicitly allowed.
+
+**What passing proves,** per `storage.rules`:
+- A photograph under `properties/{propertyId}/media/` is readable without signing in only
+  while that property is live; a draft property's photographs are refused.
+- Only the owning Host may upload, replace or delete one, and an anonymous Guest session
+  never counts as an owner.
+- Uploads are limited to JPEG, PNG and WebP under 8MB.
+- Every other path in the bucket, including elsewhere under a property, stays denied.
 
 ---
 
@@ -232,12 +251,48 @@ expected outcome for every step in this part, and is not repeated in each one.
 2. Two hero buttons: **"See a live guest wall"** → `/wall/demo-cottage`, and
    **"Host sign in"** → `/host/sign-in`.
 3. Hero bullet points include "No app download", "No guest accounts", "28-day free trial".
-4. Header navigation shows exactly four links: How it works, Pricing, See a live wall,
-   Privacy & Safety — plus a "Host sign in" button.
+4. Header navigation shows exactly four links: How it works, Pricing (→ `/pricing`),
+   See a live wall, Privacy & Safety — plus a "Host sign in" button.
 5. Footer shows three columns (brand blurb, Product, Support & legal) and a copyright
    line ending **"Working implementation — not yet released."**
-6. No image or font is fetched from an external host — all icons are inline SVG and all
+6. The pricing section is a *prompt*, not a second pricing page: the trial callout, the
+   two rates and a "See everything included, and the billing terms" link to `/pricing`.
+   The tax callout, the cancellation link and the feature checklist must **not** appear
+   here — they belong to C.1a, and two copies of the billing terms is how the two
+   copies start to differ (BOP §4.3).
+7. No image or font is fetched from an external host — all icons are inline SVG and all
    imagery is CSS. Check the Network tab: every request is same-origin.
+
+---
+
+### C.1a — Pricing page (BOP §6.3.4)
+
+**Action:** navigate to `http://localhost:5173/pricing`
+
+**Expected outcome:**
+1. A "Show prices in" control offers **AUD** and **USD**. It opens on the currency the
+   browser's own region implies (`en-AU` → AUD) and falls back to USD elsewhere.
+2. In USD the rates read **US$10** per month and **US$100** per year; in AUD, **A$15**
+   and **A$150**. Both carry their currency symbol — a bare "$15" would not say which
+   dollar. Switching the control repaints both rates and the saving sentence.
+3. The annual plan is badged **"Two months free"** and reads "That is US$20 / A$30 less
+   than twelve months at the monthly rate". Both are derived from the two rates, so a
+   rate change that leaves them wrong is a bug in `src/domain/pricing.ts`, not copy.
+4. The trial callout reads, verbatim: "Create your account and add your first property
+   to activate your 28-day free trial."
+5. The tax callout appears verbatim: "DigiStayBook may be deductible as a business
+   expense. Eligibility depends on your circumstances and business use; seek tax advice."
+6. One unified checklist under "Included in both plans" — there is no per-plan feature
+   list, because there is no feature tier.
+7. "Billing is per property. Every property is managed from a single host dashboard."
+8. A cancellation note links to `/terms`.
+9. Signed out, every plan button reads **"Create free account"** → `/host/sign-up`.
+   Signed in as a host, they read **"Add a property"** → `/host#add-property`, and the
+   closing action is "Go to your dashboard" → `/host`.
+10. The rates shown here are the same figures `activationOptions` quotes at checkout.
+    `stripeActivation.quote()` refuses to quote a Stripe catalogue amount that differs
+    from the published rate card, so a mismatch fails activation rather than selling at
+    an unpublished price.
 
 ---
 

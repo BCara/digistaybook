@@ -1,0 +1,44 @@
+
+> digistaybook@0.1.0 test:emulators
+> firebase emulators:exec --project demo-digistaybook --only firestore,storage "vitest run --no-file-parallelism tests/firestore.rules.test.ts tests/storage.rules.test.ts"
+
+i  emulators: Starting emulators: firestore, storage
+i  emulators: Detected demo project ID "demo-digistaybook", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: vitest run --no-file-parallelism tests/firestore.rules.test.ts tests/storage.rules.test.ts
+
+ RUN  v4.1.10 C:/Users/clbbe/Documents/Projects/DigiStayBook
+
+ ❯ tests/storage.rules.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/storage.rules.test.ts [ tests/storage.rules.test.ts ]
+ReferenceError: Element is not defined
+ ❯ vitest.setup.ts:6:1
+      4| // jsdom has no layout, so it never implemented scrollIntoView. Pages …
+      5| // scroll a section into view call it; a no-op keeps that out of every…
+      6| if (!Element.prototype.scrollIntoView) Element.prototype.scrollIntoVie…
+       | ^
+      7|
+      8| // jsdom implements neither half of the object-URL API. The add-proper…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  20 passed (20)
+   Start at  14:33:28
+   Duration  5.77s (transform 51ms, setup 184ms, import 272ms, tests 3.59s, environment 1.06s)
+
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  storage: Stopping Storage Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run --no-file-parallelism tests/firestore.rules.test.ts tests/storage.rules.test.ts" exited with code 1

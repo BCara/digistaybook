@@ -12,7 +12,7 @@ DigiStayBook is a mobile-first digital guestbook for short-term rental hosts. Gu
 
 ## Initial capability areas
 
-1. Guest wall with chronological posts, photos, text, copy-text action, editing, deletion, reporting, and consent capture. (`DSB-BOP-P2-004`, `DSB-BOP-P6-009`)
+1. Guest wall with chronological posts, photos, text, copy-text action, editing, deletion, reporting, and consent capture. (`DSB-BOP-P6-011`, `DSB-BOP-P6-009`)
 2. Host dashboard with property setup, wall preview, moderation, pinning, foundational posts, house information, QR assets, and billing state. (`DSB-BOP-P2-001`, `DSB-BOP-P2-002`, `DSB-BOP-P6-004`, `DSB-BOP-P6-005`)
 3. Account and billing lifecycle, including trials, monthly and annual plans, coupons, renewals, failed-payment grace period, suspension, cancellation, and reactivation. (`DSB-BOP-P3-004`, `DSB-BOP-P4-002`, `DSB-BOP-P7-003`)
 4. Moderation workflow for automated flags, guest reports, host approval, and internal trust-and-safety escalation. (`DSB-BOP-P2-005`, `DSB-BOP-P4-005`, `DSB-BOP-P9-002`)
@@ -32,7 +32,7 @@ DigiStayBook is a mobile-first digital guestbook for short-term rental hosts. Gu
 - Guest property issues are directed to the original booking provider.
 - No rating requests, review-transfer instructions, pre-filled provider reviews or provider review deep-links inside DigiStayBook.
 - Privacy and content-safety requests remain accessible to guests through self-service, reporting and the public Privacy & Safety route.
-- Live routing links and downloadable QR kits remain locked until the property is activated.
+- Live routing links and downloadable QR kits remain locked until the property is activated. Seeing the placard is not locked with them: a Host may look at their property's card, its code and its address before activating, because what a running subscription buys is the printable kit and a wall for the code to lead to, not the sight of the card.
 
 ## Open decisions
 

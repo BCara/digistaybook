@@ -1,0 +1,9 @@
+
+ RUN  v4.1.10 C:/Users/clbbe/Documents/Projects/DigiStayBook
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  16:32:48
+   Duration  1.59s (transform 35ms, setup 193ms, import 23ms, tests 5ms, environment 1.19s)
+

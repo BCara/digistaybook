@@ -6,6 +6,10 @@ functions/lib/
 .env
 .env.local
 .env.*.local
+# How the Functions emulator is given Secret Manager secrets locally. A real
+# Stripe restricted key lives here; it must never be committed.
+.secret.local
+functions/.secret.local
 firebase-debug.log
 firestore-debug.log
 ui-debug.log

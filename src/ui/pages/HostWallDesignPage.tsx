@@ -3,6 +3,7 @@ import { propertyIdentityLimits } from "../../domain/property";
 import {
   emptyFact,
   emptyHostNote,
+  exampleNote,
   factExample,
   hostInitials,
   profileLimits,
@@ -14,14 +15,17 @@ import {
 } from "../../domain/propertyProfile";
 import { useAuth } from "../auth/AuthProvider";
 import { CameraMark } from "../host/CameraMark";
+import { ActionDisclosure } from "../ActionDisclosure";
 
 import { PropertySettingsDialog } from "../host/PropertyDialog";
 import { navigate } from "../routing";
 import { CanvasLine, CanvasParagraph } from "../host/CanvasFields";
 import { HostNoteStylePicker } from "../host/HostNoteStylePicker";
 import { PropertyShell } from "../host/PropertyShell";
+import { stayWallPath } from "../../domain/wallAddress";
 import { WallPreview } from "../host/WallPreview";
 import { memoriesHeading } from "../wall/memoryHeading";
+import { EssentialMark } from "../wall/EssentialMark";
 import { WallThemePicker } from "../host/WallThemePicker";
 import { PublicWallSettings } from "../host/PublicWallSettings";
 import type { HostProperty, WallCounts } from "../host/propertyStore";
@@ -90,19 +94,23 @@ function Omit({
   label,
   onClick,
   disabled,
+  iconOnly = false,
 }: {
   label: string;
   onClick: () => void;
   disabled?: boolean;
+  iconOnly?: boolean;
 }) {
   return (
     <button
       type="button"
-      className="canvas-omit"
+      className={`canvas-omit${iconOnly ? " canvas-omit-icon" : ""}`}
+      aria-label={iconOnly ? label : undefined}
+      title={iconOnly ? label : undefined}
       onClick={onClick}
       disabled={disabled}
     >
-      {label}
+      {iconOnly ? <span aria-hidden="true">×</span> : label}
     </button>
   );
 }
@@ -467,8 +475,6 @@ export function HostWallDesignPage({
    * in a settings panel, because this is the one screen where the difference
    * between the two can be seen while it is being chosen.
    */
-  const hostNoteSigned =
-    profile.hosts.trim() !== "" || profile.hostPhoto !== null;
 
   function setNote(id: string, change: Partial<Omit<HostNote, "id">>) {
     set(
@@ -493,6 +499,7 @@ export function HostWallDesignPage({
         >
           <div className="wizard-note-header">
             <h5 className="wizard-note-title">Note {index + 1}</h5>
+            <ActionDisclosure className="canvas-note-settings" label="Note options">
             <HostNoteStylePicker
               compact
               name={`canvas-note-style-${note.id}`}
@@ -501,6 +508,16 @@ export function HostWallDesignPage({
               disabled={draft.saving}
               onChange={(style) => setNote(note.id, { style })}
             />
+            {note.photo && <button type="button" className="btn btn-ghost btn-sm"
+              onClick={() => setNote(note.id, { photo: null })}
+              disabled={draft.saving || noteBusy === note.id}>Remove photo</button>}
+            <button type="button" className="btn btn-ghost btn-sm"
+              aria-label={`Take note ${index + 1} off the wall`}
+              disabled={draft.saving}
+              onClick={() => set("hostNotes", profile.hostNotes.filter(entry => entry.id !== note.id))}>
+              Remove note
+            </button>
+            </ActionDisclosure>
           </div>
           
           <div className="host-note-body">
@@ -532,17 +549,6 @@ export function HostWallDesignPage({
                   </span>
                 )}
               </button>
-              {note.photo && (
-                <button
-                  type="button"
-                  className="btn btn-ghost btn-sm"
-                  style={{ marginTop: 4 }}
-                  onClick={() => setNote(note.id, { photo: null })}
-                  disabled={draft.saving || noteBusy === note.id}
-                >
-                  Remove photo
-                </button>
-              )}
               {noteError?.id === note.id && <p className="form-feedback" role="alert">{noteError.message}</p>}
             </div>
             <div className="host-note-words">
@@ -559,37 +565,14 @@ export function HostWallDesignPage({
                 photograph already on this page. There is nothing to sign with
                 until a Host has typed them, and an empty signature line would
                 read as a bug. */}
-              {hostNoteSigned && (
+              {profile.hosts.trim() !== "" && (
                 <p className="canvas-note-sign">
-                  {profile.hostPhoto ? (
-                    <img
-                      className="avatar avatar-photo"
-                      src={profile.hostPhoto.url}
-                      alt={profile.hostPhoto.alt}
-                    />
-                  ) : (
-                    <span className="avatar tone-2" aria-hidden="true">
-                      {hostInitials(profile.hosts)}
-                    </span>
-                  )}
                   <b>{profile.hosts}</b>
                 </p>
               )}
             </div>
           </div>
 
-          {/* A photograph is stored the moment it uploads, so what this takes
-            away is the note; the picture on it goes with the note it was on. */}
-          <Omit
-            label={`Take note ${index + 1} off the wall`}
-            disabled={draft.saving}
-            onClick={() =>
-              set(
-                "hostNotes",
-                profile.hostNotes.filter((entry) => entry.id !== note.id),
-              )
-            }
-          />
         </article>
       ))}
 
@@ -721,12 +704,12 @@ export function HostWallDesignPage({
                       sees.
                     </span>
                   )}
-                  <span
+                  {(!profile.cover || coverBusy) && <span
                     className="btn btn-secondary btn-sm canvas-cover-action"
                     role={coverBusy ? "status" : undefined}
                   >
                     {coverBusy ? (coverProgress >= 1 ? "Saving photo…" : coverProgress > 0 ? `Uploading ${Math.round(coverProgress * 100)}%…` : "Uploading…") : profile.cover ? "Change cover photo" : "Add a cover photo"}
-                  </span>
+                  </span>}
                 </button>
                 <input
                   ref={coverInput}
@@ -744,15 +727,18 @@ export function HostWallDesignPage({
                 {coverError && <p className="form-feedback" role="alert">{coverError}</p>}
               </div>
               {profile.cover && (
+                <ActionDisclosure className="canvas-cover-menu" label="Edit cover">
+                  <div className="cover-menu-actions">
+                    <button type="button" disabled={coverBusy} onClick={() => coverInput.current?.click()}>Change cover photo</button>
                 <button
                   type="button"
-                  className="btn btn-ghost btn-sm"
                   onClick={() => set("cover", null)}
                   disabled={coverBusy}
-                  style={{ position: "absolute", right: 8, bottom: -36 }}
                 >
                   Remove cover photo
                 </button>
+                  </div>
+                </ActionDisclosure>
               )}
             </div>
             
@@ -761,7 +747,7 @@ export function HostWallDesignPage({
                 {/* Same again for the portrait: the frame itself is the button,
                   so clicking the picture — or the empty square where one
                   belongs — is what a Host expects it to be. */}
-                <div className="canvas-portrait-wrap" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <div className="canvas-portrait-wrap" style={{ position: "relative" }}>
                   <button
                     type="button"
                     className="canvas-portrait"
@@ -816,12 +802,12 @@ export function HostWallDesignPage({
                   {profile.hostPhoto && (
                     <button
                       type="button"
-                      className="btn btn-ghost btn-sm"
+                      className="canvas-portrait-remove"
+                      aria-label="Remove photo"
                       onClick={() => set("hostPhoto", null)}
                       disabled={portraitBusy}
-                      style={{ marginTop: 4 }}
                     >
-                      Remove photo
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                     </button>
                   )}
                 </div>
@@ -829,14 +815,14 @@ export function HostWallDesignPage({
 
                 <div className="canvas-titles">
                   <h2 className="canvas-name">
-                    <CanvasLine
+                    <CanvasParagraph
                       label="Property name"
                       value={draft.name}
                       placeholder="The name guests see"
                       maxLength={propertyIdentityLimits.nameMax}
                       disabled={draft.saving}
                       invalid={nameProblem ? true : undefined}
-                      onChange={draft.setName}
+                      onChange={value => draft.setName(value.replace(/[\r\n]+/g, " "))}
                     />
                   </h2>
                   {nameProblem && (
@@ -844,14 +830,14 @@ export function HostWallDesignPage({
                       {nameProblem}
                     </p>
                   )}
-                  <CanvasLine
+                  <CanvasParagraph
                     label="Where the property is"
                     value={profile.location}
                     placeholder="10 Street Name, Town, Postcode"
                     maxLength={profileLimits.locationMax}
                     disabled={draft.saving}
                     className="canvas-location"
-                    onChange={(value) => set("location", value)}
+                    onChange={(value) => set("location", value.replace(/[\r\n]+/g, " "))}
                   />
                 </div>
               </div>
@@ -919,43 +905,45 @@ export function HostWallDesignPage({
                     says the same thing the page does. */}
                   {!profile.stayNoteOff ? (
                     <>
-                      <p className="canvas-eyebrow canvas-eyebrow-omit">
-                        A note from your hosts
-                        <Omit
-                          label="Leave the whole note out"
-                          disabled={draft.saving}
-                          onClick={omitStayNote}
-                        />
-                      </p>
-
-                      {shows("stayHeading") && (
-                        <div className="canvas-optional">
-                          <h3 className="canvas-heading">
-                            <CanvasLine
-                              label="Arrival heading"
-                              value={profile.stayHeading}
-                              placeholder="Welcome to the cottage"
-                              maxLength={profileLimits.stayHeadingMax}
-                              disabled={draft.saving}
-                              onChange={(value) => set("stayHeading", value)}
-                            />
-                          </h3>
+                      <div className="canvas-note-heading-group">
+                        <p className="canvas-eyebrow canvas-eyebrow-omit">
+                          A note from your hosts
                           <Omit
-                            label="Leave the heading out"
+                            label="Leave the whole note out"
                             disabled={draft.saving}
-                            onClick={() => omit("stayHeading")}
+                            onClick={omitStayNote}
                           />
-                        </div>
-                      )}
+                        </p>
+
+                        {shows("stayHeading") && (
+                          <div className="canvas-optional canvas-heading-edit">
+                            <h3 className="canvas-heading">
+                              <CanvasParagraph
+                                label="Arrival heading"
+                                value={profile.stayHeading}
+                                placeholder={exampleNote.heading}
+                                maxLength={profileLimits.stayHeadingMax}
+                                disabled={draft.saving}
+                                onChange={(value) => set("stayHeading", value.replace(/[\r\n]+/g, " "))}
+                              />
+                            </h3>
+                            <Omit
+                              label="Leave the heading out"
+                              iconOnly
+                              disabled={draft.saving}
+                              onClick={() => omit("stayHeading")}
+                            />
+                          </div>
+                        )}
+
+                      </div>
 
                       {shows("stayWelcome") && (
                         <div className="canvas-optional">
                           <CanvasParagraph
                             label="Arrival note"
                             value={profile.stayWelcome}
-                            placeholder={
-                              "The kettle is on the side and there is milk in the fridge.\n\nIf something is not working, message us before you go hunting for it."
-                            }
+                            placeholder={exampleNote.welcome}
                             maxLength={profileLimits.stayWelcomeMax}
                             disabled={draft.saving}
                             className="canvas-stay-note"
@@ -1053,12 +1041,6 @@ export function HostWallDesignPage({
                     not can take the whole section off. The lines are kept when
                     it goes, so putting it back does not cost them the Wi-Fi
                     password twice. */}
-                  <div className="stacked-form">
-                    <label className="check-row"><input type="checkbox" checked={profile.publishHouseInformation} disabled={draft.saving} onChange={event => set("publishHouseInformation", event.target.checked)} />
-                      Show the arrival note and house essentials to anyone with the guestbook link
-                    </label>
-                    <p className="field-hint">Shared links can be forwarded. Review Wi-Fi details and access instructions before enabling this.</p>
-                  </div>
                   {profile.factsOff ? (
                     <p className="canvas-includes canvas-includes-lead">
                       <Include
@@ -1086,6 +1068,10 @@ export function HostWallDesignPage({
                         {profile.facts.map((fact, index) => (
                           <div className="canvas-essential" key={index}>
                             <dt>
+                              <EssentialMark
+                                term={fact.term}
+                                className="essential-mark canvas-essential-mark"
+                              />
                               <CanvasLine
                                 label={`Line ${index + 1}: label`}
                                 value={fact.term}
@@ -1171,6 +1157,16 @@ export function HostWallDesignPage({
                                 }
                               />
                             ))}
+                          {/* The same offer, for a line none of the
+                            suggestions cover: it starts empty, so the Host
+                            types the label as well as the answer. */}
+                          <Include
+                            label="Custom"
+                            disabled={draft.saving}
+                            onClick={() =>
+                              set("facts", [...profile.facts, emptyFact()])
+                            }
+                          />
                         </p>
                       )}
 
@@ -1233,7 +1229,12 @@ export function HostWallDesignPage({
                     <GuestOnly>
                       <a
                         className="text-link"
-                        href={`/stay/${property.slug}`}
+                        /* With the token on it: the in-stay wall answers
+                           with the arrival note and the essentials only to
+                           the address printed on the placard, so a tokenless
+                           link opens the public wall and this Host is left
+                           looking for the words they just wrote. */
+                        href={stayWallPath(property.slug, property.stayToken)}
                         target="_blank"
                         rel="noreferrer"
                         aria-label="Open the in-stay wall as guests see it"

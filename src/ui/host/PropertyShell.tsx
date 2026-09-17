@@ -1,5 +1,6 @@
-import { useRef, useState, type ChangeEvent, type ReactNode } from "react";
-import { canDownloadQrKit, isPubliclyReadable } from "../../domain/property";
+import { useEffect, useRef, useState, type ChangeEvent, type ReactNode } from "react";
+import { isPubliclyReadable } from "../../domain/property";
+import { stayWallPath } from "../../domain/wallAddress";
 import {
   hasDisplayWall,
   profileLimits,
@@ -39,49 +40,13 @@ function ActionMark({ children }: { children: ReactNode }) {
   );
 }
 
-/** Sliders rather than a cog: the same shape the word beside it means. */
+/** A settings cog for the icon-only control beside the property name. */
 const settingsMark = (
   <ActionMark>
-    <path d="M3 6.2h9.2m3.6 0h1.2M3 13.8h1.2m3.6 0h9.2" />
-    <path d="M14 4.4a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6Zm-8 7.6a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6Z" />
+    <path d="M8.2 2h3.6l.5 2.1 1.4.8 2.1-.6 1.8 3.1L16 8.9v1.6l1.6 1.5-1.8 3.1-2.1-.6-1.4.8-.5 2.1H8.2l-.5-2.1-1.4-.8-2.1.6L2.4 12 4 10.5V8.9L2.4 7.4l1.8-3.1 2.1.6 1.4-.8Z" />
+    <circle cx="10" cy="9.7" r="2.6" />
   </ActionMark>
 );
-
-/**
- * A banner action, which is a link while the thing it leads to exists and a
- * plain statement while it does not. A locked QR kit and an unpublished wall
- * are the ordinary state of a property still being written, so the control
- * stays in place and says why rather than disappearing and leaving a Host to
- * wonder where it went.
- */
-function BannerAction({
-  href,
-  available,
-  unavailable,
-  mark,
-  children
-}: {
-  href: string;
-  available: boolean;
-  unavailable: string;
-  mark: ReactNode;
-  children: ReactNode;
-}) {
-  if (!available) {
-    return (
-      <span className="btn btn-secondary btn-sm banner-action is-unavailable" aria-disabled="true" title={unavailable}>
-        <ActionMark>{mark}</ActionMark>
-        {children}
-      </span>
-    );
-  }
-  return (
-    <a className="btn btn-secondary btn-sm banner-action" href={href}>
-      <ActionMark>{mark}</ActionMark>
-      {children}
-    </a>
-  );
-}
 
 export function PropertyShell({
   property,
@@ -90,6 +55,7 @@ export function PropertyShell({
   profile,
   className,
   aside,
+  onChangeAvatar,
   children
 }: {
   property: HostProperty;
@@ -120,6 +86,12 @@ export function PropertyShell({
 
   const shown = profile ?? property.profile;
   const title = (name ?? property.name).trim() || property.name;
+  
+  // If the avatar changes from outside (e.g. from a draft), clear the local override.
+  useEffect(() => {
+    setUploaded(null);
+  }, [shown.avatar?.path]);
+
   const avatar = uploaded ?? shown.avatar;
   const location = shown.location.trim();
   // Two different reasons a guest cannot reach the public wall, and the
@@ -128,12 +100,6 @@ export function PropertyShell({
   // public one.
   const served = isPubliclyReadable(property);
   const wallOn = hasDisplayWall(shown);
-  const live = served && wallOn;
-  const qrReady = canDownloadQrKit(property);
-  // A property that has never been activated is the one case where the two
-  // banner actions below are *both* locked and neither of their explanations
-  // is anything a Host can act on. It is also the case where the thing to do
-  // next is the same on every screen, so the band carries it.
   const draft = property.lifecycle === "draft";
 
   /**
@@ -158,6 +124,7 @@ export function PropertyShell({
       return;
     }
     setUploaded(outcome.value);
+    onChangeAvatar?.(outcome.value);
   }
   // The property view is the property's own address, so it is the one screen
   // the trail cannot offer as somewhere to go.
@@ -215,67 +182,47 @@ export function PropertyShell({
               onChange={(event) => void choose(event)}
             />
             <div className="banner-titles">
-              <h1>{title}</h1>
+              <div className="banner-name-row">
+                <h1>{title}</h1>
+                {onSettings ? (
+                  <span className="banner-settings is-current" aria-current="page" aria-label="Settings" title="Settings">
+                    {settingsMark}
+                  </span>
+                ) : (
+                  <a className="banner-settings" href={`/host/property/${property.id}/settings`} aria-label="Settings" title="Settings">
+                    {settingsMark}
+                  </a>
+                )}
+              </div>
               {location ? <p className="banner-location">{location}</p> : null}
-              <StatePills lifecycle={property.lifecycle} mode={property.mode} />
+              <StatePills lifecycle={property.lifecycle} mode={property.mode} billingHref={`/host/property/${property.id}/billing`} />
+              <PropertyNav mobile propertyId={property.id} current={current} publicWallOff={!wallOn} draft={draft} />
               {problem && <p className="form-feedback banner-photo-problem" role="alert">{problem}</p>}
             </div>
           </div>
 
           <div className="banner-actions">
-            {/* What the property *is* — its name, where it is, its
-                photographs — is changed from the band that states them. The
-                fields were only ever typeable in place on the wall canvas,
-                which is where they are read, not where a Host thinks to go
-                and change them. This is the way in, and on that screen it
-                stays put and says so rather than offering itself as a link
-                back to where you already are. */}
-            {/* Settings is not an errand like the two below it: it changes what
-                the property *is*, so it reads as a quiet utility and a hairline
-                keeps it out of their set rather than sitting in it as a third
-                matching button. */}
-            {onSettings ? (
-              <span className="banner-settings is-current" aria-current="page">
-                {settingsMark}
-                Settings
-              </span>
-            ) : (
-              <a className="banner-settings" href={`/host/property/${property.id}/settings`}>
-                {settingsMark}
-                Settings
-              </a>
-            )}
-            <span className="banner-actions-split" aria-hidden="true" />
             <a
-              className={`btn btn-secondary btn-sm banner-action ${live ? "" : "is-unavailable"}`}
-              href={`/wall/${property.slug}`}
+              className={`btn btn-secondary btn-sm banner-action ${served ? "" : "is-unavailable"}`}
+              /* The guestbook link, token and all. Without the token this
+                 is the public wall wearing the in-stay wall's name: the
+                 server hands house guidance to the placard's link and to
+                 nobody else, so a Host checking their arrival note through a
+                 tokenless address is shown a wall it was never on. */
+              href={stayWallPath(property.slug, property.stayToken)}
               title={
-                live
+                served
                   ? undefined
-                  : !wallOn
-                    ? "The public wall is switched off for this property. Turn it back on from Public wall in the column on the left."
-                    : draft
+                  : draft
                       ? "This property is still a private draft. You are viewing a preview. Publish it to serve its wall to guests."
-                      : "This property has no public wall yet. Walls are served only while a property is live and its subscription is running."
+                      : "This property has no in-stay wall yet. Walls are served only while a property is live and its subscription is running."
               }
             >
               <ActionMark>
                 <path d="M7.4 8.6a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8Zm0 1.6c-2.4 0-4.4 1.4-4.4 3.2v2.4h8.8v-2.4c0-1.8-2-3.2-4.4-3.2Zm6.4-1.6a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 1.6c-.5 0-1 .1-1.4.2 1 .8 1.6 1.9 1.6 3v2.4H18v-2.4c0-1.8-1.9-3.2-4.2-3.2Z" />
               </ActionMark>
-              View guest wall
+              View in-stay wall
             </a>
-            <BannerAction
-              href={`/host/property/${property.id}/qr`}
-              available={qrReady}
-              unavailable={
-                draft
-                  ? "The QR display kit unlocks once this property is published and its trial is running."
-                  : "The QR display kit unlocks once this property is on a running trial or a paid subscription."
-              }
-              mark={<path d="M3.2 3.2h4.6v4.6H3.2Zm9 0h4.6v4.6h-4.6Zm-9 9h4.6v4.6H3.2Zm9 0h1.8m3 0h-1.2m-3.6 3.4h1.8m1.8 0h1.8" />}
-            >
-              QR display kit
-            </BannerAction>
             {/* The one thing a draft property is waiting for. It is a primary
                 control rather than another quiet one because until it is done
                 nothing on this screen reaches a guest, and it is here rather
@@ -307,3 +254,4 @@ export function PropertyShell({
     </div>
   );
 }
+

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <filter id="paper" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency=".14" numOctaves="3" seed="17" stitchTiles="stitch" result="grain"/>
+    <feDiffuseLighting in="grain" surfaceScale="1" diffuseConstant="1" lighting-color="#ffffff">
+      <feDistantLight azimuth="225" elevation="60"/>
+    </feDiffuseLighting>
+    <feComponentTransfer><feFuncA type="linear" slope=".10"/></feComponentTransfer>
+  </filter>
+  <rect width="180" height="180" filter="url(#paper)"/>
+</svg>

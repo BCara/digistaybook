@@ -1,4 +1,20 @@
 {
-  "indexes": [],
-  "fieldOverrides": []
+  "indexes": [{ "collectionGroup": "posts", "queryScope": "COLLECTION", "fields": [
+    { "fieldPath": "visibility", "order": "ASCENDING" },
+    { "fieldPath": "createdAt", "order": "DESCENDING" }
+  ] }, { "collectionGroup": "guestSubmissions", "queryScope": "COLLECTION", "fields": [
+    { "fieldPath": "propertyId", "order": "ASCENDING" },
+    { "fieldPath": "status", "order": "ASCENDING" }
+  ] }, { "collectionGroup": "contentReports", "queryScope": "COLLECTION", "fields": [
+    { "fieldPath": "propertyId", "order": "ASCENDING" }, { "fieldPath": "status", "order": "ASCENDING" }
+  ] }, { "collectionGroup": "contentReports", "queryScope": "COLLECTION", "fields": [
+    { "fieldPath": "status", "order": "ASCENDING" }, { "fieldPath": "reviewDueAt", "order": "ASCENDING" }
+  ] }, { "collectionGroup": "privacyRequests", "queryScope": "COLLECTION", "fields": [
+    { "fieldPath": "status", "order": "ASCENDING" }, { "fieldPath": "reviewDueAt", "order": "ASCENDING" }
+  ] }],
+  "fieldOverrides": [
+    { "collectionGroup": "reportRateLimits", "fieldPath": "expiresAt", "ttl": true, "indexes": [] },
+    { "collectionGroup": "reportWallLimits", "fieldPath": "expiresAt", "ttl": true, "indexes": [] },
+    { "collectionGroup": "reportDuplicates", "fieldPath": "expiresAt", "ttl": true, "indexes": [] }
+  ]
 }

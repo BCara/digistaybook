@@ -26,7 +26,7 @@ export function GuestWallPage({
 }) {
   const isDemo = propertySlug === DEMO_SLUG && !embedded;
   const property = demoProperty;
-  if (propertySlug !== DEMO_SLUG) return <LiveWallPage key={propertySlug} slug={propertySlug} />;
+  if (propertySlug !== DEMO_SLUG) return <LiveWallPage key={propertySlug} slug={propertySlug} view="public" />;
 
   return (
     <div className={embedded ? "page wall-page wall-embed" : "page wall-page"}>

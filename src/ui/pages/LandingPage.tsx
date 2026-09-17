@@ -1,4 +1,14 @@
+import { useEffect } from "react";
 import { QrPlaceholder } from "../Brand";
+import { navigate } from "../routing";
+import {
+  currencyForCountry,
+  publishedPlans,
+  trialCallout,
+  trialDays
+} from "../../domain/pricing";
+import { useAuth } from "../auth/AuthProvider";
+import { detectBillingCountry } from "../host/billingCountry";
 
 const steps = [
   {
@@ -42,18 +52,34 @@ const capabilities = [
   }
 ];
 
-const included = [
-  "Unlimited guest posts and photo uploads",
-  "Printable and downloadable QR kit",
-  "Pinned host posts and house guidance",
-  "Automated content screening plus host approval",
-  "Dashboard moderation, pinning and deletion",
-  "Themes, layouts and live wall preview",
-  "Private guest feedback inbox",
-  "Privacy and takedown request queue"
-];
-
 export function LandingPage() {
+  const { status } = useAuth();
+  useEffect(() => {
+    if (status === "host") navigate("/host", { replace: true });
+  }, [status]);
+
+  if (status === "loading") {
+    return <div className="page"><p role="status">Checking your session…</p></div>;
+  }
+  if (status === "host") return null;
+  if (status === "error") return <div className="page">
+    <p role="alert">Your session couldn't load. Check your connection and try again.</p>
+    <button className="btn btn-primary" onClick={() => window.location.reload()}>Try again</button>
+  </div>;
+  return <VisitorLandingPage />;
+}
+
+function VisitorLandingPage() {
+  const signUpHref = "/host/sign-up";
+  const signUpLabel = "Create your account";
+
+  // A price has to be in some currency, and with two dollar currencies on sale
+  // an unlabelled "$10" is not a price. The browser's own region opens the
+  // quote and /pricing is where it can be changed, so this page stays a prompt.
+  const detected = detectBillingCountry();
+  const currency = detected ? currencyForCountry[detected] : "usd";
+  const [monthly, annual] = publishedPlans(currency);
+
   return (
     <div className="landing-page">
       <div className="page">
@@ -65,7 +91,7 @@ export function LandingPage() {
               note left by the people who stayed before them.
             </p>
             <div className="actions">
-              <a className="btn btn-primary" href="/wall/demo-cottage">See a live guest wall</a>
+              <a className="btn btn-primary" href="/wall/demo-cottage">See a live public wall</a>
               <a className="btn btn-secondary" href="/host/sign-in">Host sign in</a>
             </div>
             <ul className="masthead-facts">
@@ -99,7 +125,7 @@ export function LandingPage() {
             <div className="device">
               <div className="device-screen">
                 <div className="device-top">
-                  <span>Guest wall</span>
+                  <span>Public wall</span>
                   <strong>Seabreeze Cottage</strong>
                 </div>
                 <div className="device-feed">
@@ -123,8 +149,7 @@ export function LandingPage() {
                   </article>
                 </div>
                 <div className="device-composer">
-                  <span>Add a memory&hellip;</span>
-                  <b>Post</b>
+                  <div className="btn btn-primary btn-block btn-sm">Add a memory</div>
                 </div>
               </div>
             </div>
@@ -211,6 +236,11 @@ export function LandingPage() {
       </section>
 
       <div className="page landing-tail">
+        {/* BOP §6.3.3 asks the landing page for "a concise pricing prompt",
+            not a second pricing page. The rates, the trial and the link are
+            here; the unified checklist, the currency choice and the tax and
+            cancellation callouts are §6.3.4's job, at /pricing. Every figure
+            comes from domain/pricing, so the two pages cannot disagree. */}
         <section id="pricing" aria-labelledby="pricing-heading">
           <div className="section-head">
             <p className="eyebrow">Pricing</p>
@@ -218,8 +248,8 @@ export function LandingPage() {
           </div>
 
           <div className="trial-callout">
-            <strong>28-day free trial on your first property.</strong>
-            <p>Create your account and add your first property to activate your 28-day free trial.</p>
+            <strong>{trialDays}-day free trial on your first property.</strong>
+            <p>{trialCallout}</p>
           </div>
 
           <div className="rates">
@@ -227,40 +257,24 @@ export function LandingPage() {
               <div className="rate-head">
                 <h3>Monthly</h3>
               </div>
-              <p className="price">$10<span> USD / month, per property</span></p>
+              <p className="price">{monthly!.rate}<span> {monthly!.period}</span></p>
               <p>Everything included, billed monthly. Cancel from your dashboard in one click.</p>
-              <a className="btn btn-secondary btn-block" href="/host/sign-in">Create your account</a>
+              <a className="btn btn-secondary btn-block" href={signUpHref}>{signUpLabel}</a>
             </article>
             <article className="rate featured">
               <div className="rate-head">
                 <h3>Annual</h3>
-                <span className="rate-badge">Two months free</span>
+                {annual!.saving && <span className="rate-badge">{annual!.saving}</span>}
               </div>
-              <p className="price">$100<span> USD / year, per property</span></p>
+              <p className="price">{annual!.rate}<span> {annual!.period}</span></p>
               <p>The same complete platform at the annual rate, renewing automatically until you cancel.</p>
-              <a className="btn btn-primary btn-block" href="/host/sign-in">Create your account</a>
+              <a className="btn btn-primary btn-block" href={signUpHref}>{signUpLabel}</a>
             </article>
           </div>
 
-          <div className="included">
-            <h3>Included in both plans</h3>
-            <ul className="check-list">
-              {included.map((item) => <li key={item}>{item}</li>)}
-            </ul>
-          </div>
-
-          <div className="fine-print">
-            <p>
-              Prices are shown in USD and render in your local point-of-sale currency, rounded to the nearest
-              whole unit, at checkout.
-            </p>
-            <p>Billing is calculated per property. Every property is managed from a single host dashboard.</p>
-            <p>DigiStayBook may be deductible as a business expense. Eligibility depends on your circumstances and business use; seek tax advice.</p>
-            <p>
-              Cancel anytime before your next billing cycle &mdash;{" "}
-              <a className="text-link" href="/terms">read the Cancellation &amp; Billing Policy</a>.
-            </p>
-          </div>
+          <p className="rates-more">
+            <a className="text-link" href="/pricing">See everything included, and the billing terms</a>
+          </p>
         </section>
 
         <section className="section closing">

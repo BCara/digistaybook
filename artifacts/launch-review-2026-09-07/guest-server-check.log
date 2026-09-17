@@ -1,0 +1,112 @@
+
+> digistaybook@0.1.0 test:server
+> npm run functions:build && firebase emulators:exec --project demo-digistaybook --only auth,firestore,storage,functions "vitest run --no-file-parallelism tests/firestore.rules.test.ts tests/storage.rules.test.ts && node tools/verify-public-wall.mjs && node tools/verify-guest-contribution.mjs"
+
+
+> digistaybook@0.1.0 functions:build
+> npm --prefix functions run build
+
+
+> build
+> tsc
+
+i  emulators: Starting emulators: auth, functions, firestore, storage
+i  emulators: Detected demo project ID "demo-digistaybook", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+!  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection.
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 9150.
+i  functions: Watching "C:\Users\clbbe\Documents\Projects\DigiStayBook\functions" for Cloud Functions...
+!  functions: Your requested "node" version "22" doesn't match your global version "24". Using node@24 from host.
+i  functions: Loaded environment variables from .env.
+Serving at port 8982
+
++  functions: Loaded functions definitions from source: beginGuestContribution, changeGuestContribution, finishGuestContribution, guestMemoryPhoto, listGuestContributions, listHostGuestReview, readGuestReviewPhoto, reviewGuestContribution, uploadGuestPhoto, getPublicWall, health, moderatePost.
++  functions[us-central1-beginGuestContribution]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/us-central1/beginGuestContribution).
++  functions[us-central1-changeGuestContribution]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/us-central1/changeGuestContribution).
++  functions[us-central1-finishGuestContribution]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/us-central1/finishGuestContribution).
++  functions[us-central1-guestMemoryPhoto]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/us-central1/guestMemoryPhoto).
++  functions[us-central1-listGuestContributions]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/us-central1/listGuestContributions).
++  functions[us-central1-listHostGuestReview]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/us-central1/listHostGuestReview).
++  functions[us-central1-readGuestReviewPhoto]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/us-central1/readGuestReviewPhoto).
++  functions[us-central1-reviewGuestContribution]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/us-central1/reviewGuestContribution).
++  functions[us-central1-uploadGuestPhoto]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/us-central1/uploadGuestPhoto).
++  functions[australia-southeast1-getPublicWall]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/getPublicWall).
++  functions[australia-southeast1-health]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/health).
++  functions[australia-southeast1-moderatePost]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/moderatePost).
+i  Running script: vitest run --no-file-parallelism tests/firestore.rules.test.ts tests/storage.rules.test.ts && node tools/verify-public-wall.mjs && node tools/verify-guest-contribution.mjs
+
+ RUN  v4.1.10 C:/Users/clbbe/Documents/Projects/DigiStayBook
+
+
+ Test Files  2 passed (2)
+      Tests  30 passed (30)
+   Start at  02:31:21
+   Duration  8.34s (transform 68ms, setup 505ms, import 516ms, tests 5.25s, environment 1.67s)
+
+(node:44656) MetadataLookupWarning: received unexpected error = All promises were rejected code = UNKNOWN
+(Use `node --trace-warnings ...` to show where the warning was created)
+i  functions: Loaded environment variables from .env.
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 164.9191ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 81.8605ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 30.3147ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 55.8365ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 26.4652ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 25.2228ms
+PASS: actual callable projection, pagination, missing wall, cancellation deadline and visibility switch; emulator data only.
+i  functions: Loaded environment variables from .env.
+i  functions: Beginning execution of "australia-southeast1-moderatePost"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-moderatePost" in 190.4008ms
+i  functions: Beginning execution of "australia-southeast1-moderatePost"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-moderatePost" in 122.1232ms
+i  functions: Beginning execution of "australia-southeast1-moderatePost"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-moderatePost" in 61.6218ms
+i  functions: Beginning execution of "australia-southeast1-moderatePost"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-moderatePost" in 54.1224ms
+i  functions: Beginning execution of "australia-southeast1-moderatePost"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-moderatePost" in 76.8425ms
+PASS: authenticated moderation, repeat deletion, preserved object target, replay collision, restricted payload denial and unresolved-report guard.
+(node:64484) MetadataLookupWarning: received unexpected error = All promises were rejected code = UNKNOWN
+(Use `node --trace-warnings ...` to show where the warning was created)
+<anonymous_script>:1
+Function australia-southeast1-beginGuestContribution does not exist, valid functions are: us-central1-beginGuestContribution, us-central1-changeGuestContribution, us-central1-finishGuestContribution, us-central1-guestMemoryPhoto, us-central1-listGuestContributions, us-central1-listHostGuestReview, us-central1-readGuestReviewPhoto, us-central1-reviewGuestContribution, us-central1-uploadGuestPhoto, australia-southeast1-getPublicWall, australia-southeast1-health, australia-southeast1-moderatePost
+^
+
+SyntaxError: Unexpected token 'F', "Function a"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at parseJSONFromBytes (node:internal/deps/undici/undici:6433:19)
+    at successSteps (node:internal/deps/undici/undici:6414:27)
+    at readAllBytes (node:internal/deps/undici/undici:5380:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+
+Node.js v24.12.0
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  functions: Stopping Functions Emulator
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  storage: Stopping Storage Emulator
+i  eventarc: Stopping Eventarc Emulator
+i  tasks: Stopping Cloud Tasks Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "vitest run --no-file-parallelism tests/firestore.rules.test.ts tests/storage.rules.test.ts && node tools/verify-public-wall.mjs && node tools/verify-guest-contribution.mjs" exited with code 1

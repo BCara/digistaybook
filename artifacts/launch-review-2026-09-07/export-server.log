@@ -1,0 +1,52 @@
+
+> digistaybook@0.1.0 test:server
+> npm run functions:build && firebase emulators:exec --project demo-digistaybook --only auth,firestore,storage,functions "vitest run --no-file-parallelism tests/firestore.rules.test.ts tests/storage.rules.test.ts && node tools/verify-public-wall.mjs && node tools/verify-guest-contribution.mjs && node tools/verify-storage-deletion.mjs && node tools/verify-reporting.mjs"
+
+
+> digistaybook@0.1.0 functions:build
+> npm --prefix functions run build
+
+
+> build
+> tsc
+
+i  emulators: Starting emulators: auth, functions, firestore, storage
+i  emulators: Detected demo project ID "demo-digistaybook", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+!  auth: Port 9099 is not open on localhost (127.0.0.1), could not start Authentication Emulator.
+!  auth: To select a different host/port, specify that host/port in a firebase.json config file:
+      {
+        // ...
+        "emulators": {
+          "auth": {
+            "host": "HOST",
+            "port": "PORT"
+          }
+        }
+      }
+!  firestore: Port 8080 is not open on localhost (127.0.0.1), could not start Firestore Emulator.
+!  firestore: To select a different host/port, specify that host/port in a firebase.json config file:
+      {
+        // ...
+        "emulators": {
+          "firestore": {
+            "host": "HOST",
+            "port": "PORT"
+          }
+        }
+      }
+!  storage: Port 9199 is not open on localhost (127.0.0.1), could not start Storage Emulator.
+!  storage: To select a different host/port, specify that host/port in a firebase.json config file:
+      {
+        // ...
+        "emulators": {
+          "storage": {
+            "host": "HOST",
+            "port": "PORT"
+          }
+        }
+      }
+!  hub: emulator hub unable to start on port 4400, starting on 4401 instead.
+!  logging: Logging Emulator unable to start on port 4500, starting on 4501 instead.
+i  emulators: Shutting down emulators.
+
+Error: Could not start Authentication Emulator, port taken.

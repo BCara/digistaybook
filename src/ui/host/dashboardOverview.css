@@ -1,0 +1,26 @@
+/* The account, in one rule.
+
+   What used to be four tiles and two panels of dashboard chrome. The page it
+   sits on is a ledger — hairlines, squared corners, no raised boxes — and
+   this now reads as part of it rather than as a widget bolted above it. */
+
+.dashboard-strip {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 24px;
+  margin: 22px 0 0; padding: 13px 0;
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  color: var(--text-muted); font-size: var(--step--1);
+}
+.dashboard-counts, .dashboard-next { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px; }
+.dashboard-counts b, .dashboard-next b { color: var(--text); font-weight: 650; }
+.dashboard-sep { color: var(--rule-strong); padding: 0 4px; }
+.dashboard-alert { color: var(--accent-strong); }
+.dashboard-next { gap: 8px; }
+
+/* The strip already closes on a rule, so the properties section below it does
+   not draw a second one a few pixels under the first. */
+.dashboard-strip + .host-section { border-top: 0; padding-top: 0; margin-top: clamp(28px, 3.5vw, 44px); }
+
+@media (max-width: 640px) {
+  .dashboard-strip { gap: 8px; }
+  .dashboard-counts, .dashboard-next { width: 100%; }
+}

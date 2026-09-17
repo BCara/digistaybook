@@ -1,0 +1,4 @@
+(node:59596) MetadataLookupWarning: received unexpected error = All promises were rejected code = UNKNOWN
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS: actual callable projection, pagination, missing wall, cancellation deadline and visibility switch; emulator data only.
+PASS: authenticated moderation, repeat deletion, preserved object target, replay collision, restricted payload denial and unresolved-report guard.

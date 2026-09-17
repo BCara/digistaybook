@@ -16,17 +16,18 @@
 
 ## Guest experience
 
-- [ ] Build a mobile-first public wall. (`DSB-BOP-P2-004`, `DSB-BOP-P6-009`)
-- [ ] Add guest text and multi-image submission. (`DSB-BOP-P2-004`)
-- [ ] Add consent, pending, report, edit, delete, and copy-text flows. (`DSB-BOP-P2-004`, `DSB-BOP-P2-005`)
+- [ ] Build a mobile-first public wall. (`DSB-BOP-P6-011`, `DSB-BOP-P6-009`)
+- [ ] Add guest text and multi-image submission. (`DSB-BOP-P6-011`)
+- [ ] Add consent, pending, report, edit, delete, and copy-text flows. (`DSB-BOP-P6-011`, `DSB-BOP-P2-005`)
 - [x] Add the discreet public Guest Wall "Powered by DigiStayBook" landing-page link and responsive UI test. (`DSB-BOP-P6-010`)
 - [ ] Implement the D-005 transactional reporting endpoint, App Check verification, report deduplication, reporter/wall thresholds, state transitions, Host/internal alerts, restoration rules and abuse-key expiry tests. (`DSB-BOP-P2-005`)
 
 ## Host experience
 
-- [ ] Build account and property setup. (`DSB-BOP-P3-003`, `DSB-BOP-P6-003`, `DSB-BOP-P6-005`)
-- [ ] Build sandbox and live wall preview. (`DSB-BOP-P2-001`, `DSB-BOP-P2-002`)
-- [ ] Add post moderation, pinning, foundational posts, and house information. (`DSB-BOP-P1-006`, `DSB-BOP-P1-007`, `DSB-BOP-P6-005`)
+- [x] Build account and property setup, including the property profile, house guidance and photographs. See D-011, D-012 and D-013. (`DSB-BOP-P3-003`, `DSB-BOP-P6-003`, `DSB-BOP-P6-005`)
+- [ ] Build sandbox and live wall preview. The property dashboard previews the wall being edited at phone scale; the public wall routes still render demo content for every address. (`DSB-BOP-P2-001`, `DSB-BOP-P2-002`)
+- [ ] Serve the real property on `/wall/{slug}` and `/stay/{slug}`. Rules allow no public query by slug, so this needs a server-owned slug lookup. (`DSB-BOP-P6-005`, `DSB-BOP-P6-009`)
+- [ ] Add foundational posts and the host's own uploads. `/host/property/{id}/moderation` now lists every memory on a wall and publishes, hides, pins, deletes or escalates each one through `moderatePost`; what is still missing is a Host putting a memory *onto* a wall themselves, which needs the contribution endpoint (`IMP-2002`). House information ships as structured guidance on the property profile. (`DSB-BOP-P1-006`, `DSB-BOP-P1-007`, `DSB-BOP-P6-005`)
 - [ ] Generate and deliver QR assets after activation. (`DSB-BOP-P2-003`, `DSB-BOP-P4-002`)
 
 ## Commercial operations

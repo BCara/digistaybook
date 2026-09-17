@@ -5,7 +5,7 @@
 - **Authority:** `digistaybook_WIP_v3.md`
 - **Branch:** `codex/implementation-foundation`
 - **Baseline:** `da70e30` (`docs: publish reviewed DigiStayBook BOP v3`)
-- **Last completed checkpoint:** Documentation - content-only BOP comparison
+- **Last completed checkpoint:** Host experience - the moderation queue and its server endpoint
 - **Current milestone:** B - server-controlled persistence slice
 - **Machine-readable authority:** `docs/implementation-status.json`
 - **Resume command:** `npm run check`
@@ -19,8 +19,8 @@ The plan/status checkpoint was committed before application scaffolding as `c093
 | `WS-00` Delivery control | In progress | Persistent plan, ledger, validator and content-only BOP comparison tooling | Maintain checkpoint after each verified slice |
 | `WS-10` Platform foundation | In progress | React/TypeScript/Vite, Firebase boundaries, emulator-verified Firestore rules and the token-driven brand/design system | Server-controlled persistence endpoints |
 | `WS-20` Guest experience | In progress | Guest Wall, consent contract and responsive acquisition footer | `IMP-2002` server-controlled contribution persistence |
-| `WS-30` Host experience | In progress | Host shell, fail-closed auth entry, property contracts and emulator-verified ownership rules | Complete `IMP-3002` Auth UI and data adapters |
-| `WS-40` Trust and safety | In progress | Reporting state machine and threshold tests | `IMP-4002` protected transactional report endpoint |
+| `WS-30` Host experience | In progress | Host shell, auth entry, property dashboard, property profile with house guidance and photographs, the per-memory moderation queue, and emulator-verified ownership rules | Complete `IMP-3002` Auth UI and data adapters |
+| `WS-40` Trust and safety | In progress | Reporting state machine, threshold tests and the Host moderation endpoint (`IMP-4003`) | `IMP-4002` protected transactional *guest* report endpoint |
 | `WS-50` Commercial/comms | In progress | Billing, consent, suppression and email contracts | `IMP-5002` Stripe/email adapter boundaries |
 | `WS-60` Privacy/retention | In progress | Public route and retention/deletion contracts | `IMP-6002` privacy workflow and deletion manifests |
 | `WS-70` Quality/release | In progress | Tests, build, CI, evidence separation, emulator suite and advisory gate | Expand integration and accessibility evidence with each slice |
@@ -28,14 +28,15 @@ The plan/status checkpoint was committed before application scaffolding as `c093
 
 ## Demonstrated local evidence
 
-- Eight unit/UI test files and 22 tests pass.
+- Nineteen unit/UI test files and 194 tests pass.
 - Application and Functions TypeScript projects compile.
 - The web production build completes; the initial application chunk is approximately 260 kB before gzip and 79 kB after gzip.
 - Desktop landing and mobile Guest Wall were inspected locally; the mobile view had no horizontal overflow.
 - The brand/design system renders on every route in light and dark colour schemes with no external font, icon or image request; the 375 px landing, Guest Wall and Host routes show no horizontal overflow and the mobile navigation disclosure toggles correctly.
 - Host access fails closed without Firebase configuration.
+- The moderation queue was exercised against the Auth, Firestore and Functions emulators with a seeded wall covering every post state. Publishing a screening-flagged memory and confirming a privacy deletion both went through `moderatePost`, moved the memory between piles, and wrote an audit event recording the state-model outcome (`rejected_restored`, `confirmed_delete`), the previous visibility, the resolver and the App Check result. A deleted memory is tombstoned: its words and photograph are removed and the report record is kept for the retention sweep.
 - The public privacy/safety route preserves the support boundary.
-- Eight Firestore Emulator tests prove public/private visibility, Host ownership, bounded create/update behaviour and direct guest-write denial.
+- Twenty Firestore Emulator tests prove public/private visibility, Host ownership, owner-scoped listing, bounded create/update behaviour and direct guest-write denial. Seven Storage Emulator tests prove that property photographs are public only while the property is live, writable only by the owning Host, limited to images under 8MB, and denied everywhere else in the bucket.
 - `DSB-BOP-P6-010` is present in the Markdown, DOCX and readable HTML; its public Guest Wall link is responsive and navigates to the main landing page.
 - The v2-to-v3 comparison contains 110 genuine content-change blocks, with requirement-ID suffixes and ID-convention metadata excluded.
 

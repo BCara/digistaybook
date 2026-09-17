@@ -2,11 +2,11 @@ import { initializeApp } from "firebase-admin/app";
 import { FieldValue, getFirestore, Timestamp } from "firebase-admin/firestore";
 import { HttpsError, onCall, onRequest } from "firebase-functions/v2/https";
 import { setGlobalOptions } from "firebase-functions/v2";
-import { wallIsOpen, publicProperty, publicPost } from "./publicWall.js";
+import { wallIsOpen, publicProperty, publicPost, unavailableWall, wallPreviewable, ownerRecovery, resolveWallView } from "./publicWall.js";
 import { guestIntakeEnabled } from "./guestContributions.js";
 export { deleteStoredMedia } from "./storageDeletion.js";
 export { retryPendingScreening } from "./screeningRetry.js";
-export { createHostProperty, deleteHostProperty } from "./propertyCreation.js";
+export { createHostProperty, deleteHostProperty, ensureStayToken } from "./propertyCreation.js";
 export { listHostExport, readHostExportPhoto } from "./hostExport.js";
 export { reportGuestMemory, submitPrivacyRequest, listHostReports, resolveContentReport, listSafetyOperations, escalatePrivacyDeadlines } from "./reporting.js";
 export { stripeWebhook } from "./stripeWebhook.js";
@@ -20,9 +20,25 @@ setGlobalOptions({ region: "australia-southeast1", maxInstances: 10 });
 initializeApp();
 const db = getFirestore();
 
+/**
+ * The wall a guest opens, and the only endpoint they reach without doing
+ * anything first.
+ *
+ * It scales to zero. It was declared with `minInstances: 1`, because this one
+ * is the whole page - it is what the placard in the hallway points at, and a
+ * cold container in Sydney put two to five seconds in front of someone
+ * standing in a doorway with a suitcase. A resident instance removes that and
+ * bills about six US dollars a month whether or not anybody scans anything.
+ * Before the first property is paid for there is no guest in that doorway, so
+ * the warm instance is bought back when the product earns it rather than now.
+ * The warm path itself is already short (D-024); what returns without this is
+ * the first request after an idle spell.
+ */
 export const getPublicWall = onCall(async request => {
   const slug = request.data?.slug;
   const cursor = request.data?.cursor;
+  const requestedView = request.data?.view ?? "public";
+  if (requestedView !== "public" && requestedView !== "stay") throw new HttpsError("invalid-argument", "That wall view is invalid.");
   if (typeof slug !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || slug.length > 40
     || (cursor !== undefined && (typeof cursor !== "string" || !/^[A-Za-z0-9_-]{1,128}$/.test(cursor)))) {
     throw new HttpsError("invalid-argument", "That wall address is invalid.");
@@ -31,19 +47,43 @@ export const getPublicWall = onCall(async request => {
   // Duplicate slugs fail closed until server-owned unique reservation is built.
   if (matches.size !== 1) return { status: "unavailable" };
   const property = matches.docs[0];
-  const isOwner = request.auth?.uid && request.auth.uid === property.data().ownerUid;
-  if (!isOwner && !wallIsOpen(property.data())) return { status: "unavailable" };
+  const uid = request.auth?.uid;
+  // Asking for the in-stay wall is not reaching it. A caller without the
+  // token minted into this property's placard reads the public wall instead:
+  // no house information, no contributions, and nothing in the answer to say
+  // whether there was house information to be had.
+  const view = resolveWallView(property.data(), requestedView, request.data?.token, uid);
+  // A closed wall is still served to the account that owns it, as a preview:
+  // a Host who cannot read their own wall before it is published is being
+  // asked to publish something they have never seen. Every other caller gets
+  // the closed notice, so a preview discloses nothing that a guest would not
+  // read once the wall opens.
+  if (!wallIsOpen(property.data(), Date.now(), view) && !wallPreviewable(property.data(), uid)) {
+    return unavailableWall(property.data(), property.id, uid);
+  }
   let query = property.ref.collection("posts").where("visibility", "==", "visible").orderBy("createdAt", "desc").limit(25);
   if (cursor) {
     const after = await property.ref.collection("posts").doc(cursor).get();
     if (!after.exists || after.get("visibility") !== "visible") return { status: "unavailable" };
     query = query.startAfter(after);
   }
-  const posts = await query.get();
-  // Recheck after the query so a concurrent suspension does not return a stale wall.
-  const latest = await property.ref.get();
-  if (!latest.exists || !wallIsOpen(latest.data()!)) return { status: "unavailable" };
-  return { status: "open", contributionsEnabled: guestIntakeEnabled(), property: publicProperty(latest.data()!),
+  // The posts and the second look at the property are asked for together.
+  // The re-read is here because the property was read before the posts were,
+  // and a wall suspended in between must not be served on the strength of the
+  // older snapshot; running it alongside rather than after narrows the window
+  // it covers by the length of the posts query, which is the price of one
+  // fewer round trip in front of every guest. Neither ordering is airtight -
+  // a suspension committed after this read still lands after the response -
+  // and the next request is what closes that in both.
+  const [posts, latest] = await Promise.all([query.get(), property.ref.get()]);
+  if (!latest.exists) return { status: "unavailable" };
+  const open = wallIsOpen(latest.data()!, Date.now(), view);
+  if (!open && !wallPreviewable(latest.data(), uid)) return unavailableWall(latest.data(), property.id, uid);
+  return { status: open ? "open" : "preview",
+    // A closed wall takes no contributions, whoever is reading it.
+    contributionsEnabled: open && view === "stay" && guestIntakeEnabled(),
+    ...(open ? {} : { owner: ownerRecovery(latest.data()!, property.id) }),
+    property: publicProperty(latest.data()!, view),
     posts: posts.docs.map(post => publicPost(post.id, post.data())),
     nextCursor: posts.size === 25 ? posts.docs.at(-1)!.id : null };
 });
@@ -53,7 +93,7 @@ export const health = onRequest((request, response) => {
 });
 
 /* ===========================================================================
-   moderatePost — the single transactional endpoint for a Host's moderation.
+   moderatePost ï¿½ the single transactional endpoint for a Host's moderation.
 
    The reporting state model (BOP 3.6) requires that every change to a post's
    visibility go through one server endpoint, so that no client write and no
@@ -111,8 +151,8 @@ function requireId(value: unknown, field: string): string {
 }
 
 /**
- * The post fields this action rewrites. Everything else on the document — the
- * message, the photograph, who wrote it — is never touched by moderation.
+ * The post fields this action rewrites. Everything else on the document ï¿½ the
+ * message, the photograph, who wrote it ï¿½ is never touched by moderation.
  */
 function changes(action: Action, uid: string): Record<string, unknown> {
   const now = FieldValue.serverTimestamp();

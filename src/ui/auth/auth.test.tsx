@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { AuthContext, type AuthState } from "./AuthProvider";
 import { RequireHost } from "./RequireHost";
+import { LandingPage } from "../pages/LandingPage";
+import { useLocation } from "../routing";
 
 function renderGuard(state: AuthState) {
   return render(
@@ -20,16 +22,28 @@ describe("host route boundary", () => {
     expect(protectedContent()).toBeInTheDocument();
   });
 
-  it("refuses an anonymous Guest wall session", () => {
-    renderGuard({ status: "guest", user: null });
+  it.each(["guest", "signed-out"] as const)("returns a %s visitor from the dashboard to the home page", status => {
+    window.history.replaceState(null, "", "/host");
+    const historyLength = window.history.length;
+    function Routes() {
+      const location = useLocation();
+      return location.pathname === "/" ? <LandingPage /> : <RequireHost><p>Protected host content</p></RequireHost>;
+    }
+    render(<AuthContext.Provider value={{ status, user: null }}><Routes /></AuthContext.Provider>);
     expect(protectedContent()).not.toBeInTheDocument();
-    expect(screen.getByText(/guest wall session does not grant host access/i)).toBeInTheDocument();
+    expect(window.location.pathname).toBe("/");
+    expect(window.history.length).toBe(historyLength);
+    expect(screen.getByRole("heading", { name: /your rental never had/i })).toBeInTheDocument();
+    expect(screen.queryByText("Sign in to continue")).not.toBeInTheDocument();
   });
 
-  it("refuses a signed-out visitor and points at host sign-in", () => {
-    renderGuard({ status: "signed-out", user: null });
+  it("returns home when an open dashboard session signs out", () => {
+    window.history.replaceState(null, "", "/host");
+    const { rerender } = renderGuard({ status: "host", user: null });
+    expect(protectedContent()).toBeInTheDocument();
+    rerender(<AuthContext.Provider value={{ status: "signed-out", user: null }}><RequireHost><p>Protected host content</p></RequireHost></AuthContext.Provider>);
     expect(protectedContent()).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Go to host sign-in" })).toHaveAttribute("href", "/host/sign-in");
+    expect(window.location.pathname).toBe("/");
   });
 
   it("refuses access while the session is still resolving", () => {

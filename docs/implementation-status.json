@@ -1,12 +1,18 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-08-04",
+  "updated": "2026-09-03",
   "branch": "codex/implementation-foundation",
   "baselineCommit": "da70e30",
   "authority": "digistaybook_WIP_v3.md",
   "currentMilestone": "B - server-controlled persistence slice",
-  "lastCompletedCheckpoint": "Documentation - content-only BOP comparison",
-  "evidenceLevels": ["planned", "local", "emulator", "deployed", "manual"],
+  "lastCompletedCheckpoint": "Host experience - the moderation queue and its server endpoint",
+  "evidenceLevels": [
+    "planned",
+    "local",
+    "emulator",
+    "deployed",
+    "manual"
+  ],
   "statusDefinitions": [
     "not_started",
     "started",
@@ -20,14 +26,20 @@
       "id": "WS-00",
       "name": "Delivery control",
       "status": "in_progress",
-      "bopRefs": ["DSB-BOP-P1-001"],
+      "bopRefs": [
+        "DSB-BOP-P1-001"
+      ],
       "tasks": [
         {
           "id": "IMP-0001",
           "title": "Create persistent implementation plan and status authority",
           "status": "verified",
           "evidenceLevel": "local",
-          "evidence": ["docs/build-plan.md", "docs/implementation-status.json", "docs/implementation-status.md"],
+          "evidence": [
+            "docs/build-plan.md",
+            "docs/implementation-status.json",
+            "docs/implementation-status.md"
+          ],
           "verification": "node tools/verify-implementation-status.mjs"
         },
         {
@@ -35,7 +47,10 @@
           "title": "Validate BOP references, evidence paths and restart metadata",
           "status": "verified",
           "evidenceLevel": "local",
-          "evidence": ["tools/verify-implementation-status.mjs", "docs/release-evidence.md"],
+          "evidence": [
+            "tools/verify-implementation-status.mjs",
+            "docs/release-evidence.md"
+          ],
           "verification": "node tools/verify-implementation-status.mjs"
         },
         {
@@ -43,7 +58,11 @@
           "title": "Generate content-only BOP comparison without requirement-ID noise",
           "status": "verified",
           "evidenceLevel": "local",
-          "evidence": ["tools/build_bop_artifacts.py", "artifacts/digistaybook_WIP_v2-to-v3-diff.html", "docs/change-log.md"],
+          "evidence": [
+            "tools/build_bop_artifacts.py",
+            "artifacts/digistaybook_WIP_v2-to-v3-diff.html",
+            "docs/change-log.md"
+          ],
           "verification": "python tools/build_bop_artifacts.py --diff-only"
         }
       ]
@@ -52,14 +71,28 @@
       "id": "WS-10",
       "name": "Platform foundation",
       "status": "in_progress",
-      "bopRefs": ["DSB-BOP-P2-001", "DSB-BOP-P3-003", "DSB-BOP-P6-003", "DSB-BOP-P6-004", "DSB-BOP-P6-005"],
+      "bopRefs": [
+        "DSB-BOP-P2-001",
+        "DSB-BOP-P3-003",
+        "DSB-BOP-P6-003",
+        "DSB-BOP-P6-004",
+        "DSB-BOP-P6-005"
+      ],
       "tasks": [
         {
           "id": "IMP-1001",
           "title": "Scaffold web application, Firebase boundaries and local verification",
           "status": "verified",
           "evidenceLevel": "local",
-          "evidence": ["package.json", "src/App.tsx", "firebase.json", "firestore.rules", "storage.rules", "functions/src/index.ts", "docs/release-evidence.md"],
+          "evidence": [
+            "package.json",
+            "src/App.tsx",
+            "firebase.json",
+            "firestore.rules",
+            "storage.rules",
+            "functions/src/index.ts",
+            "docs/release-evidence.md"
+          ],
           "verification": "npm run check"
         },
         {
@@ -67,7 +100,16 @@
           "title": "Establish the brand and design system across public and Host surfaces",
           "status": "verified",
           "evidenceLevel": "local",
-          "evidence": ["src/styles.css", "src/ui/Brand.tsx", "src/ui/AppShell.tsx", "src/ui/pages/LandingPage.tsx", "src/ui/shell.test.tsx", "index.html", "public/favicon.svg", "docs/change-log.md"],
+          "evidence": [
+            "src/styles.css",
+            "src/ui/Brand.tsx",
+            "src/ui/AppShell.tsx",
+            "src/ui/pages/LandingPage.tsx",
+            "src/ui/shell.test.tsx",
+            "index.html",
+            "public/logo.jpg",
+            "docs/change-log.md"
+          ],
           "verification": "npm run check"
         },
         {
@@ -75,7 +117,12 @@
           "title": "Connect Firebase emulators and add security-rules integration tests",
           "status": "verified",
           "evidenceLevel": "emulator",
-          "evidence": ["firebase.json", "firestore.rules", "tests/firestore.rules.test.ts", "docs/release-evidence.md"],
+          "evidence": [
+            "firebase.json",
+            "firestore.rules",
+            "tests/firestore.rules.test.ts",
+            "docs/release-evidence.md"
+          ],
           "verification": "npm run test:emulators"
         }
       ]
@@ -84,14 +131,25 @@
       "id": "WS-20",
       "name": "Guest experience",
       "status": "in_progress",
-      "bopRefs": ["DSB-BOP-P2-003", "DSB-BOP-P2-004", "DSB-BOP-P2-005", "DSB-BOP-P6-009", "DSB-BOP-P6-010"],
+      "bopRefs": [
+        "DSB-BOP-P2-003",
+        "DSB-BOP-P2-005",
+        "DSB-BOP-P6-011",
+        "DSB-BOP-P6-009",
+        "DSB-BOP-P6-010"
+      ],
       "tasks": [
         {
           "id": "IMP-2001",
           "title": "Create public Guest Wall and consent-aware contribution slice",
           "status": "verified",
           "evidenceLevel": "local",
-          "evidence": ["src/ui/pages/GuestWallPage.tsx", "src/domain/guestContribution.ts", "src/ui/pages/pages.test.tsx", "docs/release-evidence.md"],
+          "evidence": [
+            "src/ui/pages/GuestWallPage.tsx",
+            "src/domain/guestContribution.ts",
+            "src/ui/pages/pages.test.tsx",
+            "docs/release-evidence.md"
+          ],
           "verification": "npm run check"
         },
         {
@@ -99,7 +157,10 @@
           "title": "Persist contributions through a server-controlled endpoint with bounded ownership proof",
           "status": "started",
           "evidenceLevel": "planned",
-          "evidence": ["src/domain/guestContribution.ts", "docs/build-plan.md"],
+          "evidence": [
+            "src/domain/guestContribution.ts",
+            "docs/build-plan.md"
+          ],
           "verification": "npm run test:emulators"
         },
         {
@@ -107,7 +168,15 @@
           "title": "Document and implement discreet Guest Wall micro-branding acquisition link",
           "status": "verified",
           "evidenceLevel": "local",
-          "evidence": ["digistaybook_WIP_v3.md", "artifacts/digistaybook_WIP_v3.html", "artifacts/digistaybook_WIP_v3.docx", "src/ui/pages/GuestWallPage.tsx", "src/styles.css", "src/ui/pages/pages.test.tsx", "docs/release-evidence.md"],
+          "evidence": [
+            "digistaybook_WIP_v3.md",
+            "artifacts/digistaybook_WIP_v3.html",
+            "artifacts/digistaybook_WIP_v3.docx",
+            "src/ui/pages/GuestWallPage.tsx",
+            "src/styles.css",
+            "src/ui/pages/pages.test.tsx",
+            "docs/release-evidence.md"
+          ],
           "verification": "npm run check"
         }
       ]
@@ -116,23 +185,112 @@
       "id": "WS-30",
       "name": "Host experience",
       "status": "in_progress",
-      "bopRefs": ["DSB-BOP-P2-001", "DSB-BOP-P2-002", "DSB-BOP-P6-004", "DSB-BOP-P6-005"],
+      "bopRefs": [
+        "DSB-BOP-P2-001",
+        "DSB-BOP-P2-002",
+        "DSB-BOP-P6-004",
+        "DSB-BOP-P6-005"
+      ],
       "tasks": [
         {
           "id": "IMP-3001",
           "title": "Create Host shell, property setup and sandbox/live contracts",
           "status": "verified",
           "evidenceLevel": "local",
-          "evidence": ["src/ui/pages/HostDashboardPage.tsx", "src/ui/pages/HostSignInPage.tsx", "src/domain/property.ts", "src/domain/property.test.ts"],
+          "evidence": [
+            "src/ui/pages/HostDashboardPage.tsx",
+            "src/ui/pages/HostSignInPage.tsx",
+            "src/domain/property.ts",
+            "src/domain/property.test.ts"
+          ],
           "verification": "npm run check"
+        },
+        {
+          "id": "IMP-3004",
+          "title": "Implement Host account creation with email and password, Google provisioning and bounded profile write",
+          "status": "verified",
+          "evidenceLevel": "local",
+          "evidence": [
+            "src/ui/auth/hostAuth.ts",
+            "src/ui/auth/hostAuth.test.ts",
+            "src/ui/pages/HostSignInPage.tsx",
+            "src/ui/pages/HostSignInPage.test.tsx",
+            "src/App.tsx",
+            "docs/decisions.md"
+          ],
+          "verification": "npm run check"
+        },
+        {
+          "id": "IMP-3003",
+          "title": "Build the Host property dashboard: owned property listing, creation and per-property management",
+          "status": "verified",
+          "evidenceLevel": "emulator",
+          "evidence": [
+            "src/ui/pages/HostDashboardPage.tsx",
+            "src/ui/pages/HostWallDesignPage.tsx",
+            "src/ui/pages/HostQrPage.tsx",
+            "src/ui/host/QrPlacard.tsx",
+            "src/domain/qrCode.ts",
+            "src/domain/qrCode.test.ts",
+            "src/ui/host/PropertyNav.tsx",
+            "src/ui/host/PropertyShell.tsx",
+            "src/ui/host/propertyStore.ts",
+            "src/ui/host/PropertyState.tsx",
+            "src/domain/property.ts",
+            "firestore.rules",
+            "src/ui/pages/HostDashboardPage.test.tsx",
+            "src/ui/pages/HostWallDesignPage.test.tsx",
+            "src/ui/pages/HostQrPage.test.tsx",
+            "tests/firestore.rules.test.ts"
+          ],
+          "verification": "npm run check:all"
+        },
+        {
+          "id": "IMP-3005",
+          "title": "Build the property dashboard: wall preview, public copy, house guidance, photographs and setup readiness",
+          "status": "verified",
+          "evidenceLevel": "emulator",
+          "evidence": [
+            "src/domain/propertyProfile.ts",
+            "src/domain/propertyProfile.test.ts",
+            "src/ui/host/WallPreview.tsx",
+            "src/ui/host/PhotoField.tsx",
+            "src/ui/host/propertyStore.ts",
+            "src/ui/pages/HostWallDesignPage.tsx",
+            "src/ui/pages/HostWallDesignPage.test.tsx",
+            "storage.rules",
+            "tests/storage.rules.test.ts"
+          ],
+          "verification": "npm run check:all"
         },
         {
           "id": "IMP-3002",
           "title": "Connect Host authentication, profile creation and property persistence to emulators",
           "status": "in_progress",
           "evidenceLevel": "emulator",
-          "evidence": ["src/lib/firebase.ts", "firestore.rules", "tests/firestore.rules.test.ts", "docs/build-plan.md"],
+          "evidence": [
+            "src/lib/firebase.ts",
+            "firestore.rules",
+            "tests/firestore.rules.test.ts",
+            "docs/build-plan.md"
+          ],
           "verification": "npm run test:emulators"
+        },
+        {
+          "id": "IMP-3006",
+          "title": "Build the moderation queue: every memory on a wall, actioned through one server endpoint",
+          "status": "in_progress",
+          "evidenceLevel": "manual",
+          "evidence": [
+            "src/domain/postModeration.ts",
+            "src/domain/postModeration.test.ts",
+            "src/ui/host/ModerationQueue.tsx",
+            "src/ui/host/moderationStore.ts",
+            "src/ui/host/useModerationQueue.ts",
+            "src/ui/pages/HostModerationPage.tsx",
+            "src/ui/pages/HostModerationPage.test.tsx"
+          ],
+          "verification": "npm run check; verified against the emulator suite with a seeded wall"
         }
       ]
     },
@@ -140,14 +298,21 @@
       "id": "WS-40",
       "name": "Trust and safety",
       "status": "in_progress",
-      "bopRefs": ["DSB-BOP-P2-005", "DSB-BOP-P4-005", "DSB-BOP-P9-002"],
+      "bopRefs": [
+        "DSB-BOP-P2-005",
+        "DSB-BOP-P4-005",
+        "DSB-BOP-P9-002"
+      ],
       "tasks": [
         {
           "id": "IMP-4001",
           "title": "Implement reporting state-machine contract and threshold tests",
           "status": "verified",
           "evidenceLevel": "local",
-          "evidence": ["src/domain/moderation.ts", "src/domain/moderation.test.ts"],
+          "evidence": [
+            "src/domain/moderation.ts",
+            "src/domain/moderation.test.ts"
+          ],
           "verification": "npm run check"
         },
         {
@@ -155,8 +320,25 @@
           "title": "Implement App Check protected transactional report endpoint and bounded abuse keys",
           "status": "started",
           "evidenceLevel": "planned",
-          "evidence": ["src/domain/moderation.ts", "functions/src/index.ts", "docs/build-plan.md"],
+          "evidence": [
+            "src/domain/moderation.ts",
+            "functions/src/index.ts",
+            "docs/build-plan.md"
+          ],
           "verification": "npm run test:emulators"
+        },
+        {
+          "id": "IMP-4003",
+          "title": "Implement the App Check protected transactional Host moderation endpoint",
+          "status": "in_progress",
+          "evidenceLevel": "manual",
+          "evidence": [
+            "functions/src/index.ts",
+            "src/ui/host/moderationStore.ts",
+            "src/lib/firebase.ts",
+            "firestore.rules"
+          ],
+          "verification": "npm run functions:build; exercised against the Functions emulator with a seeded wall"
         }
       ]
     },
@@ -164,14 +346,27 @@
       "id": "WS-50",
       "name": "Commercial and communications",
       "status": "in_progress",
-      "bopRefs": ["DSB-BOP-P3-004", "DSB-BOP-P4-001", "DSB-BOP-P4-002", "DSB-BOP-P4-003", "DSB-BOP-P4-004", "DSB-BOP-P9-001", "DSB-BOP-P9-006"],
+      "bopRefs": [
+        "DSB-BOP-P3-004",
+        "DSB-BOP-P4-001",
+        "DSB-BOP-P4-002",
+        "DSB-BOP-P4-003",
+        "DSB-BOP-P4-004",
+        "DSB-BOP-P9-001",
+        "DSB-BOP-P9-006"
+      ],
       "tasks": [
         {
           "id": "IMP-5001",
           "title": "Implement billing, email classification, consent and suppression contracts",
           "status": "verified",
           "evidenceLevel": "local",
-          "evidence": ["src/domain/billing.ts", "src/domain/billing.test.ts", "src/domain/marketing.ts", "src/domain/marketing.test.ts"],
+          "evidence": [
+            "src/domain/billing.ts",
+            "src/domain/billing.test.ts",
+            "src/domain/marketing.ts",
+            "src/domain/marketing.test.ts"
+          ],
           "verification": "npm run check"
         },
         {
@@ -179,7 +374,11 @@
           "title": "Implement idempotent Stripe and email adapter boundaries with suppression enforcement",
           "status": "started",
           "evidenceLevel": "planned",
-          "evidence": ["src/domain/billing.ts", "src/domain/marketing.ts", "docs/build-plan.md"],
+          "evidence": [
+            "src/domain/billing.ts",
+            "src/domain/marketing.ts",
+            "docs/build-plan.md"
+          ],
           "verification": "npm run test:emulators"
         }
       ]
@@ -188,14 +387,26 @@
       "id": "WS-60",
       "name": "Privacy and retention",
       "status": "in_progress",
-      "bopRefs": ["DSB-BOP-P6-008", "DSB-BOP-P8-001", "DSB-BOP-P8-003", "DSB-BOP-P8-005", "DSB-BOP-P8-009", "DSB-BOP-P8-010"],
+      "bopRefs": [
+        "DSB-BOP-P6-008",
+        "DSB-BOP-P8-001",
+        "DSB-BOP-P8-003",
+        "DSB-BOP-P8-005",
+        "DSB-BOP-P8-009",
+        "DSB-BOP-P8-010"
+      ],
       "tasks": [
         {
           "id": "IMP-6001",
           "title": "Implement Privacy and Safety route plus retention/deletion contracts",
           "status": "verified",
           "evidenceLevel": "local",
-          "evidence": ["src/ui/pages/PrivacySafetyPage.tsx", "src/domain/retention.ts", "src/domain/retention.test.ts", "docs/release-evidence.md"],
+          "evidence": [
+            "src/ui/pages/PrivacySafetyPage.tsx",
+            "src/domain/retention.ts",
+            "src/domain/retention.test.ts",
+            "docs/release-evidence.md"
+          ],
           "verification": "npm run check"
         },
         {
@@ -203,7 +414,10 @@
           "title": "Persist privacy requests and implement escalation, deletion manifests and legal holds",
           "status": "started",
           "evidenceLevel": "planned",
-          "evidence": ["src/domain/retention.ts", "docs/build-plan.md"],
+          "evidence": [
+            "src/domain/retention.ts",
+            "docs/build-plan.md"
+          ],
           "verification": "npm run test:emulators"
         }
       ]
@@ -212,14 +426,20 @@
       "id": "WS-70",
       "name": "Quality and release",
       "status": "in_progress",
-      "bopRefs": ["DSB-BOP-P8-010"],
+      "bopRefs": [
+        "DSB-BOP-P8-010"
+      ],
       "tasks": [
         {
           "id": "IMP-7001",
           "title": "Add CI and distinguish local, emulator, deployed and manual evidence",
           "status": "verified",
           "evidenceLevel": "local",
-          "evidence": [".github/workflows/ci.yml", "docs/release-evidence.md", "package.json"],
+          "evidence": [
+            ".github/workflows/ci.yml",
+            "docs/release-evidence.md",
+            "package.json"
+          ],
           "verification": "npm run check"
         },
         {
@@ -227,7 +447,14 @@
           "title": "Add emulator security suite and make unresolved production advisories explicit release gates",
           "status": "verified",
           "evidenceLevel": "emulator",
-          "evidence": ["docs/security-baseline.md", "firebase.json", "tests/firestore.rules.test.ts", ".github/workflows/ci.yml"],
+          "evidence": [
+            "docs/security-baseline.md",
+            "firebase.json",
+            "tests/firestore.rules.test.ts",
+            ".github/workflows/ci.yml",
+            "storage.rules",
+            "tests/storage.rules.test.ts"
+          ],
           "verification": "npm run test:emulators"
         }
       ]
@@ -236,14 +463,23 @@
       "id": "WS-80",
       "name": "Post-MVP guardrails",
       "status": "deferred",
-      "bopRefs": ["DSB-BOP-P5-001", "DSB-BOP-P5-002", "DSB-BOP-P5-003", "DSB-BOP-P5-004", "DSB-BOP-P5-005"],
+      "bopRefs": [
+        "DSB-BOP-P5-001",
+        "DSB-BOP-P5-002",
+        "DSB-BOP-P5-003",
+        "DSB-BOP-P5-004",
+        "DSB-BOP-P5-005"
+      ],
       "tasks": [
         {
           "id": "IMP-8001",
           "title": "Create disabled-by-default post-MVP feature registry",
           "status": "verified",
           "evidenceLevel": "local",
-          "evidence": ["src/domain/featureFlags.ts", "src/domain/featureFlags.test.ts"],
+          "evidence": [
+            "src/domain/featureFlags.ts",
+            "src/domain/featureFlags.test.ts"
+          ],
           "verification": "npm run check"
         }
       ]

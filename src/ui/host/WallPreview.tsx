@@ -8,6 +8,7 @@ import {
   type PropertyProfile
 } from "../../domain/propertyProfile";
 import { memoriesHeading } from "../wall/memoryHeading";
+import { EssentialMark } from "../wall/EssentialMark";
 import type { WallCounts } from "./propertyStore";
 
 /**
@@ -66,6 +67,15 @@ export function WallPreview({
   const essentials = !profile.factsOff && facts.length > 0;
   const alone = !note && !essentials;
 
+  /* The hosts beside the property's name, the way the canvas prints them: the
+     phone heads both walls the same way, so a Host looking from one to the
+     other is looking at the same wall twice rather than at two arrangements. */
+  const mark = profile.hostPhoto ? (
+    <img className="avatar avatar-photo phone-identity-avatar" src={profile.hostPhoto.url} alt={profile.hostPhoto.alt} />
+  ) : hosts ? (
+    <span className="avatar tone-2 phone-identity-avatar" aria-hidden="true">{hostInitials(hosts)}</span>
+  ) : null;
+
   /* The hosts' own note stands above the memories on both walls rather than
      among them, so the phone shows it there too — and says whose it is, which
      is the whole reason it was taken out of the grid. It is the one note here
@@ -79,14 +89,9 @@ export function WallPreview({
         <div className="phone-note" data-note-style={note.style} key={note.id}>
           {note.photo && <img className="phone-note-photo" src={note.photo.url} alt={note.photo.alt} />}
           {note.message.trim() && <p className="phone-note-message">{note.message}</p>}
-          {(hosts || profile.hostPhoto) && (
+          {hosts && (
             <p className="phone-note-sign">
-              {profile.hostPhoto ? (
-                <img className="avatar avatar-photo" src={profile.hostPhoto.url} alt={profile.hostPhoto.alt} />
-              ) : (
-                <span className="avatar tone-2" aria-hidden="true">{hostInitials(hosts)}</span>
-              )}
-              {hosts && <b>{hosts}</b>}
+              <b>{hosts}</b>
             </p>
           )}
         </div>
@@ -127,6 +132,7 @@ export function WallPreview({
         <div
           className="phone-screen"
           data-wall-theme={profile.theme}
+          data-no-header-photos={!profile.cover && !profile.hostPhoto ? "true" : undefined}
           id={fixed === undefined ? "preview-panel" : undefined}
           role={fixed === undefined ? "tabpanel" : "group"}
           aria-label={fixed === undefined ? undefined : "On a phone"}
@@ -139,17 +145,17 @@ export function WallPreview({
           <div className="phone-body">
             {view === "public" ? (
               <>
-                <p className="phone-eyebrow">The wall at</p>
-                <h3>{name}</h3>
-                {profile.location.trim() && <p className="phone-location">{profile.location}</p>}
+                <div className="phone-identity">
+                  {mark}
+                  <div className="phone-titles">
+                    <p className="phone-eyebrow">The wall at</p>
+                    <h3>{name}</h3>
+                    {profile.location.trim() && <p className="phone-location">{profile.location}</p>}
+                  </div>
+                </div>
                 {profile.welcome.trim() && <p className="phone-welcome">{profile.welcome}</p>}
-                {(hosts || profile.hostPhoto || profile.hostSince.trim()) && (
+                {(hosts || profile.hostSince.trim()) && (
                   <p className="phone-byline">
-                    {profile.hostPhoto ? (
-                      <img className="avatar avatar-photo" src={profile.hostPhoto.url} alt={profile.hostPhoto.alt} />
-                    ) : hosts ? (
-                      <span className="avatar tone-2" aria-hidden="true">{hostInitials(hosts)}</span>
-                    ) : null}
                     <span>
                       {hosts && <b>{hosts}</b>}
                       {profile.hostSince.trim() && <small>Hosting here since {profile.hostSince}</small>}
@@ -166,19 +172,17 @@ export function WallPreview({
                     the confirmation that they scanned the right display. It is
                     the property's name rather than a Host's sentence, so it is
                     on the wall whether or not anything else has been written. */}
-                <p className={alone ? "phone-stay-name alone" : "phone-stay-name"}>
-                  <b>{name}</b>
-                  {profile.location.trim() && <span>{profile.location}</span>}
-                </p>
+                <div className="phone-identity">
+                  {mark}
+                  <div className={alone ? "phone-stay-name alone" : "phone-stay-name"}>
+                    <b>{name}</b>
+                    {profile.location.trim() && <span>{profile.location}</span>}
+                  </div>
+                </div>
 
                 {note && (
-                  <div className="stay-welcome">
-                    <div className="stay-welcome-head">
-                      {profile.hostPhoto ? (
-                        <img className="avatar avatar-lg avatar-photo" src={profile.hostPhoto.url} alt={profile.hostPhoto.alt} />
-                      ) : hosts ? (
-                        <span className="avatar avatar-lg tone-2" aria-hidden="true">{hostInitials(hosts)}</span>
-                      ) : null}
+                  <div className="phone-stay-welcome">
+                    <div className="phone-stay-welcome-head">
                       <div>
                         {noteBody && <p className="phone-eyebrow">A note from your hosts</p>}
                         {heading && <h3>{heading}</h3>}
@@ -196,7 +200,7 @@ export function WallPreview({
                     <dl className="phone-facts">
                       {facts.map((fact) => (
                         <div key={fact.term}>
-                          <dt>{fact.term}</dt>
+                          <dt><EssentialMark term={fact.term} className="essential-mark phone-fact-mark" />{fact.term}</dt>
                           <dd>
                             <b>{fact.detail}</b>
                             {fact.note && <small>{fact.note}</small>}

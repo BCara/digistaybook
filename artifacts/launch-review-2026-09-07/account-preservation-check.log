@@ -1,0 +1,50 @@
+
+> digistaybook@0.1.0 check
+> npm run typecheck && npm run test && npm run build && npm run functions:build
+
+
+> digistaybook@0.1.0 typecheck
+> tsc --noEmit
+
+
+> digistaybook@0.1.0 test
+> vitest run --exclude "tests/**/*.rules.test.ts"
+
+
+ RUN  v4.1.10 C:/Users/clbbe/Documents/Projects/DigiStayBook
+
+Not implemented: navigation to another Document
+Not implemented: navigation to another Document
+
+ Test Files  31 passed (31)
+      Tests  292 passed (292)
+   Start at  08:27:00
+   Duration  13.78s (transform 10.01s, setup 24.96s, import 13.47s, tests 27.37s, environment 138.35s)
+
+
+> digistaybook@0.1.0 build
+> vite build
+
+vite v8.2.0 building client environment for production...
+[2K
+transforming...✓ 180 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                      1.36 kB │ gzip:   0.59 kB
+dist/assets/index-CzxiDP1I.css      86.68 kB │ gzip:  17.21 kB
+dist/assets/index.esm-CZr-mCJw.js    0.69 kB │ gzip:   0.39 kB
+dist/assets/index.esm-CQJnr55V.js    8.30 kB │ gzip:   3.29 kB
+dist/assets/index.esm-BTcVzOZU.js   31.99 kB │ gzip:  10.43 kB
+dist/assets/index.esm-DoYTAfpC.js   34.74 kB │ gzip:  11.16 kB
+dist/assets/index.esm-DIQVOIfr.js  127.16 kB │ gzip:  36.11 kB
+dist/assets/index-D9KLBbyq.js      438.95 kB │ gzip: 131.98 kB
+dist/assets/index.esm-CxMzEItC.js  555.00 kB │ gzip: 161.92 kB
+
+✓ built in 572ms
+> digistaybook@0.1.0 functions:build
+> npm --prefix functions run build
+
+
+> build
+> tsc
+

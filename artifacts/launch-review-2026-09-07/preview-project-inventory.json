@@ -1,0 +1,6 @@
+- Preparing the list of your Firebase projects
+× Preparing the list of your Firebase projects
+{
+  "status": "error",
+  "error": "Failed to list Firebase projects. See firebase-debug.log for more info."
+}

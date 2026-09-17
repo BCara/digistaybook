@@ -1,13 +1,13 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { firebaseConfigured } from "../../lib/firebaseConfig";
-import { getFirebaseServices } from "../../lib/firebase";
+import { getFirebaseAuth } from "../../lib/firebase";
 
 /**
  * `guest` is an anonymous session created for Guest self-service (Terms 4.4).
  * It is a signed-in Firebase user but never a Host, so it must not satisfy any
  * Host authorisation check.
  */
-export type AuthStatus = "unconfigured" | "loading" | "signed-out" | "guest" | "host";
+export type AuthStatus = "unconfigured" | "loading" | "error" | "signed-out" | "guest" | "host";
 
 export type AuthState = {
   status: AuthStatus;
@@ -34,23 +34,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!firebaseConfigured) return;
     let cancelled = false;
     let unsubscribe: (() => void) | undefined;
+    const fail = () => { if (!cancelled) setState({ status: "error", user: null }); };
+    const timeout = window.setTimeout(fail, 15000);
 
     void (async () => {
-      const services = await getFirebaseServices();
+      const services = await getFirebaseAuth();
       if (!services || cancelled) return;
       const { onAuthStateChanged } = await import("firebase/auth");
+      if (cancelled) return;
       unsubscribe = onAuthStateChanged(services.auth, (user) => {
         if (cancelled) return;
+        window.clearTimeout(timeout);
         if (!user) {
           setState({ status: "signed-out", user: null });
           return;
         }
         setState({ status: user.isAnonymous ? "guest" : "host", user });
-      });
-    })();
+      }, fail);
+    })().catch(fail);
 
     return () => {
       cancelled = true;
+      window.clearTimeout(timeout);
       unsubscribe?.();
     };
   }, []);

@@ -1,6 +1,7 @@
 import { useState, useRef, type FormEvent } from "react";
 import { guestContributionSchema } from "../../domain/guestContribution";
 import { HostNotes } from "../wall/HostNotes";
+import { EssentialMark } from "../wall/EssentialMark";
 import { MemoryWall } from "../wall/MemoryWall";
 import { LiveWallPage } from "./LiveWallPage";
 import { DEMO_SLUG, demoPosts, demoProperty, houseEssentials, hostWallNotes, hostWelcome, wallPhotos } from "../wall/demoWall";
@@ -13,9 +14,12 @@ const NAME_LIMIT = 80;
  * The in-stay wall: what the QR display opens.
  *
  * This is the only wall that carries house guidance, and the only one that
- * accepts a contribution, because reaching it means holding the QR display.
+ * accepts a contribution, because reaching it means holding the guestbook
+ * link — the slug with the token printed into the placard beside it. The slug
+ * on its own is the public wall: it is in the Host's listing and embedded on
+ * their own site, and the Wi-Fi password cannot hang on that.
  */
-export function StayWallPage({ propertySlug = "property" }: { propertySlug?: string }) {
+export function StayWallPage({ propertySlug = "property", stayToken = null }: { propertySlug?: string; stayToken?: string | null }) {
   const isDemo = propertySlug === DEMO_SLUG;
   const property = demoProperty;
   const [displayName, setDisplayName] = useState("");
@@ -23,7 +27,7 @@ export function StayWallPage({ propertySlug = "property" }: { propertySlug?: str
   const [consent, setConsent] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
-  if (propertySlug !== DEMO_SLUG) return <LiveWallPage key={propertySlug} slug={propertySlug} />;
+  if (propertySlug !== DEMO_SLUG) return <LiveWallPage key={propertySlug} slug={propertySlug} view="stay" stayToken={stayToken} />;
 
   function submit(event: FormEvent) {
     event.preventDefault();
@@ -63,20 +67,25 @@ export function StayWallPage({ propertySlug = "property" }: { propertySlug?: str
         {/* Confirms at a glance that they scanned the right property, so it
             is the largest thing on the wall before the hosts' own words: a
             guest arriving from the placard is asking "is this the place?"
-            before they are asking anything else. */}
-        <p className="stay-cover-caption">
-          <b>{property.name}</b>
-          <span>{property.location}</span>
-        </p>
+            before they are asking anything else. The hosts hang off the
+            bottom edge of the cover beside it, the way the canvas and the
+            phone preview draw them — and the way `LiveWallPage` draws the
+            served wall, because it is the same wall. */}
+        <div className="stay-cover-caption">
+          {property.hostPhoto ? (
+            <img className="avatar avatar-photo stay-portrait" src={property.hostPhoto.src} alt={property.hostPhoto.alt} />
+          ) : property.hostInitials ? (
+            <span className="avatar tone-2 stay-portrait" aria-hidden="true">{property.hostInitials}</span>
+          ) : null}
+          <div className="stay-cover-titles">
+            <b>{property.name}</b>
+            <span>{property.location}</span>
+          </div>
+        </div>
       </div>
 
       <header className="stay-welcome">
         <div className="stay-welcome-head">
-          {property.hostPhoto ? (
-            <img className="avatar avatar-lg avatar-photo" src={property.hostPhoto.src} alt={property.hostPhoto.alt} />
-          ) : property.hostInitials ? (
-            <span className="avatar avatar-lg tone-2" aria-hidden="true">{property.hostInitials}</span>
-          ) : null}
           <div>
             <p className="eyebrow">A note from your hosts</p>
             <h1>{hostWelcome.heading}</h1>
@@ -92,7 +101,7 @@ export function StayWallPage({ propertySlug = "property" }: { propertySlug?: str
         <dl className="essentials-grid">
           {houseEssentials.map((item) => (
             <div className="essential" key={item.term}>
-              <dt>{item.term}</dt>
+              <dt><EssentialMark term={item.term} />{item.term}</dt>
               <dd>
                 <b>{item.detail}</b>
                 <small>{item.note}</small>
@@ -137,7 +146,7 @@ export function StayWallPage({ propertySlug = "property" }: { propertySlug?: str
           <input id="photo" type="file" accept="image/jpeg, image/png, image/webp" />
           <label className="check-row">
             <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />
-            I consent to this message being displayed on the public Guest Wall under the current Guest Content Policy.
+            I consent to this message being displayed on the public wall under the current Guest Content Policy.
           </label>
           <div className="dialog-actions">
             <button type="button" className="btn btn-secondary" onClick={() => dialogRef.current?.close()}>Cancel</button>

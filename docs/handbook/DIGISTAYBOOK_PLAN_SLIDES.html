@@ -1,0 +1,1959 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DigiStayBook — Business &amp; Operating Plan: Test Deck</title>
+<style>
+:root{
+  --stamp-600:#b4472a; --stamp-700:#8f3a20; --stamp-500:#cd6844; --stamp-050:#f6e6de;
+  --sage-700:#33604c; --sage-050:#e2ebe4;
+  --paper-100:#f7f2e8; --paper-200:#efe8da; --paper-050:#fdfaf4; --paper-000:#ffffff;
+  --ink-900:#14181b; --ink-700:#33404a; --ink-500:#5d6d78; --ink-400:#7d8c96;
+  --on-ink:#f5f1e8;
+  --rule:rgba(20,24,27,.13); --rule-strong:rgba(20,24,27,.26);
+  --ok:#2f6b46; --ok-bg:#e4efe7;
+  --warn:#8a5a12; --warn-bg:#f7ecd8;
+  --err:#9a2f22; --err-bg:#f7e2de;
+  --font-display:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,ui-serif,serif;
+  --font-sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  --font-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{background:var(--ink-900);font-family:var(--font-sans);color:var(--ink-900);-webkit-font-smoothing:antialiased;overflow:hidden}
+
+#deck{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+.slide{
+  position:absolute;width:1280px;height:720px;
+  background:var(--paper-100);
+  background-image:repeating-linear-gradient(to bottom,transparent 0 39px,rgba(20,24,27,.035) 39px 40px);
+  border-radius:6px;box-shadow:0 24px 70px rgba(0,0,0,.55);
+  padding:48px 64px 60px;display:none;flex-direction:column;overflow:hidden;transform-origin:center center;
+}
+.slide.active{display:flex}
+
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--stamp-600);font-weight:700;margin:0 0 10px}
+.eyebrow .sec{color:var(--ink-400);font-weight:600}
+h1{font-family:var(--font-display);font-size:64px;line-height:1.06;margin:0 0 18px;font-weight:600;letter-spacing:-.01em}
+h2{font-family:var(--font-display);font-size:36px;line-height:1.12;margin:0 0 6px;font-weight:600;letter-spacing:-.005em}
+h3{font-size:16px;margin:0 0 8px;font-weight:700;color:var(--ink-900)}
+.sub{font-size:15.5px;line-height:1.5;color:var(--ink-700);margin:0 0 20px;max-width:88ch}
+.slide-body{flex:1;min-height:0;overflow:hidden}
+p{margin:0 0 10px;line-height:1.5}
+code{font-family:var(--font-mono);font-size:.88em;background:var(--paper-200);padding:1px 5px;border-radius:3px}
+
+.cols{display:grid;gap:18px}
+.c2{grid-template-columns:1fr 1fr}
+.c3{grid-template-columns:repeat(3,1fr)}
+.c4{grid-template-columns:repeat(4,1fr)}
+.c-2-1{grid-template-columns:2fr 1fr}
+.c-1-2{grid-template-columns:1fr 2fr}
+.stack{display:flex;flex-direction:column;gap:12px}
+
+.card{background:var(--paper-050);border:1px solid var(--rule);border-radius:6px;padding:15px 17px}
+.card.raised{background:var(--paper-000);box-shadow:0 2px 6px rgba(20,24,27,.06)}
+.card h3{font-size:14.5px;margin-bottom:6px}
+.card p,.card li{font-size:13px;line-height:1.45;color:var(--ink-700)}
+.card.accent{border-left:3px solid var(--stamp-600)}
+.card.sage{border-left:3px solid var(--sage-700);background:var(--sage-050)}
+.card.warn{border-left:3px solid var(--warn);background:var(--warn-bg)}
+.card.err{border-left:3px solid var(--err);background:var(--err-bg)}
+.card.ok{border-left:3px solid var(--ok);background:var(--ok-bg)}
+
+ul,ol{margin:0;padding-left:18px}
+li{margin:0 0 7px;line-height:1.45;font-size:13.5px}
+ul.tight li{margin-bottom:4px}
+ul.plain{list-style:none;padding-left:0}
+ul.plain li{position:relative;padding-left:20px}
+ul.plain li:before{content:"";position:absolute;left:3px;top:8px;width:6px;height:6px;border-radius:1px;background:var(--stamp-600)}
+ul.no li:before{background:var(--err)}
+ul.yes li:before{background:var(--ok)}
+
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-500);font-weight:700;padding:0 10px 7px;border-bottom:1px solid var(--rule-strong)}
+td{padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.38;color:var(--ink-700)}
+td:first-child,th:first-child{padding-left:0}
+td:last-child,th:last-child{padding-right:0}
+tbody tr:last-child td{border-bottom:0}
+td strong{color:var(--ink-900)}
+table.sm{font-size:11.5px}
+table.sm td{padding:6px 8px}
+table.xs{font-size:10.8px}
+table.xs td{padding:4.5px 7px;line-height:1.32}
+table.xs th{font-size:9.5px;padding-bottom:5px}
+.zebra tbody tr:nth-child(even){background:rgba(20,24,27,.028)}
+
+.pill{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.pill.tx{background:var(--sage-050);color:var(--sage-700);border:1px solid rgba(51,96,76,.28)}
+.pill.mk{background:var(--stamp-050);color:var(--stamp-700);border:1px solid rgba(180,71,42,.28)}
+.pill.int{background:#e6e9ec;color:var(--ink-700);border:1px solid var(--rule-strong)}
+.pill.ok{background:var(--ok-bg);color:var(--ok);border:1px solid rgba(47,107,70,.3)}
+.pill.warn{background:var(--warn-bg);color:var(--warn);border:1px solid rgba(138,90,18,.3)}
+.pill.err{background:var(--err-bg);color:var(--err);border:1px solid rgba(154,47,34,.3)}
+.ref{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--stamp-700)}
+
+.stat{background:var(--paper-000);border:1px solid var(--rule);border-radius:6px;padding:15px 17px}
+.stat .n{font-family:var(--font-display);font-size:38px;line-height:1;color:var(--stamp-600);font-weight:600}
+.stat .l{font-size:11.5px;color:var(--ink-500);margin-top:7px;line-height:1.35}
+
+.mailwrap{display:grid;grid-template-columns:296px 1fr;gap:22px;height:100%}
+.mailmeta{display:flex;flex-direction:column;gap:9px}
+.mailmeta .row{border-top:1px solid var(--rule);padding-top:8px}
+.mailmeta .k{font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-400);font-weight:700;margin-bottom:3px}
+.mailmeta .v{font-size:12.5px;line-height:1.4;color:var(--ink-700)}
+.mailmeta .v code{font-size:11px}
+
+.email{background:var(--paper-000);border:1px solid var(--rule-strong);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;height:100%;box-shadow:0 3px 10px rgba(20,24,27,.08)}
+.email .bar{background:var(--paper-200);border-bottom:1px solid var(--rule);padding:9px 18px;display:flex;align-items:center;gap:10px}
+.email .dots{display:flex;gap:5px}
+.email .dots i{width:9px;height:9px;border-radius:50%;background:var(--rule-strong);display:block}
+.email .bar span{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-500);font-weight:700}
+.email .hdr{padding:13px 24px 11px;border-bottom:1px solid var(--rule)}
+.email .from{font-size:11.5px;color:var(--ink-500);margin-bottom:5px}
+.email .from b{color:var(--ink-900)}
+.email .subj{font-size:17px;font-weight:700;color:var(--ink-900);line-height:1.3}
+.email .body{padding:17px 24px;flex:1;overflow:auto;font-size:13.5px;line-height:1.55;color:var(--ink-700)}
+.email .body p{margin:0 0 11px}
+.email .body p:last-child{margin-bottom:0}
+.cta{display:inline-block;background:var(--stamp-600);color:#fff;font-weight:700;font-size:12.5px;padding:9px 19px;border-radius:3px}
+.email .foot{border-top:1px solid var(--rule);padding:9px 24px;font-size:10.5px;color:var(--ink-400);line-height:1.45;background:var(--paper-050)}
+.tok{font-family:var(--font-mono);font-size:.92em;background:var(--stamp-050);color:var(--stamp-700);padding:0 3px;border-radius:2px}
+
+.slide.divider{background:var(--ink-900);background-image:none;color:var(--on-ink);justify-content:center}
+.slide.divider h1{color:var(--on-ink);font-size:74px}
+.slide.divider .sub{color:rgba(245,241,232,.72);font-size:18px}
+.slide.divider .eyebrow{color:var(--stamp-500)}
+.slide.divider .num{font-family:var(--font-display);font-size:190px;line-height:1;color:rgba(245,241,232,.09);position:absolute;right:64px;bottom:18px;font-weight:600}
+.slide.divider .foot-note{color:rgba(245,241,232,.5);font-size:13px;border-top:1px solid rgba(245,241,232,.16);padding-top:14px;margin-top:24px;max-width:74ch}
+
+.slide.cover{justify-content:center;background:var(--paper-050)}
+.cover .mark{display:flex;align-items:center;gap:14px;margin-bottom:32px}
+.cover .wordmark{font-size:21px;letter-spacing:-.01em;color:var(--ink-900)}
+.cover .wordmark b{font-weight:800}
+.cover h1{font-size:78px;max-width:20ch}
+.cover .meta{display:grid;grid-template-columns:repeat(4,auto);gap:0 44px;margin-top:38px;padding-top:20px;border-top:1px solid var(--rule-strong);justify-content:start}
+.cover .meta .k{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-400);font-weight:700;margin-bottom:5px}
+.cover .meta .v{font-size:13.5px;color:var(--ink-700)}
+
+.slidefoot{position:absolute;left:64px;right:64px;bottom:20px;display:flex;justify-content:space-between;align-items:center;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-400);font-weight:600;border-top:1px solid var(--rule);padding-top:10px}
+.slide.divider .slidefoot{border-color:rgba(245,241,232,.16);color:rgba(245,241,232,.45)}
+.slidefoot .brand b{font-weight:800;color:var(--ink-500)}
+.slide.divider .slidefoot .brand b{color:rgba(245,241,232,.6)}
+
+#progress{position:fixed;top:0;left:0;height:3px;background:var(--stamp-600);z-index:60;transition:width .18s ease}
+#hud{position:fixed;bottom:14px;right:16px;z-index:60;display:flex;gap:8px;align-items:center;font-size:11px;color:rgba(245,241,232,.5);font-weight:600;letter-spacing:.06em}
+#hud button{background:rgba(245,241,232,.1);border:1px solid rgba(245,241,232,.18);color:rgba(245,241,232,.75);border-radius:4px;padding:5px 10px;font:inherit;cursor:pointer}
+#hud button:hover{background:rgba(245,241,232,.2)}
+
+#overview{position:fixed;inset:0;background:rgba(20,24,27,.97);z-index:70;overflow:auto;padding:32px;display:none}
+#overview.on{display:block}
+#overview h4{color:var(--on-ink);font-family:var(--font-display);font-size:25px;margin:0 0 4px;font-weight:600}
+#overview .hint{color:rgba(245,241,232,.45);font-size:12px;margin:0 0 20px}
+#ovgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(188px,1fr));gap:11px}
+.ovitem{background:var(--paper-100);border-radius:4px;padding:11px;cursor:pointer;border:2px solid transparent;min-height:74px;display:flex;flex-direction:column;justify-content:space-between}
+.ovitem:hover{border-color:var(--stamp-600)}
+.ovitem .t{font-size:12px;font-weight:700;color:var(--ink-900);line-height:1.28}
+.ovitem .n{font-size:9.5px;color:var(--ink-400);font-weight:700;letter-spacing:.08em;margin-top:7px}
+.ovitem.isdiv{background:var(--stamp-700)}
+.ovitem.isdiv .t{color:#fff}
+.ovitem.isdiv .n{color:rgba(255,255,255,.6)}
+
+/* slides carrying more rows than the 720px frame comfortably holds */
+.slide.dense h2{font-size:32px;margin-bottom:4px}
+.slide.dense .sub{margin-bottom:14px;font-size:14.5px}
+.slide.dense table.xs td{padding:3.5px 7px;line-height:1.27}
+.slide.dense table.xs th{padding-bottom:4px}
+.slide.dense .card{padding:10px 13px}
+.slide.dense li{margin-bottom:5px}
+
+@media print{
+  @page{size:1280px 720px;margin:0}
+  body{background:#fff;overflow:visible}
+  #deck{position:static;display:block}
+  #progress,#hud,#overview{display:none!important}
+  .slide{display:flex!important;position:relative;page-break-after:always;break-after:page;box-shadow:none;border-radius:0;transform:none!important;margin:0}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="deck">
+
+<!-- ══ COVER ══ -->
+<section class="slide cover" data-title="Cover">
+  <div class="mark">
+    <svg width="46" height="46" viewBox="0 0 48 48" aria-hidden="true">
+      <path d="M4 10c6-2 12-2 19 1v30c-7-3-13-3-19-1V10z" fill="none" stroke="#33404a" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M44 10c-6-2-12-2-21 1v30c9-3 15-3 21-1V10z" fill="#fdfaf4" stroke="#14181b" stroke-width="2.2" stroke-linejoin="round"/>
+      <rect x="27" y="15" width="5" height="5" fill="#b4472a"/><rect x="35" y="15" width="5" height="5" fill="#b4472a"/>
+      <rect x="27" y="23" width="5" height="5" fill="#b4472a"/><rect x="35" y="23" width="3" height="3" fill="#b4472a"/>
+      <rect x="39" y="27" width="3" height="3" fill="#b4472a"/><rect x="27" y="31" width="3" height="3" fill="#b4472a"/>
+    </svg>
+    <div class="wordmark">DigiStay<b>Book</b></div>
+  </div>
+  <h1>Business &amp; Operating Plan</h1>
+  <p class="sub" style="font-size:19px;max-width:66ch">The complete plan as a deck — offer, operations, moderation, retention, brand, launch and costs — with every outbound email rendered exactly as the host will receive it.</p>
+  <div class="meta">
+    <div><div class="k">Document status</div><div class="v">Work in progress — internal</div></div>
+    <div><div class="k">Purpose</div><div class="v">Review &amp; test deck</div></div>
+    <div><div class="k">Legal operator</div><div class="v">codebertcreations</div></div>
+    <div><div class="k">Region</div><div class="v">Australia · Victoria law</div></div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>Press → to advance · O for overview</span></div>
+</section>
+
+<!-- ══ HOW TO USE ══ -->
+<section class="slide" data-title="How to use this deck">
+  <p class="eyebrow">Read me first</p>
+  <h2>How to use this deck</h2>
+  <p class="sub">Everything here is carried from the Business &amp; Operating Plan. It states the intended operating position, not the code as it stands. Where the two differ, the difference is marked rather than smoothed over.</p>
+  <div class="slide-body">
+    <div class="cols c-2-1">
+      <div class="stack">
+        <div class="card accent">
+          <h3>Navigation</h3>
+          <p><strong>→ / Space / Page Down</strong> next slide &nbsp;·&nbsp; <strong>←</strong> previous &nbsp;·&nbsp; <strong>O</strong> overview grid &nbsp;·&nbsp; <strong>Home / End</strong> first &amp; last &nbsp;·&nbsp; <strong>F</strong> fullscreen &nbsp;·&nbsp; <strong>Ctrl+P</strong> prints one slide per page for PDF.</p>
+        </div>
+        <div class="card warn">
+          <h3><span class="pill warn">Confirm</span> &nbsp;A decision the owner must make</h3>
+          <p>A figure, decision or fact that is not settled. The surrounding text is written on a stated assumption so the plan stays readable; the assumption is named in the note. 34 of these are open — collected in the register near the end of this deck.</p>
+        </div>
+        <div class="card err">
+          <h3><span class="pill err">Action</span> &nbsp;Settled intent the product does not meet</h3>
+          <p>The decision is not in question — the delivery is. 18 of these are open. Nothing in this category is decoration; each one is work that must be done.</p>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="card sage">
+          <h3>The email section</h3>
+          <p>Slides 26–47 render every message the system will send — subject line, trigger, classification and full body — as an email preview. Placeholders appear as <span class="tok">{{Token}}</span>.</p>
+        </div>
+        <div class="card">
+          <h3>Both annotation types are internal</h3>
+          <p>Remove every Confirm and Action slide before this deck is shown to anyone outside the business.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>Read me first</span></div>
+</section>
+
+<!-- ══ DIVIDER 1 ══ -->
+<section class="slide divider" data-title="1 · The business">
+  <p class="eyebrow">Part one</p>
+  <h1>The business</h1>
+  <p class="sub">Executive summary, objective, product, customer, roles and scope.</p>
+  <p class="foot-note">DigiStayBook sits between a host and their guests for the duration of a stay. It does not sit between a host and their booking provider, and it does not take on the guest relationship.</p>
+  <div class="num">1</div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>Sections 1–2</span></div>
+</section>
+
+<!-- ══ EXEC SUMMARY ══ -->
+<section class="slide" data-title="Executive summary">
+  <p class="eyebrow">1 · Executive summary <span class="sec">/ what the business is</span></p>
+  <h2>A digital guestbook, sold per property</h2>
+  <p class="sub">A host creates a property, seeds it with a welcome post and house information, and receives a printed QR placard for the kitchen counter. Guests scan it during their stay, read the pinned house information, and add photos and messages to a shared wall — no app, no account, no password.</p>
+  <div class="slide-body">
+    <div class="cols c4" style="margin-bottom:18px">
+      <div class="stat"><div class="n">28</div><div class="l">days free trial, on the host's first activated property</div></div>
+      <div class="stat"><div class="n">~$10</div><div class="l">USD per property per month, or ~$100 per year</div></div>
+      <div class="stat"><div class="n">10</div><div class="l">images permitted in a single guest post</div></div>
+      <div class="stat"><div class="n">0</div><div class="l">guest accounts, apps or passwords required</div></div>
+    </div>
+    <div class="cols c3">
+      <div class="card accent"><h3>Sold self-service</h3><p>Monthly or discounted annual, both with the full feature set. Payment, renewal, dunning and cancellation run through Stripe. No feature-gated tier.</p></div>
+      <div class="card accent"><h3>Screened automatically</h3><p>Guest submissions are screened before they can reach a public wall. Only genuinely severe cases reach a person inside the business.</p></div>
+      <div class="card accent"><h3>Built to run itself</h3><p>Host workload after setup is close to zero; business workload per customer is close to zero. Delivered on React, TypeScript and Vite over Firebase, with Stripe and an email provider behind an adapter boundary.</p></div>
+    </div>
+    <div class="card sage" style="margin-top:16px">
+      <h3>Deliberately excluded, permanently</h3>
+      <p>No guest-to-host messaging, no maintenance ticketing, no in-stay guest support. Those belong to the host's booking provider, and building them would import an operational burden a two-person business cannot carry.</p>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>1 · Executive summary</span></div>
+</section>
+
+<!-- ══ OBJECTIVE ══ -->
+<section class="slide" data-title="Business objective">
+  <p class="eyebrow">1.1 · Business objective <span class="sec">/ what would count as proof</span></p>
+  <h2>Prove hosts will pay, per property, for a warmer stay</h2>
+  <p class="sub">And do it inside an operating model one operator and one developer can sustain alongside the rest of the portfolio. Progress is demonstrated by evidence, not activity.</p>
+  <div class="slide-body">
+    <div class="cols c4">
+      <div class="card raised"><h3>1 · Unassisted activation</h3><p>A host completes sign-up, property creation and paid activation without any help from us.</p></div>
+      <div class="card raised"><h3>2 · Unassisted contribution</h3><p>A guest scans a printed placard and posts a memory without contacting support.</p></div>
+      <div class="card raised"><h3>3 · First conversion</h3><p>A first trial converts to a paid subscription at the end of day 28.</p></div>
+      <div class="card raised"><h3>4 · First renewal</h3><p>A first annual renewal is charged and the property is retained.</p></div>
+    </div>
+    <div class="card warn" style="margin-top:20px">
+      <h3><span class="pill warn">Confirm</span> &nbsp;<span class="ref">C-02</span> &nbsp;No target has been set for any of these milestones</h3>
+      <p>Decide the number of paying properties, the trial-to-paid conversion rate, and the date by which they must be reached for the business to continue investing. Without a number, the monthly financial review has nothing to review against.</p>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>1.1 · Business objective</span></div>
+</section>
+
+<!-- ══ PRODUCT ══ -->
+<section class="slide" data-title="The product">
+  <p class="eyebrow">2.1 · Product <span class="sec">/ what each property gets</span></p>
+  <h2>Four things per property</h2>
+  <div class="slide-body">
+    <div class="cols c2">
+      <div class="stack">
+        <div class="card accent"><h3>The Guest Wall</h3><p>A mobile-first, reverse-chronological feed of approved guest photos and messages, with host-pinned content held at the top.</p></div>
+        <div class="card accent"><h3>A digital house manual</h3><p>Delivered through the same pinned posts — Wi-Fi, appliance instructions, bin days, local recommendations, the checkout routine — available at the moment a guest needs it rather than buried in a booking-app thread.</p></div>
+      </div>
+      <div class="stack">
+        <div class="card accent"><h3>A host dashboard</h3><p>Property setup, theme and layout, content curation, pinning, moderation and takedown queues, private guest feedback, QR assets and billing — every property from one place.</p></div>
+        <div class="card accent"><h3>A printed QR kit</h3><p>High-resolution placard artwork issued on activation, plus a shareable live routing link.</p></div>
+      </div>
+    </div>
+    <div class="cols c2" style="margin-top:16px">
+      <div class="card sage"><h3>What a guest may do</h3><p>Add up to ten images in a single post, edit or delete their own contributions, copy the text of a post, report any post, and leave one-way, text-only private feedback to the host.</p></div>
+      <div class="card"><h3>What the product never does</h3><p>Nothing carries a guest message to a host's inbox. Nothing invites a guest into a conversation.</p></div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>2.1 · Product</span></div>
+</section>
+
+<!-- ══ CUSTOMER ══ -->
+<section class="slide" data-title="Customer & guest">
+  <p class="eyebrow">2.2 · Customer <span class="sec">/ who pays and who does not</span></p>
+  <h2>The host pays. The guest is never asked to.</h2>
+  <div class="slide-body">
+    <div class="cols c2">
+      <div class="card raised" style="border-left:3px solid var(--stamp-600)">
+        <h3>The host — the paying customer</h3>
+        <p>An individual owner with one property, or a small operator running several. They already use Airbnb, Vrbo or Booking.com for reservations, payments, messaging and reviews.</p>
+        <p><strong>Their problem is not distribution.</strong> It is that the stay itself has become impersonal, that house information is fragmented, and that the same questions arrive by message for every booking.</p>
+        <p>They have very little tolerance for another dashboard to check, and none at all for a product that generates support work.</p>
+      </div>
+      <div class="card raised" style="border-left:3px solid var(--sage-700)">
+        <h3>The guest — never the customer</h3>
+        <p>In an unfamiliar house for a few nights, holding a phone, with no reason to install anything.</p>
+        <p><strong>The constraint that follows:</strong> the product must be usable by a guest who has never heard of DigiStayBook, in under a minute, on a phone with poor signal, without registering.</p>
+      </div>
+    </div>
+    <div class="card warn" style="margin-top:18px">
+      <h3><span class="pill warn">Confirm</span> &nbsp;<span class="ref">C-03</span> &nbsp;Australia first — but may hosts outside Australia buy at launch?</h3>
+      <p>Pricing, consumer law, spam law and privacy obligations are all written to Australian requirements. Currency localisation is designed for AUD, GBP, EUR and USD. If international sales are permitted at launch, privacy and the policy appendices need a jurisdiction review before the first one.</p>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>2.2 · Customer</span></div>
+</section>
+
+<!-- ══ ROLES ══ -->
+<section class="slide" data-title="Customer roles">
+  <p class="eyebrow">2.3 · Customer roles <span class="sec">/ five roles, enforced in security rules</span></p>
+  <h2>Who may see and do what</h2>
+  <div class="slide-body">
+    <table class="sm zebra">
+      <thead><tr><th style="width:19%">Role</th><th style="width:36%">Purpose</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Host</strong><br><span class="pill tx">customer</span></td><td>Creates, pays for and manages one or more properties; curates the wall and publishes house information.</td><td>Authenticated dashboard, property settings, guest content and moderation queues, private feedback inbox, QR assets, billing, export and deletion — restricted to properties the host owns.</td></tr>
+        <tr><td><strong>Guest</strong><br><span class="pill mk">contributor</span></td><td>Adds photos, messages and optional private feedback during a stay, by scanning the property's printed QR code.</td><td>The public wall for that one property, plus contribution, self-edit, self-delete and report controls for their own session. No access to host records, held content, private feedback or any other property.</td></tr>
+        <tr><td><strong>Viewer</strong></td><td>Views an approved public wall without contributing — a guest browsing before posting, or a visitor arriving through the public demo.</td><td>Approved public content and public-safe display settings only.</td></tr>
+        <tr><td><strong>Platform administrator</strong><br><span class="pill int">internal</span></td><td>Runs the critical-escalation queue, host-initiated abuse escalations, privacy escalations, incidents, billing exceptions and business administration.</td><td>A separate, protected, role-based administrative surface with attributable, audited actions. <strong>Never linked</strong> from any public, host or guest navigation.</td></tr>
+        <tr><td><strong>Privacy &amp; Safety Ops</strong><br><span class="pill int">internal</span></td><td>Handles privacy and takedown requests the host has not resolved within 14 days, circuit-breaker alerts, and requests arriving through the public Privacy &amp; Safety route.</td><td>A restricted privacy and safety queue, separate from ordinary host moderation, with access logging.</td></tr>
+      </tbody>
+    </table>
+    <div class="cols c2" style="margin-top:14px">
+      <div class="card warn" style="padding:11px 14px"><h3 style="font-size:13px"><span class="pill warn">Confirm</span> <span class="ref">C-04</span> &nbsp;Who holds each internal function?</h3><p style="font-size:12px">At launch both are likely the same person. An escalation route with no named owner does not exist.</p></div>
+      <div class="card err" style="padding:11px 14px"><h3 style="font-size:13px"><span class="pill err">Action</span> <span class="ref">A-03</span> &nbsp;No internal admin surface has been built</h3><p style="font-size:12px">A launch blocker for the moderation model, not a later refinement.</p></div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>2.3 · Customer roles</span></div>
+</section>
+
+<!-- ══ SCOPE ══ -->
+<section class="slide" data-title="Product scope">
+  <p class="eyebrow">2.4 · Product scope <span class="sec">/ the boundary of release one</span></p>
+  <h2>What ships, and what is refused</h2>
+  <div class="slide-body">
+    <div class="cols c2">
+      <div class="card ok">
+        <h3 style="margin-bottom:10px">In the first release</h3>
+        <ul class="plain yes tight" style="columns:2;column-gap:22px">
+          <li>Host account creation</li>
+          <li>Multi-property management from one dashboard</li>
+          <li>Pre-purchase sandbox and demo wall</li>
+          <li>Anti-blank-wall seeding</li>
+          <li>Per-property Stripe checkout, trial and coupons</li>
+          <li>Printed QR kit and live routing links</li>
+          <li>Guest Wall with pinning and themes</li>
+          <li>Guest contribution with consent capture</li>
+          <li>Automated screening, host review, internal escalation</li>
+          <li>Report and takedown state machine</li>
+          <li>Private guest feedback</li>
+          <li>Transactional and consented-marketing email</li>
+          <li>The retention and deletion schedule</li>
+        </ul>
+      </div>
+      <div class="card err">
+        <h3 style="margin-bottom:10px">Explicitly excluded</h3>
+        <ul class="plain no tight">
+          <li><strong>Guest-to-host messaging.</strong> There is no reply channel. Private feedback is one-way and is not monitored in real time.</li>
+          <li><strong>Maintenance reporting or ticketing.</strong> Stay problems belong to the booking provider.</li>
+          <li><strong>Guest stay support of any kind.</strong> The single exception is privacy, personal-data and content-safety matters.</li>
+          <li><strong>Any review-generation function.</strong> No rating request, no review-transfer instruction, no pre-filled text, no deep link into a provider review form, no benefit conditioned on leaving a review.</li>
+          <li><strong>Guest accounts and app downloads.</strong> Printed QR code and browser only.</li>
+          <li><strong>In-property tablet hardware.</strong> Physical-QR-first, precisely to avoid Wi-Fi, battery and device-maintenance dependencies.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>2.4 · Product scope</span></div>
+</section>
+
+<!-- ══ PROBLEM ══ -->
+<section class="slide" data-title="Customer problem">
+  <p class="eyebrow">3.1 · Customer problem <span class="sec">/ why a host would care</span></p>
+  <h2>Efficient and impersonal at the same time</h2>
+  <p class="sub">Self check-in, keypad locks and automated messaging mean a guest can arrive, stay and leave without a single human exchange. The stay works, but it feels like a transaction in an empty house.</p>
+  <div class="slide-body">
+    <div class="cols c3">
+      <div class="card raised"><h3>The stay has no character</h3><p>Nothing in the property tells the guest that someone cares about it, and nothing invites the guest to treat it as more than a room they paid for.</p></div>
+      <div class="card raised"><h3>Information arrives at the wrong time</h3><p>Wi-Fi passwords, bin nights, appliance quirks and checkout steps are spread across the booking thread, a folder nobody opens, and a welcome message read three weeks before arrival. The same questions then arrive by message, per booking, forever.</p></div>
+      <div class="card raised"><h3>Nothing accumulates</h3><p>Every stay starts from zero. A guestbook on the hall table does accumulate — but only the next guest at that table can see it, and it cannot be moderated, backed up or removed on request.</p></div>
+    </div>
+    <div class="card sage" style="margin-top:16px"><p style="margin:0"><strong>The impact:</strong> a stay that is competent but forgettable, and a support load that never falls. Hosts care because guest experience is the one lever they control that a booking provider does not set for them.</p></div>
+    <div class="card warn" style="margin-top:12px;padding:11px 14px"><h3 style="font-size:13px"><span class="pill warn">Confirm</span> <span class="ref">C-05</span> &nbsp;This problem statement is reasoned from the product's design, not from host research</h3><p style="font-size:12px;margin:0">No interviews, survey responses or waitlist data exist. Decide whether to run even a small structured conversation with ten hosts before launch spend is committed.</p></div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>3.1 · Customer problem</span></div>
+</section>
+
+<!-- ══ ALTERNATIVES ══ -->
+<section class="slide" data-title="Existing alternatives">
+  <p class="eyebrow">3.2 · Existing alternatives <span class="sec">/ what a host does today</span></p>
+  <h2>Six alternatives — and the real competitor is the last one</h2>
+  <div class="slide-body">
+    <table class="sm zebra">
+      <thead><tr><th style="width:26%">Alternative</th><th style="width:34%">Why a host uses it</th><th>Why they may leave it</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Paper guestbook on the hall table</strong></td><td>Free, charming, needs no setup, and guests understand it instantly.</td><td>Only visible in the room; fills up; cannot be moderated, copied or removed on request; lost or damaged with no recovery; photographs nothing.</td></tr>
+        <tr><td><strong>Printed house-manual folder or laminated sheets</strong></td><td>Cheap and already in the property.</td><td>Rarely opened; out of date the moment anything changes; reprinting is manual; nothing tells the host it was read.</td></tr>
+        <tr><td><strong>Digital guidebook products</strong></td><td>Solve the house-information problem properly, with maps and recommendations.</td><td>One-directional: the guest reads and leaves nothing behind. No shared memory, nothing that accumulates across stays.</td></tr>
+        <tr><td><strong>Booking-provider messaging and guidebook fields</strong></td><td>Already in the workflow; no extra subscription.</td><td>Information arrives before the stay and is lost in a thread; the provider owns the surface; nothing is visible inside the property at the moment of need.</td></tr>
+        <tr><td><strong>Event and wedding photo-wall products</strong></td><td>Genuinely good at collecting guest photos to a shared wall.</td><td>Built for a single event, not a property used continuously by strangers; no per-property recurring model; no house-manual role.</td></tr>
+        <tr style="background:var(--stamp-050)"><td><strong>Doing nothing</strong> <span class="pill mk">the real competitor</span></td><td>Free, and the stay still functions.</td><td>The support load and the impersonal stay both persist.</td></tr>
+      </tbody>
+    </table>
+    <p class="sub" style="margin:14px 0 0;font-size:14px"><strong>DigiStayBook is chosen</strong> when a host wants the house-manual benefit and the shared-memory benefit from one printed placard, with moderation and deletion handled for them, at a price low enough not to require a decision.</p>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>3.2 · Existing alternatives</span></div>
+</section>
+
+<!-- ══ POSITIONING ══ -->
+<section class="slide" data-title="Positioning">
+  <p class="eyebrow">3.3 · Positioning <span class="sec">/ one sentence, four approved messages</span></p>
+  <h2>The positioning statement</h2>
+  <div class="slide-body">
+    <div class="card raised" style="border-left:4px solid var(--stamp-600);padding:22px 26px;margin-bottom:18px">
+      <p style="font-family:var(--font-display);font-size:25px;line-height:1.38;color:var(--ink-900);margin:0">For short-term rental hosts who want a stay that feels personal rather than automated, DigiStayBook is a per-property digital guestbook that turns one printed QR placard into a living wall of guest memories and always-available house information — with automated content screening, so the host gets the warmth without the work.</p>
+    </div>
+    <div class="cols c2">
+      <div class="card ok">
+        <h3>Approved host-facing messages</h3>
+        <ul class="plain yes tight">
+          <li>"Create a more memorable guest experience."</li>
+          <li>"Help every stay feel personal, welcoming and well supported."</li>
+          <li>"A better guest experience <em>may</em> encourage more positive feedback on the official booking platform."</li>
+          <li>"DigiStayBook may be deductible as a business expense. Eligibility depends on your circumstances and business use; seek tax advice."</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Not a…</h3>
+        <p>DigiStayBook is not positioned as a social network, a photo-storage service, a property-management system or a communication platform.</p>
+        <p style="margin-bottom:0"><strong>The test for every claim</strong> comes from the brand values: say only what is true; make the guest's minute count; never create work for the host; delete what is no longer needed.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>3.3 · Positioning</span></div>
+</section>
+
+<!-- ══ FORBIDDEN CLAIMS ══ -->
+<section class="slide" data-title="Claims never made">
+  <p class="eyebrow">3.3 · Positioning <span class="sec">/ the compliance boundary</span></p>
+  <h2>Claims the business will not make, in any channel</h2>
+  <p class="sub">This list binds marketing copy, the pricing page, checkout microcopy, every email, every support reply and every partner's material. A partner may not make a claim the business itself is forbidden to make.</p>
+  <div class="slide-body">
+    <div class="cols c2">
+      <div class="card err">
+        <ul class="plain no tight" style="margin:0">
+          <li>Any promise of a particular <strong>star rating</strong>, a guaranteed increase in review volume, higher revenue, or preferential treatment by a booking provider.</li>
+          <li>Any promise of <strong>reduced property damage</strong>, improved cleanliness, rule compliance or reduced support demand. These may follow from a better stay; none is guaranteed.</li>
+          <li>Any claim of <strong>endorsement by, integration with or affiliation with</strong> a booking provider.</li>
+        </ul>
+      </div>
+      <div class="card err">
+        <ul class="plain no tight" style="margin:0">
+          <li>Any unsubstantiated <strong>conversion figure</strong> for the "Powered by DigiStayBook" wall link.</li>
+          <li>Any <strong>tax advice</strong> beyond the exact approved wording.</li>
+          <li>Any statement that <strong>automated moderation guarantees safe content</strong>. Screening is a risk-control tool, not a guarantee, and is never described as one.</li>
+          <li>Any promise of <strong>unlimited storage, indefinite retention, original-quality media or guaranteed uptime</strong> that has not been implemented, costed and substantiated.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>3.3 · Claims boundary</span></div>
+</section>
+
+<!-- ══ PRICING ══ -->
+<section class="slide" data-title="Plans & pricing">
+  <p class="eyebrow">4.1 · Plans and pricing <span class="sec">/ no feature-gated tier</span></p>
+  <h2>Both plans include the complete platform</h2>
+  <p class="sub">The only difference is billing frequency and price. Billing is per activated property — a host with four properties holds four subscriptions and manages all four from one dashboard.</p>
+  <div class="slide-body">
+    <table class="sm zebra">
+      <thead><tr><th style="width:16%">Offer</th><th style="width:20%">Price</th><th style="width:32%">Included service</th><th>Limits and terms</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Free trial</strong></td><td>No charge for <strong>28 days</strong></td><td>The complete platform for the first activated property, including live routing links and the printed QR kit.</td><td>First activated property only. A valid payment method is required to start. Converts automatically to the selected plan at the end of day 28 unless cancelled.</td></tr>
+        <tr><td><strong>Monthly</strong></td><td>~<strong>USD $10</strong> per property per month, shown in local currency</td><td>Guest Wall, house-manual pinning, themes and layouts, unlimited guest uploads, QR kit, dashboard moderation, private feedback inbox, takedown queue.</td><td>Renews monthly at the locked-in localised rate. Cancel any time in the dashboard; access runs to the end of the paid cycle.</td></tr>
+        <tr><td><strong>Annual</strong></td><td>~<strong>USD $100</strong> per property per year, shown in local currency</td><td>Identical to the monthly plan.</td><td>Equivalent to two months free. Charged in full at the end of the trial, then annually. A renewal notice is sent 14 days before each annual renewal.</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px;color:var(--ink-500);margin:12px 0 14px">Prices render in the host's point-of-sale currency (AUD, GBP, EUR, USD), rounded cleanly to the nearest whole unit. Stripe promotional codes are supported — not marketed at launch, but the field must exist, not least so a 100% discount code can activate a property in production for internal verification without taking a real payment.</p>
+    <div class="cols c2">
+      <div class="card warn" style="padding:11px 14px"><h3 style="font-size:13px"><span class="pill warn">Confirm</span> <span class="ref">C-07</span> &nbsp;Exact price per currency, Stripe price objects, GST treatment</h3><p style="font-size:12px;margin:0">Checkout microcopy, receipts, the pricing page and the annual renewal notice must all show the same figure.</p></div>
+      <div class="card warn" style="padding:11px 14px"><h3 style="font-size:13px"><span class="pill warn">Confirm</span> <span class="ref">C-08</span> &nbsp;"Unlimited guest uploads" has no ceiling behind it</h3><p style="font-size:12px;margin:0">Cloud Storage is charged per GB stored and transferred. Confirm a stated limit, or accept that one heavily used property can consume margin without bound.</p></div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>4.1 · Plans and pricing</span></div>
+</section>
+
+<!-- ══ REVENUE MODEL ══ -->
+<section class="slide" data-title="Revenue model">
+  <p class="eyebrow">4.2 · Revenue model <span class="sec">/ where the commercial boundary sits</span></p>
+  <h2>The guardrail is at activation, not at sign-up</h2>
+  <div class="slide-body">
+    <div class="cols c2">
+      <div class="card ok">
+        <h3>Free, before paying</h3>
+        <p>A host may create an account, create a property, use the pre-purchase sandbox, upload custom photos, write welcome notes and preview every theme — all without paying.</p>
+      </div>
+      <div class="card err">
+        <h3>Locked until activated</h3>
+        <p>The <strong>live routing URL</strong> and the <strong>downloadable high-resolution QR kit</strong> stay locked until a valid payment method is authorised — or a 100% discount code is confirmed.</p>
+      </div>
+    </div>
+    <div class="card sage" style="margin-top:16px">
+      <p style="margin:0"><strong>The host can see the whole product before paying, but nothing reaches a guest until the property is activated.</strong></p>
+    </div>
+    <div class="cols c2" style="margin-top:16px">
+      <div class="card">
+        <h3>How money moves</h3>
+        <p>Stripe Checkout collects payment, Stripe Billing manages the recurring subscription and the trial, and the Stripe Customer Portal handles self-service payment-method changes. The product never handles raw card details.</p>
+        <p style="margin-bottom:0"><strong>Entitlements change only when a signature-verified Stripe webhook is processed.</strong> Nothing in the client grants access.</p>
+      </div>
+      <div class="card accent">
+        <h3>Required checkout microcopy</h3>
+        <p>The trial end date is calculated and shown as a <em>date</em>, not as "in 28 days", beside a required consent checkbox:</p>
+        <p style="background:var(--paper-000);border:1px solid var(--rule);border-radius:4px;padding:10px 12px;font-size:13px;margin-bottom:0">"I understand I will be billed <span class="tok">${Price}</span> on <span class="tok">{Date}</span> if I do not cancel."</p>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>4.2 · Revenue model</span></div>
+</section>
+
+<!-- ══ COMMERCIAL PRINCIPLES ══ -->
+<section class="slide" data-title="Commercial principles">
+  <p class="eyebrow">4.3 · Commercial principles <span class="sec">/ nine rules that bind every surface</span></p>
+  <h2>Commercial principles</h2>
+  <div class="slide-body">
+    <div class="cols c2">
+      <div class="stack">
+        <div class="card"><p style="margin:0"><strong>One offer, one wording, one price.</strong> Marketing, the pricing page, checkout, dashboard entitlements and the customer policies describe the same offer, in the same words, at the same price.</p></div>
+        <div class="card"><p style="margin:0"><strong>Limits are visible before they are reached</strong>, and the exact reason is shown when an action is blocked.</p></div>
+        <div class="card"><p style="margin:0"><strong>Cancellation is self-service in the dashboard and nowhere else.</strong> Requests are not accepted by email or contact form, because neither route can verify account ownership.</p></div>
+        <div class="card"><p style="margin:0"><strong>On cancellation the host keeps full access</strong> to the wall and QR code until the end of the paid cycle or trial, and is told the exact date access ends and what happens to the content afterwards.</p></div>
+      </div>
+      <div class="stack">
+        <div class="card"><p style="margin:0"><strong>Charges are non-refundable except where required by law</strong>, including a major failure under the Australian Consumer Law. Statutory rights are never described as a goodwill concession.</p></div>
+        <div class="card"><p style="margin:0"><strong>Goodwill refunds outside the policy</strong> require a recorded decision by a named owner and are reconciled against Stripe.</p></div>
+        <div class="card"><p style="margin:0"><strong>No promise that has not been implemented, costed and substantiated.</strong> Not unlimited storage, indefinite retention, original-quality media, guaranteed uptime, or any review, revenue or property outcome.</p></div>
+        <div class="card accent"><p style="margin:0"><strong>A failed payment never produces a broken link for a guest standing in the property.</strong> It produces a designed fallback page. Protecting the host's appearance in front of their own guests is a commercial rule, not a courtesy.</p></div>
+      </div>
+    </div>
+    <div class="card warn" style="margin-top:14px;padding:10px 14px"><p style="font-size:12.5px;margin:0"><span class="pill warn">Confirm</span> <span class="ref">C-09</span> &nbsp;<strong>Refund authority is undefined.</strong> Confirm who may approve a goodwill refund, up to what value, and where the decision is recorded.</p></div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>4.3 · Commercial principles</span></div>
+</section>
+
+<!-- ══ DIVIDER 2 ══ -->
+<section class="slide divider" data-title="2 · The operating plan">
+  <p class="eyebrow">Part two</p>
+  <h1>The operating plan</h1>
+  <p class="sub">Guest content, moderation, the host dashboard, billing, support, incidents and retention.</p>
+  <p class="foot-note">The service is designed to run itself. Onboarding, billing, screening, email, retention and reporting are automated. Human involvement is confined to support exceptions, complaints, refunds, serious incidents and escalated content decisions — and each of those has a defined route rather than an inbox.</p>
+  <div class="num">5</div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>Section 5</span></div>
+</section>
+
+<!-- ══ GUEST CONTENT ══ -->
+<section class="slide" data-title="Guest content">
+  <p class="eyebrow">5.3 · Guest content <span class="sec">/ what a guest may add, and on what terms</span></p>
+  <h2>Reached only by scanning the placard</h2>
+  <p class="sub">Mobile-first, no account, and nothing is asked about the guest beyond what the contribution itself contains.</p>
+  <div class="slide-body">
+    <div class="card accent" style="margin-bottom:14px">
+      <h3>The mandatory consent checkbox, immediately above submit</h3>
+      <p style="font-size:14.5px;color:var(--ink-900);margin-bottom:8px">"I agree to the Guest Terms and Privacy Policy, consent to this image being displayed publicly, and confirm I am over 16 years of age."</p>
+      <p style="margin-bottom:0">Recorded with a timestamp, the exact wording and its version, and a pseudonymous post and session reference — without creating an account and without duplicating the photograph into the consent record.</p>
+    </div>
+    <table class="sm zebra">
+      <thead><tr><th style="width:22%">Content type</th><th>Operating treatment</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Text (post message)</strong></td><td>Length limits, duplicate-submission prevention, and automated screening for profanity, harassment, threats, hate, sexual content, personal information and competitor or malicious URLs. Strongly negative sentiment routes to host review rather than publishing silently.</td></tr>
+        <tr><td><strong>Images</strong></td><td>Up to <strong>ten per post</strong>. File type, size and count validated before processing; safe decoding; upload progress shown; recoverable errors explained. Stored first in a private quarantine bucket under the owning property path, screened, and moved to public storage only on approval.</td></tr>
+        <tr><td><strong>Private feedback</strong> (text only)</td><td>One-way, never published, never triggers a host reply channel. Screened for abuse but not for publication. Carries explicit microcopy: it is private, not monitored in real time, will not receive a reply, and is not the route for in-stay assistance.</td></tr>
+        <tr><td><strong>Audio and video</strong></td><td>Not accepted in the first release.</td></tr>
+      </tbody>
+    </table>
+    <div class="cols c2" style="margin-top:12px">
+      <div class="card sage" style="padding:11px 14px"><p style="font-size:12.5px;margin:0"><strong>Guests keep instant self-service control.</strong> They can edit the text or delete a post at any time within their session, without host intervention. Deleting hides the post immediately and schedules deletion.</p></div>
+      <div class="card err" style="padding:11px 14px"><p style="font-size:12.5px;margin:0"><span class="pill err">Action</span> <span class="ref">A-01</span> &nbsp;<strong>Guest content is not yet written through a server-controlled endpoint with App Check.</strong> Until it exists and is proved in the emulator, no guest can contribute at all. This is the first blocking item in the build.</p></div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>5.3 · Guest content</span></div>
+</section>
+
+<!-- ══ MODERATION ARCHITECTURE ══ -->
+<section class="slide" data-title="Moderation: quarantine-first">
+  <p class="eyebrow">5.4 · Content moderation <span class="sec">/ quarantine-first architecture</span></p>
+  <h2>Nothing reaches a public wall unscreened</h2>
+  <p class="sub">On submission, files upload to a private, non-public bucket and the post is assigned a processing status. While the guest sees a brief optimistic loading state, a dual-layer server-side scan runs: image moderation and concurrent text filtering — string matching for profanity, sentiment analysis and URL detection.</p>
+  <div class="slide-body">
+    <table class="sm zebra">
+      <thead><tr><th style="width:23%">Scan result</th><th style="width:15%">Post status</th><th style="width:29%">What the guest sees</th><th>What happens next</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Clear</strong> — no flags</td><td><span class="pill ok">Published</span></td><td>The post appears on the wall immediately.</td><td>Assets move to public storage. The quarantine copy is deleted within 24 hours of approved publication.</td></tr>
+        <tr><td><strong>Standard flag</strong> — NSFW or racy imagery, profanity, strongly negative sentiment, competitor or external URLs</td><td><span class="pill warn">Pending host approval</span></td><td>"Memory added! Your host is reviewing this post to add it to the public wall."</td><td>Stays in private quarantine and enters the host's review queue. The host receives a moderation alert. Standard curation is the host's responsibility.</td></tr>
+        <tr><td><strong>Critical flag</strong> — explicit violence, severe hate speech, or material indicating serious legal liability</td><td><span class="pill err">Admin escalation</span></td><td>The same neutral pending state. The guest is <strong>not</strong> told an internal escalation exists.</td><td>The host is bypassed entirely. The post is blocked from the public wall and routed to the restricted internal Trust &amp; Safety queue.</td></tr>
+      </tbody>
+    </table>
+    <div class="cols c3" style="margin-top:14px">
+      <div class="card err" style="padding:12px 14px"><h3 style="font-size:13px">Fail-closed</h3><p style="font-size:12px;margin:0">If the moderation provider is unavailable, new content stays pending and does not appear publicly. It is never published optimistically and reviewed later.</p></div>
+      <div class="card sage" style="padding:12px 14px"><h3 style="font-size:13px">No biometrics — a hard constraint</h3><p style="font-size:12px;margin:0">No biometric data and no facial-recognition template is generated, extracted or stored from a guest image. Driven by biometric privacy law, not preference.</p></div>
+      <div class="card" style="padding:12px 14px"><h3 style="font-size:13px">Why the pending state matters</h3><p style="font-size:12px;margin:0">Without it, a guest caught by a false positive assumes the app is broken and uploads the same images repeatedly.</p></div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>5.4 · Moderation</span></div>
+</section>
+
+<!-- ══ CONTENT CONCERNS ══ -->
+<section class="slide" data-title="Content concerns & review cadence">
+  <p class="eyebrow">5.4 · Content moderation <span class="sec">/ default responses and internal cadence</span></p>
+  <h2>Default response per concern</h2>
+  <div class="slide-body">
+    <div class="cols c-1-2">
+      <div>
+        <table class="xs zebra">
+          <thead><tr><th style="width:52%">Concern</th><th>Default response</th></tr></thead>
+          <tbody>
+            <tr><td>Harassment or bullying</td><td>Hold for host review; remove targeted abuse.</td></tr>
+            <tr><td>Nudity or sexual material</td><td>Hold. Explicit content is rejected — a guest wall is displayed in a family home.</td></tr>
+            <tr><td>Obscene or highly offensive material</td><td>Hold for host review.</td></tr>
+            <tr><td>Threats or violence</td><td>Hold; escalate credible or severe cases internally.</td></tr>
+            <tr><td>Hate directed at protected characteristics</td><td>Hold; escalate severe cases; reject on confirmation.</td></tr>
+            <tr><td>Spam, scams, competitor promotion, malicious links</td><td>Hold or reject.</td></tr>
+            <tr><td>Personal or sensitive third-party information</td><td>Hold before public display.</td></tr>
+            <tr><td>Illegal or clearly dangerous material</td><td>Lock down immediately, route to internal Trust &amp; Safety, follow the documented incident and legal process. <strong>Mandatory authority reporting requires manual human verification — never an automated report.</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="stack">
+        <div class="card accent"><h3>The daily sweep</h3><p>Operations reviews the critical escalation queue <strong>once per day</strong>. That queue holds only AI-flagged severe cases and host-initiated escalations — never ordinary curation. Each case is resolved by restricting content and session where proportionate, retaining a restricted case only for the approved review period, deleting securely when review and legal-retention needs end, or downgrading a false positive to host review.</p></div>
+        <div class="card accent"><h3>Monthly tuning</h3><p>A random sample of <strong>50 standard AI-flagged posts</strong> each month. Over-aggressive filtering creates guest friction, so where the false-positive rate exceeds the accepted margin, the image-moderation confidence threshold is lowered. Unresolved critical cases are reviewed at least every 30 days.</p></div>
+        <div class="card"><h3>Audit without copying media</h3><p>Every moderation action records the previous status, the new status, the actor, the time and the reason — <strong>without copying the reported media into the audit event</strong>. Hosts are notified immediately when a post is hidden pending review; other notices are batched rather than one email per held item.</p></div>
+        <div class="card warn" style="padding:10px 13px"><p style="font-size:12px;margin:0"><span class="pill warn">Confirm</span> <span class="ref">C-12</span> <span class="ref">C-13</span> &nbsp;<strong>No moderation provider has been selected</strong>, and the standard/critical thresholds and accepted false-positive rate are undefined. The choice determines cost per image, latency inside the guest's loading state, available thresholds, data terms and processing location.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>5.4 · Moderation</span></div>
+</section>
+
+<!-- ══ TAKEDOWN STATE MODEL ══ -->
+<section class="slide" data-title="Report & takedown state model">
+  <p class="eyebrow">5.4 · Content moderation <span class="sec">/ reporting and takedown state model</span></p>
+  <h2>One transactional server endpoint governs visibility</h2>
+  <p class="sub">Client-side actions and direct database writes can never hide, restore or delete another guest's post.</p>
+  <div class="slide-body">
+    <table class="sm zebra">
+      <thead><tr><th style="width:24%">State</th><th style="width:36%">Cause</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td><code>self_delete_scheduled</code></td><td>An authenticated anonymous guest session deletes its own post.</td><td>Hidden immediately; deletion scheduled; no host verification required.</td></tr>
+        <tr><td><code>hidden_pending_review</code></td><td>The server accepts an ordinary report from a reporter who is not in an abuse state.</td><td>Hidden immediately; the host is notified; the 14-day privacy SLA starts where applicable.</td></tr>
+        <tr><td><code>suspected_abuse_no_visibility_change</code></td><td>The reporter or the wall circuit breaker is active.</td><td>The report is recorded and routed internally. <strong>Visibility is unchanged.</strong> The host is not told a post was hidden, because it was not.</td></tr>
+        <tr><td><code>confirmed_delete</code></td><td>The host, or Privacy &amp; Safety Operations, confirms deletion.</td><td>Active copies are deleted within the retention-schedule deadline.</td></tr>
+        <tr><td><code>rejected_restored</code></td><td>A report is rejected on review and no other open report or safety restriction applies.</td><td>The post is restored and the outcome is added to the audit trail. A host rejection alone does not mark a reporter as malicious.</td></tr>
+      </tbody>
+    </table>
+    <div class="cols c2" style="margin-top:14px">
+      <div class="card sage"><h3>Nothing is silently dropped</h3><p style="margin:0">Every syntactically valid report receives the same neutral acknowledgement — <strong>"Report received. It will be reviewed."</strong> The client never claims deletion was approved and never reveals whether visibility changed. Reports received during a circuit-breaker state are logged, acknowledged, routed for internal review and left visible.</p></div>
+      <div class="card"><h3>What each report transaction records</h3><p style="margin:0">Report ID, post and wall IDs, pseudonymous reporter key, reason, App Check result, threshold counters, previous and new visibility, status, timestamps and resolver — without copying the reported media into the audit event.</p></div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>5.4 · Takedown state model</span></div>
+</section>
+
+<!-- ══ CIRCUIT BREAKERS ══ -->
+<section class="slide" data-title="Anti-abuse circuit breakers">
+  <p class="eyebrow">5.4 · Content moderation <span class="sec">/ anti-abuse circuit breakers</span></p>
+  <h2>Stopping report-driven censorship of a wall</h2>
+  <p class="sub">All reports go through a server-controlled endpoint with Firebase App Check, transaction-safe post and report updates, same-session and same-post deduplication for 24 hours, and short-lived pseudonymous rate-limit keys.</p>
+  <div class="slide-body">
+    <div class="cols c3">
+      <div class="card raised" style="border-left:3px solid var(--warn)">
+        <h3>Reporter breaker</h3>
+        <p>A reporter enters a <strong>24-hour suspected-abuse cooldown</strong> after reporting 3 distinct posts on one wall within 10 minutes, or 5 distinct posts within 24 hours.</p>
+      </div>
+      <div class="card raised" style="border-left:3px solid var(--err)">
+        <h3>Wall-level breaker</h3>
+        <p>Trips when <strong>5 distinct posts are reported within 10 minutes</strong> across related reporter signals. It pauses new report-driven hides for that wall, alerts Privacy &amp; Safety Operations, and leaves already-hidden posts in review. An internal reviewer can still restrict a credible urgent safety report while the breaker is active.</p>
+      </div>
+      <div class="card raised" style="border-left:3px solid var(--sage-700)">
+        <h3>Confirmed malicious reporting</h3>
+        <p>Two internally confirmed cases within 90 days may create a proportionate restriction lasting <strong>no more than 90 days</strong>, linked only to a keyed hash of the existing Firebase anonymous or account UID.</p>
+      </div>
+    </div>
+    <div class="cols c2" style="margin-top:18px">
+      <div class="card sage"><h3>No new identity is ever created</h3><p style="margin:0">No cross-device identity is created, and a cleared browser session cannot be correlated through an invented device fingerprint. Restrictions expire automatically.</p></div>
+      <div class="card err"><h3><span class="pill err">Action</span> <span class="ref">A-04</span> &nbsp;App Check is not yet enforced</h3><p style="margin:0">Until App Check is enforced on the contribution and reporting endpoints, <strong>every circuit breaker on this slide is bypassable.</strong></p></div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>5.4 · Circuit breakers</span></div>
+</section>
+
+<!-- ══ DASHBOARD ══ -->
+<section class="slide" data-title="Host dashboard">
+  <p class="eyebrow">5.5 · Host dashboard <span class="sec">/ six areas</span></p>
+  <h2>Everything the host manages, in one place</h2>
+  <div class="slide-body">
+    <div class="cols c3">
+      <div class="card accent"><h3>Overview</h3><p>Every property with its state — draft, sandbox, trial, active, grace period, suspended, cancelled or dormant — setup progress, and the next useful action for each.</p></div>
+      <div class="card accent"><h3>Guest access</h3><p>The QR kit (print, download, email, copy link), the live routing URL, and the host's guest instructions and writing prompt. Locked with a clear reason until the property is activated.</p></div>
+      <div class="card accent"><h3>Content</h3><p>Approved, held and hidden views with pin, feature, hide, delete and upload actions; the host's own featured photos; and a dedicated <strong>Privacy &amp; Takedown Requests</strong> queue with one-click Confirm Permanent Deletion and a reasoned rejection path.</p></div>
+      <div class="card accent"><h3>Private feedback</h3><p>A separate inbox for one-way guest feedback, visibly detached from the public wall and from any reply mechanism.</p></div>
+      <div class="card accent"><h3>Display</h3><p>Theme, layout (mosaic, spotlight), pinned-content ordering, visibility toggles for guest photos and guest messages, and live preview.</p></div>
+      <div class="card accent"><h3>Billing and account</h3><p>Plan, trial end date, invoices, payment method, renewal date, coupon entry, one-click cancellation, retention and deletion dates, and account security actions.</p></div>
+    </div>
+    <div class="card err" style="margin-top:16px">
+      <h3><span class="pill err">Action</span> <span class="ref">A-07</span> &nbsp;There is no export function anywhere in this plan</h3>
+      <p style="margin:0">Yet the retention schedule tells a host their content will be deleted after a dormancy period, and the cancellation email tells them the same. A host must be able to take their wall with them before it is deleted. Decide the format and add it to the dashboard, or the deletion schedule destroys customer content with no route to recover it.</p>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>5.5 · Host dashboard</span></div>
+</section>
+
+<!-- ══ DIVIDER 3 — EMAILS ══ -->
+<section class="slide divider" data-title="3 · Every email that gets delivered">
+  <p class="eyebrow">Part three</p>
+  <h1>Every email<br>that gets delivered</h1>
+  <p class="sub">All 24 messages — trigger, classification, subject line and full approved body.</p>
+  <p class="foot-note">Every outbound email is classified before it is implemented. <strong>Transactional</strong> messages are limited to what is necessary to create, secure, operate or bill the account or property, and must contain no promotional copy. <strong>Marketing</strong> messages require recorded express consent and a successful central-suppression check immediately before sending.</p>
+  <div class="num">5.6</div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>Section 5.6 &amp; Appendix A.1</span></div>
+</section>
+
+<!-- ══ EMAIL INVENTORY — TRANSACTIONAL ══ -->
+<section class="slide" data-title="Email inventory: transactional">
+  <p class="eyebrow">5.6 · Host emails <span class="sec">/ inventory, part 1 of 2</span></p>
+  <h2>Transactional messages <span class="pill tx" style="vertical-align:6px">no consent required</span></h2>
+  <p class="sub">Necessary to create, secure, operate or bill the account or property. Marketing consent and unsubscribe controls must <strong>never</strong> prevent delivery of an essential account, purchase, security or safety message.</p>
+  <div class="slide-body">
+    <table class="xs zebra">
+      <thead><tr><th style="width:24%">Email</th><th style="width:30%">Trigger</th><th>Content boundary</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Account creation confirmation</strong></td><td>Host account created</td><td>Confirm the account and link to the secure dashboard. No trial or sales call to action.</td></tr>
+        <tr><td><strong>Property activation &amp; QR delivery</strong></td><td>Checkout completed and property activated — every time, whether it is the first property or the fiftieth</td><td>Deliver the QR kit and essential setup information only.</td></tr>
+        <tr><td><strong>Moderation alert — AI flag</strong></td><td>The scan routes a post to pending host approval</td><td>Describe the event and the required action. <strong>Never attach the flagged media.</strong></td></tr>
+        <tr><td><strong>Moderation alert — post hidden after guest report</strong></td><td>The server sets <code>hidden_pending_review</code>. Tapping Report is not itself the trigger.</td><td>State that the post was hidden and what the host must do within 14 days.</td></tr>
+        <tr><td><strong>Circuit-breaker alert</strong> <span class="pill int">internal</span></td><td><code>suspected_abuse_no_visibility_change</code></td><td>Sent to Privacy &amp; Safety Operations, never to the host. Sending a host a hidden-post alert here would be false.</td></tr>
+        <tr><td><strong>Trial expiry notice</strong></td><td>Before the end of the 28-day trial</td><td>State the end date, the plan, the amount and the charge date.</td></tr>
+        <tr><td><strong>Monthly receipt</strong></td><td>Immediately after each billing cycle</td><td>Itemised invoice. No tax advice, no promotional copy.</td></tr>
+        <tr><td><strong>Card expiring soon</strong></td><td>Stripe reports the card on file expires within 30 days</td><td>Billing facts and a secure update route.</td></tr>
+        <tr><td><strong>Failed payment</strong></td><td>Verified payment failure</td><td>State the 14-day grace period, the suspension date and the secure update route.</td></tr>
+        <tr><td><strong>Service suspension</strong></td><td>The 14-day grace period ends</td><td>Confirm QR deactivation, describe the fallback page, and give the reactivation route.</td></tr>
+        <tr><td><strong>Annual renewal notice</strong></td><td>14 days before an annual subscription renews</td><td>Date, amount and billing link.</td></tr>
+        <tr><td><strong>Cancellation confirmation</strong></td><td>Cancellation completed in the dashboard</td><td>Effective date, access end date and what happens to the content.</td></tr>
+        <tr><td><strong>Security</strong> — password reset, password changed, email change verification, new-device login</td><td>The corresponding account-security event</td><td>Security and recovery content only.</td></tr>
+        <tr><td><strong>Affiliate payout notice</strong> <span class="pill int">post-MVP</span></td><td>A commission is earned</td><td>Payout facts only, with no encouragement to promote further.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>5.6 · Transactional inventory</span></div>
+</section>
+
+<!-- ══ EMAIL INVENTORY — MARKETING ══ -->
+<section class="slide" data-title="Email inventory: marketing">
+  <p class="eyebrow">5.6 · Host emails <span class="sec">/ inventory, part 2 of 2</span></p>
+  <h2>Marketing messages <span class="pill mk" style="vertical-align:6px">consent + suppression check required</span></h2>
+  <div class="slide-body">
+    <table class="sm zebra" style="margin-bottom:16px">
+      <thead><tr><th style="width:28%">Sequence</th><th style="width:32%">Trigger</th><th>Content boundary</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Onboarding tips</strong> beyond essential setup</td><td>Post-signup sequence</td><td>Consent plus send-time suppression check. May explain benefits, never absolute outcomes.</td></tr>
+        <tr><td><strong>Cart abandonment</strong> (1 hour, 24 hours, 3 days, day 23)</td><td>A property is named but not activated</td><td>Consent plus suppression check on <em>every</em> message. Sender, contact and unsubscribe required.</td></tr>
+        <tr><td><strong>Activation nudge</strong></td><td>7 days after activation with an empty wall</td><td>As above.</td></tr>
+        <tr><td><strong>ROI and engagement milestones</strong> (10, 50, 100 scans; 1st, 10th, 50th memory)</td><td>The counter reaches the milestone</td><td>As above. Metrics are reported as counts and must <strong>never</strong> be presented as proof of an outcome.</td></tr>
+        <tr><td><strong>90-day win-back</strong></td><td>90 days into the dormant-property period after cancellation</td><td>Consent, dormant-property eligibility and suppression check. Never targets a draft deleted at day 30.</td></tr>
+        <tr><td><strong>Affiliate recruitment / campaign updates</strong> <span class="pill int">post-MVP</span></td><td>Campaign</td><td>Recorded affiliate marketing consent plus suppression check.</td></tr>
+      </tbody>
+    </table>
+    <div class="card err">
+      <h3><span class="pill err">Action</span> <span class="ref">A-06</span> &nbsp;The central marketing-preference and suppression service does not exist</h3>
+      <p style="margin:0">Until it does, <strong>no marketing sequence may be enabled at all</strong> — the cart-abandonment, activation-nudge, milestone and win-back sequences on this slide are unlawful to send without it.</p>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>5.6 · Marketing inventory</span></div>
+</section>
+
+<!-- ══ CONSENT RULES ══ -->
+<section class="slide" data-title="Consent, suppression & fail-closed">
+  <p class="eyebrow">5.6 · Host emails <span class="sec">/ the rules behind every send</span></p>
+  <h2>Consent is never inferred</h2>
+  <div class="slide-body">
+    <div class="cols c2">
+      <div class="stack">
+        <div class="card accent"><h3>Never inferred from account creation or the Terms</h3><p>The registration form carries a clear, <strong>un-ticked</strong> checkbox. The consent event stores the host UID, the normalised address, a UTC timestamp, the form or source identifier, the exact consent wording and version, and the resulting status.</p></div>
+        <div class="card accent"><h3>Every commercial message carries</h3><p>Clear DigiStayBook sender identification, valid contact details, and a functional one-click unsubscribe that remains available for at least <strong>30 days</strong>. Unsubscribe requests update the central suppression state within five working days, with immediate suppression as the operational target.</p></div>
+      </div>
+      <div class="stack">
+        <div class="card sage"><h3>The preference service fails closed</h3><p>Every promotional sequence queries it at send time and <strong>fails closed</strong> if consent or suppression status cannot be confirmed. Account, property or content deletion must not remove the minimum suppression value needed to prevent future marketing. Verified re-consent creates a new versioned consent event rather than overwriting a historical withdrawal.</p></div>
+        <div class="card err"><h3>Tests that must pass before any sequence is enabled</h3><p style="margin-bottom:6px">Automated tests must prove that each of these <em>prevents</em> the send:</p><ul class="plain no tight" style="margin:0"><li>An unticked consent box</li><li>A withdrawn consent</li><li>A suppression record</li><li>A missing preference-service response</li><li>A deleted account</li></ul><p style="margin:8px 0 0">— and that transactional templates contain <strong>no configured promotional block</strong>.</p></div>
+      </div>
+    </div>
+    <div class="card warn" style="margin-top:14px;padding:11px 14px"><p style="font-size:12.5px;margin:0"><span class="pill warn">Confirm</span> <span class="ref">C-14</span> &nbsp;<strong>No email provider has been selected.</strong> The portfolio default is Resend, whose free tier allows 3,000 messages per month capped at 100 per day — a cap a moderation-alert burst across several properties could reach. Confirm the provider and plan, the sending domain, and SPF, DKIM and DMARC authentication before any transactional email is enabled.</p></div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>5.6 · Consent and suppression</span></div>
+</section>
+
+<!-- ══ EMAIL 01 ══ -->
+<section class="slide" data-title="Email 01 · Account creation">
+  <p class="eyebrow">A.1.1 · Core host lifecycle <span class="sec">/ email 1 of 14</span></p>
+  <h2 style="margin-bottom:16px">Account creation confirmation</h2>
+  <div class="slide-body">
+    <div class="mailwrap">
+      <div class="mailmeta">
+        <div class="row" style="border:0;padding:0"><div class="k">Classification</div><div class="v"><span class="pill tx">Transactional</span></div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v">Host signs up by email or Google</div></div>
+        <div class="row"><div class="k">Recipient</div><div class="v">The verified host account address</div></div>
+        <div class="row"><div class="k">Placeholders</div><div class="v"><span class="tok">{{Host_Name}}</span> <span class="tok">{{Host_Email}}</span></div></div>
+        <div class="row"><div class="k">Content boundary</div><div class="v">Contains <strong>no</strong> trial, upgrade or promotional call to action. Onboarding promotions are a separate marketing sequence requiring consent.</div></div>
+      </div>
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span>Preview</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook</b> &lt;no-reply@digistaybook.com&gt; · to <b>{{Host_Email}}</b></div>
+          <div class="subj">Your DigiStayBook account is ready</div>
+        </div>
+        <div class="body">
+          <p>Hi <span class="tok">{{Host_Name}}</span>,</p>
+          <p>Your DigiStayBook account for <span class="tok">{{Host_Email}}</span> has been created successfully.</p>
+          <p><span class="cta">Open Secure Dashboard</span></p>
+          <p>If you did not create this account, use the account-security link or contact DigiStayBook support.</p>
+        </div>
+        <div class="foot">DigiStayBook · codebertcreations · Victoria, Australia — Transactional message. No unsubscribe link: this message is essential to your account.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.1 · Account creation</span></div>
+</section>
+
+<!-- ══ EMAIL 02 ══ -->
+<section class="slide" data-title="Email 02 · QR kit delivery">
+  <p class="eyebrow">A.1.1 · Core host lifecycle <span class="sec">/ email 2 of 14</span></p>
+  <h2 style="margin-bottom:16px">Property activation — QR kit delivery</h2>
+  <div class="slide-body">
+    <div class="mailwrap">
+      <div class="mailmeta">
+        <div class="row" style="border:0;padding:0"><div class="k">Classification</div><div class="v"><span class="pill tx">Transactional</span></div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v">Checkout completed and property activated — <strong>every property</strong>, not only the first</div></div>
+        <div class="row"><div class="k">Attachment</div><div class="v">High-resolution QR code kit</div></div>
+        <div class="row"><div class="k">Placeholders</div><div class="v"><span class="tok">{{Host_Name}}</span> <span class="tok">{{Property_Name}}</span></div></div>
+        <div class="row"><div class="k">Note</div><div class="v">Carries the anti-blank-wall instruction: seed a foundational post before the placard goes out.</div></div>
+      </div>
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span>Preview</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook</b> &lt;no-reply@digistaybook.com&gt; · 1 attachment</div>
+          <div class="subj">{{Property_Name}} is live — here is your QR kit</div>
+        </div>
+        <div class="body">
+          <p>Hi <span class="tok">{{Host_Name}}</span>,</p>
+          <p><span class="tok">{{Property_Name}}</span> is officially active. Attached is your high-resolution QR code kit. Print the placard and place it where guests will see it.</p>
+          <p>Before you display the QR code, make sure at least one foundational post is on the wall so the first guest to scan it does not find an empty page.</p>
+          <p><span class="cta">Go to Property Dashboard</span></p>
+        </div>
+        <div class="foot">DigiStayBook · codebertcreations · Victoria, Australia — Transactional message.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.1 · QR kit delivery</span></div>
+</section>
+
+<!-- ══ EMAIL 03 ══ -->
+<section class="slide" data-title="Email 03 · Trial expiry">
+  <p class="eyebrow">A.1.1 · Core host lifecycle <span class="sec">/ email 3 of 14</span></p>
+  <h2 style="margin-bottom:16px">Trial expiry notice</h2>
+  <div class="slide-body">
+    <div class="mailwrap">
+      <div class="mailmeta">
+        <div class="row" style="border:0;padding:0"><div class="k">Classification</div><div class="v"><span class="pill tx">Transactional</span></div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v">Before the end of the 28-day trial</div></div>
+        <div class="row"><div class="k">Must state</div><div class="v">The end date, the plan, the exact amount and the charge date — as dates, not as "in 28 days"</div></div>
+        <div class="row"><div class="k">Placeholders</div><div class="v"><span class="tok">{{Property_Name}}</span> <span class="tok">{{Trial_End_Date}}</span> <span class="tok">{{Charge_Amount}}</span> <span class="tok">{{Charge_Date}}</span></div></div>
+      </div>
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span>Preview</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook</b> &lt;no-reply@digistaybook.com&gt;</div>
+          <div class="subj">Your DigiStayBook trial for {{Property_Name}} ends soon</div>
+        </div>
+        <div class="body">
+          <p>Hi <span class="tok">{{Host_Name}}</span>,</p>
+          <p>This is a service reminder that your 28-day free trial for <span class="tok">{{Property_Name}}</span> will end on <span class="tok">{{Trial_End_Date}}</span>.</p>
+          <p>Unless you cancel before that date, your subscription will move to the selected paid plan and <span class="tok">{{Charge_Amount}}</span> will be charged on <span class="tok">{{Charge_Date}}</span>.</p>
+          <p><span class="cta">Manage Billing</span></p>
+        </div>
+        <div class="foot">DigiStayBook · codebertcreations · Victoria, Australia — Transactional message.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.1 · Trial expiry</span></div>
+</section>
+
+<!-- ══ EMAIL 04 ══ -->
+<section class="slide" data-title="Email 04 · Monthly receipt">
+  <p class="eyebrow">A.1.1 · Core host lifecycle <span class="sec">/ email 4 of 14</span></p>
+  <h2 style="margin-bottom:16px">Monthly receipt</h2>
+  <div class="slide-body">
+    <div class="mailwrap">
+      <div class="mailmeta">
+        <div class="row" style="border:0;padding:0"><div class="k">Classification</div><div class="v"><span class="pill tx">Transactional</span></div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v">Immediately after each billing cycle</div></div>
+        <div class="row"><div class="k">Content boundary</div><div class="v">Contains <strong>no tax advice</strong> and <strong>no promotional copy</strong>.</div></div>
+        <div class="row"><div class="k">Not sent</div><div class="v">No routine renewal reminder is sent for monthly plans. Annual renewal and trial expiry are separate messages.</div></div>
+      </div>
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span>Preview</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook</b> &lt;billing@digistaybook.com&gt;</div>
+          <div class="subj">DigiStayBook receipt: {{Month}}</div>
+        </div>
+        <div class="body">
+          <p>Hi <span class="tok">{{Host_Name}}</span>,</p>
+          <p>Your invoice for <span class="tok">{{Property_Name}}</span> is below. Keep this invoice for your records.</p>
+          <p><span class="cta">Download PDF Invoice</span></p>
+        </div>
+        <div class="foot">DigiStayBook · codebertcreations · Victoria, Australia — Transactional message. <span class="pill warn" style="font-size:9px">Confirm C-01</span> registered entity name and ABN must appear here before the first invoice is issued.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.1 · Monthly receipt</span></div>
+</section>
+
+<!-- ══ EMAIL 05 ══ -->
+<section class="slide" data-title="Email 05 · Card expiring">
+  <p class="eyebrow">A.1.1 · Core host lifecycle <span class="sec">/ email 5 of 14</span></p>
+  <h2 style="margin-bottom:16px">Card expiring soon <span style="font-size:19px;color:var(--ink-500)">(pre-dunning)</span></h2>
+  <div class="slide-body">
+    <div class="mailwrap">
+      <div class="mailmeta">
+        <div class="row" style="border:0;padding:0"><div class="k">Classification</div><div class="v"><span class="pill tx">Transactional</span></div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v">Stripe reports the card on file expires within 30 days</div></div>
+        <div class="row"><div class="k">Content boundary</div><div class="v">Billing facts and a secure update route only.</div></div>
+        <div class="row"><div class="k">Why it exists</div><div class="v">A failed payment must never produce a broken link for a guest standing in the property. Preventing dunning altogether is the cheapest way to keep that promise.</div></div>
+      </div>
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span>Preview</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook</b> &lt;billing@digistaybook.com&gt;</div>
+          <div class="subj">Action needed: your payment method is expiring soon</div>
+        </div>
+        <div class="body">
+          <p>Hi <span class="tok">{{Host_Name}}</span>,</p>
+          <p>The card on file for your DigiStayBook account is set to expire in the next 30 days.</p>
+          <p>Update your payment details so your property's QR codes stay active and your guests can keep adding memories without interruption.</p>
+          <p><span class="cta">Update Payment Method</span></p>
+        </div>
+        <div class="foot">DigiStayBook · codebertcreations · Victoria, Australia — Transactional message.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.1 · Card expiring</span></div>
+</section>
+
+<!-- ══ EMAIL 06 ══ -->
+<section class="slide" data-title="Email 06 · Failed payment">
+  <p class="eyebrow">A.1.1 · Core host lifecycle <span class="sec">/ email 6 of 14</span></p>
+  <h2 style="margin-bottom:16px">Failed payment — grace period</h2>
+  <div class="slide-body">
+    <div class="mailwrap">
+      <div class="mailmeta">
+        <div class="row" style="border:0;padding:0"><div class="k">Classification</div><div class="v"><span class="pill tx">Transactional</span></div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v">Verified payment failure</div></div>
+        <div class="row"><div class="k">Grace period</div><div class="v"><strong>14 days.</strong> The Guest Wall stays fully live for guests checking in throughout.</div></div>
+        <div class="row"><div class="k">Placeholders</div><div class="v"><span class="tok">{{Property_Name}}</span> <span class="tok">{{Suspension_Date}}</span></div></div>
+        <div class="row"><div class="k">Open decision</div><div class="v"><span class="pill warn">Confirm</span> <span class="ref">C-15</span> Stripe's smart-retry schedule also attempts the card inside this window. Confirm the retry configuration so the two do not contradict each other.</div></div>
+      </div>
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span>Preview</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook</b> &lt;billing@digistaybook.com&gt;</div>
+          <div class="subj">Payment failed — action required to keep {{Property_Name}} active</div>
+        </div>
+        <div class="body">
+          <p>Hi <span class="tok">{{Host_Name}}</span>,</p>
+          <p>We were unable to process your recent subscription payment for <span class="tok">{{Property_Name}}</span>. Your Guest Wall stays fully active for guests checking in during a 14-day grace period.</p>
+          <p>Please update your payment details before <span class="tok">{{Suspension_Date}}</span> to avoid deactivation.</p>
+          <p><span class="cta">Securely Update Payment</span></p>
+        </div>
+        <div class="foot">DigiStayBook · codebertcreations · Victoria, Australia — Transactional message.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.1 · Failed payment</span></div>
+</section>
+
+<!-- ══ EMAIL 07 ══ -->
+<section class="slide" data-title="Email 07 · Service suspension">
+  <p class="eyebrow">A.1.1 · Core host lifecycle <span class="sec">/ email 7 of 14</span></p>
+  <h2 style="margin-bottom:16px">Service suspension — final notice</h2>
+  <div class="slide-body">
+    <div class="mailwrap">
+      <div class="mailmeta">
+        <div class="row" style="border:0;padding:0"><div class="k">Classification</div><div class="v"><span class="pill tx">Transactional</span></div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v">The 14-day grace period ends</div></div>
+        <div class="row"><div class="k">Guest-facing effect</div><div class="v">The QR routes to a <strong>designed offline fallback page</strong>, not an error. This is a commercial rule, not a courtesy.</div></div>
+        <div class="row"><div class="k">Support link</div><div class="v">Pairs with the support template for "My QR code shows an offline page" — identify the billing state first.</div></div>
+      </div>
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span>Preview</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook</b> &lt;billing@digistaybook.com&gt;</div>
+          <div class="subj">Notice: {{Property_Name}}'s digital guestbook is offline</div>
+        </div>
+        <div class="body">
+          <p>Hi <span class="tok">{{Host_Name}}</span>,</p>
+          <p>Your 14-day grace period has ended and the QR code for <span class="tok">{{Property_Name}}</span> has been deactivated.</p>
+          <p>Scanning the existing QR code now opens a fallback page stating that the guestbook is temporarily offline. Your guests will not see an error.</p>
+          <p>Reactivation restores the property according to your current billing state.</p>
+          <p><span class="cta">Reactivate Now</span></p>
+        </div>
+        <div class="foot">DigiStayBook · codebertcreations · Victoria, Australia — Transactional message.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.1 · Service suspension</span></div>
+</section>
+
+<!-- ══ EMAIL 08 ══ -->
+<section class="slide" data-title="Email 08 · Cancellation">
+  <p class="eyebrow">A.1.1 · Core host lifecycle <span class="sec">/ email 8 of 14</span></p>
+  <h2 style="margin-bottom:14px">Cancellation confirmation <span class="pill err" style="vertical-align:5px">blocked</span></h2>
+  <div class="slide-body">
+    <div class="mailwrap">
+      <div class="mailmeta">
+        <div class="row" style="border:0;padding:0"><div class="k">Classification</div><div class="v"><span class="pill tx">Transactional</span></div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v">Cancellation completed in the dashboard — the only route that can verify account ownership</div></div>
+        <div class="row"><div class="k">Placeholders</div><div class="v"><span class="tok">{{End_Date}}</span> <span class="tok">{{Dormancy_Expiry_Date}}</span></div></div>
+        <div class="row"><div class="k">Do not enable</div><div class="v" style="color:var(--err)"><span class="pill warn">Confirm</span> <span class="ref">C-19</span> The dormancy paragraph quotes the 12-month period, which is <strong>not yet approved through the legal review gate</strong>. This template must not be enabled until that period and this wording are approved.</div></div>
+      </div>
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span>Preview · not yet approved for sending</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook</b> &lt;billing@digistaybook.com&gt;</div>
+          <div class="subj">Confirmation of subscription cancellation</div>
+        </div>
+        <div class="body">
+          <p>Hi <span class="tok">{{Host_Name}}</span>,</p>
+          <p>This confirms that you have cancelled your subscription for <span class="tok">{{Property_Name}}</span>.</p>
+          <p>You keep full access to your live guestbook and QR code until your current billing cycle ends on <span class="tok">{{End_Date}}</span>. After that date the QR code is deactivated and the public wall is no longer visible.</p>
+          <p>Your property configuration and Guest Wall content remain private and dormant until <span class="tok">{{Dormancy_Expiry_Date}}</span>. After that date, deletion from active systems completes within 30 days and encrypted backup copies expire within a further 30 days. Limited accounting, consent, suppression, security-incident and deletion-audit records follow the separate periods in the Privacy Policy.</p>
+        </div>
+        <div class="foot">DigiStayBook · codebertcreations · Victoria, Australia — Transactional message.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.1 · Cancellation</span></div>
+</section>
+
+<!-- ══ EMAIL 09 ══ -->
+<section class="slide" data-title="Email 09 · AI-flagged content">
+  <p class="eyebrow">A.1.2 · Moderation and content safety <span class="sec">/ email 9 of 14</span></p>
+  <h2 style="margin-bottom:16px">Moderation alert — AI-flagged content</h2>
+  <div class="slide-body">
+    <div class="mailwrap">
+      <div class="mailmeta">
+        <div class="row" style="border:0;padding:0"><div class="k">Classification</div><div class="v"><span class="pill tx">Transactional</span></div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v">The scan flags a submission for host review</div></div>
+        <div class="row"><div class="k">Timing</div><div class="v">Immediate</div></div>
+        <div class="row"><div class="k">Hard rule</div><div class="v" style="color:var(--err)"><strong>Never attaches or embeds the flagged media.</strong></div></div>
+        <div class="row"><div class="k">Volume driver</div><div class="v">These scale with <em>guest activity</em>, not host count — every held post is an email. A burst across several properties could reach a provider's daily cap.</div></div>
+      </div>
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span>Preview</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook</b> &lt;alerts@digistaybook.com&gt;</div>
+          <div class="subj">Action required: guest post flagged for review ({{Property_Name}})</div>
+        </div>
+        <div class="body">
+          <p>Hi <span class="tok">{{Host_Name}}</span>,</p>
+          <p>Our automated safety filter flagged a new guest submission at <span class="tok">{{Property_Name}}</span>.</p>
+          <p>The post has been placed in Pending Host Approval and is hidden from your public wall.</p>
+          <p><strong>Flag reason:</strong> <span class="tok">{{AI_Flag_Reason}}</span></p>
+          <p>Review the post in your dashboard to publish it to your wall or delete it.</p>
+          <p><span class="cta">Review Flagged Post</span></p>
+        </div>
+        <div class="foot">DigiStayBook · codebertcreations · Victoria, Australia — Transactional message. The flagged media is never included in this email.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.2 · AI flag</span></div>
+</section>
+
+<!-- ══ EMAIL 10 ══ -->
+<section class="slide" data-title="Email 10 · Guest report / takedown">
+  <p class="eyebrow">A.1.2 · Moderation and content safety <span class="sec">/ email 10 of 14</span></p>
+  <h2 style="margin-bottom:16px">Post hidden after a guest report</h2>
+  <div class="slide-body">
+    <div class="mailwrap">
+      <div class="mailmeta">
+        <div class="row" style="border:0;padding:0"><div class="k">Classification</div><div class="v"><span class="pill tx">Transactional</span> <span class="pill err">high priority</span></div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v">The server sets <code>hidden_pending_review</code>. <strong>Tapping Report is not itself the trigger.</strong></div></div>
+        <div class="row"><div class="k">SLA</div><div class="v">Unresolved after <strong>14 days</strong>, the request escalates automatically to Privacy &amp; Safety Operations.</div></div>
+        <div class="row"><div class="k">Placeholders</div><div class="v"><span class="tok">{{Report_Timestamp}}</span></div></div>
+      </div>
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span>Preview</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook</b> &lt;alerts@digistaybook.com&gt;</div>
+          <div class="subj">Action required: privacy or takedown request at {{Property_Name}}</div>
+        </div>
+        <div class="body">
+          <p>Hi <span class="tok">{{Host_Name}}</span>,</p>
+          <p>A guest viewing your public wall at <span class="tok">{{Property_Name}}</span> has flagged a post and requested its removal. The post has been hidden from public view and routed to your dashboard.</p>
+          <p><strong>Reported:</strong> <span class="tok">{{Report_Timestamp}}</span> · <strong>Status:</strong> hidden from public wall</p>
+          <p>Open the Privacy &amp; Takedown Requests tab. If this is a valid request, choose Confirm Permanent Deletion. If you believe the report is false, reject it and give the reason. Rejecting a report does not by itself classify the reporter as malicious.</p>
+          <p>If you do not resolve a privacy request within 14 days, it escalates automatically to Privacy &amp; Safety Operations, which applies the approved deletion or restoration workflow.</p>
+          <p><span class="cta">Review Deletion Request</span></p>
+        </div>
+        <div class="foot">DigiStayBook · codebertcreations · Victoria, Australia — Transactional message.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.2 · Guest report</span></div>
+</section>
+
+<!-- ══ EMAIL 11 ══ -->
+<section class="slide" data-title="Email 11 · Circuit-breaker (internal)">
+  <p class="eyebrow">A.1.2 · Moderation and content safety <span class="sec">/ email 11 of 14</span></p>
+  <h2 style="margin-bottom:16px">Reporting circuit-breaker alert <span class="pill int" style="vertical-align:6px">internal only</span></h2>
+  <div class="slide-body">
+    <div class="mailwrap">
+      <div class="mailmeta">
+        <div class="row" style="border:0;padding:0"><div class="k">Classification</div><div class="v"><span class="pill int">Internal only</span></div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v">A reporter or wall enters a circuit-breaker state, producing <code>suspected_abuse_no_visibility_change</code></div></div>
+        <div class="row"><div class="k">Recipients</div><div class="v">Privacy &amp; Safety Operations only</div></div>
+        <div class="row"><div class="k">Never sent to</div><div class="v" style="color:var(--err)"><strong>The host.</strong> No post was hidden, so telling the host one was would be false.</div></div>
+      </div>
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span>Internal queue notification</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook system</b> · to <b>Privacy &amp; Safety Operations</b></div>
+          <div class="subj">Circuit breaker tripped — {{Wall_ID}}</div>
+        </div>
+        <div class="body">
+          <p><strong>Contents:</strong></p>
+          <p>Wall and report identifiers · the threshold reached · affected post identifiers · current visibility · the App Check result · the pseudonymous reporter key expiry · and a link to the restricted report queue.</p>
+          <p style="background:var(--err-bg);border-left:3px solid var(--err);padding:11px 13px;border-radius:3px;margin-top:16px">No guest media is attached or duplicated. No host alert is sent, because no post was hidden — telling the host otherwise would be false.</p>
+        </div>
+        <div class="foot">Restricted distribution. Access to the linked queue is logged.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.2 · Circuit-breaker alert</span></div>
+</section>
+
+<!-- ══ EMAIL 12 ══ -->
+<section class="slide" data-title="Email 12 · Password reset">
+  <p class="eyebrow">A.1.3 · Security and account <span class="sec">/ email 12 of 14</span></p>
+  <h2 style="margin-bottom:16px">Password reset request</h2>
+  <div class="slide-body">
+    <div class="mailwrap">
+      <div class="mailmeta">
+        <div class="row" style="border:0;padding:0"><div class="k">Classification</div><div class="v"><span class="pill tx">Transactional</span></div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v">Host requests a reset</div></div>
+        <div class="row"><div class="k">Link lifetime</div><div class="v"><strong>60 minutes</strong></div></div>
+        <div class="row"><div class="k">Content boundary</div><div class="v">Security and recovery content only. Never confirms whether an account exists beyond what the requester already supplied.</div></div>
+        <div class="row"><div class="k">Open decision</div><div class="v"><span class="pill warn">Confirm</span> <span class="ref">C-22</span> <span class="ref">C-23</span> Password minimum length, complexity and reuse rules are undefined; MFA availability for hosts is undecided.</div></div>
+      </div>
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span>Preview</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook</b> &lt;security@digistaybook.com&gt;</div>
+          <div class="subj">Reset your DigiStayBook password</div>
+        </div>
+        <div class="body">
+          <p>Hi <span class="tok">{{Host_Name}}</span>,</p>
+          <p>We received a request to reset the password for your DigiStayBook account (<span class="tok">{{Host_Email}}</span>).</p>
+          <p><span class="cta">Reset My Password</span></p>
+          <p>This link expires in 60 minutes.</p>
+          <p>If you did not request a reset, you can ignore this email — your password is unchanged.</p>
+        </div>
+        <div class="foot">DigiStayBook · codebertcreations · Victoria, Australia — Transactional message.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.3 · Password reset</span></div>
+</section>
+
+<!-- ══ EMAIL 13 ══ -->
+<section class="slide" data-title="Email 13 · Password changed">
+  <p class="eyebrow">A.1.3 · Security and account <span class="sec">/ email 13 of 14</span></p>
+  <h2 style="margin-bottom:16px">Password successfully changed</h2>
+  <div class="slide-body">
+    <div class="mailwrap">
+      <div class="mailmeta">
+        <div class="row" style="border:0;padding:0"><div class="k">Classification</div><div class="v"><span class="pill tx">Transactional</span></div></div>
+        <div class="row"><div class="k">Trigger</div><div class="v">Password updated in the dashboard or by reset link</div></div>
+        <div class="row"><div class="k">Placeholders</div><div class="v"><span class="tok">{{Change_Timestamp}}</span> <span class="tok">{{User_Agent}}</span> <span class="tok">{{IP_Location}}</span></div></div>
+        <div class="row"><div class="k">Purpose</div><div class="v">An out-of-band signal that an account takeover has occurred. Always sent, even when the host made the change themselves.</div></div>
+      </div>
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span>Preview</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook</b> &lt;security@digistaybook.com&gt;</div>
+          <div class="subj">Security alert: your DigiStayBook password was changed</div>
+        </div>
+        <div class="body">
+          <p>Hi <span class="tok">{{Host_Name}}</span>,</p>
+          <p>The password for your DigiStayBook account (<span class="tok">{{Host_Email}}</span>) was updated on <span class="tok">{{Change_Timestamp}}</span>.</p>
+          <p><strong>Device:</strong> <span class="tok">{{User_Agent}}</span> · <strong>Location:</strong> <span class="tok">{{IP_Location}}</span></p>
+          <p>If you did not authorise this change, reset your password immediately and contact support from your dashboard.</p>
+          <p><span class="cta">Secure My Account</span></p>
+        </div>
+        <div class="foot">DigiStayBook · codebertcreations · Victoria, Australia — Transactional message.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.3 · Password changed</span></div>
+</section>
+
+<!-- ══ EMAIL 14 ══ -->
+<section class="slide" data-title="Email 14 · Email change & new device">
+  <p class="eyebrow">A.1.3 · Security and account <span class="sec">/ email 14 of 14 — two messages</span></p>
+  <h2 style="margin-bottom:14px">Email change verification &amp; new-device login</h2>
+  <div class="slide-body">
+    <div class="cols c2" style="height:100%">
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span><span class="pill tx" style="font-size:9px">Transactional</span> &nbsp;Trigger: host requests a change to the primary account email</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook</b> &lt;security@digistaybook.com&gt; · to the <b>new</b> address</div>
+          <div class="subj">Verify your new email address for DigiStayBook</div>
+        </div>
+        <div class="body">
+          <p>Hi <span class="tok">{{Host_Name}}</span>,</p>
+          <p>You requested to change your primary login email to <span class="tok">{{New_Host_Email}}</span>.</p>
+          <p><span class="cta">Confirm New Email Address</span></p>
+          <p>Once confirmed, operational updates, invoices and moderation alerts for your properties will be sent to this address.</p>
+        </div>
+        <div class="foot">Transactional message. Verification is required before the address becomes the delivery target for invoices and alerts.</div>
+      </div>
+      <div class="email">
+        <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span><span class="pill tx" style="font-size:9px">Transactional</span> &nbsp;Trigger: login from a new device or IP address</span></div>
+        <div class="hdr">
+          <div class="from">From <b>DigiStayBook</b> &lt;security@digistaybook.com&gt;</div>
+          <div class="subj">New login to your DigiStayBook account</div>
+        </div>
+        <div class="body">
+          <p>Hi <span class="tok">{{Host_Name}}</span>,</p>
+          <p>We noticed a new login to your host dashboard.</p>
+          <p><strong>Time:</strong> <span class="tok">{{Login_Timestamp}}</span> · <strong>Device:</strong> <span class="tok">{{Device_Type_and_Browser}}</span> · <strong>Approximate location:</strong> <span class="tok">{{IP_Location}}</span></p>
+          <p>If this was you, no action is needed. If it was not, sign in immediately to change your password and review your account security.</p>
+          <p><span class="cta">Review Account Security</span></p>
+        </div>
+        <div class="foot">Transactional message. Sent regardless of marketing preferences.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.3 · Account security</span></div>
+</section>
+
+<!-- ══ CART ABANDONMENT ══ -->
+<section class="slide" data-title="Cart abandonment sequence">
+  <p class="eyebrow">A.1.4 · Cart abandonment <span class="sec">/ four messages</span></p>
+  <h2>Cart abandonment <span class="pill mk" style="vertical-align:6px">marketing</span></h2>
+  <p class="sub">Fires <strong>only</strong> where the host ticked the marketing consent box at sign-up, named a property and left before completing checkout. Every message requires a send-time suppression check, sender identification, contact details and a functional unsubscribe link.</p>
+  <div class="slide-body">
+    <table class="sm zebra">
+      <thead><tr><th style="width:11%">Message</th><th style="width:13%">Timing</th><th>Content</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Email 1</strong></td><td>1 hour</td><td>A check-in asking whether they hit a snag, pointing to the FAQ, and explaining the guest-experience value <strong>without promising any change in guest behaviour or property outcome</strong>.</td></tr>
+        <tr><td><strong>Email 2</strong></td><td>24 hours</td><td>The guest-experience value: a warmer, more useful stay <em>may</em> encourage more positive feedback on the host's official booking platform. <strong>No review outcome is guaranteed.</strong></td></tr>
+        <tr><td><strong>Email 3</strong></td><td>3 days</td><td>May state, in exactly this wording: "DigiStayBook may be deductible as a business expense. Eligibility depends on your circumstances and business use; seek tax advice." Must not claim guaranteed property protection, savings or financial return.</td></tr>
+        <tr><td><strong>Email 4</strong></td><td>Day 23</td><td>Final seven-day warning that the unpaid property draft is scheduled for deletion on day 30. <strong>Must show the exact deletion date</strong> and must not imply the draft survives afterwards.</td></tr>
+      </tbody>
+    </table>
+    <div class="cols c2" style="margin-top:16px">
+      <div class="card accent"><h3>Why day 23 is fixed, not chosen</h3><p style="margin:0">Unpaid property drafts and sandbox media are deleted on <strong>day 30</strong> from draft creation; the clock resets only on meaningful host editing. Day 23 is the last honest moment to warn a host that their work is about to be destroyed.</p></div>
+      <div class="card err"><h3>Nothing in this sequence may be sent today</h3><p style="margin:0"><span class="pill err">Action</span> <span class="ref">A-06</span> The central preference and suppression service does not exist. Without it, the send-time check cannot be made and these messages are unlawful.</p></div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.4 · Cart abandonment</span></div>
+</section>
+
+<!-- ══ RETENTION / ENGAGEMENT ══ -->
+<section class="slide" data-title="Retention & engagement sequence">
+  <p class="eyebrow">A.1.5 · Retention and engagement <span class="sec">/ nine messages</span></p>
+  <h2>Milestones report counts — never outcomes</h2>
+  <div class="slide-body">
+    <table class="sm zebra">
+      <thead><tr><th style="width:19%">Message</th><th style="width:11%">Class</th><th style="width:26%">Trigger</th><th>Content boundary</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Activation nudge</strong></td><td><span class="pill mk">Marketing</span></td><td>7 days after activation, only if the property has zero guest posts</td><td>"Did you get your QR code printed? Here is a quick tip on the best place to display it to get your first guest memory."</td></tr>
+        <tr><td><strong>10 scans</strong></td><td><span class="pill mk">Marketing</span></td><td>Placement milestone</td><td>Confirms 10 scans were recorded. <strong>Does not claim every guest read the content.</strong></td></tr>
+        <tr><td><strong>First memory</strong></td><td><span class="pill mk">Marketing</span></td><td>First guest contribution</td><td>Confirms a guest added the first memory. Does not claim a change in sentiment or behaviour.</td></tr>
+        <tr><td><strong>50 scans</strong></td><td><span class="pill mk">Marketing</span></td><td>Engagement milestone</td><td>Confirms 50 scans. <strong>Does not claim reduced support demand.</strong></td></tr>
+        <tr><td><strong>10 memories</strong></td><td><span class="pill mk">Marketing</span></td><td>Engagement milestone</td><td>Shows multiple guests have contributed.</td></tr>
+        <tr><td><strong>100 scans</strong></td><td><span class="pill mk">Marketing</span></td><td>Continued-use milestone</td><td>Reports continued scanning activity without claiming an operational outcome.</td></tr>
+        <tr><td><strong>50 memories</strong></td><td><span class="pill mk">Marketing</span></td><td>Contribution milestone</td><td>Confirms 50 memories without claiming any change in property status or guest behaviour.</td></tr>
+        <tr style="background:var(--sage-050)"><td><strong>Annual renewal notice</strong></td><td><span class="pill tx">Transactional</span></td><td>14 days before an annual subscription renews</td><td>Date, amount and a link to manage billing.</td></tr>
+        <tr><td><strong>90-day win-back</strong></td><td><span class="pill mk">Marketing</span></td><td>90 days into the dormant-property period after cancellation</td><td>"We've added new ways to help you create a warmer, more useful and memorable guest experience… Log back in to reactivate your wall in one click." <strong>Never targets a draft deleted at day 30. Never offers a margin-reducing discount.</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.5 · Retention and engagement</span></div>
+</section>
+
+<!-- ══ TEMPLATE STRUCTURE ══ -->
+<section class="slide" data-title="Standard email template structure">
+  <p class="eyebrow">A.1.6 · Standard structure <span class="sec">/ how each message is drafted</span></p>
+  <h2>The nine parts of every message</h2>
+  <p class="sub">Use this structure to draft each message before product, legal and operational approval.</p>
+  <div class="slide-body">
+    <div class="cols c3">
+      <div class="card"><h3>1 · Internal template name</h3><p>The name the codebase and the register both use.</p></div>
+      <div class="card"><h3>2 · Message classification</h3><p>Essential transactional, service, or marketing. Decided <em>before</em> implementation, not after.</p></div>
+      <div class="card"><h3>3 · Trigger and recipient</h3><p>The verified event and the intended recipient.</p></div>
+      <div class="card"><h3>4 · Subject and preview text</h3><p>Both written, both approved.</p></div>
+      <div class="card"><h3>5 · Greeting and personalisation rule</h3><p>Including what happens when the placeholder is empty.</p></div>
+      <div class="card"><h3>6 · Body</h3><p>What happened, which property or account is affected, and why the recipient is receiving it.</p></div>
+      <div class="card"><h3>7 · Primary action</h3><p><strong>One label, one secure destination.</strong></p></div>
+      <div class="card"><h3>8 · Conditions</h3><p>Deadlines, access effects, limits, alternatives, and the correct support route. <strong>No unsupported guarantees.</strong></p></div>
+      <div class="card"><h3>9 · Sign-off and footer</h3><p>Business identity, contact details, policy links, and the unsubscribe control on every marketing message.</p></div>
+    </div>
+    <div class="card accent" style="margin-top:16px"><p style="margin:0;font-size:14.5px"><strong>The overriding rule:</strong> marketing consent and unsubscribe controls must never prevent delivery of an essential account, purchase, security or safety message.</p></div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.1.6 · Template structure</span></div>
+</section>
+
+<!-- ══ EMAIL TEST CHECKLIST ══ -->
+<section class="slide dense" data-title="Email delivery test checklist">
+  <p class="eyebrow">Testing <span class="sec">/ what must pass before any message is enabled</span></p>
+  <h2>Email delivery test checklist</h2>
+  <p class="sub">Derived from the rules on the preceding slides. Every row must pass in the preview environment — against a separate Firebase project, a Stripe test account and a separate sending domain — before the equivalent message is enabled in production.</p>
+  <div class="slide-body">
+    <div class="cols c2">
+      <table class="xs">
+        <thead><tr><th style="width:64%">Test</th><th>Expected</th></tr></thead>
+        <tbody>
+          <tr><td>Sign up with the consent box <strong>unticked</strong>, then trigger a marketing sequence</td><td><span class="pill err">No send</span></td></tr>
+          <tr><td>Withdraw consent, then trigger a marketing sequence</td><td><span class="pill err">No send</span></td></tr>
+          <tr><td>Add a suppression record, then trigger a marketing sequence</td><td><span class="pill err">No send</span></td></tr>
+          <tr><td>Make the preference service unreachable, then trigger a marketing sequence</td><td><span class="pill err">No send</span> (fail closed)</td></tr>
+          <tr><td>Delete the account, then trigger a marketing sequence</td><td><span class="pill err">No send</span></td></tr>
+          <tr><td>Delete the account, then check the suppression record</td><td><span class="pill ok">Minimum value retained</span></td></tr>
+          <tr><td>Scan every transactional template for a configured promotional block</td><td><span class="pill ok">None present</span></td></tr>
+          <tr><td>Withdraw consent, then trigger password reset, receipt, moderation and suspension emails</td><td><span class="pill ok">All still delivered</span></td></tr>
+          <tr><td>Click unsubscribe, then re-check 30 days later</td><td><span class="pill ok">Link still functional</span></td></tr>
+          <tr><td>Re-consent after a withdrawal</td><td><span class="pill ok">New versioned event, withdrawal preserved</span></td></tr>
+        </tbody>
+      </table>
+      <table class="xs">
+        <thead><tr><th style="width:64%">Test</th><th>Expected</th></tr></thead>
+        <tbody>
+          <tr><td>Trigger an AI-flag alert and inspect the raw message source</td><td><span class="pill ok">No media attached or embedded</span></td></tr>
+          <tr><td>Trip a reporter circuit breaker</td><td><span class="pill ok">Internal alert only, no host email</span></td></tr>
+          <tr><td>Trip a wall-level circuit breaker</td><td><span class="pill ok">Visibility unchanged, host not told</span></td></tr>
+          <tr><td>Activate a second, third and fiftieth property</td><td><span class="pill ok">QR kit email sent every time</span></td></tr>
+          <tr><td>Replay a Stripe webhook</td><td><span class="pill ok">Idempotent — no duplicate receipt</span></td></tr>
+          <tr><td>Compare trial-expiry amount against checkout microcopy and the pricing page</td><td><span class="pill ok">Identical figure</span></td></tr>
+          <tr><td>Check the cancellation template's dormancy paragraph</td><td><span class="pill err">Disabled until legal approval</span></td></tr>
+          <tr><td>Send a burst of moderation alerts across several properties</td><td><span class="pill warn">Must not hit the provider daily cap</span></td></tr>
+          <tr><td>Check SPF, DKIM and DMARC on the sending domain</td><td><span class="pill warn">Provider not yet selected</span></td></tr>
+          <tr><td>Check the footer of every message for entity name and ABN</td><td><span class="pill warn">Entity not yet confirmed</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card err" style="margin-top:14px;padding:11px 14px"><p style="font-size:12.5px;margin:0"><span class="pill err">Action</span> <span class="ref">A-15</span> &nbsp;<strong>The preview environment does not exist.</strong> A separate Firebase project, Stripe test account and sending domain are unbuilt — so today, every test on this slide has nowhere to run but production.</p></div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>Email test checklist</span></div>
+</section>
+
+<!-- ══ SUPPORT TEMPLATES ══ -->
+<section class="slide" data-title="Support response templates">
+  <p class="eyebrow">A.2 · Support response templates <span class="sec">/ the requests that will actually arrive</span></p>
+  <h2>Seven inbound requests, seven positions</h2>
+  <p class="sub">Each identifies the issue, avoids promising an outcome before verification, states the next action and the expected response period, and links to the correct secure self-service route.</p>
+  <div class="slide-body">
+    <table class="sm zebra">
+      <thead><tr><th style="width:29%">Request</th><th>Response position</th></tr></thead>
+      <tbody>
+        <tr><td><strong>"Please cancel my subscription"</strong> by email</td><td>Explain that cancellation is self-service in the dashboard and cannot be actioned by email, <strong>because email cannot verify account ownership</strong>. Give the exact path and the effective-date rule. Do not cancel on the host's behalf.</td></tr>
+        <tr><td><strong>Refund request</strong></td><td>State the published policy, acknowledge Australian Consumer Law rights <strong>without characterising them as goodwill</strong>, and confirm when a decision will be given. Do not promise an outcome in the acknowledgement.</td></tr>
+        <tr><td><strong>Guest asking about a booking, a key or a broken appliance</strong></td><td>Explain that DigiStayBook is the guestbook software and cannot help with the stay, and direct them to their host through their booking platform. Offer the Privacy &amp; Safety route <em>only</em> if the matter is actually about personal data or content safety.</td></tr>
+        <tr><td><strong>Guest privacy or deletion request</strong></td><td>Acknowledge with a reference, confirm it is recorded, explain the host-review step and the 14-day escalation, and <strong>never disclose whether the post's visibility changed</strong>.</td></tr>
+        <tr><td><strong>Host reporting an abusive guest</strong></td><td>Confirm receipt, explain that severe cases route to internal operations, describe the proportionate controls available, and set expectations about what will not be shared back.</td></tr>
+        <tr><td><strong>"My QR code shows an offline page"</strong></td><td><strong>Identify the billing state first</strong>, explain the grace period or suspension, and give the secure reactivation route.</td></tr>
+        <tr><td><strong>Accessibility request</strong></td><td>Acknowledge, record it, name the owner and give a response date. <strong>Never defer an accessibility issue to a future release without a date.</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="card err" style="margin-top:14px;padding:11px 14px"><p style="font-size:12.5px;margin:0"><span class="pill err">Action</span> <span class="ref">A-17</span> &nbsp;<strong>None of these has been written as approved copy.</strong> The first support request will arrive before the templates exist unless they are drafted before launch.</p></div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.2 · Support templates</span></div>
+</section>
+
+<!-- ══ BILLING OPS ══ -->
+<section class="slide" data-title="Billing operations">
+  <p class="eyebrow">5.7 · Billing operations <span class="sec">/ nine rules</span></p>
+  <h2>Billing operations</h2>
+  <div class="slide-body">
+    <div class="cols c2">
+      <div class="stack">
+        <div class="card"><p style="margin:0"><strong>Stripe-hosted checkout</strong> collects payment details. The product never handles raw card data.</p></div>
+        <div class="card"><p style="margin:0"><strong>Entitlements are granted or changed only after a signature-verified webhook is processed.</strong> Nothing in the browser grants entitlement.</p></div>
+        <div class="card"><p style="margin:0"><strong>Webhook processing is idempotent</strong>, so a Stripe retry cannot activate a property twice or double-charge.</p></div>
+        <div class="card"><p style="margin:0"><strong>Checkout shows the calculated trial end date</strong>, the exact charge amount and date, and requires the billing acknowledgement checkbox before submission.</p></div>
+        <div class="card"><p style="margin:0"><strong>Cancellation is one click</strong> in the dashboard, effective at the end of the paid cycle, with the exact end date confirmed by email.</p></div>
+      </div>
+      <div class="stack">
+        <div class="card accent"><p style="margin:0"><strong>A failed payment opens a 14-day soft grace period</strong> during which the wall stays fully live for guests checking in. The host is notified immediately with the suspension date and a secure update route.</p></div>
+        <div class="card accent"><p style="margin:0"><strong>At the end of the grace period the property is suspended:</strong> the QR routes to the designed offline fallback page, not an error.</p></div>
+        <div class="card accent"><p style="margin:0"><strong>Reactivation restores the property</strong> according to the current billing and entitlement state.</p></div>
+        <div class="card accent"><p style="margin:0"><strong>Stripe revenue, refunds, disputes and subscription states are reconciled</strong> against the product database monthly.</p></div>
+        <div class="card warn" style="padding:11px 14px"><p style="font-size:12.5px;margin:0"><span class="pill warn">Confirm</span> <span class="ref">C-15</span> &nbsp;Dunning is described as a single 14-day grace period, but Stripe's smart retry schedule will also attempt the card several times inside that window. Confirm the retry configuration so the Stripe schedule and the email sequence do not contradict each other.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>5.7 · Billing operations</span></div>
+</section>
+
+<!-- ══ SUPPORT ROUTES ══ -->
+<section class="slide" data-title="Support, complaints & refunds">
+  <p class="eyebrow">5.8 · Support, complaints and refunds <span class="sec">/ exactly two inbound routes</span></p>
+  <h2>Two routes, deliberately different</h2>
+  <div class="slide-body">
+    <div class="cols c2">
+      <div class="card raised" style="border-left:3px solid var(--stamp-600)">
+        <h3>Host Contact form <span class="pill tx">hosts only</span></h3>
+        <p><strong>Scope:</strong> billing, account, product behaviour, moderation questions, refunds and complaints from the paying customer.</p>
+        <p style="margin-bottom:0"><strong>Out of scope:</strong> cancellation (self-service only, because the form cannot verify ownership) and anything about a guest's stay.</p>
+      </div>
+      <div class="card raised" style="border-left:3px solid var(--sage-700)">
+        <h3>Privacy &amp; Safety route <span class="pill int">public</span></h3>
+        <p><strong>Scope:</strong> privacy, personal-data and platform content-safety matters — the single exception to "no guest support".</p>
+        <p style="margin-bottom:0"><strong>Out of scope:</strong> bookings, keys, appliances, refunds for a stay — everything that belongs to the host's booking provider.</p>
+      </div>
+    </div>
+    <div class="cols c2" style="margin-top:16px">
+      <div class="card">
+        <h3>The refund position</h3>
+        <p style="margin:0">Charges are non-refundable except where required by law, including a major failure under the Australian Consumer Law. <strong>Statutory rights are never described as a goodwill concession.</strong> Goodwill refunds outside the policy require a recorded decision by a named owner and are reconciled against Stripe.</p>
+      </div>
+      <div class="card warn">
+        <h3><span class="pill warn">Confirm</span> <span class="ref">C-16</span> <span class="ref">C-09</span> &nbsp;Undefined</h3>
+        <p style="margin:0">The support address, response-time target, business-hours expectation and queue cover. And refund authority: who may approve a goodwill refund, up to what value, recorded where.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>5.8 · Support and refunds</span></div>
+</section>
+
+<!-- ══ INCIDENTS ══ -->
+<section class="slide" data-title="Incidents & reliability">
+  <p class="eyebrow">5.9 · Incidents and reliability <span class="sec">/ eight monitored journeys</span></p>
+  <h2>Where a silent failure costs a customer</h2>
+  <p class="sub">These journeys are monitored because a silent failure in any of them costs a customer or breaks a legal commitment.</p>
+  <div class="slide-body">
+    <div class="cols c4" style="margin-bottom:18px">
+      <div class="card" style="padding:12px 14px"><p style="margin:0;font-size:13px">Host sign-up and sign-in</p></div>
+      <div class="card" style="padding:12px 14px"><p style="margin:0;font-size:13px">Property creation and activation</p></div>
+      <div class="card" style="padding:12px 14px"><p style="margin:0;font-size:13px">Stripe checkout and webhook fulfilment</p></div>
+      <div class="card" style="padding:12px 14px"><p style="margin:0;font-size:13px">Guest QR route resolution and wall rendering</p></div>
+      <div class="card" style="padding:12px 14px"><p style="margin:0;font-size:13px">Guest upload and the moderation scan</p></div>
+      <div class="card" style="padding:12px 14px"><p style="margin:0;font-size:13px">The reporting and takedown endpoint</p></div>
+      <div class="card" style="padding:12px 14px"><p style="margin:0;font-size:13px">Transactional email delivery</p></div>
+      <div class="card" style="padding:12px 14px"><p style="margin:0;font-size:13px">Scheduled retention and deletion jobs</p></div>
+    </div>
+    <div class="cols c-2-1">
+      <div class="stack">
+        <div class="card accent"><h3>How failures are handled</h3><p style="margin:0">Temporary failures use bounded retries with deduplication. Repeated failures raise an <strong>actionable alert</strong> rather than a log line nobody reads. Deletion jobs that risk missing a retention deadline enter an operations queue. A material incident has a named owner, a severity, a timeline, a customer-impact statement and a recovery decision.</p></div>
+        <div class="card sage"><h3>Two failure modes have designed product behaviour, not an error</h3><p style="margin:0"><strong>Moderation provider unavailable</strong> — content stays pending and is never published unscreened. &nbsp;·&nbsp; <strong>Property suspended or cancelled</strong> — the QR routes to the designed offline page.</p></div>
+      </div>
+      <div class="stack">
+        <div class="card warn" style="padding:11px 14px"><p style="font-size:12px;margin:0"><span class="pill warn">Confirm</span> <span class="ref">C-17</span> No monitoring or alerting tool has been selected and no alert destination exists. A one-operator business needs this decided before launch, not during the first incident.</p></div>
+        <div class="card warn" style="padding:11px 14px"><p style="font-size:12px;margin:0"><span class="pill warn">Confirm</span> <span class="ref">C-18</span> No availability target is published or internally agreed — so nothing about uptime may be stated to customers.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>5.9 · Incidents</span></div>
+</section>
+
+<!-- ══ RETENTION ══ -->
+<section class="slide dense" data-title="Retention & deletion schedule">
+  <p class="eyebrow">5.10 · Retention, deletion and backups <span class="sec">/ the recommended operational defaults</span></p>
+  <h2>Personal information is not retained because storage is available</h2>
+  <div class="slide-body">
+    <table class="xs zebra">
+      <thead><tr><th style="width:19%">Data class</th><th style="width:21%">Active retention</th><th style="width:22%">Cancellation / dormancy</th><th style="width:21%">Deletion deadline</th><th>Backup expiry</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Unpaid property drafts &amp; sandbox media</strong></td><td>30 days from creation; the clock resets only on meaningful host editing</td><td>No dormancy. The abandonment sequence ends with a day-23 warning.</td><td>Delete on day 30; primary-store deletion within 72 hours</td><td>Within 30 days after primary deletion</td></tr>
+        <tr><td><strong>Active property configuration</strong></td><td>Subscription or trial lifetime</td><td>Lock public service; move approved reactivatable fields into the dormant state</td><td>Within 30 days of a deletion request or dormancy expiry</td><td>Within 30 days</td></tr>
+        <tr><td><strong>Dormant property configuration</strong></td><td>Recommended maximum <strong>12 months</strong> from service end</td><td>No public wall, no guest upload, no operational email. One 90-day win-back only with valid consent.</td><td>Within 30 days after the 12-month expiry</td><td>Within 30 days</td></tr>
+        <tr><td><strong>Public guest content &amp; original media</strong></td><td>While the property is active, unless the guest or host deletes it</td><td>Public access removed; retained privately only for the approved 12-month reactivation window</td><td>Approved privacy deletion: remove public access promptly, primary copies within 72 hours</td><td>Within 30 days; the deletion manifest is reapplied before any restore</td></tr>
+        <tr><td><strong>Quarantine, flags &amp; rejected content</strong></td><td>Processing max 7 days; quarantine copy deleted within 24 hours of approved publication; rejected max 30 days</td><td>Does not enter dormancy unless already published</td><td>Timed-out items after failed-retry handling; rejected at 30 days</td><td>Within 30 days</td></tr>
+        <tr><td><strong>Privacy &amp; takedown requests</strong></td><td>Resolve or escalate within <strong>14 days</strong>; closed-case metadata 24 months</td><td>Continues independently of cancellation until resolved</td><td>Attachments as soon as resolved; metadata 24 months after closure</td><td>Within 30 days</td></tr>
+        <tr><td><strong>Guest content-consent evidence</strong></td><td>Life of the content plus 24 months</td><td>Retained separately from dormant content</td><td>24 months after content deletion or final dispute closure</td><td>Within 30 days</td></tr>
+        <tr><td><strong>Stripe references, invoices, accounting</strong></td><td>Transaction lifetime plus <strong>five years</strong></td><td>Retained independently of dormancy; full card data stays with Stripe</td><td>End of the accounting period, after open disputes close</td><td>Controlled exports expire within 30 days</td></tr>
+        <tr><td><strong>Auth, App Check &amp; security logs</strong></td><td>Cooldowns 24h; confirmed restrictions 90 days; routine logs rolling 90 days; incident-linked up to 12 months after closure</td><td>Routine expiry continues through cancellation</td><td>Automated at the 24-hour, 90-day or 12-month deadline</td><td>Within 30 days</td></tr>
+        <tr><td><strong>Marketing consent &amp; suppression</strong></td><td>Consent proof for 24 months after the last commercial message; suppression while the system operates</td><td>Unsubscribe suppresses all marketing within five working days</td><td>Consent evidence at 24 months. <strong>The minimum suppression value is retained</strong> — deleting an account must not release it.</td><td>Suppression state must be rebuilt before any restored system sends</td></tr>
+      </tbody>
+    </table>
+    <div class="cols c2" style="margin-top:12px">
+      <div class="card warn" style="padding:10px 13px"><p style="font-size:11.5px;margin:0"><span class="pill warn">Confirm</span> <span class="ref">C-19</span> Every period here must be approved through the professional legal review gate before production.</p></div>
+      <div class="card err" style="padding:10px 13px"><p style="font-size:11.5px;margin:0"><span class="pill err">Action</span> <span class="ref">A-05</span> <strong>The retention engine does not exist.</strong> Every date in this matrix is a promise the product cannot currently keep — several of them stated to customers in the Privacy Policy.</p></div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>5.10 · Retention and deletion</span></div>
+</section>
+
+<!-- ══ DIVIDER 4 ══ -->
+<section class="slide divider" data-title="4 · Platform & brand">
+  <p class="eyebrow">Part four</p>
+  <h1>Platform &amp; brand</h1>
+  <p class="sub">Architecture, access control, the colour and type system, environments and quality gates.</p>
+  <p class="foot-note">React, TypeScript and Vite on Firebase — Authentication, Firestore, Storage, Functions, Hosting — with Stripe for payments and an email provider behind an adapter boundary. Inexpensive to launch, consistent with the wider portfolio, and capable of running with minimal routine manual intervention.</p>
+  <div class="num">6</div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>Section 6</span></div>
+</section>
+
+<!-- ══ ARCHITECTURE ══ -->
+<section class="slide" data-title="Architecture & access control">
+  <p class="eyebrow">6.1–6.2 · Architecture and access control</p>
+  <h2>Standard portfolio architecture</h2>
+  <div class="slide-body">
+    <div class="cols c2">
+      <div class="stack">
+        <div class="card accent"><h3>The stack</h3><p style="margin:0">React + TypeScript + Vite on the client. Firebase Authentication, Firestore, Cloud Storage, Cloud Functions and Hosting on the server. Stripe for payments. The email provider sits <strong>behind an adapter boundary</strong>, so the provider decision does not leak into product code.</p></div>
+        <div class="card accent"><h3>Sign-in methods</h3><p style="margin:0">Hosts sign in by email or Google. Guests receive a <strong>Firebase anonymous session</strong> — one per scanning device — which is the identity that owns their own posts and lets them self-edit and self-delete. No guest account, no password, no app.</p></div>
+        <div class="card sage"><h3>Access enforcement</h3><p style="margin:0">The five roles are enforced in Firestore and Storage security rules, not merely in the interface. Guest content is written through a <strong>server-controlled endpoint with App Check</strong> — direct browser writes are denied. The internal administrative surface is never linked from any public, host or guest navigation.</p></div>
+      </div>
+      <div class="stack">
+        <div class="card"><h3>Anonymous sessions are the volume driver</h3><p style="margin:0">One anonymous session per scanning guest device — not the host count — is what drives Firebase Authentication volume, and it is what the cost model must be built against.</p></div>
+        <div class="card warn" style="padding:11px 14px"><p style="font-size:12.5px;margin:0"><span class="pill warn">Confirm</span> <span class="ref">C-22</span> <span class="ref">C-23</span> <span class="ref">C-24</span> &nbsp;Password rules are undefined; MFA for hosts is undecided; and there is no cleanup schedule for abandoned anonymous guest accounts — which affects both identity hygiene and cost.</p></div>
+        <div class="card err" style="padding:11px 14px"><p style="font-size:12.5px;margin:0"><span class="pill err">Action</span> <span class="ref">A-01</span> <span class="ref">A-04</span> <span class="ref">A-08</span> &nbsp;The contribution endpoint and property-owned Storage rules are unbuilt; App Check is not enforced; and seven moderate transitive advisories remain in the Functions dependency tree — resolve them or record a time-bounded named risk acceptance. <strong>Do not force a downgrade.</strong></p></div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>6.1–6.2 · Platform</span></div>
+</section>
+
+<!-- ══ BRAND COLOUR ══ -->
+<section class="slide" data-title="Brand: colour system">
+  <p class="eyebrow">6.4.3 · Colour system <span class="sec">/ the premise is a printed page</span></p>
+  <h2>Warm paper, dark ink, one stamped colour</h2>
+  <p class="sub">Four scales: <strong>ink</strong> for text, <strong>paper</strong> for surfaces, <strong>stamp</strong> as the single accent, and <strong>sage</strong> as a quiet secondary. A dark palette remaps the same semantic tokens rather than introducing a second colour language.</p>
+  <div class="slide-body">
+    <div class="cols c-2-1">
+      <table class="xs zebra">
+        <thead><tr><th style="width:24%">Role</th><th style="width:26%">Token</th><th style="width:18%">Value</th><th>Usage</th></tr></thead>
+        <tbody>
+          <tr><td>Primary accent</td><td><code>--stamp-600</code></td><td><span style="display:inline-block;width:11px;height:11px;background:#b4472a;border-radius:2px;vertical-align:-1px;margin-right:5px"></span>#b4472a</td><td>Primary actions, selected states, focus rings. The one colour that carries brand recognition.</td></tr>
+          <tr><td>Accent strong / hover</td><td><code>--stamp-700</code></td><td><span style="display:inline-block;width:11px;height:11px;background:#8f3a20;border-radius:2px;vertical-align:-1px;margin-right:5px"></span>#8f3a20</td><td>Hover, pressed and high-contrast accent treatment.</td></tr>
+          <tr><td>Accent light</td><td><code>--stamp-500</code></td><td><span style="display:inline-block;width:11px;height:11px;background:#cd6844;border-radius:2px;vertical-align:-1px;margin-right:5px"></span>#cd6844</td><td>Lighter accent use where the primary would dominate.</td></tr>
+          <tr><td>Accent soft</td><td><code>--stamp-050</code></td><td><span style="display:inline-block;width:11px;height:11px;background:#f6e6de;border:1px solid var(--rule);border-radius:2px;vertical-align:-1px;margin-right:5px"></span>#f6e6de</td><td>Focus ring fill, accent-tinted surfaces.</td></tr>
+          <tr><td>Secondary</td><td><code>--sage-700 / --sage-050</code></td><td><span style="display:inline-block;width:11px;height:11px;background:#33604c;border-radius:2px;vertical-align:-1px;margin-right:5px"></span>#33604c · #e2ebe4</td><td>Supporting emphasis and quiet section tinting. Must not compete with the accent.</td></tr>
+          <tr><td>Page background</td><td><code>--paper-100</code></td><td><span style="display:inline-block;width:11px;height:11px;background:#f7f2e8;border:1px solid var(--rule);border-radius:2px;vertical-align:-1px;margin-right:5px"></span>#f7f2e8</td><td>Default canvas.</td></tr>
+          <tr><td>Alternate / surface / raised</td><td><code>--paper-200 / 050 / 000</code></td><td>#efe8da · #fdfaf4 · #ffffff</td><td>Banded sections; cards, panels and form areas; elements that read as lifted off the page.</td></tr>
+          <tr><td>Primary text</td><td><code>--ink-900</code></td><td><span style="display:inline-block;width:11px;height:11px;background:#14181b;border-radius:2px;vertical-align:-1px;margin-right:5px"></span>#14181b</td><td>Headings and body copy.</td></tr>
+          <tr><td>Secondary / muted / low</td><td><code>--ink-700 / 500 / 400</code></td><td>#33404a · #5d6d78 · #7d8c96</td><td>Sub-headings, supporting information, and lowest-emphasis elements. <strong>Never the only carrier of meaning.</strong></td></tr>
+          <tr><td>Rules and borders</td><td><code>--rule / --rule-strong</code></td><td>rgba(20,24,27,.13 / .26)</td><td>Dividers and container edges, as translucent ink rather than a separate grey.</td></tr>
+        </tbody>
+      </table>
+      <div class="stack">
+        <div class="card err"><h3><span class="pill err">Action</span> <span class="ref">A-13</span> &nbsp;There are no semantic status colours</h3><p style="margin:0">No success, warning or error token exists. Every state that matters — payment failed, post held for review, upload rejected, property suspended, deletion confirmed — needs a defined colour paired with an icon and a plain-language label. <strong>This is a gap in a product whose core interface is a moderation queue.</strong></p></div>
+        <div class="card err"><h3><span class="pill err">Action</span> <span class="ref">A-14</span> &nbsp;No contrast testing recorded</h3><p style="margin:0">#b4472a on white and #5d6d78 on #f7f2e8 both need measuring against WCAG AA for their intended text sizes before either is used for body text or a button label.</p></div>
+        <div class="card err"><h3><span class="pill err">Action</span> <span class="ref">A-11</span> &nbsp;The logo paints with undefined tokens</h3><p style="margin:0"><code>--harbour-800</code>, <code>--harbour-500</code> and <code>--ember-600</code> are defined nowhere in the stylesheet. <strong>The brand's single most visible inconsistency.</strong></p></div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>6.4.3 · Colour</span></div>
+</section>
+
+<!-- ══ BRAND TYPE & VOICE ══ -->
+<section class="slide dense" data-title="Brand: type, UI & voice">
+  <p class="eyebrow">6.4.4–6.4.6 · Typography, interface style and voice</p>
+  <h2>System-first type, tight corners, fixed terminology</h2>
+  <div class="slide-body">
+    <div class="cols c3">
+      <div class="stack">
+        <div class="card"><h3>Display <span style="font-family:var(--font-display);font-weight:400;font-size:20px">Aa</span></h3><p style="margin:0"><code>--font-display</code>: Iowan Old Style → Palatino → Georgia → serif. A book face, chosen for the guestbook premise. Major brand statements and the wall's editorial moments.</p></div>
+        <div class="card"><h3>Interface &amp; body <span style="font-weight:400;font-size:19px">Aa</span></h3><p style="margin:0"><code>--font-sans</code>: Inter → system UI. All interface text, forms, buttons, tables, <strong>emails</strong> and guidance.</p></div>
+        <div class="card"><h3>Scale &amp; measure</h3><p style="margin:0">Seven fluid steps from 0.72rem to a clamped 2.5–4.25rem, each interpolating with viewport width. One scale across desktop and mobile; content constrained to a 1180px measure. Heading levels are chosen semantically, never for appearance.</p></div>
+        <div class="card sage" style="padding:11px 14px"><p style="font-size:12px;margin:0">Both stacks are system-first, so nothing is downloaded: no font-loading flash, no licensing question, no performance cost. <span class="pill warn" style="font-size:9px">Confirm C-27</span> — but the display serif resolves differently on macOS, Windows and Android.</p></div>
+      </div>
+      <div class="stack">
+        <div class="card"><h3>Corner radius</h3><p style="margin:0">2px, 3px, 6px, 10px and a pill token. <strong>Deliberately tight — paper does not have 24px corners.</strong> Do not introduce new radii per component.</p></div>
+        <div class="card"><h3>Elevation &amp; texture</h3><p style="margin:0">Three shadow tokens, reserved for elements that represent physical objects. Depth is not decoration; a flat panel stays flat. A ruled-paper repeating gradient is used sparingly and must never reduce text contrast.</p></div>
+        <div class="card"><h3>Focus</h3><p style="margin:0">A 3px ring in <code>--stamp-050</code> against the <code>--stamp-600</code> focus colour. <strong>Focus is always visible. It is never removed to tidy a layout.</strong></p></div>
+        <div class="card"><h3>Icons &amp; motion</h3><p style="margin:0">Inline SVG drawn to the brand, no icon library. Unfamiliar icons carry a visible label — <strong>report, pin, hide and delete must never rely on an icon alone</strong>. Motion explains change or progress only, and respects reduced-motion preferences.</p></div>
+      </div>
+      <div class="stack">
+        <div class="card accent"><h3>Pending and held states</h3><p style="margin:0">"Memory added! Your host is reviewing this post to add it to the public wall." Never suggest the guest did something wrong, and never reveal an internal escalation.</p></div>
+        <div class="card accent"><h3>Report acknowledgement — identical every time</h3><p style="margin:0">"Report received. It will be reviewed." Never confirm deletion and never reveal whether visibility changed.</p></div>
+        <div class="card accent"><h3>Billing, privacy and safety</h3><p style="margin:0">Precise and non-promotional. Defined terms used consistently. No material condition hidden in friendly language. <strong>No promotional block in a transactional message.</strong></p></div>
+        <div class="card sage"><h3>Fixed terminology</h3><p style="margin:0"><strong>Host, Guest, property, Guest Wall, memory, post, pinned post, QR kit, Privacy &amp; Safety.</strong><br>Not: user, customer wall, event, gallery, feed.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>6.4 · Brand system</span></div>
+</section>
+
+<!-- ══ DIVIDER 5 ══ -->
+<section class="slide divider" data-title="5 · Launch, growth & money">
+  <p class="eyebrow">Part five</p>
+  <h1>Launch, growth<br>&amp; money</h1>
+  <p class="sub">The launch approach, referral partnerships, the cost drivers and the monthly review.</p>
+  <p class="foot-note">At roughly USD $10 per property per month, the unit economics are unforgiving: a small number of cost drivers determine whether the product has a margin at all.</p>
+  <div class="num">7</div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>Sections 7–8</span></div>
+</section>
+
+<!-- ══ LAUNCH ══ -->
+<section class="slide" data-title="Launch approach">
+  <p class="eyebrow">7.1 · Launch approach <span class="sec">/ narrow on purpose</span></p>
+  <h2>Australian hosts with one to five properties</h2>
+  <p class="sub">Hosts who manage their own listings and care about the guest experience rather than yield optimisation — the group for whom a per-property fee at this price is a decision they can make alone, in one sitting, without approval from anyone.</p>
+  <div class="slide-body">
+    <div class="cols c2">
+      <div class="stack">
+        <div class="card accent"><h3>The trial does the selling</h3><p style="margin:0">A host can build their entire wall, in their own theme, with their own photos, before being asked for a card. The launch message is the positioning statement: one printed placard turns into a living wall of guest memories and always-available house information, with the screening handled.</p></div>
+        <div class="card"><h3>Launch scope</h3><p style="margin:0">The monthly and annual plans, the first-property trial, the physical QR kit — and <strong>nothing</strong> from the future-features appendix. No affiliate programme, no tablet display, no direct-booking links, no translation.</p></div>
+      </div>
+      <div class="stack">
+        <div class="card sage"><h3>Two acquisition mechanics already built in, not bought</h3><p><strong>The Guest Wall micro-branding loop.</strong> Every live public wall carries a discreet "Powered by DigiStayBook" link. Some guests own or manage rentals themselves. A plausible product-discovery path — but <strong>no conversion percentage may be published</strong>, and nothing about the placement may interrupt the guest.</p><p style="margin:0"><strong>The demo wall.</strong> The public sandbox is a working sales surface: a prospective host can see and manipulate the real product before creating an account.</p></div>
+      </div>
+    </div>
+    <div class="cols c3" style="margin-top:14px">
+      <div class="card warn" style="padding:10px 13px"><p style="font-size:11.5px;margin:0"><span class="pill warn">Confirm</span> <span class="ref">C-29</span> <strong>No primary paid channel chosen.</strong> Host communities and Facebook groups, industry newsletters, direct local outreach, or search advertising. A two-person business cannot run several — pick one to test first.</p></div>
+      <div class="card warn" style="padding:10px 13px"><p style="font-size:11.5px;margin:0"><span class="pill warn">Confirm</span> <span class="ref">C-30</span> <strong>No launch date, budget or spending limit.</strong> Set the acceptable cost of acquiring one property against its expected retained lifetime <em>before</em> the first campaign.</p></div>
+      <div class="card warn" style="padding:10px 13px"><p style="font-size:11.5px;margin:0"><span class="pill warn">Confirm</span> <span class="ref">C-31</span> <strong>Launch ownership is unassigned.</strong> Who approves the launch, against which evidence, and who may stop it.</p></div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>7.1 · Launch</span></div>
+</section>
+
+<!-- ══ PARTNERSHIPS ══ -->
+<section class="slide" data-title="Partnerships & referrals">
+  <p class="eyebrow">7.2 · Partnerships and referrals <span class="sec">/ the natural channel</span></p>
+  <h2>The customer is already surrounded by suppliers who visit their property</h2>
+  <div class="slide-body">
+    <div class="cols c-2-1">
+      <table class="sm zebra">
+        <thead><tr><th style="width:24%">Partner type</th><th style="width:40%">How it works</th><th>Benefit</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Referral partner</strong></td><td>Introduces hosts through an approved tracked link or code.</td><td>Earns an agreed commission on qualified, retained customers without delivering the product.</td></tr>
+          <tr><td><strong>Service provider</strong><br>manager, cleaner, stylist</td><td>Recommends the product where it complements their existing service. Any setup fee they charge is separate from the subscription.</td><td>Offers their client something useful while keeping responsibilities and fees clear.</td></tr>
+          <tr><td><strong>Association or host community</strong></td><td>Presents an approved member offer or resource <strong>without sharing membership data</strong>.</td><td>Members get a relevant benefit; the organisation may receive an agreed return.</td></tr>
+          <tr><td><strong>Technology partner</strong></td><td>Coordinates compatible workflows or approved co-marketing. Any integration needs a separate security, privacy and delivery decision.</td><td>Both products reach a better-matched audience.</td></tr>
+          <tr><td><strong>Content or affiliate partner</strong></td><td>Publishes approved, clearly disclosed content and refers through a tracked route.</td><td>Earns performance-based income; the business gains measurable exposure.</td></tr>
+        </tbody>
+      </table>
+      <div class="stack">
+        <div class="card err"><h3>Firm boundaries, in every arrangement</h3><ul class="plain no tight" style="margin:0"><li>The customer creates their own account and contracts directly with the business. <strong>The partner never collects passwords or payment details.</strong></li><li>Partners use current approved materials and must not invent discounts, guarantees or capabilities — and <strong>no partner may make the review, revenue or property-protection claims the business itself is forbidden to make</strong>.</li><li>Referred customers receive the same product, service standards and statutory rights as anyone else.</li><li>Immediate suspension for misleading promotion, unlawful conduct, privacy or security concerns, fraudulent referrals, misuse of data or material brand harm.</li></ul></div>
+        <div class="card warn" style="padding:10px 13px"><p style="font-size:11.5px;margin:0"><span class="pill warn">Confirm</span> <span class="ref">C-32</span> Commission, attribution window, payment threshold, currency and tax documentation are undefined — and cannot be renegotiated after a partner conversation begins without damaging the relationship.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>7.2 · Partnerships</span></div>
+</section>
+
+<!-- ══ COSTS ══ -->
+<section class="slide dense" data-title="Primary costs">
+  <p class="eyebrow">8.1 · Primary costs <span class="sec">/ four drivers scale with usage</span></p>
+  <h2>Stored media, moderation calls, email volume, Stripe fees</h2>
+  <p class="sub">Everything else is close to fixed at launch volumes. Costs are reviewed against active properties, stored media and guest activity — never treated as fixed.</p>
+  <div class="slide-body">
+    <table class="xs zebra">
+      <thead><tr><th style="width:17%">Cost</th><th style="width:36%">Reference position</th><th>What makes it grow</th></tr></thead>
+      <tbody>
+        <tr style="background:var(--stamp-050)"><td><strong>Cloud Storage</strong> <span class="pill mk">driver 1</span></td><td>Blaze plan required. Charged by bucket region for data stored, operations and network transfer.</td><td><strong>The primary variable cost.</strong> Guest photos, up to ten per post, retained for the life of the property plus a 12-month dormancy window, plus quarantine copies and downloads by every wall visitor.</td></tr>
+        <tr style="background:var(--stamp-050)"><td><strong>Moderation provider</strong> <span class="pill mk">driver 2</span></td><td>Provider not selected. Per image and per text call.</td><td><strong>The second variable cost.</strong> Every image and every text block is screened before publication. A ten-image post is ten calls plus one text call.</td></tr>
+        <tr style="background:var(--stamp-050)"><td><strong>Email</strong> <span class="pill mk">driver 3</span></td><td>Provider not selected. Portfolio default free tier: 3,000/month capped at 100/day; paid ≈ USD $20/month for 50,000.</td><td>Account, activation, billing, security and moderation alerts. <strong>Moderation alerts scale with guest activity, not host count — every held post is an email.</strong></td></tr>
+        <tr style="background:var(--stamp-050)"><td><strong>Stripe processing</strong> <span class="pill mk">driver 4</span></td><td>Rate depends on the connected account and payment mix.</td><td>Payments, refunds, disputes, international cards and conversion. On a ~$10 monthly charge the <strong>fixed per-transaction component is a material share of revenue</strong> — part of why the annual plan matters.</td></tr>
+        <tr><td>Cloud Functions</td><td>First 2M invocations/month free, then ≈ USD $0.40 per million, plus compute, networking and build/container storage.</td><td>Uploads, moderation routing, reporting transactions, billing webhooks, email dispatch, scheduled retention jobs and retries.</td></tr>
+        <tr><td>Cloud Firestore</td><td>20,000 reads / writes / deletes per day free; then ≈ $0.03 per 100k reads, $0.09 per 100k writes, $0.01 per 100k deletes, $0.15 per GiB-month. <strong>TTL deletes are billed.</strong></td><td>Wall reads by every scanning guest, contributions, moderation and status updates, report transactions, and the retention engine's scheduled deletes.</td></tr>
+        <tr><td>Firebase Hosting</td><td>10 GB storage and 10 GB monthly transfer free; then ≈ $0.026/GB stored, $0.15/GB transferred.</td><td>Asset size, release history and visitor traffic.</td></tr>
+        <tr><td>Firebase Authentication</td><td>Email and Google sign-in generally free for standard Firebase Auth. Identity Platform includes up to 50,000 MAU.</td><td>Host accounts, plus <strong>one anonymous session per scanning guest device</strong> — the volume driver, not the host count.</td></tr>
+        <tr><td>Domain, branding, monitoring, marketing</td><td>Registrar rate for digistaybook.com · logo masters, print-ready placard artwork, the 45-second preview video, demo photography licences · tool not selected · no budget approved.</td><td>Renewal price changes, asset refreshes, logs retained and alerts monitored, campaign spend and partner payments.</td></tr>
+      </tbody>
+    </table>
+    <div class="cols c3" style="margin-top:12px">
+      <div class="card warn" style="padding:10px 13px"><p style="font-size:11.5px;margin:0"><span class="pill warn">Confirm</span> <span class="ref">C-33</span> <strong>No cost-per-property model exists.</strong> Nobody knows whether a busy property with fifty ten-image posts a month is profitable at USD $10.</p></div>
+      <div class="card warn" style="padding:10px 13px"><p style="font-size:11.5px;margin:0"><span class="pill warn">Confirm</span> <span class="ref">C-34</span> <strong>The Firebase region and Storage bucket SKU are unconfirmed</strong> — and storage is the single largest variable cost.</p></div>
+      <div class="card err" style="padding:10px 13px"><p style="font-size:11.5px;margin:0"><span class="pill err">Action</span> <span class="ref">A-16</span> <strong>No budget alerts are configured.</strong> A runaway upload loop, an aggressive crawler or a misconfigured retry accumulates charges with nothing to signal it. <em>Budget alerts are notifications — they do not cap Firebase charges.</em></p></div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>8.1 · Primary costs</span></div>
+</section>
+
+<!-- ══ MONTHLY REVIEW ══ -->
+<section class="slide" data-title="Monthly financial review">
+  <p class="eyebrow">8.2 · Monthly financial review <span class="sec">/ once a month, the owner</span></p>
+  <h2>What the monthly review actually checks</h2>
+  <div class="slide-body">
+    <div class="cols c2">
+      <div class="stack">
+        <div class="card"><p style="margin:0"><strong>Reconciles</strong> Stripe receipts, refunds, disputes and subscription states against the product database.</p></div>
+        <div class="card"><p style="margin:0"><strong>Reviews supplier invoices and usage</strong> against the four drivers — in particular gigabytes stored, moderation calls and emails sent.</p></div>
+        <div class="card"><p style="margin:0"><strong>Calculates revenue and direct contribution margin</strong> per active property.</p></div>
+        <div class="card"><p style="margin:0"><strong>Identifies unexpected cost growth and its cause</strong> — a single heavy property, a retry loop, an unexpected traffic source.</p></div>
+        <div class="card"><p style="margin:0"><strong>Reviews trial-to-paid conversion</strong>, monthly-to-annual mix, cancellations and the reasons given.</p></div>
+        <div class="card"><p style="margin:0"><strong>Records the next pricing, limit or supplier decision</strong>, with an owner and a date.</p></div>
+      </div>
+      <div class="stack">
+        <div class="card sage">
+          <h3>And confirms the operational commitments with a financial consequence were met</h3>
+          <ul class="plain tight" style="margin:0">
+            <li>The deletion jobs ran</li>
+            <li>The moderation queue was swept daily</li>
+            <li>The monthly false-positive sample of 50 posts was taken</li>
+            <li>No privacy request passed 14 days</li>
+          </ul>
+        </div>
+        <div class="card warn">
+          <h3><span class="pill warn">Confirm</span> <span class="ref">C-02</span> &nbsp;This review has nothing to review against</h3>
+          <p style="margin:0">Until a target number of paying properties, a trial-to-paid conversion rate and a date are set, the review can describe what happened but cannot say whether it was good enough to keep investing.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>8.2 · Monthly review</span></div>
+</section>
+
+<!-- ══ DIVIDER 6 ══ -->
+<section class="slide divider" data-title="6 · The open register">
+  <p class="eyebrow">Part six</p>
+  <h1>The open register</h1>
+  <p class="sub">34 decisions to confirm. 18 actions outstanding. Nothing here is optional.</p>
+  <p class="foot-note">Confirm items need a decision from the owner. Action items are settled intent that the product does not yet meet — the decision is not in question, the delivery is. This register is the working list.</p>
+  <div class="num">A.4</div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>Appendix A.4</span></div>
+</section>
+
+<!-- ══ DECISIONS 1 ══ -->
+<section class="slide" data-title="Decisions to confirm (1/2)">
+  <p class="eyebrow">A.4 · Decisions to confirm <span class="sec">/ C-01 to C-17</span></p>
+  <h2>Decisions to confirm <span style="font-size:20px;color:var(--ink-500)">— 1 of 2</span></h2>
+  <div class="slide-body">
+    <table class="xs zebra">
+      <thead><tr><th style="width:6%">Ref</th><th style="width:8%">Section</th><th style="width:56%">Decision needed</th><th>Blocks</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ref">C-01</span></td><td>Cover</td><td>Registered entity name, ABN and trading name for invoices, email footers and published policies.</td><td>First customer invoice</td></tr>
+        <tr><td><span class="ref">C-02</span></td><td>1.1</td><td>Target number of paying properties, trial-to-paid conversion rate and the date by which they must be reached.</td><td>The monthly review</td></tr>
+        <tr><td><span class="ref">C-03</span></td><td>2.2</td><td>Whether hosts outside Australia may buy at launch.</td><td>Legal review scope</td></tr>
+        <tr><td><span class="ref">C-04</span></td><td>2.3</td><td>Who holds the Platform administrator and Privacy &amp; Safety Operations functions.</td><td>Escalation routes</td></tr>
+        <tr><td><span class="ref">C-05</span></td><td>3.1</td><td>Whether to run structured conversations with ten hosts before launch spend is committed.</td><td>Launch approach</td></tr>
+        <tr><td><span class="ref">C-06</span></td><td>3.2</td><td>Whether a documented competitive review is required before pricing is fixed.</td><td>Pricing</td></tr>
+        <tr><td><span class="ref">C-07</span></td><td>4.1</td><td>Exact rounded price in each supported currency, the Stripe price objects, and GST treatment for Australian hosts.</td><td>Checkout, receipts, pricing page</td></tr>
+        <tr><td><span class="ref">C-08</span></td><td>4.1</td><td>A storage ceiling or fair-use boundary behind the "unlimited uploads" claim.</td><td>Pricing page copy, cost model</td></tr>
+        <tr><td><span class="ref">C-09</span></td><td>4.3</td><td>Refund authority: who approves a goodwill refund, up to what value, recorded where.</td><td>Support operations</td></tr>
+        <tr><td><span class="ref">C-10</span></td><td>5.3</td><td>Per-image and per-post size limits, whether images are downscaled server-side, and the rejection experience.</td><td>Contribution endpoint, cost model</td></tr>
+        <tr><td><span class="ref">C-11</span></td><td>5.3</td><td>The age threshold and the workflow for a photograph containing a minor who did not consent.</td><td>Legal review, consent wording</td></tr>
+        <tr><td><span class="ref">C-12</span></td><td>5.4, 5.12</td><td>Moderation provider selection — cost per item, latency, thresholds, data terms and processing location.</td><td>The entire screening pipeline</td></tr>
+        <tr><td><span class="ref">C-13</span></td><td>5.4</td><td>Standard and critical confidence thresholds, and the accepted monthly false-positive rate.</td><td>Daily sweep, monthly tuning</td></tr>
+        <tr style="background:var(--stamp-050)"><td><span class="ref">C-14</span></td><td>5.6, 5.12</td><td><strong>Email provider and plan, sending domain, and SPF, DKIM and DMARC authentication.</strong></td><td><strong>Every transactional email</strong></td></tr>
+        <tr><td><span class="ref">C-15</span></td><td>5.7</td><td>Stripe retry configuration, reconciled with the failed-payment email sequence.</td><td>Dunning behaviour</td></tr>
+        <tr><td><span class="ref">C-16</span></td><td>5.8</td><td>Support address, response-time target, business-hours expectation and queue cover.</td><td>Support page, acknowledgement copy</td></tr>
+        <tr><td><span class="ref">C-17</span></td><td>5.9</td><td>Monitoring and alerting tool, alert destination and out-of-hours severity threshold.</td><td>Incident response</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.4 · Decisions 1/2</span></div>
+</section>
+
+<!-- ══ DECISIONS 2 ══ -->
+<section class="slide" data-title="Decisions to confirm (2/2)">
+  <p class="eyebrow">A.4 · Decisions to confirm <span class="sec">/ C-18 to C-34</span></p>
+  <h2>Decisions to confirm <span style="font-size:20px;color:var(--ink-500)">— 2 of 2</span></h2>
+  <div class="slide-body">
+    <table class="xs zebra">
+      <thead><tr><th style="width:6%">Ref</th><th style="width:9%">Section</th><th style="width:55%">Decision needed</th><th>Blocks</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ref">C-18</span></td><td>5.9</td><td>Whether an availability target exists and is measured.</td><td>Any uptime statement</td></tr>
+        <tr style="background:var(--stamp-050)"><td><span class="ref">C-19</span></td><td>5.10, A.6, A.7</td><td><strong>Professional legal review gate</strong> — approval of the Terms, Privacy Policy, consent wording, age threshold, moderation process, controller/processor allocation, retention schedule and jurisdictional scope, with versions and date recorded.</td><td><strong>Publication of any policy; launch</strong></td></tr>
+        <tr><td><span class="ref">C-20</span></td><td>5.10</td><td>Backup scope, encryption, access control and restoration-test frequency.</td><td>Recovery assurance</td></tr>
+        <tr><td><span class="ref">C-21</span></td><td>5.12</td><td>Domain registration held by the operating entity, with registrar security and recovery access recorded.</td><td>Email authentication</td></tr>
+        <tr><td><span class="ref">C-22</span></td><td>6.2</td><td>Password minimum length, complexity and reuse rules.</td><td>Sign-up page</td></tr>
+        <tr><td><span class="ref">C-23</span></td><td>6.2</td><td>Whether multi-factor authentication is offered to hosts.</td><td>Account security</td></tr>
+        <tr><td><span class="ref">C-24</span></td><td>6.2</td><td>Cleanup schedule for abandoned anonymous guest accounts, and its effect on later self-delete requests.</td><td>Identity hygiene, cost</td></tr>
+        <tr><td><span class="ref">C-25</span></td><td>6.4.1</td><td>Approved tagline or short descriptor.</td><td>Logo lockup, placard artwork</td></tr>
+        <tr><td><span class="ref">C-26</span></td><td>6.4.2</td><td>Logo clear space and minimum legible size, screen and print.</td><td>Placard artwork</td></tr>
+        <tr><td><span class="ref">C-27</span></td><td>6.4.4</td><td>Whether the display serif's variation across platforms is acceptable, or one webfont should be self-hosted.</td><td>Brand consistency</td></tr>
+        <tr><td><span class="ref">C-28</span></td><td>6.4.7</td><td>Licences and releases for the ten demo-wall images used on a public sales surface.</td><td>Sandbox launch</td></tr>
+        <tr><td><span class="ref">C-29</span></td><td>7.1</td><td>The one primary acquisition channel to test first.</td><td>Launch</td></tr>
+        <tr><td><span class="ref">C-30</span></td><td>7.1</td><td>Launch date, acquisition budget and acceptable cost per acquired property.</td><td>Any paid campaign</td></tr>
+        <tr><td><span class="ref">C-31</span></td><td>7.1</td><td>Who approves the launch, against which evidence, and who may stop it.</td><td>Launch</td></tr>
+        <tr><td><span class="ref">C-32</span></td><td>7.2</td><td>Referral commission, attribution window, payment threshold, currency and tax documentation.</td><td>First partner conversation</td></tr>
+        <tr><td><span class="ref">C-33</span></td><td>8.1</td><td>Cost-per-property model, built against stated usage assumptions and checked against the price.</td><td>Pricing viability</td></tr>
+        <tr><td><span class="ref">C-34</span></td><td>8.1</td><td>Firebase project region and the exact Cloud Storage bucket SKU and rate.</td><td>Every budget figure</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.4 · Decisions 2/2</span></div>
+</section>
+
+<!-- ══ ACTIONS ══ -->
+<section class="slide dense" data-title="Actions outstanding">
+  <p class="eyebrow">A.4 · Actions outstanding <span class="sec">/ A-01 to A-18 — settled intent the product does not meet</span></p>
+  <h2>Actions outstanding</h2>
+  <div class="slide-body">
+    <table class="xs zebra">
+      <thead><tr><th style="width:5.5%">Ref</th><th style="width:8%">Section</th><th style="width:50%">Work required</th><th>Consequence if not done</th></tr></thead>
+      <tbody>
+        <tr style="background:var(--err-bg)"><td><span class="ref">A-01</span></td><td>5.3, 6.2</td><td><strong>Build the server-controlled guest contribution endpoint with App Check</strong>, and the property-owned Storage rules with size and content-type limits. Prove both in the emulator.</td><td><strong>No guest can contribute. Nothing else in the product matters.</strong></td></tr>
+        <tr><td><span class="ref">A-02</span></td><td>5.4</td><td>Build the quarantine bucket, the dual-layer screening call, the three-way routing and the fail-closed behaviour.</td><td>Unscreened guest content would reach public walls in family homes.</td></tr>
+        <tr><td><span class="ref">A-03</span></td><td>2.3, 5.4</td><td>Build the internal administrative surface: critical escalation queue, daily sweep, host-initiated escalations, Privacy &amp; Safety queue, with MFA and audited actions.</td><td>Severe content has nowhere to escalate to.</td></tr>
+        <tr><td><span class="ref">A-04</span></td><td>5.11</td><td>Enforce Firebase App Check on the contribution and reporting endpoints.</td><td>Every circuit breaker is bypassable.</td></tr>
+        <tr><td><span class="ref">A-05</span></td><td>5.10</td><td>Build the retention engine: scheduled deletion jobs, the deletion manifest, content-free audit events, backup-expiry control and scoped legal holds.</td><td>Every date in the retention matrix is a promise the product cannot keep — several stated to customers in the Privacy Policy.</td></tr>
+        <tr style="background:var(--err-bg)"><td><span class="ref">A-06</span></td><td>5.6</td><td><strong>Build the central marketing-preference and suppression service</strong>, with fail-closed send-time checks and the automated suppression tests.</td><td><strong>No marketing sequence may lawfully be sent at all.</strong></td></tr>
+        <tr><td><span class="ref">A-07</span></td><td>5.5</td><td>Add a content export function for hosts.</td><td>The retention schedule deletes customer content with no route to recover it first.</td></tr>
+        <tr><td><span class="ref">A-08</span></td><td>5.11</td><td>Resolve the seven moderate transitive advisories in the Functions dependency tree, or record a time-bounded named risk acceptance. Do not force a downgrade.</td><td>Privileged functions deploy with unresolved advisories.</td></tr>
+        <tr><td><span class="ref">A-09</span></td><td>6.3.10</td><td>Build the missing routes: pricing, host FAQ, host contact, and the per-property management page.</td><td>The host experience described in the plan does not exist.</td></tr>
+        <tr><td><span class="ref">A-10</span></td><td>6.3.3</td><td>Produce the 45-second preview video, or restructure the landing page around its absence.</td><td>The landing page is written around content that does not exist.</td></tr>
+        <tr><td><span class="ref">A-11</span></td><td>6.4.2</td><td>Resolve the logo's undefined colour tokens (<code>--harbour-800</code>, <code>--harbour-500</code>, <code>--ember-600</code>).</td><td>The brand mark renders against undefined values.</td></tr>
+        <tr><td><span class="ref">A-12</span></td><td>6.4.2</td><td>Produce reversed, single-colour, compact and small-format logo versions, favicon and app icons, editable vector masters and print-ready placard artwork.</td><td>The printed QR placard — a physical product — has no print-ready artwork.</td></tr>
+        <tr><td><span class="ref">A-13</span></td><td>6.4.3</td><td>Define semantic status colours for success, warning and error, each paired with an icon and a text label.</td><td>A moderation-queue product has no visual language for state.</td></tr>
+        <tr><td><span class="ref">A-14</span></td><td>6.4.3</td><td>Measure and record contrast for every approved colour pair against WCAG AA.</td><td>Accessibility compliance is unverified.</td></tr>
+        <tr><td><span class="ref">A-15</span></td><td>6.5</td><td>Create the preview environment: separate Firebase project, Stripe test account and sending domain.</td><td>Pre-launch verification has nowhere to run but production.</td></tr>
+        <tr><td><span class="ref">A-16</span></td><td>8.1</td><td>Configure Firebase billing alerts.</td><td>Runaway usage accumulates charges with no signal.</td></tr>
+        <tr><td><span class="ref">A-17</span></td><td>A.2, A.3</td><td>Write the support response templates and the operational checklists.</td><td>The first support request and the first daily sweep have no defined handling.</td></tr>
+        <tr><td><span class="ref">A-18</span></td><td>Whole doc</td><td>Re-point existing <code>DSB-BOP-P&lt;part&gt;-&lt;number&gt;</code> citations in the decisions log, implementation status, product spec, tests and issues to the section numbers used here.</td><td>The plan drops the requirement-ID scheme, so existing citations no longer resolve to anything.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.4 · Actions outstanding</span></div>
+</section>
+
+<!-- ══ FUTURE ══ -->
+<section class="slide" data-title="Held for later">
+  <p class="eyebrow">A.8 · Future features <span class="sec">/ explicitly out of launch scope</span></p>
+  <h2>Held until the core journey and willingness to pay are demonstrated</h2>
+  <div class="slide-body">
+    <div class="cols c3">
+      <div class="card"><h3>Affiliate and referral engine</h3><p>Tracked links and a 40% commission on the first year of an <em>annual</em> subscription only, with payout notifications.</p></div>
+      <div class="card"><h3>Contextual location-based writing prompts</h3><p>Prompts that change with where in the property the guest is standing.</p></div>
+      <div class="card"><h3>Dual-carousel tablet display</h3><p>Explicitly excluded from the MVP: the physical-QR-first approach exists to avoid Wi-Fi, battery and device-maintenance dependencies.</p></div>
+      <div class="card"><h3>Direct booking retention links</h3><p>A route back to the host's own booking channel.</p></div>
+      <div class="card"><h3>Client-side auto-translation for house manuals</h3><p>So a guest reads the manual in their own language.</p></div>
+      <div class="card"><h3>House-manual content guidance for hosts</h3><p>Structured help writing the pinned posts that carry the manual.</p></div>
+    </div>
+    <div class="card sage" style="margin-top:18px"><p style="margin:0;font-size:14.5px">None of these ships at launch. Launch scope is the monthly and annual plans, the first-property trial, and the physical QR kit — <strong>and nothing else.</strong></p></div>
+  </div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>A.8 · Future features</span></div>
+</section>
+
+<!-- ══ CLOSE ══ -->
+<section class="slide divider" data-title="Close">
+  <p class="eyebrow">The position</p>
+  <h1 style="font-size:56px;max-width:24ch">The plan is settled.<br>The delivery is not.</h1>
+  <p class="sub" style="max-width:76ch">Two items decide whether anything else can happen: <strong style="color:var(--on-ink)">A-01</strong>, the guest contribution endpoint — without it no guest can contribute and nothing else in the product matters — and <strong style="color:var(--on-ink)">A-06</strong>, the marketing-preference and suppression service, without which no marketing message may lawfully be sent at all. <strong style="color:var(--on-ink)">C-19</strong>, the professional legal review gate, blocks the publication of any policy and the launch itself.</p>
+  <p class="foot-note">Remove every Confirm and Action slide before this deck is shown to anyone outside the business.</p>
+  <div class="num">·</div>
+  <div class="slidefoot"><span class="brand">DigiStay<b>Book</b> — internal</span><span>End of deck</span></div>
+</section>
+
+<!--SLIDES-END-->
+</div>
+
+<div id="hud">
+  <button id="btnPrev" type="button">←</button>
+  <span id="counter">1 / 1</span>
+  <button id="btnNext" type="button">→</button>
+  <button id="btnOv" type="button">Overview</button>
+</div>
+
+<div id="overview">
+  <h4>Deck overview</h4>
+  <p class="hint">Click any slide to jump to it · Esc or O to close</p>
+  <div id="ovgrid"></div>
+</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var idx = 0;
+  var deck = document.getElementById('deck');
+  var counter = document.getElementById('counter');
+  var progress = document.getElementById('progress');
+  var overview = document.getElementById('overview');
+  var ovgrid = document.getElementById('ovgrid');
+
+  function fit(){
+    var pad = 40;
+    var s = Math.min((window.innerWidth - pad) / 1280, (window.innerHeight - pad) / 720);
+    slides.forEach(function(el){ el.style.transform = 'scale(' + s + ')'; });
+  }
+
+  function show(n){
+    idx = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function(el, i){ el.classList.toggle('active', i === idx); });
+    counter.textContent = (idx + 1) + ' / ' + slides.length;
+    progress.style.width = ((idx + 1) / slides.length * 100) + '%';
+    if (location.hash !== '#' + (idx + 1)) history.replaceState(null, '', '#' + (idx + 1));
+  }
+
+  slides.forEach(function(el, i){
+    var d = document.createElement('div');
+    d.className = 'ovitem' + (el.classList.contains('divider') ? ' isdiv' : '');
+    d.innerHTML = '<div class="t"></div><div class="n">' + (i + 1) + '</div>';
+    d.querySelector('.t').textContent = el.getAttribute('data-title') || ('Slide ' + (i + 1));
+    d.addEventListener('click', function(){ overview.classList.remove('on'); show(i); });
+    ovgrid.appendChild(d);
+  });
+
+  function toggleOverview(){ overview.classList.toggle('on'); }
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown'){ e.preventDefault(); show(idx + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); show(idx - 1); }
+    else if (e.key === 'Home'){ e.preventDefault(); show(0); }
+    else if (e.key === 'End'){ e.preventDefault(); show(slides.length - 1); }
+    else if (e.key === 'o' || e.key === 'O'){ e.preventDefault(); toggleOverview(); }
+    else if (e.key === 'Escape'){ overview.classList.remove('on'); }
+    else if (e.key === 'f' || e.key === 'F'){
+      if (!document.fullscreenElement) { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
+      else { document.exitFullscreen && document.exitFullscreen(); }
+    }
+  });
+
+  deck.addEventListener('click', function(e){
+    if (e.target.closest('a')) return;
+    show(idx + (e.clientX < window.innerWidth / 3 ? -1 : 1));
+  });
+
+  document.getElementById('btnNext').addEventListener('click', function(e){ e.stopPropagation(); show(idx + 1); });
+  document.getElementById('btnPrev').addEventListener('click', function(e){ e.stopPropagation(); show(idx - 1); });
+  document.getElementById('btnOv').addEventListener('click', function(e){ e.stopPropagation(); toggleOverview(); });
+
+  window.addEventListener('resize', fit);
+  fit();
+  var start = parseInt((location.hash || '').replace('#', ''), 10);
+  show(isNaN(start) ? 0 : start - 1);
+})();
+</script>
+</body>
+</html>

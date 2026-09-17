@@ -1,0 +1,55 @@
+
+> digistaybook@0.1.0 check
+> npm run typecheck && npm run test && npm run build && npm run functions:build
+
+
+> digistaybook@0.1.0 typecheck
+> tsc --noEmit
+
+
+> digistaybook@0.1.0 test
+> vitest run --exclude "tests/**/*.rules.test.ts"
+
+
+ RUN  v4.1.10 C:/Users/clbbe/Documents/Projects/DigiStayBook
+
+Not implemented: navigation to another Document
+Not implemented: navigation to another Document
+
+ Test Files  33 passed (33)
+      Tests  324 passed (324)
+   Start at  13:34:16
+   Duration  9.51s (transform 5.32s, setup 13.81s, import 7.88s, tests 18.91s, environment 101.30s)
+
+
+> digistaybook@0.1.0 build
+> vite build
+
+vite v8.2.0 building client environment for production...
+[2K
+transforming...✓ 183 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                      1.36 kB │ gzip:   0.59 kB
+dist/assets/index-BBoGU4G1.css      86.94 kB │ gzip:  17.29 kB
+dist/assets/index.esm-CZr-mCJw.js    0.69 kB │ gzip:   0.39 kB
+dist/assets/index.esm-CQJnr55V.js    8.30 kB │ gzip:   3.29 kB
+dist/assets/index.esm-BTcVzOZU.js   31.99 kB │ gzip:  10.43 kB
+dist/assets/index.esm-DoYTAfpC.js   34.74 kB │ gzip:  11.16 kB
+dist/assets/index.esm-DIQVOIfr.js  127.16 kB │ gzip:  36.11 kB
+dist/assets/index-CYGk07lI.js      449.73 kB │ gzip: 134.89 kB
+dist/assets/index.esm-CxMzEItC.js  555.00 kB │ gzip: 161.92 kB
+
+✓ built in 223ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+> digistaybook@0.1.0 functions:build
+> npm --prefix functions run build
+
+
+> build
+> tsc
+

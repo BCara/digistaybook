@@ -1,0 +1,2711 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1" /><title>wizard-step-2</title><style>/* ==========================================================================
+   DigiStayBook design system: "ink and paper"
+
+   The product is a guestbook, so the site is set like stationery rather than
+   like a dashboard: warm paper, one ink, hairline rules doing the structural
+   work, and square-ish geometry. Cards, soft shadows and pill buttons are
+   deliberately rare; they are reserved for the things that are physical in
+   the story (the phone, the QR display, a pinned note).
+
+   No external font or asset requests are made, so the site stays privacy-safe.
+   ========================================================================== */
+
+:root {
+  /* Ink */
+  --ink-900: #14181b;
+  --ink-800: #1f262b;
+  --ink-700: #33404a;
+  --ink-500: #5d6d78;
+  --ink-400: #7d8c96;
+
+  /* Paper */
+  --paper-000: #ffffff;
+  --paper-050: #fdfaf4;
+  --paper-100: #f7f2e8;
+  --paper-200: #efe8da;
+
+  /* Stamp: used sparingly, like a rubber stamp on a page */
+  --stamp-700: #8f3a20;
+  --stamp-600: #b4472a;
+  --stamp-500: #cd6844;
+  --stamp-050: #f6e6de;
+
+  --sage-700: #33604c;
+  --sage-050: #e2ebe4;
+
+  /* The paper tokens flip to dark surfaces under a dark scheme, so anything
+     that must stay legible ON an ink-coloured chip uses this instead. It is
+     deliberately never overridden. */
+  --on-ink: #f5f1e8;
+
+  /* Semantic tokens */
+  --bg: var(--paper-100);
+  --bg-alt: var(--paper-200);
+  --surface: var(--paper-050);
+  --surface-raised: var(--paper-000);
+  --surface-inverse: var(--ink-900);
+  --text: var(--ink-900);
+  --text-muted: var(--ink-500);
+  --text-inverse: #f4efe4;
+  --text-inverse-muted: #a4b0b8;
+  --accent: var(--stamp-600);
+  --accent-strong: var(--stamp-700);
+  --accent-soft: var(--stamp-050);
+
+  /* Hairlines carry the layout. Two weights, nothing else. */
+  --rule: rgba(20, 24, 27, .13);
+  --rule-strong: rgba(20, 24, 27, .26);
+  --rule-inverse: rgba(255, 255, 255, .16);
+  --border: var(--rule);
+  --border-strong: var(--rule-strong);
+  --border-inverse: var(--rule-inverse);
+  --focus: var(--stamp-600);
+
+  /* Type */
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, ui-serif, serif;
+  --step--2: .77rem;
+  --step--1: clamp(.86rem, .83rem + .1vw, .92rem);
+  --step-0: clamp(1.07rem, 1.04rem + .16vw, 1.15rem);
+  --step-1: clamp(1.23rem, 1.16rem + .35vw, 1.43rem);
+  --step-2: clamp(1.5rem, 1.31rem + .8vw, 1.98rem);
+  --step-3: clamp(1.96rem, 1.5rem + 1.9vw, 3.05rem);
+  --step-4: clamp(2.62rem, 1.68rem + 3.9vw, 4.4rem);
+
+  /* Space and shape. Paper does not have 24px corners. */
+  --gutter: clamp(20px, 5vw, 72px);
+  --measure: 1180px;
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+
+  /* Depth is for physical objects only. */
+  --lift-sm: 0 1px 1px rgba(20, 24, 27, .07);
+  --lift-md: 0 10px 24px -14px rgba(20, 24, 27, .5);
+  --lift-lg: 0 30px 60px -28px rgba(20, 24, 27, .55);
+  --ring: 0 0 0 3px var(--accent-soft);
+
+  --ruled: repeating-linear-gradient(180deg, transparent 0 27px, var(--rule) 27px 28px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #12171a;
+    --bg-alt: #171d21;
+    --surface: #181f23;
+    --surface-raised: #1d252a;
+    --surface-inverse: #0c1113;
+    --text: #eef1f2;
+    --text-muted: #9aa8b0;
+    --text-inverse: #eef1f2;
+    --text-inverse-muted: #9aa8b0;
+    --accent: var(--stamp-500);
+    --accent-strong: #dd8465;
+    --accent-soft: rgba(205, 104, 68, .16);
+    --rule: rgba(255, 255, 255, .13);
+    --rule-strong: rgba(255, 255, 255, .27);
+    --paper-000: #1d252a;
+    --paper-050: #181f23;
+    /* Ink chips have to lift off a dark page instead of sinking into it. */
+    --ink-800: #45535d;
+    --ink-700: #56646f;
+    --sage-050: rgba(51, 96, 76, .3);
+    --sage-700: #8fc0a8;
+    --lift-sm: 0 1px 1px rgba(0, 0, 0, .5);
+    --lift-md: 0 10px 24px -14px rgba(0, 0, 0, .8);
+    --lift-lg: 0 30px 60px -28px rgba(0, 0, 0, .9);
+  }
+}
+
+/* ------------------------------- Base ---------------------------------- */
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  color: var(--text);
+  background-color: var(--bg);
+  /* A grain, not a gradient. Just enough to read as stock rather than screen. */
+  background-image: repeating-linear-gradient(0deg, rgba(20, 24, 27, .016) 0 1px, transparent 1px 3px);
+  -webkit-font-smoothing: antialiased;
+  font-synthesis: none;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -.018em;
+  color: var(--text);
+  /* Set in em so the gap tracks the heading's own size: a display h1 opens a
+     wider space below it than a small h3, without a rule per component. */
+  margin: 0 0 .4em;
+  text-wrap: balance;
+}
+/* A heading that ends its block owes the block nothing; the container's own
+   margin or gap carries the space from there. */
+h1:last-child, h2:last-child, h3:last-child { margin-bottom: 0; }
+h1 { font-size: var(--step-4); letter-spacing: -.032em; line-height: 1.02; }
+h2 { font-size: var(--step-3); letter-spacing: -.024em; }
+h3 { font-size: var(--step-1); letter-spacing: -.01em; }
+p { margin: 0 0 1rem; }
+p:last-child { margin-bottom: 0; }
+a { color: inherit; }
+img, svg { max-width: 100%; }
+
+:where(a, button, input, textarea, select, summary):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: var(--radius-xs);
+}
+
+/* A section marker set as a small-caps label on a hairline, not a coloured
+   kicker. One per section at most. */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  color: var(--text-muted);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+.eyebrow::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+
+.lede { font-size: var(--step-1); line-height: 1.55; color: var(--text-muted); max-width: 58ch; }
+.muted { color: var(--text-muted); }
+.small { font-size: var(--step--1); }
+
+/* ------------------------------ Layout --------------------------------- */
+
+.app-shell { min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; }
+
+.page { width: min(var(--measure), 100% - 2 * var(--gutter)); margin-inline: auto; padding: clamp(32px, 5vw, 64px) 0 clamp(64px, 9vw, 120px); }
+.narrow-page { width: min(660px, 100% - 2 * var(--gutter)); }
+
+/* Full-bleed escape hatch, so not every band is trapped in the same box. */
+.bleed { width: 100vw; margin-left: calc(50% - 50vw); }
+
+.section { margin-top: clamp(64px, 10vw, 128px); }
+/* Sized in rem, not ch: a ch cap set on the container would be measured
+   against the body font and would strangle the much larger heading inside. */
+.section-head { max-width: 38rem; margin-bottom: clamp(28px, 4vw, 48px); }
+.section-head p { color: var(--text-muted); margin-bottom: 0; }
+
+.skip-link {
+  position: absolute; left: 12px; top: -60px; z-index: 20;
+  padding: 10px 16px; border-radius: var(--radius-sm);
+  background: var(--surface-inverse); color: var(--text-inverse);
+  font-weight: 650; text-decoration: none; transition: top .15s ease;
+}
+.skip-link:focus-visible { top: 12px; }
+
+/* ------------------------------ Buttons --------------------------------
+   Squared, with a printed weight to them. Nothing lifts on hover: the page
+   stays still and only colour responds.
+   ----------------------------------------------------------------------- */
+
+.btn, .primary-action, .secondary-action, button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px 24px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font: inherit; font-size: 1.01rem; font-weight: 600; letter-spacing: .005em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color .14s ease, border-color .14s ease, color .14s ease;
+}
+.btn-primary, .primary-action, button[type="submit"] { background: var(--ink-900); color: var(--on-ink); }
+.btn-primary:hover, .primary-action:hover, button[type="submit"]:hover { background: var(--ink-700); }
+.btn-accent { background: var(--accent); color: #fff; }
+.btn-accent:hover { background: var(--accent-strong); }
+.btn-secondary, .secondary-action { background: transparent; color: var(--text); border-color: var(--rule-strong); }
+.btn-secondary:hover, .secondary-action:hover { border-color: var(--text); background: color-mix(in srgb, var(--text) 4%, transparent); }
+.btn-ghost { background: transparent; color: inherit; padding-inline: 10px; }
+.btn-ghost:hover { color: var(--accent-strong); }
+.btn-sm { padding: 9px 16px; font-size: var(--step--1); }
+.btn-block { width: 100%; }
+button:disabled, .btn:disabled { cursor: not-allowed; opacity: .45; }
+
+/* A near-black button disappears into a near-black page, so dark mode
+   inverts it to light-on-dark. Literal values: the paper tokens are dark here. */
+@media (prefers-color-scheme: dark) {
+  .btn-primary, .primary-action, button[type="submit"] { background: #eaeef0; color: #14181b; }
+  .btn-primary:hover, .primary-action:hover, button[type="submit"]:hover { background: #c4cfd6; }
+}
+
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.action-note { margin-top: 14px; font-size: var(--step--1); color: var(--text-muted); }
+
+/* Links underline from the hairline up, like a ruled page. */
+.text-link { color: var(--text); font-weight: 500; text-underline-offset: 4px; text-decoration-color: var(--rule-strong); }
+.text-link:hover { color: var(--accent-strong); text-decoration-color: currentColor; }
+
+/* ------------------------------ Header --------------------------------- */
+
+.site-header {
+  position: sticky; top: 0; z-index: 15;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  padding: 16px var(--gutter);
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter: saturate(1.2) blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
+.brand-mark { display: block; flex: none; }
+.brand-word { font-family: var(--font-display); font-size: 1.28rem; font-weight: 600; letter-spacing: -.022em; }
+.brand-word b { font-weight: 600; }
+
+.header-inner { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); }
+.site-nav { display: flex; align-items: center; gap: clamp(12px, 2.2vw, 28px); }
+.site-nav a { font-size: .98rem; font-weight: 500; text-decoration: none; color: var(--text-muted); padding: 4px 0; }
+.site-nav a:hover { color: var(--text); }
+.site-nav a.active { color: var(--text); box-shadow: inset 0 -1px 0 var(--text); }
+
+.nav-toggle { display: none; }
+
+/* Signed-in header: where you work, then who you are and the way out.
+   The two destinations sit together as buttons and the account rule divides
+   them from the session controls. */
+.header-account { display: flex; align-items: center; gap: 10px; }
+.header-account-name {
+  font-size: .98rem; font-weight: 500; color: var(--text-muted);
+  max-width: 22ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  margin-left: clamp(6px, 1vw, 12px); padding-left: clamp(12px, 1.6vw, 20px);
+  border-left: 1px solid var(--rule);
+}
+
+/* ------------------------------ Footer --------------------------------- */
+
+.site-footer {
+  background: var(--surface-inverse); color: var(--text-inverse);
+  padding: clamp(52px, 7vw, 88px) var(--gutter) 32px;
+}
+.site-footer .brand { color: var(--text-inverse); }
+.footer-grid {
+  display: grid; grid-template-columns: minmax(0, 1.7fr) repeat(2, minmax(0, 1fr));
+  gap: clamp(28px, 5vw, 64px); max-width: var(--measure); margin-inline: auto;
+}
+.footer-blurb { margin: 18px 0 0; max-width: 38ch; color: var(--text-inverse-muted); font-size: var(--step--1); line-height: 1.7; }
+.footer-col h2 {
+  font-family: var(--font-sans); font-size: var(--step--2); font-weight: 600;
+  text-transform: uppercase; letter-spacing: .18em; color: var(--text-inverse-muted);
+  margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--rule-inverse);
+}
+.footer-col nav { display: grid; gap: 11px; }
+.footer-col a { color: var(--text-inverse); text-decoration: none; font-size: .98rem; opacity: .82; }
+.footer-col a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+.footer-base {
+  max-width: var(--measure); margin: clamp(40px, 6vw, 64px) auto 0; padding-top: 22px;
+  border-top: 1px solid var(--rule-inverse);
+  display: flex; flex-wrap: wrap; gap: 10px 28px; justify-content: space-between;
+  color: var(--text-inverse-muted); font-size: var(--step--1);
+}
+
+/* ------------------------------ Masthead -------------------------------
+   The hero. Copy is set like a title page; the art carries the whole product
+   story in one picture: a paper guestbook page, with the phone the QR display
+   opens resting on top of it.
+   ----------------------------------------------------------------------- */
+
+.masthead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+  gap: clamp(36px, 5vw, 72px);
+  align-items: center;
+  padding: clamp(20px, 4vw, 56px) 0 clamp(40px, 6vw, 72px);
+}
+.masthead-copy { max-width: 34rem; }
+.masthead-copy h1 { margin-bottom: 24px; }
+.masthead-copy h1 em { font-style: italic; font-weight: 400; }
+.masthead-lede { max-width: 44ch; font-size: var(--step-1); line-height: 1.55; color: var(--text-muted); }
+
+/* Facts as a run of small print under a rule, not a boxed stat bar. */
+.masthead-facts {
+  list-style: none; display: flex; flex-wrap: wrap; gap: 6px 18px;
+  margin: 28px 0 0; padding-top: 16px; border-top: 1px solid var(--rule);
+  font-size: var(--step--1); color: var(--text-muted);
+}
+.masthead-facts li + li::before { content: "·"; margin-right: 18px; color: var(--rule-strong); }
+
+/* ---- The guestbook page ---- */
+
+.masthead-art { position: relative; min-height: clamp(400px, 46vw, 540px); }
+
+.spread {
+  position: absolute; inset: 0 22% 0 0;
+  overflow: hidden; /* a note never spills past the edge of the paper */
+  padding: 30px 28px 24px;
+  background: var(--paper-000);
+  background-image: var(--ruled);
+  background-position: 0 44px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-xs);
+  box-shadow: var(--lift-md);
+  transform: rotate(-1.4deg);
+}
+.spread-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin-bottom: 22px; padding-bottom: 10px; border-bottom: 1px solid var(--rule-strong);
+  font-size: var(--step--2); letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted);
+}
+.spread-head b { font-family: var(--font-display); font-size: 1rem; letter-spacing: 0; text-transform: none; color: var(--text); font-weight: 600; }
+
+/* Guest hands, standing in for handwriting without loading a font. */
+.hand { margin: 0 0 20px; font-family: var(--font-display); font-style: italic; font-size: 1.02rem; line-height: 28px; color: var(--ink-800); }
+.hand small { display: block; font-style: normal; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); }
+.hand-1 { transform: rotate(-.3deg); }
+.hand-2 { transform: rotate(.4deg); padding-left: 8%; }
+.hand-3 { transform: rotate(-.2deg); }
+
+@media (prefers-color-scheme: dark) { .hand { color: var(--text); } }
+
+/* ---- The phone, resting on the page ---- */
+
+.device {
+  position: absolute; right: 0; top: 8%; z-index: 2;
+  width: min(238px, 44%); aspect-ratio: 9 / 17.6;
+  border-radius: 30px; padding: 9px;
+  background: linear-gradient(165deg, var(--ink-700), var(--ink-900));
+  box-shadow: var(--lift-lg);
+  transform: rotate(2.6deg);
+}
+.device-screen { height: 100%; border-radius: 22px; background: var(--surface); overflow: hidden; display: flex; flex-direction: column; }
+.device-top { padding: 15px 14px 11px; border-bottom: 1px solid var(--rule); }
+.device-top strong { font-family: var(--font-display); font-size: 1rem; display: block; letter-spacing: -.01em; }
+.device-top span { font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); }
+/* The feed fills whatever height is left and crops under a fade, so the mock
+   phone never shows dead space and reads as a live, scrollable wall. */
+.device-feed {
+  flex: 1; min-height: 0; overflow: hidden;
+  padding: 12px; display: grid; gap: 12px; align-content: start;
+  mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
+}
+.mini-post { border-bottom: 1px solid var(--rule); padding-bottom: 12px; }
+.mini-post:last-child { border-bottom: 0; }
+.mini-post p { margin: 0; font-family: var(--font-display); font-size: .76rem; line-height: 1.5; }
+.mini-post small { display: block; margin-top: 6px; font-size: .58rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+.mini-post.pinned { border-left: 2px solid var(--accent); padding-left: 9px; }
+.mini-post.pinned p { font-family: var(--font-sans); }
+.mini-tag { display: block; margin-bottom: 5px; font-size: .54rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-strong); }
+.mini-photo { display: block; width: 100%; height: 58px; object-fit: cover; border-radius: var(--radius-xs); margin-bottom: 8px; }
+
+.device-composer {
+  display: flex; align-items: center; gap: 8px; flex: none;
+  padding: 10px 11px; border-top: 1px solid var(--rule); background: var(--surface-raised);
+}
+.device-composer span {
+  flex: 1; padding: 6px 9px; border-radius: var(--radius-xs);
+  background: var(--bg-alt); font-size: .58rem; color: var(--text-muted);
+}
+.device-composer b { padding: 6px 10px; border-radius: var(--radius-xs); background: var(--ink-900); color: var(--on-ink); font-size: .58rem; font-weight: 650; }
+
+@media (prefers-color-scheme: dark) {
+  .device-composer b { background: #eaeef0; color: #14181b; }
+}
+
+/* ---- The QR display, tucked into the page ---- */
+
+.qr-display {
+  position: absolute; left: 4%; bottom: 2%; z-index: 3; width: 132px;
+  display: grid; gap: 8px; justify-items: center;
+  padding: 13px 12px 11px;
+  background: var(--paper-000);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-xs);
+  box-shadow: var(--lift-md);
+  transform: rotate(-5.5deg);
+}
+.qr-display-caption { margin: 0; font-family: var(--font-display); font-size: .78rem; text-align: center; line-height: 1.35; }
+.qr-display small { font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); }
+
+/* ------------------------------ Ledger ---------------------------------
+   Three facts set as running small print between two rules, replacing the
+   boxed three-across stat strip.
+   ----------------------------------------------------------------------- */
+
+.ledger {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 4vw, 56px);
+  padding: clamp(26px, 3vw, 34px) 0;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule);
+}
+.ledger div { display: grid; gap: 6px; align-content: start; }
+.ledger strong { font-family: var(--font-display); font-size: var(--step-1); font-weight: 600; letter-spacing: -.01em; }
+.ledger p { margin: 0; font-size: var(--step--1); color: var(--text-muted); line-height: 1.55; }
+
+/* ---------------------------- Walkthrough ------------------------------
+   Three steps as an editorial numbered list: serif numerals, hairline
+   between columns, no cards.
+   ----------------------------------------------------------------------- */
+
+.walkthrough { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; counter-reset: step; margin: 0; padding: 0; }
+.walkthrough li {
+  list-style: none;
+  padding: 0 clamp(18px, 2.6vw, 34px);
+  border-left: 1px solid var(--rule);
+}
+.walkthrough li:first-child { padding-left: 0; border-left: 0; }
+.walkthrough li:last-child { padding-right: 0; }
+.walkthrough li::before {
+  counter-increment: step; content: counter(step, decimal-leading-zero);
+  display: block; margin-bottom: 14px;
+  font-family: var(--font-display); font-size: var(--step-3); line-height: 1;
+  color: var(--accent); letter-spacing: -.03em;
+}
+.walkthrough h3 { margin: 0 0 10px; }
+.walkthrough p { margin: 0; color: var(--text-muted); font-size: 1.02rem; line-height: 1.6; }
+
+/* ---------------------------- Capabilities -----------------------------
+   What hosts get, as a ruled two-column list rather than six icon tiles.
+   ----------------------------------------------------------------------- */
+
+.capabilities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 clamp(32px, 5vw, 72px); margin: 0; }
+.capability { padding: clamp(22px, 2.6vw, 30px) 0; border-top: 1px solid var(--rule); }
+.capability:first-child, .capability:nth-child(2) { border-top-color: var(--rule-strong); }
+.capability h3 { margin: 0 0 8px; display: flex; align-items: baseline; gap: 12px; }
+.capability h3 span {
+  font-family: var(--font-sans); font-size: var(--step--2); font-weight: 600;
+  letter-spacing: .12em; color: var(--text-muted);
+}
+.capability p { margin: 0; color: var(--text-muted); font-size: 1.02rem; line-height: 1.62; max-width: 44ch; }
+
+/* Kept for the host dashboard's card grid. */
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(16px, 2vw, 24px); }
+.feature-grid article { padding: clamp(20px, 2.4vw, 26px); background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-sm); }
+.feature-grid h2, .feature-grid h3 { font-size: var(--step-1); margin-bottom: 8px; }
+.feature-grid p { color: var(--text-muted); margin-bottom: 0; font-size: 1.02rem; }
+
+.card-icon { display: grid; place-items: center; width: 34px; height: 34px; margin-bottom: 14px; color: var(--accent-strong); }
+.card-icon svg { width: 22px; height: 22px; }
+
+/* ----------------------------- Manifesto -------------------------------
+   Full-bleed dark band. One idea, set large in the display face.
+   ----------------------------------------------------------------------- */
+
+.manifesto {
+  background: var(--surface-inverse); color: var(--text-inverse);
+  padding: clamp(64px, 9vw, 128px) var(--gutter);
+}
+.manifesto-inner {
+  max-width: var(--measure); margin-inline: auto;
+  display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(32px, 6vw, 88px); align-items: start;
+}
+.manifesto .quote {
+  margin: 0; font-family: var(--font-display); font-size: var(--step-3);
+  line-height: 1.22; letter-spacing: -.022em; color: var(--text-inverse); text-wrap: balance;
+}
+.manifesto .quote cite {
+  display: block; margin-top: 22px; font-family: var(--font-sans); font-style: normal;
+  font-size: var(--step--1); letter-spacing: .14em; text-transform: uppercase; color: var(--text-inverse-muted);
+}
+.manifesto-note h2 { color: var(--text-inverse); font-size: var(--step-2); margin-bottom: 16px; }
+.manifesto-note p { color: var(--text-inverse-muted); font-size: 1.02rem; line-height: 1.65; }
+.manifesto-note .eyebrow { color: var(--text-inverse-muted); }
+.manifesto-note .eyebrow::after { background: var(--rule-inverse); }
+.band-note { font-size: var(--step--1); opacity: .82; }
+
+/* ------------------------------ Rates ----------------------------------
+   Pricing as a flat rate table sharing one hairline, not two floating cards
+   competing for attention.
+   ----------------------------------------------------------------------- */
+
+.trial-callout {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px;
+  margin-bottom: clamp(24px, 3vw, 34px); padding-bottom: 20px;
+  border-bottom: 1px solid var(--rule);
+}
+.trial-callout strong { font-family: var(--font-display); font-size: var(--step-1); font-weight: 600; }
+.trial-callout p { margin: 0; font-size: var(--step--1); color: var(--text-muted); }
+
+.rates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+.rate { display: flex; flex-direction: column; align-items: stretch; gap: 12px; padding: clamp(24px, 3vw, 34px) clamp(24px, 3.2vw, 40px); border: 1px solid var(--rule); }
+.rate + .rate { border-left: 0; }
+.rate.featured { background: var(--surface); border-color: var(--rule-strong); }
+.rate-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.rate h3 { margin-bottom: 0; font-family: var(--font-sans); font-size: var(--step--2); font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--text-muted); }
+.rate-badge { font-size: var(--step--2); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-strong); }
+.price { margin: 0; font-family: var(--font-display); font-size: var(--step-3); line-height: 1; letter-spacing: -.03em; }
+.price span { font-family: var(--font-sans); font-size: var(--step--1); letter-spacing: 0; color: var(--text-muted); font-weight: 400; }
+.rate > p { margin: 0; color: var(--text-muted); font-size: var(--step--1); line-height: 1.6; }
+.rate .btn { margin-top: auto; }
+
+.included { margin-top: clamp(28px, 4vw, 44px); }
+.included h3 { font-family: var(--font-sans); font-size: var(--step--2); font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 18px; }
+.check-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0 clamp(24px, 4vw, 48px); margin: 0; padding: 0; font-size: 1rem; }
+.check-list li { display: flex; align-items: flex-start; gap: 12px; padding: 11px 0; border-top: 1px solid var(--rule); color: var(--text-muted); }
+/* Masked rather than a coloured data URI, so the tick takes its colour from
+   the token and flips with the scheme instead of staying dark green on dark. */
+.check-list li::before {
+  content: ""; flex: none; width: 15px; height: 15px; margin-top: 4px;
+  background: var(--sage-700);
+  --tick: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.6l3 3L13 4.6' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  -webkit-mask: var(--tick) center/15px no-repeat;
+  mask: var(--tick) center/15px no-repeat;
+}
+.fine-print {
+  display: grid; gap: 10px; margin-top: clamp(28px, 4vw, 40px); padding-top: 20px;
+  border-top: 1px solid var(--rule);
+  font-size: var(--step--1); color: var(--text-muted); max-width: 68ch; line-height: 1.6;
+}
+.fine-print p { margin: 0; }
+
+/* ----------------------------- Closing ---------------------------------- */
+
+.closing {
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 72px); align-items: end;
+  padding-top: clamp(40px, 5vw, 64px); border-top: 2px solid var(--text);
+}
+/* The pricing/closing run sits below the full-bleed manifesto, so it opens on
+   its own rule rather than a second page's worth of top padding. */
+.landing-tail { padding-top: clamp(56px, 8vw, 104px); }
+.landing-tail > #pricing { margin-top: 0; }
+
+.closing h2 { max-width: 30rem; margin-bottom: 0; }
+.closing-side p { color: var(--text-muted); font-size: 1.02rem; }
+.closing .actions { margin-top: 24px; }
+
+/* ------------------------------ Guest wall -----------------------------
+   Two routes share this section. /wall/:slug is the public wall a host
+   shares or embeds; /stay/:slug is what the QR display opens and is the
+   only one carrying house guidance or a contribution form.
+   ----------------------------------------------------------------------- */
+
+.wall-page { width: min(940px, 100% - 2 * var(--gutter)); padding-top: clamp(20px, 3vw, 32px); }
+.stay-composer {
+  position: sticky; bottom: 0; z-index: 10;
+  padding: 16px 0; background: var(--bg);
+  border-top: 1px solid var(--rule); margin-top: 32px;
+}
+
+/* Guest photography is served from our own origin out of public/wall. Images
+   carry intrinsic width/height attributes, so every rule that sets a height
+   also sets object-fit to stop the browser stretching them. */
+
+.demo-ribbon {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px;
+  margin: 0 0 clamp(20px, 3vw, 28px); padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--text-muted); font-size: var(--step--1);
+}
+.demo-ribbon-tag { font-size: var(--step--2); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent-strong); }
+.demo-ribbon a { color: var(--text); font-weight: 500; text-underline-offset: 3px; margin-left: auto; white-space: nowrap; }
+.demo-ribbon a:hover { color: var(--accent-strong); }
+
+/* ---- Public wall cover ---- */
+
+.wall-cover { margin-bottom: clamp(32px, 5vw, 56px); }
+/* The wall renders real photography from public/wall as an <img>. The low
+   object-position keeps the cottage front, not the sky, in the crop. */
+.wall-cover-photo {
+  display: block; width: 100%;
+  height: clamp(150px, 26vw, 250px);
+  object-fit: cover; object-position: center 62%;
+  border-radius: var(--radius-xs); background: var(--paper-100);
+}
+.wall-cover .eyebrow { margin-bottom: 10px; }
+.wall-cover h1 { font-size: var(--step-3); margin-bottom: 10px; }
+.wall-location { margin: 0 0 24px; color: var(--text-muted); font-size: var(--step--1); letter-spacing: .04em; }
+.wall-welcome { max-width: 52ch; margin: 0; font-family: var(--font-display); font-size: var(--step-1); line-height: 1.55; }
+.wall-monogram {
+  position: relative; display: grid; place-items: center;
+  width: 66px; height: 66px; margin: -33px 0 20px;
+  border-radius: var(--radius-xs); border: 3px solid var(--bg);
+  background: var(--ink-800); color: var(--on-ink);
+  font-family: var(--font-display); font-size: 1.55rem;
+}
+
+.host-byline {
+  display: flex; align-items: center; gap: 12px;
+  margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--rule);
+}
+.host-byline b { display: block; font-weight: 600; font-size: 1.03rem; }
+.host-byline small { color: var(--text-muted); font-size: var(--step--1); }
+
+/* ---- The wall of notes ---- */
+
+.wall-heading {
+  display: flex; align-items: center; gap: 16px;
+  font-size: var(--step-2); margin-bottom: clamp(20px, 2.6vw, 28px);
+}
+.wall-heading::after { content: ""; flex: 1; height: 1px; background: var(--rule-strong); }
+
+.memory-wall { margin-bottom: clamp(40px, 6vw, 64px); }
+
+/* Column flow, so notes of different lengths pack like pinned paper rather
+   than lining up in rigid rows. */
+.note-grid { columns: 2; column-gap: clamp(16px, 2.2vw, 24px); }
+.note {
+  break-inside: avoid;
+  margin: 0 0 clamp(16px, 2.2vw, 24px);
+  padding: clamp(18px, 2.2vw, 24px);
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-xs);
+  box-shadow: var(--lift-sm);
+}
+.tilt-0 { transform: rotate(-.4deg); }
+.tilt-1 { transform: rotate(.45deg); }
+.tilt-2 { transform: rotate(-.15deg); }
+
+/* Guest photos sit in a paper border, like a print stuck to the page. */
+.note-photo { margin: 0 0 18px; padding: 7px 7px 11px; background: var(--paper-000); border: 1px solid var(--rule); border-radius: var(--radius-xs); }
+.note-photo img { display: block; width: 100%; height: auto; border-radius: var(--radius-xs); background: var(--bg-alt); }
+.note-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--paper-100); }
+
+.note-message { margin: 0; font-family: var(--font-display); font-size: var(--step-1); line-height: 1.55; }
+.note-sign { display: flex; align-items: center; gap: 11px; margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--rule); }
+.note-author b { display: block; font-family: var(--font-display); font-size: 1.11rem; font-weight: 600; }
+.note-author time { color: var(--text-muted); font-size: var(--step--1); letter-spacing: .04em; }
+
+/* The hosts' own note among the guests'.
+
+   Nothing on it says so in words. It is squared up while the guests' notes lie
+   askew, it is printed on the house's own accent rather than plain stock, and
+   it carries no stay under the signature because they did not stay here. That
+   is the whole of the difference, and it is enough: it reads as the card the
+   people who keep the board pinned up themselves. */
+.note-host {
+  transform: none;
+  background: color-mix(in srgb, var(--accent-soft) 55%, var(--surface-raised));
+  border-color: color-mix(in srgb, var(--accent) 25%, var(--rule));
+  border-left: 3px solid var(--accent);
+}
+.note-host .note-sign { border-top-color: color-mix(in srgb, var(--accent) 22%, var(--rule)); }
+
+.avatar {
+  display: grid; place-items: center; width: 36px; height: 36px; flex: none;
+  border-radius: var(--radius-xs); background: var(--ink-800); color: var(--on-ink);
+  font-size: .76rem; font-weight: 650; letter-spacing: .03em;
+}
+.avatar-lg { width: 46px; height: 46px; font-size: .9rem; }
+.avatar.tone-1 { background: var(--sage-700); }
+.avatar.tone-2 { background: var(--stamp-700); }
+.avatar.tone-3 { background: var(--ink-700); }
+
+.wall-invite { padding: clamp(22px, 3vw, 30px) 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.wall-invite h2 { font-size: var(--step-1); margin-bottom: 10px; }
+.wall-invite p { margin: 0; max-width: 58ch; color: var(--text-muted); font-size: 1.02rem; }
+
+/* ---- In-stay wall ---- */
+
+/* The guest is standing in the property, so the cover reads as confirmation
+   they scanned the right one rather than as a sales photograph. */
+.stay-cover { margin-bottom: clamp(24px, 3.5vw, 36px); }
+.stay-cover-caption {
+  display: grid; justify-items: center; gap: 8px;
+  margin: clamp(18px, 2.2vw, 26px) 0 0; padding-bottom: clamp(18px, 2.2vw, 26px);
+  border-bottom: 1px solid var(--rule);
+  text-align: center;
+}
+.stay-cover-caption b { font-family: var(--font-display); font-size: var(--step-3); font-weight: 600; line-height: 1.12; }
+.stay-cover-caption span {
+  font-size: var(--step--2); letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted);
+}
+
+.stay-welcome {
+  margin-bottom: clamp(32px, 4vw, 48px);
+  padding-bottom: clamp(28px, 3.5vw, 40px);
+  border-bottom: 2px solid var(--text);
+}
+.stay-welcome-head { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+.stay-welcome-head .eyebrow { margin-bottom: 8px; }
+.stay-welcome h1 { font-size: var(--step-2); }
+.stay-welcome p { max-width: 60ch; }
+.stay-tip { padding: 16px 20px; background: var(--surface); border-left: 2px solid var(--accent); font-size: 1.02rem; }
+.stay-signature { margin: 22px 0 0; font-family: var(--font-display); font-style: italic; font-size: var(--step-2); }
+
+.essentials { margin-bottom: clamp(40px, 6vw, 64px); }
+.essentials-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin: 0; }
+.essential { padding: 20px clamp(14px, 1.8vw, 22px); border-top: 1px solid var(--rule-strong); border-right: 1px solid var(--rule); }
+.essential:first-child { padding-left: 0; }
+.essential:last-child { border-right: 0; padding-right: 0; }
+.essential dt { margin-bottom: 10px; font-size: var(--step--2); font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); }
+.essential dd { margin: 0; }
+.essential dd b { display: block; font-family: var(--font-display); font-size: var(--step-1); line-height: 1.25; font-weight: 600; }
+.essential dd small { display: block; margin-top: 8px; color: var(--text-muted); font-size: var(--step--1); line-height: 1.5; }
+
+.status-pill {
+  display: inline-flex; align-items: center; gap: 6px; align-self: start;
+  padding: 4px 10px; border-radius: var(--radius-xs); border: 1px solid var(--rule-strong);
+  color: var(--accent-strong); font-size: var(--step--2); font-weight: 650; letter-spacing: .1em; text-transform: uppercase;
+}
+
+/* ------------------------------- Forms --------------------------------- */
+
+.card, .contribution-card, .notice {
+  background: var(--surface); border: 1px solid var(--rule);
+  border-radius: var(--radius-sm); padding: clamp(20px, 2.4vw, 28px);
+}
+
+.contribution-card, .stacked-form { display: grid; gap: 14px; }
+.stacked-form { margin-top: 26px; }
+.contribution-card h2 { margin-bottom: 0; font-size: var(--step-2); }
+.field-hint { margin: -6px 0 0; font-size: var(--step--1); color: var(--text-muted); }
+.contribution-dialog {
+  padding: 0; border: none; border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text);
+  max-width: 540px; width: 90%;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+}
+.contribution-dialog::backdrop { background: rgba(0, 0, 0, 0.62); }
+.dialog-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+/* An in-page mode switch that must not look or behave like a form button. */
+.link-button { padding: 0; border: 0; background: none; font: inherit; cursor: pointer; text-decoration: underline; }
+/* Standing note under an access form, set apart from the hint above it. */
+.access-note { margin-top: 14px; }
+label { font-weight: 600; font-size: .99rem; }
+.label-optional { margin-left: 6px; font-size: var(--step--2); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
+input, textarea, select {
+  width: 100%; padding: 12px 14px;
+  font: inherit; color: var(--text);
+  background: var(--surface-raised);
+  border: 1px solid var(--rule-strong); border-radius: var(--radius-xs);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: var(--ring); }
+input:disabled, textarea:disabled, select:disabled { background: var(--bg-alt); color: var(--text-muted); cursor: not-allowed; }
+textarea { min-height: 132px; resize: vertical; }
+.check-row { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; font-weight: 400; font-size: .99rem; line-height: 1.55; color: var(--text-muted); }
+.check-row input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); }
+.form-feedback { margin: 0; padding: 12px 15px; background: var(--bg-alt); border-left: 2px solid var(--accent); color: var(--text-muted); font-size: .99rem; }
+
+.notice { border-left: 2px solid var(--accent); }
+.notice strong { display: block; margin-bottom: 6px; }
+.notice p { margin: 0; color: var(--text-muted); }
+
+.guest-wall-powered-by { margin: clamp(32px, 5vw, 48px) auto 0; max-width: 46ch; text-align: center; color: var(--text-muted); font-size: var(--step--1); }
+.guest-wall-powered-by p { margin: 0; line-height: 1.65; }
+.guest-wall-powered-by a { color: var(--text); font-weight: 500; text-decoration-color: var(--rule-strong); text-underline-offset: 4px; }
+.guest-wall-powered-by a:hover { color: var(--accent-strong); text-decoration-color: currentColor; }
+
+/* --------------------------- Host control centre -----------------------
+   The dashboard stays inside the stationery system: hairline rules, no
+   dashboard chrome. A property reads as an entry in a ledger, not a tile.  */
+
+.host-section { margin-top: clamp(36px, 4.5vw, 56px); padding-top: clamp(24px, 3vw, 34px); border-top: 1px solid var(--rule); }
+.host-section > h2 { font-size: var(--step-2); margin-bottom: 10px; }
+.host-section > .lede { margin-top: 0; max-width: 62ch; }
+.host-section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.host-section-head h2 { margin: 0; font-size: var(--step-2); }
+.host-section-head .card-icon { flex: none; }
+
+.property-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); margin-top: 22px; }
+.property-card {
+  display: grid; align-content: start; gap: 14px;
+  padding: clamp(18px, 2vw, 24px);
+  background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-sm);
+}
+.property-card-head { display: grid; gap: 10px; }
+.property-card-head h2 { margin: 0; font-size: var(--step-1); line-height: 1.3; }
+.property-card .btn { justify-self: start; }
+
+.state-pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
+.state-pill {
+  display: inline-flex; align-items: center;
+  padding: 4px 10px; border-radius: var(--radius-xs);
+  border: 1px solid var(--rule-strong); color: var(--text-muted);
+  font-size: var(--step--2); font-weight: 650; letter-spacing: .1em; text-transform: uppercase;
+}
+/* Three readings only: running, needs attention, and everything else. */
+.state-pill.lifecycle-trialing, .state-pill.lifecycle-active, .state-pill.mode-live {
+  color: var(--sage-700); border-color: var(--sage-700); background: var(--sage-050);
+}
+.state-pill.lifecycle-grace_period, .state-pill.lifecycle-suspended,
+.state-pill.lifecycle-deletion_scheduled, .state-pill.lifecycle-deleted {
+  color: var(--accent-strong); border-color: var(--accent); background: var(--accent-soft);
+}
+
+.property-facts { display: grid; gap: 12px; margin: 0; }
+.property-facts > div { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+.property-facts > div:last-child { padding-bottom: 0; border-bottom: 0; }
+.property-facts dt { margin: 0; color: var(--text-muted); font-size: var(--step--1); }
+.property-facts dd { margin: 0; font-weight: 600; text-align: right; overflow-wrap: anywhere; }
+.property-facts + .field-hint { margin-top: 16px; }
+
+.empty-state {
+  margin-top: 22px; padding: clamp(20px, 2.4vw, 28px);
+  background: var(--bg-alt); border: 1px dashed var(--rule-strong); border-radius: var(--radius-sm);
+  max-width: 62ch;
+}
+.empty-state p { margin: 0 0 8px; color: var(--text-muted); }
+.empty-state p:last-child { margin-bottom: 0; }
+.empty-state b { color: var(--text); }
+
+/* ---- The property window ----
+   Adding a property and changing one are the same three steps, asked in a
+   window over whatever the Host was looking at. It is a window rather than a
+   panel on the page because in both cases the thing behind it — the list being
+   added to, the wall being built — is where the Host is going straight back to,
+   and in the settings case the wall behind visibly changes as it is typed into.
+
+   Everything inside borrows the form styles wholesale. What is new is the
+   window, the step heading and the row of moves under it.                  */
+
+.page-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 14px 28px; }
+.page-head > div { max-width: 62ch; }
+.page-head h1 { margin-bottom: 10px; }
+.page-head .lede { margin-top: 0; }
+.page-head > .btn { flex: none; margin-top: 8px; }
+
+/* Flex rather than grid so the panel's own max-height resolves against the
+   window and not against how tall the answers happen to make it. */
+.property-dialog-scrim {
+  position: fixed; inset: 0; z-index: 40;
+  display: flex; align-items: center; justify-content: center;
+  padding: clamp(12px, 3vw, 40px);
+  background: rgba(20, 24, 27, .46);
+}
+
+/* Three bands that do not move: what this window is, where you are in it, and
+   the way on. Only the answers between them scroll, so the step heading and
+   the button that leaves the step are both in view at every scroll position of
+   a form that can run to eight guidance lines. */
+.property-dialog {
+  display: grid; grid-template-rows: auto minmax(0, 1fr);
+  width: min(46rem, 100%); max-height: 100%;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--lift-lg);
+}
+.property-dialog:focus { outline: none; }
+
+/* The window says what it is once, across the top, and the step heading below
+   says which part of it you are on. */
+.property-dialog-head {
+  padding: clamp(18px, 2.4vw, 26px) clamp(18px, 2.4vw, 28px) 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.property-dialog-head h2 { margin: 0 0 6px; font-size: var(--step-1); }
+.property-dialog-head .lede { margin: 0; font-size: var(--step--1); max-width: 62ch; }
+.property-dialog-body {
+  padding: clamp(18px, 2.4vw, 26px) clamp(18px, 2.4vw, 28px) 0;
+  overflow-y: auto; overscroll-behavior: contain;
+}
+
+/* The panel scrolls, not the page behind it, so a field a rejected answer
+   scrolls to has to clear the top of the panel rather than the site header. */
+.property-dialog input, .property-dialog textarea, .property-dialog .wizard-essential { scroll-margin-top: 24px; }
+
+/* ---- The stepped form ----
+   Its own rhythm rather than the even gap a stacked form is set on: a label
+   sits close to the answer it names and the hint close under that, and the
+   space that used to be between them is spent between one field and the next.
+   Eight questions in a row are then eight things rather than twenty-four. */
+.wizard { gap: 0; margin-top: 0; }
+.wizard label { display: block; margin: 22px 0 7px; }
+.wizard input, .wizard textarea, .wizard select { margin: 0; }
+.wizard .field-hint { margin: 7px 0 0; max-width: 68ch; }
+.wizard > .form-feedback { margin-top: 20px; }
+
+.wizard-rail { margin: 0 0 18px; }
+.wizard-rail ol {
+  display: flex; flex-wrap: wrap; gap: 6px 10px;
+  margin: 0; padding: 0; list-style: none;
+}
+.wizard-rail-step {
+  display: flex; align-items: center; gap: 8px;
+  font-size: var(--step--1); color: var(--text-muted);
+}
+.wizard-rail-step + .wizard-rail-step::before {
+  content: ""; width: 14px; height: 1px; margin-right: 2px; background: var(--rule-strong);
+}
+/* The number is a stamp: filled where you are, outlined where you have not
+   been. Nothing else in the rail changes, so the eye finds the current step
+   without reading any of it. */
+.wizard-rail-number {
+  display: grid; place-items: center;
+  width: 22px; height: 22px; flex: none;
+  border: 1px solid var(--rule-strong); border-radius: var(--radius-pill);
+  font-size: var(--step--2); font-weight: 650; font-variant-numeric: tabular-nums;
+}
+.wizard-rail-step[data-state="current"] { color: var(--text); font-weight: 600; }
+/* Ink on paper, and paper on ink where the page is dark: the chip is the text
+   colour, so it stays the strongest thing in the rail under either scheme. */
+.wizard-rail-step[data-state="current"] .wizard-rail-number {
+  background: var(--text); border-color: var(--text); color: var(--surface-raised);
+}
+.wizard-rail-step[data-state="done"] .wizard-rail-number { border-color: var(--text); color: var(--text); }
+.wizard-rail-back {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0; border: 0; background: none;
+  font: inherit; color: inherit; cursor: pointer;
+}
+.wizard-rail-back:hover { color: var(--accent-strong); }
+.wizard-rail-back:hover .wizard-rail-number { border-color: currentColor; color: inherit; }
+.wizard-rail-back:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: var(--radius-xs); }
+.wizard-rail-back:disabled { cursor: default; color: inherit; }
+
+.wizard-step-title { margin: 0; font-size: var(--step-1); }
+.wizard-step-blurb { margin: 6px 0 0; font-size: var(--step--1); max-width: 62ch; }
+
+/* A group within a step: photographs, the arrival note, the guidance. Ruled
+   off rather than boxed, so a step reads as one form and not as a stack of
+   cards inside a window that is already a card. */
+.wizard-photos, .wizard-note, .wizard-essentials, .wizard-host-note, .wizard-address {
+  display: block;
+  margin-top: 30px; padding-top: 22px;
+  border-top: 1px solid var(--rule);
+}
+.wizard-photos > h4, .wizard-note > h4, .wizard-essentials > h4, .wizard-host-note > h4, .wizard-address > h4 {
+  margin: 0; font-size: var(--step-0);
+}
+.wizard-photos > .field-hint, .wizard-note > .field-hint, .wizard-essentials > .field-hint,
+.wizard-host-note > .field-hint, .wizard-address > .field-hint { margin: 7px 0 0; }
+.wizard-address .wall-address { margin: 14px 0 0; }
+.wizard-host-note .photo-field { margin-top: 22px; }
+
+/* One line of house guidance: three fields that belong together, ruled off
+   the ones above so a form of eight of them still reads as eight lines. */
+.wizard-essential {
+  padding: 4px 0 18px; border-bottom: 1px solid var(--rule);
+}
+.wizard-essential label { margin: 14px 0 6px; }
+.wizard-essential > label:first-child { margin-top: 0; }
+.wizard-essential .actions { margin-top: 12px; }
+.wizard-suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+
+/* The floor of the panel. It leaves the flow of the form only visually: it is
+   still the last thing in it, so Tab reaches it after the last answer. */
+.wizard-nav {
+  position: sticky; bottom: 0; z-index: 1;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+  margin-top: 28px;
+  padding: 16px 0 clamp(18px, 2.4vw, 26px);
+  background: var(--surface-raised);
+  border-top: 1px solid var(--rule-strong);
+}
+/* Cancel is not the opposite of Next, so it does not stand beside it. */
+.wizard-nav-cancel { margin-left: auto; }
+
+@media (prefers-color-scheme: dark) {
+  .property-dialog-scrim { background: rgba(0, 0, 0, .62); }
+}
+
+@media (max-width: 560px) {
+  .property-dialog-scrim { padding: 0; }
+  .property-dialog { width: 100%; height: 100%; max-height: none; border: 0; border-radius: 0; }
+  /* Only the step you are on is named; the numbers keep the count. */
+  .wizard-rail-step:not([data-state="current"]) .wizard-rail-name { display: none; }
+  /* One line, not three: a footer stuck to the foot of a phone screen is
+     paying for its height out of the form above it. */
+  .wizard-nav { gap: 10px; padding: 14px 0 18px; }
+  .wizard-nav .btn { padding-inline: 16px; }
+  .wizard-nav .btn-primary { flex: 1; }
+  .wizard-nav-cancel { margin-left: 0; padding-inline: 6px; }
+}
+
+/* --------------------------- Property workspace -------------------------
+   The property dashboard is the wall being built, next to the things that go
+   into it. The preview is not decoration: an unpublished wall is served to
+   nobody, so this is the only place a Host can see what they are making. It
+   borrows the shapes of the wall at phone scale, because that is the object a
+   guest will actually be holding.                                          */
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+
+/* The meter answers "is this ready?" in one line; the list behind it is only
+   interesting while something is still missing. */
+.setup-meter > summary { display: grid; gap: 7px; cursor: pointer; list-style: none; }
+.setup-meter > summary::-webkit-details-marker { display: none; }
+.setup-meter-line { font-weight: 600; font-size: 1.01rem; }
+.setup-meter-line::after { content: " ▾"; color: var(--text-muted); font-size: .8em; }
+.setup-meter[open] .setup-meter-line::after { content: " ▴"; }
+.setup-bar { display: block; height: 4px; background: var(--rule); overflow: hidden; }
+.setup-bar > span { display: block; height: 100%; background: var(--sage-700); transition: width .2s ease; }
+
+.setup-list { list-style: none; display: grid; margin: 12px 0 0; padding: 0; }
+.setup-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-top: 1px solid var(--rule); font-size: .98rem; }
+.setup-item b { display: block; font-weight: 600; }
+.setup-item small { display: block; margin-top: 2px; color: var(--text-muted); font-size: var(--step--1); }
+.setup-mark { flex: none; width: 1.1em; font-weight: 700; color: var(--text-muted); }
+.setup-item.done .setup-mark { color: var(--sage-700); }
+.setup-item.done b { color: var(--text-muted); font-weight: 500; }
+
+
+/* ---- The wall, at phone scale ---- */
+
+.preview-switch { display: flex; gap: 6px; margin-bottom: 12px; }
+.preview-switch button {
+  flex: 1; padding: 8px 6px;
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--rule-strong); border-radius: var(--radius-xs);
+  font-size: var(--step--2); font-weight: 650; letter-spacing: .08em; text-transform: uppercase;
+}
+.preview-switch button.active { background: var(--ink-900); color: var(--on-ink); border-color: var(--ink-900); }
+
+@media (prefers-color-scheme: dark) {
+  .preview-switch button.active { background: #eaeef0; color: #14181b; border-color: #eaeef0; }
+}
+
+.phone {
+  border-radius: 26px; padding: 8px;
+  background: linear-gradient(165deg, var(--ink-700), var(--ink-900));
+  box-shadow: var(--lift-md);
+}
+.phone-screen {
+  display: flex; flex-direction: column;
+  height: clamp(360px, 48vh, 500px); overflow-y: auto; overscroll-behavior: contain;
+  border-radius: 19px; background: var(--surface);
+}
+.phone-cover { flex: none; width: 100%; height: 112px; object-fit: cover; }
+.phone-body { flex: 1; display: grid; align-content: start; gap: 9px; padding: 15px 15px 18px; }
+.phone-body h3 { margin: 0; font-family: var(--font-display); font-size: 1.16rem; line-height: 1.25; }
+.phone-eyebrow { margin: 0; font-size: .56rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); }
+/* The in-stay wall opens on the property naming itself, centred over the note
+   the way a printed card names the house across the top: the guest is holding
+   the placard's wall and the first thing it has to settle is that they scanned
+   the right one. */
+.phone-stay-name {
+  display: grid; justify-items: center; gap: 5px;
+  margin: 2px 0 4px; padding-bottom: 13px; border-bottom: 1px solid var(--rule);
+  text-align: center;
+}
+.phone-stay-name b { font-family: var(--font-display); font-size: 1.62rem; font-weight: 600; line-height: 1.12; }
+/* Nothing else has been written yet, so the name has the sheet to itself. */
+.phone-stay-name.alone { gap: 7px; margin-top: 10px; padding-bottom: 16px; }
+.phone-stay-name.alone b { font-size: 2.1rem; }
+.phone-stay-name span {
+  font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted);
+}
+.phone-location { margin: 0; font-size: .72rem; letter-spacing: .04em; color: var(--text-muted); }
+.phone-welcome { margin: 0; font-family: var(--font-display); font-size: .85rem; line-height: 1.6; }
+.phone-para { margin: 0; font-size: .78rem; line-height: 1.65; }
+.phone-tip { margin: 0; padding: 9px 11px; background: var(--bg-alt); border-left: 2px solid var(--accent); font-size: .74rem; line-height: 1.5; }
+.phone-signature { margin: 0; font-family: var(--font-display); font-style: italic; font-size: .9rem; }
+.phone-byline { display: flex; align-items: center; gap: 10px; margin: 4px 0 0; padding-top: 12px; border-top: 1px solid var(--rule); }
+.phone-byline b { display: block; font-size: .78rem; font-weight: 600; }
+.phone-byline small { display: block; font-size: .64rem; color: var(--text-muted); }
+.phone-heading { margin: 6px 0 0; padding-top: 12px; border-top: 1px solid var(--rule); font-size: .56rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); }
+.phone-note {
+  display: grid; gap: 7px; margin: 0; padding: 9px 10px;
+  background: color-mix(in srgb, var(--accent-soft) 55%, var(--surface-raised));
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--rule));
+  border-left: 2px solid var(--accent);
+  border-radius: var(--radius-xs);
+}
+.phone-note-photo { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-xs); }
+.phone-note-message { margin: 0; font-family: var(--font-display); font-size: .78rem; line-height: 1.55; }
+.phone-note-sign { display: flex; align-items: center; gap: 8px; margin: 0; }
+.phone-note-sign .avatar { width: 22px; height: 22px; font-size: .5rem; }
+.phone-note-sign b { font-size: .7rem; font-weight: 600; }
+.phone-facts { display: grid; gap: 10px; margin: 0; }
+.phone-facts dt { font-size: .56rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); }
+.phone-facts dd { margin: 2px 0 0; }
+.phone-facts dd b { display: block; font-family: var(--font-display); font-size: .88rem; }
+.phone-facts dd small { display: block; margin-top: 2px; font-size: .68rem; color: var(--text-muted); }
+.phone-composer {
+  position: sticky; bottom: 0; flex: none;
+  display: flex; align-items: center; gap: 8px; margin: 0;
+  padding: 9px 10px; border-top: 1px solid var(--rule); background: var(--surface-raised);
+}
+.phone-composer span { flex: 1; padding: 6px 9px; background: var(--bg-alt); font-size: .6rem; color: var(--text-muted); }
+.phone-composer b { padding: 6px 10px; background: var(--ink-900); color: var(--on-ink); font-size: .6rem; font-weight: 650; }
+
+@media (prefers-color-scheme: dark) {
+  .phone-composer b { background: #eaeef0; color: #14181b; }
+}
+
+.avatar-photo { object-fit: cover; }
+
+/* ---- Photographs, wherever they are uploaded ---- */
+
+.photo-field { display: grid; align-content: start; gap: 8px; }
+.photo-field h3, .photo-field h5 { margin: 0; font-size: var(--step-0); }
+.photo-field .field-hint { margin: 0; }
+.photo-field .actions { margin-top: 2px; }
+.photo-preview { margin: 0; }
+.photo-preview img {
+  display: block; width: 100%; max-height: 180px; object-fit: cover;
+  background: var(--bg-alt); border: 1px solid var(--rule);
+}
+.photo-preview figcaption { margin-top: 6px; font-size: var(--step--1); color: var(--text-muted); }
+
+/* Two photographs asked for at once stand beside each other: they are one
+   question about how the property looks, and stacked they were most of the
+   first step of a form whose first step is meant to be the short one. */
+.photo-grid {
+  display: grid; gap: 22px 20px;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  margin-top: 18px;
+}
+/* The two frames line up with each other even though the sentences above them
+   are different lengths: the frame is pushed to the foot of its column, and
+   the columns are the same height. Two dashed boxes a few pixels out of step
+   look like a mistake in a form that is otherwise ruled. */
+.photo-grid .photo-field { display: flex; flex-direction: column; gap: 7px; }
+.photo-grid .photo-drop, .photo-grid .photo-preview { margin-top: auto; }
+
+/* The empty frame, which is the control. Dashed because nothing is in it yet,
+   and the height of a photograph rather than of a line of text, so a slot that
+   is filled and one that is not do not shuffle the form between them. */
+.photo-drop {
+  display: grid; place-items: center; align-content: center; gap: 8px;
+  width: 100%; min-height: 132px; padding: 18px 14px;
+  text-align: center;
+  background: var(--bg-alt); border: 1px dashed var(--rule-strong); border-radius: var(--radius-xs);
+  color: var(--text-muted); font: inherit; font-size: var(--step--1);
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.photo-drop .camera-mark { width: 26px; height: 26px; opacity: .75; }
+.photo-drop-line { color: var(--text-muted); }
+/* Painted inside the button rather than being one, so the frame lights it. */
+.photo-drop-action { background: var(--surface-raised); pointer-events: none; }
+.photo-drop:hover { border-color: var(--accent); color: var(--text); }
+.photo-drop:hover .photo-drop-action { border-color: var(--accent); color: var(--text); }
+.photo-drop:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.photo-drop:disabled { cursor: not-allowed; opacity: .6; }
+
+/* Changing a photograph is a short errand, so it is done over the page rather
+   than in it: the wall underneath keeps its place, and the scrim says the rest
+   of it is not listening. */
+.photo-dialog-scrim {
+  position: fixed; inset: 0; z-index: 40;
+  display: grid; place-items: center;
+  padding: 20px;
+  background: rgba(20, 24, 27, .46);
+  overflow-y: auto;
+}
+.photo-dialog {
+  display: grid; gap: 14px; justify-items: start;
+  width: min(440px, 100%);
+  padding: clamp(18px, 2.4vw, 26px);
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--lift-lg);
+}
+.photo-dialog:focus { outline: none; }
+.photo-dialog .photo-field { width: 100%; }
+.photo-dialog-close { justify-self: end; }
+
+@media (prefers-color-scheme: dark) {
+  .photo-dialog-scrim { background: rgba(0, 0, 0, .62); }
+}
+
+
+/* The one control that acts on everything above it, kept in reach of a long
+   open section rather than stranded at the bottom of the page. */
+.save-bar {
+  position: sticky; bottom: 0; z-index: 5;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+  padding: 12px 0; border-top: 1px solid var(--rule-strong); background: var(--bg);
+}
+.save-note { font-size: var(--step--1); color: var(--text-muted); }
+.save-note.failed { color: var(--accent-strong); }
+
+/* ------------------------- The guest-view canvas ------------------------
+   /host/property/{id}/design: the wall as a guest meets it, with every line
+   a Host writes made typeable in place. Fields carry the wall's own type and
+   show no border until they are reached for, so the page reads as the result
+   rather than as a form wearing one.                                       */
+
+.view-switch { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; margin: 20px 0 0; font-size: var(--step--1); }
+.view-current { color: var(--text-muted); }
+
+/* -------------------- The frame around one property ---------------------
+   Every screen of a property is drawn inside the same frame: the property
+   stated once across the top, the five ways of looking at it standing in a
+   column on the left, and the screen itself filling the rest. The band does
+   not move between screens, so a Host three clicks into the moderation queue
+   can still see whose wall they are policing and what it currently looks
+   like.                                                                    */
+
+/* A property screen is a banner, a column of views and a working surface
+   beside them — three things abreast, not a page of prose — so it is given
+   more of the window than the reading measure the marketing pages use. */
+.property-shell { display: grid; width: min(1240px, 100% - 2 * var(--gutter)); }
+
+.property-banner { padding-bottom: clamp(18px, 2.4vw, 26px); border-bottom: 1px solid var(--rule); }
+.property-banner .eyebrow { margin-bottom: clamp(14px, 2vw, 20px); }
+.banner-row {
+  display: flex; flex-wrap: wrap; align-items: flex-start;
+  justify-content: space-between; gap: 18px clamp(24px, 4vw, 48px);
+}
+.banner-identity { display: flex; flex-wrap: wrap; align-items: flex-start; gap: clamp(14px, 1.8vw, 22px); min-width: 0; }
+/* The property's own photograph, and the control that sets it. Square,
+   because that is how a picture of something reads when it stands beside its
+   name, and large enough to be a photograph rather than a marker. */
+.banner-thumb {
+  position: relative; flex: none; overflow: hidden;
+  width: clamp(88px, 9vw, 116px); height: auto; aspect-ratio: 1 / 1; padding: 0;
+  border: 1px solid var(--rule-strong); border-radius: var(--radius-sm);
+  background: var(--bg-alt); color: var(--text-muted);
+}
+/* The intrinsic `width`/`height` attributes would otherwise win over the
+   square and draw the photograph at its own proportions. */
+.banner-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* What the square is for, said inside it: standing there while it is empty,
+   and stepping in over the photograph on hover or focus once there is one. */
+.banner-thumb-say {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  padding: 6px; text-align: center;
+  font-size: var(--step--2); font-weight: 600; line-height: 1.15;
+}
+.banner-thumb-mark {
+  width: 23px; height: 23px; fill: none; stroke: currentColor;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+}
+/* An empty square is a dashed one, the way every other place on this site
+   marks a thing that is waiting to be filled in. */
+.banner-thumb.is-empty { border-style: dashed; }
+.banner-thumb.is-empty:hover, .banner-thumb.is-empty:focus-visible { border-color: var(--text); color: var(--text); }
+.banner-thumb:not(.is-empty) .banner-thumb-say {
+  opacity: 0; color: var(--on-ink);
+  background: color-mix(in srgb, #14181b 62%, transparent);
+  transition: opacity .14s ease;
+}
+.banner-thumb:not(.is-empty):hover .banner-thumb-say,
+.banner-thumb:not(.is-empty):focus-visible .banner-thumb-say { opacity: 1; }
+/* Nothing hovers on a tablet, and a photograph that can only be changed by a
+   pointer cannot be changed there at all, so it says so outright. */
+@media (hover: none) {
+  .banner-thumb:not(.is-empty) .banner-thumb-say { opacity: 1; }
+}
+/* A rejected file is reported under the name rather than beside the square,
+   where it would push the name across the page. */
+.banner-photo-problem { margin-top: 10px; }
+.banner-titles { min-width: 0; }
+.property-banner h1 { font-size: var(--step-2); margin: 0; }
+.banner-location { margin: 2px 0 0; color: var(--text-muted); font-size: var(--step--1); }
+.banner-titles .state-pills { margin-top: 10px; }
+.banner-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.banner-action { gap: 9px; }
+.banner-mark { flex: none; width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+/* A wall that is not being served and a locked QR kit are the ordinary state
+   of a property still being written, so the control stays where it is and
+   goes quiet rather than vanishing. */
+/* Not faded: at 40% the words were barely readable, and a Host is meant to
+   read them and learn what unlocks the thing. The border goes quiet instead
+   and the label stays as black as every other control on the band. */
+.banner-action.is-unavailable { color: var(--text); border-color: var(--rule); cursor: not-allowed; }
+.banner-action.is-unavailable .banner-mark { opacity: .55; }
+/* Settings sits first among the banner actions but is not one of them: it
+   changes what the property is, not where you are looking at it. So it is a
+   quiet utility link — no box — and a hairline rule fences it off from the two
+   errand buttons rather than letting it read as a third of the same kind. */
+.banner-settings {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 4px;
+  font-size: var(--step--1); font-weight: 600; letter-spacing: .005em;
+  color: var(--text-muted); text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: color .14s ease;
+}
+.banner-settings:hover { color: var(--accent-strong); }
+.banner-settings .banner-mark { width: 16px; height: 16px; }
+/* The band is on the settings screen too, so the way in stays where it always
+   is and marks itself rather than offering a trip back to this page. */
+.banner-settings.is-current { color: var(--text); cursor: default; }
+.banner-settings.is-current:hover { color: var(--text); }
+.banner-actions-split {
+  flex: none; align-self: stretch; width: 1px;
+  margin: 3px 2px; background: var(--rule);
+}
+
+.property-shell-body {
+  display: grid; align-items: start;
+  grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+  gap: clamp(24px, 3.4vw, 54px);
+  padding-top: clamp(22px, 3vw, 34px);
+}
+.property-shell-main { min-width: 0; }
+/* Billing is a page of prose and dates; it reads at a book width whatever the
+   window is doing. */
+.narrow-main .property-shell-main { max-width: 660px; }
+
+/* One property is five screens — the setup list, the guest view, the walls it
+   is served on, the queue of what guests left, and what it costs — and this is
+   the column that joins them. It is the same column on every one of them, and
+   the one you are standing on is the one not offered as a link. */
+/* The column travels with the page as a whole, so a screen's own settings
+   standing under the views stay in reach of the wall they change. */
+.property-side { position: sticky; top: 86px; display: grid; align-content: start; gap: 22px; }
+.property-side-tools { padding-top: 20px; border-top: 1px solid var(--rule); }
+.property-nav .nav-eyebrow {
+  margin: 0 0 10px; padding-left: 12px;
+  color: var(--text-muted); font-size: var(--step--2);
+  font-weight: 650; letter-spacing: .12em; text-transform: uppercase;
+}
+.property-nav ul { list-style: none; display: grid; gap: 2px; margin: 0; padding: 0; }
+.nav-item {
+  display: flex; align-items: center; gap: 11px;
+  padding: 9px 12px; border-radius: var(--radius-xs);
+  border-left: 2px solid transparent;
+  color: var(--text-muted); font-size: var(--step--1); text-decoration: none;
+}
+a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text) 4%, transparent); }
+/* The section you are standing on is marked in the margin rather than by a
+   filled block: a hairline product does not need a highlighter. */
+.property-nav .view-current {
+  color: var(--text); font-weight: 600;
+  border-left-color: var(--accent);
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+}
+.nav-mark { flex: none; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.property-nav .view-current .nav-mark { stroke: var(--accent); }
+
+/* ------------------------------- Billing --------------------------------
+   Lifecycle is only interesting for what it does to the wall, so the billing
+   page states the two consequences before it states any dates. A consequence
+   that is currently false is marked by the accent, not by red: a locked QR kit
+   on a property still being written is the ordinary state of things.        */
+
+.billing-page .state-pills { margin: 18px 0 0; }
+.billing-page > .lede { margin-top: 10px; }
+.consequences { display: grid; gap: 14px; margin: clamp(22px, 3vw, 30px) 0; }
+.consequence { padding-left: 14px; border-left: 2px solid var(--rule-strong); }
+.consequence-off { border-left-color: var(--accent); }
+.consequence strong { display: block; margin-bottom: 4px; }
+.consequence p { margin: 0; color: var(--text-muted); font-size: var(--step--1); line-height: 1.6; max-width: 62ch; }
+
+/* The screen opens on the wall. What stood here — a title, a lede, the paper
+   and a line about who can reach this wall — was four things between a Host
+   and the thing they came to write; the paper moved to the column on the left
+   and the rest was already said by the banner and the nav. What is left is the
+   phone, kept in the canvas's own top corner. */
+.design-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px 20px; margin-bottom: 12px; }
+
+/* The measure that suits a page of prose is not the measure that suits a wall
+   being written beside a phone. A page at the reading measure leaves a strip
+   of nothing down either side of a wide window, and taking the preview's
+   column out of the canvas instead of out of that strip is what made the wall
+   too narrow to read: the arrival note broke mid-sentence and the essentials
+   squeezed. So the page grows while the phone is open, and the canvas keeps
+   its width. */
+.design-page.has-phone { width: min(1664px, 100% - 2 * var(--gutter)); }
+
+.design-body { display: grid; }
+/* The phone opens down the right of the canvas rather than in front of it: a
+   Host keeps typing on the wall while the same words are read back at the
+   width a guest holds. */
+.design-body.with-phone {
+  /* At the page's full width the phone is drawn the width of a real one
+     rather than a thumbnail of one, and the canvas takes everything left over
+     — a sheet wide enough for the cover, the essentials and the notes to
+     spread across. On a narrower window the phone gives its width back first:
+     it is a preview, and the wall being written is the thing being read. */
+  grid-template-columns: minmax(0, 1fr) clamp(300px, 27.5%, 390px);
+  align-items: start;
+  gap: clamp(20px, 2.6vw, 40px);
+}
+/* The canvas is tall and the phone is not, so the phone travels with the page
+   instead of leaving a column of nothing beside the essentials. */
+.design-body.with-phone .design-phone { position: sticky; top: 18px; }
+/* Under about a laptop there is no room for two walls abreast, and squeezing
+   the canvas to make room is the wrong trade: the phone drops underneath. */
+@media (max-width: 1340px) {
+  .design-body.with-phone { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+  .design-body.with-phone .design-phone { position: static; padding-top: 8px; }
+}
+.design-phone { display: grid; gap: 14px; width: min(390px, 100%); }
+/* A phone on a desk, not a thumbnail beside a form: the preview is the point
+   of opening it, so it gets the height it would really have. */
+.design-phone .phone-screen { height: clamp(480px, 66vh, 700px); }
+.design-phone .field-hint { margin: 0; max-width: 34ch; text-align: center; }
+/* The phone is live, and a picture of a phone beside a page does not say so.
+   The line stands above it, quiet enough to read once and stop noticing. */
+.design-phone-note { margin: 0; max-width: 34ch; justify-self: center; color: var(--text-muted); font-size: var(--step--1); line-height: 1.45; text-align: center; }
+.design-phone-note .where-above { display: none; }
+@media (max-width: 1340px) {
+  .design-phone-note .where-beside { display: none; }
+  .design-phone-note .where-above { display: inline; }
+}
+
+.wall-canvas { display: grid; }
+.canvas-sheet {
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--lift-md);
+}
+
+/* ---- Fields that look like the wall until you reach for them ---- */
+
+.canvas-line, .canvas-grow > .canvas-area {
+  width: calc(100% + 18px); margin-inline: -9px;
+  padding: 4px 8px;
+  font: inherit; color: inherit; letter-spacing: inherit; text-transform: inherit;
+  background: transparent;
+  border: 1px solid transparent; border-radius: var(--radius-xs);
+  transition: background-color .12s ease, border-color .12s ease;
+}
+.canvas-line:hover:not(:disabled), .canvas-area:hover:not(:disabled) { background: var(--bg-alt); border-color: var(--rule); }
+/* Matched on specificity with the hover rule above, which is otherwise the
+   one that applies while a Host is typing with the pointer still on it. */
+.canvas-line:focus:not(:disabled), .canvas-area:focus:not(:disabled) { outline: none; background: var(--surface-raised); border-color: var(--accent); box-shadow: var(--ring); }
+.canvas-line:disabled, .canvas-area:disabled { background: transparent; color: var(--text-muted); }
+.canvas-line::placeholder, .canvas-area::placeholder { color: var(--text-muted); font-style: italic; opacity: .75; }
+
+/* The height comes from a copy of the text under the field in the same grid
+   cell, so a note three lines long is three lines tall on first paint. */
+.canvas-grow { display: grid; }
+.canvas-grow::after, .canvas-grow > .canvas-area {
+  grid-area: 1 / 1;
+  padding: 4px 8px; border: 1px solid transparent;
+  font: inherit; line-height: inherit; letter-spacing: inherit;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.canvas-grow::after { content: attr(data-value) " "; visibility: hidden; }
+.canvas-grow > .canvas-area { min-height: 0; resize: none; overflow: hidden; }
+
+/* ---- Cover, portrait and titles ---- */
+
+.canvas-cover { position: relative; }
+/* The photograph area is one button the width of the sheet. It is stripped
+   back to the layout it had as a plain block, so the only thing the button
+   adds is that the whole area takes the click. */
+.canvas-cover-hit {
+  display: block; position: relative; width: 100%;
+  margin: 0; padding: 0; border: 0; background: none;
+  font: inherit; color: inherit; text-align: inherit; cursor: pointer;
+}
+.canvas-cover-photo {
+  display: block; width: 100%;
+  height: clamp(180px, 28vw, 320px);
+  object-fit: cover; object-position: center 62%;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0; background: var(--paper-100);
+}
+.canvas-cover-empty {
+  display: grid; justify-items: center; align-content: center; gap: 6px;
+  height: clamp(180px, 28vw, 320px); margin: 0; padding: 20px clamp(20px, 4vw, 48px);
+  background: var(--bg-alt); border-bottom: 1px dashed var(--rule-strong);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  color: var(--text-muted); font-size: var(--step--1); text-align: center;
+}
+.canvas-cover-empty b { font-family: var(--font-display); font-size: var(--step-1); color: var(--text); }
+.canvas-cover-empty .camera-mark { width: 30px; height: 30px; margin-bottom: 2px; opacity: .75; }
+.canvas-cover-action {
+  position: absolute; right: clamp(12px, 2vw, 20px); bottom: clamp(12px, 2vw, 20px);
+  background: var(--surface-raised); box-shadow: var(--lift-sm);
+}
+/* The pill is painted inside the button, so it cannot light up on its own
+   hover; the whole area lights it instead, which is also what says the whole
+   area is the target. */
+.canvas-cover-hit:hover .canvas-cover-empty { border-color: var(--accent); color: var(--text); }
+.canvas-cover-hit:hover .canvas-cover-action { background: var(--bg-alt); }
+.canvas-cover-hit:hover .canvas-cover-photo { filter: brightness(.94); }
+.canvas-cover-hit:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+
+/* Drawn on an empty frame in place of a letter. */
+.camera-mark { fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+
+
+.canvas-body { display: grid; gap: 18px; padding: 0 clamp(20px, 3.4vw, 40px) clamp(28px, 4vw, 44px); }
+.canvas-body > .btn { justify-self: start; }
+
+/* The cover is positioned, so it paints over anything in the flow after it;
+   the identity row has to be positioned too to hang off the bottom of it. */
+.canvas-identity { position: relative; display: flex; align-items: flex-end; gap: clamp(16px, 2.4vw, 24px); margin-top: -46px; }
+/* The row is positioned to hang over the cover, which would otherwise leave
+   its empty half swallowing clicks meant for the button on the photograph.
+   Only the portrait and the titles take a pointer. */
+.canvas-identity { pointer-events: none; }
+.canvas-identity > * { pointer-events: auto; }
+.canvas-portrait {
+  flex: none; display: grid; justify-items: center;
+  margin: 0; padding: 0; border: 0; background: none;
+  font: inherit; color: inherit; cursor: pointer;
+}
+.canvas-portrait-photo, .canvas-portrait-mark {
+  display: grid; place-items: center;
+  width: 108px; height: 108px; object-fit: cover;
+  border: 4px solid var(--surface-raised); border-radius: var(--radius-xs);
+  background: var(--stamp-700); color: var(--on-ink);
+  font-family: var(--font-display); font-size: 2rem;
+}
+.canvas-portrait-mark .camera-mark { width: 40px; height: 40px; stroke-width: 1.1; }
+.canvas-portrait-action { margin-top: 4px; padding-inline: 4px; font-size: var(--step--2); }
+.canvas-portrait:hover .canvas-portrait-action { background: var(--bg-alt); color: var(--text); }
+.canvas-portrait:hover .canvas-portrait-photo, .canvas-portrait:hover .canvas-portrait-mark { border-color: var(--accent); }
+.canvas-portrait:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--radius-xs); }
+.canvas-titles { flex: 1; min-width: 0; padding-bottom: 10px; }
+.canvas-name { margin: 0; font-family: var(--font-display); font-size: var(--step-2); line-height: 1.2; }
+.canvas-name .canvas-line { font-weight: 600; }
+.canvas-titles .form-feedback { margin-top: 8px; }
+.canvas-location { margin-top: 4px; color: var(--text-muted); font-size: var(--step--1); letter-spacing: .04em; }
+
+/* ---- The public wall's half ---- */
+
+.canvas-welcome { font-family: var(--font-display); font-size: var(--step-1); line-height: 1.55; max-width: 56ch; }
+.canvas-byline { display: flex; align-items: center; gap: 12px; padding-top: 18px; border-top: 1px solid var(--rule); }
+.canvas-byline-mark { flex: none; }
+.canvas-byline-mark .avatar { width: 46px; height: 46px; font-size: .9rem; }
+.canvas-byline-text { flex: 1; min-width: 0; }
+.canvas-hosts { font-weight: 600; }
+.canvas-since-row { display: flex; align-items: baseline; gap: 4px; color: var(--text-muted); font-size: var(--step--1); }
+.canvas-since-row > span { flex: none; }
+.canvas-since { max-width: 14ch; }
+
+/* ---- The in-stay wall's half ---- */
+
+.canvas-eyebrow { margin: 8px 0 0; font-size: var(--step--2); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); }
+/* ---- Leaving a line off the wall, and putting it back ---- */
+
+/* The remove control is quiet until its line is hovered or it is tabbed to:
+   on a page meant to read as the finished wall, a column of remove buttons
+   would be the loudest thing on it. Opacity, not display, so it stays in the
+   tab order and in the accessibility tree. */
+.canvas-optional { display: flex; align-items: flex-start; gap: 12px; }
+.canvas-optional > *:first-child { flex: 1; min-width: 0; }
+.canvas-omit {
+  flex: none; align-self: center; padding: 4px 8px;
+  background: transparent; border: 1px solid transparent; border-radius: var(--radius-xs);
+  color: var(--text-muted); font-size: var(--step--2); font-weight: 600; letter-spacing: .06em;
+  opacity: 0; transition: opacity .12s ease, color .12s ease;
+}
+.canvas-optional:hover .canvas-omit,
+.canvas-eyebrow-omit:hover .canvas-omit,
+.canvas-essentials-heading:hover .canvas-omit,
+.canvas-note:hover .canvas-omit,
+.canvas-omit:focus-visible { opacity: 1; }
+.canvas-omit:hover { color: var(--accent-strong); border-color: var(--rule); background: var(--bg-alt); }
+/* The same reasoning as the banner thumb overhead: a control that only exists
+   on hover does not exist at all on a touch screen, and these are the only way
+   to take a line off the wall. They stand up there rather than hiding. */
+@media (hover: none) {
+  .canvas-omit { opacity: 1; }
+}
+
+.canvas-eyebrow-omit { display: flex; align-items: center; gap: 10px; }
+
+.canvas-includes { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; }
+.canvas-includes-lead { margin-top: 12px; }
+.canvas-include {
+  padding: 7px 13px;
+  background: transparent; border: 1px dashed var(--rule-strong); border-radius: var(--radius-xs);
+  color: var(--text-muted); font-size: var(--step--1); font-weight: 600;
+}
+.canvas-include:hover { color: var(--text); border-color: var(--text); background: var(--bg-alt); }
+.canvas-heading { margin: 0; font-family: var(--font-display); font-size: var(--step-2); line-height: 1.2; }
+.canvas-stay-note { font-size: var(--step-0); line-height: 1.7; max-width: 62ch; }
+.canvas-tip { padding-left: 12px; border-left: 2px solid var(--accent); font-size: 1.02rem; }
+.canvas-signature { margin: 6px 0 0; max-width: 24ch; font-family: var(--font-display); font-style: italic; font-size: var(--step-2); }
+
+.canvas-essentials-heading { margin: 18px 0 0; }
+/* wall-heading ends in a rule that eats the free space, so the control goes
+   after it and the rule stays between the words and the button. */
+.canvas-essentials-heading .canvas-omit { order: 3; }
+.canvas-essentials { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin: 0; }
+.canvas-essential { padding: 16px clamp(12px, 1.8vw, 20px); border-top: 1px solid var(--rule-strong); border-right: 1px solid var(--rule); }
+.canvas-essential:nth-child(2n) { border-right: 0; padding-right: 0; }
+.canvas-essential:nth-child(2n + 1) { padding-left: 0; }
+.canvas-essential dt { margin-bottom: 6px; font-size: var(--step--2); font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); }
+.canvas-essential dd { margin: 0; display: grid; justify-items: start; }
+.canvas-essential-detail { font-family: var(--font-display); font-size: var(--step-1); font-weight: 600; }
+.canvas-essential-note { color: var(--text-muted); font-size: var(--step--1); line-height: 1.5; }
+.canvas-essential .form-feedback { margin-top: 8px; }
+.canvas-essential .btn { margin-top: 4px; }
+
+/* ---- The guests' half: drawn, greyed, and not editable ---- */
+
+.canvas-memories { margin-top: 22px; padding-top: 4px; }
+.canvas-memories .wall-heading { font-size: var(--step-1); }
+/* Two notes, not three: the wall itself runs two columns, and the pair is
+   enough to say "these keep coming" without filling the canvas with things
+   nobody wrote. They borrow .note's paper and .tilt-* rotations so a Host
+   recognises the shape from their own wall, and are held back with opacity
+   rather than redrawn in grey. */
+.canvas-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 16px; margin-bottom: 16px; }
+.canvas-note-ghost {
+  padding: 16px 18px 14px;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule); border-radius: var(--radius-xs);
+  box-shadow: var(--lift-sm);
+  opacity: .8;
+}
+.canvas-ghost-lines { display: grid; gap: 9px; }
+.canvas-ghost-lines i { height: 8px; border-radius: 1px; background: var(--bg-alt); }
+.canvas-ghost-lines i:last-child { width: 58%; }
+.canvas-ghost-sign {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 16px; padding-top: 13px; border-top: 1px solid var(--rule);
+}
+.canvas-ghost-avatar { width: 32px; height: 32px; flex: none; border-radius: var(--radius-xs); background: var(--bg-alt); }
+/* A name over a date, because that is what a guest signs with. */
+.canvas-ghost-author { display: grid; gap: 6px; }
+.canvas-ghost-author i { height: 7px; border-radius: 1px; background: var(--bg-alt); }
+.canvas-ghost-author i:first-child { width: 72px; }
+.canvas-ghost-author i:last-child { width: 98px; }
+.canvas-guest-note { margin: 0; padding-left: 12px; border-left: 2px solid var(--rule-strong); color: var(--text-muted); font-size: var(--step--1); line-height: 1.6; }
+
+/* ---- The one card in the guests' half a Host writes ----
+   It borrows .note and .note-host wholesale, so what is typed into is the card
+   as it will be pinned up rather than a form that produces one. Only the
+   affordances are added here: a frame that takes a photograph, and a field
+   where the words go. */
+
+.canvas-note { margin: 0; }
+.canvas-note .note-photo { display: block; width: 100%; cursor: pointer; text-align: left; }
+.canvas-note .note-photo:hover { border-color: var(--accent); }
+.canvas-note .note-photo:focus-visible { outline: none; border-color: var(--accent); box-shadow: var(--ring); }
+.canvas-note-photo-empty {
+  display: grid; place-items: center; gap: 6px;
+  padding: 20px 12px;
+  border: 1px dashed var(--rule-strong); border-radius: var(--radius-xs);
+  color: var(--text-muted);
+}
+.canvas-note-photo-empty b { font-size: var(--step--1); font-weight: 600; }
+.canvas-note-sign {
+  display: flex; align-items: center; gap: 11px;
+  margin: 20px 0 0; padding-top: 15px;
+  border-top: 1px solid color-mix(in srgb, var(--accent) 22%, var(--rule));
+}
+.canvas-note-sign b { font-family: var(--font-display); font-size: 1.11rem; font-weight: 600; }
+.canvas-note .canvas-omit { margin-top: 10px; }
+
+/* The offer stands in the cell the card would fill, so what it opens is said
+   by where it is rather than by a sentence explaining it. */
+.canvas-note-offer {
+  display: grid; justify-items: start; align-content: center; gap: 8px;
+  min-height: 132px; padding: 16px 18px;
+  border: 1px dashed var(--rule-strong); border-radius: var(--radius-xs);
+}
+.canvas-note-offer small { color: var(--text-muted); font-size: var(--step--2); line-height: 1.5; }
+
+.canvas-savebar { margin-top: 4px; }
+
+/* -------------------------- Moderation queue ---------------------------
+   The wall again, but with the working surface a guest never sees: why a
+   memory is off the wall, how long is left on it, and the buttons. The notes
+   borrow .note's paper but sit square, in a real grid — this is a job of work
+   being done, not a wall being admired, and tilted cards would make a Host
+   read twenty of them at twenty angles.
+   ----------------------------------------------------------------------- */
+
+.moderation-page { max-width: 1080px; }
+
+/* ---- Walls and QR display ---- */
+
+.qr-page > .lede { margin-top: 10px; }
+/* A consequence normally holds one paragraph; a wall holds a sentence, an
+   address and a way in, so this one lets them stack. */
+.qr-page .consequence { display: grid; gap: 8px; justify-items: start; }
+.qr-page .consequence .field-hint { margin: 0; }
+.wall-address {
+  margin: 0; font-size: var(--step--1); color: var(--text-muted); overflow-wrap: anywhere;
+}
+.wall-address code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.qr-page h3 { margin: clamp(24px, 3vw, 32px) 0 8px; font-size: var(--step-0); }
+.qr-page > .lede { max-width: 62ch; }
+
+/* ------------------------------ Settings --------------------------------
+   /host/property/{id}/settings: what the property is, on a plain labelled
+   form. The wall canvas types into the sentence a guest reads; this types
+   into a field with its name above it, because a Host who came to rename the
+   place is not reading the wall.                                           */
+
+.settings-page > .lede { margin-top: 10px; max-width: 62ch; }
+.settings-page .stacked-form { max-width: 46rem; }
+.settings-page h3 { margin: clamp(26px, 3.4vw, 36px) 0 8px; font-size: var(--step-0); }
+.settings-page .wall-address { margin-bottom: 6px; }
+/* Two slots side by side once there is room for both: they are the same kind
+   of thing, and stacked they push the wall address off the screen. */
+.settings-photos {
+  display: grid; gap: clamp(22px, 3vw, 34px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  align-items: start;
+}
+.settings-photos > h3, .settings-photos > .field-hint { grid-column: 1 / -1; }
+.settings-photos > .field-hint { margin: 0 0 4px; }
+
+/* The placard is one of the few things in this product that is physically
+   real, so it is drawn as the card it will be printed as rather than
+   described. It keeps its own paper and ink in both colour schemes: a printed
+   card does not have a dark mode, and an inverted QR code is a code that will
+   not scan. */
+.placard { margin: clamp(18px, 2.5vw, 24px) 0 0; }
+.placard-card {
+  width: min(340px, 100%); padding: 26px 24px 18px; text-align: center;
+  background: #fff; color: #14181b;
+  border: 1px solid rgba(20, 24, 27, .16); border-radius: var(--radius-sm);
+  box-shadow: var(--lift-md);
+}
+.placard-lead {
+  margin: 0; font-size: var(--step--2); letter-spacing: .12em; text-transform: uppercase; color: #5d6d78;
+}
+.placard-name {
+  margin: 6px 0 18px; font-family: var(--font-display); font-size: var(--step-1);
+  font-weight: 600; line-height: 1.2;
+}
+.placard-code { display: block; width: min(210px, 68%); height: auto; margin: 0 auto; }
+.placard-invite { margin: 16px auto 0; max-width: 26ch; font-size: var(--step--1); line-height: 1.5; color: #33404a; }
+.placard-address {
+  margin: 10px 0 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--step--2); color: #5d6d78; overflow-wrap: anywhere;
+}
+.placard-mark {
+  margin: 16px 0 0; padding-top: 12px; border-top: 1px solid rgba(20, 24, 27, .12);
+  font-size: var(--step--2); letter-spacing: .14em; text-transform: uppercase; color: #7d8c96;
+}
+
+.queue-section { margin-top: clamp(34px, 4vw, 48px); }
+.queue-section h2 {
+  display: flex; align-items: baseline; gap: 10px;
+  margin: 0; padding-bottom: 10px; border-bottom: 1px solid var(--rule-strong);
+  font-size: var(--step-2);
+}
+.queue-count {
+  padding: 2px 9px; border-radius: var(--radius-xs);
+  background: var(--bg-alt); color: var(--text-muted);
+  font-family: inherit; font-size: var(--step--1); font-weight: 650;
+}
+.queue-blurb { margin: 12px 0 0; max-width: 68ch; color: var(--text-muted); font-size: var(--step--1); }
+
+/* A privacy request carries a legal deadline, so its pile is stamped rather
+   than left to look like the rest of the day's work. */
+.queue-privacy h2 { border-bottom-color: var(--accent); }
+.queue-privacy .queue-count { background: var(--accent-soft); color: var(--accent-strong); }
+
+.queue-grid {
+  display: grid; gap: clamp(16px, 2vw, 22px); margin-top: 22px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  align-items: start;
+}
+
+.queue-note {
+  display: flex; flex-direction: column;
+  padding: clamp(18px, 2vw, 22px);
+  background: var(--surface-raised); border: 1px solid var(--rule);
+  border-radius: var(--radius-sm); box-shadow: var(--lift-sm);
+}
+.queue-note .note-photo { margin-bottom: 16px; }
+.queue-note .note-message { font-size: var(--step-0); }
+.queue-note .note-empty { color: var(--text-muted); font-style: italic; }
+.queue-note .note-sign { margin-top: auto; padding-top: 14px; }
+
+.queue-state { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; }
+.state-pill.visibility-hidden_pending_review, .state-pill.sla {
+  color: var(--accent-strong); border-color: var(--accent); background: var(--accent-soft);
+}
+.state-pill.visibility-visible { color: var(--sage-700); border-color: var(--sage-700); background: var(--sage-050); }
+/* Overdue is the one state on this page that is allowed to shout. */
+.state-pill.sla-overdue { color: var(--on-ink); background: var(--accent-strong); border-color: var(--accent-strong); }
+
+.queue-hold {
+  margin: 12px 0 0; padding: 12px 14px;
+  background: var(--bg-alt); border-left: 2px solid var(--rule-strong); border-radius: var(--radius-xs);
+  color: var(--text-muted); font-size: var(--step--1); line-height: 1.5;
+}
+.queue-privacy .queue-hold { border-left-color: var(--accent); }
+
+.queue-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.queue-lead-hint { margin: 10px 0 0; color: var(--text-muted); font-size: var(--step--2); line-height: 1.5; }
+.queue-note .field-hint { margin-top: 16px; }
+
+/* Deletion is the only thing on this page that cannot be undone, so it is the
+   only control drawn in the stamp colour. */
+.btn-destructive { background: transparent; color: var(--accent-strong); border-color: var(--accent); }
+.btn-destructive:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.queue-confirm {
+  margin-top: 16px; padding: 14px;
+  background: var(--accent-soft); border: 1px solid var(--accent); border-radius: var(--radius-xs);
+}
+.queue-confirm p { margin: 0; font-size: var(--step--1); line-height: 1.55; }
+.queue-confirm .actions { margin-top: 14px; gap: 8px; }
+
+.queue-result { margin: 14px 0 0; color: var(--sage-700); font-size: var(--step--1); font-weight: 600; }
+.queue-result-failed { color: var(--accent-strong); }
+
+@media (prefers-color-scheme: dark) {
+  /* The stamp-on-paper chips lose their contrast on a dark surface, so the
+     fill goes and the ink stays. */
+  .state-pill.sla-overdue { color: #fff; }
+  .btn-destructive:hover { color: #fff; }
+}
+
+@media (max-width: 560px) {
+  .queue-grid { grid-template-columns: 1fr; }
+  .queue-actions .btn { flex: 1 1 auto; }
+}
+
+/* ------------------------------ Responsive ----------------------------- */
+
+@media (max-width: 1000px) {
+  .masthead { grid-template-columns: 1fr; gap: clamp(40px, 7vw, 64px); }
+  .masthead-art { min-height: clamp(360px, 74vw, 460px); }
+  .manifesto-inner { grid-template-columns: 1fr; gap: 32px; }
+  .closing { grid-template-columns: 1fr; align-items: start; }
+}
+
+@media (max-width: 1040px) {
+  /* Narrower than this the sidebar takes width the screen beside it needs, so
+     the views lie down across the top instead and stop being sticky. */
+  .property-shell-body { grid-template-columns: 1fr; gap: clamp(18px, 2.6vw, 28px); }
+  .property-side { position: static; gap: 16px; }
+  .property-nav { padding-bottom: 12px; border-bottom: 1px solid var(--rule); }
+  .property-side-tools { padding-top: 0; border-top: 0; }
+  .property-nav .nav-eyebrow { display: none; }
+  .property-nav ul { display: flex; flex-wrap: wrap; gap: 2px 4px; }
+  .nav-item { border-left: 0; border-bottom: 2px solid transparent; border-radius: 0; padding: 7px 10px; }
+  .property-nav .view-current { background: none; border-bottom-color: var(--accent); }
+}
+
+
+@media (max-width: 860px) {
+  .walkthrough { grid-template-columns: 1fr; }
+  .walkthrough li { padding: 22px 0; border-left: 0; border-top: 1px solid var(--rule); }
+  .walkthrough li:first-child { padding-top: 0; border-top: 0; }
+  .walkthrough li::before { margin-bottom: 8px; }
+  .capabilities { grid-template-columns: 1fr; }
+  .capability:nth-child(2) { border-top-color: var(--rule); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 760px) {
+  html { scroll-padding-top: 74px; }
+  .canvas-essentials { grid-template-columns: 1fr; }
+  .canvas-essential { padding-inline: 0; border-right: 0; }
+  .ledger { grid-template-columns: 1fr; gap: 20px; }
+  .rates { grid-template-columns: 1fr; }
+  .rate + .rate { border-left: 1px solid var(--rule); border-top: 0; }
+  .note-grid { columns: 1; }
+  .note { transform: none; }
+  .essentials-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .essential:nth-child(2n) { border-right: 0; padding-right: 0; }
+  .essential:nth-child(2n + 1) { padding-left: 0; }
+  .demo-ribbon a { margin-left: 0; }
+  .nav-toggle { display: inline-flex; }
+  .header-inner {
+    display: none;
+    position: absolute; top: 100%; right: var(--gutter); left: var(--gutter);
+    flex-direction: column; align-items: stretch; gap: 2px;
+    padding: 10px; background: var(--surface); border: 1px solid var(--rule-strong);
+    box-shadow: var(--lift-md);
+  }
+  .header-inner.open { display: flex; }
+  .site-nav { flex-direction: column; align-items: stretch; gap: 0; }
+  .site-nav a { padding: 11px 12px; color: var(--text); border-bottom: 1px solid var(--rule); }
+  .site-nav a:last-child { border-bottom: 0; }
+  .site-nav a.active { box-shadow: none; color: var(--accent-strong); }
+  .header-inner .btn { width: 100%; margin-top: 8px; }
+  .header-account { flex-direction: column; align-items: stretch; gap: 0; }
+  .header-account-name {
+    max-width: none; margin-left: 0; padding: 11px 12px; color: var(--text);
+    border-left: 0; border-bottom: 1px solid var(--rule);
+  }
+}
+
+/* ---------------------- One property, on a phone -----------------------
+   The band, the column of views and the wall are the same furniture at every
+   width. On a phone they were not furniture but obstruction: some 740px of
+   chrome stood between a Host and the thing they had opened the page to
+   change, and the control that takes a line off the wall — invisible until
+   hovered, and so invisible for good on a touch screen — was squeezing the
+   arrival note into a column 101px wide and 1105px tall.
+
+   Nothing is dropped below that the page does not already say twice. The
+   rest is set at the size a thumb needs rather than the size a cursor does. */
+
+@media (max-width: 620px) {
+  /* The trail names the property, and the heading two lines under it names
+     the property again — and at this width the restatement was wrapping
+     across two lines of letter-spaced capitals. Getting back is what a trail
+     is for, so that is all this one does here. */
+  .property-banner .trail-here { display: none; }
+  .property-banner { padding-bottom: 16px; }
+  .property-banner .eyebrow { margin-bottom: 12px; }
+
+  /* Photograph, name and state as one line of identity, rather than as a
+     picture with a paragraph standing beside it. */
+  .banner-row { gap: 14px; }
+  .banner-identity { flex-wrap: nowrap; align-items: center; gap: 12px; }
+  .banner-thumb { width: 56px; }
+  .banner-thumb-mark { width: 20px; height: 20px; }
+  /* No room for words inside a 56px square. The button's own label still
+     carries them for anyone who cannot see the mark. */
+  .banner-thumb-say { gap: 0; padding: 2px; }
+  .banner-thumb-say > span { display: none; }
+  .property-banner h1 { font-size: var(--step-1); line-height: 1.25; }
+  .banner-titles .state-pills { margin-top: 8px; }
+
+  /* The three errands, and the five views under them, are each named in
+     words. It is the marks beside the words that do not fit, so it is the
+     marks that go. */
+  .banner-actions { width: 100%; gap: 6px; }
+  .banner-actions .banner-mark { display: none; }
+  .banner-action { padding-inline: 11px; }
+  .banner-settings { padding-inline: 2px; }
+  .banner-actions-split { margin-inline: 0; }
+  .property-nav .nav-mark { display: none; }
+  .nav-item { gap: 0; padding: 8px 9px; }
+
+  .property-shell-body { padding-top: 18px; }
+
+  /* A line and the control that takes it off the wall cannot share a row
+     this narrow. `.canvas-omit` is `flex: none`, so it never gave the width
+     back: it claimed 180px of a 293px row and left the arrival note the
+     remaining hundred. They stack, and the control sits under the line it
+     acts on. */
+  .canvas-optional { flex-wrap: wrap; }
+  .canvas-optional > *:first-child { flex: 1 0 100%; }
+  .canvas-omit { align-self: flex-start; }
+  .canvas-eyebrow-omit, .canvas-essentials-heading { flex-wrap: wrap; }
+
+  /* A screen's own title and opening line are set for a desk. On a phone they
+     were a display heading over six lines of large grey type, standing
+     between a Host and the first field. */
+  .property-shell-main > h2 { font-size: var(--step-1); }
+  .property-shell-main > .lede { font-size: var(--step-0); }
+  .settings-page h3 { margin-top: 24px; }
+
+  /* The paper a wall is printed on is a setting about the screen, and on a
+     phone it stands above the wall it repaints. The four swatches stay — they
+     are the choice — and the chrome around them gives the room back. */
+  .theme-options { gap: 6px; }
+  .theme-option > span { padding: 5px 10px 5px 5px; gap: 7px; }
+}
+
+@media (max-width: 520px) {
+  /* The portrait cannot hang off the cover and leave room for a name beside
+     it, so it drops back into the flow above the titles. */
+  /* The action sits on the photograph; with no photograph the words behind
+     it need the room. */
+  .canvas-cover-empty { padding-bottom: 70px; }
+  .canvas-identity { flex-direction: column; align-items: flex-start; gap: 12px; margin-top: -34px; }
+  .canvas-titles { padding-bottom: 0; }
+  .canvas-notes { grid-template-columns: 1fr; }
+  /* Three overlapping objects do not fit a phone: the page keeps two notes,
+     and the phone and QR display each get their own clear corner. */
+  .masthead-art { min-height: 440px; }
+  .spread { inset: 0 28% 0 0; padding: 20px 16px; }
+  .spread-head { margin-bottom: 16px; }
+  .hand { font-size: .92rem; line-height: 26px; margin-bottom: 14px; }
+  .hand-2 { padding-left: 0; }
+  .hand-3 { display: none; }
+  .device { width: 46%; right: 0; top: 12%; }
+  .qr-display { width: 104px; left: 0; bottom: 0; }
+  .essentials-grid { grid-template-columns: 1fr; }
+  .essential { padding-inline: 0; border-right: 0; }
+  .stay-welcome-head { flex-direction: column; align-items: flex-start; gap: 14px; }
+  /* On a phone the preview is already the size of the thing it previews, so it
+     is shortened to keep the wall itself within reach of a thumb. */
+  .phone-screen { height: 300px; }
+  .actions .btn, .actions .primary-action, .actions .secondary-action { width: 100%; }
+  .page-head > .btn { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+
+/* ---------------------------- Wall themes ------------------------------ */
+
+/* The paper a property's walls are printed on.
+
+   A theme is not a colour scheme. Four walls that differ only in hue are four
+   copies of the same wall, so each theme sets what a printer would have picked
+   along with the paper: the face the headings are set in, whether a memory is
+   a card pinned to the page or a paragraph written on it, whether corners are
+   cut square or rounded, whether anything lifts off the sheet, and whether the
+   sheet is plain or woven.
+
+   All of it is expressed as tokens re-declared per theme, so a themed subtree —
+   the canvas sheet, the phone preview, the swatch in the picker — is painted by
+   its descendants' existing rules rather than by a second set of them.
+
+   These sit after the dark-scheme block deliberately. A wall theme is the paper
+   a Host chose for their guests, and it looks the same to every guest whatever
+   their phone is set to; `color-scheme` keeps the controls inside the canvas
+   matched to the paper rather than to the reader. */
+
+[data-wall-theme] {
+  color-scheme: light;
+
+  /* ---- Colour: the wall's semantic tokens, re-pointed at the paper ---- */
+  --bg: var(--wall-paper);
+  --bg-alt: var(--wall-paper-alt);
+  --surface: var(--wall-paper);
+  --surface-raised: var(--wall-sheet);
+  --paper-000: var(--wall-sheet);
+  --paper-050: var(--wall-paper);
+  --paper-100: var(--wall-paper-alt);
+  --text: var(--wall-ink);
+  --text-muted: var(--wall-ink-soft);
+  --accent: var(--wall-accent);
+  --accent-strong: var(--wall-accent-strong);
+  --accent-soft: var(--wall-accent-soft);
+  --rule: var(--wall-rule);
+  --rule-strong: var(--wall-rule-strong);
+  --focus: var(--wall-accent);
+  --ring: 0 0 0 3px var(--wall-accent-soft);
+
+  /* The chips — avatars, the host's monogram, a primary button — are drawn
+     from these, so a theme sets its own rather than borrowing the site's.
+     `--on-ink` is never overridden anywhere else; inside a themed subtree it
+     has to be, because dark stock wants dark type on its chips. */
+  --ink-900: var(--wall-chip-strong);
+  --ink-800: var(--wall-chip);
+  --ink-700: var(--wall-chip-soft);
+  --stamp-700: var(--wall-accent-strong);
+  --sage-700: var(--wall-chip-alt);
+  --on-ink: var(--wall-chip-ink);
+
+  /* ---- Shape ---- */
+  --wall-sheet-radius: var(--radius-sm);
+  /* The sheet's own edge. `lead` and `cap` fall back to the whole border, the
+     way a note's do, so a theme that wants one edge of its own names it. */
+  --wall-sheet-border: 1px solid var(--wall-rule);
+  --wall-sheet-lead: var(--wall-sheet-border);
+  --wall-sheet-cap: var(--wall-sheet-border);
+  --wall-sheet-shadow: var(--lift-md);
+  /* A frame a few pixels inside the sheet, the way a printed card carries one.
+     It is drawn round the written face rather than round the whole sheet: the
+     cover photograph runs edge to edge across the top and the portrait hangs
+     over it, and a line crossing either would read as a scratch rather than as
+     a frame. So it opens under the cover and closes at the foot of the sheet. */
+  --wall-frame: 1px solid var(--wall-rule);
+  --wall-frame-inset: 12px;
+  --wall-frame-radius: 0;
+  --wall-mark-radius: var(--radius-xs);
+  --wall-note-radius: var(--radius-xs);
+
+  /* ---- The memory itself: card, printed block, or written paragraph ----
+     `lead` and `cap` fall back to the whole border, so a theme that keeps only
+     one edge sets `--wall-note-border: 0` and names the edge it keeps. */
+  --wall-note-back: var(--wall-sheet);
+  /* Two more stocks, dealt out by the same index that decides a note's angle.
+     A board of identical cards is a filing cabinet, so a theme that wants more
+     than one names them; they fall back to the first, and a theme that leaves
+     them alone is printed on one card throughout. */
+  --wall-note-back-1: var(--wall-note-back);
+  --wall-note-back-2: var(--wall-note-back);
+  --wall-note-border: 1px solid var(--wall-rule);
+  --wall-note-lead: var(--wall-note-border);
+  --wall-note-cap: var(--wall-note-border);
+  --wall-note-shadow: var(--lift-sm);
+  --wall-note-pad: clamp(18px, 2.2vw, 24px);
+  /* A multiplier on the pinned-paper rotations, so a theme flattens the wall
+     by zeroing one number instead of restating three transforms. */
+  --wall-tilt: 1;
+
+  /* ---- What holds a memory to the wall ----
+     Most stock holds nothing: a memory is printed on the sheet, or cut out and
+     laid on it, and nothing is fastening it. A board is the exception — what
+     makes it a board is the pin — so a theme that wants one names it here and
+     it is drawn through the top edge of every card: on the wall, in the phone
+     and in the swatch. It is a box rather than a drawing, so the same six
+     declarations give Cork a pin head and give Album a strip of tape. A theme
+     that names none generates no pseudo-element at all. */
+  --wall-fix-content: none;
+  --wall-fix-width: 14px;
+  --wall-fix-height: 14px;
+  --wall-fix-radius: 50%;
+  --wall-fix-back: var(--wall-accent);
+  --wall-fix-shadow: none;
+  --wall-fix-tilt: 0deg;
+  /* The one number the smaller drawings of the wall turn down, so a pin stays
+     a pin and a strip of tape stays a strip of tape at a third of the size. */
+  --wall-fix-scale: 1;
+
+  /* ---- Voice ---- */
+  --wall-prose-font: var(--font-display);
+  --wall-prose-height: 1.55;
+  --wall-heading-weight: 600;
+  --wall-heading-tracking: normal;
+  --wall-heading-style: normal;
+  --wall-eyebrow-font: var(--font-sans);
+  --wall-eyebrow-weight: 700;
+  --wall-eyebrow-tracking: .16em;
+  --wall-eyebrow-transform: uppercase;
+  --wall-eyebrow-style: normal;
+  --wall-rule-height: 1px;
+  --wall-rule-colour: var(--wall-rule-strong);
+
+  /* ---- The sheet itself ---- */
+  --wall-texture: none;
+  /* Woven stock is drawn with gratings, which fill whatever they are given;
+     speckled stock is drawn with dots, which have to be told how big a tile to
+     repeat on. One size per layer, so no two layers land on the same period
+     and the eye cannot find the repeat. */
+  --wall-texture-size: auto;
+
+  /* A theme's device: the mark a printer would have put on their own stock. It
+     is a mask rather than a coloured drawing, so one shape takes the theme's
+     accent wherever it is used — small beside a section heading, large and
+     faint in the corner of the sheet — and a theme's colour is still only ever
+     declared once.
+
+     Not every stock is marked. A theme that names no device sets no content
+     either, so the pseudo-elements that would carry it are never generated:
+     Linen is plain woven paper, and a mark stamped on it would be one thing
+     more than the wall needs. */
+  --wall-device: none;
+  --wall-device-content: none;
+
+  color: var(--text);
+}
+
+/* Linen — paper and pins. Warm stock, notes cut out and pinned up at the angle
+   a hand leaves them, and a woven grain in the sheet. */
+[data-wall-theme="linen"] {
+  --wall-paper: #fdfaf4;
+  --wall-paper-alt: #f7f2e8;
+  --wall-sheet: #ffffff;
+  --wall-ink: #14181b;
+  --wall-ink-soft: #5d6d78;
+  --wall-accent: #b4472a;
+  --wall-accent-strong: #8f3a20;
+  --wall-accent-soft: #f6e6de;
+  --wall-rule: rgba(20, 24, 27, .13);
+  --wall-rule-strong: rgba(20, 24, 27, .26);
+  --wall-chip-strong: #14181b;
+  --wall-chip: #1f262b;
+  --wall-chip-soft: #33404a;
+  --wall-chip-alt: #33604c;
+  --wall-chip-ink: #f5f1e8;
+
+  /* A woven grain, drawn rather than fetched: two hairline gratings crossed at
+     right angles, faint enough to read as stock instead of as pattern. */
+  --wall-texture:
+    repeating-linear-gradient(45deg, rgba(20, 24, 27, .022) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(-45deg, rgba(20, 24, 27, .022) 0 1px, transparent 1px 4px);
+}
+
+/* Harbour — a new-build by the water. Everything set in the plainer face,
+   corners rounded off, nothing lifting: flat cards on cool stock. */
+[data-wall-theme="harbour"] {
+  --wall-paper: #f1f6f8;
+  --wall-paper-alt: #e5eef2;
+  --wall-sheet: #fdfefe;
+  --wall-ink: #12232c;
+  --wall-ink-soft: #4f6874;
+  --wall-accent: #2b6b86;
+  --wall-accent-strong: #1d4d62;
+  --wall-accent-soft: #dcebf1;
+  --wall-rule: rgba(18, 35, 44, .14);
+  --wall-rule-strong: rgba(18, 35, 44, .28);
+  --wall-chip-strong: #12232c;
+  --wall-chip: #2b6b86;
+  --wall-chip-soft: #4f6874;
+  --wall-chip-alt: #1d4d62;
+  --wall-chip-ink: #f2f8fa;
+
+  /* One face for the whole wall, headings and prose alike. */
+  --font-display: var(--font-sans);
+  --wall-prose-font: var(--font-sans);
+  --wall-prose-height: 1.7;
+  --wall-heading-weight: 680;
+  --wall-heading-tracking: -.018em;
+  --wall-eyebrow-tracking: .22em;
+
+  --wall-sheet-radius: 16px;
+  --wall-mark-radius: var(--radius-pill);
+  --wall-note-radius: 12px;
+  --wall-note-border: 1px solid var(--wall-rule-strong);
+  --wall-note-shadow: none;
+  --wall-note-pad: clamp(20px, 2.6vw, 28px);
+  --wall-tilt: 0;
+  /* Nothing lifts, the sheet included. */
+  --wall-sheet-shadow: none;
+  --wall-sheet-border: 1px solid var(--wall-rule-strong);
+  --wall-frame-radius: 10px;
+
+  /* Water, in the two lines a chart draws it with. */
+  --wall-device-content: "";
+  --wall-device: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M2 9.5q3-4 6 0t6 0 6 0'/%3E%3Cpath d='M2 15.5q3-4 6 0t6 0 6 0'/%3E%3C/svg%3E");
+}
+
+
+
+/* Sage — a journal left open. No cards at all: memories are paragraphs under a
+   rule, set airy, and the small print is written rather than stamped. */
+[data-wall-theme="sage"] {
+  --wall-paper: #eef3ee;
+  --wall-paper-alt: #e2ebe4;
+  --wall-sheet: #fbfdfa;
+  --wall-ink: #1a2a22;
+  --wall-ink-soft: #55705f;
+  --wall-accent: #33604c;
+  --wall-accent-strong: #234534;
+  --wall-accent-soft: #dce9e0;
+  --wall-rule: rgba(26, 42, 34, .14);
+  --wall-rule-strong: rgba(26, 42, 34, .28);
+  --wall-chip-strong: #234534;
+  --wall-chip: #33604c;
+  --wall-chip-soft: #55705f;
+  --wall-chip-alt: #1a2a22;
+  --wall-chip-ink: #f2f7f3;
+
+  --font-display: Cambria, "Hoefler Text", Constantia, Georgia, ui-serif, serif;
+  --wall-prose-height: 1.8;
+  --wall-heading-style: italic;
+  --wall-heading-weight: 550;
+  /* Labels written in the same hand as the page, not stamped over it. */
+  --wall-eyebrow-font: var(--font-display);
+  --wall-eyebrow-weight: 500;
+  --wall-eyebrow-tracking: .02em;
+  --wall-eyebrow-transform: none;
+  --wall-eyebrow-style: italic;
+
+  --wall-note-back: transparent;
+  --wall-note-border: 0;
+  --wall-note-cap: 1px solid var(--wall-rule-strong);
+  --wall-note-radius: 0;
+  --wall-note-shadow: none;
+  --wall-note-pad: 18px 0 24px;
+  --wall-tilt: 0;
+  /* A journal is ruled down its margin, not across its page: one double line
+     at the left edge, which lands where it is meant to whatever the text
+     above it is doing. */
+  --wall-sheet-lead: 3px double var(--wall-accent);
+  --wall-sheet-shadow: none;
+  --wall-frame: 1px solid var(--wall-rule-strong);
+  --wall-frame-inset: 14px;
+
+  /* A sprig, off the plant by the door. */
+  --wall-device-content: "";
+  --wall-device: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21.5V8'/%3E%3Cpath d='M12 13.5c-4 0-6.5-2.6-6.5-6.6 4 0 6.5 2.6 6.5 6.6z'/%3E%3Cpath d='M12 9.5c4 0 6.5-2.6 6.5-6.6-4 0-6.5 2.6-6.5 6.6z'/%3E%3C/svg%3E");
+  /* No ruling on the stock. A feint rule has to land on the lines it is ruling
+     for, and the sheet carries prose, labels and essentials all set at
+     different sizes: anchored to the top of the sheet instead, it cut through
+     the words at whatever interval the block above it happened to end on. */
+}
+
+/* Studio — a clean architectural moodboard. A soft-grey backdrop
+   with crisp white cards pinned securely under a metallic pushpin. */
+[data-wall-theme="studio"] {
+  --wall-paper: #e8e8e8;
+  --wall-paper-alt: #dcdcdc;
+  --wall-sheet: #e0e0e0;
+  --wall-ink: #1a1a1a;
+  --wall-ink-soft: #4a4a4a;
+  --wall-accent: #2b2b2b;
+  --wall-accent-strong: #111111;
+  --wall-accent-soft: #cccccc;
+  --wall-rule: rgba(0, 0, 0, .1);
+  --wall-rule-strong: rgba(0, 0, 0, .2);
+  --wall-chip-strong: #1a1a1a;
+  --wall-chip: #2b2b2b;
+  --wall-chip-soft: #4a4a4a;
+  --wall-chip-alt: #333333;
+  --wall-chip-ink: #ffffff;
+  
+  --paper-000: var(--wall-note-back);
+
+  --wall-heading-weight: 500;
+  --wall-eyebrow-tracking: .1em;
+  
+  --wall-sheet-radius: 4px;
+  --wall-sheet-border: 6px solid #d4d4d4;
+  --wall-sheet-shadow: 0 10px 30px rgba(0, 0, 0, .1);
+  --wall-frame: 0;
+
+  --wall-note-back: #ffffff;
+  --wall-note-back-1: #ffffff;
+  --wall-note-back-2: #ffffff;
+  --wall-note-border: 1px solid rgba(0, 0, 0, .05);
+  --wall-note-radius: 2px;
+  --wall-note-shadow: 2px 4px 10px rgba(0, 0, 0, .08);
+  --wall-mark-radius: 2px;
+  --wall-tilt: 1.5;
+
+  --wall-fix-content: "";
+  --wall-fix-width: 12px;
+  --wall-fix-height: 12px;
+  --wall-fix-radius: 50%;
+  --wall-fix-back: radial-gradient(circle at 34% 30%, #888888 0 16%, #444444 58%, #222222 100%);
+  --wall-fix-shadow: 0 2px 4px rgba(0, 0, 0, .3);
+
+  --wall-texture:
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, .02) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, .02) 0 1px, transparent 1px 4px);
+  --wall-texture-size: auto;
+
+  --wall-device-content: "";
+  --wall-device: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round'%3E%3Ccircle cx='12' cy='8.4' r='4.6'/%3E%3Cpath d='M12 13v8.4'/%3E%3Cpath d='M8.5 5.6a4.6 4.6 0 0 1 2.6-1.8' stroke-width='1.1'/%3E%3C/svg%3E");
+}
+
+/* Archive — a gallery portfolio. Cool-grey card, squared off, 
+   with memories taped cleanly onto the page. */
+[data-wall-theme="archive"] {
+  --wall-paper: #f4f5f7;
+  --wall-paper-alt: #e6e8eb;
+  --wall-sheet: #ffffff;
+  --wall-ink: #1a1f26;
+  --wall-ink-soft: #4a5463;
+  --wall-accent: #2d3748;
+  --wall-accent-strong: #1a202c;
+  --wall-accent-soft: #edf2f7;
+  --wall-rule: rgba(26, 31, 38, .1);
+  --wall-rule-strong: rgba(26, 31, 38, .2);
+  --wall-chip-strong: #1a1f26;
+  --wall-chip: #2d3748;
+  --wall-chip-soft: #4a5463;
+  --wall-chip-alt: #364152;
+  --wall-chip-ink: #f8fafc;
+  --paper-000: var(--wall-note-back);
+
+  --font-display: "Iowan Old Style", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, ui-serif, serif;
+  --wall-prose-height: 1.7;
+  --wall-heading-weight: 600;
+  
+  --wall-eyebrow-font: var(--font-sans);
+  --wall-eyebrow-weight: 600;
+  --wall-eyebrow-tracking: .08em;
+
+  --wall-sheet-radius: 2px;
+  --wall-sheet-border: 1px solid var(--wall-rule-strong);
+  --wall-mark-radius: 0;
+  --wall-frame: 0;
+
+  --wall-note-back: #ffffff;
+  --wall-note-border: 1px solid rgba(26, 31, 38, .1);
+  --wall-note-radius: 0;
+  --wall-note-shadow: 0 4px 14px rgba(26, 31, 38, .08);
+  --wall-note-pad: 22px 22px 26px;
+  --wall-tilt: .7;
+
+  /* Frosted matte tape, clean and modern */
+  --wall-fix-content: "";
+  --wall-fix-width: 48px;
+  --wall-fix-height: 14px;
+  --wall-fix-radius: 1px;
+  --wall-fix-back: linear-gradient(180deg, rgba(240, 242, 245, .95), rgba(226, 232, 240, .9));
+  --wall-fix-shadow: 0 1px 3px rgba(0, 0, 0, .05), inset 0 0 0 1px rgba(255, 255, 255, .6);
+  --wall-fix-tilt: -1deg;
+
+  /* Very soft, clean blooms */
+  --wall-texture:
+    radial-gradient(circle at 30% 22%, rgba(0, 0, 0, .01) 0 26%, transparent 68%),
+    radial-gradient(circle at 74% 72%, rgba(0, 0, 0, .01) 0 22%, transparent 64%);
+  --wall-texture-size: 190px 190px, 230px 230px;
+
+  --wall-device-content: "";
+  --wall-device: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4.6' y='5.4' width='14.8' height='13.2' rx='.6'/%3E%3Cpath d='M7.4 15.4l2.9-3.3 2.1 2.2 1.9-2 2.4 3.1'/%3E%3Cpath d='M4.6 8.8l3.6-3.4M15.8 18.6l3.6-3.4'/%3E%3C/svg%3E");
+}
+
+/* ---- What the tokens above actually paint ----
+   Two-part selectors throughout: a themed .note outranks the plain one earlier
+   in the sheet, and the elements carrying the attribute themselves are matched
+   with a compound rather than a descendant. */
+
+[data-wall-theme].canvas-sheet, [data-wall-theme] .canvas-sheet {
+  position: relative;
+  border: var(--wall-sheet-border);
+  border-left: var(--wall-sheet-lead);
+  border-top: var(--wall-sheet-cap);
+  border-radius: var(--wall-sheet-radius);
+  box-shadow: var(--wall-sheet-shadow);
+  background-image: var(--wall-texture);
+  background-size: var(--wall-texture-size);
+}
+/* The frame, drawn on the written face so it opens under the cover. Three
+   sides: the fourth is the cover's own bottom edge. */
+[data-wall-theme] .canvas-body, [data-wall-theme] .phone-body { position: relative; }
+[data-wall-theme] .canvas-body::before, [data-wall-theme] .phone-body::before {
+  content: ""; position: absolute; pointer-events: none;
+  inset: 0 var(--wall-frame-inset) var(--wall-frame-inset);
+  border: var(--wall-frame); border-top: 0;
+  border-radius: 0 0 var(--wall-frame-radius) var(--wall-frame-radius);
+}
+/* At phone scale the same frame is drawn closer in, since the margins it sits
+   in are a third of the size. */
+[data-wall-theme] .phone-body::before { inset: 0 6px 6px; border-radius: 0 0 calc(var(--wall-frame-radius) / 2) calc(var(--wall-frame-radius) / 2); }
+
+/* The device again in the corner of the sheet, faint and large, the way a
+   stationer prints their own mark on the stock they sell. It sits in the
+   sheet's bottom margin, inside the frame and under nothing. */
+[data-wall-theme].canvas-sheet::after, [data-wall-theme] .canvas-sheet::after {
+  content: var(--wall-device-content); position: absolute; right: 26px; bottom: 22px;
+  width: 84px; height: 84px; pointer-events: none; opacity: .13;
+  background: var(--accent);
+  -webkit-mask: var(--wall-device) center / contain no-repeat;
+  mask: var(--wall-device) center / contain no-repeat;
+}
+[data-wall-theme].phone-screen { background-image: var(--wall-texture); background-size: var(--wall-texture-size); }
+[data-wall-theme] .canvas-cover-photo,
+[data-wall-theme] .canvas-cover-empty {
+  border-radius: var(--wall-sheet-radius) var(--wall-sheet-radius) 0 0;
+}
+
+/* The chips: square on Linen, round on Harbour, cut square on Ember. */
+[data-wall-theme] .avatar,
+[data-wall-theme] .wall-monogram,
+[data-wall-theme] .canvas-portrait-photo,
+[data-wall-theme] .canvas-portrait-mark { border-radius: var(--wall-mark-radius); }
+
+/* Restated inside a themed subtree so the reader's dark mode cannot invert a
+   button standing on a Host's light paper: the theme's own chip decides. */
+[data-wall-theme] .btn-primary,
+[data-wall-theme] .primary-action,
+[data-wall-theme] button[type="submit"],
+[data-wall-theme] .phone-composer b { background: var(--ink-900); color: var(--on-ink); }
+[data-wall-theme] .btn-primary:hover,
+[data-wall-theme] .primary-action:hover,
+[data-wall-theme] button[type="submit"]:hover { background: var(--ink-700); }
+
+/* A memory: pinned card, printed block, or paragraph on the page. */
+[data-wall-theme] .note,
+[data-wall-theme] .canvas-note-ghost,
+[data-wall-theme] .theme-swatch-note {
+  background: var(--wall-note-back);
+  border: var(--wall-note-border);
+  border-left: var(--wall-note-lead);
+  border-top: var(--wall-note-cap);
+  border-radius: var(--wall-note-radius);
+  box-shadow: var(--wall-note-shadow);
+}
+[data-wall-theme] .note { padding: var(--wall-note-pad); }
+/* Restated on the theme's own stock: the paper above is set by a two-part
+   selector, so the hosts' card has to claim its accent back at the same
+   weight or it prints as one more guest note. */
+[data-wall-theme] .note-host {
+  background: color-mix(in srgb, var(--accent) 9%, var(--wall-note-back));
+  border-left: 3px solid var(--accent);
+  transform: none;
+}
+/* Flat stock keeps the rotations in the markup and multiplies them away. */
+[data-wall-theme] .tilt-0 { transform: rotate(calc(var(--wall-tilt) * -.4deg)); }
+/* The angle and the stock are dealt by the same index, so a card that lies at
+   its own angle is on its own card too. The hosts' note is on neither list: it
+   is squared up and printed on the house's accent, which is how a reader tells
+   it from the guests' notes around it. */
+[data-wall-theme] .tilt-1 {
+  transform: rotate(calc(var(--wall-tilt) * .45deg));
+  background: var(--wall-note-back-1);
+}
+[data-wall-theme] .tilt-2 {
+  transform: rotate(calc(var(--wall-tilt) * -.15deg));
+  background: var(--wall-note-back-2);
+}
+
+/* What holds a memory up. Nothing, on stock that is not a board. It is drawn
+   straddling the top edge of the card rather than inside it, so it reads as
+   fastening the card to the wall rather than as printed on it, and it takes no
+   pointer: it is the one thing on a memory that nobody can reach. */
+[data-wall-theme] .note,
+[data-wall-theme] .canvas-note-ghost,
+[data-wall-theme] .phone-note,
+[data-wall-theme] .theme-swatch-note { position: relative; }
+[data-wall-theme] .note::before,
+[data-wall-theme] .canvas-note-ghost::before,
+[data-wall-theme] .phone-note::before,
+[data-wall-theme] .theme-swatch-note::before {
+  content: var(--wall-fix-content);
+  position: absolute; left: 50%; pointer-events: none;
+  width: calc(var(--wall-fix-width) * var(--wall-fix-scale));
+  height: calc(var(--wall-fix-height) * var(--wall-fix-scale));
+  top: calc(var(--wall-fix-height) * var(--wall-fix-scale) / -2);
+  border-radius: var(--wall-fix-radius);
+  background: var(--wall-fix-back);
+  box-shadow: var(--wall-fix-shadow);
+  transform: translateX(-50%) rotate(var(--wall-fix-tilt));
+}
+/* The phone and the swatch are the same wall at half and a third of the size,
+   so the fixing comes down with them rather than standing 13px across a card
+   24px wide. */
+[data-wall-theme] .phone-note { --wall-fix-scale: .5; }
+[data-wall-theme] .theme-swatch-note { --wall-fix-scale: .3; }
+
+/* Prose: the welcome, the arrival note, and what a guest wrote. */
+[data-wall-theme] .wall-welcome,
+[data-wall-theme] .canvas-welcome,
+[data-wall-theme] .canvas-stay-note,
+[data-wall-theme] .note-message,
+[data-wall-theme] .canvas-note-message,
+[data-wall-theme] .phone-welcome,
+[data-wall-theme] .phone-para {
+  font-family: var(--wall-prose-font);
+  line-height: var(--wall-prose-height);
+}
+
+[data-wall-theme] h1, [data-wall-theme] h2, [data-wall-theme] h3,
+[data-wall-theme] .canvas-name,
+[data-wall-theme] .phone-stay-name b,
+[data-wall-theme] .stay-cover-caption b,
+[data-wall-theme] .canvas-heading,
+[data-wall-theme] .wall-heading {
+  font-weight: var(--wall-heading-weight);
+  letter-spacing: var(--wall-heading-tracking);
+  font-style: var(--wall-heading-style);
+}
+/* The rule that finishes a section heading: a hairline on most stock, a
+   printed bar in the accent on Ember. */
+[data-wall-theme] .wall-heading::after {
+  height: var(--wall-rule-height);
+  background: var(--wall-rule-colour);
+}
+/* And the theme's own device opening it, at the size of the words beside it.
+   A wall says "Memories left here" under a leaf, a wave, an ember or a sheet
+   of paper depending on the stock it is printed on. */
+[data-wall-theme] .wall-heading::before,
+[data-wall-theme] .phone-heading::before {
+  content: var(--wall-device-content); flex: none;
+  width: 1.15em; height: 1.15em;
+  background: var(--accent);
+  -webkit-mask: var(--wall-device) center / contain no-repeat;
+  mask: var(--wall-device) center / contain no-repeat;
+}
+[data-wall-theme] .phone-heading { display: flex; align-items: center; gap: 6px; }
+
+/* Small print — eyebrows, section labels, the essentials' terms. */
+[data-wall-theme] .eyebrow,
+[data-wall-theme] .canvas-eyebrow,
+[data-wall-theme] .phone-eyebrow,
+[data-wall-theme] .phone-heading,
+[data-wall-theme] .phone-facts dt,
+[data-wall-theme] .essential dt,
+[data-wall-theme] .canvas-essential dt {
+  font-family: var(--wall-eyebrow-font);
+  font-weight: var(--wall-eyebrow-weight);
+  letter-spacing: var(--wall-eyebrow-tracking);
+  text-transform: var(--wall-eyebrow-transform);
+  font-style: var(--wall-eyebrow-style);
+}
+
+/* ---- The picker ---- */
+
+.theme-picker { border: 0; padding: 0; margin: 0; min-width: 0; }
+.theme-picker legend {
+  padding: 0; margin-bottom: 8px;
+  font-size: var(--step--2); font-weight: 650; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--text-muted);
+}
+.theme-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.theme-option { position: relative; }
+.theme-option input {
+  position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer;
+}
+/* The chip is the label's own span, named as a child: the swatch inside it is
+   a span too, and a descendant selector was painting the drawing of the wall
+   with the chrome of the control around it. */
+.theme-option > span {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px 6px 6px;
+  border: 1px solid var(--rule-strong); border-radius: var(--radius-xs);
+  background: var(--surface);
+  font-size: var(--step--1); font-weight: 600;
+}
+/* The swatch is a wall the size of a stamp, painted by the theme it stands
+   for: its own stock and grain, with one memory on it drawn by the same
+   declaration that draws a real one. Three stripes of colour could not show
+   that Harbour rounds its corners or that Sage has no cards at all. */
+.theme-swatch {
+  display: grid; place-items: center;
+  width: 38px; height: 28px; flex: none; overflow: hidden;
+  background: var(--wall-paper); background-image: var(--wall-texture); background-size: var(--wall-texture-size);
+  border: 1px solid var(--wall-rule-strong); border-radius: var(--wall-sheet-radius);
+}
+.theme-swatch-note {
+  display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; gap: 3px;
+  width: 24px; height: 17px; padding: 3px 4px;
+  transform: rotate(calc(var(--wall-tilt) * -3deg));
+  /* A corner cut for a note the width of a fingernail: at full size Harbour's
+     12px reads as a rounded card, and at 24px it reads as a pill. */
+  border-radius: min(var(--wall-note-radius), 5px);
+}
+.theme-swatch-note i { display: block; height: 2px; background: var(--wall-ink); opacity: .5; }
+.theme-swatch-note i:last-child { width: 55%; background: var(--wall-accent); opacity: 1; }
+
+.theme-option input:checked + span { border-color: var(--text); box-shadow: inset 0 0 0 1px var(--text); }
+.theme-option input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 2px; }
+.theme-option input:hover:not(:disabled) + span { border-color: var(--text-muted); }
+.theme-option input:disabled + span { opacity: .55; }
+
+.theme-note { margin: 8px 0 0; font-size: var(--step--1); color: var(--text-muted); }
+
+/* ------------------- The public wall: on, off, and shared ---------------- */
+
+/* An embedded wall is inside someone else's page, so it brings no page of its
+   own with it: no outer margin, no maximum measure, and the host page's width
+   is the width. */
+.wall-embed { max-width: none; margin: 0; padding: clamp(16px, 3vw, 28px) clamp(14px, 3vw, 26px); }
+
+.wall-share {
+  margin: 0 0 22px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+}
+/* A wall that is off is not an error, so it is quietened rather than alarmed:
+   the switch stays exactly where it was and the page stops offering addresses
+   that currently reach nobody. */
+.wall-share.is-off { background: var(--bg-alt); }
+.wall-share-decision { display: grid; gap: 8px; }
+.wall-share-say { margin: 0; max-width: 72ch; font-size: var(--step--1); line-height: 1.6; color: var(--text-muted); }
+.wall-share-uses { display: grid; gap: 14px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--rule); }
+
+/* ---- The switch ---- */
+
+.switch { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+.switch input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.switch-track {
+  position: relative; flex: none;
+  width: 42px; height: 24px; border-radius: 999px;
+  background: var(--rule-strong); border: 1px solid transparent;
+  transition: background .12s ease;
+}
+.switch-knob {
+  position: absolute; top: 2px; left: 2px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--paper-000); box-shadow: var(--lift-sm);
+  transition: transform .12s ease;
+}
+.switch input:checked + .switch-track { background: var(--sage-700); }
+.switch input:checked + .switch-track .switch-knob { transform: translateX(18px); }
+.switch input:focus-visible + .switch-track { outline: 2px solid var(--focus); outline-offset: 2px; }
+.switch input:disabled ~ * { opacity: .55; }
+.switch-label { font-weight: 650; }
+
+/* ---- An address, and the button that copies it ---- */
+
+.wall-copy { display: grid; gap: 6px; }
+.wall-copy-label {
+  margin: 0;
+  font-size: var(--step--2); font-weight: 650; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--text-muted);
+}
+.wall-copy-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px; }
+.wall-copy-value {
+  flex: 1 1 280px; min-width: 0; margin: 0;
+  padding: 8px 10px;
+  background: var(--surface-raised); border: 1px solid var(--rule); border-radius: var(--radius-xs);
+  font-size: var(--step--1); line-height: 1.5;
+  /* The snippet is four lines a Host will paste, so it keeps its line breaks
+     and scrolls sideways rather than reflowing into something they cannot
+     read back. */
+  overflow-x: auto; white-space: pre;
+}
+.wall-copy-value code { white-space: inherit; }
+.wall-copy-said { margin: 0; font-size: var(--step--1); color: var(--sage-700); }
+.wall-copy-said.failed { color: var(--accent-strong); }
+
+/* ---- The nav row for a wall that is switched off ---- */
+
+.nav-tag {
+  margin-left: auto;
+  padding: 1px 6px; border-radius: 999px;
+  background: var(--rule); color: var(--text-muted);
+  font-size: var(--step--2); font-weight: 650; letter-spacing: .06em; text-transform: uppercase;
+}
+</style></head><body><main class="page" style="min-height:100vh"><h1>Behind the window</h1><p class="lede">The dashboard the window opens over.</p></main><div class="property-dialog-scrim"><div class="property-dialog" role="dialog" aria-modal="true" aria-labelledby="property-dialog-title" tabindex="-1"><header class="property-dialog-head"><h2 id="property-dialog-title">Add a property</h2></header><div class="property-dialog-body"><form class="wizard stacked-form" novalidate="" aria-label="Your welcome: step 2 of 3"><nav class="wizard-rail" aria-label="Steps"><p class="visually-hidden">Step 2 of 3</p><ol><li class="wizard-rail-step" data-state="done"><button type="button" class="wizard-rail-back"><span class="wizard-rail-number" aria-hidden="true">1</span><span class="wizard-rail-name">The property</span></button></li><li class="wizard-rail-step" data-state="current" aria-current="step"><span class="wizard-rail-number" aria-hidden="true">2</span><span class="wizard-rail-name">Your welcome</span></li><li class="wizard-rail-step" data-state="ahead"><span class="wizard-rail-number" aria-hidden="true">3</span><span class="wizard-rail-name">The essentials</span></li></ol></nav><h3 class="wizard-step-title">Your welcome</h3><p class="lede wizard-step-blurb">What a guest reads when they open the wall, and the names it is signed off with.</p><label for="wizard-welcome">A welcome for the wall<span class="label-optional">Optional</span></label><textarea id="wizard-welcome" data-field="welcome" maxlength="400" rows="4" placeholder="A granite cottage a short walk above the harbour, with the same view our family has been coming back to since 2019." aria-describedby="wizard-welcome-hint"></textarea><p class="field-hint" id="wizard-welcome-hint">The paragraph under the property name on the wall anyone can open. It introduces the place to someone who has not stayed yet.</p><label for="wizard-hosts">Signed off by<span class="label-optional">Optional</span></label><input id="wizard-hosts" data-field="hosts" maxlength="60" placeholder="Ana &amp; Tom" aria-describedby="wizard-hosts-hint" value=""><p class="field-hint" id="wizard-hosts-hint">The names at the foot of your note, as guests would address you. First names are enough.</p><label for="wizard-host-since">Hosting here since<span class="label-optional">Optional</span></label><input id="wizard-host-since" data-field="hostSince" maxlength="60" placeholder="2019" value=""><div class="wizard-photos"><div class="photo-field"><h5>Your photograph<span class="label-optional">Optional</span></h5><p class="field-hint">Beside your names at the foot of the note. Without one, guests see your initials.</p><button type="button" class="photo-drop" aria-label="Your photograph: choose a photograph"><svg class="camera-mark" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M7.3 5.6 8.5 3.5h3l1.2 2.1"></path><rect x="2.3" y="5.6" width="15.4" height="10.9" rx="1.9"></rect><circle cx="10" cy="11.1" r="3"></circle></svg><span class="photo-drop-line">No photograph yet.</span><span class="btn btn-secondary btn-sm photo-drop-action" aria-hidden="true">Choose a photograph</span></button><input class="visually-hidden" accept="image/jpeg,image/png,image/webp" aria-label="Your photograph: choose an image file" type="file"></div></div><section class="wizard-note" aria-labelledby="wizard-note-heading"><h4 id="wizard-note-heading">The arrival note</h4><p class="field-hint">What guests read first after scanning the QR display. It is never on the public wall.</p><label for="wizard-stay-heading">Arrival heading<span class="label-optional">Optional</span></label><input id="wizard-stay-heading" data-field="stayHeading" maxlength="80" placeholder="Welcome to the cottage" value="Welcome, make yourself at home"><label for="wizard-stay-welcome">Arrival note<span class="label-optional">Optional</span></label><textarea id="wizard-stay-welcome" data-field="stayWelcome" maxlength="1200" rows="6" placeholder="The kettle is on the side and there is milk in the fridge.
+
+If something is not working, message us before you go hunting for it." aria-describedby="wizard-stay-welcome-hint">We are glad you found the place. Everything you need should be to hand, we have added some essential information below but if you get stuck feel free to message.
+
+Before you go, we would appreciate if you would add a memory to the wall.</textarea><p class="field-hint" id="wizard-stay-welcome-hint">Leave a blank line between paragraphs.</p><label for="wizard-stay-tip">One local recommendation<span class="label-optional">Optional</span></label><input id="wizard-stay-tip" data-field="stayTip" maxlength="240" placeholder="The bakery behind the lighthouse. Go before 9am." value=""></section><footer class="wizard-nav"><button type="submit" class="btn btn-primary">Next</button><button type="button" class="btn btn-secondary">Back</button><button type="button" class="btn btn-ghost wizard-nav-cancel">Cancel</button></footer></form></div></div></div></body></html>

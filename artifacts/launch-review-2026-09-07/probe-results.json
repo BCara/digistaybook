@@ -1,0 +1,11 @@
+{
+  "publicReadIncludesHouseGuidance": true,
+  "publicReadIncludesBilling": true,
+  "cancelledBeforePeriodEndDenied": true,
+  "publicReadIgnoresDisplayWallOff": true,
+  "ownerCanReadRestrictedMessage": true,
+  "clientCanSupplyServerFieldsAtCreation": true,
+  "clientCanChangeModeCountAndUnknownFields": true,
+  "guestSdkDraftPhotoDenied": true,
+  "unauthenticatedDraftPhotoTokenUrlStatus": 200
+}

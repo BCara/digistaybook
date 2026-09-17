@@ -1,0 +1,98 @@
+i  emulators: Starting emulators: auth, functions, firestore, storage
+i  emulators: Detected demo project ID "demo-digistaybook", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 9150.
+i  functions: Watching "C:\Users\clbbe\Documents\Projects\DigiStayBook\functions" for Cloud Functions...
+!  functions: Your requested "node" version "22" doesn't match your global version "24". Using node@24 from host.
+i  functions: Loaded environment variables from .env.
+Serving at port 8405
+
++  functions: Loaded functions definitions from source: activationOptions, beginGuestContribution, changeGuestContribution, createActivationCheckout, deleteStoredMedia, escalatePrivacyDeadlines, finishGuestContribution, getPublicWall, guestMemoryPhoto, health, listGuestContributions, listHostGuestReview, listHostReports, listSafetyOperations, moderatePost, readGuestReviewPhoto, reportGuestMemory, resolveContentReport, reviewGuestContribution, submitPrivacyRequest, uploadGuestPhoto, stripeWebhook.
++  functions[australia-southeast1-activationOptions]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/activationOptions).
++  functions[australia-southeast1-beginGuestContribution]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/beginGuestContribution).
++  functions[australia-southeast1-changeGuestContribution]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/changeGuestContribution).
++  functions[australia-southeast1-createActivationCheckout]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/createActivationCheckout).
+i  functions[australia-southeast1-deleteStoredMedia]: function ignored because the pubsub emulator does not exist or is not running.
+i  functions[australia-southeast1-escalatePrivacyDeadlines]: function ignored because the pubsub emulator does not exist or is not running.
++  functions[australia-southeast1-finishGuestContribution]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/finishGuestContribution).
++  functions[australia-southeast1-getPublicWall]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/getPublicWall).
++  functions[australia-southeast1-guestMemoryPhoto]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/guestMemoryPhoto).
++  functions[australia-southeast1-health]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/health).
++  functions[australia-southeast1-listGuestContributions]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/listGuestContributions).
++  functions[australia-southeast1-listHostGuestReview]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/listHostGuestReview).
++  functions[australia-southeast1-listHostReports]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/listHostReports).
++  functions[australia-southeast1-listSafetyOperations]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/listSafetyOperations).
++  functions[australia-southeast1-moderatePost]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/moderatePost).
++  functions[australia-southeast1-readGuestReviewPhoto]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/readGuestReviewPhoto).
++  functions[australia-southeast1-reportGuestMemory]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/reportGuestMemory).
++  functions[australia-southeast1-resolveContentReport]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/resolveContentReport).
++  functions[australia-southeast1-reviewGuestContribution]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/reviewGuestContribution).
++  functions[australia-southeast1-submitPrivacyRequest]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/submitPrivacyRequest).
++  functions[australia-southeast1-uploadGuestPhoto]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/uploadGuestPhoto).
++  functions[us-central1-stripeWebhook]: http function initialized (http://127.0.0.1:5001/demo-digistaybook/us-central1/stripeWebhook).
+i  Running script: node tools/verify-reporting.mjs
+(node:44272) MetadataLookupWarning: received unexpected error = All promises were rejected code = UNKNOWN
+(Use `node --trace-warnings ...` to show where the warning was created)
+i  functions: Loaded environment variables from .env.
+i  functions: Beginning execution of "australia-southeast1-reportGuestMemory"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-reportGuestMemory" in 236.244ms
+i  functions: Beginning execution of "australia-southeast1-reportGuestMemory"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-reportGuestMemory" in 69.9721ms
+i  functions: Beginning execution of "australia-southeast1-reportGuestMemory"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-reportGuestMemory" in 121.4142ms
+i  functions: Beginning execution of "australia-southeast1-reportGuestMemory"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-reportGuestMemory" in 94.0746ms
+i  functions: Loaded environment variables from .env.
+i  functions: Beginning execution of "australia-southeast1-listHostReports"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listHostReports" in 121.8416ms
+i  functions: Loaded environment variables from .env.
+i  functions: Beginning execution of "australia-southeast1-resolveContentReport"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-resolveContentReport" in 164.9092ms
+i  functions: Beginning execution of "australia-southeast1-resolveContentReport"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-resolveContentReport" in 73.5185ms
+i  functions: Beginning execution of "australia-southeast1-resolveContentReport"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-resolveContentReport" in 83.0293ms
+i  functions: Beginning execution of "australia-southeast1-resolveContentReport"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-resolveContentReport" in 51.4522ms
+i  functions: Beginning execution of "australia-southeast1-reportGuestMemory"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-reportGuestMemory" in 93.1725ms
+i  functions: Beginning execution of "australia-southeast1-reportGuestMemory"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-reportGuestMemory" in 104.8045ms
+i  functions: Beginning execution of "australia-southeast1-reportGuestMemory"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-reportGuestMemory" in 101.964ms
+i  functions: Loaded environment variables from .env.
+i  functions: Beginning execution of "australia-southeast1-listSafetyOperations"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listSafetyOperations" in 11.6142ms
+i  functions: Loaded environment variables from .env.
+i  functions: Beginning execution of "australia-southeast1-submitPrivacyRequest"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-submitPrivacyRequest" in 129.8011ms
+i  functions: Beginning execution of "australia-southeast1-submitPrivacyRequest"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-submitPrivacyRequest" in 53.5626ms
+PASS: actual report hide/dedupe/cooldown, neutral acknowledgement, multiple-report restoration, ownership/MFA guards, private intake retry and deadline escalation. No email delivery claimed.
++  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  functions: Stopping Functions Emulator
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  storage: Stopping Storage Emulator
+i  eventarc: Stopping Eventarc Emulator
+i  tasks: Stopping Cloud Tasks Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

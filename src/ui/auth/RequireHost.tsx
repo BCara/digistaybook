@@ -1,5 +1,6 @@
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { useAuth } from "./AuthProvider";
+import { navigate } from "../routing";
 
 function Blocked({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -18,8 +19,16 @@ function Blocked({ title, children }: { title: string; children: ReactNode }) {
  */
 export function RequireHost({ children }: { children: ReactNode }) {
   const { status } = useAuth();
+  useEffect(() => {
+    if (status === "signed-out" || status === "guest") navigate("/", { replace: true });
+  }, [status]);
 
   if (status === "host") return <>{children}</>;
+
+  if (status === "error") return <Blocked title="Your session couldn't load">
+    <p role="alert">Check your connection and try again.</p>
+    <button className="btn btn-primary" onClick={() => window.location.reload()}>Try again</button>
+  </Blocked>;
 
   if (status === "unconfigured") {
     return (
@@ -43,20 +52,5 @@ export function RequireHost({ children }: { children: ReactNode }) {
     );
   }
 
-  return (
-    <Blocked title="Sign in to continue">
-      <div className="notice">
-        <strong>This area is limited to signed-in hosts.</strong>
-        <p>
-          {status === "guest"
-            ? "A guest wall session does not grant host access. Sign in with your host account to continue."
-            : "Sign in with your host account to reach your dashboard."}
-        </p>
-      </div>
-      <div className="actions">
-        <a className="btn" href="/host/sign-in">Go to host sign-in</a>
-        <a className="btn btn-secondary" href="/">Back to home</a>
-      </div>
-    </Blocked>
-  );
+  return null;
 }
