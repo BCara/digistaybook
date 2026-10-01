@@ -29,7 +29,9 @@ export const screenFeedback: FeedbackScreener = async text => {
   // The emulator has no Google credentials; tests inject a screener instead.
   if (process.env.FUNCTIONS_EMULATOR === "true") return { verdict: "deliver" };
   const { access_token } = await applicationDefault().getAccessToken();
-  const response = await fetch("https://language.googleapis.com/v2/documents:moderateText", {
+  // Text moderation supports an Australia endpoint. Keep private feedback in
+  // that location instead of silently using Google's global endpoint.
+  const response = await fetch("https://au-language.googleapis.com/v2/documents:moderateText", {
     method: "POST", signal: AbortSignal.timeout(5000),
     headers: { Authorization: `Bearer ${access_token}`, "Content-Type": "application/json" },
     body: JSON.stringify({ document: { type: "PLAIN_TEXT", content: text } })
