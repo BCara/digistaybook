@@ -82,8 +82,15 @@ const received = await call("submitPrivacyRequest", privacy);
 await call("submitPrivacyRequest", privacy);
 assert.equal((await db.doc(`privacyRequests/${received.reference}`).get()).get("status"), "awaiting_verification");
 await db.doc(`privacyRequests/${received.reference}`).update({ reviewDueAt: Timestamp.fromMillis(Date.now() - 1) });
+await db.doc("trustSafetyCases/feedback-overdue").set({ kind: "private_feedback", propertyId, status: "open", message: "Held", reviewDueAt: Timestamp.fromMillis(Date.now() - 1000) });
+await db.doc("trustSafetyCases/feedback-not-due").set({ kind: "private_feedback", propertyId, status: "open", message: "Held", reviewDueAt: Timestamp.fromMillis(Date.now() + 86400000) });
 await escalatePrivacyDeadlines.run({ scheduleTime: new Date().toISOString() });
 assert.equal((await db.doc(`privacyRequests/${received.reference}`).get()).get("status"), "escalated");
+// Undecided safety cases are flagged at the review date, never deleted.
+assert.equal((await db.doc("trustSafetyCases/feedback-overdue").get()).get("status"), "escalated");
+assert.equal((await db.doc("trustSafetyCases/feedback-overdue").get()).get("message"), "Held");
+assert.equal((await db.doc("operationsAlerts/deadline-feedback-overdue").get()).get("kind"), "safety_case_overdue");
+assert.equal((await db.doc("trustSafetyCases/feedback-not-due").get()).get("status"), "open");
 assert.equal((await db.doc(`operationsAlerts/deadline-${received.reference}`).get()).get("status"), "pending");
 const retryId = "reporting-screen-retry";
 await db.doc(`guestSubmissions/${retryId}`).set({ propertyId, status: "pending", revision: 1, message: "Synthetic text", feedback: "", photoCount: 0, createdAt: Timestamp.now() });

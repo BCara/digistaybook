@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { guestCall } from "../../lib/guestSession";
-import { guestPolicy } from "../../../functions/src/guestPolicy";
+import { guestPolicy, feedbackBoundary } from "../../../functions/src/guestPolicy";
 
 type OwnPost = { id: string; message: string; revision: number; status: string };
 type OwnPage = { posts: OwnPost[]; nextCursor?: string | null };
@@ -19,7 +19,8 @@ async function base64(file: File) {
   });
 }
 
-export function GuestContribution({ slug, stayToken = null, onChanged }: {
+export type ContributionMode = "memory" | "feedback";
+export function GuestContribution({ slug, stayToken = null, onChanged, mode: requestedMode, onModeChange }: {
   slug: string;
   /**
    * The guestbook link's token. A memory is left by someone who was in the
@@ -29,9 +30,16 @@ export function GuestContribution({ slug, stayToken = null, onChanged }: {
    */
   stayToken?: string | null;
   onChanged: () => void;
+  /** Which form is showing, when the page around it chooses; otherwise the form keeps its own. */
+  mode?: ContributionMode;
+  onModeChange?: (mode: ContributionMode) => void;
 }) {
   const [message, setMessage] = useState("");
   const [feedback, setFeedback] = useState("");
+  // A submission is a memory for the wall or a private note to the Host, never
+  // both: the two go to different readers, under different screening.
+  const [ownMode, setOwnMode] = useState<ContributionMode>("memory");
+  const mode = requestedMode ?? ownMode, setMode = onModeChange ?? setOwnMode;
   const [photos, setPhotos] = useState<Photo[]>([]);
   const photoRef = useRef<Photo[]>([]);
   photoRef.current = photos;
@@ -77,29 +85,33 @@ export function GuestContribution({ slug, stayToken = null, onChanged }: {
   async function submit(event: FormEvent) {
     event.preventDefault();
     if (busy) return;
-    if (!consent) { setNotice("Please read and accept the consent before submitting."); return; }
-    if (!message.trim() && !photos.length) { setNotice("Add a message or at least one photo."); return; }
-    setBusy(true); setNotice("Preparing your memory…"); setProgress(0);
+    const memory = mode === "memory";
+    if (memory && !message.trim() && !photos.length) { setNotice("Add a message or at least one photo."); return; }
+    if (!memory && !feedback.trim()) { setNotice("Write your feedback before sending it."); return; }
+    if (memory && !consent) { setNotice("Please read and accept the consent before submitting."); return; }
+    setBusy(true); setNotice(memory ? "Preparing your memory…" : "Sending your feedback…"); setProgress(0);
     const current = attempt.current ?? { requestId: crypto.randomUUID(), uploaded: 0 };
     attempt.current = current;
     try {
       if (!current.id) current.id = (await guestCall<{ id: string }>(slug, "beginGuestContribution", {
-        slug, stayToken, requestId: current.requestId, message, feedback, photoCount: photos.length,
-        consentAccepted: consent, consentVersion: guestPolicy.consentVersion
+        slug, stayToken, requestId: current.requestId, ...(memory
+          ? { message, feedback: "", photoCount: photos.length, consentAccepted: consent, consentVersion: guestPolicy.consentVersion }
+          : { message: "", feedback, photoCount: 0 })
       })).id;
-      for (let index = current.uploaded; index < photos.length; index++) {
+      for (let index = current.uploaded; memory && index < photos.length; index++) {
         setNotice(`Uploading photo ${index + 1} of ${photos.length}…`);
         await guestCall(slug, "uploadGuestPhoto", { id: current.id, index, base64: await base64(photos[index].file) });
         current.uploaded = index + 1;
         setProgress(Math.round(current.uploaded / Math.max(photos.length, 1) * 90));
       }
-      setNotice("Saving your memory for safety screening…");
+      if (memory) setNotice("Saving your memory for safety screening…");
       const result = await guestCall<{ status: string; message: string }>(slug, "finishGuestContribution", { id: current.id });
       setProgress(100);
       setNotice(result.status === "published" ? "Your memory is now on the wall." : result.message);
-      if (result.status !== "published") setConfirmation(result.message);
-      photos.forEach(photo => URL.revokeObjectURL(photo.preview));
-      setPhotos([]); setMessage(""); setFeedback(""); setConsent(false); attempt.current = null;
+      if (result.status === "pending") setConfirmation(result.message);
+      if (memory) { photos.forEach(photo => URL.revokeObjectURL(photo.preview)); setPhotos([]); setMessage(""); setConsent(false); }
+      else setFeedback("");
+      attempt.current = null;
       await refresh(); onChanged();
     } catch (error) { setNotice(explain(error)); }
     finally { setBusy(false); }
@@ -119,8 +131,14 @@ export function GuestContribution({ slug, stayToken = null, onChanged }: {
       <h2 id="guest-pending-heading">Memory received</h2><p>{confirmation}</p>
       <button type="button" onClick={() => confirmationDialog.current?.close()}>Back to the guestbook</button>
     </dialog>
-    <h2 id="guest-contribution-heading">Add a memory</h2>
+    <h2 id="guest-contribution-heading">{mode === "memory" ? "Add a memory" : "Private feedback for your host"}</h2>
     <form onSubmit={event => void submit(event)}>
+      <fieldset className="guest-mode" disabled={locked}>
+        <legend>What would you like to leave?</legend>
+        <label><input type="radio" name="guest-mode" checked={mode === "memory"} onChange={() => setMode("memory")} /><span>A memory for the wall</span></label>
+        <label><input type="radio" name="guest-mode" checked={mode === "feedback"} onChange={() => setMode("feedback")} /><span>Private feedback for your host</span></label>
+      </fieldset>
+      {mode === "memory" ? <>
       <label>Your message<textarea value={message} maxLength={guestPolicy.maxMessage} disabled={locked} onChange={event => setMessage(event.target.value)} /></label>
       <div className="guest-photo-picker">
         <label className="guest-photo-trigger" data-disabled={locked}>
@@ -138,13 +156,14 @@ export function GuestContribution({ slug, stayToken = null, onChanged }: {
         <img src={photo.preview} alt={`Selected photo ${index + 1}`} /><figcaption>{photo.file.name}</figcaption>
         <button type="button" disabled={locked} onClick={() => { URL.revokeObjectURL(photo.preview); setPhotos(previous => previous.filter((_, i) => i !== index)); }}>Remove photo {index + 1}</button>
       </figure>)}</div>
-      <details className="guest-optional"><summary>Private feedback (optional)</summary>
-        <label>Private feedback<textarea value={feedback} maxLength={guestPolicy.maxFeedback} disabled={locked} onChange={event => setFeedback(event.target.value)} aria-describedby="feedback-boundary" /></label>
-        <p id="feedback-boundary">Only your host sees this, to improve future stays. No replies here — for help, message your host through your booking app.</p>
-      </details>
-      <p><a href="/terms" target="_blank" rel="noreferrer">Guest Terms</a> · <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a></p>
+      <p><a href="/guest-terms" target="_blank" rel="noreferrer">Guest Terms</a> · <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a></p>
       <label className="guest-consent"><input type="checkbox" checked={consent} disabled={locked} onChange={event => setConsent(event.target.checked)} /><span>{guestPolicy.consentWording}</span></label>
-      <button className="btn btn-primary" type="submit" disabled={busy}>{busy ? "Saving…" : attempt.current ? "Retry this submission" : "Submit memory"}</button>
+      </> : <>
+      <label>Private feedback<textarea value={feedback} maxLength={guestPolicy.maxFeedback} disabled={locked} onChange={event => setFeedback(event.target.value)} aria-describedby="feedback-boundary" /></label>
+      <p id="feedback-boundary" className="guest-feedback-note"><small>Only for your host, never shown on the wall. {feedbackBoundary}</small></p>
+      <p><a href="/guest-terms" target="_blank" rel="noreferrer">Guest Terms</a> · <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a></p>
+      </>}
+      <button className="btn btn-primary" type="submit" disabled={busy}>{busy ? "Saving…" : attempt.current ? "Retry this submission" : mode === "memory" ? "Submit memory" : "Send to host"}</button>
       {attempt.current && !busy && <button type="button" className="btn btn-secondary" onClick={async () => {
         try {
           if (attempt.current?.id) await guestCall(slug, "changeGuestContribution", { id: attempt.current.id, revision: 1, action: "delete" });

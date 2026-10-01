@@ -4,8 +4,9 @@ import { getStorage } from "firebase-admin/storage";
 import { HttpsError, onCall, onRequest, type CallableRequest } from "firebase-functions/v2/https";
 import sharp from "sharp";
 import { wallIsOpen, stayTokenMatches } from "./publicWall.js";
-import { guestPolicy, pendingMessage } from "./guestPolicy.js";
-import { screenContent, type Screener } from "./screening.js";
+import { guestPolicy, pendingMessage, feedbackSentMessage } from "./guestPolicy.js";
+import { legalApproved, legalVersions } from "./legal.js";
+import { screenContent, screenFeedback, type FeedbackScreener, type FeedbackVerdict, type Screener } from "./screening.js";
 
 const options = { region: "australia-southeast1", maxInstances: 10, enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true", memory: "512MiB" as const, timeoutSeconds: 120, concurrency: 4 };
 const hash = (value: string | Buffer) => createHash("sha256").update(value).digest("hex");
@@ -26,8 +27,11 @@ function uid(request: CallableRequest, guest = true) {
   if (anonymous !== guest) throw new HttpsError("permission-denied", "This action is not available in this session.");
   return request.auth.uid;
 }
+// Guests send personal text and photos only under approved Terms, Privacy
+// Policy and consent wording (GC-03), so the deployment switch alone cannot
+// open intake. The emulator runs on the drafts.
 export function guestIntakeEnabled() {
-  return process.env.FUNCTIONS_EMULATOR === "true" || process.env.GUEST_CONTRIBUTIONS_ENABLED === "true";
+  return process.env.FUNCTIONS_EMULATOR === "true" || (process.env.GUEST_CONTRIBUTIONS_ENABLED === "true" && legalApproved());
 }
 function bucketName() {
   if (process.env.FUNCTIONS_EMULATOR === "true") return "demo-digistaybook.firebasestorage.app";
@@ -88,16 +92,22 @@ export const beginGuestContribution = onCall(options, async request => {
   const message = text(request.data?.message, guestPolicy.maxMessage);
   const feedback = text(request.data?.feedback ?? "", guestPolicy.maxFeedback);
   const count = request.data?.photoCount;
-  if (!Number.isInteger(count) || count < 0 || count > guestPolicy.maxPhotos || (!message && count === 0)) throw new HttpsError("invalid-argument", "Add a message or up to ten photos.");
-  if (request.data?.consentAccepted !== true || request.data?.consentVersion !== guestPolicy.consentVersion) throw new HttpsError("invalid-argument", "Please read and accept the current consent wording.");
+  if (!Number.isInteger(count) || count < 0 || count > guestPolicy.maxPhotos) throw new HttpsError("invalid-argument", "Add a message or up to ten photos.");
+  // A submission is a memory for the wall or private feedback for the Host,
+  // never both. Feedback is not published, so the public-display consent is
+  // asked only of a memory.
+  const memory = Boolean(message) || count > 0;
+  if (memory && feedback) throw new HttpsError("invalid-argument", "Send a memory or private feedback, not both.");
+  if (!memory && !feedback) throw new HttpsError("invalid-argument", "Add a message, a photo or private feedback.");
+  if (memory && (request.data?.consentAccepted !== true || request.data?.consentVersion !== guestPolicy.consentVersion)) throw new HttpsError("invalid-argument", "Please read and accept the current consent wording.");
   const requestId = validId(request.data?.requestId);
   const id = `${owner}_${requestId}`;
   validId(id);
   const fingerprint = hash(JSON.stringify({ message, feedback, count, propertyId: property.id }));
   const ref = submissionRef(id);
   const sessionRef = db().doc(`guestSessions/${owner}`);
-  const bucket = bucketName();
-  const publishedBucket = publishedBucketName();
+  const bucket = memory ? bucketName() : null;
+  const publishedBucket = memory ? publishedBucketName() : null;
   await db().runTransaction(async tx => {
     const [existing, session, latest] = await Promise.all([tx.get(ref), tx.get(sessionRef), tx.get(property.ref)]);
     if (!latest.exists || !wallIsOpen(latest.data()!)) throw new HttpsError("failed-precondition", "This guestbook is currently offline.");
@@ -110,10 +120,11 @@ export const beginGuestContribution = onCall(options, async request => {
     const attempts = session.get("hour") === hour ? session.get("attempts") ?? 0 : 0;
     if (attempts >= 10) throw new HttpsError("resource-exhausted", "Too many attempts. Please try again later.");
     tx.set(sessionRef, { propertyId: property.id, hour, attempts: attempts + 1, updatedAt: stamp() });
-    tx.create(ref, { propertyId: property.id, uid: owner, fingerprint, message, feedback, photoCount: count,
+    tx.create(ref, { propertyId: property.id, uid: owner, kind: memory ? "memory" : "feedback", fingerprint, message, feedback, photoCount: count,
       bucket, publishedBucket, slots: {}, bytes: 0, revision: 1, status: "uploading", createdAt: stamp(), updatedAt: stamp() });
-    tx.create(db().doc(`guestConsent/${id}`), { propertyId: property.id, postId: id, sessionUid: owner,
-      wording: guestPolicy.consentWording, version: guestPolicy.consentVersion, acceptedAt: stamp() });
+    if (memory) tx.create(db().doc(`guestConsent/${id}`), { propertyId: property.id, postId: id, sessionUid: owner,
+      wording: guestPolicy.consentWording, version: guestPolicy.consentVersion,
+      guestTermsVersion: legalVersions.guestTerms, privacyVersion: legalVersions.privacy, acceptedAt: stamp() });
   });
   return { id };
 });
@@ -166,22 +177,47 @@ export const finishGuestContribution = onCall(options, async request => {
     if (data.status === "deleted") throw new HttpsError("failed-precondition", "This memory has been deleted.");
     if (data.status !== "uploading") return;
     for (let index = 0; index < data.photoCount; index++) if (!data.slots[index]?.ready) throw new HttpsError("failed-precondition", "Some photos are still uploading. Retry the upload.");
-    tx.update(ref, { status: "pending", updatedAt: stamp() });
+    tx.update(ref, { status: data.kind === "feedback" ? "feedback" : "pending", updatedAt: stamp() });
   });
+  if ((await ref.get()).get("kind") === "feedback") {
+    await deliverFeedback(id);
+    return { id, status: "feedback", message: feedbackSentMessage };
+  }
   await processGuestSubmission(id);
   const current = await ref.get();
   return { id, status: current.get("status") === "published" ? "published" : "pending",
     message: current.get("status") === "pending" ? "Your memory has been saved and is waiting for safety screening. You do not need to upload it again." : pendingMessage };
 });
 
+const feedbackCaseRef = (id: string) => db().doc(`trustSafetyCases/feedback-${id}`);
+export const feedbackReviewDue = () => Timestamp.fromMillis(Date.now() + guestPolicy.feedbackReviewDays * 86400000);
+
+// Private feedback is its own submission and never waits on memory screening.
+// The raw text leaves the submission once it is delivered or held, so the
+// inbox or the safety case holds its only copy.
+export async function deliverFeedback(id: string, screener: FeedbackScreener = screenFeedback) {
+  const ref = submissionRef(id), data = (await ref.get()).data();
+  if (!data?.feedback || data.feedbackStatus || ["uploading", "deleted"].includes(data.status)) return;
+  let result: FeedbackVerdict;
+  try { result = await screener(data.feedback); } catch { result = { verdict: "deliver" }; }
+  await db().runTransaction(async tx => {
+    const current = await tx.get(ref);
+    if (current.get("feedback") !== data.feedback || current.get("feedbackStatus") || current.get("status") === "deleted") return;
+    if (result.verdict === "critical") tx.set(feedbackCaseRef(id), { kind: "private_feedback", source: "automated_screening", categories: result.categories,
+      propertyId: data.propertyId, feedbackId: id, message: data.feedback, feedbackCreatedAt: data.createdAt, status: "open", createdAt: stamp(), reviewDueAt: feedbackReviewDue() });
+    else tx.set(db().doc(`properties/${data.propertyId}/privateFeedback/${id}`), { message: data.feedback, createdAt: data.createdAt });
+    tx.update(ref, { feedback: "", feedbackStatus: result.verdict === "critical" ? "held" : "delivered", updatedAt: stamp() });
+  });
+}
+
 // Trusted adapter boundary only. No request parameter can select a scan result.
 export async function processGuestSubmission(id: string, screener: Screener = screenContent) {
   const ref = submissionRef(id), snapshot = await ref.get(), data = snapshot.data();
   if (!data || data.status !== "pending" || data.safetyCaseOpen === true) return;
   let result;
-  try { result = await screener({ message: data.message, feedback: data.feedback,
+  try { result = await screener({ message: data.message,
     photos: Array.from({ length: data.photoCount }, (_, index) => photoSource(data, id, index)) }); }
-  catch { result = { outcome: "unavailable", feedback: "held" } as const; }
+  catch { result = { outcome: "unavailable" } as const; }
   if (result.outcome === "unavailable") return;
   if (result.outcome === "clear") await promotePhotos(id, data);
   // Approved photos move out of quarantine. The delivery bucket remains
@@ -194,7 +230,7 @@ export async function processGuestSubmission(id: string, screener: Screener = sc
     const openReports = existingPost.get("openReportCount") ?? 0;
     if (existingPost.get("safetyRestricted") === true || current.get("safetyCaseOpen") === true) return false;
     const status = result.outcome === "clear" ? openReports > 0 ? "standard" : "published" : result.outcome;
-    tx.update(ref, { status, feedbackStatus: result.feedback, updatedAt: stamp(),
+    tx.update(ref, { status, updatedAt: stamp(),
       ...(result.outcome === "clear" ? { mediaLocation: "published" } : {}),
       ...(["critical", "reject"].includes(result.outcome) ? { safetyCaseOpen: true } : {}) });
     tx.set(postRef, { guestSubmissionId: id, message: data.message, createdAt: data.createdAt,
@@ -206,9 +242,6 @@ export async function processGuestSubmission(id: string, screener: Screener = sc
     if (result.outcome === "critical" || result.outcome === "reject") tx.set(db().doc(`trustSafetyCases/${id}:${data.revision}`), {
       propertyId: data.propertyId, postId: id, revision: data.revision, status: "open", message: data.message,
       photos: Array.from({ length: data.photoCount }, (_, index) => photoSource(data, id, index)), createdAt: stamp(), reviewDueAt: Timestamp.fromMillis(Date.now() + 30 * 86400000)
-    });
-    if (data.feedback && result.feedback === "clear") tx.set(propertyRef.collection("privateFeedback").doc(id), {
-      message: data.feedback, createdAt: data.createdAt, revision: data.revision
     });
     return status === "published";
   });
@@ -227,7 +260,7 @@ export const listGuestContributions = onCall(options, async request => {
   const session = await db().doc(`guestSessions/${owner}`).get();
   if (!session.exists) return { posts: [] };
   const snapshots = await readPage(db().collection("guestSubmissions").where("uid", "==", owner), request.data?.cursor);
-  return { nextCursor: snapshots.nextCursor, posts: snapshots.docs.map(doc => ({ id: doc.id, message: doc.get("message"), revision: doc.get("revision"),
+  return { nextCursor: snapshots.nextCursor, posts: snapshots.docs.filter(doc => doc.get("kind") !== "feedback").map(doc => ({ id: doc.id, message: doc.get("message"), revision: doc.get("revision"),
     status: doc.get("status") === "published" ? "published" : doc.get("status") === "deleted" ? "deleted" : doc.get("status") === "uploading" ? "uploading" : "pending" })) };
 });
 
@@ -237,17 +270,21 @@ export const changeGuestContribution = onCall(options, async request => {
   const ref = submissionRef(id);
   await owned(id, owner);
   await db().runTransaction(async tx => {
-    const current = await tx.get(ref), data = current.data()!;
+    const current = await tx.get(ref), data = current.data()!, heldFeedback = await tx.get(feedbackCaseRef(id));
     if (data.status === "deleted") return;
     if (request.data?.revision !== data.revision) throw new HttpsError("failed-precondition", "This memory has changed. Refresh it before editing.");
     if (action === "edit" && data.status === "uploading") throw new HttpsError("failed-precondition", "Finish uploading first.");
+    if (action === "edit" && data.kind === "feedback") throw new HttpsError("failed-precondition", "Private feedback can't be edited once it is sent.");
     const message = action === "edit" ? text(request.data?.message, guestPolicy.maxMessage) : "";
     if (action === "edit" && !message && data.photoCount === 0) throw new HttpsError("invalid-argument", "Add a message to this memory.");
     tx.update(ref, { message, status: action === "delete" ? "deleted" : "pending", revision: data.revision + 1, updatedAt: stamp(), ...(action === "delete" ? { feedback: "" } : {}) });
-    tx.set(db().doc(`properties/${data.propertyId}/posts/${id}`), { visibility: action === "delete" ? "deleted" : "processing", message, pinned: false,
+    if (data.kind !== "feedback") tx.set(db().doc(`properties/${data.propertyId}/posts/${id}`), { visibility: action === "delete" ? "deleted" : "processing", message, pinned: false,
       screeningStatus: "pending", guestSubmissionId: id, revision: data.revision + 1 }, { merge: true });
     if (action === "delete") {
       tx.delete(db().doc(`properties/${data.propertyId}/privateFeedback/${id}`));
+      // A guest who withdraws their memory withdraws its feedback, held or not.
+      if (heldFeedback.exists && ["open", "escalated"].includes(heldFeedback.get("status"))) tx.update(heldFeedback.ref, {
+        status: "withdrawn", message: FieldValue.delete(), resolvedAt: stamp() });
       tx.set(db().doc(`deletionJobs/guest-${id}`), { propertyId: data.propertyId, postId: id, bucket: data.bucket,
         paths: Array.from({ length: data.photoCount }, (_, index) => `properties/${data.propertyId}/quarantine/${id}/${index}.webp`),
         objects: Array.from({ length: data.photoCount }, (_, index) => [
@@ -275,6 +312,26 @@ export const listHostGuestReview = onCall(options, async request => {
     message: doc.get("status") === "standard" ? doc.get("message") : "Awaiting safety screening",
     photoCount: doc.get("status") === "standard" ? doc.get("photoCount") : 0
   })), feedback: feedback.docs.map(doc => ({ id: doc.id, message: doc.get("message") })) };
+});
+
+// The screener cannot catch every threat, so the Host can send any feedback
+// message to the safety team. It leaves the inbox at once and comes back only
+// if the safety team releases it.
+export const reportPrivateFeedback = onCall(options, async request => {
+  const owner = uid(request, false), propertyId = validId(request.data?.propertyId), id = validId(request.data?.id);
+  const propertyRef = db().doc(`properties/${propertyId}`), feedbackRef = propertyRef.collection("privateFeedback").doc(id);
+  await db().runTransaction(async tx => {
+    const [property, feedback, existing] = await Promise.all([tx.get(propertyRef), tx.get(feedbackRef), tx.get(feedbackCaseRef(id))]);
+    if (property.get("ownerUid") !== owner) throw new HttpsError("permission-denied", "This property is not yours.");
+    if (!feedback.exists) {
+      if (existing.exists && existing.get("propertyId") === propertyId) return;
+      throw new HttpsError("not-found", "This feedback is no longer in your inbox.");
+    }
+    tx.set(feedbackCaseRef(id), { kind: "private_feedback", source: "host_report", categories: [], propertyId, feedbackId: id, message: feedback.get("message"),
+      feedbackCreatedAt: feedback.get("createdAt") ?? null, status: "open", reportedBy: owner, createdAt: stamp(), reviewDueAt: feedbackReviewDue() });
+    tx.delete(feedbackRef);
+  });
+  return { status: "reported" };
 });
 
 export const reviewGuestContribution = onCall(options, async request => {

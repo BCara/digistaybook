@@ -12,7 +12,8 @@ const { getStorage } = require("firebase-admin/storage");
 const sharp = require("sharp");
 initializeApp({ projectId: "demo-digistaybook" });
 const db = getFirestore();
-const { processGuestSubmission } = await import("../functions/lib/guestContributions.js");
+const { processGuestSubmission, deliverFeedback } = await import("../functions/lib/guestContributions.js");
+const { readSafetyCase, resolveSafetyCase } = await import("../functions/lib/reporting.js");
 const { guestPolicy } = await import("../functions/lib/guestPolicy.js");
 const base = "http://127.0.0.1:5001/demo-digistaybook/australia-southeast1";
 async function signup(host = false) {
@@ -30,8 +31,9 @@ async function call(name, data, identity = guest, status = 200) {
 const propertyId = "guest-flow-property", slug = "guest-flow-property", stayToken = "guestFlowStayToken0001";
 await db.doc(`properties/${propertyId}`).set({ slug, name: "Guest flow cottage", ownerUid: host.localId, mode: "live", lifecycle: "active", profile: {}, stayToken });
 await db.doc("properties/guest-flow-other").set({ slug: "guest-flow-other", name: "Other", ownerUid: host.localId, mode: "live", lifecycle: "active", stayToken: "guestFlowOtherToken002" });
-const input = { slug, stayToken, requestId: randomUUID(), message: "Our memory", feedback: "A private suggestion", photoCount: 10, consentAccepted: true, consentVersion: guestPolicy.consentVersion };
+const input = { slug, stayToken, requestId: randomUUID(), message: "Our memory", photoCount: 10, consentAccepted: true, consentVersion: guestPolicy.consentVersion };
 await call("beginGuestContribution", { ...input, photoCount: 11 }, guest, 400);
+await call("beginGuestContribution", { ...input, feedback: "A private suggestion" }, guest, 400); // A memory or feedback, never both.
 await call("beginGuestContribution", { ...input, consentAccepted: false }, guest, 400);
 await call("beginGuestContribution", input, host, 403);
 await call("beginGuestContribution", input, null, 401);
@@ -73,7 +75,6 @@ assert.doesNotMatch(JSON.stringify(wall), /private suggestion|consentVersion|slo
 const imageResponse = await fetch(`${base}/guestMemoryPhoto?id=${id}&index=0`);
 assert.equal(imageResponse.status, 200); assert.match(imageResponse.headers.get("cache-control"), /no-store/);
 const metadata = await sharp(Buffer.from(await imageResponse.arrayBuffer())).metadata(); assert.equal(metadata.format, "webp"); assert.equal(metadata.exif, undefined);
-assert.equal((await call("listHostGuestReview", { propertyId }, host)).feedback[0].message, input.feedback);
 await call("listHostGuestReview", { propertyId }, otherHost, 403);
 await call("changeGuestContribution", { id, action: "delete", revision: 1 }, stranger, 403);
 await call("changeGuestContribution", { id, action: "edit", revision: 1, message: "Changed message" });
@@ -118,6 +119,64 @@ await call("moderatePost", { propertyId, postId: stale, action: "delete", reques
 await call("changeGuestContribution", { id: stale, revision: 2, action: "edit", message: "Must not resurrect host deletion" });
 assert.equal((await db.doc(`guestSubmissions/${stale}`).get()).get("status"), "deleted");
 assert.equal((await db.doc(`properties/${propertyId}/posts/${stale}`).get()).get("visibility"), "deleted");
+// Feedback on its own: no memory, no consent record, no wall post, not in the guest's memory list.
+const operations = { uid: "ops", token: { admin: true, firebase: { sign_in_second_factor: "totp" } } };
+const asOperations = (fn, data) => fn.run({ data, auth: operations, rawRequest: {} });
+const feedbackOnly = { slug, stayToken, requestId: randomUUID(), message: "", feedback: "The smoke alarm beeps all night", photoCount: 0 };
+const loneId = (await call("beginGuestContribution", feedbackOnly)).id;
+const lone = await call("finishGuestContribution", { id: loneId });
+assert.equal(lone.status, "feedback");
+assert.equal((await db.doc(`guestConsent/${loneId}`).get()).exists, false);
+assert.equal((await db.doc(`properties/${propertyId}/posts/${loneId}`).get()).exists, false);
+assert.equal((await db.doc(`properties/${propertyId}/privateFeedback/${loneId}`).get()).get("message"), feedbackOnly.feedback);
+assert.equal((await call("listGuestContributions", {})).posts.some(post => post.id === loneId), false);
+await call("changeGuestContribution", { id: loneId, revision: 1, action: "edit", message: "Now public" }, guest, 400);
+await call("beginGuestContribution", { ...feedbackOnly, requestId: randomUUID(), feedback: "" }, guest, 400);
+// The Host reports a delivered message: it leaves the inbox for a safety case.
+await call("reportPrivateFeedback", { propertyId, id: loneId }, otherHost, 403);
+await call("reportPrivateFeedback", { propertyId, id: loneId }, host);
+await call("reportPrivateFeedback", { propertyId, id: loneId }, host);
+assert.equal((await db.doc(`properties/${propertyId}/privateFeedback/${loneId}`).get()).exists, false);
+let held = (await db.doc(`trustSafetyCases/feedback-${loneId}`).get()).data();
+assert.equal(held.source, "host_report"); assert.equal(held.message, feedbackOnly.feedback); assert.equal(held.status, "open");
+// The safety team opens it (audited) and releases it back to the Host.
+assert.equal((await asOperations(readSafetyCase, { id: `feedback-${loneId}` })).message, feedbackOnly.feedback);
+assert.ok(!(await db.collection("moderationAudit").where("caseId", "==", `feedback-${loneId}`).where("action", "==", "open_case").get()).empty);
+await assert.rejects(readSafetyCase.run({ data: { id: `feedback-${loneId}` }, auth: { uid: "ops", token: { admin: true, firebase: {} } }, rawRequest: {} }));
+await asOperations(resolveSafetyCase, { id: `feedback-${loneId}`, action: "release", note: "Ordinary complaint" });
+assert.equal((await db.doc(`properties/${propertyId}/privateFeedback/${loneId}`).get()).get("message"), feedbackOnly.feedback);
+held = (await db.doc(`trustSafetyCases/feedback-${loneId}`).get()).data();
+assert.equal(held.status, "released"); assert.equal(held.message, undefined);
+const releaseAudit = (await db.doc(`moderationAudit/case-feedback-${loneId}-release`).get()).data();
+assert.equal(releaseAudit.actor, "ops"); assert.doesNotMatch(JSON.stringify(releaseAudit), /smoke alarm/);
+await assert.rejects(asOperations(resolveSafetyCase, { id: `feedback-${loneId}`, action: "delete" }));
+// Screening holds a threat for the safety team; it never reaches the inbox, and deleting it removes the text.
+async function heldFeedback(text, verdict) {
+  const heldId = (await call("beginGuestContribution", { ...feedbackOnly, requestId: randomUUID(), feedback: text })).id;
+  await db.doc(`guestSubmissions/${heldId}`).update({ status: "feedback" }); // As finishGuestContribution leaves it, before delivery.
+  await deliverFeedback(heldId, verdict);
+  assert.equal((await call("finishGuestContribution", { id: heldId })).status, "feedback");
+  return heldId;
+}
+const threat = await heldFeedback("Threat fixture", async () => ({ verdict: "critical", categories: ["Violent"] }));
+assert.equal((await db.doc(`properties/${propertyId}/privateFeedback/${threat}`).get()).exists, false);
+held = (await db.doc(`trustSafetyCases/feedback-${threat}`).get()).data();
+assert.equal(held.source, "automated_screening"); assert.deepEqual(held.categories, ["Violent"]); assert.equal(held.message, "Threat fixture");
+assert.equal((await db.doc(`guestSubmissions/${threat}`).get()).get("feedback"), "");
+assert.equal((await db.doc(`guestSubmissions/${threat}`).get()).get("feedbackStatus"), "held");
+await asOperations(resolveSafetyCase, { id: `feedback-${threat}`, action: "delete" });
+assert.equal((await db.doc(`trustSafetyCases/feedback-${threat}`).get()).get("message"), undefined);
+assert.equal((await db.doc(`properties/${propertyId}/privateFeedback/${threat}`).get()).exists, false);
+// A provider failure delivers rather than holds.
+const outage = await heldFeedback("Outage fixture", async () => { throw new Error("Provider outage"); });
+assert.equal((await db.doc(`properties/${propertyId}/privateFeedback/${outage}`).get()).get("message"), "Outage fixture");
+// A guest who withdraws their submission withdraws feedback that is still held.
+const withdrawn = await heldFeedback("Withdrawn fixture", async () => ({ verdict: "critical", categories: ["Sexual"] }));
+await call("changeGuestContribution", { id: withdrawn, revision: 1, action: "delete" });
+held = (await db.doc(`trustSafetyCases/feedback-${withdrawn}`).get()).data();
+assert.equal(held.status, "withdrawn"); assert.equal(held.message, undefined);
+assert.equal((await db.doc(`properties/${propertyId}/posts/${withdrawn}`).get()).exists, false);
+
 const pagingGuest = await signup();
 const pagingProperty = "paging-property";
 await db.doc(`properties/${pagingProperty}`).set({ ownerUid: host.localId });
@@ -144,3 +203,4 @@ await collect("listHostGuestReview", { propertyId: pagingProperty, kind: "feedba
 await call("listHostGuestReview", { propertyId: pagingProperty, reviewCursor: "paging-open-025" }, otherHost, 403);
 await call("listGuestContributions", { cursor: "bad/path" }, pagingGuest, 400);
 console.log("PASS: guest contribution lifecycle and paginated guest history/host review/private feedback, including unresolved items after 140 closed entries and cross-owner cursor protection.");
+console.log("PASS: private feedback as its own submission (never with a memory), host report, held-case open/release/delete with audit, fail-open delivery and guest withdrawal.");

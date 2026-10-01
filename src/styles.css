@@ -1078,6 +1078,10 @@ textarea { min-height: 132px; resize: vertical; }
 
 .notice { border-left: 2px solid var(--accent); }
 .notice strong { display: block; margin-bottom: 6px; }
+.legal-page h2 { font-size: var(--step-1, 1.25rem); margin-block: 1.75rem .5rem; }
+.legal-version { color: var(--text-muted); font-size: .875rem; }
+.legal-added { color: var(--text-muted); font-size: .8em; font-weight: 400; }
+.legal-page aside.notice { margin-block: 2rem; }
 .notice p { margin: 0; color: var(--text-muted); }
 
 .guest-wall-powered-by { margin: clamp(32px, 5vw, 48px) auto 0; max-width: 46ch; text-align: center; color: var(--text-muted); font-size: var(--step--1); }

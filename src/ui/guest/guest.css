@@ -33,11 +33,21 @@
 .wall-empty h2 { margin: 0 0 .5rem; font-size: clamp(1.5rem, 4vw, 2rem); }
 .wall-empty p { margin: 0; }
 .wall-contribution-action { margin-block: 1.5rem; }
+.wall-contribution-choices { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; }
+.wall-contribution-choices .btn-ghost { text-decoration: underline; text-underline-offset: 4px; }
 .guest-optional summary, .guest-own-memories summary { cursor: pointer; padding-block: .75rem; font-weight: 600; }
 .guest-optional p, .guest-own-memories p { font-size: .875rem; }
 .guest-own-memories { margin-top: 1.5rem; border-top: 1px solid var(--rule); }
 .guest-contribution .guest-consent { display: flex; align-items: flex-start; gap: .75rem; font-size: .875rem; }
 .guest-consent input[type="checkbox"] { flex-shrink: 0; margin: .15rem 0 0; }
+.guest-mode { display: flex; flex-wrap: wrap; gap: .75rem; margin: 0; padding: 0; border: 0; min-width: 0; }
+.guest-mode legend { padding: 0; margin-bottom: .75rem; font-weight: 600; }
+.guest-contribution .guest-mode label { display: flex; align-items: center; gap: .6rem; flex: 1 1 14rem; min-height: 48px; padding: .75rem 1rem; box-sizing: border-box; border: 1px solid var(--rule); border-radius: 12px; cursor: pointer; }
+.guest-mode label:has(input:checked) { border-color: currentColor; box-shadow: inset 0 0 0 1px currentColor; }
+.guest-mode label:focus-within { outline: 2px solid currentColor; outline-offset: 3px; }
+.guest-mode input[type="radio"] { width: 1.15rem; height: 1.15rem; margin: 0; flex-shrink: 0; }
+.guest-mode:disabled label { opacity: .6; cursor: not-allowed; }
+.guest-feedback-note { margin: 0; font-size: .875rem; }
 
 /* ---- The owner's own scaffolding above a closed wall ----
 

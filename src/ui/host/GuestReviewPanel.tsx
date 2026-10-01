@@ -41,6 +41,16 @@ export function GuestReviewPanel({ propertyId, feedbackOnly = false }: { propert
     catch { setNotice("The memory could not be changed. Refresh the queue and try again."); }
     finally { setBusy(false); }
   }
+  async function report(id: string) {
+    if (!window.confirm("Send this message to the DigiStayBook safety team? It will leave your inbox and only come back if they find it acceptable.")) return;
+    setBusy(true); setNotice("");
+    try {
+      await hostCall("reportPrivateFeedback", { propertyId, id });
+      setResult(previous => previous ? { ...previous, feedback: previous.feedback.filter(item => item.id !== id) } : previous);
+      setNotice("Reported. The safety team will review this message.");
+    } catch { setNotice("The message could not be reported. Refresh the inbox and try again."); }
+    finally { setBusy(false); }
+  }
   async function loadPhotos(post: ReviewPost) {
     setBusy(true);
     try {
@@ -59,10 +69,11 @@ export function GuestReviewPanel({ propertyId, feedbackOnly = false }: { propert
       {!feedbackOnly && result && <span className="review-status">{result.posts.length === 0 ? "All clear" : `${result.posts.length} to review`}</span>}
       <button className="btn btn-sm btn-secondary" aria-label="Refresh inbox" disabled={busy} onClick={() => void refresh().catch(() => setNotice("The inbox could not be refreshed."))}>Refresh</button>
     </div>
-    {feedbackOnly && <p>Private guest feedback. Replies aren’t supported.</p>}
+    {feedbackOnly && <p>Private guest feedback. Replies aren’t supported. If a message is threatening or abusive, report it to our safety team.</p>}
     {notice && <p role="status">{notice}</p>}
     {!result && !notice && <p role="status">Loading inbox…</p>}
-    {feedbackOnly ? result?.feedback.map(item => <article key={item.id}><p>{item.message}</p></article>) : result?.posts.map(post => <article key={post.id}>
+    {feedbackOnly ? result?.feedback.map(item => <article key={item.id}><p>{item.message}</p>
+      <button className="btn btn-sm btn-secondary" disabled={busy} onClick={() => void report(item.id)}>Report message</button></article>) : result?.posts.map(post => <article key={post.id}>
       <p>{post.message}</p><p>{post.status === "pending" ? "Awaiting safety screening" : "Ready for host review"}</p>
       {post.status === "standard" && <>
         {post.photoCount > 0 && <button disabled={busy} onClick={() => void loadPhotos(post)}>View {post.photoCount} photos</button>}

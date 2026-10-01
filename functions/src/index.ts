@@ -8,12 +8,12 @@ export { deleteStoredMedia } from "./storageDeletion.js";
 export { retryPendingScreening } from "./screeningRetry.js";
 export { createHostProperty, deleteHostProperty, ensureStayToken } from "./propertyCreation.js";
 export { listHostExport, readHostExportPhoto } from "./hostExport.js";
-export { reportGuestMemory, submitPrivacyRequest, listHostReports, resolveContentReport, listSafetyOperations, escalatePrivacyDeadlines } from "./reporting.js";
+export { reportGuestMemory, submitPrivacyRequest, listHostReports, resolveContentReport, listSafetyOperations, readSafetyCase, resolveSafetyCase, escalatePrivacyDeadlines } from "./reporting.js";
 export { stripeWebhook } from "./stripeWebhook.js";
 export { activationOptions, createActivationCheckout } from "./stripeActivation.js";
 export { cancelSubscription, resumeSubscription } from "./stripeCancellation.js";
 export { beginGuestContribution, uploadGuestPhoto, finishGuestContribution, listGuestContributions,
-  changeGuestContribution, listHostGuestReview, reviewGuestContribution, readGuestReviewPhoto, guestMemoryPhoto } from "./guestContributions.js";
+  changeGuestContribution, listHostGuestReview, reportPrivateFeedback, reviewGuestContribution, readGuestReviewPhoto, guestMemoryPhoto } from "./guestContributions.js";
 
 initializeApp();
 const db = getFirestore();

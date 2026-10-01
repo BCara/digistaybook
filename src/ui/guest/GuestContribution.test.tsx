@@ -31,10 +31,10 @@ it("requires consent and does not collect a guest name or email", async () => {
   expect(screen.getByRole("status")).toHaveTextContent(/accept the consent/);
   expect(call.mock.calls.some(([, name]) => name === "beginGuestContribution")).toBe(false);
   expect(screen.queryByLabelText(/email|your name/i)).not.toBeInTheDocument();
-  expect(screen.getByRole("link", { name: "Guest Terms" })).toHaveAttribute("href", "/terms");
+  expect(screen.getByRole("link", { name: "Guest Terms" })).toHaveAttribute("href", "/guest-terms");
 });
 
-it("retains one request ID after a lost response and separates private feedback", async () => {
+it("retains one request ID after a lost response and sends no feedback with a memory", async () => {
   let attempts = 0;
   call.mockImplementation(async (_slug, name) => {
     if (name === "listGuestContributions") return { posts: [] };
@@ -45,8 +45,6 @@ it("retains one request ID after a lost response and separates private feedback"
   const changed = vi.fn();
   render(<GuestContribution slug="cottage" onChanged={changed} />);
   fireEvent.change(screen.getByLabelText("Your message"), { target: { value: "A lovely stay" } });
-  fireEvent.click(screen.getByText("Private feedback (optional)"));
-  fireEvent.change(screen.getByLabelText("Private feedback"), { target: { value: "Private suggestion" } });
   fireEvent.click(screen.getByRole("checkbox"));
   fireEvent.click(screen.getByRole("button", { name: "Submit memory" }));
   await screen.findByRole("button", { name: "Retry this submission" });
@@ -55,7 +53,7 @@ it("retains one request ID after a lost response and separates private feedback"
   await waitFor(() => expect(changed).toHaveBeenCalled());
   const starts = call.mock.calls.filter(([, name]) => name === "beginGuestContribution");
   expect(starts[0][2].requestId).toBe(starts[1][2].requestId);
-  expect(starts[1][2]).toMatchObject({ message: "A lovely stay", feedback: "Private suggestion", consentVersion: guestPolicy.consentVersion });
+  expect(starts[1][2]).toMatchObject({ message: "A lovely stay", feedback: "", consentVersion: guestPolicy.consentVersion });
   expect(screen.getByRole("status")).toHaveTextContent("Saved and waiting");
 });
 
@@ -78,4 +76,39 @@ it("uses the server revision for self-edit and self-delete", async () => {
   fireEvent.change(screen.getByLabelText("Edit your message"), { target: { value: "Updated" } });
   fireEvent.click(screen.getByRole("button", { name: "Save message" }));
   await waitFor(() => expect(call).toHaveBeenCalledWith("cottage", "changeGuestContribution", { id: "own", revision: 3, action: "edit", message: "Updated" }));
+});
+
+it("sends private feedback as its own submission, without the memory fields or consent", async () => {
+  call.mockImplementation(async (_slug, name) => {
+    if (name === "listGuestContributions") return { posts: [] };
+    if (name === "beginGuestContribution") return { id: "feedback-only" };
+    if (name === "finishGuestContribution") return { status: "feedback", message: "Thanks — your feedback has been sent to your host." };
+    return {};
+  });
+  render(<GuestContribution slug="cottage" onChanged={() => {}} />);
+  fireEvent.change(screen.getByLabelText("Your message"), { target: { value: "Draft memory" } });
+  fireEvent.click(screen.getByRole("radio", { name: "Private feedback for your host" }));
+  expect(screen.getByRole("heading", { name: "Private feedback for your host" })).toBeInTheDocument();
+  expect(screen.queryByLabelText("Your message")).not.toBeInTheDocument();
+  expect(screen.queryByLabelText("Choose photos")).not.toBeInTheDocument();
+  expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
+  expect(screen.getByText(/threats, sexual content or hate may be held/)).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Send to host" }));
+  expect(screen.getByRole("status")).toHaveTextContent("Write your feedback before sending it.");
+  fireEvent.change(screen.getByLabelText("Private feedback"), { target: { value: "The smoke alarm beeps all night" } });
+  fireEvent.click(screen.getByRole("button", { name: "Send to host" }));
+  await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("your feedback has been sent"));
+  const start = call.mock.calls.find(([, name]) => name === "beginGuestContribution")![2];
+  expect(start).toMatchObject({ message: "", photoCount: 0, feedback: "The smoke alarm beeps all night" });
+  expect(start).not.toHaveProperty("consentAccepted");
+  expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("radio", { name: "A memory for the wall" }));
+  expect(screen.getByLabelText("Your message")).toHaveValue("Draft memory");
+});
+
+it("asks for a message or a photo before submitting a memory", async () => {
+  render(<GuestContribution slug="cottage" onChanged={() => {}} />);
+  fireEvent.click(screen.getByRole("button", { name: "Submit memory" }));
+  expect(screen.getByRole("status")).toHaveTextContent("Add a message or at least one photo.");
+  expect(call.mock.calls.some(([, name]) => name === "beginGuestContribution")).toBe(false);
 });

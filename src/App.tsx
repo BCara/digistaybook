@@ -101,6 +101,7 @@ function resolvePage(pathname: string) {
   if (pathname === "/privacy-safety") return <PrivacySafetyPage />;
   if (pathname === "/operations") return <RequireHost><SafetyOperationsPage /></RequireHost>;
   if (pathname === "/terms") return <LegalDraftPage kind="terms" />;
+  if (pathname === "/guest-terms") return <LegalDraftPage kind="guest-terms" />;
   if (pathname === "/privacy") return <LegalDraftPage kind="privacy" />;
   return <NotFoundPage />;
 }

@@ -5,7 +5,7 @@ import { PreviewGaps } from "../wall/PreviewGaps";
 import { useEffect, useState } from "react";
 import { getFirebaseServices, wallReaderFunctions } from "../../lib/firebase";
 import { guestPhotoUrl } from "../../lib/guestSession";
-import { GuestContribution } from "../guest/GuestContribution";
+import { GuestContribution, type ContributionMode } from "../guest/GuestContribution";
 import { ReportMemory } from "../guest/ReportMemory";
 import { readWallTheme } from "../../domain/wallTheme";
 import { readHostNoteStyle, hostInitials } from "../../domain/propertyProfile";
@@ -42,6 +42,7 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
   const [busy, setBusy] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const [contributing, setContributing] = useState(false);
+  const [contributionMode, setContributionMode] = useState<ContributionMode>("memory");
   const [formOpened, setFormOpened] = useState(false);
   // An owner previewing a closed wall can switch to what a guest gets instead.
   const [guestView, setGuestView] = useState(false);
@@ -160,10 +161,17 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
       </section>
       {wall.nextCursor && <button className="btn btn-secondary" disabled={busy} onClick={() => void more()}>{busy ? "Loading…" : "Load more memories"}</button>}
       {served === "stay" && (wall.contributionsEnabled ? <div className="wall-contribution-action">
-        <button className="btn btn-primary" aria-expanded={contributing} aria-controls="wall-contribution" onClick={() => { setFormOpened(true); setContributing(value => !value); }}>{contributing ? "Back to wall" : "Add a memory"}</button>
+        {contributing
+          ? <button className="btn btn-primary" aria-expanded aria-controls="wall-contribution" onClick={() => setContributing(false)}>Back to wall</button>
+          // A guest with a complaint should not have to guess that it lives
+          // behind "Add a memory", so the private route is offered by name.
+          : <div className="wall-contribution-choices">
+            <button className="btn btn-primary" aria-expanded={false} aria-controls="wall-contribution" onClick={() => { setContributionMode("memory"); setFormOpened(true); setContributing(true); }}>Add a memory</button>
+            <button className="btn btn-ghost" aria-expanded={false} aria-controls="wall-contribution" onClick={() => { setContributionMode("feedback"); setFormOpened(true); setContributing(true); }}>Private feedback</button>
+          </div>}
         <div id="wall-contribution" hidden={!contributing}>
-        {contributing && wall.property.guestPrompt && <p>{wall.property.guestPrompt}</p>}
-        {formOpened && <GuestContribution key={slug} slug={slug} stayToken={stayToken} onChanged={() => {
+        {contributing && contributionMode === "memory" && wall.property.guestPrompt && <p>{wall.property.guestPrompt}</p>}
+        {formOpened && <GuestContribution key={slug} slug={slug} stayToken={stayToken} mode={contributionMode} onModeChange={setContributionMode} onChanged={() => {
         void readWall(slug, view, stayToken, Boolean(auth.user)).then(result => { if (result.status !== "unavailable") setWall(result); else { setWall(null); setUnavailable({ ...result, sessionUid: auth.user?.uid }); setStatus(""); } })
           .catch(() => setStatus("The wall could not refresh. Your saved memory is still in Your memories below."));
       }} />}

@@ -174,16 +174,56 @@ export const listSafetyOperations = onCall({ ...options, secrets: [] }, async re
     reviewDueAt: doc.get("reviewDueAt")?.toDate?.().toISOString() ?? null })), nextCursor: page.size > 25 ? docs.at(-1)!.id : null };
 });
 
+const caseId = (value: unknown) => {
+  if (typeof value !== "string" || !/^[A-Za-z0-9_:-]{1,200}$/.test(value)) throw new HttpsError("invalid-argument", "A valid case reference is required.");
+  return value;
+};
+
+// Held private feedback is the only case kind the safety team can open here.
+// Opening one shows guest text to staff, so every opening is audited.
+export const readSafetyCase = onCall({ ...options, secrets: [] }, async request => {
+  const actor = requireOperations(request), reference = caseId(request.data?.id), db = getFirestore();
+  const snapshot = await db.doc(`trustSafetyCases/${reference}`).get();
+  if (!snapshot.exists || snapshot.get("kind") !== "private_feedback") throw new HttpsError("not-found", "Only held private feedback can be opened here.");
+  await db.collection("moderationAudit").add({ caseId: reference, propertyId: snapshot.get("propertyId"), action: "open_case", actor, createdAt: stamp() });
+  return { id: reference, propertyId: snapshot.get("propertyId"), source: snapshot.get("source"), categories: snapshot.get("categories") ?? [],
+    status: snapshot.get("status"), message: snapshot.get("message") ?? null, reviewDueAt: snapshot.get("reviewDueAt")?.toDate?.().toISOString() ?? null };
+});
+
+export const resolveSafetyCase = onCall({ ...options, secrets: [] }, async request => {
+  const actor = requireOperations(request), reference = caseId(request.data?.id), action = request.data?.action, db = getFirestore();
+  if (!["release", "delete"].includes(action)) throw new HttpsError("invalid-argument", "Choose release or delete.");
+  const note = request.data?.note === undefined ? "" : trim(request.data.note, 500);
+  const ref = db.doc(`trustSafetyCases/${reference}`);
+  await db.runTransaction(async tx => {
+    const snapshot = await tx.get(ref), data = snapshot.data();
+    if (!data || data.kind !== "private_feedback") throw new HttpsError("not-found", "Only held private feedback can be resolved here.");
+    if (!["open", "escalated"].includes(data.status)) throw new HttpsError("failed-precondition", "This case has already been resolved.");
+    const property = await tx.get(db.doc(`properties/${data.propertyId}`));
+    if (action === "release") {
+      if (!property.exists) throw new HttpsError("failed-precondition", "This property no longer exists, so the message can only be deleted.");
+      tx.set(property.ref.collection("privateFeedback").doc(data.feedbackId), { message: data.message, createdAt: data.feedbackCreatedAt ?? stamp(), releasedAt: stamp() });
+    }
+    const status = action === "release" ? "released" : "deleted";
+    tx.update(ref, { status, message: FieldValue.delete(), resolvedAt: stamp(), resolvedBy: actor });
+    // The audit records the decision, never the message.
+    tx.set(db.doc(`moderationAudit/case-${reference}-${action}`), { caseId: reference, propertyId: data.propertyId, action,
+      previousStatus: data.status, newStatus: status, actor, note, createdAt: stamp() });
+  });
+  return { status: action === "release" ? "released" : "deleted" };
+});
+
 export const escalatePrivacyDeadlines = onSchedule({ schedule: "every 60 minutes", region: "australia-southeast1", maxInstances: 1 }, async () => {
   const db = getFirestore();
-  for (const queue of ["contentReports", "privacyRequests"]) {
-    const due = await db.collection(queue).where("status", "in", queue === "contentReports" ? ["open", "internal"] : ["awaiting_verification", "verified"]).where("reviewDueAt", "<=", Timestamp.now()).limit(100).get();
+  const open: Record<string, string[]> = { contentReports: ["open", "internal"], privacyRequests: ["awaiting_verification", "verified"], trustSafetyCases: ["open"] };
+  for (const queue of Object.keys(open)) {
+    const due = await db.collection(queue).where("status", "in", open[queue]).where("reviewDueAt", "<=", Timestamp.now()).limit(100).get();
     for (const doc of due.docs) await db.runTransaction(async tx => {
       const current = await tx.get(doc.ref);
       if (!["open", "internal", "awaiting_verification", "verified"].includes(current.get("status"))) return;
       if (current.get("reviewDueAt")?.toMillis?.() > Date.now()) return;
       tx.update(doc.ref, { status: "escalated", escalatedAt: stamp() });
-      tx.set(db.doc(`operationsAlerts/deadline-${doc.id}`), { kind: "privacy_deadline", sourceQueue: queue, requestId: doc.id, status: "pending", createdAt: stamp() });
+      tx.set(db.doc(`operationsAlerts/deadline-${doc.id}`), { kind: queue === "trustSafetyCases" ? "safety_case_overdue" : "privacy_deadline", sourceQueue: queue, requestId: doc.id, status: "pending", createdAt: stamp() });
     });
   }
 });

@@ -11,6 +11,8 @@
     { "fieldPath": "status", "order": "ASCENDING" }, { "fieldPath": "reviewDueAt", "order": "ASCENDING" }
   ] }, { "collectionGroup": "privacyRequests", "queryScope": "COLLECTION", "fields": [
     { "fieldPath": "status", "order": "ASCENDING" }, { "fieldPath": "reviewDueAt", "order": "ASCENDING" }
+  ] }, { "collectionGroup": "trustSafetyCases", "queryScope": "COLLECTION", "fields": [
+    { "fieldPath": "status", "order": "ASCENDING" }, { "fieldPath": "reviewDueAt", "order": "ASCENDING" }
   ] }],
   "fieldOverrides": [
     { "collectionGroup": "reportRateLimits", "fieldPath": "expiresAt", "ttl": true, "indexes": [] },

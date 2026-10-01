@@ -5,7 +5,7 @@ import { StayWallPage } from "./StayWallPage";
 const call = vi.fn();
 const auth = vi.hoisted(() => ({ status: "signed-out", user: null as null | { uid: string } }));
 vi.mock("../auth/AuthProvider", () => ({ useAuth: () => auth }));
-vi.mock("../guest/GuestContribution", () => ({ GuestContribution: () => <div>Guest contribution form</div> }));
+vi.mock("../guest/GuestContribution", () => ({ GuestContribution: ({ mode }: { mode?: string }) => <div>Guest contribution form{mode === "feedback" ? " (feedback)" : ""}</div> }));
 // Which Firebase app asked is the point of the split below, so the mocks are
 // told apart rather than both answering `{}`.
 const asked = vi.hoisted(() => ({ app: "" }));
@@ -57,6 +57,10 @@ it.each(["public", "stay"] as const)("opens the %s route with its own content an
     expect(screen.getByText("Guest contribution form")).not.toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Add a memory" }));
     expect(screen.getByText("Guest contribution form")).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Back to wall" }));
+    // Private feedback is offered by name and opens the form on that choice.
+    fireEvent.click(screen.getByRole("button", { name: "Private feedback" }));
+    expect(screen.getByText("Guest contribution form (feedback)")).toBeVisible();
   } else {
     expect(screen.queryByRole("region", { name: "A note from your hosts" })).not.toBeInTheDocument();
     expect(screen.queryByText("Welcome inside")).not.toBeInTheDocument();
