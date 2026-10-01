@@ -3,8 +3,8 @@ import { legalVersions } from "../../../../functions/src/legal";
 /*
  * The guest- and host-facing legal texts. The Terms and Privacy Policy are the
  * handbook's drafts (A.6, A.7, last updated 4 August 2026), carried word for
- * word except where marked "Added 1 October 2026": those passages cover what
- * the drafts predate (guest-facing terms, private feedback, Google screening).
+ * word except the marked additions and updates through 2 October 2026:
+ * guest-facing terms, private feedback, Google screening and overseas processing.
  * None of it is approved. Counsel approves these exact versions (C-19), and
  * the approval is recorded in functions/src/legal.ts.
  */
@@ -57,7 +57,7 @@ export const hostTerms: LegalDocument = {
 export const guestTerms: LegalDocument = {
   title: "Guest Terms",
   version: legalVersions.guestTerms,
-  lastUpdated: "1 October 2026",
+  lastUpdated: "2 October 2026",
   intro: ["These terms apply when you use a property’s DigiStayBook guestbook as a guest: reading its wall, adding a memory, or sending private feedback to your host. You do not need an account. The host of the property runs their guestbook; DigiStayBook provides the software."],
   sections: [
     { heading: "1. Adding a memory", added: true, paragraphs: [
@@ -68,7 +68,8 @@ export const guestTerms: LegalDocument = {
       "Private feedback goes to your host only and is never shown on the wall. It is not monitored in real time and your host cannot reply to it here. It is not a way to get help during your stay: for anything urgent, contact your host through your booking app, or the emergency services if anyone is in danger."
     ] },
     { heading: "3. Screening", added: true, paragraphs: [
-      "Memories and private feedback are checked automatically before they reach the wall or your host. Memories that may break these terms are held for review and may never be published. Private feedback that appears to contain threats, sexual content or hate may be held for DigiStayBook’s safety team, who may pass it to your host or delete it. Automated checks are not perfect, and their result is not an endorsement of anything posted."
+      "Memories and private feedback are checked automatically before they reach the wall or your host. Memories that may break these terms are held for review and may never be published. Private feedback that appears to contain threats, sexual content or hate may be held for DigiStayBook’s safety team, who may pass it to your host or delete it. Automated checks are not perfect, and their result is not an endorsement of anything posted.",
+      "Photos are stored in Sydney, Australia. Automated photo safety checks involve overseas processing by Google Cloud Vision, configured to use its European Union service endpoint. Google may also handle information in other countries under its service and data-processing terms. See the Privacy Policy for details."
     ] },
     { heading: "4. What you must not post", added: true, paragraphs: [
       "Nothing illegal, threatening, harassing, hateful or sexually explicit; nothing that shares someone else’s personal information without their permission; no photos of children who are not yours; no advertising, spam or links meant to mislead; and nothing you do not have the right to share. Content that breaks these rules may be removed, and the session that posted it may be restricted."
@@ -86,14 +87,15 @@ export const guestTerms: LegalDocument = {
   reviewNotes: [
     "These Guest Terms are new: the handbook’s A.6 covers Hosts only, while the guestbook form has always linked to “Guest Terms”.",
     "Age threshold (16) and the minors workflow are open register item C-11.",
-    "Whether a licence from the guest to the host and DigiStayBook is needed for display, beyond consent, is for counsel."
+    "Whether a licence from the guest to the host and DigiStayBook is needed for display, beyond consent, is for counsel.",
+    "Review the overseas photo-screening disclosure together with Privacy Policy section 4.1 and consent version handbook-5.3-draft-v3; this acknowledgement does not waive privacy rights."
   ]
 };
 
 export const privacyPolicy: LegalDocument = {
   title: "Privacy Policy",
   version: legalVersions.privacy,
-  lastUpdated: "1 October 2026",
+  lastUpdated: "2 October 2026",
   intro: [],
   sections: [
     { heading: "1. Information collected", paragraphs: [
@@ -127,6 +129,11 @@ export const privacyPolicy: LegalDocument = {
       "Escalation: if the Host does not act within 14 days, the request escalates to Privacy & Safety Operations, which applies the approved deletion or restriction workflow. DigiStayBook may also act directly where required by law or where it is independently responsible for the data class."
     ] },
     { heading: "4. How information is shared", paragraphs: ["Information is shared only with service providers performing services on DigiStayBook’s behalf (cloud hosting, payment processing, email delivery, content moderation); where required by law, court order or governmental request, or to protect the rights, property or safety of DigiStayBook, its users or others; and in the event of a merger, acquisition or sale of assets, where Host data and Guest content may transfer as a business asset."] },
+    { heading: "4.1 Photo storage and overseas safety checks", added: true, paragraphs: [
+      "Guest photos are stored in Sydney, Australia, in private Google Cloud Storage buckets. Photos undergo automated safety checks using Google Cloud Vision SafeSearch, configured to use its European Union service endpoint. The photo is sent overseas for that check; Sydney storage does not mean all processing stays in Australia.",
+      "We use immediate-response photo checks. Google states that these checks process the image in memory without persisting it to disk, and that submitted content is not used to train or improve Cloud Vision models. Google temporarily logs some request metadata, such as the request time and size.",
+      "Google processes service data under its Cloud Data Processing Addendum, including security, confidentiality and incident-notification commitments. Google and its contracted service providers may handle information in other countries under those terms. Our choice of the EU endpoint is not a guarantee that every aspect of Google's handling remains in the EU. Text screening is configured to use Google Cloud Natural Language’s Australia endpoint."
+    ] },
     { heading: "5. Data retention and deletion", paragraphs: ["Personal information is kept only as long as the approved retention schedule allows, then destroyed or de-identified, including controlled copies in archives and backups. Business records are kept for the period Australian tax law requires, and marketing consent records and unsubscribe requests are handled within the periods ACMA requires."] },
     { heading: "6. Cookies and tracking", paragraphs: ["Essential cookies maintain Host login sessions and platform security. No invasive tracking cookies are used for targeted third-party advertising."] },
     { heading: "7. Data security", paragraphs: ["Administrative, technical and physical measures protect personal information. No electronic transmission or storage technology can be guaranteed completely secure."] },
@@ -137,6 +144,7 @@ export const privacyPolicy: LegalDocument = {
     "Section 1.1 is new: private feedback, Google Cloud screening and safety-team access postdate the 4 August draft.",
     "Section 8 now says “16 or older before posting a memory” to match the consent sentence; the draft said “over 16 before uploading content”.",
     "Section 5 summarises the draft’s pointer to the handbook’s retention schedule (5.10), which is internal; the published policy needs the schedule itself or a public summary of it.",
-    "The final policy must name every service provider and its role. The email provider (C-14) is unselected; the moderation provider is selected for text (Google Cloud Natural Language) but not yet confirmed for images (C-12), and its processing location is unconfirmed."
+    "Section 4.1 records the 2 October owner decision: Sydney photo storage and overseas screening through Google Vision’s EU endpoint. Review the actual account agreement, overseas-disclosure safeguards and country disclosures: Google's contractual Vision data-residency list currently covers OCR only, not SafeSearch. Do not turn the endpoint choice into an EU-only guarantee.",
+    "Confirm Google Cloud’s processor/subprocessor role for each data class, applicable account terms, provider notices and the final overseas-country disclosure. The email provider remains open (C-14)."
   ]
 };

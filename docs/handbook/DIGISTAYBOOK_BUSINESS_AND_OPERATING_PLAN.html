@@ -1074,7 +1074,7 @@
         <h3 id="guest-content">5.3 Guest content</h3>
         <p>The contribution route is reached only by scanning the property&rsquo;s printed QR code or opening its live routing link. It is mobile-first, requires no account, and asks for nothing about the guest beyond what the contribution itself contains.</p>
         <p><strong>Current implementation, pending approval:</strong> a guest chooses either a public-wall memory or private feedback for the host. The server rejects a combined submission. Private feedback is text-only, is never published, has no public-display consent checkbox and offers no reply channel. The in-stay wall links directly to the feedback mode. The draft consent for memories now names the message and any photos; the 16+ threshold and final wording remain C-11/C-19 legal decisions. Guest intake stays disabled until approved versions are recorded.</p>
-        <p>Before submitting, a guest sees the property identity, the host&rsquo;s instructions and writing prompt, the permitted content types and limits, and a mandatory single-tap consent checkbox immediately above the submit button: &ldquo;I agree to the Guest Terms and Privacy Policy, consent to this image being displayed publicly, and confirm I am over 16 years of age.&rdquo; That consent is recorded with a timestamp, the exact wording and its version, and a pseudonymous post and session reference &mdash; without creating an account and without duplicating the photograph into the consent record.</p>
+        <p>Before submitting a memory, a guest sees the property identity, the host&rsquo;s instructions and writing prompt, the permitted content types and limits, and a mandatory single-tap consent checkbox immediately above the submit button. The current draft, <code>handbook-5.3-draft-v3</code>, says: &ldquo;I agree to the Guest Terms and Privacy Policy, understand that photos undergo automated safety checks involving overseas processing, consent to my message and any photos being displayed publicly on this property&rsquo;s guestbook, and confirm I am 16 or older.&rdquo; That consent is recorded with a timestamp, the exact wording and its version, Guest Terms and Privacy versions, and a pseudonymous post and session reference &mdash; without requesting a guest account and without duplicating the photograph into the consent record. This wording remains subject to C-19 review.</p>
         <div class="table-wrap">
           <table>
             <thead>
@@ -1174,13 +1174,13 @@
         <h4>Audit and notification</h4>
         <p>Every moderation action records the previous status, the new status, the actor, the time and the reason, without copying the reported media into the audit event. Hosts receive an immediate notification when a post is hidden pending review; other moderation notices are batched rather than sent one email per held item.</p>
         <div class="annotation" data-annotation="confirm">
-          <p><span class="annotation-label">Confirm</span>Google Natural Language is wired for private feedback through its Australia text-moderation endpoint. Direct API calls succeeded, while the deployed function&rsquo;s live call path remains untested. Google Vision SafeSearch and Natural Language are proposed for wall memories. Google currently documents US and EU regional endpoints for SafeSearch; its global endpoint does not guarantee an image-processing region. C-12 needs owner approval of the image location and data terms. That decision determines cost, latency, categories and thresholds. Keep the memory adapter fail-closed until the provider and mapping are approved.</p>
+          <p><span class="annotation-label">Confirm</span>C-12 provider/location decision recorded 2 October 2026: the owner approved overseas image screening while keeping photo storage in Sydney. Google Vision SafeSearch is selected through its EU endpoint, <code>eu-vision.googleapis.com</code>, using synchronous requests containing only transformed image bytes. The local transport has no global/US fallback and is not connected to publication while C-13 mapping and numeric cost controls remain open. Google's contractual Vision residency list currently covers OCR only; do not promise that every part of SafeSearch handling stays in the EU. The revised Guest Terms, Privacy Policy and consent remain in the existing C-19 review, including account terms and overseas safeguards. Google Natural Language remains configured through its Australia endpoint for private feedback. See <code>image-screening-provider-review-2026-10-02.md</code> for sources and proof boundaries.</p>
         </div>
         <div class="annotation" data-annotation="confirm">
           <p><span class="annotation-label">Confirm</span>C-13 policy approved 2 October 2026: uncertain memory results go to host review; automated rejection is deferred until real examples have been labelled and reviewed. Category thresholds and the accepted monthly false-positive rate remain unset. Set them from a labelled sample with explicit checks for missed severe content before enabling the memory adapter.</p>
         </div>
         <div class="annotation action" data-annotation="action">
-          <p><span class="annotation-label">Action</span>Complete and approve C-12/C-13 before connecting the wall-memory image and text screening adapter. Verify bucket access and App Check in production, connect the held-memory outbox event to host delivery, and test real provider outcomes and outages after deployment. Local routing and the restricted case queue exist, but are not production proof. Email delivery for alerts remains C-14.</p>
+          <p><span class="annotation-label">Action</span>Calibrate C-13 and set numeric cost controls before connecting the combined wall-memory image and text screening adapter; complete C-19 review before opening intake. The production guest buckets were rechecked on 2 October in Sydney with public-access prevention and uniform access; actual application object access remains to be proved. Verify App Check, connect held-memory alerts to host delivery, and test real provider outcomes and outages after deployment. Local transport and routing are not production guest-flow proof. Email delivery remains C-14.</p>
         </div>
 
         <h4>Reporting and takedown state model</h4>
@@ -1550,7 +1550,7 @@
                 <td>Held behind an adapter so the provider can be replaced without touching the email lifecycle.</td>
               </tr>
               <tr>
-                <td>Moderation provider</td>
+                <td>Google Cloud Vision SafeSearch / Natural Language</td>
                 <td>Image and text safety screening.</td>
                 <td>Policy and threshold mapping, outage behaviour (fail closed), cost per item, data-processing terms and processing location.</td>
                 <td>Category mappings are provider-specific; a change requires re-tuning thresholds and re-running the false-positive sample.</td>
@@ -1571,7 +1571,7 @@
           </table>
         </div>
         <div class="annotation" data-annotation="confirm">
-          <p><span class="annotation-label">Confirm</span>Two suppliers in this table are unnamed &mdash; the email provider and the moderation provider &mdash; and both are on the critical path. Neither the email lifecycle in section 5.6 nor the screening pipeline in section 5.4 can be built against an unnamed vendor. These are the two most urgent confirmations in the document.</p>
+          <p><span class="annotation-label">Confirm</span>The moderation supplier is selected: Google Cloud Vision through the EU endpoint for photos and Natural Language through the Australia endpoint for text. Category mappings, numeric cost controls, account-term review and runtime proof remain open. The email provider remains unselected (C-14).</p>
         </div>
         <div class="annotation" data-annotation="confirm">
           <p><span class="annotation-label">Confirm</span>The domain <code>digistaybook.com</code> and the admin subdomain are referenced throughout the working papers. Confirm the domain is registered to the operating entity, with registrar account security and recovery access recorded.</p>
@@ -2599,7 +2599,7 @@
               <tr><td>C-09</td><td>4.3</td><td>Refund authority: who approves a goodwill refund, up to what value, recorded where.</td><td>Support operations</td></tr>
               <tr><td>C-10</td><td>5.3</td><td>Per-image and per-post size limits, whether images are downscaled server-side, and the rejection experience.</td><td>Contribution endpoint, cost model</td></tr>
               <tr><td>C-11</td><td>5.3</td><td>The age threshold and the workflow for a photograph containing a minor who did not consent.</td><td>Legal review, consent wording</td></tr>
-              <tr><td>C-12</td><td>5.4, 5.12</td><td><strong>Moderation provider selection</strong> &mdash; cost per item, latency, thresholds, data terms and processing location.</td><td>The entire screening pipeline</td></tr>
+              <tr><td>C-12</td><td>5.4, 5.12</td><td><strong>Provider/location selected 2 October 2026:</strong> overseas image screening allowed, Google Vision SafeSearch via the EU synchronous endpoint, photo storage in Sydney; Natural Language text endpoint in Australia. No exclusive EU handling guarantee. Published terms checked; account agreement and privacy review remain C-19, with cost/latency evidence and C-13 calibration still open.</td><td>The screening adapter and revised privacy disclosures</td></tr>
               <tr><td>C-13</td><td>5.4</td><td>Review-first policy approved 2 October 2026: uncertain results enter host review, with no automatic rejection until real samples are labelled. Numeric category thresholds and the accepted monthly false-positive rate remain to be set.</td><td>Daily sweep, monthly tuning</td></tr>
               <tr><td>C-14</td><td>5.6, 5.12</td><td><strong>Email provider and plan</strong>, sending domain, and SPF, DKIM and DMARC authentication.</td><td>Every transactional email</td></tr>
               <tr><td>C-15</td><td>5.7</td><td>Stripe retry configuration, reconciled with the failed-payment email sequence.</td><td>Dunning behaviour</td></tr>
@@ -2734,7 +2734,7 @@
       <section class="plan-section" id="a-privacy">
         <h2><span>A.7 Privacy policy (draft)</span></h2>
         <div class="annotation" data-annotation="confirm">
-          <p><span class="annotation-label">Confirm</span><strong>Draft &mdash; not approved for publication.</strong> Qualified legal counsel must review and approve this text before it is used. Last updated 4 August 2026.</p>
+          <p><span class="annotation-label">Confirm</span><strong>Draft &mdash; not approved for publication.</strong> Qualified legal counsel must review and approve this text before it is used. The overseas photo-screening disclosure below was added 2 October 2026, matching Privacy version <code>draft-2026-10-02</code>.</p>
         </div>
 
         <h3>1. Information collected</h3>
@@ -2766,7 +2766,7 @@
           </table>
         </div>
         <div class="annotation" data-annotation="confirm">
-          <p><span class="annotation-label">Confirm</span>The final policy must name every service provider and state whether each acts as processor, sub-processor or independent controller. Two of them &mdash; the email provider and the moderation provider &mdash; are still unselected (register items C-12 and C-14), so this list cannot be completed until they are.</p>
+          <p><span class="annotation-label">Confirm</span>The final policy must name every service provider and state whether each acts as processor, sub-processor or independent controller. Google Cloud is selected for image/text screening under C-12; counsel must check the actual account agreement, roles and overseas safeguards. The email provider remains unselected (C-14).</p>
         </div>
         <p><strong>How a Guest exercises deletion rights:</strong></p>
         <ul>
@@ -2778,6 +2778,11 @@
 
         <h3>4. How information is shared</h3>
         <p>Information is shared only with service providers performing services on DigiStayBook&rsquo;s behalf (cloud hosting, payment processing, email delivery, content moderation); where required by law, court order or governmental request, or to protect the rights, property or safety of DigiStayBook, its users or others; and in the event of a merger, acquisition or sale of assets, where Host data and Guest content may transfer as a business asset.</p>
+
+        <h3>4.1 Photo storage and overseas safety checks</h3>
+        <p>Guest photos are stored in Sydney, Australia, in private Google Cloud Storage buckets. Photos undergo automated safety checks using Google Cloud Vision SafeSearch, configured to use its European Union service endpoint. The photo is sent overseas for that check; Sydney storage does not mean all processing stays in Australia.</p>
+        <p>We use immediate-response photo checks. Google states that these checks process the image in memory without persisting it to disk, and that submitted content is not used to train or improve Cloud Vision models. Google temporarily logs some request metadata, such as the request time and size.</p>
+        <p>Google processes service data under its Cloud Data Processing Addendum, including security, confidentiality and incident-notification commitments. Google and its contracted service providers may handle information in other countries under those terms. Our choice of the EU endpoint is not a guarantee that every aspect of Google's handling remains in the EU. Text screening is configured to use Google Cloud Natural Language&rsquo;s Australia endpoint.</p>
 
         <h3>5. Data retention and deletion</h3>
         <p>The retention schedule, the meaning of deletion, the deletion-audit rules and the legal-hold governance are recorded in full in <a href="#retention-deletion-backups">section 5.10</a> and apply to this policy without modification.</p>

@@ -1,6 +1,6 @@
 # DigiStayBook — implementation progress
 
-**Updated 8 September 2026.** This records the work completed in this task. Implemented means built in the project and checked locally; these changes have not been deployed. The app is not ready for public launch yet. Separate workstreams need checking before their work is counted here.
+**Scoped update 2 October 2026.** The tables retain the earlier implementation record; current image-provider and privacy decisions are recorded in [the provider review](image-screening-provider-review-2026-10-02.md). Implemented means built and checked locally unless deployment evidence is stated separately. The app is not ready for public launch yet. Separate workstreams need checking before their work is counted here.
 
 ## Implemented
 
@@ -31,7 +31,7 @@ Some rows below finish an existing feature; others require a connection, decisio
 
 | Feature | What still needs to be implemented or checked | What is needed to proceed |
 |---|---|---|
-| Real content screening | Connect a real checking service and prove acceptable, harmful, uncertain and failed-check outcomes. The current preparation does not perform real automated screening. | Provider choice and agreed rules/data terms; then implementation and tests. |
+| Real content screening | Google Vision's EU synchronous request adapter is prepared; photo storage remains in Sydney. The combined wall-memory adapter stays disconnected until category mappings and cost controls are settled. Private feedback has a separate Australia text adapter. | Calibrate C-13 using labelled examples, set numeric cost controls, complete C-19 review and prove runtime and guest submission paths. Provider/location choice is recorded in the 2 October review. |
 | Final policies | Replace draft Terms, Privacy and consent wording with reviewed versions, including age/minor and text-only wording. | Business details and policy review; then connect the approved wording. |
 | Hosted security and sign-in | Configure and test actual preview storage permissions, permitted website addresses, request protection and signed-in account preservation. | Account access for the authorised isolated preview. |
 | Full deletion schedules | Add expiry rules for abandoned uploads, old drafts, dormant properties and guest records. Handle older/backup copies, safety-hold release and delivered failure alerts. | Further implementation, cloud checks and any unresolved retention/operating decisions. |
@@ -48,4 +48,4 @@ Some rows below finish an existing feature; others require a connection, decisio
 | Launch verification | Deploy to isolated preview; test complete journeys, devices, real services, accessibility, performance, monitoring, recovery and rollback. | Preview access, completed dependencies and a final launch decision. |
 | Keeping progress accurate | Reconcile separate workstreams and update these tables as work is implemented, verified and deployed. | Ongoing review; no additional product feature is implied. |
 
-The original [Business & Operating Plan](handbook/DIGISTAYBOOK_BUSINESS_AND_OPERATING_PLAN.html) is the skeleton and remains unchanged. [Differences from the skeleton](PLAN_DEVIATIONS_AND_GAPS.md) records behaviour that differs from it. [Detailed history, decisions and test links](reference-implementation-detail-2026-09-08.md) are retained only as a supporting reference.
+The [Business & Operating Plan](handbook/DIGISTAYBOOK_BUSINESS_AND_OPERATING_PLAN.html) is the skeleton; its decision register and privacy draft now include the approved overseas image-screening arrangement. [Differences from the skeleton](PLAN_DEVIATIONS_AND_GAPS.md) records behaviour that differs from it. [Detailed history, decisions and test links](reference-implementation-detail-2026-09-08.md) are retained only as a supporting reference.

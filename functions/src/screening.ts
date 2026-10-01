@@ -5,8 +5,9 @@ export type ScreeningResult = { outcome: "clear" | "standard" | "critical" | "re
 export type ScreeningInput = { message: string; photos: { bucket: string; path: string }[] };
 export type Screener = (input: ScreeningInput) => Promise<ScreeningResult>;
 
-// No wall-memory provider is selected in handbook C-12/C-13. Never substitute profanity
-// matching or a host's approval for the required image AND text screening.
+// C-12 selects Google Vision's EU endpoint for photos (visionScreening.ts).
+// C-13 category mappings and numeric cost controls are still pending. Never
+// substitute this transport, text matching or host approval for a complete scan.
 export const screenContent: Screener = async () => ({ outcome: "unavailable" });
 
 // A successful provider scan does not by itself make contact details suitable
