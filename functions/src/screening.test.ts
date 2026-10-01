@@ -1,5 +1,20 @@
 import { describe, expect, it } from "vitest";
-import { feedbackVerdict } from "./screening";
+import { feedbackVerdict, memoryNeedsContactReview } from "./screening";
+
+describe("public memory contact review", () => {
+  it("holds links, email addresses and phone numbers for host review", () => {
+    expect(memoryNeedsContactReview("Photos at https://example.com/album")).toBe(true);
+    expect(memoryNeedsContactReview("Find us at example.com")).toBe(true);
+    expect(memoryNeedsContactReview("Email guest@example.com")).toBe(true);
+    expect(memoryNeedsContactReview("Call 0412 345 678")).toBe(true);
+  });
+
+  it("leaves ordinary memory text alone", () => {
+    expect(memoryNeedsContactReview("A lovely stay from 2 to 10 October 2026.")).toBe(false);
+    expect(memoryNeedsContactReview("Thank you for the warm welcome!")).toBe(false);
+    expect(memoryNeedsContactReview("Mrs.Smith was a wonderful host.")).toBe(false);
+  });
+});
 
 describe("private feedback screening", () => {
   it("delivers rude, negative and profane complaints", () => {

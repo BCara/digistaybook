@@ -5,9 +5,19 @@ export type ScreeningResult = { outcome: "clear" | "standard" | "critical" | "re
 export type ScreeningInput = { message: string; photos: { bucket: string; path: string }[] };
 export type Screener = (input: ScreeningInput) => Promise<ScreeningResult>;
 
-// No provider is selected in handbook C-12/C-13. Never substitute profanity
+// No wall-memory provider is selected in handbook C-12/C-13. Never substitute profanity
 // matching or a host's approval for the required image AND text screening.
 export const screenContent: Screener = async () => ({ outcome: "unavailable" });
+
+// A successful provider scan does not by itself make contact details suitable
+// for a public guest wall. This rule only adds host review; it never clears an
+// unavailable scan or overrides a more severe provider result.
+export function memoryNeedsContactReview(message: string): boolean {
+  const email = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+  const link = /\b(?:https?:\/\/|www\.)\S+|\b(?:[A-Z0-9-]+\.)+(?:com|net|org|edu|gov|io|co|au|uk|nz)(?:\/\S*)?\b/i;
+  const phone = /(?:^|[^\w])(?:\+?\d[\d ().-]{7,}\d)(?=$|[^\w])/;
+  return email.test(message) || link.test(message) || phone.test(message);
+}
 
 // Private feedback is read by one adult, the Host, and complaints are what it
 // is for: rude, negative and profane text is delivered. Only text that would

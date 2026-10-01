@@ -6,7 +6,7 @@ import sharp from "sharp";
 import { wallIsOpen, stayTokenMatches } from "./publicWall.js";
 import { guestPolicy, pendingMessage, feedbackSentMessage } from "./guestPolicy.js";
 import { legalApproved, legalVersions } from "./legal.js";
-import { screenContent, screenFeedback, type FeedbackScreener, type FeedbackVerdict, type Screener } from "./screening.js";
+import { memoryNeedsContactReview, screenContent, screenFeedback, type FeedbackScreener, type FeedbackVerdict, type Screener } from "./screening.js";
 
 const options = { region: "australia-southeast1", maxInstances: 10, enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true", memory: "512MiB" as const, timeoutSeconds: 120, concurrency: 4 };
 const hash = (value: string | Buffer) => createHash("sha256").update(value).digest("hex");
@@ -219,7 +219,8 @@ export async function processGuestSubmission(id: string, screener: Screener = sc
     photos: Array.from({ length: data.photoCount }, (_, index) => photoSource(data, id, index)) }); }
   catch { result = { outcome: "unavailable" } as const; }
   if (result.outcome === "unavailable") return;
-  if (result.outcome === "clear") await promotePhotos(id, data);
+  const outcome = result.outcome === "clear" && memoryNeedsContactReview(data.message) ? "standard" : result.outcome;
+  if (outcome === "clear") await promotePhotos(id, data);
   // Approved photos move out of quarantine. The delivery bucket remains
   // private at IAM/rules level; the endpoint checks publication on each read.
   const published = await db().runTransaction(async tx => {
@@ -229,21 +230,21 @@ export async function processGuestSubmission(id: string, screener: Screener = sc
     if (!property.exists || !wallIsOpen(property.data()!)) return false;
     const openReports = existingPost.get("openReportCount") ?? 0;
     if (existingPost.get("safetyRestricted") === true || current.get("safetyCaseOpen") === true) return false;
-    const status = result.outcome === "clear" ? openReports > 0 ? "standard" : "published" : result.outcome;
+    const status = outcome === "clear" ? openReports > 0 ? "standard" : "published" : outcome;
     tx.update(ref, { status, updatedAt: stamp(),
-      ...(result.outcome === "clear" ? { mediaLocation: "published" } : {}),
-      ...(["critical", "reject"].includes(result.outcome) ? { safetyCaseOpen: true } : {}) });
+      ...(outcome === "clear" ? { mediaLocation: "published" } : {}),
+      ...(["critical", "reject"].includes(outcome) ? { safetyCaseOpen: true } : {}) });
     tx.set(postRef, { guestSubmissionId: id, message: data.message, createdAt: data.createdAt,
       visibility: status === "published" ? "visible" : status === "standard" ? "hidden_pending_review" : "restricted",
-      screeningStatus: result.outcome, pinned: false, revision: data.revision,
-      guestMediaPublished: data.mediaLocation === "published" || result.outcome === "clear",
+      screeningStatus: outcome, pinned: false, revision: data.revision,
+      guestMediaPublished: data.mediaLocation === "published" || outcome === "clear",
       hold: openReports > 0 ? existingPost.get("hold") : { source: "automated_screening", reason: null, detail: "Safety screening", raisedAt: stamp() },
       guestPhotoCount: data.photoCount }, { merge: true });
-    if (result.outcome === "critical" || result.outcome === "reject") tx.set(db().doc(`trustSafetyCases/${id}:${data.revision}`), {
+    if (outcome === "critical" || outcome === "reject") tx.set(db().doc(`trustSafetyCases/${id}:${data.revision}`), {
       propertyId: data.propertyId, postId: id, revision: data.revision, status: "open", message: data.message,
       photos: Array.from({ length: data.photoCount }, (_, index) => photoSource(data, id, index)), createdAt: stamp(), reviewDueAt: Timestamp.fromMillis(Date.now() + 30 * 86400000)
     });
-    if (result.outcome === "standard") tx.set(db().doc(`notificationOutbox/memory-held-${id}-${data.revision}`), {
+    if (outcome === "standard") tx.set(db().doc(`notificationOutbox/memory-held-${id}-${data.revision}`), {
       kind: "memory_held_for_host_review", propertyId: data.propertyId, postId: id, revision: data.revision,
       status: "pending", createdAt: stamp()
     });

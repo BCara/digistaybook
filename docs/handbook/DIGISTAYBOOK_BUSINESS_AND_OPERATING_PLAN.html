@@ -1083,7 +1083,7 @@
             <tbody>
               <tr>
                 <td>Text (post message)</td>
-                <td>Length limits, duplicate-submission prevention, and automated screening for profanity, harassment, threats, hate, sexual content, personal information and competitor or malicious URLs. Sentiment screening routes strongly negative text to host review rather than publishing it silently.</td>
+                <td>Length limits and duplicate-submission prevention apply. Public wall memories need provider text screening before publication; contact details and external links are held for host review. Do not add a custom profanity blacklist without evidence from reviewed examples. Private feedback follows its separate restricted-safety route.</td>
               </tr>
               <tr>
                 <td>Images</td>
@@ -1115,7 +1115,7 @@
         <p>Every guest submission is screened before it can appear publicly. Automated screening is a risk-control tool, not a guarantee, and is never described as one.</p>
         <p><strong>Implementation status, 1 October 2026:</strong> memory intake, private quarantine paths, fail-closed routing, bounded screening retries, host review and a restricted Trust &amp; Safety case queue are implemented locally. The memory <code>screenContent</code> adapter still returns unavailable; live image and text screening, approved category thresholds and end-to-end deployment evidence remain open. The two production guest-media buckets exist with public-access prevention and uniform bucket access, but live application access is unverified. Private feedback has a separate Natural Language <code>moderateText</code> check using the Australia endpoint: selected threat, sexual, derogatory and firearms categories at confidence 0.8 or above are held for restricted review; other feedback is delivered to the host, including if the provider fails. Direct project-authenticated calls to the Australia endpoint succeeded for a routine complaint and an explicit threat, but the deployed feedback function has not been exercised with guest intake enabled. These feedback thresholds are an engineering setting pending C-13 review.</p>
         <h4>Quarantine-first architecture</h4>
-        <p>On submission, files are uploaded to a private, non-public storage bucket and the post is assigned a processing status. While the guest sees a brief optimistic loading state, a dual-layer server-side scan runs: image moderation and concurrent text filtering, including string matching for profanity, sentiment analysis and URL detection. The scan looks only for unsafe or explicit content. No biometric data and no facial-recognition template is generated, extracted or stored from a guest image &mdash; a hard constraint driven by biometric privacy law, not a preference.</p>
+        <p>On submission, files are uploaded to a private, non-public storage bucket and the post is assigned a processing status. The proposed server-side scan covers both image and text safety; the memory provider adapter is still disconnected, so posts remain private. After a successful provider scan, a local rule sends public posts containing contact details or external links to host review. It cannot clear a failed scan or override a more severe result. No custom profanity blacklist is approved. No biometric data and no facial-recognition template is generated, extracted or stored from a guest image &mdash; a hard constraint driven by biometric privacy law, not a preference.</p>
         <h4>Three routes</h4>
         <div class="table-wrap">
           <table>
@@ -1130,7 +1130,7 @@
                 <td>Assets move to public storage. The quarantine copy is deleted within 24 hours of approved publication.</td>
               </tr>
               <tr>
-                <td>Standard flag &mdash; NSFW or racy imagery, profanity, strongly negative sentiment, competitor or external URLs</td>
+                <td>Standard flag &mdash; provider result requiring host review, or a contact detail or external link after successful provider screening</td>
                 <td>Pending host approval</td>
                 <td>&ldquo;Memory added! Your host is reviewing this post to add it to the public wall.&rdquo;</td>
                 <td>The post stays in private quarantine and enters the host&rsquo;s review queue. The host receives a moderation alert. Standard curation is the host&rsquo;s responsibility.</td>
@@ -1168,7 +1168,7 @@
         <h4>Internal review cadence</h4>
         <ul>
           <li><strong>The daily sweep.</strong> Operations reviews the critical escalation queue once per day. That queue holds only AI-flagged severe cases and host-initiated escalations &mdash; never ordinary curation. Each case is resolved by restricting the content and session where proportionate, retaining a restricted case only for the approved review period, deleting securely when review and legal-retention needs end, or downgrading a false positive to host review.</li>
-          <li><strong>Monthly tuning.</strong> Operations reviews a random sample of 50 standard AI-flagged posts each month. Over-aggressive filtering creates guest friction, so where the false-positive rate exceeds the accepted margin, the image-moderation confidence threshold is lowered.</li>
+          <li><strong>Monthly tuning.</strong> Operations reviews a random sample of 50 standard AI-flagged posts each month, records false positives by category and checks the accepted margin once set. A threshold change requires a labelled sample and a rerun of the clear, hold and severe-case checks; do not automatically lower a threshold on the strength of one aggregate rate.</li>
           <li><strong>Unresolved critical cases</strong> are reviewed at least every 30 days.</li>
         </ul>
         <h4>Audit and notification</h4>
@@ -1177,7 +1177,7 @@
           <p><span class="annotation-label">Confirm</span>Google Natural Language is wired for private feedback through its Australia text-moderation endpoint. Direct API calls succeeded, while the deployed function&rsquo;s live call path remains untested. Google Vision SafeSearch and Natural Language are proposed for wall memories. Google currently documents US and EU regional endpoints for SafeSearch; its global endpoint does not guarantee an image-processing region. C-12 needs owner approval of the image location and data terms. That decision determines cost, latency, categories and thresholds. Keep the memory adapter fail-closed until the provider and mapping are approved.</p>
         </div>
         <div class="annotation" data-annotation="confirm">
-          <p><span class="annotation-label">Confirm</span>&ldquo;Standard&rdquo; and &ldquo;critical&rdquo; confidence thresholds, and the accepted monthly false-positive rate, are undefined. Confirm both, or the daily sweep has no entry criteria and the monthly tuning review has no pass mark.</p>
+          <p><span class="annotation-label">Confirm</span>C-13 policy approved 2 October 2026: uncertain memory results go to host review; automated rejection is deferred until real examples have been labelled and reviewed. Category thresholds and the accepted monthly false-positive rate remain unset. Set them from a labelled sample with explicit checks for missed severe content before enabling the memory adapter.</p>
         </div>
         <div class="annotation action" data-annotation="action">
           <p><span class="annotation-label">Action</span>Complete and approve C-12/C-13 before connecting the wall-memory image and text screening adapter. Verify bucket access and App Check in production, connect the held-memory outbox event to host delivery, and test real provider outcomes and outages after deployment. Local routing and the restricted case queue exist, but are not production proof. Email delivery for alerts remains C-14.</p>
@@ -2283,7 +2283,7 @@
             </tbody>
           </table>
         </div>
-        <p>Pricing controls: verify the live project region and the supplier price before approving any budget; record both the free allowance and the paid rate; and review usage per active property, per 1,000 guest contributions and per GiB stored. Budget alerts are notifications &mdash; they do not cap Firebase charges.</p>
+        <p>Pricing controls: verify the live project region and the supplier price before approving any budget; record both the free allowance and the paid rate; and review usage per active property, per 1,000 guest contributions and per GiB stored. The approved screening cost policy is to stop accepting new wall memories when a server-side daily screening limit is reached, keep affected submissions private, and alert operations. Set project API quotas and a billing alert as additional controls. The daily limit and monthly AUD alert amount are still awaiting owner figures; no effective cost ceiling is configured. Budget alerts are notifications &mdash; they do not cap Firebase charges.</p>
         <div class="annotation" data-annotation="confirm">
           <p><span class="annotation-label">Confirm</span>No cost-per-property model exists. Until one does, nobody knows whether a busy property with fifty ten-image posts a month is profitable at USD $10. Build the model against a stated assumption &mdash; posts per property per month, images per post, average image size, wall views per stay &mdash; and check the result against the pricing in section 4.1 and the &ldquo;unlimited uploads&rdquo; claim on the pricing page.</p>
         </div>
@@ -2600,7 +2600,7 @@
               <tr><td>C-10</td><td>5.3</td><td>Per-image and per-post size limits, whether images are downscaled server-side, and the rejection experience.</td><td>Contribution endpoint, cost model</td></tr>
               <tr><td>C-11</td><td>5.3</td><td>The age threshold and the workflow for a photograph containing a minor who did not consent.</td><td>Legal review, consent wording</td></tr>
               <tr><td>C-12</td><td>5.4, 5.12</td><td><strong>Moderation provider selection</strong> &mdash; cost per item, latency, thresholds, data terms and processing location.</td><td>The entire screening pipeline</td></tr>
-              <tr><td>C-13</td><td>5.4</td><td>Standard and critical confidence thresholds, and the accepted monthly false-positive rate.</td><td>Daily sweep, monthly tuning</td></tr>
+              <tr><td>C-13</td><td>5.4</td><td>Review-first policy approved 2 October 2026: uncertain results enter host review, with no automatic rejection until real samples are labelled. Numeric category thresholds and the accepted monthly false-positive rate remain to be set.</td><td>Daily sweep, monthly tuning</td></tr>
               <tr><td>C-14</td><td>5.6, 5.12</td><td><strong>Email provider and plan</strong>, sending domain, and SPF, DKIM and DMARC authentication.</td><td>Every transactional email</td></tr>
               <tr><td>C-15</td><td>5.7</td><td>Stripe retry configuration, reconciled with the failed-payment email sequence.</td><td>Dunning behaviour</td></tr>
               <tr><td>C-16</td><td>5.8</td><td>Support address, response-time target, business-hours expectation and queue cover.</td><td>Support page, acknowledgement copy</td></tr>
