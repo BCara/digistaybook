@@ -1,7 +1,7 @@
+import "./runtimeOptions.js";
 import { initializeApp } from "firebase-admin/app";
 import { FieldValue, getFirestore, Timestamp } from "firebase-admin/firestore";
 import { HttpsError, onCall, onRequest } from "firebase-functions/v2/https";
-import { setGlobalOptions } from "firebase-functions/v2";
 import { wallIsOpen, publicProperty, publicPost, unavailableWall, wallPreviewable, ownerRecovery, resolveWallView } from "./publicWall.js";
 import { guestIntakeEnabled } from "./guestContributions.js";
 export { deleteStoredMedia } from "./storageDeletion.js";
@@ -14,8 +14,6 @@ export { activationOptions, createActivationCheckout } from "./stripeActivation.
 export { cancelSubscription, resumeSubscription } from "./stripeCancellation.js";
 export { beginGuestContribution, uploadGuestPhoto, finishGuestContribution, listGuestContributions,
   changeGuestContribution, listHostGuestReview, reviewGuestContribution, readGuestReviewPhoto, guestMemoryPhoto } from "./guestContributions.js";
-
-setGlobalOptions({ region: "australia-southeast1", maxInstances: 10 });
 
 initializeApp();
 const db = getFirestore();
@@ -34,7 +32,7 @@ const db = getFirestore();
  * The warm path itself is already short (D-024); what returns without this is
  * the first request after an idle spell.
  */
-export const getPublicWall = onCall(async request => {
+export const getPublicWall = onCall({ maxInstances: 10 }, async request => {
   const slug = request.data?.slug;
   const cursor = request.data?.cursor;
   const requestedView = request.data?.view ?? "public";
@@ -88,7 +86,7 @@ export const getPublicWall = onCall(async request => {
     nextCursor: posts.size === 25 ? posts.docs.at(-1)!.id : null };
 });
 
-export const health = onRequest((request, response) => {
+export const health = onRequest({ maxInstances: 10 }, (request, response) => {
   response.status(200).json({ service: "digistaybook-functions", status: "ok" });
 });
 
@@ -194,7 +192,7 @@ export const moderatePost = onCall(
   // cannot mint an attestation token, so enforcing it locally would mean this
   // endpoint could never be exercised or tested before it was deployed. Every
   // audit event records which of the two it was.
-  { enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true" },
+  { enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true", maxInstances: 10 },
   async (request) => {
     const auth = request.auth;
     if (!auth) throw new HttpsError("unauthenticated", "Sign in to moderate this wall.");

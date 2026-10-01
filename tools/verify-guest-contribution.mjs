@@ -27,10 +27,10 @@ async function call(name, data, identity = guest, status = 200) {
   const response = await fetch(`${base}/${name}`, { method: "POST", headers: { "Content-Type": "application/json", ...(identity ? { Authorization: `Bearer ${identity.idToken}` } : {}) }, body: JSON.stringify({ data }) });
   const body = await response.json(); assert.equal(response.status, status, `${name}: ${JSON.stringify(body)}`); return body.result;
 }
-const propertyId = "guest-flow-property", slug = "guest-flow-property";
-await db.doc(`properties/${propertyId}`).set({ slug, name: "Guest flow cottage", ownerUid: host.localId, mode: "live", lifecycle: "active", profile: {} });
-await db.doc("properties/guest-flow-other").set({ slug: "guest-flow-other", name: "Other", ownerUid: host.localId, mode: "live", lifecycle: "active" });
-const input = { slug, requestId: randomUUID(), message: "Our memory", feedback: "A private suggestion", photoCount: 10, consentAccepted: true, consentVersion: guestPolicy.consentVersion };
+const propertyId = "guest-flow-property", slug = "guest-flow-property", stayToken = "guestFlowStayToken0001";
+await db.doc(`properties/${propertyId}`).set({ slug, name: "Guest flow cottage", ownerUid: host.localId, mode: "live", lifecycle: "active", profile: {}, stayToken });
+await db.doc("properties/guest-flow-other").set({ slug: "guest-flow-other", name: "Other", ownerUid: host.localId, mode: "live", lifecycle: "active", stayToken: "guestFlowOtherToken002" });
+const input = { slug, stayToken, requestId: randomUUID(), message: "Our memory", feedback: "A private suggestion", photoCount: 10, consentAccepted: true, consentVersion: guestPolicy.consentVersion };
 await call("beginGuestContribution", { ...input, photoCount: 11 }, guest, 400);
 await call("beginGuestContribution", { ...input, consentAccepted: false }, guest, 400);
 await call("beginGuestContribution", input, host, 403);
