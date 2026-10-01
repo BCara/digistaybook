@@ -17,8 +17,8 @@ type Likelihood = typeof likelihoods[number];
 const categories = ["adult", "spoof", "medical", "violence", "racy"] as const;
 export type SafeSearchResult = Record<typeof categories[number], Likelihood>;
 
-// Transport only: results cannot publish a memory until C-13 mappings and
-// cost controls are approved and the combined image/text adapter is wired.
+// The transport is called by the combined memory screener. Its result maps to
+// host review provisionally; C-13 still needs representative-content tuning.
 // Supply the already transformed, metadata-stripped photo from Sydney storage.
 // One image per request keeps the current 5 MiB limit below Vision's JSON cap.
 export async function scanMemoryPhoto(image: Buffer): Promise<SafeSearchResult> {
