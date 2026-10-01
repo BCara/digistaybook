@@ -8,6 +8,7 @@ const annotation = { adult: "VERY_UNLIKELY", spoof: "UNLIKELY", medical: "UNLIKE
 const fetchMock = vi.fn();
 beforeEach(() => {
   vi.stubEnv("GCLOUD_PROJECT", "demo-digistaybook");
+  vi.stubEnv("FUNCTIONS_EMULATOR", "true");
   vi.stubGlobal("fetch", fetchMock);
   fetchMock.mockReset();
 });

@@ -1,5 +1,25 @@
 import { describe, expect, it } from "vitest";
-import { feedbackVerdict, memoryNeedsContactReview } from "./screening";
+import { feedbackVerdict, memoryImageNeedsReview, memoryNeedsContactReview, memoryTextNeedsReview } from "./screening";
+
+describe("wall memory provider mappings", () => {
+  const safe = { adult: "VERY_UNLIKELY", spoof: "VERY_UNLIKELY", medical: "UNLIKELY", violence: "UNLIKELY", racy: "UNLIKELY" } as const;
+
+  it("holds a likely adult, medical, violent or racy image for host review", () => {
+    expect(memoryImageNeedsReview([{ ...safe, adult: "LIKELY" }])).toBe(true);
+    expect(memoryImageNeedsReview([{ ...safe, medical: "VERY_LIKELY" }])).toBe(true);
+    expect(memoryImageNeedsReview([{ ...safe, racy: "LIKELY" }])).toBe(true);
+    expect(memoryImageNeedsReview([{ ...safe, violence: "LIKELY", racy: "UNLIKELY" }])).toBe(true);
+  });
+
+  it("keeps low-likelihood images clear and never auto-rejects them", () => {
+    expect(memoryImageNeedsReview([{ ...safe, adult: "POSSIBLE", racy: "POSSIBLE" }])).toBe(false);
+  });
+
+  it("uses provider text categories as review signals without a profanity list", () => {
+    expect(memoryTextNeedsReview([{ name: "Profanity", confidence: 0.8 }])).toBe(true);
+    expect(memoryTextNeedsReview([{ name: "Toxic", confidence: 0.79 }])).toBe(false);
+  });
+});
 
 describe("public memory contact review", () => {
   it("holds links, email addresses and phone numbers for host review", () => {
