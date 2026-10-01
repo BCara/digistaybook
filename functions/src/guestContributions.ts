@@ -243,6 +243,10 @@ export async function processGuestSubmission(id: string, screener: Screener = sc
       propertyId: data.propertyId, postId: id, revision: data.revision, status: "open", message: data.message,
       photos: Array.from({ length: data.photoCount }, (_, index) => photoSource(data, id, index)), createdAt: stamp(), reviewDueAt: Timestamp.fromMillis(Date.now() + 30 * 86400000)
     });
+    if (result.outcome === "standard") tx.set(db().doc(`notificationOutbox/memory-held-${id}-${data.revision}`), {
+      kind: "memory_held_for_host_review", propertyId: data.propertyId, postId: id, revision: data.revision,
+      status: "pending", createdAt: stamp()
+    });
     return status === "published";
   });
   if (published && !data.safetyCaseOpen) await clearQuarantine(id, data);
