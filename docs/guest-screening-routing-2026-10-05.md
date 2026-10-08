@@ -1,5 +1,9 @@
 # Guest screening and review — 5 October 2026
 
+## Current production release — 8 October 2026
+
+The 6 October incomplete-screening policy is now deployed: unavailable results, provider errors and exhausted allowance route memories and private feedback to restricted Safety Review. Isolated emulator checks confirmed that automatic retry cannot bypass an open case and that authorised release follows the intended memory/feedback path. All Functions were updated and are ACTIVE; live metadata and unauthenticated access denial were checked. See [deployment evidence](deployment-2026-10-08.json). Provider classification quality and real reviewer journeys remain separate checks. Earlier release notes below preserve their historical status.
+
 Owner requested the review switch, complete memory-case controls, serious-photo
 routing and deployment. These routing thresholds are provisional; provider
 accuracy and false positives still require representative calibration. Nothing

@@ -1,5 +1,9 @@
 # Host account settings — 6 October 2026
 
+## Production release — 8 October 2026
+
+The Account page is now deployed at `/host/account`. Live HTML and asset bytes match the production build, which includes the Account route and the registered App Check key. See [deployment evidence](deployment-2026-10-08.json). Real account-change journeys, actual inbox delivery and reviewer MFA during an account change remain unverified. The notes below preserve the original local implementation record.
+
 Implemented locally at `/host/account`, reached through **Account** beside
 **Billing** in the signed-in header and mobile menu. Not deployed by this update.
 

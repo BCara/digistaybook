@@ -1,5 +1,7 @@
 # DigiStayBook — implementation progress
 
+**Consolidated production release — 8 October 2026.** Host Account settings, wall design updates, billing confirmation fixes, reviewer MFA and incomplete-screening Safety Review routing are now deployed. All 38 Functions are ACTIVE in Sydney; the live website assets match the production build. Firestore and Storage rules were already current and their releases were confirmed by the deploy. The release passed application typecheck, 662 tests (one skipped), 35 security-rule tests, both builds and isolated server checks. General guest intake remains disabled, and the existing controlled test-property exception is preserved. Authenticated reviewer queues, real account-change/inbox journeys, provider calibration and legal approval remain separate checks. See [deployment evidence](deployment-2026-10-08.json). Earlier notes below retain their historical status.
+
 **Consent reminders deployed 5 October 2026.** Guest consent now has an hourly
 eligibility review and daily 9am Sydney email reminders for manual deletion.
 The operations page shows the exact consent record, deadline and reason and can
