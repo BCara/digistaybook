@@ -8,3 +8,10 @@ export const firebaseConfig = {
 };
 
 export const firebaseConfigured = Object.values(firebaseConfig).every(Boolean);
+
+export const localTest = import.meta.env.VITE_USE_FIREBASE_EMULATORS === "true";
+if ((localTest && firebaseConfig.projectId !== "demo-digistaybook")
+  || (firebaseConfig.projectId?.startsWith("demo-") && !localTest)
+  || (import.meta.env.MODE === "emulator" && !localTest)) {
+  throw new Error("Test must use demo-digistaybook and all local Firebase emulators.");
+}

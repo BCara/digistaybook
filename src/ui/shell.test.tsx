@@ -69,6 +69,7 @@ describe("shell and landing presentation", () => {
     const header = within(screen.getByRole("banner"));
     const primary = screen.getByRole("navigation", { name: "Primary navigation" });
     expect(within(primary).getByRole("link", { name: "Dashboard" })).toHaveAttribute("href", "/host");
+    expect(within(primary).getByRole("link", { name: "Account" })).toHaveAttribute("href", "/host/account");
     expect(within(primary).queryByRole("link", { name: "Pricing" })).not.toBeInTheDocument();
     expect(within(primary).queryByRole("link", { name: "Privacy & Safety" })).not.toBeInTheDocument();
     expect(header.getByRole("link", { name: "Add property" })).toHaveAttribute("href", "/host#add-property");

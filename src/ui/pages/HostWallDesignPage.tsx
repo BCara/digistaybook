@@ -504,6 +504,7 @@ export function HostWallDesignPage({
               compact
               name={`canvas-note-style-${note.id}`}
               theme={profile.theme}
+              colour={profile.colour}
               value={note.style}
               disabled={draft.saving}
               onChange={(style) => setNote(note.id, { style })}
@@ -620,8 +621,10 @@ export function HostWallDesignPage({
       aside={
         <WallThemePicker
           value={profile.theme}
+          colour={profile.colour}
           disabled={draft.saving}
           onChange={(theme) => set("theme", theme)}
+          onColourChange={(colour) => set("colour", colour)}
         />
       }
     >
@@ -673,6 +676,7 @@ export function HostWallDesignPage({
             className="canvas-sheet"
             id="design-canvas"
             data-wall-theme={profile.theme}
+            data-wall-colour={profile.colour}
           >
             {/* The whole cover is the control, not the pill sitting on it: an
               empty photograph area reads as somewhere to drop a photograph, and

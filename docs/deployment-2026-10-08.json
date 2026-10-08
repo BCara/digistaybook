@@ -1,0 +1,320 @@
+{
+  "checkedAt": "2026-10-08T05:07:00.478Z",
+  "project": "digistaybook-cbert",
+  "sourceCommit": "1d282d10a5927c2fde702fd973d82762807d83c7",
+  "hosting": {
+    "releaseTime": "2026-10-08T05:06:26.003Z",
+    "version": "sites/digistaybook-cbert/versions/8674d85e89f9a1d8",
+    "htmlMatchesProductionBuild": true,
+    "assets": [
+      {
+        "path": "/assets/index-YiJGSR_i.js",
+        "sha256": "105019b22b52cdee17a2682558b98a873aea5e819f5322faf20bad10955a05c4"
+      },
+      {
+        "path": "/assets/index-pZwdWdQ-.css",
+        "sha256": "065b9ef5beb4c26a767edf3e4fcf4dc075afb8eef7e44cba1f21173faa38753d"
+      }
+    ],
+    "hostAccountAndReviewerSetupPresent": true,
+    "registeredAppCheckKeyPresent": true
+  },
+  "functions": [
+    {
+      "name": "finishGuestContribution",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:01:53.593395388Z",
+      "revision": "finishguestcontribution-00018-yeh"
+    },
+    {
+      "name": "resolveContentReport",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:05.632276806Z",
+      "revision": "resolvecontentreport-00012-taj"
+    },
+    {
+      "name": "stripeWebhook",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:07.481438900Z",
+      "revision": "stripewebhook-00011-vob"
+    },
+    {
+      "name": "reportGuestMemory",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:07.879632154Z",
+      "revision": "reportguestmemory-00012-jag"
+    },
+    {
+      "name": "listSafetyOperations",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:04.636440634Z",
+      "revision": "listsafetyoperations-00013-mab"
+    },
+    {
+      "name": "listHostGuestReview",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:01:54.434416767Z",
+      "revision": "listhostguestreview-00013-biz"
+    },
+    {
+      "name": "submitPrivacyRequest",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:06.211503382Z",
+      "revision": "submitprivacyrequest-00012-zog"
+    },
+    {
+      "name": "resolveSafetyCase",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:06.897215563Z",
+      "revision": "resolvesafetycase-00003-yos"
+    },
+    {
+      "name": "readSafetyCase",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:05.945557067Z",
+      "revision": "readsafetycase-00003-saw"
+    },
+    {
+      "name": "getPublicWall",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:02.052061180Z",
+      "revision": "getpublicwall-00014-gew"
+    },
+    {
+      "name": "readHostExportPhoto",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:01:54.157324826Z",
+      "revision": "readhostexportphoto-00012-sic"
+    },
+    {
+      "name": "createActivationCheckout",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:01.258187991Z",
+      "revision": "createactivationcheckout-00011-sem"
+    },
+    {
+      "name": "notifyConsentDeletionReview",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:08.075053419Z",
+      "revision": "notifyconsentdeletionreview-00003-puw"
+    },
+    {
+      "name": "ensureStayToken",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:01.014710983Z",
+      "revision": "ensurestaytoken-00006-gev"
+    },
+    {
+      "name": "createHostProperty",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:07.681945066Z",
+      "revision": "createhostproperty-00012-sir"
+    },
+    {
+      "name": "reportPrivateFeedback",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:01:47.071180001Z",
+      "revision": "reportprivatefeedback-00002-xin"
+    },
+    {
+      "name": "deleteStoredMedia",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:01.651249485Z",
+      "revision": "deletestoredmedia-00012-vaf"
+    },
+    {
+      "name": "listHostReports",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:05.269981623Z",
+      "revision": "listhostreports-00012-rah"
+    },
+    {
+      "name": "readConsentDeletionReview",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:01.251614212Z",
+      "revision": "readconsentdeletionreview-00003-vut"
+    },
+    {
+      "name": "guestMemoryPhoto",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:07.481438800Z",
+      "revision": "guestmemoryphoto-00013-lit"
+    },
+    {
+      "name": "setGuestReviewPolicy",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:01:52.801101208Z",
+      "revision": "setguestreviewpolicy-00002-piz"
+    },
+    {
+      "name": "deleteHostProperty",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:01.643401210Z",
+      "revision": "deletehostproperty-00012-yar"
+    },
+    {
+      "name": "moderatePost",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:05.070973448Z",
+      "revision": "moderatepost-00012-yil"
+    },
+    {
+      "name": "retryPendingScreening",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:01:41.462079991Z",
+      "revision": "retrypendingscreening-00017-siw"
+    },
+    {
+      "name": "escalatePrivacyDeadlines",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:06:12.403783832Z",
+      "revision": "escalateprivacydeadlines-00012-lak"
+    },
+    {
+      "name": "uploadGuestPhoto",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:00.026647236Z",
+      "revision": "uploadguestphoto-00013-doh"
+    },
+    {
+      "name": "cancelSubscription",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:06.907165007Z",
+      "revision": "cancelsubscription-00011-kax"
+    },
+    {
+      "name": "resumeSubscription",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:06.522566119Z",
+      "revision": "resumesubscription-00011-zux"
+    },
+    {
+      "name": "listGuestContributions",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:01:48.217891449Z",
+      "revision": "listguestcontributions-00012-zul"
+    },
+    {
+      "name": "changeGuestContribution",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:01:52.403635245Z",
+      "revision": "changeguestcontribution-00017-ruv"
+    },
+    {
+      "name": "health",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:02.466332264Z",
+      "revision": "health-00013-xiy"
+    },
+    {
+      "name": "readSafetyCasePhoto",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:01:55.131744031Z",
+      "revision": "readsafetycasephoto-00002-wim"
+    },
+    {
+      "name": "activationOptions",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:01.646219516Z",
+      "revision": "activationoptions-00011-xok"
+    },
+    {
+      "name": "reviewGuestContribution",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:01:53.467199706Z",
+      "revision": "reviewguestcontribution-00013-hiy"
+    },
+    {
+      "name": "notifyScreeningAllowance",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:02:02.050892100Z",
+      "revision": "notifyscreeningallowance-00002-vuf"
+    },
+    {
+      "name": "listHostExport",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:01:52.663268988Z",
+      "revision": "listhostexport-00012-rig"
+    },
+    {
+      "name": "readGuestReviewPhoto",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:01:54.548418548Z",
+      "revision": "readguestreviewphoto-00012-zok"
+    },
+    {
+      "name": "beginGuestContribution",
+      "region": "australia-southeast1",
+      "state": "ACTIVE",
+      "updateTime": "2026-10-08T05:01:41.714861555Z",
+      "revision": "beginguestcontribution-00014-toh"
+    }
+  ],
+  "unauthenticatedDenial": [
+    {
+      "name": "listSafetyOperations",
+      "httpStatus": 401
+    },
+    {
+      "name": "readSafetyCase",
+      "httpStatus": 401
+    },
+    {
+      "name": "readSafetyCasePhoto",
+      "httpStatus": 401
+    },
+    {
+      "name": "setGuestReviewPolicy",
+      "httpStatus": 401
+    }
+  ],
+  "intakeEnabled": false,
+  "preflight": {
+    "applicationTestsPassed": 662,
+    "applicationTestsSkipped": 1,
+    "securityRuleTestsPassed": 35,
+    "serverVerification": "Isolated demo emulator: public wall, guest contribution, storage deletion, reporting, incomplete screening, consent retention, guest names and screening allowance checks passed."
+  },
+  "remainingHumanVerification": [
+    "Authenticated reviewer queues and browser App Check attestation",
+    "Real account email/password changes and inbox delivery",
+    "Provider calibration, device journeys and legal approval"
+  ]
+}

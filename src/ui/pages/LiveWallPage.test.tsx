@@ -17,6 +17,30 @@ vi.mock("firebase/functions", () => ({ httpsCallable: (functions: { app: string 
 
 beforeEach(() => { call.mockReset(); asked.app = ""; auth.status = "signed-out"; auth.user = null; });
 
+it.each(["public", "stay"] as const)("shows supplied guest names and omits unnamed authors on the %s wall", async view => {
+  call.mockResolvedValue({ data: { status: "open", property: { name: "Real cottage", welcome: "", hosts: "", location: "" }, posts: [
+    { id: "named", message: "Lovely stay", displayName: "Mia & Sam" },
+    { id: "unnamed", message: "Great weekend", displayName: "" },
+    { id: "spaces", message: "Thanks", displayName: "   " },
+    { id: "legacy", message: "Old memory" }
+  ], nextCursor: null } });
+  render(<LiveWallPage slug="real-cottage" view={view} />);
+  expect(await screen.findByText("Mia & Sam")).toBeInTheDocument();
+  expect(screen.queryByText("A guest")).not.toBeInTheDocument();
+  for (const message of ["Great weekend", "Thanks", "Old memory"]) expect(screen.getByText(message).closest("article")?.querySelectorAll("p")).toHaveLength(1);
+});
+
+it.each(["public", "stay"] as const)("applies the saved theme and colour on the %s wall", async view => {
+  call.mockResolvedValue({ data: { status: "open", property: {
+    name: "Real cottage", welcome: "", hosts: "", location: "", theme: "archive", colour: "ocean",
+    ...(view === "stay" ? { houseInformation: { heading: "", welcome: "", tip: "", facts: [] } } : {})
+  }, posts: [], nextCursor: null } });
+  render(<LiveWallPage slug="real-cottage" view={view} />);
+  await screen.findByRole("heading", { name: "Real cottage" });
+  expect(document.querySelector(".wall-page")).toHaveAttribute("data-wall-theme", "archive");
+  expect(document.querySelector(".wall-page")).toHaveAttribute("data-wall-colour", "ocean");
+});
+
 it("reads a guest's wall through the app that carries no attestation", async () => {
   call.mockResolvedValue({ data: { status: "open", property: { name: "Real cottage", welcome: "", hosts: "", location: "" }, posts: [], nextCursor: null } });
   render(<LiveWallPage slug="real-cottage" />);

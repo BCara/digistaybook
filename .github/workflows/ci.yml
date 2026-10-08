@@ -11,6 +11,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -23,4 +24,16 @@ jobs:
           java-version: 21
       - run: npm ci
       - run: npm ci --prefix functions
+      - name: Configure isolated emulator fixtures
+        run: |
+          cat > functions/.env.local <<'EOF'
+          STRIPE_PRICE_MONTHLY=price_local_disabled
+          STRIPE_PRICE_ANNUAL=price_local_disabled
+          APP_URL=http://127.0.0.1:5181
+          EOF
+          cat > functions/.secret.local <<'EOF'
+          STRIPE_RESTRICTED_KEY=rk_test_local_disabled
+          STRIPE_WEBHOOK_SECRET=whsec_local_disabled
+          REPORT_HASH_KEY=local-only-report-key
+          EOF
       - run: npm run check:all

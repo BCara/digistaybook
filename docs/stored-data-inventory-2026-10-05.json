@@ -1,0 +1,268 @@
+[
+  [
+    "Host accounts",
+    "Firebase Authentication; identity, email/name, provider IDs and MFA/sign-in state. Country/provider copies not verified.",
+    "Proposed retention: Active account lifetime. Service end / cancellation: Minimum profile retained during the approved 12-month dormancy; secure reactivation still possible",
+    "Remove Auth account and separately address profile/session copies and scoped evidence.\n\nProposed deletion deadline: Within 30 days after dormancy expires or an approved deletion request. Backup expiry: Within 30 days after primary deletion",
+    "Not implemented in inspected app: no account-removal/expiry worker. Provider-side cleanup not checked."
+  ],
+  [
+    "Anonymous guest accounts",
+    "Firebase Authentication; guest UID and authentication/session state.",
+    "No separate anonymous-account period specified.",
+    "Agree expiry compatible with guest self-service; separately handle related submission/consent records.",
+    "Not verified: no app cleanup worker; provider anonymous-account auto-cleanup was not inspected."
+  ],
+  [
+    "Host profiles",
+    "Firestore users/{uid}; display name, email and timestamps.",
+    "Account lifetime; proposed minimal 12-month dormant profile, then remove within 30 days.",
+    "Delete/minimise document and unnecessary derived copies, checking scoped holds.\n\nProposed backup expiry: Within 30 days after primary deletion",
+    "Not implemented: profile creation exists; no profile expiry/TTL or physical purge worker."
+  ],
+  [
+    "Draft / active / dormant property configuration",
+    "Firestore properties/{propertyId}; owner, name, instructions/notes/profile, slug, stay token, wall/review settings and billing fields.",
+    "Unpaid property drafts and sandbox media: Proposed retention: 30 days from draft creation; the clock resets only on meaningful host editing. Service end / cancellation: No dormancy. The abandonment sequence ends with a day-23 warning.\n\nActive property configuration: Proposed retention: Subscription or trial lifetime. Service end / cancellation: At service end, lock public service and move approved reactivatable fields into the dormant state\n\nDormant property configuration: Proposed retention: Recommended maximum 12 months from service end. Service end / cancellation: No public wall, no guest upload, no operational email. One 90-day win-back permitted only with valid marketing consent.",
+    "Lock public access; purge applicable fields, descendants and files when due. Billing/evidence has separate retention.\n\nUnpaid property drafts and sandbox media: Proposed deletion deadline: Delete draft and media on day 30; primary-store deletion within 72 hours. Backup expiry: Within 30 days after primary deletion\n\nActive property configuration: Proposed deletion deadline: Within 30 days of a host deletion request or expiry of dormancy. Backup expiry: Within 30 days after primary deletion\n\nDormant property configuration: Proposed deletion deadline: Within 30 days after the 12-month expiry. Backup expiry: Within 30 days after primary deletion",
+    "Partial: lifecycle/access controls exist. deleteHostProperty only changes lifecycle to deleted. No draft/dormancy expiry or complete property purge."
+  ],
+  [
+    "Guestbook address reservations",
+    "Firestore slugReservations/{slug}; owner/property references, request fingerprint, timestamp.",
+    "No separate period/address-reuse rule specified.",
+    "Delete/minimise under an agreed rule that addresses old printed guestbook links.",
+    "Not implemented: transactional creation; no reservation expiry/TTL."
+  ],
+  [
+    "Host/property/note photo files",
+    "Default bucket digistaybook-cbert.firebasestorage.app (US-CENTRAL1); properties/{propertyId}/media/{slot}-{timestamp}.{extension}. URL/path/alt references in property profile/notes.",
+    "Applicable draft/active/dormant period; remove superseded/explicitly removed files.\n\nDraft abandonment: day-23 warning; delete on day 30 with primary deletion within 72 hours. Dormant copies: no public access, guest uploads or operational email; one 90-day win-back only with valid marketing consent.",
+    "Delete object and references; account for cached/downloaded and soft-deleted copies.\n\nProposed backup expiry: Within 30 days after primary deletion; the deletion manifest is reapplied before any restore",
+    "Partial source implementation: scoped owner rules and client deletes exist; replacement cleanup can fail without durable retry. Download URLs/public one-year cache header. No scheduled expiry; live journeys unverified."
+  ],
+  [
+    "Guest submission records",
+    "Firestore guestSubmissions/{id}; message or pending feedback, session/property links, photo slots/bucket references, status/revision, fingerprints and screening/retry metadata. Photo files are separate.",
+    "Memory follows active/dormant-content rule; proposed processing maximum seven days. Deleted-record metadata/private-feedback periods need decisions.",
+    "Clear content and projections; queue photo removal; later expire/minimise remaining metadata.\n\nProposed backup expiry: Within 30 days after primary deletion; the deletion manifest is reapplied before any restore",
+    "Partial: deletion clears content and marks deleted; delivered/held feedback is cleared from the source submission. No full-document, tombstone or abandoned-upload expiry."
+  ],
+  [
+    "Wall posts / public projections",
+    "Firestore properties/{propertyId}/posts/{postId}; message, photo references, visibility, screening/report and publication metadata.",
+    "Proposed retention: While the property is active, unless the guest or host deletes it. Service end / cancellation: Public access removed; retained privately only for the approved 12-month reactivation window",
+    "Stop reads promptly, clear content/references, remove photo files and later expire metadata.\n\nProposed deletion deadline: Approved privacy deletion: remove public access promptly, delete primary copies within 72 hours. Otherwise within 30 days after dormancy expires.. Backup expiry: Within 30 days after primary deletion; the deletion manifest is reapplied before any restore",
+    "Partial: state-checked reads and clearing/tombstones/photo jobs exist. No full post purge or dormant-content expiry."
+  ],
+  [
+    "Quarantine guest photo files",
+    "Private bucket digistaybook-cbert-guest-quarantine (Sydney); properties/{propertyId}/quarantine/{id}/{index}.webp. Transformed WebP; raw originals not retained by this upload flow.",
+    "Proposed retention: Processing maximum 7 days; the quarantine copy is deleted within 24 hours of approved publication; rejected content maximum 30 days. Service end / cancellation: Does not enter property dormancy unless it was already published",
+    "Remove exact objects; retry failed publication cleanup; add timeout/rejection/abandonment expiry.\n\nProposed deletion deadline: Timed-out processing items after failed-retry handling; rejected content at 30 days. Backup expiry: Within 30 days after primary deletion",
+    "Partial automatic deletion deployed: immediate cleanup plus five-minute storageCleanup worker; retries/holds/emulator proof. No general seven/30-day expiry or age lifecycle. Seven-day soft-delete recovery after removal."
+  ],
+  [
+    "Guest photo delivery files",
+    "Private bucket digistaybook-cbert-guest-published (Sydney); properties/{propertyId}/published/{id}/{index}.webp. Can hold a prepared copy awaiting host approval; read remains gated.",
+    "Active/dormant content period; approved primary removal target 72 hours; other expiry within 30 days after dormancy.",
+    "Stop endpoint reads; queue quarantine and delivery objects; check scoped holds and recovery copies.\n\nProposed backup expiry: Within 30 days after primary deletion; the deletion manifest is reapplied before any restore",
+    "Automatic queued object removal deployed: deleteStoredMedia every five minutes, validated paths, leases, eight-attempt limit, holds/overdue logs; emulator proof. Production deadline performance unverified. No dormancy sweep. Seven-day soft delete; no permanent guest-photo tokens."
+  ],
+  [
+    "Private feedback text",
+    "Pending: guestSubmissions/{id}. Delivered: properties/{propertyId}/privateFeedback/{id}. Held: trustSafetyCases/feedback-{id}. Source clears submission text after successful delivery/hold.",
+    "Delivered/pending-feedback periods not separately specified. Held feedback's 30-day review due date is not automatic deletion.",
+    "Define inbox/pending/case periods; remove all applicable text copies on approved deletion; never publish feedback.",
+    "Partial: self-delete/inbox removal and restricted case-message deletion exist. No timed inbox/pending-text expiry. Complete retention and production copy-removal proof outstanding."
+  ],
+  [
+    "Guest display-consent evidence",
+    "Firestore guestConsent/{id}; exact wording/version, Terms/Privacy versions, acceptance time and property/post/session links.",
+    "Proposed retention: Life of the associated content plus 24 months. Service end / cancellation: Retained separately from dormant content for the remainder of the evidence period\n\nInventory-specific detail: Life of associated content, then 24 calendar months after content deletion or final dispute closure, whichever is later; scoped holds can extend.",
+    "Recheck eligibility and external/unrecorded holds; manually delete only the consent document; observe absence and handle backups separately.\n\nProposed deletion deadline: 24 months after content deletion or final dispute closure, whichever is later. Backup expiry: Within 30 days after primary deletion",
+    "Email reminder + manual deletion deployed: hourly review, daily 9am Sydney reminder when due. Open linked reviews/holds/missing evidence block eligibility. Worker completion status corrected to complete. No consent TTL/automatic deletion. Receipt/manual production completion unverified."
+  ],
+  [
+    "Guest application sessions",
+    "Firestore guestSessions/{uid}; property reference, attempt hour/count and update time. Auth account is separate.",
+    "No separate session-record period specified.",
+    "Agree expiry for self-service/support needs; remove application session and address related records separately.",
+    "Not implemented: counters exist; no session TTL/expiry worker."
+  ],
+  [
+    "Content reports",
+    "Firestore contentReports/{id}; property/post links, pseudonymous reporter key, reason/status, deadlines, outcome/resolver metadata.",
+    "Proposed resolve/escalate within 14 days; minimal evidence 24 months after closure.",
+    "Remove unnecessary detail after closure; expire evidence when due with scoped holds.\n\nProposed backup expiry: Within 30 days after the applicable primary deletion",
+    "Partial: resolution and hourly deadline escalation exist. No case-evidence expiry/TTL. Escalation creates an alert, not deletion."
+  ],
+  [
+    "Privacy/takedown requests",
+    "Firestore privacyRequests/{id}; contact email, details, kind, reporter key, status/deadlines.",
+    "Proposed retention: Resolve or escalate within 14 days; minimal closed-case metadata for 24 months. Service end / cancellation: Continues independently of property cancellation until resolved and the evidence period ends",
+    "Verify/resolve request; remove unnecessary contact/details/attachments; later expire minimal evidence.\n\nProposed deletion deadline: Attachments as soon as resolved; case metadata 24 months after closure. Backup expiry: Within 30 days after the applicable primary deletion",
+    "Partial: request capture/hourly escalation. No complete expiry/deletion workflow or 24-month TTL identified."
+  ],
+  [
+    "Restricted safety cases",
+    "Firestore trustSafetyCases/{id}; held text, categories, property/post/feedback links, state/revision, deadlines and photo bucket/path references. Files remain in private buckets.",
+    "Proposed retention: Unresolved cases reviewed at least every 30 days; critical media maximum 30 days after closure; metadata maximum 12 months. Service end / cancellation: Never enters property dormancy or marketing use",
+    "Authorised MFA release/delete controls; queue files; expire closed text/media and metadata; explicitly review holds.\n\nProposed deletion deadline: Media within 30 days of closure; metadata at 12 months, unless counsel records another requirement. Backup expiry: Within 30 days after each primary deadline",
+    "Partial: audited text/photo reads and release/delete, photo jobs and deadline escalation deployed. No general 30-day/12-month closed-case expiry. Staffing, hold governance and live journeys unverified."
+  ],
+  [
+    "Report duplicate keys",
+    "Firestore reportDuplicates/{key}; pseudonymous scope and expiresAt.",
+    "Source expiry: 24 hours; confirm security-record period.",
+    "Logical suppression expires; asynchronous Firestore TTL removes document afterward.\n\nProposed backup expiry: Within 30 days after primary log deletion",
+    "Automatic deletion configured live: expiresAt TTL ACTIVE. Typical deletion is within 24 hours after expiry, not guaranteed/exact. No sampled purge measurement."
+  ],
+  [
+    "Report rate-limit history",
+    "Firestore reportRateLimits/{key}; short hit history, cooldown and expiresAt.",
+    "Cooldown: 24 hours. Source document expiry: 48 hours after update, followed by TTL delay. Reconcile with policy.",
+    "Expire restriction logically; remove stored key/history through TTL.\n\nProposed backup expiry: Within 30 days after primary log deletion",
+    "Automatic deletion configured live: expiresAt TTL ACTIVE. This does not delete at the 24-hour cooldown boundary; production delay unmeasured."
+  ],
+  [
+    "Wall report-rate keys",
+    "Firestore reportWallLimits/{scope}; short hit history, breaker time and expiresAt.",
+    "Source expiry: 24 hours; breaker has its own shorter clock.",
+    "Expire breaker logically and remove record through background TTL.\n\nProposed backup expiry: Within 30 days after primary log deletion",
+    "Automatic deletion configured live: expiresAt TTL ACTIVE; physical deletion is asynchronous and unmeasured."
+  ],
+  [
+    "Screening daily counters",
+    "Firestore screeningDailyUsage/{SydneyDate}; attempts, thresholds and reserved memory/feedback/text/photo units, not guest message/photo bodies.",
+    "No specific usage-ledger period specified.",
+    "Agree expiry/aggregation of old counters while preserving current-day enforcement.",
+    "Not implemented: allowance/warnings deployed; no old-counter expiry/TTL."
+  ],
+  [
+    "Worker/retry/lease state",
+    "Firestore workerState/{screening|deletionJobs|storageCleanup}; cursors/times. Submission retry/lease state is in guestSubmissions.",
+    "Current operational state; retirement/abandoned-state period not specified.",
+    "Overwrite active state; expire retired/stale state and relevant parent records under an agreed rule.",
+    "Partial: retries, leases and cursor updates exist. No general stale-state retention cleanup; overwriting a cursor is not a full expiry policy."
+  ],
+  [
+    "Notification outbox",
+    "Firestore notificationOutbox/{id}; event kind, property/post links, revision/status/time.",
+    "No separate queued/sent/failed-notification period specified.",
+    "Approved dispatch/delivery tracking followed by bounded expiry of completed/failed entries.",
+    "Not implemented for general host/guest email: source queues events; no durable dispatch/delivery/expiry worker found. Monitoring warnings are separate."
+  ],
+  [
+    "Operations alerts",
+    "Firestore operationsAlerts/{id}; privacy/safety/screening references, kind/status/time.",
+    "No separate resolved-alert/evidence period specified.",
+    "Resolve alerts, minimise required evidence, then expire it.",
+    "Partial: creation/listing exist; no general alert-resolution/expiry worker or TTL. Stored alert is not email-delivery proof."
+  ],
+  [
+    "Moderation/operations audit",
+    "Firestore moderationAudit/{id} and properties/{propertyId}/moderationEvents/{id}; actors, references, action/state/time and optional staff notes.",
+    "No distinct moderation-audit period specified; reconcile case/evidence obligations. Do not automatically apply the deletion-job period to every audit.",
+    "Keep minimal evidence; avoid guest content in notes; expire/de-identify at agreed deadline.",
+    "Partial: actions/case/photo opens recorded. Notes may contain staff-entered information. No audit expiry/TTL."
+  ],
+  [
+    "Photo deletion/cleanup manifests",
+    "Firestore deletionJobs/{id}, storageCleanup/{id}; exact targets, property/submission links, due time, attempt/lease/status/failure/completion metadata.",
+    "Proposed retention: 24 months after job completion or final failure resolution. Service end / cancellation: Continues independently of property cancellation\n\nInventory-specific detail: Target removal: proposed 72 hours for deletion, 24 for quarantine cleanup. Proposed job-audit evidence: 24 months after completion/final failure resolution.",
+    "Worker removes objects and records complete/held/retry/needs_attention; later expire minimal job evidence.\n\nProposed deletion deadline: At 24 months. Records job ID, data-class code, pseudonymous target, timestamps, status, retry code and approving actor — never deleted text or media.. Backup expiry: Within 30 days after audit-record deletion",
+    "Partial automatic deletion: file worker deployed/tested; manifest documents remain. No 24-month metadata expiry. Overdue errors logged; response/email to every failure not proved."
+  ],
+  [
+    "Consent review/reminder metadata",
+    "Firestore consentDeletionReview/{id}, retentionReminderState/guestConsent; paths, deadlines/reasons/status, observed absence, cursors/day/count.",
+    "No distinct post-completion review-evidence period specified; cursor state is operational.",
+    "Stop reminders after consent absence; later expire/minimise review evidence under an agreed separate rule.",
+    "Partial: reviews/reminders/absence checks deployed; rechecks audited. No review-metadata expiry. Absence does not prove actor, deletion time or backup removal."
+  ],
+  [
+    "Host billing / Stripe references",
+    "Firestore hosts/{uid}, properties/{id}.billing; country, customer/subscription/status/price/period/trial/payment references. Provider customer/payment records remain with Stripe.",
+    "Proposed retention: Transaction lifetime plus five years. Service end / cancellation: Retained independently of property and profile dormancy; full card data stays with Stripe\n\nInventory-specific detail: Proposed transaction lifetime plus five years for accounting evidence; open disputes can extend scoped retention independently of dormancy.",
+    "Expire/minimise local and supplier records after approved accounting/dispute periods.\n\nProposed deletion deadline: Delete or de-identify at the end of the accounting period, after open disputes close. Backup expiry: Controlled exports expire within 30 days after the retention period ends",
+    "Source stores references, not full card details. No local billing expiry/TTL found. Provider/account retention and real payment journeys not audited."
+  ],
+  [
+    "Billing agreement/actions",
+    "Firestore properties/{id}/billingAcknowledgements/{id} (wording/version, offer/amount/country/coupon/trial acceptance); billingActions/{id} (actor, cancel/resume, subscription/end date/time).",
+    "Distinct period not specified; reconcile necessary contract/payment evidence with approved accounting/dispute rule.",
+    "Retain required evidence separately from disposable property fields; expire/minimise when due.",
+    "Current source writes collections; no expiry/TTL. Source review does not prove every local billing change is deployed."
+  ],
+  [
+    "Stripe replay ledger",
+    "Firestore stripeEvents/{StripeEventId}; transactional replay/order/application evidence. Supplier event history is separate.",
+    "No distinct replay-evidence period specified.",
+    "Agree minimal expiry compatible with replay protection and accounting evidence.",
+    "Source has transaction idempotency; no expiry/TTL. Supplier retention not checked."
+  ],
+  [
+    "Marketing consent/suppression/delivery history",
+    "Planned application preference/suppression store and email-provider records; persistent collections/provider not identified in inspected source.",
+    "Proposed retention: Consent proof while marketing is active and for 24 months after the last commercial message; suppression while the system operates or until verified re-consent. Service end / cancellation: Unsubscribe suppresses all marketing within five working days\n\nInventory-specific detail: Proposed consent while active plus 24 months after last commercial message; minimal suppression while operating or until verified re-consent. Delivery-history period unspecified.",
+    "Expire old consent/delivery evidence while retaining suppression; enforce unsubscribe/restoration rules.\n\nProposed deletion deadline: Expired consent evidence at 24 months. The minimum suppression value is retained — deleting an account must not release it.. Backup expiry: Consent backups within 30 days; suppression state must be rebuilt before any restored system sends",
+    "Not implemented/verified: marketing predicate alone is not a persistent consent store, delivery/expiry worker or unsubscribe process. External lists/mailboxes need separate inventory."
+  ],
+  [
+    "Cloud application/security logs",
+    "Cloud Logging global-location buckets _Default and _Required in this project. Runtime/request/security diagnostics; screening uses a derived reference and technical outcomes. global is not a single-country guarantee.",
+    "Proposed retention: Rate-limit keys rotate; suspected-abuse cooldowns expire after 24 hours; confirmed restrictions within 90 days; routine logs on rolling 90-day retention; incident-linked records up to 12 months after closure. Service end / cancellation: Routine expiry continues through cancellation and dormancy\n\nInventory-specific detail: Proposed routine security logs 90 days and incident-linked evidence up to 12 months after closure. Actual: _Default 30 days; locked _Required 400 days.",
+    "Provider retention for routine logs; separately reconcile required audit logs/incident evidence with draft policy.\n\nProposed deletion deadline: Automated deletion at the 24-hour, 90-day or 12-month deadline. Backup expiry: Within 30 days after primary log deletion",
+    "Automatic provider expiry configured live at 30/400 days. These differ from draft periods. Sampled purges, external sinks and incident exports not verified."
+  ],
+  [
+    "Screening provider request data",
+    "Photo bytes: Google Vision EU endpoint. Memory/feedback text: Google Natural Language AU endpoint. App runtime memory; provider metadata/copies outside guest buckets.",
+    "Exact account-specific supplier metadata periods/countries not established by source or endpoint choice.",
+    "Confirm vendor handling/deletion terms; avoid unnecessary persisted payloads.",
+    "Adapter deployed/configured; source stores outcomes/references, no separate screening-payload archive. Real processing/vendor retention need independent proof."
+  ],
+  [
+    "Operations reminder emails",
+    "Google Cloud Monitoring channel/policy and codebertcreations@gmail.com mailbox; messages include consent paths/deadlines/links.",
+    "No recipient-mailbox retention period specified.",
+    "Operator deletes/archive copies under an agreed rule; retain only necessary evidence.",
+    "Policy/channel configured and labelled test log submitted. Inbox receipt/mailbox expiry unverified. Deleting consent does not remove a received email."
+  ],
+  [
+    "Host exports/screenshots/downloads",
+    "Host/guest devices/browser caches. ZIP exports generated from visible memories/photos; no server export archive in inspected flow.",
+    "Controlled copies follow approved schedule; server cannot enforce an external-device retention period.",
+    "Copy owner removes external exports/screenshots. Takedown stops later reads but cannot revoke existing copies.\n\nProposed backup expiry: Within 30 days after primary deletion; the deletion manifest is reapplied before any restore",
+    "Export source excludes feedback/internal records. No external-copy revocation/expiry. Host media cache can be one year; guest delivery private/no-store."
+  ],
+  [
+    "Browser session/cache data",
+    "In-memory property cache and Firebase Auth/App Check SDK browser storage. Exact SDK/browser persistence not independently audited.",
+    "Only what current sign-in/security/use needs; distinct period not specified.",
+    "Clear app memory on sign-out/reload; SDK revocation/sign-out and browser controls separately; downloads are separate.",
+    "Partial: property cache cleared on host sign-out; no app localStorage/sessionStorage store found. Does not prove all SDK/browser data removal."
+  ],
+  [
+    "Backups/recoverable copies",
+    "Application buckets' soft-deleted files; possible archives/provider recovery copies. Firestore backup schedules and PITR checked separately.",
+    "Proposed retention: Rolling maximum 30 days. Service end / cancellation: No product, support, analytics or marketing access. Deleted records are marked beyond use pending backup expiry.\n\nInventory-specific detail: Proposed rolling backup maximum 30 days and deletion-manifest reapplication before restore. Actual media recovery: seven days after removal.",
+    "Expire backups, keep deleted data beyond ordinary use, and reapply scoped deletion manifest before restoration.\n\nProposed deletion deadline: Backup generations expire automatically at 30 days. Backup expiry: This row sets the maximum: 30 days",
+    "Partial: seven-day media soft delete configured. No Firestore backup schedules returned; PITR disabled. Complete archive/backup/restore governance and deletion manifest not verified."
+  ],
+  [
+    "Deployment source/uploads/build images",
+    "Sydney Functions source/upload buckets and gcf-artifacts Artifact Registry; deployment assets, not guest photo objects.",
+    "Configured: upload age one day; non-live source versions after three newer versions; build-image cleanup older than 30 days.",
+    "Use bucket lifecycle/repository cleanup; retain required release evidence separately.",
+    "Automatic cleanup configured live. Rules do not expire guest objects/records. Sampled artifact removal not checked; source/upload buckets also have seven-day soft delete."
+  ],
+  [
+    "Secrets/configuration/review documents",
+    "Secret Manager/Functions configuration; local environment/build settings; source/review documents in workspace/NAS. Secret values/production record contents not read for this check.",
+    "Secret rotation/retirement and business-document periods not completely specified.",
+    "Revoke/rotate retired secrets/config; remove obsolete local/NAS copies under operator policy.",
+    "Manual administration; no app expiry for secrets/local files/NAS packs identified. This does not imply every review pack contains secrets/guest records."
+  ]
+]

@@ -80,12 +80,11 @@ export function AppShell({ children }: { children: ReactNode }) {
             </nav>
           )}
           {signedIn ? (
-            // A signed-in Host works from three places, so all three are
-            // controls rather than nav links. The rule before the account name
-            // splits where you go to work from who you are signed in as.
+            // The account name separates destinations from session controls.
             <nav className="header-account" aria-label="Primary navigation">
               <a className="btn btn-primary btn-sm" href="/host">Dashboard</a>
               <a className="btn btn-secondary btn-sm" href="/host/billing">Billing</a>
+              <a className="btn btn-secondary btn-sm" href="/host/account" aria-current={path === "/host/account" ? "page" : undefined}>Account</a>
               <a className="btn btn-secondary btn-sm" href={ADD_PROPERTY}>Add property</a>
               <span className="header-account-name" title={user?.email ?? undefined}>{accountName}</span>
               <button

@@ -1,0 +1,10 @@
+{
+  "preparedDate": "2026-10-02",
+  "updatedDate": "2026-10-05",
+  "reviewVersion": 2,
+  "revisionScope": "Shared screening labels; serious memory text safety routing; incomplete feedback scans wait privately for bounded retry. Local source changes only, no new deployment. Live metadata remains the 2 October snapshot.",
+  "timezone": "Australia/Sydney",
+  "gitHead": "67cc174765aa06f46c78353fd433979924e8e7da",
+  "operator": "User confirmed they are operator and privacy/safety handler; legal identity details pending",
+  "sourceBasis": "Working tree snapshot; included source-file hashes are authoritative"
+}

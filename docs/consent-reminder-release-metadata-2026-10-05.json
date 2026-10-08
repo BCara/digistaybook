@@ -1,0 +1,23 @@
+[
+  {
+    "state": "ACTIVE",
+    "updatedAt": "2026-10-05T01:11:59.169385312Z",
+    "publicGuestIntakeEnabled": "false",
+    "name": "notifyConsentDeletionReview",
+    "revision": "notifyconsentdeletionreview-00002-vuh"
+  },
+  {
+    "state": "ACTIVE",
+    "updatedAt": "2026-10-05T01:12:02.293536886Z",
+    "publicGuestIntakeEnabled": "false",
+    "name": "readConsentDeletionReview",
+    "revision": "readconsentdeletionreview-00002-cat"
+  },
+  {
+    "state": "ACTIVE",
+    "updatedAt": "2026-10-05T00:10:16.324469981Z",
+    "publicGuestIntakeEnabled": "false",
+    "name": "listSafetyOperations",
+    "revision": "listsafetyoperations-00012-vuf"
+  }
+]

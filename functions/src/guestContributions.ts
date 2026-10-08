@@ -3,10 +3,12 @@ import { FieldPath, FieldValue, getFirestore, Timestamp, type Query } from "fire
 import { getStorage } from "firebase-admin/storage";
 import { HttpsError, onCall, onRequest, type CallableRequest } from "firebase-functions/v2/https";
 import sharp from "sharp";
+import { ScreeningBudgetReached } from "./screeningBudget.js";
+import { screeningReference, withScreeningDiagnostics, screeningDiagnostic, screeningError } from "./screeningDiagnostics.js";
 import { wallIsOpen, stayTokenMatches } from "./publicWall.js";
 import { guestPolicy, pendingMessage, feedbackSentMessage } from "./guestPolicy.js";
 import { legalApproved, legalVersions } from "./legal.js";
-import { screenContent, screenFeedback, type FeedbackScreener, type FeedbackVerdict, type Screener } from "./screening.js";
+import { memoryNeedsContactReview, screenContent, screenFeedback, type FeedbackScreener, type FeedbackVerdict, type Screener } from "./screening.js";
 
 const options = { region: "australia-southeast1", maxInstances: 10, enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true", memory: "512MiB" as const, timeoutSeconds: 120, concurrency: 4 };
 const hash = (value: string | Buffer) => createHash("sha256").update(value).digest("hex");
@@ -27,11 +29,15 @@ function uid(request: CallableRequest, guest = true) {
   if (anonymous !== guest) throw new HttpsError("permission-denied", "This action is not available in this session.");
   return request.auth.uid;
 }
-// Guests send personal text and photos only under approved Terms, Privacy
-// Policy and consent wording (GC-03), so the deployment switch alone cannot
-// open intake. The emulator runs on the drafts.
-export function guestIntakeEnabled() {
-  return process.env.FUNCTIONS_EMULATOR === "true" || (process.env.GUEST_CONTRIBUTIONS_ENABLED === "true" && legalApproved());
+// General intake requires approved legal wording. The emulator and an
+// explicitly owner-authorised, property-scoped test can use the drafts.
+export function guestIntakeEnabled(propertyId?: string, now = Date.now()) {
+  if (process.env.FUNCTIONS_EMULATOR === "true" || (process.env.GUEST_CONTRIBUTIONS_ENABLED === "true" && legalApproved())) return true;
+  // Explicit owner-authorised production testing exception. No legal approval
+  // is fabricated; only the named property can use draft texts until expiry.
+  const expires = Date.parse(process.env.GUEST_TEST_UNTIL ?? "");
+  const properties = (process.env.GUEST_TEST_PROPERTY_IDS ?? "").split(",").map(value => value.trim()).filter(Boolean);
+  return Boolean(propertyId && Number.isFinite(expires) && expires > now && properties.includes(propertyId));
 }
 function bucketName() {
   if (process.env.FUNCTIONS_EMULATOR === "true") return "demo-digistaybook.firebasestorage.app";
@@ -80,8 +86,8 @@ async function owned(id: string, owner: string) {
 
 export const beginGuestContribution = onCall(options, async request => {
   const owner = uid(request);
-  if (!guestIntakeEnabled()) throw new HttpsError("failed-precondition", "New memories are temporarily unavailable.");
   const property = await propertyForSlug(request.data?.slug);
+  if (!guestIntakeEnabled(property.id)) throw new HttpsError("failed-precondition", "New memories are temporarily unavailable.");
   // A memory is left by someone who was in the property, and holding the
   // guestbook link is what stands for that. The slug alone is public - it is
   // in the listing and embedded on the Host's own site - so gating only the
@@ -97,13 +103,14 @@ export const beginGuestContribution = onCall(options, async request => {
   // never both. Feedback is not published, so the public-display consent is
   // asked only of a memory.
   const memory = Boolean(message) || count > 0;
+  const displayName = memory ? text(request.data?.displayName ?? "", guestPolicy.maxName) : "";
   if (memory && feedback) throw new HttpsError("invalid-argument", "Send a memory or private feedback, not both.");
   if (!memory && !feedback) throw new HttpsError("invalid-argument", "Add a message, a photo or private feedback.");
   if (memory && (request.data?.consentAccepted !== true || request.data?.consentVersion !== guestPolicy.consentVersion)) throw new HttpsError("invalid-argument", "Please read and accept the current consent wording.");
   const requestId = validId(request.data?.requestId);
   const id = `${owner}_${requestId}`;
   validId(id);
-  const fingerprint = hash(JSON.stringify({ message, feedback, count, propertyId: property.id }));
+  const fingerprint = hash(JSON.stringify({ message, feedback, count, propertyId: property.id, ...(displayName ? { displayName } : {}) }));
   const ref = submissionRef(id);
   const sessionRef = db().doc(`guestSessions/${owner}`);
   const bucket = memory ? bucketName() : null;
@@ -120,8 +127,9 @@ export const beginGuestContribution = onCall(options, async request => {
     const attempts = session.get("hour") === hour ? session.get("attempts") ?? 0 : 0;
     if (attempts >= 10) throw new HttpsError("resource-exhausted", "Too many attempts. Please try again later.");
     tx.set(sessionRef, { propertyId: property.id, hour, attempts: attempts + 1, updatedAt: stamp() });
-    tx.create(ref, { propertyId: property.id, uid: owner, kind: memory ? "memory" : "feedback", fingerprint, message, feedback, photoCount: count,
-      bucket, publishedBucket, slots: {}, bytes: 0, revision: 1, status: "uploading", createdAt: stamp(), updatedAt: stamp() });
+    tx.create(ref, { propertyId: property.id, uid: owner, kind: memory ? "memory" : "feedback", fingerprint, message, displayName, feedback, photoCount: count,
+      bucket, publishedBucket, slots: {}, bytes: 0, revision: 1, status: "uploading", createdAt: stamp(), updatedAt: stamp(),
+      intakeMode: legalApproved() ? "approved" : process.env.FUNCTIONS_EMULATOR === "true" ? "emulator" : "owner_authorised_test" });
     if (memory) tx.create(db().doc(`guestConsent/${id}`), { propertyId: property.id, postId: id, sessionUid: owner,
       wording: guestPolicy.consentWording, version: guestPolicy.consentVersion,
       guestTermsVersion: legalVersions.guestTerms, privacyVersion: legalVersions.privacy, acceptedAt: stamp() });
@@ -181,7 +189,10 @@ export const finishGuestContribution = onCall(options, async request => {
   });
   if ((await ref.get()).get("kind") === "feedback") {
     await deliverFeedback(id);
-    return { id, status: "feedback", message: feedbackSentMessage };
+    const current = await ref.get();
+    return { id, status: "feedback", message: !current.get("feedbackStatus")
+      ? "Your feedback has been saved and is waiting for safety screening before delivery to your host."
+      : current.get("feedbackStatus") === "held" ? "Your feedback has been saved for review before delivery to your host." : feedbackSentMessage };
   }
   await processGuestSubmission(id);
   const current = await ref.get();
@@ -198,15 +209,23 @@ export const feedbackReviewDue = () => Timestamp.fromMillis(Date.now() + guestPo
 export async function deliverFeedback(id: string, screener: FeedbackScreener = screenFeedback) {
   const ref = submissionRef(id), data = (await ref.get()).data();
   if (!data?.feedback || data.feedbackStatus || ["uploading", "deleted"].includes(data.status)) return;
+  await ref.update({ screeningReference: screeningReference(id, data.revision) });
   let result: FeedbackVerdict;
-  try { result = await screener(data.feedback); } catch { result = { verdict: "deliver" }; }
+  let incompleteReason: string | null = null;
+  try { result = await withScreeningDiagnostics(id, data.revision, () => screener(data.feedback)); } catch (error) {
+    screeningError(id, data.revision, error, "feedback_safety_review");
+    incompleteReason = error instanceof ScreeningBudgetReached ? "daily_allowance_reached" : "provider_error";
+    result = { verdict: "critical", categories: ["Screening incomplete"] };
+  }
   await db().runTransaction(async tx => {
     const current = await tx.get(ref);
     if (current.get("feedback") !== data.feedback || current.get("feedbackStatus") || current.get("status") === "deleted") return;
-    if (result.verdict === "critical") tx.set(feedbackCaseRef(id), { kind: "private_feedback", source: "automated_screening", categories: result.categories,
+    if (result.verdict === "critical") tx.set(feedbackCaseRef(id), { kind: "private_feedback", source: incompleteReason ? "incomplete_screening" : "automated_screening", categories: result.categories,
+      ...(incompleteReason ? { screeningStatus: "incomplete", screeningIncompleteReason: incompleteReason } : {}),
       propertyId: data.propertyId, feedbackId: id, message: data.feedback, feedbackCreatedAt: data.createdAt, status: "open", createdAt: stamp(), reviewDueAt: feedbackReviewDue() });
     else tx.set(db().doc(`properties/${data.propertyId}/privateFeedback/${id}`), { message: data.feedback, createdAt: data.createdAt });
-    tx.update(ref, { feedback: "", feedbackStatus: result.verdict === "critical" ? "held" : "delivered", updatedAt: stamp() });
+    tx.update(ref, { feedback: "", feedbackStatus: result.verdict === "critical" ? "held" : "delivered",
+      screeningFeedbackPending: FieldValue.delete(), screeningBudgetWaiting: FieldValue.delete(), updatedAt: stamp() });
   });
 }
 
@@ -214,12 +233,31 @@ export async function deliverFeedback(id: string, screener: FeedbackScreener = s
 export async function processGuestSubmission(id: string, screener: Screener = screenContent) {
   const ref = submissionRef(id), snapshot = await ref.get(), data = snapshot.data();
   if (!data || data.status !== "pending" || data.safetyCaseOpen === true) return;
+  await ref.update({ screeningReference: screeningReference(id, data.revision) });
+  const screeningText = [data.displayName, data.message].filter(Boolean).join("\n");
   let result;
-  try { result = await screener({ message: data.message,
-    photos: Array.from({ length: data.photoCount }, (_, index) => photoSource(data, id, index)) }); }
-  catch { result = { outcome: "unavailable" } as const; }
-  if (result.outcome === "unavailable") return;
-  if (result.outcome === "clear") await promotePhotos(id, data);
+  let incompleteReason: string | null = null;
+  try { result = await withScreeningDiagnostics(id, data.revision, () => screener({ message: screeningText,
+    photos: Array.from({ length: data.photoCount }, (_, index) => photoSource(data, id, index)) })); }
+  catch (error) {
+    screeningError(id, data.revision, error, "memory_safety_review");
+    if (error instanceof ScreeningBudgetReached) {
+      incompleteReason = "daily_allowance_reached";
+    }
+    await ref.update({ screeningBudgetWaiting: FieldValue.delete() });
+    incompleteReason ??= "provider_error";
+    result = { outcome: "unavailable" } as const;
+  }
+  const providerOutcome = result.outcome;
+  if (result.outcome === "unavailable") {
+    incompleteReason ??= "incomplete_result";
+    result = { outcome: "critical" as const, categories: ["Screening incomplete"] };
+  }
+  const outcome = result.outcome === "clear" && memoryNeedsContactReview(screeningText) ? "standard" : result.outcome;
+  await withScreeningDiagnostics(id, data.revision, async () => {
+    screeningDiagnostic("screening_memory_decision", { providerOutcome, outcome, screeningStatus: incompleteReason ? "incomplete" : "complete", contactDetailsOrLinkHold: result.outcome === "clear" && outcome === "standard" });
+  });
+  if (outcome === "clear") await promotePhotos(id, data);
   // Approved photos move out of quarantine. The delivery bucket remains
   // private at IAM/rules level; the endpoint checks publication on each read.
   const published = await db().runTransaction(async tx => {
@@ -229,27 +267,33 @@ export async function processGuestSubmission(id: string, screener: Screener = sc
     if (!property.exists || !wallIsOpen(property.data()!)) return false;
     const openReports = existingPost.get("openReportCount") ?? 0;
     if (existingPost.get("safetyRestricted") === true || current.get("safetyCaseOpen") === true) return false;
-    const status = result.outcome === "clear" ? openReports > 0 ? "standard" : "published" : result.outcome;
-    tx.update(ref, { status, updatedAt: stamp(),
-      ...(result.outcome === "clear" ? { mediaLocation: "published" } : {}),
-      ...(["critical", "reject"].includes(result.outcome) ? { safetyCaseOpen: true } : {}) });
-    tx.set(postRef, { guestSubmissionId: id, message: data.message, createdAt: data.createdAt,
+    const hostReview = property.get("reviewContent") === true;
+    const status = outcome === "clear" ? openReports > 0 || hostReview ? "standard" : "published" : outcome;
+    tx.update(ref, { status, updatedAt: stamp(), screeningBudgetWaiting: FieldValue.delete(),
+      ...(outcome === "clear" ? { mediaLocation: "published" } : {}),
+      ...(["critical", "reject"].includes(outcome) ? { safetyCaseOpen: true } : {}) });
+    tx.set(postRef, { guestSubmissionId: id, message: data.message, displayName: data.displayName ?? "", createdAt: data.createdAt,
       visibility: status === "published" ? "visible" : status === "standard" ? "hidden_pending_review" : "restricted",
-      screeningStatus: result.outcome, pinned: false, revision: data.revision,
-      guestMediaPublished: data.mediaLocation === "published" || result.outcome === "clear",
-      hold: openReports > 0 ? existingPost.get("hold") : { source: "automated_screening", reason: null, detail: "Safety screening", raisedAt: stamp() },
+      screeningStatus: outcome, pinned: false, revision: data.revision,
+      guestMediaPublished: data.mediaLocation === "published" || outcome === "clear",
+      hold: openReports > 0 ? existingPost.get("hold") : { source: outcome === "clear" && hostReview ? "host_review_requested" : "automated_screening", reason: null, detail: "Safety screening", raisedAt: stamp() },
       guestPhotoCount: data.photoCount }, { merge: true });
-    if (result.outcome === "critical" || result.outcome === "reject") tx.set(db().doc(`trustSafetyCases/${id}:${data.revision}`), {
-      propertyId: data.propertyId, postId: id, revision: data.revision, status: "open", message: data.message,
+    if (outcome === "critical" || outcome === "reject") tx.set(db().doc(`trustSafetyCases/${id}:${data.revision}`), {
+      kind: "guest_memory", propertyId: data.propertyId, postId: id, revision: data.revision, status: "open", message: data.message, displayName: data.displayName ?? "",
+      source: incompleteReason ? "incomplete_screening" : "automated_screening", categories: result.categories ?? [],
+      ...(incompleteReason ? { screeningStatus: "incomplete", screeningIncompleteReason: incompleteReason } : {}),
       photos: Array.from({ length: data.photoCount }, (_, index) => photoSource(data, id, index)), createdAt: stamp(), reviewDueAt: Timestamp.fromMillis(Date.now() + 30 * 86400000)
     });
-    if (result.outcome === "standard") tx.set(db().doc(`notificationOutbox/memory-held-${id}-${data.revision}`), {
+    if (status === "standard") tx.set(db().doc(`notificationOutbox/memory-held-${id}-${data.revision}`), {
       kind: "memory_held_for_host_review", propertyId: data.propertyId, postId: id, revision: data.revision,
       status: "pending", createdAt: stamp()
     });
-    return status === "published";
+    return status;
   });
-  if (published && !data.safetyCaseOpen) await clearQuarantine(id, data);
+  await withScreeningDiagnostics(id, data.revision, async () => {
+    screeningDiagnostic("screening_final_state", { finalStatus: published || "state_changed_no_publication", screeningOutcome: outcome });
+  });
+  if (published === "published" && !data.safetyCaseOpen) await clearQuarantine(id, data);
 }
 
 async function readPage(query: Query, cursor: unknown) {
@@ -264,7 +308,7 @@ export const listGuestContributions = onCall(options, async request => {
   const session = await db().doc(`guestSessions/${owner}`).get();
   if (!session.exists) return { posts: [] };
   const snapshots = await readPage(db().collection("guestSubmissions").where("uid", "==", owner), request.data?.cursor);
-  return { nextCursor: snapshots.nextCursor, posts: snapshots.docs.filter(doc => doc.get("kind") !== "feedback").map(doc => ({ id: doc.id, message: doc.get("message"), revision: doc.get("revision"),
+  return { nextCursor: snapshots.nextCursor, posts: snapshots.docs.filter(doc => doc.get("kind") !== "feedback").map(doc => ({ id: doc.id, message: doc.get("message"), displayName: doc.get("displayName") ?? "", revision: doc.get("revision"),
     status: doc.get("status") === "published" ? "published" : doc.get("status") === "deleted" ? "deleted" : doc.get("status") === "uploading" ? "uploading" : "pending" })) };
 });
 
@@ -281,9 +325,9 @@ export const changeGuestContribution = onCall(options, async request => {
     if (action === "edit" && data.kind === "feedback") throw new HttpsError("failed-precondition", "Private feedback can't be edited once it is sent.");
     const message = action === "edit" ? text(request.data?.message, guestPolicy.maxMessage) : "";
     if (action === "edit" && !message && data.photoCount === 0) throw new HttpsError("invalid-argument", "Add a message to this memory.");
-    tx.update(ref, { message, status: action === "delete" ? "deleted" : "pending", revision: data.revision + 1, updatedAt: stamp(), ...(action === "delete" ? { feedback: "" } : {}) });
+    tx.update(ref, { message, status: action === "delete" ? "deleted" : "pending", revision: data.revision + 1, updatedAt: stamp(), ...(action === "delete" ? { feedback: "", displayName: "" } : {}) });
     if (data.kind !== "feedback") tx.set(db().doc(`properties/${data.propertyId}/posts/${id}`), { visibility: action === "delete" ? "deleted" : "processing", message, pinned: false,
-      screeningStatus: "pending", guestSubmissionId: id, revision: data.revision + 1 }, { merge: true });
+      screeningStatus: "pending", guestSubmissionId: id, revision: data.revision + 1, ...(action === "delete" ? { displayName: "" } : {}) }, { merge: true });
     if (action === "delete") {
       tx.delete(db().doc(`properties/${data.propertyId}/privateFeedback/${id}`));
       // A guest who withdraws their memory withdraws its feedback, held or not.
@@ -311,11 +355,23 @@ export const listHostGuestReview = onCall(options, async request => {
   if (!["both", "review", "feedback"].includes(kind)) throw new HttpsError("invalid-argument", "Choose an inbox.");
   const snapshots = kind === "feedback" ? { docs: [], nextCursor: null } : await readPage(db().collection("guestSubmissions").where("propertyId", "==", propertyId).where("status", "in", ["pending", "standard"]), request.data?.reviewCursor);
   const feedback = kind === "review" ? { docs: [], nextCursor: null } : await readPage(property.ref.collection("privateFeedback"), request.data?.feedbackCursor);
-  return { reviewCursor: snapshots.nextCursor, feedbackCursor: feedback.nextCursor, posts: snapshots.docs.map(doc => ({
+  return { reviewContent: property.get("reviewContent") === true, reviewCursor: snapshots.nextCursor, feedbackCursor: feedback.nextCursor, posts: snapshots.docs.map(doc => ({
     id: doc.id, revision: doc.get("revision"), status: doc.get("status"),
     message: doc.get("status") === "standard" ? doc.get("message") : "Awaiting safety screening",
+    displayName: doc.get("status") === "standard" ? doc.get("displayName") ?? "" : "",
     photoCount: doc.get("status") === "standard" ? doc.get("photoCount") : 0
   })), feedback: feedback.docs.map(doc => ({ id: doc.id, message: doc.get("message") })) };
+});
+
+export const setGuestReviewPolicy = onCall(options, async request => {
+  const owner = uid(request, false), propertyId = validId(request.data?.propertyId), reviewContent = request.data?.reviewContent;
+  if (typeof reviewContent !== "boolean") throw new HttpsError("invalid-argument", "Choose whether to review content.");
+  await db().runTransaction(async tx => {
+    const ref = db().doc(`properties/${propertyId}`), property = await tx.get(ref);
+    if (!property.exists || property.get("ownerUid") !== owner) throw new HttpsError("permission-denied", "This property is not yours.");
+    tx.update(ref, { reviewContent, updatedAt: stamp() });
+  });
+  return { reviewContent };
 });
 
 // The screener cannot catch every threat, so the Host can send any feedback
@@ -352,7 +408,7 @@ export const reviewGuestContribution = onCall(options, async request => {
     const post = await tx.get(property.ref.collection("posts").doc(id));
     if (property.get("ownerUid") !== owner) throw new HttpsError("permission-denied", "This property is not yours.");
     if (data.status !== "standard" || request.data?.revision !== data.revision || !wallIsOpen(property.data()!)
-      || post.get("openReportCount") > 0 || post.get("safetyRestricted") === true) throw new HttpsError("failed-precondition", "This memory is not available for approval.");
+      || data.safetyCaseOpen === true || post.get("openReportCount") > 0 || post.get("safetyRestricted") === true) throw new HttpsError("failed-precondition", "This memory is not available for approval.");
     const approved = request.data.action === "approve";
     tx.update(ref, { status: approved ? "published" : "rejected", updatedAt: stamp(), ...(approved ? { mediaLocation: "published" } : {}) });
     tx.update(post.ref, { visibility: approved ? "visible" : "hidden_by_host", guestMediaPublished: approved || data.mediaLocation === "published", moderatedAt: stamp(), moderatedBy: owner });

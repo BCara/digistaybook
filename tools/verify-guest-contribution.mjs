@@ -13,8 +13,23 @@ const sharp = require("sharp");
 initializeApp({ projectId: "demo-digistaybook" });
 const db = getFirestore();
 const { processGuestSubmission, deliverFeedback } = await import("../functions/lib/guestContributions.js");
-const { readSafetyCase, resolveSafetyCase } = await import("../functions/lib/reporting.js");
+const { retryScreening } = await import("../functions/lib/screeningRetry.js");
+const { memoryTextVerdict, memoryImageVerdict } = await import("../functions/lib/screening.js");
+const { readSafetyCase, readSafetyCasePhoto, resolveSafetyCase } = await import("../functions/lib/reporting.js");
+const { processStorageJob } = await import("../functions/lib/storageDeletion.js");
 const { guestPolicy } = await import("../functions/lib/guestPolicy.js");
+// Test-only fixture setup for injected provider decisions after the default emulator
+// creates an incomplete case. Production retries must never perform this reset.
+async function prepareInjectedScreening(id) {
+  const ref = db.doc(`guestSubmissions/${id}`), data = (await ref.get()).data();
+  if (data.safetyCaseOpen) {
+    const review = db.doc(`trustSafetyCases/${id}:${data.revision}`);
+    assert.equal((await review.get()).get("source"), "incomplete_screening");
+    await review.delete();
+    await db.doc(`properties/${data.propertyId}/posts/${id}`).update({ safetyRestricted: false, visibility: "processing" });
+  }
+  await ref.update({ status: "pending", safetyCaseOpen: false });
+}
 const base = "http://127.0.0.1:5001/demo-digistaybook/australia-southeast1";
 async function signup(host = false) {
   const response = await fetch("http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=demo-key", {
@@ -60,10 +75,13 @@ assert.equal((await call("finishGuestContribution", { id })).status, "pending");
 assert.equal((await call("getPublicWall", { slug }, null)).posts.length, 0);
 assert.equal((await fetch(`${base}/guestMemoryPhoto?id=${id}&index=0`)).status, 404);
 await call("reviewGuestContribution", { id, action: "approve", revision: 1 }, host, 400);
-assert.equal((await call("listHostGuestReview", { propertyId }, host)).posts[0].message, "Awaiting safety screening");
+assert.equal((await call("listHostGuestReview", { propertyId }, host)).posts.length, 0);
 assert.equal((await call("listHostGuestReview", { propertyId }, host)).feedback.length, 0);
+await prepareInjectedScreening(id);
 await processGuestSubmission(id, async () => { throw new Error("Provider outage"); });
-assert.equal((await db.doc(`guestSubmissions/${id}`).get()).get("status"), "pending");
+assert.equal((await db.doc(`guestSubmissions/${id}`).get()).get("status"), "critical");
+assert.equal((await db.doc(`trustSafetyCases/${id}:1`).get()).get("screeningStatus"), "incomplete");
+await prepareInjectedScreening(id);
 await processGuestSubmission(id, async () => ({ outcome: "clear", feedback: "clear" }));
 const publishedSubmission = (await db.doc(`guestSubmissions/${id}`).get()).data();
 assert.notEqual(publishedSubmission.bucket, publishedSubmission.publishedBucket);
@@ -81,6 +99,7 @@ await call("changeGuestContribution", { id, action: "edit", revision: 1, message
 assert.equal((await call("getPublicWall", { slug }, null)).posts.length, 0);
 assert.equal((await fetch(`${base}/guestMemoryPhoto?id=${id}&index=0`)).status, 404);
 await call("changeGuestContribution", { id, action: "edit", revision: 1, message: "Stale write" }, guest, 400);
+await prepareInjectedScreening(id);
 await processGuestSubmission(id, async () => ({ outcome: "standard", feedback: "clear" }));
 const heldNotice = (await db.doc(`notificationOutbox/memory-held-${id}-2`).get()).data();
 assert.equal(heldNotice.kind, "memory_held_for_host_review");
@@ -102,14 +121,17 @@ const job = (await db.doc(`deletionJobs/guest-${id}`).get()).data(); assert.equa
 assert.equal(job.objects.length, 20);
 const critical = (await call("beginGuestContribution", { ...input, requestId: randomUUID(), photoCount: 0, message: "Critical fixture" })).id;
 await call("finishGuestContribution", { id: critical });
-await processGuestSubmission(critical, async () => ({ outcome: "critical", feedback: "held" }));
+await prepareInjectedScreening(critical);
+await processGuestSubmission(critical, async () => memoryTextVerdict([{ name: "Violent", confidence: 0.9 }, { name: "Profanity", confidence: 0.99 }]));
 assert.equal((await call("listHostGuestReview", { propertyId }, host)).posts.length, 0);
 assert.equal((await call("listGuestContributions", {})).posts.find(post => post.id === critical).status, "pending");
 await call("reviewGuestContribution", { id: critical, action: "approve", revision: 1 }, host, 400);
 await call("readGuestReviewPhoto", { id: critical, index: 0 }, host, 403);
 assert.ok((await db.doc(`trustSafetyCases/${critical}:1`).get()).exists);
+assert.deepEqual((await db.doc(`trustSafetyCases/${critical}:1`).get()).get("categories"), ["Violent"]);
 const stale = (await call("beginGuestContribution", { ...input, requestId: randomUUID(), photoCount: 0, message: "Old revision" })).id;
 await call("finishGuestContribution", { id: stale });
+await prepareInjectedScreening(stale);
 let signalEntered, releaseScan;
 const entered = new Promise(resolve => { signalEntered = resolve; });
 const paused = new Promise(resolve => { releaseScan = resolve; });
@@ -117,8 +139,11 @@ const scan = processGuestSubmission(stale, async () => { signalEntered(); await 
 await entered;
 await call("changeGuestContribution", { id: stale, revision: 1, action: "edit", message: "New revision" });
 releaseScan(); await scan;
-assert.equal((await db.doc(`guestSubmissions/${stale}`).get()).get("status"), "pending");
-assert.equal((await db.doc(`properties/${propertyId}/posts/${stale}`).get()).get("visibility"), "processing");
+assert.equal((await db.doc(`guestSubmissions/${stale}`).get()).get("status"), "critical");
+assert.equal((await db.doc(`guestSubmissions/${stale}`).get()).get("safetyCaseOpen"), true);
+assert.equal((await db.doc(`properties/${propertyId}/posts/${stale}`).get()).get("visibility"), "restricted");
+assert.equal((await db.doc(`trustSafetyCases/${stale}:2`).get()).get("source"), "incomplete_screening");
+await prepareInjectedScreening(stale);
 await processGuestSubmission(stale, async () => ({ outcome: "clear", feedback: "clear" }));
 await call("moderatePost", { propertyId, postId: stale, action: "delete", requestId: randomUUID() }, host);
 await call("changeGuestContribution", { id: stale, revision: 2, action: "edit", message: "Must not resurrect host deletion" });
@@ -156,11 +181,11 @@ const releaseAudit = (await db.doc(`moderationAudit/case-feedback-${loneId}-rele
 assert.equal(releaseAudit.actor, "ops"); assert.doesNotMatch(JSON.stringify(releaseAudit), /smoke alarm/);
 await assert.rejects(asOperations(resolveSafetyCase, { id: `feedback-${loneId}`, action: "delete" }));
 // Screening holds a threat for the safety team; it never reaches the inbox, and deleting it removes the text.
-async function heldFeedback(text, verdict) {
+async function heldFeedback(text, verdict, finish = true) {
   const heldId = (await call("beginGuestContribution", { ...feedbackOnly, requestId: randomUUID(), feedback: text })).id;
   await db.doc(`guestSubmissions/${heldId}`).update({ status: "feedback" }); // As finishGuestContribution leaves it, before delivery.
   await deliverFeedback(heldId, verdict);
-  assert.equal((await call("finishGuestContribution", { id: heldId })).status, "feedback");
+  if (finish) assert.equal((await call("finishGuestContribution", { id: heldId })).status, "feedback");
   return heldId;
 }
 const threat = await heldFeedback("Threat fixture", async () => ({ verdict: "critical", categories: ["Violent"] }));
@@ -172,8 +197,14 @@ assert.equal((await db.doc(`guestSubmissions/${threat}`).get()).get("feedbackSta
 await asOperations(resolveSafetyCase, { id: `feedback-${threat}`, action: "delete" });
 assert.equal((await db.doc(`trustSafetyCases/feedback-${threat}`).get()).get("message"), undefined);
 assert.equal((await db.doc(`properties/${propertyId}/privateFeedback/${threat}`).get()).exists, false);
-// A provider failure delivers rather than holds.
-const outage = await heldFeedback("Outage fixture", async () => { throw new Error("Provider outage"); });
+// An incomplete scan opens a tagged restricted case, never automatic delivery.
+const outage = await heldFeedback("Outage fixture", async () => { throw new Error("Provider outage"); }, false);
+assert.equal((await db.doc(`properties/${propertyId}/privateFeedback/${outage}`).get()).exists, false);
+assert.equal((await db.doc(`guestSubmissions/${outage}`).get()).get("feedbackStatus"), "held");
+assert.equal((await db.doc(`trustSafetyCases/feedback-${outage}`).get()).get("screeningStatus"), "incomplete");
+await retryScreening(outage, Date.now(), undefined, async () => ({ verdict: "deliver" }));
+assert.equal((await db.doc(`properties/${propertyId}/privateFeedback/${outage}`).get()).exists, false);
+await asOperations(resolveSafetyCase, { id: `feedback-${outage}`, action: "release" });
 assert.equal((await db.doc(`properties/${propertyId}/privateFeedback/${outage}`).get()).get("message"), "Outage fixture");
 // A guest who withdraws their submission withdraws feedback that is still held.
 const withdrawn = await heldFeedback("Withdrawn fixture", async () => ({ verdict: "critical", categories: ["Sexual"] }));
@@ -208,4 +239,62 @@ await collect("listHostGuestReview", { propertyId: pagingProperty, kind: "feedba
 await call("listHostGuestReview", { propertyId: pagingProperty, reviewCursor: "paging-open-025" }, otherHost, 403);
 await call("listGuestContributions", { cursor: "bad/path" }, pagingGuest, 400);
 console.log("PASS: guest contribution lifecycle and paginated guest history/host review/private feedback, including unresolved items after 140 closed entries and cross-owner cursor protection.");
-console.log("PASS: private feedback as its own submission (never with a memory), host report, held-case open/release/delete with audit, fail-open delivery and guest withdrawal.");
+console.log("PASS: private feedback as its own submission (never with a memory), host report, held-case open/release/delete with audit, tagged incomplete-screening review and manual release, and guest withdrawal.");
+
+// Per-property review policy: only the owning host can set it; serious flags always win.
+const reviewGuest = await signup(), reviewProperty = "review-policy-property", reviewToken = randomUUID().replaceAll("-", "").slice(0, 22);
+await db.doc(`properties/${reviewProperty}`).set({ slug: reviewProperty, ownerUid: host.localId, name: "Review cottage", mode: "live", lifecycle: "active", stayToken: reviewToken });
+const reviewInput = { slug: reviewProperty, stayToken: reviewToken, photoCount: 1, message: "Review fixture", consentAccepted: true, consentVersion: guestPolicy.consentVersion };
+await call("setGuestReviewPolicy", { propertyId: reviewProperty, reviewContent: true }, otherHost, 403);
+await call("setGuestReviewPolicy", { propertyId: reviewProperty, reviewContent: true }, reviewGuest, 403);
+await call("setGuestReviewPolicy", { propertyId: reviewProperty, reviewContent: "true" }, host, 400);
+await call("setGuestReviewPolicy", { propertyId: reviewProperty, reviewContent: true }, host);
+async function reviewMemory(verdict) {
+  const memoryId = (await call("beginGuestContribution", { ...reviewInput, requestId: randomUUID() }, reviewGuest)).id;
+  await call("uploadGuestPhoto", { id: memoryId, index: 0, base64: bytes.toString("base64") }, reviewGuest);
+  await call("finishGuestContribution", { id: memoryId }, reviewGuest);
+  await prepareInjectedScreening(memoryId);
+  await processGuestSubmission(memoryId, verdict);
+  return memoryId;
+}
+const reviewClear = await reviewMemory(async () => ({ outcome: "clear" }));
+assert.equal((await db.doc(`guestSubmissions/${reviewClear}`).get()).get("status"), "standard");
+assert.equal((await call("listHostGuestReview", { propertyId: reviewProperty }, host)).reviewContent, true);
+assert.equal((await fetch(`${base}/guestMemoryPhoto?id=${reviewClear}&index=0`)).status, 404);
+await call("setGuestReviewPolicy", { propertyId: reviewProperty, reviewContent: false }, host);
+assert.equal((await db.doc(`guestSubmissions/${reviewClear}`).get()).get("status"), "standard");
+await call("reviewGuestContribution", { id: reviewClear, revision: 1, action: "approve" }, host);
+assert.equal((await fetch(`${base}/guestMemoryPhoto?id=${reviewClear}&index=0`)).status, 200);
+const safePhoto = { adult: "VERY_UNLIKELY", violence: "UNLIKELY", medical: "UNLIKELY", racy: "UNLIKELY", spoof: "UNLIKELY" };
+const severePhoto = await reviewMemory(async () => memoryImageVerdict([{ ...safePhoto, violence: "LIKELY" }]));
+const severeCase = `${severePhoto}:1`;
+assert.equal((await db.doc(`guestSubmissions/${severePhoto}`).get()).get("status"), "critical");
+await call("reviewGuestContribution", { id: severePhoto, revision: 1, action: "approve" }, host, 400);
+await call("moderatePost", { propertyId: reviewProperty, postId: severePhoto, action: "publish", requestId: randomUUID() }, host, 403);
+await assert.rejects(readSafetyCase.run({ data: { id: severeCase }, auth: { uid: host.localId, token: {} }, rawRequest: {} }));
+assert.equal((await asOperations(readSafetyCase, { id: severeCase })).photoCount, 1);
+assert.ok((await asOperations(readSafetyCasePhoto, { id: severeCase, index: 0 })).base64);
+await assert.rejects(readSafetyCasePhoto.run({ data: { id: severeCase, index: 0 }, auth: { uid: "ops", token: { admin: true, firebase: {} } }, rawRequest: {} }));
+assert.ok(!(await db.collection("moderationAudit").where("caseId", "==", severeCase).where("action", "==", "open_case_photo").get()).empty);
+await asOperations(resolveSafetyCase, { id: severeCase, action: "release", note: "Benign fixture" });
+assert.equal((await db.doc(`guestSubmissions/${severePhoto}`).get()).get("status"), "standard");
+assert.equal((await fetch(`${base}/guestMemoryPhoto?id=${severePhoto}&index=0`)).status, 404);
+await assert.rejects(asOperations(readSafetyCasePhoto, { id: severeCase, index: 0 }));
+await call("reviewGuestContribution", { id: severePhoto, revision: 1, action: "approve" }, host);
+assert.equal((await fetch(`${base}/guestMemoryPhoto?id=${severePhoto}&index=0`)).status, 200);
+const deletePhoto = await reviewMemory(async () => memoryImageVerdict([{ ...safePhoto, adult: "VERY_LIKELY" }]));
+await call("changeGuestContribution", { id: deletePhoto, revision: 1, action: "delete" }, reviewGuest);
+await assert.rejects(asOperations(resolveSafetyCase, { id: `${deletePhoto}:1`, action: "release" }));
+await asOperations(resolveSafetyCase, { id: `${deletePhoto}:1`, action: "delete" });
+assert.equal((await db.doc(`guestSubmissions/${deletePhoto}`).get()).get("safetyCaseOpen"), false);
+assert.equal((await db.doc(`trustSafetyCases/${deletePhoto}:1`).get()).get("photos"), undefined);
+await processStorageJob("deletionJobs", `guest-${deletePhoto}`, Date.now() + 10 * 60000);
+assert.equal((await db.doc(`deletionJobs/guest-${deletePhoto}`).get()).get("status"), "complete");
+const deleted = (await db.doc(`guestSubmissions/${deletePhoto}`).get()).data();
+assert.equal((await getStorage().bucket(deleted.bucket).file(deleted.slots[0].path).exists())[0], false);
+const changedSafety = await reviewMemory(async () => ({ outcome: "critical", categories: ["Violent"] }));
+await call("changeGuestContribution", { id: changedSafety, revision: 1, action: "edit", message: "Revised message" }, reviewGuest);
+await asOperations(resolveSafetyCase, { id: `${changedSafety}:1`, action: "release" });
+assert.equal((await db.doc(`guestSubmissions/${changedSafety}`).get()).get("status"), "pending");
+assert.equal((await db.doc(`properties/${reviewProperty}/posts/${changedSafety}`).get()).get("visibility"), "processing");
+console.log("PASS: owner-only review policy, clear-content hold, serious-photo safety priority, audited MFA case/photo access, release without publication, changed-revision rescreen and withdrawn memory deletion.");

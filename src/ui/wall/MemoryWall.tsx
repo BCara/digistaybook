@@ -30,7 +30,7 @@ export function MemoryWall({
       </h2>
       <div className="note-grid">
         {posts.map((post, index) => {
-          const author = post.displayName ?? "A guest";
+          const author = post.displayName?.trim() ?? "";
           const photo = post.photo ? wallPhotos[post.photo] : undefined;
           return (
             <article
@@ -52,14 +52,14 @@ export function MemoryWall({
               )}
               <p className="note-message">{post.message}</p>
               <footer className="note-sign">
-                <span
+                {author && <span
                   className={`avatar tone-${toneIndex(author)}`}
                   aria-hidden="true"
                 >
                   {initials(author)}
-                </span>
+                </span>}
                 <span className="note-author">
-                  <b>{author}</b>
+                  {author && <b>{author}</b>}
                   <time
                     dateTime={post.createdAt}
                     title={`Posted ${formatDate(post.createdAt)}`}

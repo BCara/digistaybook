@@ -1,5 +1,7 @@
 import Stripe from "stripe";
 import { defineSecret, defineString } from "firebase-functions/params";
+import { HttpsError } from "firebase-functions/v2/https";
+import { localTestEnabled } from "./localTest.js";
 
 /* ===========================================================================
    stripeConfig — where the Stripe credentials live, and where they do not.
@@ -41,6 +43,7 @@ let client: Stripe | undefined;
  * version it was built against. Upgrade by upgrading the SDK.
  */
 export function stripe(): Stripe {
+  if (localTestEnabled()) throw new HttpsError("failed-precondition", "Payments are disabled in local Test. Use the seeded active property for this walkthrough.");
   if (process.env.FUNCTIONS_EMULATOR === "true") {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   }

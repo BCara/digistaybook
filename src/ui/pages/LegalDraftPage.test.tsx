@@ -5,7 +5,7 @@ it("publishes the Guest Terms as a versioned draft, with private feedback and th
   render(<LegalDraftPage kind="guest-terms" />);
   expect(screen.getByRole("heading", { name: "Guest Terms" })).toBeInTheDocument();
   expect(screen.getByText("Draft — not yet approved.")).toBeInTheDocument();
-  expect(screen.getByText(/Version draft-2026-10-01/)).toBeInTheDocument();
+  expect(screen.getByText(/Version draft-2026-10-06/)).toBeInTheDocument();
   expect(screen.getByText(/not monitored in real time and your host cannot reply/)).toBeInTheDocument();
   expect(screen.getByRole("complementary", { name: "Open points for legal review" })).toBeInTheDocument();
 });
@@ -14,4 +14,7 @@ it("carries private feedback and Google screening in the draft Privacy Policy", 
   render(<LegalDraftPage kind="privacy" />);
   expect(screen.getByRole("heading", { name: /Private feedback and automated screening/ })).toBeInTheDocument();
   expect(screen.getByText(/Google Cloud’s content moderation services/)).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: /Photo storage and overseas safety checks/ })).toBeInTheDocument();
+  expect(screen.getByText(/Sydney storage does not mean all processing stays in Australia/)).toBeInTheDocument();
+  expect(screen.getByText(/not a guarantee that every aspect/)).toBeInTheDocument();
 });

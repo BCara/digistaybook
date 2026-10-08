@@ -591,6 +591,24 @@
       .annotation, .email-template { break-inside: avoid; }
     }
   </style>
+
+
+
+<!-- stored-data-inventory-style:start --><style>
+  .stored-data-inventory-table { max-height: 75vh; overflow: auto; }
+  .stored-data-inventory-table:focus-visible { outline: 3px solid #2b70a9; outline-offset: 2px; }
+  .stored-data-inventory-table table { min-width: 1180px; table-layout: fixed; }
+  .stored-data-inventory-table thead th { position: sticky; top: 0; z-index: 2; background: #e7eef7; }
+  .stored-data-inventory-table th, .stored-data-inventory-table td { overflow-wrap: anywhere; }
+  .stored-data-inventory-table thead th:nth-child(1) { width: 14%; }
+  .stored-data-inventory-table thead th:nth-child(2) { width: 22%; }
+  .stored-data-inventory-table thead th:nth-child(3) { width: 20%; }
+  .stored-data-inventory-table thead th:nth-child(4) { width: 19%; }
+  .stored-data-inventory-table thead th:nth-child(5) { width: 25%; }
+  .stored-data-inventory-table tbody th { position: static; background: #f8fafc; font-weight: 700; }
+  .stored-data-inventory-table caption { padding: 12px; text-align: left; font-weight: 700; }
+  @media print { .stored-data-inventory-table { max-height: none; overflow: visible; } .stored-data-inventory-table table { min-width: 0; } .stored-data-inventory-table thead { display: table-header-group; } .stored-data-inventory-table thead th { position: static; } }
+</style><!-- stored-data-inventory-style:end -->
 </head>
 <body>
   <a class="skip-link" href="#plan">Skip to plan</a>
@@ -644,7 +662,7 @@
             <li><a href="#billing-operations">5.7 Billing operations</a></li>
             <li><a href="#support-complaints-refunds">5.8 Customer support, complaints and refunds</a></li>
             <li><a href="#incidents-reliability">5.9 Incidents and reliability</a></li>
-            <li><a href="#retention-deletion-backups">5.10 Retention, deletion and backups</a></li>
+            <li><a href="#retention-deletion-backups">5.10 Stored data, retention, deletion and backups</a></li>
             <li><a href="#privacy-security">5.11 Privacy and security</a></li>
             <li><a href="#suppliers">5.12 Suppliers</a></li>
           </ol>
@@ -925,6 +943,7 @@
         <h2><span class="section-number">4</span><span>Offer and revenue model</span></h2>
 
         <h3 id="plans-and-pricing">4.1 Plans and pricing</h3>
+<p>Final billing test decision — 6 October 2026: billing is live, not Stripe test mode. Controlled testing uses the dedicated test accounts and their test properties, with a scoped 50c test price where a payment is needed, and subscription/trial cancellation checks. Record the currency, displayed total, charge, renewal date and cancellation state. The 50c value is a test arrangement, not a new published product price. Test-price configuration, actual checkout/payment and cancellation still require verification. This decision records the test plan; no prices or subscriptions have been changed by this document update.</p>
         <p>Both plans include the complete platform. There is no feature-gated tier: the only difference is billing frequency and price. Billing is per activated property; a host with four properties holds four subscriptions and manages all four from one dashboard.</p>
         <div class="table-wrap">
           <table>
@@ -1072,9 +1091,10 @@
         <p>Approved, held, hidden and pending-deletion content carry distinct statuses in the dashboard. Held content is never displayed to the host as approved.</p>
 
         <h3 id="guest-content">5.3 Guest content</h3>
+        <p id="guest-decisions-final-2026-10-06"><strong>Final product decisions &mdash; 6 October 2026:</strong> retain the current guest experience: separate public memories and text-only private feedback, the current memory-consent flow, up to ten photos with the current upload limits, and same-browser memory edit/delete controls. These decisions are settled and are reopened only if testing discovers an issue. Legal wording review and live verification are separate outstanding work; they do not make these product choices undecided. Screening expectations are recorded in section 5.4.</p>
         <p>The contribution route is reached only by scanning the property&rsquo;s printed QR code or opening its live routing link. It is mobile-first, requires no account, and asks for nothing about the guest beyond what the contribution itself contains.</p>
-        <p><strong>Current implementation, pending approval:</strong> a guest chooses either a public-wall memory or private feedback for the host. The server rejects a combined submission. Private feedback is text-only, is never published, has no public-display consent checkbox and offers no reply channel. The in-stay wall links directly to the feedback mode. The draft consent for memories now names the message and any photos; the 16+ threshold and final wording remain C-11/C-19 legal decisions. Guest intake stays disabled until approved versions are recorded.</p>
-        <p>Before submitting, a guest sees the property identity, the host&rsquo;s instructions and writing prompt, the permitted content types and limits, and a mandatory single-tap consent checkbox immediately above the submit button: &ldquo;I agree to the Guest Terms and Privacy Policy, consent to this image being displayed publicly, and confirm I am over 16 years of age.&rdquo; That consent is recorded with a timestamp, the exact wording and its version, and a pseudonymous post and session reference &mdash; without creating an account and without duplicating the photograph into the consent record.</p>
+        <p><strong>Current product behaviour; legal wording review pending:</strong> a guest chooses either a public-wall memory or private feedback for the host. The server rejects a combined submission. Private feedback is text-only, is never published, has no public-display consent checkbox and offers no reply channel. The in-stay wall links directly to the feedback mode. The draft consent for memories now names the message and any photos; the 16+ threshold and final wording remain C-11/C-19 legal decisions. Guest intake stays disabled until approved versions are recorded.</p>
+        <p>Before submitting a memory, a guest sees the property identity, the host&rsquo;s instructions and writing prompt, the permitted content types and limits, and a mandatory single-tap consent checkbox immediately above the submit button. The current draft, <code>handbook-5.3-draft-v4</code>, says: &ldquo;I agree to the Guest Terms and Privacy Policy, understand that photos undergo automated safety checks, consent to my message and any photos being displayed publicly on this property&rsquo;s guestbook, and confirm I am 16 or older.&rdquo; Guest Terms and Privacy Policy are compact inline links; those documents retain the details of overseas photo processing. That consent is recorded with a timestamp, the exact wording and its version, Guest Terms and Privacy versions, and a pseudonymous post and session reference &mdash; without requesting a guest account and without duplicating the photograph into the consent record. This wording remains subject to C-19 review.</p>
         <div class="table-wrap">
           <table>
             <thead>
@@ -1083,7 +1103,7 @@
             <tbody>
               <tr>
                 <td>Text (post message)</td>
-                <td>Length limits, duplicate-submission prevention, and automated screening for profanity, harassment, threats, hate, sexual content, personal information and competitor or malicious URLs. Sentiment screening routes strongly negative text to host review rather than publishing it silently.</td>
+                <td>Length limits and duplicate-submission prevention apply. Public wall memories need provider text screening before publication; contact details and external links are held for host review. Do not add a custom profanity blacklist without evidence from reviewed examples. Private feedback follows its separate restricted-safety route.</td>
               </tr>
               <tr>
                 <td>Images</td>
@@ -1102,7 +1122,7 @@
         </div>
         <p>Guests retain instant self-service control of their own contributions: they can edit the text or delete a post at any time within their session, without host intervention. Deleting hides the post immediately and schedules deletion.</p>
         <div class="annotation" data-annotation="confirm">
-          <p><span class="annotation-label">Confirm</span>Per-image file-size and per-post total limits have not been set, and they drive both the guest experience on a weak connection and the storage cost in section 8.1. Confirm the maximum image size, whether images are downscaled on the server, and what the guest sees when a file is rejected.</p>
+          <p><span class="annotation-label">Test</span>Upload limits are final for testing: up to ten JPEG/PNG/WebP images, 5 MiB each, 25 MiB total and 40 megapixels per image. The server rotates images, strips metadata and converts them to WebP within 2000 by 2000. Test weak connections, rejected files and device compatibility; change these limits only if a test demonstrates an issue.</p>
         </div>
         <div class="annotation" data-annotation="confirm">
           <p><span class="annotation-label">Confirm</span>The consent wording states 16 years of age, and the draft Privacy Policy says the service is not directed at children under 16. Confirm this threshold with counsel against every jurisdiction the product will be sold into, together with the workflow for a photograph that contains a minor who did not consent.</p>
@@ -1112,11 +1132,12 @@
         </div>
 
         <h3 id="content-moderation">5.4 Content moderation and safety</h3>
+        <p id="screening-decisions-final-2026-10-06"><strong>Final screening decisions &mdash; 6 October 2026:</strong> retain the current providers, category thresholds and routing. Clear memories publish unless host review is enabled; ordinary flags and screened contact details or links go to host review. Clear or ordinary private feedback goes to the private host inbox. Serious text or photo flags go to restricted safety review. An incomplete check goes to the same restricted queue tagged <strong>Screening incomplete</strong>, with the reason shown to the reviewer, and cannot be released by automatic retry. These are the agreed test expectations; reopen a decision only when testing identifies an issue, recording the failure and resulting change. Calibration and device tests verify these choices. Live deployment and end-to-end verification of the incomplete-screening change remain pending.</p>
         <p>Every guest submission is screened before it can appear publicly. Automated screening is a risk-control tool, not a guarantee, and is never described as one.</p>
-        <p><strong>Implementation status, 1 October 2026:</strong> memory intake, private quarantine paths, fail-closed routing, bounded screening retries, host review and a restricted Trust &amp; Safety case queue are implemented locally. The memory <code>screenContent</code> adapter still returns unavailable; live image and text screening, approved category thresholds and end-to-end deployment evidence remain open. The two production guest-media buckets exist with public-access prevention and uniform bucket access, but live application access is unverified. Private feedback has a separate Natural Language <code>moderateText</code> check using the Australia endpoint: selected threat, sexual, derogatory and firearms categories at confidence 0.8 or above are held for restricted review; other feedback is delivered to the host, including if the provider fails. Direct project-authenticated calls to the Australia endpoint succeeded for a routine complaint and an explicit threat, but the deployed feedback function has not been exercised with guest intake enabled. These feedback thresholds are an engineering setting pending C-13 review.</p>
+        <p><strong>Implementation status, 2 October 2026:</strong> memory intake, private quarantine paths, fail-closed routing, bounded screening retries, host review and a restricted Trust &amp; Safety case queue are implemented locally and the guest-contribution function revisions now connect and deploy the wall-memory screen. Photos are sent as transformed bytes to Google Vision SafeSearch&rsquo;s EU endpoint; wall text is sent to the Australia Natural Language endpoint. Provider flags map provisionally to host review and provider failure remains private. Approved category thresholds, cost controls and end-to-end guest deployment evidence remain open. The two production guest-media buckets exist in Sydney with public-access prevention and uniform bucket access, but live application object access is unverified. Private feedback has its separate Natural Language <code>moderateText</code> check using the Australia endpoint: selected threat, sexual, derogatory and firearms categories at confidence 0.8 or above are held for restricted review; other feedback is delivered to the host, including if the provider fails. Direct provider calls succeeded for synthetic/test examples, but the deployed feedback and memory functions have not been exercised with guest intake enabled. These thresholds remain engineering settings pending C-13 review.</p>
         <h4>Quarantine-first architecture</h4>
-        <p>On submission, files are uploaded to a private, non-public storage bucket and the post is assigned a processing status. While the guest sees a brief optimistic loading state, a dual-layer server-side scan runs: image moderation and concurrent text filtering, including string matching for profanity, sentiment analysis and URL detection. The scan looks only for unsafe or explicit content. No biometric data and no facial-recognition template is generated, extracted or stored from a guest image &mdash; a hard constraint driven by biometric privacy law, not a preference.</p>
-        <h4>Three routes</h4>
+        <p>On submission, files are uploaded to a private, non-public storage bucket and the post is assigned a processing status. The proposed server-side scan covers both image and text safety; the memory provider adapter is still disconnected, so posts remain private. After a successful provider scan, a local rule sends public posts containing contact details or external links to host review. It cannot clear a failed scan or override a more severe result. No custom profanity blacklist is approved. No biometric data and no facial-recognition template is generated, extracted or stored from a guest image &mdash; a hard constraint driven by biometric privacy law, not a preference.</p>
+        <h4>Screening routes</h4>
         <div class="table-wrap">
           <table>
             <thead>
@@ -1130,7 +1151,7 @@
                 <td>Assets move to public storage. The quarantine copy is deleted within 24 hours of approved publication.</td>
               </tr>
               <tr>
-                <td>Standard flag &mdash; NSFW or racy imagery, profanity, strongly negative sentiment, competitor or external URLs</td>
+                <td>Standard flag &mdash; provider result requiring host review, or a contact detail or external link after successful provider screening</td>
                 <td>Pending host approval</td>
                 <td>&ldquo;Memory added! Your host is reviewing this post to add it to the public wall.&rdquo;</td>
                 <td>The post stays in private quarantine and enters the host&rsquo;s review queue. The host receives a moderation alert. Standard curation is the host&rsquo;s responsibility.</td>
@@ -1141,7 +1162,8 @@
                 <td>The same neutral pending state. The guest is not told that an internal escalation exists.</td>
                 <td>The host is bypassed entirely. The post is blocked from the public wall and routed to the restricted internal Trust &amp; Safety queue.</td>
               </tr>
-            </tbody>
+            <tr><td>Screening incomplete &mdash; provider failure, missing results or allowance reached</td><td>Restricted safety review</td><td>A neutral pending acknowledgement.</td><td>Tagged <strong>Screening incomplete</strong> with the reason shown to the safety reviewer. Remains unpublished or undelivered until authorised review.</td></tr>
+</tbody>
           </table>
         </div>
         <p>The pending state matters operationally: without it, a guest whose photograph was caught by a false positive assumes the app is broken and uploads the same images repeatedly.</p>
@@ -1164,23 +1186,24 @@
           </table>
         </div>
         <h4>Fail-closed behaviour</h4>
-        <p>If the moderation provider is unavailable, new content remains pending and does not appear on a public wall. It is not published optimistically and reviewed later.</p>
+        <p>If screening cannot complete, the memory or private feedback goes directly to the restricted Trust &amp; Safety review queue, tagged <strong>Screening incomplete</strong>. The reviewer sees the reason, such as provider failure, missing results or the daily screening allowance being reached. This tag does not classify the content as harmful. Memories stay unpublished and feedback stays undelivered. Automatic retries cannot bypass an open review case. An authorised reviewer may release an unchanged memory to host review or release feedback to the private host inbox. <strong>6 October policy update:</strong> implemented and verified locally; live deployment and verification remain pending. This supersedes earlier provider-failure delivery and bounded-retry descriptions below.</p>
+        <p><strong>Shared screening outcomes &mdash; deployed 5 October 2026:</strong> Clear memories publish when the host's Review content before publication switch is off; with the switch on they wait for host approval. Clear private feedback reaches the host privately. Flagged for host means non-severe profanity or ordinary flags: memories wait for host approval, while ordinary private complaints reach the host inbox. Serious text flags open restricted internal cases in either route, using provisional 0.8 thresholds for Violent, Sexual, Derogatory and Firearms &amp; Weapons. Photo adult or violence flags at LIKELY/VERY_LIKELY open restricted cases; medical or racy flags alone at those levels use host review. MFA operations can open/audit case messages and photos, release an unchanged memory to host review, rescreen an edited revision, or delete with queued photo removal. Release does not publish a memory. At that release, incomplete screening waited privately for bounded retry; the 6 October policy above supersedes this behaviour. Nine selected Functions and the scoped frontend are deployed; representative provider calibration, reviewer staffing and device journeys still require evidence. See guest-screening-routing-2026-10-05.md.</p>
         <h4>Internal review cadence</h4>
         <ul>
           <li><strong>The daily sweep.</strong> Operations reviews the critical escalation queue once per day. That queue holds only AI-flagged severe cases and host-initiated escalations &mdash; never ordinary curation. Each case is resolved by restricting the content and session where proportionate, retaining a restricted case only for the approved review period, deleting securely when review and legal-retention needs end, or downgrading a false positive to host review.</li>
-          <li><strong>Monthly tuning.</strong> Operations reviews a random sample of 50 standard AI-flagged posts each month. Over-aggressive filtering creates guest friction, so where the false-positive rate exceeds the accepted margin, the image-moderation confidence threshold is lowered.</li>
+          <li><strong>Monthly tuning.</strong> Operations reviews a random sample of 50 standard AI-flagged posts each month, records false positives by category and checks the accepted margin once set. A threshold change requires a labelled sample and a rerun of the clear, hold and severe-case checks; do not automatically lower a threshold on the strength of one aggregate rate.</li>
           <li><strong>Unresolved critical cases</strong> are reviewed at least every 30 days.</li>
         </ul>
         <h4>Audit and notification</h4>
         <p>Every moderation action records the previous status, the new status, the actor, the time and the reason, without copying the reported media into the audit event. Hosts receive an immediate notification when a post is hidden pending review; other moderation notices are batched rather than sent one email per held item.</p>
         <div class="annotation" data-annotation="confirm">
-          <p><span class="annotation-label">Confirm</span>Google Natural Language is wired for private feedback through its Australia text-moderation endpoint. Direct API calls succeeded, while the deployed function&rsquo;s live call path remains untested. Google Vision SafeSearch and Natural Language are proposed for wall memories. Google currently documents US and EU regional endpoints for SafeSearch; its global endpoint does not guarantee an image-processing region. C-12 needs owner approval of the image location and data terms. That decision determines cost, latency, categories and thresholds. Keep the memory adapter fail-closed until the provider and mapping are approved.</p>
+          <p><span class="annotation-label">Confirm</span>C-12 provider/location decision recorded 2 October 2026: the owner approved overseas image screening while keeping photo storage in Sydney. Google Vision SafeSearch is selected through its EU endpoint, <code>eu-vision.googleapis.com</code>, using synchronous requests containing only transformed image bytes. The transport is connected to the wall-memory flow and deployed in the guest-contribution function revisions; it has no global/US fallback. C-13 mappings are final for testing as recorded above; cost controls and their live evidence remain separately tracked. Google's contractual Vision residency list currently covers OCR only; do not promise that every part of SafeSearch handling stays in the EU. The revised Guest Terms, Privacy Policy and consent remain in the existing C-19 review, including account terms and overseas safeguards. Google Natural Language remains configured through its Australia endpoint for wall text and private feedback. See <code>image-screening-provider-review-2026-10-02.md</code> for sources and proof boundaries.</p>
         </div>
         <div class="annotation" data-annotation="confirm">
-          <p><span class="annotation-label">Confirm</span>&ldquo;Standard&rdquo; and &ldquo;critical&rdquo; confidence thresholds, and the accepted monthly false-positive rate, are undefined. Confirm both, or the daily sweep has no entry criteria and the monthly tuning review has no pass mark.</p>
+          <p><span class="annotation-label">Decision</span>C-13 final for testing, confirmed 6 October 2026: retain the current category thresholds and review-first routing in section 5.4, including tagged restricted review for incomplete screening. No automatic rejection. Test labelled examples and record false positives and missed severe content; revise only when testing identifies an issue. The measured false-positive rate remains a test result to collect.</p>
         </div>
         <div class="annotation action" data-annotation="action">
-          <p><span class="annotation-label">Action</span>Complete and approve C-12/C-13 before connecting the wall-memory image and text screening adapter. Verify bucket access and App Check in production, connect the held-memory outbox event to host delivery, and test real provider outcomes and outages after deployment. Local routing and the restricted case queue exist, but are not production proof. Email delivery for alerts remains C-14.</p>
+          <p><span class="annotation-label">Action</span>Calibrate C-13 and set numeric cost controls before enabling a controlled intake test; complete C-19 review before opening intake. The production guest buckets were rechecked on 2 October in Sydney with public-access prevention and uniform access; actual application object access remains to be proved. Verify App Check, connect held-memory alerts to host delivery, and test real provider outcomes and outages against the deployed revisions. The adapter connection is deployed, but deployment is not production guest-flow proof. Email delivery remains C-14.</p>
         </div>
 
         <h4>Reporting and takedown state model</h4>
@@ -1304,6 +1327,7 @@
         </div>
 
         <h3 id="billing-operations">5.7 Billing operations</h3>
+<p>Final billing test decision — 6 October 2026: billing is live, not Stripe test mode. Controlled testing uses the dedicated test accounts and their test properties, with a scoped 50c test price where a payment is needed, and subscription/trial cancellation checks. Record the currency, displayed total, charge, renewal date and cancellation state. The 50c value is a test arrangement, not a new published product price. Test-price configuration, actual checkout/payment and cancellation still require verification. This decision records the test plan; no prices or subscriptions have been changed by this document update.</p>
         <ul class="checklist">
           <li>Stripe-hosted checkout collects payment details. The product never handles raw card data.</li>
           <li>Entitlements are granted or changed only after a signature-verified webhook is processed. Nothing in the browser grants entitlement.</li>
@@ -1375,128 +1399,85 @@
           <p><span class="annotation-label">Confirm</span>No availability target is published or internally agreed. Section 4.3 forbids promising uptime that has not been substantiated, so nothing may be stated to customers until a target exists and is measured.</p>
         </div>
 
-        <h3 id="retention-deletion-backups">5.10 Retention, deletion and backups</h3>
-        <p>The periods below are the recommended operational defaults. Personal information is not retained merely because storage is available: it is destroyed, de-identified or put beyond use when it is no longer needed, including controlled expiry from backups.</p>
+        <h3 id="retention-deletion-backups">5.10 Stored data, retention, deletion and backups</h3>
+        <p id="test-data-scope-2026-10-06"><strong>Confirmed test-data scope — 6 October 2026:</strong> controlled live testing uses a couple of dedicated test accounts. Every property, setting, guest contribution, feedback item and uploaded file created for those accounts is test-only. Related review cases, reports and cleanup jobs are also part of that test scope. Keep test activity attributable to those accounts and properties so it can be identified for cleanup. Account/property deletion timing has not been selected; this decision does not authorise deletion. Record test results, faults and any eventual deletion evidence in the shared Test Procedures document. General retention, backup and safety-hold work in section 5.10 remains separately tracked.</p>
+        <p>The periods in the combined inventory below are proposed operational defaults pending approval. Personal information is not retained merely because storage is available: it is destroyed, de-identified or put beyond use when it is no longer needed, including controlled expiry from backups.</p>
         <div class="annotation" data-annotation="confirm">
           <p><span class="annotation-label">Confirm</span>The 12-month dormancy period, the critical-moderation periods and every jurisdiction-dependent obligation in this table must be approved through the professional legal review gate before production. Until that approval is recorded, the cancellation email in Appendix A.1 that quotes the dormancy period must not be enabled.</p>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr><th>Data class</th><th>Active retention</th><th>Cancellation or dormancy behaviour</th><th>Deletion deadline</th><th>Backup expiry</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Unpaid property drafts and sandbox media</td>
-                <td>30 days from draft creation; the clock resets only on meaningful host editing</td>
-                <td>No dormancy. The abandonment sequence ends with a day-23 warning.</td>
-                <td>Delete draft and media on day 30; primary-store deletion within 72 hours</td>
-                <td>Within 30 days after primary deletion</td>
-              </tr>
-              <tr>
-                <td>Active property configuration</td>
-                <td>Subscription or trial lifetime</td>
-                <td>At service end, lock public service and move approved reactivatable fields into the dormant state</td>
-                <td>Within 30 days of a host deletion request or expiry of dormancy</td>
-                <td>Within 30 days after primary deletion</td>
-              </tr>
-              <tr>
-                <td>Dormant property configuration</td>
-                <td>Recommended maximum 12 months from service end</td>
-                <td>No public wall, no guest upload, no operational email. One 90-day win-back permitted only with valid marketing consent.</td>
-                <td>Within 30 days after the 12-month expiry</td>
-                <td>Within 30 days after primary deletion</td>
-              </tr>
-              <tr>
-                <td>Public guest content and original media</td>
-                <td>While the property is active, unless the guest or host deletes it</td>
-                <td>Public access removed; retained privately only for the approved 12-month reactivation window</td>
-                <td>Approved privacy deletion: remove public access promptly, delete primary copies within 72 hours. Otherwise within 30 days after dormancy expires.</td>
-                <td>Within 30 days after primary deletion; the deletion manifest is reapplied before any restore</td>
-              </tr>
-              <tr>
-                <td>Quarantine, ordinary flags and host-rejected content</td>
-                <td>Processing maximum 7 days; the quarantine copy is deleted within 24 hours of approved publication; rejected content maximum 30 days</td>
-                <td>Does not enter property dormancy unless it was already published</td>
-                <td>Timed-out processing items after failed-retry handling; rejected content at 30 days</td>
-                <td>Within 30 days after primary deletion</td>
-              </tr>
-              <tr>
-                <td>Privacy and takedown requests</td>
-                <td>Resolve or escalate within 14 days; minimal closed-case metadata for 24 months</td>
-                <td>Continues independently of property cancellation until resolved and the evidence period ends</td>
-                <td>Attachments as soon as resolved; case metadata 24 months after closure</td>
-                <td>Within 30 days after the applicable primary deletion</td>
-              </tr>
-              <tr>
-                <td>Guest content-consent evidence</td>
-                <td>Life of the associated content plus 24 months</td>
-                <td>Retained separately from dormant content for the remainder of the evidence period</td>
-                <td>24 months after content deletion or final dispute closure, whichever is later</td>
-                <td>Within 30 days after primary deletion</td>
-              </tr>
-              <tr>
-                <td>Host account and profile data</td>
-                <td>Active account lifetime</td>
-                <td>Minimum profile retained during the approved 12-month dormancy; secure reactivation still possible</td>
-                <td>Within 30 days after dormancy expires or an approved deletion request</td>
-                <td>Within 30 days after primary deletion</td>
-              </tr>
-              <tr>
-                <td>Stripe references, invoices and accounting records</td>
-                <td>Transaction lifetime plus five years</td>
-                <td>Retained independently of property and profile dormancy; full card data stays with Stripe</td>
-                <td>Delete or de-identify at the end of the accounting period, after open disputes close</td>
-                <td>Controlled exports expire within 30 days after the retention period ends</td>
-              </tr>
-              <tr>
-                <td>Authentication, App Check, rate-limit and routine security logs</td>
-                <td>Rate-limit keys rotate; suspected-abuse cooldowns expire after 24 hours; confirmed restrictions within 90 days; routine logs on rolling 90-day retention; incident-linked records up to 12 months after closure</td>
-                <td>Routine expiry continues through cancellation and dormancy</td>
-                <td>Automated deletion at the 24-hour, 90-day or 12-month deadline</td>
-                <td>Within 30 days after primary log deletion</td>
-              </tr>
-              <tr>
-                <td>Internal critical-moderation cases</td>
-                <td>Unresolved cases reviewed at least every 30 days; critical media maximum 30 days after closure; metadata maximum 12 months</td>
-                <td>Never enters property dormancy or marketing use</td>
-                <td>Media within 30 days of closure; metadata at 12 months, unless counsel records another requirement</td>
-                <td>Within 30 days after each primary deadline</td>
-              </tr>
-              <tr>
-                <td>Marketing consent and suppression records</td>
-                <td>Consent proof while marketing is active and for 24 months after the last commercial message; suppression while the system operates or until verified re-consent</td>
-                <td>Unsubscribe suppresses all marketing within five working days</td>
-                <td>Expired consent evidence at 24 months. The minimum suppression value is retained &mdash; deleting an account must not release it.</td>
-                <td>Consent backups within 30 days; suppression state must be rebuilt before any restored system sends</td>
-              </tr>
-              <tr>
-                <td>Deletion-job audit records</td>
-                <td>24 months after job completion or final failure resolution</td>
-                <td>Continues independently of property cancellation</td>
-                <td>At 24 months. Records job ID, data-class code, pseudonymous target, timestamps, status, retry code and approving actor &mdash; never deleted text or media.</td>
-                <td>Within 30 days after audit-record deletion</td>
-              </tr>
-              <tr>
-                <td>Backups and disaster-recovery copies</td>
-                <td>Rolling maximum 30 days</td>
-                <td>No product, support, analytics or marketing access. Deleted records are marked beyond use pending backup expiry.</td>
-                <td>Backup generations expire automatically at 30 days</td>
-                <td>This row sets the maximum: 30 days</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p><strong>What deletion means.</strong> &ldquo;Deleted from active systems&rdquo; means the identifiable record or object, searchable indexes, caches, derived public projections and routine service-provider copies have been removed or irreversibly de-identified, so the data is no longer available through the product or normal administration. During the rolling backup period the record is put beyond use: not accessed, not restored for ordinary purposes. If disaster recovery restores an older generation, the deletion manifest is reapplied before the service returns to users.</p>
+
+        <!-- stored-data-inventory:start -->
+        <section id="stored-data-inventory" aria-labelledby="stored-data-inventory-title">
+          <h4 id="stored-data-inventory-title">Stored data, retention rules and current deletion setup</h4>
+          <p><strong>Checked 5 October 2026 (Australia/Sydney).</strong> This single inventory combines the proposed retention schedule with the data stores found in current application source and the checked cloud configuration. Retention, cancellation, deletion and backup rules are proposed policy; the current-setup column records implementation and evidence. It distinguishes automatic deletion, partial cleanup, email reminders followed by manual deletion, and work not implemented or not verified. A deployed worker or configured expiry is not proof that every deletion deadline has been met.</p>
+          <p><strong>Storage locations:</strong> all Firestore paths below are in the project's default database, <code>nam5</code>, a <a href="https://firebase.google.com/docs/firestore/locations">United States multi-region location</a>. The two guest-photo buckets are in Sydney; the default host-media bucket is <code>US-CENTRAL1</code>. These facts do not establish Australian storage for Authentication, logs, Stripe, email, browser copies or provider processing.</p>
+          <p><strong>How to read the current-setup column:</strong> <em>Automatic configured/deployed</em> identifies a live control, with any proof limits stated. <em>Partial</em> means some content or state is handled but complete expiry/copy removal is missing. <em>Reminder + manual deletion</em> requires the operator to act. <em>Not implemented</em> means no corresponding process was found in inspected source/live configuration. <em>Not verified</em> means supplier or production evidence is still missing. A period marked <em>not specified</em> needs a decision; it must not be presented as an approved promise.</p>
+          <p><strong>Scope and evidence:</strong> this covers the 38 application, supplier, recovery, client and supporting data categories identified below. It is not an exhaustive supplier/account audit. No production guest record contents, secret values or payment details were read to prepare it. Current source contains uncommitted work; source presence does not prove deployment, particularly for separate billing/email changes. Keep legal approval, source inspection, live configuration, emulator proof, real deletion completion and backup removal distinct.</p>
+          <p id="stored-data-inventory-help">Scroll inside the table to read all rows and columns. You can also focus the table and use the arrow keys.</p>
+          <div class="table-wrap stored-data-inventory-table" role="region" aria-label="Stored data inventory" aria-describedby="stored-data-inventory-help" tabindex="0">
+            <table>
+              <caption>Stored data, retention and deletion status — 5 October 2026</caption>
+              <thead><tr><th scope="col">Data / what is stored</th><th scope="col">Where it is stored</th><th scope="col">Proposed retention and cancellation rules</th><th scope="col">Deletion method, proposed deadlines and backup expiry</th><th scope="col">Current setup and verification limits</th></tr></thead>
+              <tbody><tr><th scope="row">Host accounts</th><td>Firebase Authentication; identity, email/name, provider IDs and MFA/sign-in state. Country/provider copies not verified.</td><td>Proposed retention: Active account lifetime. Service end / cancellation: Minimum profile retained during the approved 12-month dormancy; secure reactivation still possible</td><td>Remove Auth account and separately address profile/session copies and scoped evidence.<br><br>Proposed deletion deadline: Within 30 days after dormancy expires or an approved deletion request. Backup expiry: Within 30 days after primary deletion</td><td>Not implemented in inspected app: no account-removal/expiry worker. Provider-side cleanup not checked.</td></tr>
+<tr><th scope="row">Anonymous guest accounts</th><td>Firebase Authentication; guest UID and authentication/session state.</td><td>No separate anonymous-account period specified.</td><td>Agree expiry compatible with guest self-service; separately handle related submission/consent records.</td><td>Not verified: no app cleanup worker; provider anonymous-account auto-cleanup was not inspected.</td></tr>
+<tr><th scope="row">Host profiles</th><td>Firestore users/{uid}; display name, email and timestamps.</td><td>Account lifetime; proposed minimal 12-month dormant profile, then remove within 30 days.</td><td>Delete/minimise document and unnecessary derived copies, checking scoped holds.<br><br>Proposed backup expiry: Within 30 days after primary deletion</td><td>Not implemented: profile creation exists; no profile expiry/TTL or physical purge worker.</td></tr>
+<tr><th scope="row">Draft / active / dormant property configuration</th><td>Firestore properties/{propertyId}; owner, name, instructions/notes/profile, slug, stay token, wall/review settings and billing fields.</td><td>Unpaid property drafts and sandbox media: Proposed retention: 30 days from draft creation; the clock resets only on meaningful host editing. Service end / cancellation: No dormancy. The abandonment sequence ends with a day-23 warning.<br><br>Active property configuration: Proposed retention: Subscription or trial lifetime. Service end / cancellation: At service end, lock public service and move approved reactivatable fields into the dormant state<br><br>Dormant property configuration: Proposed retention: Recommended maximum 12 months from service end. Service end / cancellation: No public wall, no guest upload, no operational email. One 90-day win-back permitted only with valid marketing consent.</td><td>Lock public access; purge applicable fields, descendants and files when due. Billing/evidence has separate retention.<br><br>Unpaid property drafts and sandbox media: Proposed deletion deadline: Delete draft and media on day 30; primary-store deletion within 72 hours. Backup expiry: Within 30 days after primary deletion<br><br>Active property configuration: Proposed deletion deadline: Within 30 days of a host deletion request or expiry of dormancy. Backup expiry: Within 30 days after primary deletion<br><br>Dormant property configuration: Proposed deletion deadline: Within 30 days after the 12-month expiry. Backup expiry: Within 30 days after primary deletion</td><td>Partial: lifecycle/access controls exist. deleteHostProperty only changes lifecycle to deleted. No draft/dormancy expiry or complete property purge.</td></tr>
+<tr><th scope="row">Guestbook address reservations</th><td>Firestore slugReservations/{slug}; owner/property references, request fingerprint, timestamp.</td><td>No separate period/address-reuse rule specified.</td><td>Delete/minimise under an agreed rule that addresses old printed guestbook links.</td><td>Not implemented: transactional creation; no reservation expiry/TTL.</td></tr>
+<tr><th scope="row">Host/property/note photo files</th><td>Default bucket digistaybook-cbert.firebasestorage.app (US-CENTRAL1); properties/{propertyId}/media/{slot}-{timestamp}.{extension}. URL/path/alt references in property profile/notes.</td><td>Applicable draft/active/dormant period; remove superseded/explicitly removed files.<br><br>Draft abandonment: day-23 warning; delete on day 30 with primary deletion within 72 hours. Dormant copies: no public access, guest uploads or operational email; one 90-day win-back only with valid marketing consent.</td><td>Delete object and references; account for cached/downloaded and soft-deleted copies.<br><br>Proposed backup expiry: Within 30 days after primary deletion; the deletion manifest is reapplied before any restore</td><td>Partial source implementation: scoped owner rules and client deletes exist; replacement cleanup can fail without durable retry. Download URLs/public one-year cache header. No scheduled expiry; live journeys unverified.</td></tr>
+<tr><th scope="row">Guest submission records</th><td>Firestore guestSubmissions/{id}; message or pending feedback, session/property links, photo slots/bucket references, status/revision, fingerprints and screening/retry metadata. Photo files are separate.</td><td>Memory follows active/dormant-content rule; proposed processing maximum seven days. Deleted-record metadata/private-feedback periods need decisions.</td><td>Clear content and projections; queue photo removal; later expire/minimise remaining metadata.<br><br>Proposed backup expiry: Within 30 days after primary deletion; the deletion manifest is reapplied before any restore</td><td>Partial: deletion clears content and marks deleted; delivered/held feedback is cleared from the source submission. No full-document, tombstone or abandoned-upload expiry.</td></tr>
+<tr><th scope="row">Wall posts / public projections</th><td>Firestore properties/{propertyId}/posts/{postId}; message, photo references, visibility, screening/report and publication metadata.</td><td>Proposed retention: While the property is active, unless the guest or host deletes it. Service end / cancellation: Public access removed; retained privately only for the approved 12-month reactivation window</td><td>Stop reads promptly, clear content/references, remove photo files and later expire metadata.<br><br>Proposed deletion deadline: Approved privacy deletion: remove public access promptly, delete primary copies within 72 hours. Otherwise within 30 days after dormancy expires.. Backup expiry: Within 30 days after primary deletion; the deletion manifest is reapplied before any restore</td><td>Partial: state-checked reads and clearing/tombstones/photo jobs exist. No full post purge or dormant-content expiry.</td></tr>
+<tr><th scope="row">Quarantine guest photo files</th><td>Private bucket digistaybook-cbert-guest-quarantine (Sydney); properties/{propertyId}/quarantine/{id}/{index}.webp. Transformed WebP; raw originals not retained by this upload flow.</td><td>Proposed retention: Processing maximum 7 days; the quarantine copy is deleted within 24 hours of approved publication; rejected content maximum 30 days. Service end / cancellation: Does not enter property dormancy unless it was already published</td><td>Remove exact objects; retry failed publication cleanup; add timeout/rejection/abandonment expiry.<br><br>Proposed deletion deadline: Timed-out processing items after failed-retry handling; rejected content at 30 days. Backup expiry: Within 30 days after primary deletion</td><td>Partial automatic deletion deployed: immediate cleanup plus five-minute storageCleanup worker; retries/holds/emulator proof. No general seven/30-day expiry or age lifecycle. Seven-day soft-delete recovery after removal.</td></tr>
+<tr><th scope="row">Guest photo delivery files</th><td>Private bucket digistaybook-cbert-guest-published (Sydney); properties/{propertyId}/published/{id}/{index}.webp. Can hold a prepared copy awaiting host approval; read remains gated.</td><td>Active/dormant content period; approved primary removal target 72 hours; other expiry within 30 days after dormancy.</td><td>Stop endpoint reads; queue quarantine and delivery objects; check scoped holds and recovery copies.<br><br>Proposed backup expiry: Within 30 days after primary deletion; the deletion manifest is reapplied before any restore</td><td>Automatic queued object removal deployed: deleteStoredMedia every five minutes, validated paths, leases, eight-attempt limit, holds/overdue logs; emulator proof. Production deadline performance unverified. No dormancy sweep. Seven-day soft delete; no permanent guest-photo tokens.</td></tr>
+<tr><th scope="row">Private feedback text</th><td>Pending: guestSubmissions/{id}. Delivered: properties/{propertyId}/privateFeedback/{id}. Held: trustSafetyCases/feedback-{id}. Source clears submission text after successful delivery/hold.</td><td>Delivered/pending-feedback periods not separately specified. Held feedback&#39;s 30-day review due date is not automatic deletion.</td><td>Define inbox/pending/case periods; remove all applicable text copies on approved deletion; never publish feedback.</td><td>Partial: self-delete/inbox removal and restricted case-message deletion exist. No timed inbox/pending-text expiry. Complete retention and production copy-removal proof outstanding.</td></tr>
+<tr><th scope="row">Guest display-consent evidence</th><td>Firestore guestConsent/{id}; exact wording/version, Terms/Privacy versions, acceptance time and property/post/session links.</td><td>Proposed retention: Life of the associated content plus 24 months. Service end / cancellation: Retained separately from dormant content for the remainder of the evidence period<br><br>Inventory-specific detail: Life of associated content, then 24 calendar months after content deletion or final dispute closure, whichever is later; scoped holds can extend.</td><td>Recheck eligibility and external/unrecorded holds; manually delete only the consent document; observe absence and handle backups separately.<br><br>Proposed deletion deadline: 24 months after content deletion or final dispute closure, whichever is later. Backup expiry: Within 30 days after primary deletion</td><td>Email reminder + manual deletion deployed: hourly review, daily 9am Sydney reminder when due. Open linked reviews/holds/missing evidence block eligibility. Worker completion status corrected to complete. No consent TTL/automatic deletion. Receipt/manual production completion unverified.</td></tr>
+<tr><th scope="row">Guest application sessions</th><td>Firestore guestSessions/{uid}; property reference, attempt hour/count and update time. Auth account is separate.</td><td>No separate session-record period specified.</td><td>Agree expiry for self-service/support needs; remove application session and address related records separately.</td><td>Not implemented: counters exist; no session TTL/expiry worker.</td></tr>
+<tr><th scope="row">Content reports</th><td>Firestore contentReports/{id}; property/post links, pseudonymous reporter key, reason/status, deadlines, outcome/resolver metadata.</td><td>Proposed resolve/escalate within 14 days; minimal evidence 24 months after closure.</td><td>Remove unnecessary detail after closure; expire evidence when due with scoped holds.<br><br>Proposed backup expiry: Within 30 days after the applicable primary deletion</td><td>Partial: resolution and hourly deadline escalation exist. No case-evidence expiry/TTL. Escalation creates an alert, not deletion.</td></tr>
+<tr><th scope="row">Privacy/takedown requests</th><td>Firestore privacyRequests/{id}; contact email, details, kind, reporter key, status/deadlines.</td><td>Proposed retention: Resolve or escalate within 14 days; minimal closed-case metadata for 24 months. Service end / cancellation: Continues independently of property cancellation until resolved and the evidence period ends</td><td>Verify/resolve request; remove unnecessary contact/details/attachments; later expire minimal evidence.<br><br>Proposed deletion deadline: Attachments as soon as resolved; case metadata 24 months after closure. Backup expiry: Within 30 days after the applicable primary deletion</td><td>Partial: request capture/hourly escalation. No complete expiry/deletion workflow or 24-month TTL identified.</td></tr>
+<tr><th scope="row">Restricted safety cases</th><td>Firestore trustSafetyCases/{id}; held text, categories, property/post/feedback links, state/revision, deadlines and photo bucket/path references. Files remain in private buckets.</td><td>Proposed retention: Unresolved cases reviewed at least every 30 days; critical media maximum 30 days after closure; metadata maximum 12 months. Service end / cancellation: Never enters property dormancy or marketing use</td><td>Authorised MFA release/delete controls; queue files; expire closed text/media and metadata; explicitly review holds.<br><br>Proposed deletion deadline: Media within 30 days of closure; metadata at 12 months, unless counsel records another requirement. Backup expiry: Within 30 days after each primary deadline</td><td>Partial: audited text/photo reads and release/delete, photo jobs and deadline escalation deployed. No general 30-day/12-month closed-case expiry. Staffing, hold governance and live journeys unverified.</td></tr>
+<tr><th scope="row">Report duplicate keys</th><td>Firestore reportDuplicates/{key}; pseudonymous scope and expiresAt.</td><td>Source expiry: 24 hours; confirm security-record period.</td><td>Logical suppression expires; asynchronous Firestore TTL removes document afterward.<br><br>Proposed backup expiry: Within 30 days after primary log deletion</td><td>Automatic deletion configured live: expiresAt TTL ACTIVE. Typical deletion is within 24 hours after expiry, not guaranteed/exact. No sampled purge measurement.</td></tr>
+<tr><th scope="row">Report rate-limit history</th><td>Firestore reportRateLimits/{key}; short hit history, cooldown and expiresAt.</td><td>Cooldown: 24 hours. Source document expiry: 48 hours after update, followed by TTL delay. Reconcile with policy.</td><td>Expire restriction logically; remove stored key/history through TTL.<br><br>Proposed backup expiry: Within 30 days after primary log deletion</td><td>Automatic deletion configured live: expiresAt TTL ACTIVE. This does not delete at the 24-hour cooldown boundary; production delay unmeasured.</td></tr>
+<tr><th scope="row">Wall report-rate keys</th><td>Firestore reportWallLimits/{scope}; short hit history, breaker time and expiresAt.</td><td>Source expiry: 24 hours; breaker has its own shorter clock.</td><td>Expire breaker logically and remove record through background TTL.<br><br>Proposed backup expiry: Within 30 days after primary log deletion</td><td>Automatic deletion configured live: expiresAt TTL ACTIVE; physical deletion is asynchronous and unmeasured.</td></tr>
+<tr><th scope="row">Screening daily counters</th><td>Firestore screeningDailyUsage/{SydneyDate}; attempts, thresholds and reserved memory/feedback/text/photo units, not guest message/photo bodies.</td><td>No specific usage-ledger period specified.</td><td>Agree expiry/aggregation of old counters while preserving current-day enforcement.</td><td>Not implemented: allowance/warnings deployed; no old-counter expiry/TTL.</td></tr>
+<tr><th scope="row">Worker/retry/lease state</th><td>Firestore workerState/{screening|deletionJobs|storageCleanup}; cursors/times. Submission retry/lease state is in guestSubmissions.</td><td>Current operational state; retirement/abandoned-state period not specified.</td><td>Overwrite active state; expire retired/stale state and relevant parent records under an agreed rule.</td><td>Partial: retries, leases and cursor updates exist. No general stale-state retention cleanup; overwriting a cursor is not a full expiry policy.</td></tr>
+<tr><th scope="row">Notification outbox</th><td>Firestore notificationOutbox/{id}; event kind, property/post links, revision/status/time.</td><td>No separate queued/sent/failed-notification period specified.</td><td>Approved dispatch/delivery tracking followed by bounded expiry of completed/failed entries.</td><td>Not implemented for general host/guest email: source queues events; no durable dispatch/delivery/expiry worker found. Monitoring warnings are separate.</td></tr>
+<tr><th scope="row">Operations alerts</th><td>Firestore operationsAlerts/{id}; privacy/safety/screening references, kind/status/time.</td><td>No separate resolved-alert/evidence period specified.</td><td>Resolve alerts, minimise required evidence, then expire it.</td><td>Partial: creation/listing exist; no general alert-resolution/expiry worker or TTL. Stored alert is not email-delivery proof.</td></tr>
+<tr><th scope="row">Moderation/operations audit</th><td>Firestore moderationAudit/{id} and properties/{propertyId}/moderationEvents/{id}; actors, references, action/state/time and optional staff notes.</td><td>No distinct moderation-audit period specified; reconcile case/evidence obligations. Do not automatically apply the deletion-job period to every audit.</td><td>Keep minimal evidence; avoid guest content in notes; expire/de-identify at agreed deadline.</td><td>Partial: actions/case/photo opens recorded. Notes may contain staff-entered information. No audit expiry/TTL.</td></tr>
+<tr><th scope="row">Photo deletion/cleanup manifests</th><td>Firestore deletionJobs/{id}, storageCleanup/{id}; exact targets, property/submission links, due time, attempt/lease/status/failure/completion metadata.</td><td>Proposed retention: 24 months after job completion or final failure resolution. Service end / cancellation: Continues independently of property cancellation<br><br>Inventory-specific detail: Target removal: proposed 72 hours for deletion, 24 for quarantine cleanup. Proposed job-audit evidence: 24 months after completion/final failure resolution.</td><td>Worker removes objects and records complete/held/retry/needs_attention; later expire minimal job evidence.<br><br>Proposed deletion deadline: At 24 months. Records job ID, data-class code, pseudonymous target, timestamps, status, retry code and approving actor — never deleted text or media.. Backup expiry: Within 30 days after audit-record deletion</td><td>Partial automatic deletion: file worker deployed/tested; manifest documents remain. No 24-month metadata expiry. Overdue errors logged; response/email to every failure not proved.</td></tr>
+<tr><th scope="row">Consent review/reminder metadata</th><td>Firestore consentDeletionReview/{id}, retentionReminderState/guestConsent; paths, deadlines/reasons/status, observed absence, cursors/day/count.</td><td>No distinct post-completion review-evidence period specified; cursor state is operational.</td><td>Stop reminders after consent absence; later expire/minimise review evidence under an agreed separate rule.</td><td>Partial: reviews/reminders/absence checks deployed; rechecks audited. No review-metadata expiry. Absence does not prove actor, deletion time or backup removal.</td></tr>
+<tr><th scope="row">Host billing / Stripe references</th><td>Firestore hosts/{uid}, properties/{id}.billing; country, customer/subscription/status/price/period/trial/payment references. Provider customer/payment records remain with Stripe.</td><td>Proposed retention: Transaction lifetime plus five years. Service end / cancellation: Retained independently of property and profile dormancy; full card data stays with Stripe<br><br>Inventory-specific detail: Proposed transaction lifetime plus five years for accounting evidence; open disputes can extend scoped retention independently of dormancy.</td><td>Expire/minimise local and supplier records after approved accounting/dispute periods.<br><br>Proposed deletion deadline: Delete or de-identify at the end of the accounting period, after open disputes close. Backup expiry: Controlled exports expire within 30 days after the retention period ends</td><td>Source stores references, not full card details. No local billing expiry/TTL found. Provider/account retention and real payment journeys not audited.</td></tr>
+<tr><th scope="row">Billing agreement/actions</th><td>Firestore properties/{id}/billingAcknowledgements/{id} (wording/version, offer/amount/country/coupon/trial acceptance); billingActions/{id} (actor, cancel/resume, subscription/end date/time).</td><td>Distinct period not specified; reconcile necessary contract/payment evidence with approved accounting/dispute rule.</td><td>Retain required evidence separately from disposable property fields; expire/minimise when due.</td><td>Current source writes collections; no expiry/TTL. Source review does not prove every local billing change is deployed.</td></tr>
+<tr><th scope="row">Stripe replay ledger</th><td>Firestore stripeEvents/{StripeEventId}; transactional replay/order/application evidence. Supplier event history is separate.</td><td>No distinct replay-evidence period specified.</td><td>Agree minimal expiry compatible with replay protection and accounting evidence.</td><td>Source has transaction idempotency; no expiry/TTL. Supplier retention not checked.</td></tr>
+<tr><th scope="row">Marketing consent/suppression/delivery history</th><td>Planned application preference/suppression store and email-provider records; persistent collections/provider not identified in inspected source.</td><td>Proposed retention: Consent proof while marketing is active and for 24 months after the last commercial message; suppression while the system operates or until verified re-consent. Service end / cancellation: Unsubscribe suppresses all marketing within five working days<br><br>Inventory-specific detail: Proposed consent while active plus 24 months after last commercial message; minimal suppression while operating or until verified re-consent. Delivery-history period unspecified.</td><td>Expire old consent/delivery evidence while retaining suppression; enforce unsubscribe/restoration rules.<br><br>Proposed deletion deadline: Expired consent evidence at 24 months. The minimum suppression value is retained — deleting an account must not release it.. Backup expiry: Consent backups within 30 days; suppression state must be rebuilt before any restored system sends</td><td>Not implemented/verified: marketing predicate alone is not a persistent consent store, delivery/expiry worker or unsubscribe process. External lists/mailboxes need separate inventory.</td></tr>
+<tr><th scope="row">Cloud application/security logs</th><td>Cloud Logging global-location buckets _Default and _Required in this project. Runtime/request/security diagnostics; screening uses a derived reference and technical outcomes. global is not a single-country guarantee.</td><td>Proposed retention: Rate-limit keys rotate; suspected-abuse cooldowns expire after 24 hours; confirmed restrictions within 90 days; routine logs on rolling 90-day retention; incident-linked records up to 12 months after closure. Service end / cancellation: Routine expiry continues through cancellation and dormancy<br><br>Inventory-specific detail: Proposed routine security logs 90 days and incident-linked evidence up to 12 months after closure. Actual: _Default 30 days; locked _Required 400 days.</td><td>Provider retention for routine logs; separately reconcile required audit logs/incident evidence with draft policy.<br><br>Proposed deletion deadline: Automated deletion at the 24-hour, 90-day or 12-month deadline. Backup expiry: Within 30 days after primary log deletion</td><td>Automatic provider expiry configured live at 30/400 days. These differ from draft periods. Sampled purges, external sinks and incident exports not verified.</td></tr>
+<tr><th scope="row">Screening provider request data</th><td>Photo bytes: Google Vision EU endpoint. Memory/feedback text: Google Natural Language AU endpoint. App runtime memory; provider metadata/copies outside guest buckets.</td><td>Exact account-specific supplier metadata periods/countries not established by source or endpoint choice.</td><td>Confirm vendor handling/deletion terms; avoid unnecessary persisted payloads.</td><td>Adapter deployed/configured; source stores outcomes/references, no separate screening-payload archive. Real processing/vendor retention need independent proof.</td></tr>
+<tr><th scope="row">Operations reminder emails</th><td>Google Cloud Monitoring channel/policy and codebertcreations@gmail.com mailbox; messages include consent paths/deadlines/links.</td><td>No recipient-mailbox retention period specified.</td><td>Operator deletes/archive copies under an agreed rule; retain only necessary evidence.</td><td>Policy/channel configured and labelled test log submitted. Inbox receipt/mailbox expiry unverified. Deleting consent does not remove a received email.</td></tr>
+<tr><th scope="row">Host exports/screenshots/downloads</th><td>Host/guest devices/browser caches. ZIP exports generated from visible memories/photos; no server export archive in inspected flow.</td><td>Controlled copies follow approved schedule; server cannot enforce an external-device retention period.</td><td>Copy owner removes external exports/screenshots. Takedown stops later reads but cannot revoke existing copies.<br><br>Proposed backup expiry: Within 30 days after primary deletion; the deletion manifest is reapplied before any restore</td><td>Export source excludes feedback/internal records. No external-copy revocation/expiry. Host media cache can be one year; guest delivery private/no-store.</td></tr>
+<tr><th scope="row">Browser session/cache data</th><td>In-memory property cache and Firebase Auth/App Check SDK browser storage. Exact SDK/browser persistence not independently audited.</td><td>Only what current sign-in/security/use needs; distinct period not specified.</td><td>Clear app memory on sign-out/reload; SDK revocation/sign-out and browser controls separately; downloads are separate.</td><td>Partial: property cache cleared on host sign-out; no app localStorage/sessionStorage store found. Does not prove all SDK/browser data removal.</td></tr>
+<tr><th scope="row">Backups/recoverable copies</th><td>Application buckets&#39; soft-deleted files; possible archives/provider recovery copies. Firestore backup schedules and PITR checked separately.</td><td>Proposed retention: Rolling maximum 30 days. Service end / cancellation: No product, support, analytics or marketing access. Deleted records are marked beyond use pending backup expiry.<br><br>Inventory-specific detail: Proposed rolling backup maximum 30 days and deletion-manifest reapplication before restore. Actual media recovery: seven days after removal.</td><td>Expire backups, keep deleted data beyond ordinary use, and reapply scoped deletion manifest before restoration.<br><br>Proposed deletion deadline: Backup generations expire automatically at 30 days. Backup expiry: This row sets the maximum: 30 days</td><td>Partial: seven-day media soft delete configured. No Firestore backup schedules returned; PITR disabled. Complete archive/backup/restore governance and deletion manifest not verified.</td></tr>
+<tr><th scope="row">Deployment source/uploads/build images</th><td>Sydney Functions source/upload buckets and gcf-artifacts Artifact Registry; deployment assets, not guest photo objects.</td><td>Configured: upload age one day; non-live source versions after three newer versions; build-image cleanup older than 30 days.</td><td>Use bucket lifecycle/repository cleanup; retain required release evidence separately.</td><td>Automatic cleanup configured live. Rules do not expire guest objects/records. Sampled artifact removal not checked; source/upload buckets also have seven-day soft delete.</td></tr>
+<tr><th scope="row">Secrets/configuration/review documents</th><td>Secret Manager/Functions configuration; local environment/build settings; source/review documents in workspace/NAS. Secret values/production record contents not read for this check.</td><td>Secret rotation/retirement and business-document periods not completely specified.</td><td>Revoke/rotate retired secrets/config; remove obsolete local/NAS copies under operator policy.</td><td>Manual administration; no app expiry for secrets/local files/NAS packs identified. This does not imply every review pack contains secrets/guest records.</td></tr></tbody>
+            </table>
+          </div>
+          <p><strong>Immediate gaps to reconcile:</strong> property deletion currently marks state rather than purging the property and its descendants; private feedback/session/queue/review-metadata periods are not separately settled; no general draft/dormant/rejected-content/case/audit expiry exists; the report rate-limit document uses a 48-hour expiry although its cooldown is 24 hours; logs are configured for 30 and 400 days rather than one uniform draft period; and recovery/restore controls need their own proof.</p>
+          <p><strong>Consent operation:</strong> the chosen process is automatic reminders and manual deletion. The hourly review checks up to 100 consent records and 100 existing review records per run using persistent cursors; larger sets are covered over multiple runs. At 9am Sydney it reassesses due entries and emits a notification only if some remain due. The email lists the first two exact paths/deadlines and links to the complete private review list. An operator checks the current eligibility and any external/unrecorded dispute or hold, deletes only the named consent record and rechecks its absence. Open linked reviews, recorded holds and unfinished photo removal block eligibility; missing evidence needs investigation. Reminder/recheck metadata itself has no agreed expiry yet. Inbox receipt and production manual/backup deletion are not confirmed.</p>
+          <p><strong>Expiry is not instant physical deletion:</strong> the three active Firestore <a href="https://firebase.google.com/docs/firestore/ttl">TTL policies</a> apply only to <code>reportDuplicates</code>, <code>reportRateLimits</code> and <code>reportWallLimits</code>. TTL deletion is asynchronous, typically within 24 hours after expiry, without an exact-deadline guarantee. Seven-day bucket soft delete means a removed file can remain recoverable during that period. Neither a tombstone, a hidden wall, an expired restriction nor an absent active object establishes backup removal.</p>
+          <p><strong>Evidence record:</strong> current source checked: guestContributions, propertyCreation, reporting, storageDeletion, consentRetention, screening/retry/budget/diagnostics, billing/webhook/cancellation, host auth/media/export/cache code, and Firestore/Storage rules. Filtered metadata is recorded in <code>storage-retention-live-evidence-2026-10-05.json</code> beside this NAS handbook; it includes database location/PITR, active TTL fields, bucket regions/recovery/lifecycle rules, log retention, backup schedules and enabled scheduler configuration. Artifact Registry cleanup was also inspected (30 days). Consent's photo-completion status was aligned with the worker's <code>complete</code> value and verified in the emulator before redeploying the two consent functions. Consent email receipt, provider retention, production deadlines and recovery operations remain independent checks.</p>
+        </section>
+<!-- stored-data-inventory:end -->
+<p><strong>What deletion means.</strong> &ldquo;Deleted from active systems&rdquo; means the identifiable record or object, searchable indexes, caches, derived public projections and routine service-provider copies have been removed or irreversibly de-identified, so the data is no longer available through the product or normal administration. During the rolling backup period the record is put beyond use: not accessed, not restored for ordinary purposes. If disaster recovery restores an older generation, the deletion manifest is reapplied before the service returns to users.</p>
         <p><strong>Deletion audit.</strong> Every deletion workflow creates a content-free audit event and alerts on partial failure. Failed jobs retry with bounded backoff. The audit record holds identifiers and status metadata only.</p>
         <p><strong>Legal holds.</strong> A hold identifies the authority, the data classes, the case owner, the approval date and the review date. It suspends deletion only for the scoped records, never for an entire account by default, and is reviewed at the cadence in the matrix. A legal-hold export is a separate, scoped, access-logged repository &mdash; never an extension of general backup retention.</p>
         <p>These defaults apply the OAIC requirement to destroy or de-identify personal information when it is no longer needed, the ATO&rsquo;s general five-year business-record requirement, and ACMA&rsquo;s consent-record and five-working-day unsubscribe requirements.</p>
         <div class="annotation action" data-annotation="action">
-          <p><span class="annotation-label">Action</span>None of this schedule is implemented. There is no retention engine, no scheduled deletion job, no deletion manifest, no content-free audit event and no backup-expiry control. Every date in the table above is a commitment the product cannot currently keep, and several of them are stated to customers in the draft Privacy Policy.</p>
+          <p><span class="annotation-label">Action</span>The schedule is only partly implemented. Queued photo removal, three report-control TTL policies and consent reminders for manual deletion are configured/deployed; those controls do not establish a complete retention engine or proof of every production deadline. Draft/dormant expiry, remaining record/case/audit expiry, scoped hold governance and complete backup/restore controls remain outstanding. Use the combined inventory in this section before relying on a retention promise.</p>
         </div>
         <div class="annotation" data-annotation="confirm">
           <p><span class="annotation-label">Confirm</span>Backup scope, encryption, access control and restoration testing frequency are undefined beyond the 30-day expiry. Confirm how often a restore is actually tested &mdash; an untested backup is a belief, not a control.</p>
         </div>
+
+
+
+
 
         <h3 id="privacy-security">5.11 Privacy and security</h3>
         <ul class="checklist">
@@ -1550,7 +1531,7 @@
                 <td>Held behind an adapter so the provider can be replaced without touching the email lifecycle.</td>
               </tr>
               <tr>
-                <td>Moderation provider</td>
+                <td>Google Cloud Vision SafeSearch / Natural Language</td>
                 <td>Image and text safety screening.</td>
                 <td>Policy and threshold mapping, outage behaviour (fail closed), cost per item, data-processing terms and processing location.</td>
                 <td>Category mappings are provider-specific; a change requires re-tuning thresholds and re-running the false-positive sample.</td>
@@ -1571,7 +1552,7 @@
           </table>
         </div>
         <div class="annotation" data-annotation="confirm">
-          <p><span class="annotation-label">Confirm</span>Two suppliers in this table are unnamed &mdash; the email provider and the moderation provider &mdash; and both are on the critical path. Neither the email lifecycle in section 5.6 nor the screening pipeline in section 5.4 can be built against an unnamed vendor. These are the two most urgent confirmations in the document.</p>
+          <p><span class="annotation-label">Confirm</span>The moderation supplier is selected: Google Cloud Vision through the EU endpoint for photos and Natural Language through the Australia endpoint for text. Category mappings, numeric cost controls, account-term review and runtime proof remain open. The email provider remains unselected (C-14).</p>
         </div>
         <div class="annotation" data-annotation="confirm">
           <p><span class="annotation-label">Confirm</span>The domain <code>digistaybook.com</code> and the admin subdomain are referenced throughout the working papers. Confirm the domain is registered to the operating entity, with registrar account security and recovery access recorded.</p>
@@ -1853,8 +1834,9 @@
         <p><strong>Destination and states:</strong> the page keeps an obvious route back to the dashboard. Preview and public-view actions appear only when entitlement and property state permit. Actions affecting public visibility, billing or deletion require clear confirmation and give explicit outcome feedback.</p>
 
         <h4 id="guest-contribution">6.3.8 Guest contribution</h4>
+        <p><strong>Decision status:</strong> final for testing, as confirmed in sections 5.3 and 5.4 on 6 October. Reopen only if testing finds an issue.</p>
         <p><strong>Purpose:</strong> let a guest add a memory quickly from a phone without entering the host interface.</p>
-        <p><strong>Content and actions:</strong> property identity; the host&rsquo;s instructions; the host-selected writing prompt from the dashboard dropdown (for example &ldquo;Show us your best sunset or sunrise view&rdquo;, &ldquo;Who made the best breakfast this morning?&rdquo;, &ldquo;Capture the coziest spot you found in the house&rdquo;); multi-image selection up to ten images; upload progress; the mandatory consent checkbox immediately above Submit; and the separate, optional &ldquo;Private Feedback / Help Us Improve&rdquo; text field.</p>
+        <p><strong>Content and actions:</strong> property identity; the host&rsquo;s instructions; the host-selected writing prompt from the dashboard dropdown (for example &ldquo;Show us your best sunset or sunrise view&rdquo;, &ldquo;Who made the best breakfast this morning?&rdquo;, &ldquo;Capture the coziest spot you found in the house&rdquo;); a choice between a memory and private feedback; multi-image selection up to ten images for a memory; upload progress; the mandatory memory-consent checkbox immediately above Submit; and a separate text-only private feedback mode with no public-display consent checkbox.</p>
         <p>The private feedback field carries explicit boundary microcopy: &ldquo;Note: This feedback is kept strictly private and will not be published to the public memory wall. It is not monitored in real-time and your host will not reply here; it is strictly used to improve our house manual for future guests. If you need immediate assistance during your stay, please message your host directly through your booking app.&rdquo;</p>
         <p>The page collects nothing else about the guest.</p>
         <p><strong>Destination and states:</strong> success confirms whether the post is live or pending review. Flagged content produces the graceful pending modal rather than a silent failure or a visible rejection. Closed, expired, offline, oversized-file and retryable-upload states each state the exact cause and the available action.</p>
@@ -2050,40 +2032,9 @@
           <p><span class="annotation-label">Confirm</span>The pre-purchase sandbox shows ten dummy posts to every prospective host, which makes them marketing assets on a public surface. Confirm each image&rsquo;s licence permits that use, and that no identifiable person appears without a release.</p>
         </div>
 
-        <h3 id="environments">6.5 Environments</h3>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr><th>Environment</th><th>Purpose</th><th>Data boundary</th><th>Deployment authority</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Local development</td>
-                <td>Feature work and the full test suite.</td>
-                <td>Firebase Emulator Suite only. No production credentials, no production data, no live Stripe key, no real email delivery.</td>
-                <td>Any maintainer.</td>
-              </tr>
-              <tr>
-                <td>Preview / test</td>
-                <td>Verification of a complete journey against real services before release.</td>
-                <td>Its own Firebase project, its own Stripe test-mode account, its own sending domain or a capture inbox. Never reads or writes production data.</td>
-                <td>Any maintainer.</td>
-              </tr>
-              <tr>
-                <td>Production</td>
-                <td>Live customer service.</td>
-                <td>Real customer data. Access limited and reviewed. Verification here uses a 100% discount code rather than a real charge.</td>
-                <td>Deliberate, recorded and limited to authorised maintainers.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p>Testing does not depend on production customer data or on live production writes.</p>
-        <div class="annotation action" data-annotation="action">
-          <p><span class="annotation-label">Action</span>Only one Firebase project configuration is present. The preview environment described here &mdash; a separate project, a separate Stripe test account and a separate sending domain &mdash; does not exist. Without it, the pre-launch verification in section 6.6 has nowhere to run except production.</p>
-        </div>
+        <h3 id="environments">6.5 Environments</h3><p>Two environments are used. Feature development and hands-on testing share the local Test environment; there is no separate staging or preview project.</p><div class="table-wrap"><table><thead><tr><th>Environment</th><th>Purpose</th><th>Data boundary</th><th>Authority</th></tr></thead><tbody><tr><td>Test (local)</td><td>Feature work, automated checks and the owner/tester walkthrough.</td><td>demo-digistaybook Firebase emulators only; synthetic data and test photos. Simulated screening; no live payments or real emails.</td><td>Local maintainer; no cloud deployment.</td></tr><tr><td>Production</td><td>Live customer service and separately authorised, scoped real-service verification.</td><td>digistaybook-cbert; real customer data and providers. Test fixtures and local reviewer simulation never grant production access.</td><td>Deliberate release by authorised maintainers.</td></tr></tbody></table></div><!-- local-test-setup:start --><div class="panel"><h3>Local Test — 5 October 2026</h3><p>There are two environments: local <strong>Test</strong> and live <strong>Production</strong>. Run <code>npm run test:local</code> in the DigiStayBook project folder. Open <a href="http://127.0.0.1:5181/__test">the local accounts and walkthrough guide</a>. It lists the three accounts, guest links, screening markers and save/reset commands. All Test accounts use <code>LocalTest-2026!</code>.</p><p>Test uses <code>demo-digistaybook</code> with local Auth, Firestore, Storage and Functions. The launcher uses isolated generated Functions files and dummy secrets; production configuration is not copied. Screening is simulated, payments are disabled and notification records remain in the local outbox rather than sending real email. Operations uses an explicit local reviewer simulation; it does not prove real MFA.</p><p>Begin with the host/guest walkthrough. Payment, real email, real Google classification, hosted App Check and production recovery checks are deferred and must be recorded as not exercised. Use the computer running Test: phone access is not configured because all endpoints bind to loopback. Save runs every 30 seconds and on Ctrl+C; the next start imports that snapshot. Reset replaces only the local demo data.</p></div><!-- local-test-setup:end --><p>Passing local Test does not prove real provider classification, App Check enforcement, MFA, payment/email delivery, deployment or cloud deletion/recovery. Those checks remain separately recorded before wider release. Draft legal approval is not changed by local testing.</p>
 
-        <h3 id="quality">6.6 Quality requirements</h3>
+<h3 id="quality">6.6 Quality requirements</h3>
         <p>The evidence required before launch. Each item is evidence, not an intention: it is either demonstrated and recorded, or the launch does not proceed.</p>
         <ul class="checklist">
           <li>The complete host journey &mdash; sign-up, property creation, sandbox, seeding, activation, QR download &mdash; tested on desktop and mobile.</li>
@@ -2283,7 +2234,7 @@
             </tbody>
           </table>
         </div>
-        <p>Pricing controls: verify the live project region and the supplier price before approving any budget; record both the free allowance and the paid rate; and review usage per active property, per 1,000 guest contributions and per GiB stored. Budget alerts are notifications &mdash; they do not cap Firebase charges.</p>
+        <p>Pricing controls: verify the live project region and the supplier price before approving any budget; record both the free allowance and the paid rate; and review usage per active property, per 1,000 guest contributions and per GiB stored. The approved screening cost policy is to stop accepting new wall memories when a server-side daily screening limit is reached, keep affected submissions private, and alert operations. Set project API quotas and a billing alert as additional controls. The daily limit and monthly AUD alert amount are still awaiting owner figures; no effective cost ceiling is configured. Budget alerts are notifications &mdash; they do not cap Firebase charges.</p>
         <div class="annotation" data-annotation="confirm">
           <p><span class="annotation-label">Confirm</span>No cost-per-property model exists. Until one does, nobody knows whether a busy property with fifty ten-image posts a month is profitable at USD $10. Build the model against a stated assumption &mdash; posts per property per month, images per post, average image size, wall views per stay &mdash; and check the result against the pricing in section 4.1 and the &ldquo;unlimited uploads&rdquo; claim on the pricing page.</p>
         </div>
@@ -2580,7 +2531,7 @@
         </div>
 
         <div data-annotation="register">
-        <h3 id="a-decisions">A.4 Open decision and action register</h3>
+        <h3 id="a-decisions">A.4 Open decision and action register</h3><p><strong>Outstanding work:</strong> use the <a href="DigiStayBook-task-board.html">interactive task and milestone board</a> to assign work, record completion and schedule targets. Connect the NAS task data file in the board to save shared progress. The original register remains the source reference; task-board progress is recorded separately.</p>
         <p>Every annotation in this document, collected. <strong>Confirm</strong> items need a decision from the owner. <strong>Action</strong> items are settled intent that the product does not yet meet. Nothing here is optional; the register is the working list.</p>
 
         <h4>Decisions to confirm</h4>
@@ -2599,11 +2550,11 @@
               <tr><td>C-09</td><td>4.3</td><td>Refund authority: who approves a goodwill refund, up to what value, recorded where.</td><td>Support operations</td></tr>
               <tr><td>C-10</td><td>5.3</td><td>Per-image and per-post size limits, whether images are downscaled server-side, and the rejection experience.</td><td>Contribution endpoint, cost model</td></tr>
               <tr><td>C-11</td><td>5.3</td><td>The age threshold and the workflow for a photograph containing a minor who did not consent.</td><td>Legal review, consent wording</td></tr>
-              <tr><td>C-12</td><td>5.4, 5.12</td><td><strong>Moderation provider selection</strong> &mdash; cost per item, latency, thresholds, data terms and processing location.</td><td>The entire screening pipeline</td></tr>
-              <tr><td>C-13</td><td>5.4</td><td>Standard and critical confidence thresholds, and the accepted monthly false-positive rate.</td><td>Daily sweep, monthly tuning</td></tr>
+              <tr><td>C-12</td><td>5.4, 5.12</td><td><strong>Provider/location selected 2 October 2026:</strong> overseas image screening allowed, Google Vision SafeSearch via the EU synchronous endpoint, photo storage in Sydney; Natural Language text endpoint in Australia. No exclusive EU handling guarantee. Published terms checked; account agreement and privacy review remain C-19, with cost/latency evidence and C-13 calibration still open.</td><td>The screening adapter and revised privacy disclosures</td></tr>
+              <tr><td>C-13</td><td>5.4</td><td>Final for testing, confirmed 6 October 2026: retain current category thresholds and review-first routes in section 5.4. Incomplete screening goes to restricted safety review tagged Screening incomplete. No automatic rejection. Reopen only for an issue found in testing; collect calibration and false-positive evidence.</td><td>Daily sweep, monthly tuning</td></tr>
               <tr><td>C-14</td><td>5.6, 5.12</td><td><strong>Email provider and plan</strong>, sending domain, and SPF, DKIM and DMARC authentication.</td><td>Every transactional email</td></tr>
               <tr><td>C-15</td><td>5.7</td><td>Stripe retry configuration, reconciled with the failed-payment email sequence.</td><td>Dunning behaviour</td></tr>
-              <tr><td>C-16</td><td>5.8</td><td>Support address, response-time target, business-hours expectation and queue cover.</td><td>Support page, acknowledgement copy</td></tr>
+              <tr><td>C-16</td><td>5.8</td><td>Support route selected 5 October 2026: info@digistaybook.com via ImprovMX to codebertcreations@gmail.com; access limited to the owner and one other authorised person. Configure and verify under A-19. Response-time target, business-hours expectation and queue cover remain to be confirmed.</td><td>Support page, acknowledgement copy</td></tr>
               <tr><td>C-17</td><td>5.9</td><td>Monitoring and alerting tool, alert destination and out-of-hours severity threshold.</td><td>Incident response</td></tr>
               <tr><td>C-18</td><td>5.9</td><td>Whether an availability target exists and is measured.</td><td>Any uptime statement</td></tr>
               <tr><td>C-19</td><td>5.10, A.6, A.7</td><td><strong>Professional legal review gate</strong> &mdash; approval of the Terms, Privacy Policy, consent wording, age threshold, moderation process, controller/processor allocation, retention schedule and jurisdictional scope, with versions and date recorded.</td><td>Publication of any policy; launch</td></tr>
@@ -2635,7 +2586,7 @@
               <tr><td>A-02</td><td>5.4</td><td>Build the quarantine bucket, the dual-layer screening call, the three-way routing and the fail-closed behaviour.</td><td>Unscreened guest content would reach public walls in family homes.</td></tr>
               <tr><td>A-03</td><td>2.3, 5.4</td><td>Build the internal administrative surface: critical escalation queue, daily sweep, host-initiated escalations, Privacy &amp; Safety queue, with MFA and audited actions.</td><td>Severe content has nowhere to escalate to.</td></tr>
               <tr><td>A-04</td><td>5.11</td><td>Enforce Firebase App Check on the contribution and reporting endpoints.</td><td>Every circuit breaker in 5.4 is bypassable.</td></tr>
-              <tr><td>A-05</td><td>5.10</td><td>Build the retention engine: scheduled deletion jobs, the deletion manifest, content-free audit events, backup-expiry control and scoped legal holds.</td><td>Every date in the retention matrix is a promise the product cannot keep &mdash; several of them stated to customers in the Privacy Policy.</td></tr>
+              <tr><td>A-05</td><td>5.10</td><td>Complete remaining retention schedules, record/case/audit expiry, scoped holds, deletion manifests and backup/restore controls. Queued media deletion, report-control TTLs and manual-consent reminders are already configured/deployed.</td><td>Verify each current control and remaining policy promise using the stored-data inventory; deployment is not production deadline or backup-removal proof.</td></tr>
               <tr><td>A-06</td><td>5.6</td><td>Build the central marketing-preference and suppression service, with fail-closed send-time checks and the automated suppression tests.</td><td>No marketing sequence may lawfully be sent at all.</td></tr>
               <tr><td>A-07</td><td>5.5</td><td>Add a content export function for hosts.</td><td>The retention schedule deletes customer content with no route to recover it first.</td></tr>
               <tr><td>A-08</td><td>5.11</td><td>Resolve the seven moderate transitive advisories in the Functions dependency tree, or record a time-bounded named risk acceptance. Do not force a downgrade.</td><td>Privileged functions deploy with unresolved advisories.</td></tr>
@@ -2649,6 +2600,7 @@
               <tr><td>A-16</td><td>8.1</td><td>Configure Firebase billing alerts.</td><td>Runaway usage accumulates charges with no signal.</td></tr>
               <tr><td>A-17</td><td>A.2, A.3</td><td>Write the support response templates and the operational checklists.</td><td>The first support request and the first daily sweep have no defined handling.</td></tr>
               <tr><td>A-18</td><td>Whole document</td><td>Re-point existing <code>DSB-BOP-P&lt;part&gt;-&lt;number&gt;</code> citations in <code>docs/decisions.md</code>, <code>docs/implementation-status.json</code>, <code>docs/product-spec.md</code>, tests and issues to the section numbers used here.</td><td>This document drops the requirement-ID scheme, so existing citations no longer resolve to anything.</td></tr>
+              <tr><td>A-19</td><td>5.8, 5.10, 5.12</td><td><strong>Configure planned support email routing:</strong> set up ImprovMX for digistaybook.com and forward info@digistaybook.com to codebertcreations@gmail.com, matching the DigiGuestbook arrangement. Configure the required domain/MX records and forwarding alias; send an external test email and verify receipt and the reply path. Record mailbox access limited to the owner and one other authorised person, and document support-mail retention/deletion and provider processing locations. Status: to do; planned arrangement approved by the owner on 5 October 2026.</td><td>The published support address cannot be relied on until configuration and receipt/reply tests pass.</td></tr>
             </tbody>
           </table>
         </div>
@@ -2734,12 +2686,12 @@
       <section class="plan-section" id="a-privacy">
         <h2><span>A.7 Privacy policy (draft)</span></h2>
         <div class="annotation" data-annotation="confirm">
-          <p><span class="annotation-label">Confirm</span><strong>Draft &mdash; not approved for publication.</strong> Qualified legal counsel must review and approve this text before it is used. Last updated 4 August 2026.</p>
+          <p><span class="annotation-label">Confirm</span><strong>Draft &mdash; not approved for publication.</strong> Qualified legal counsel must review and approve this text before it is used. The overseas photo-screening disclosure below was added 2 October 2026, Optional guest names were added 6 October 2026, matching Privacy version <code>draft-2026-10-06</code>.</p>
         </div>
 
         <h3>1. Information collected</h3>
         <p><strong>From Hosts:</strong> account information (email address, password, property names); billing information collected by Stripe, which DigiStayBook does not view or store in full; property configuration data such as welcome messages, house rules and display preferences; and marketing preference data &mdash; the host identity, normalised contact address, consent or withdrawal status, UTC timestamp, form or source identifier, and the exact consent wording and version. A minimal central suppression record is kept separately to prevent promotional messages after opt-out.</p>
-        <p><strong>From Guests:</strong> user-generated content voluntarily uploaded to a Guest Wall; and limited technical and security data &mdash; IP address, browser type, device category, access time, anonymous session tokens and Firebase App Check signals. Where needed to prevent abuse, short-lived pseudonymous abuse keys may be derived without creating a persistent cross-session identifier. This information is used to route uploads, secure the Service, enforce rate limits, investigate reports and apply proportionate restrictions. It is access-controlled and retained only for the bounded period in the approved retention schedule.</p>
+        <p><strong>From Guests:</strong> user-generated content voluntarily uploaded to a Guest Wall, including messages, photos and an optional guest name displayed with the memory; and limited technical and security data &mdash; IP address, browser type, device category, access time, anonymous session tokens and Firebase App Check signals. Where needed to prevent abuse, short-lived pseudonymous abuse keys may be derived without creating a persistent cross-session identifier. This information is used to route uploads, secure the Service, enforce rate limits, investigate reports and apply proportionate restrictions. It is access-controlled and retained only for the bounded period in the approved retention schedule.</p>
 
         <h3>2. How information is used</h3>
         <ul>
@@ -2766,7 +2718,7 @@
           </table>
         </div>
         <div class="annotation" data-annotation="confirm">
-          <p><span class="annotation-label">Confirm</span>The final policy must name every service provider and state whether each acts as processor, sub-processor or independent controller. Two of them &mdash; the email provider and the moderation provider &mdash; are still unselected (register items C-12 and C-14), so this list cannot be completed until they are.</p>
+          <p><span class="annotation-label">Confirm</span>The final policy must name every service provider and state whether each acts as processor, sub-processor or independent controller. Google Cloud is selected for image/text screening under C-12; counsel must check the actual account agreement, roles and overseas safeguards. The email provider remains unselected (C-14).</p>
         </div>
         <p><strong>How a Guest exercises deletion rights:</strong></p>
         <ul>
@@ -2778,6 +2730,11 @@
 
         <h3>4. How information is shared</h3>
         <p>Information is shared only with service providers performing services on DigiStayBook&rsquo;s behalf (cloud hosting, payment processing, email delivery, content moderation); where required by law, court order or governmental request, or to protect the rights, property or safety of DigiStayBook, its users or others; and in the event of a merger, acquisition or sale of assets, where Host data and Guest content may transfer as a business asset.</p>
+
+        <h3>4.1 Photo storage and overseas safety checks</h3>
+        <p>Guest photos are stored in Sydney, Australia, in private Google Cloud Storage buckets. Photos undergo automated safety checks using Google Cloud Vision SafeSearch, configured to use its European Union service endpoint. The photo is sent overseas for that check; Sydney storage does not mean all processing stays in Australia.</p>
+        <p>We use immediate-response photo checks. Google states that these checks process the image in memory without persisting it to disk, and that submitted content is not used to train or improve Cloud Vision models. Google temporarily logs some request metadata, such as the request time and size.</p>
+        <p>Google processes service data under its Cloud Data Processing Addendum, including security, confidentiality and incident-notification commitments. Google and its contracted service providers may handle information in other countries under those terms. Our choice of the EU endpoint is not a guarantee that every aspect of Google's handling remains in the EU. Text screening is configured to use Google Cloud Natural Language&rsquo;s Australia endpoint.</p>
 
         <h3>5. Data retention and deletion</h3>
         <p>The retention schedule, the meaning of deletion, the deletion-audit rules and the legal-hold governance are recorded in full in <a href="#retention-deletion-backups">section 5.10</a> and apply to this policy without modification.</p>

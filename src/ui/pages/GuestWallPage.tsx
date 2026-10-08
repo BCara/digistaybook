@@ -29,7 +29,7 @@ export function GuestWallPage({
   if (propertySlug !== DEMO_SLUG) return <LiveWallPage key={propertySlug} slug={propertySlug} view="public" />;
 
   return (
-    <div className={embedded ? "page wall-page wall-embed" : "page wall-page"}>
+    <div className={embedded ? "page wall-page wall-embed" : "page wall-page"} data-wall-theme="linen" data-wall-colour="sand">
       {isDemo && (
         <p className="demo-ribbon">
           <span className="demo-ribbon-tag">Demo</span>

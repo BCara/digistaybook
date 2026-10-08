@@ -1,5 +1,6 @@
 import { getFirebaseServices } from "../../lib/firebase";
 import { forgetProperties } from "../host/propertyCache";
+import { mfaChallenge, type MfaChallenge } from "./reviewerMfa";
 
 /**
  * A sign-in attempt ends in exactly one of three ways. `cancelled` is kept
@@ -9,6 +10,7 @@ import { forgetProperties } from "../host/propertyCache";
 export type SignInOutcome =
   | { status: "success" }
   | { status: "cancelled" }
+  | { status: "mfa"; challenge: MfaChallenge }
   | { status: "error"; message: string };
 
 export type AuthContextKind = "sign-in" | "sign-up";
@@ -80,6 +82,8 @@ export async function signInWithEmail(email: string, password: string): Promise<
     await signInWithEmailAndPassword(services.auth, email.trim(), password);
     return { status: "success" };
   } catch (error) {
+    const challenge = mfaChallenge(services.auth, error);
+    if (challenge) return { status: "mfa", challenge };
     return describeAuthError(error);
   }
 }
@@ -94,6 +98,8 @@ export async function signInWithGoogle(): Promise<SignInOutcome> {
     await ensureHostProfile(credential.user);
     return { status: "success" };
   } catch (error) {
+    const challenge = mfaChallenge(services.auth, error);
+    if (challenge) return { status: "mfa", challenge };
     return describeAuthError(error);
   }
 }

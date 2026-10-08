@@ -283,7 +283,7 @@ button:disabled, .btn:disabled { cursor: not-allowed; opacity: .45; }
 }
 
 
-.header-inner { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); }
+.header-inner { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); min-width: 0; }
 .site-nav { display: flex; align-items: center; gap: clamp(12px, 2.2vw, 28px); }
 .site-nav a { font-size: .98rem; font-weight: 500; text-decoration: none; color: var(--text-muted); padding: 4px 0; }
 .site-nav a:hover { color: var(--text); }
@@ -294,10 +294,18 @@ button:disabled, .btn:disabled { cursor: not-allowed; opacity: .45; }
 /* Signed-in header: where you work, then who you are and the way out.
    The two destinations sit together as buttons and the account rule divides
    them from the session controls. */
-.header-account { display: flex; align-items: center; gap: 10px; }
+.header-account { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.header-account > .btn { flex-shrink: 0; white-space: nowrap; }
+.account-section { padding: 28px 0; border-bottom: 1px solid var(--rule); }
+.account-section h2 { margin-top: 0; }
+.account-section .stacked-form { margin-top: 18px; }
+.account-section .btn-ghost { margin-top: 16px; }
+.account-address { overflow-wrap: anywhere; }
+.account-page > .text-link { display: inline-block; margin-top: 28px; }
 .header-account-name {
   font-size: .98rem; font-weight: 500; color: var(--text-muted);
   max-width: 22ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  min-width: 0;
   margin-left: clamp(6px, 1vw, 12px); padding-left: clamp(12px, 1.6vw, 20px);
   border-left: 1px solid var(--rule);
 }
@@ -758,6 +766,14 @@ button:disabled, .btn:disabled { cursor: not-allowed; opacity: .45; }
 .wall-heading::after { content: ""; flex: 1; height: 1px; background: var(--rule-strong); }
 
 .memory-wall { margin-bottom: clamp(40px, 6vw, 64px); }
+.memory-report { display: flow-root; }
+.memory-report-trigger {
+  display: flex; margin-left: auto;
+  width: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 0;
+  background: transparent; color: var(--text-muted);
+  opacity: .6;
+}
+.memory-report-trigger:hover, .memory-report-trigger:focus-visible { color: var(--text); opacity: 1; }
 
 /* Column flow, so notes of different lengths pack like pinned paper rather
    than lining up in rigid rows. */
@@ -1007,7 +1023,7 @@ button:disabled, .btn:disabled { cursor: not-allowed; opacity: .45; }
 
 .essentials { margin-bottom: clamp(40px, 6vw, 64px); }
 .essentials-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin: 0; }
-.essential { padding: 20px clamp(14px, 1.8vw, 22px); border-top: 1px solid var(--rule-strong); border-right: 1px solid var(--rule); }
+.essential { padding: 20px clamp(14px, 1.8vw, 22px); border-right: 1px solid var(--rule); }
 .essential:first-child { padding-left: 0; }
 .essential:last-child { border-right: 0; padding-right: 0; }
 .essential dt { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: var(--step--2); font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); }
@@ -2338,10 +2354,77 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
    ----------------------------------------------------------------------- */
 
 .moderation-page { max-width: 1080px; }
-.moderation-page > .guest-review { margin-bottom: 1rem; }
-.queue-empty { padding: 1.5rem; border: 1px solid var(--rule); border-radius: 12px; text-align: center; color: var(--muted); }
+.moderation-intro { margin-bottom: 24px; }
+.moderation-intro h2 { margin: 0; font-size: var(--step-2); }
+.moderation-intro p { margin: 8px 0 0; max-width: 64ch; font-size: var(--step--1); color: var(--text-muted); }
+.property-shell .approval-settings {
+  display: grid; gap: 14px; margin-bottom: 24px; padding: clamp(18px, 3vw, 24px);
+  background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--sage-700);
+  border-radius: var(--radius-md);
+}
+.property-shell .approval-settings h3 { margin: 0; font: 650 1.05rem var(--font-sans); }
+.approval-settings-copy p { margin: 6px 0 0; color: var(--text-muted); font-size: var(--step--1); }
+.approval-settings .approval-switch { position: relative; min-height: 44px; font-size: var(--step--1); }
+.approval-switch .switch-label { flex: 1; }
+.approval-switch-state { flex: none; font-size: .8rem; color: var(--text-muted); }
+.approval-switch:has(input:checked) .approval-switch-state { color: var(--sage-700); }
+.approval-settings-note { margin: 0; font-size: var(--step--1); line-height: 1.55; }
+.approval-settings-footnote { margin: 0; color: var(--text-muted); font-size: var(--step--2); }
+.approval-settings-link { justify-self: start; font-size: var(--step--1); }
+.qr-page .approval-settings { margin: 12px 0 8px; }
+.property-shell .approval-settings-compact {
+  gap: 4px; padding: 0 0 0 14px; background: transparent;
+  border: 0; border-left: 2px solid var(--rule-strong); border-radius: 0;
+}
+.approval-settings-compact .approval-settings-note,
+.approval-settings-compact .approval-settings-link { font-size: var(--step--2); line-height: 1.5; }
+.approval-settings-compact .approval-settings-note { color: var(--text-muted); }
+.moderation-page .moderation-panel {
+  margin-bottom: 20px; padding: clamp(16px, 3vw, 24px);
+  background: var(--surface-raised); border: 1px solid var(--rule); border-radius: var(--radius-md);
+}
+.moderation-page .review-heading { padding: 0; border: 0; gap: 8px; }
+.moderation-page .review-heading h2 { font: 650 1.05rem var(--font-sans); }
+.moderation-page .review-status { background: var(--sage-050); color: var(--sage-700); white-space: nowrap; }
+.moderation-page .review-status[data-attention="true"] { background: var(--accent-soft); color: var(--accent-strong); }
+.moderation-page .review-description { margin: 8px 0 0; color: var(--text-muted); font-size: var(--step--1); overflow-wrap: anywhere; }
+.moderation-page .review-empty { margin: 14px 0 0; font-size: var(--step--1); color: var(--text-muted); }
+.moderation-page .review-notice { margin: 16px 0 0; padding: 12px 14px; background: var(--bg-alt); font-size: var(--step--1); border-radius: var(--radius-sm); }
+.moderation-page .guest-review article {
+  margin: 18px 0 0; padding: 18px; background: var(--surface);
+  border: 1px solid var(--rule); border-radius: var(--radius-sm); min-width: 0;
+}
+.review-memory-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.review-memory-author { margin: 0; font-size: var(--step--1); font-weight: 650; }
+.review-memory-state { padding: 4px 8px; color: var(--accent-strong); background: var(--accent-soft); border-radius: var(--radius-xs); font-size: var(--step--2); }
+.review-memory-state[data-pending="true"] { color: var(--text-muted); background: var(--bg-alt); }
+.review-memory-message { margin: 16px 0; font-size: var(--step-0); line-height: 1.6; overflow-wrap: anywhere; white-space: pre-wrap; }
+.review-memory-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.moderation-page .review-memory-actions button { margin: 0; }
+.review-memory-photos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 12px; margin-top: 12px; }
+.review-memory-photos:empty { display: none; }
+.review-memory-photos img { width: 100%; object-fit: contain; border-radius: var(--radius-sm); }
+.review-report-reason { margin: 0; font-size: var(--step--1); font-weight: 650; }
+.review-report-due { margin: 10px 0 0; font-size: var(--step--2); color: var(--accent-strong); }
+.moderation-wall { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--rule-strong); }
+.moderation-wall-heading h2 { margin: 0; font: 650 1.2rem var(--font-sans); }
+.moderation-wall-heading > p { margin: 6px 0 0; font-size: var(--step--1); color: var(--text-muted); }
+.moderation-wall .queue-section { margin-top: 24px; }
+.moderation-wall .queue-section h3 { display: flex; align-items: baseline; gap: 10px; margin: 0; padding-bottom: 10px; font: 600 1rem var(--font-sans); border-bottom: 1px solid var(--rule); }
+.moderation-wall .queue-privacy h3 { border-bottom-color: var(--accent); }
+.moderation-page #new-memories { scroll-margin-top: 24px; }
+.moderation-wall .queue-grid { margin-top: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+.moderation-page details.fine-print { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--rule); }
+.queue-empty { padding: 1.5rem; border: 1px solid var(--rule); border-radius: 12px; text-align: center; color: var(--text-muted); }
 .moderation-page details.fine-print summary { cursor: pointer; }
 .moderation-page details.fine-print[open] summary { margin-bottom: .75rem; }
+@media (max-width: 560px) {
+  .moderation-page .review-heading h2 { flex: 1; }
+  .moderation-page .review-heading > button { flex-basis: 100%; margin: 4px 0 0; }
+  .moderation-page .review-memory-actions .btn { flex: 1 1 100%; }
+  .moderation-page .guest-review article { padding: 14px; }
+  .approval-switch .switch-label { line-height: 1.4; }
+}
 
 /* ---- Walls and QR display ---- */
 
@@ -2702,8 +2785,7 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 
 /* The paper a property's walls are printed on.
 
-   A theme is not a colour scheme. Four walls that differ only in hue are four
-   copies of the same wall, so each theme sets what a printer would have picked
+   Layout and colour are chosen separately. Each theme sets what a printer would have picked
    along with the paper: the face the headings are set in, whether a memory is
    a card pinned to the page or a paragraph written on it, whether corners are
    cut square or rounded, whether anything lifts off the sheet, and whether the
@@ -2862,255 +2944,85 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
   color: var(--text);
 }
 
-/* Linen — paper and pins. Warm stock, notes cut out and pinned up at the angle
-   a hand leaves them, and a woven grain in the sheet. */
+/* Three layouts. Palette tokens are shared by every layout and drawing. */
 [data-wall-theme="linen"] {
-  --wall-sheet-border: 1px solid #cbb99b;
-  --wall-frame: 3px double #cbb99b;
-  --wall-guest-frame: var(--wall-frame);
-  --wall-note-border: 1px solid #dfd3bf;
-  --wall-paper: #fdfaf4;
-  --wall-paper-alt: #f7f2e8;
-  --wall-sheet: #ffffff;
-  --wall-ink: #14181b;
-  --wall-ink-soft: #5d6d78;
-  --wall-accent: #b4472a;
-  --wall-accent-strong: #8f3a20;
-  --wall-accent-soft: #f6e6de;
-  --wall-rule: rgba(20, 24, 27, .13);
-  --wall-rule-strong: rgba(20, 24, 27, .26);
-  --wall-chip-strong: #14181b;
-  --wall-chip: #1f262b;
-  --wall-chip-soft: #33404a;
-  --wall-chip-alt: #33604c;
-  --wall-chip-ink: #f5f1e8;
-
-  /* A woven grain, drawn rather than fetched: two hairline gratings crossed at
-     right angles, faint enough to read as stock instead of as pattern. */
-  --wall-texture:
-    repeating-linear-gradient(45deg, rgba(20, 24, 27, .022) 0 1px, transparent 1px 4px),
-    repeating-linear-gradient(-45deg, rgba(20, 24, 27, .022) 0 1px, transparent 1px 4px);
+  --font-display: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+  --wall-heading-weight: 500;
+  --wall-heading-tracking: -.025em;
+  --wall-sheet-radius: 12px;
+  --wall-note-radius: 8px;
+  --wall-frame: 0;
+  --wall-texture: repeating-linear-gradient(0deg, rgba(60, 48, 35, .018) 0 1px, transparent 1px 4px);
+  --wall-tilt: .35;
+}
+[data-wall-theme="studio"] {
+  --font-display: var(--font-sans);
+  --wall-heading-weight: 650;
+  --wall-heading-tracking: -.035em;
+  --wall-sheet-radius: 20px;
+  --wall-note-radius: 16px;
+  --wall-note-shadow: 0 5px 18px rgba(25, 39, 45, .045);
+  --wall-frame: 0;
+  --wall-tilt: 0;
+}
+[data-wall-theme="archive"] {
+  --font-display: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+  --wall-heading-weight: 600;
+  --wall-heading-tracking: -.03em;
+  --wall-sheet-radius: 2px;
+  --wall-note-radius: 2px;
+  --wall-note-shadow: none;
+  --wall-note-cap: 2px solid var(--wall-accent);
+  --wall-sheet-border: 1px solid var(--wall-rule-strong);
+  --wall-frame: 0;
+  --wall-tilt: 0;
 }
 
-/* Harbour — a new-build by the water. Everything set in the plainer face,
-   corners rounded off, nothing lifting: flat cards on cool stock. */
-[data-wall-theme="harbour"] {
-  --wall-texture: linear-gradient(rgba(247, 251, 253, .28), rgba(247, 251, 253, .28)), url("/assets/harbour-marble.jpg");
-  --wall-texture-size: 100% auto;
-  --wall-paper: #f1f6f8;
-  --wall-paper-alt: #e5eef2;
-  --wall-sheet: #fdfefe;
-  --wall-ink: #12232c;
-  --wall-ink-soft: #4f6874;
-  --wall-accent: #2b6b86;
-  --wall-accent-strong: #1d4d62;
-  --wall-accent-soft: #dcebf1;
-  --wall-rule: rgba(18, 35, 44, .14);
-  --wall-rule-strong: rgba(18, 35, 44, .28);
-  --wall-chip-strong: #12232c;
-  --wall-chip: #2b6b86;
-  --wall-chip-soft: #4f6874;
-  --wall-chip-alt: #1d4d62;
-  --wall-chip-ink: #f2f8fa;
-
-  /* One face for the whole wall, headings and prose alike. */
-  --font-display: var(--font-sans);
+/* Sand is also the fallback for older documents with no colour field. */
+[data-wall-theme] {
+  --wall-paper: #f7f3ec;
+  --wall-paper-alt: #eee7db;
+  --wall-sheet: #fffdf9;
+  --wall-ink: #292824;
+  --wall-ink-soft: #69655d;
+  --wall-accent: #956047;
+  --wall-accent-strong: #77462f;
+  --wall-accent-soft: #efe2d7;
+  --wall-rule: rgba(73, 59, 42, .14);
+  --wall-rule-strong: rgba(73, 59, 42, .26);
+  --wall-chip-strong: var(--wall-accent-strong);
+  --wall-chip: var(--wall-accent);
+  --wall-chip-soft: var(--wall-accent);
+  --wall-chip-alt: var(--wall-ink);
+  --wall-chip-ink: #ffffff;
   --wall-prose-font: var(--font-sans);
   --wall-prose-height: 1.7;
-  --wall-heading-weight: 680;
-  --wall-heading-tracking: -.018em;
-  --wall-eyebrow-tracking: .22em;
-
-  --wall-sheet-radius: 16px;
-  --wall-mark-radius: var(--radius-pill);
-  --wall-note-radius: 12px;
-  --wall-note-border: 1px solid var(--wall-rule-strong);
-  --wall-note-shadow: none;
-  --wall-note-pad: clamp(20px, 2.6vw, 28px);
-  --wall-tilt: 0;
-  /* Nothing lifts, the sheet included. */
-  --wall-sheet-shadow: none;
-  --wall-sheet-border: 1px solid var(--wall-rule-strong);
-  --wall-frame-radius: 10px;
-
-  /* Water, in the two lines a chart draws it with. */
-  --wall-device-content: "";
-  --wall-device: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M2 9.5q3-4 6 0t6 0 6 0'/%3E%3Cpath d='M2 15.5q3-4 6 0t6 0 6 0'/%3E%3C/svg%3E");
-}
-
-
-
-/* Sage — a journal left open. No cards at all: memories are paragraphs under a
-   rule, set airy, and the small print is written rather than stamped. */
-[data-wall-theme="sage"] {
-  --wall-floral-border: url("/assets/sage-floral-border.svg");
-  --wall-floral-bottom: url("/assets/sage-floral-corner-bottom.svg");
-  --wall-paper: #eef3ee;
-  --wall-paper-alt: #e2ebe4;
-  --wall-sheet: #fbfdfa;
-  --wall-ink: #1a2a22;
-  --wall-ink-soft: #55705f;
-  --wall-accent: #33604c;
-  --wall-accent-strong: #234534;
-  --wall-accent-soft: #dce9e0;
-  --wall-rule: rgba(26, 42, 34, .14);
-  --wall-rule-strong: rgba(26, 42, 34, .28);
-  --wall-chip-strong: #234534;
-  --wall-chip: #33604c;
-  --wall-chip-soft: #55705f;
-  --wall-chip-alt: #1a2a22;
-  --wall-chip-ink: #f2f7f3;
-
-  --font-display: Cambria, "Hoefler Text", Constantia, Georgia, ui-serif, serif;
-  --wall-prose-height: 1.8;
-  --wall-heading-style: italic;
-  --wall-heading-weight: 550;
-  /* Labels written in the same hand as the page, not stamped over it. */
-  --wall-eyebrow-font: var(--font-display);
-  --wall-eyebrow-weight: 500;
-  --wall-eyebrow-tracking: .02em;
-  --wall-eyebrow-transform: none;
-  --wall-eyebrow-style: italic;
-
-  --wall-note-back: transparent;
-  --wall-note-border: 0;
-  --wall-note-cap: 1px solid var(--wall-rule-strong);
-  --wall-note-radius: 0;
-  --wall-note-shadow: none;
-  --wall-note-pad: 18px 0 24px;
-  --wall-tilt: 0;
-  /* A memory here is a paragraph on the page rather than a card, and a pinned
-     note has to be on paper for the pin to mean anything: it gets the sheet, a
-     hairline and a lift that the memories around it do not have. */
-  --wall-host-note-back: var(--wall-sheet);
-  --wall-host-note-border: 1px solid var(--wall-rule);
-  --wall-host-note-shadow: var(--lift-sm);
-  /* Quiet paper with small floral corner details. */
-  --wall-sheet-lead: 1px solid #a6b7a0;
-  --wall-sheet-shadow: none;
-  --wall-frame: 0;
-  --wall-frame-inset: 6px;
-
-  /* A sprig, off the plant by the door. */
-  --wall-device-content: "";
-  --wall-device: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21.5V8'/%3E%3Cpath d='M12 13.5c-4 0-6.5-2.6-6.5-6.6 4 0 6.5 2.6 6.5 6.6z'/%3E%3Cpath d='M12 9.5c4 0 6.5-2.6 6.5-6.6-4 0-6.5 2.6-6.5 6.6z'/%3E%3C/svg%3E");
-  /* No ruling on the stock. A feint rule has to land on the lines it is ruling
-     for, and the sheet carries prose, labels and essentials all set at
-     different sizes: anchored to the top of the sheet instead, it cut through
-     the words at whatever interval the block above it happened to end on. */
-}
-
-/* Studio — a clean architectural moodboard. A soft-grey backdrop
-   with crisp white cards pinned securely under a metallic pushpin. */
-[data-wall-theme="studio"] {
-  --wall-paper: #e8e8e8;
-  --wall-paper-alt: #dcdcdc;
-  --wall-sheet: #e0e0e0;
-  --wall-ink: #1a1a1a;
-  --wall-ink-soft: #4a4a4a;
-  --wall-accent: #2b2b2b;
-  --wall-accent-strong: #111111;
-  --wall-accent-soft: #cccccc;
-  --wall-rule: rgba(0, 0, 0, .1);
-  --wall-rule-strong: rgba(0, 0, 0, .2);
-  --wall-chip-strong: #1a1a1a;
-  --wall-chip: #2b2b2b;
-  --wall-chip-soft: #4a4a4a;
-  --wall-chip-alt: #333333;
-  --wall-chip-ink: #ffffff;
-  
-  --paper-000: var(--wall-note-back);
-
-  --wall-heading-weight: 500;
   --wall-eyebrow-tracking: .1em;
-  
-  --wall-sheet-radius: 4px;
-  --wall-sheet-border: 6px solid #d4d4d4;
-  --wall-sheet-shadow: 0 10px 30px rgba(0, 0, 0, .1);
-  --wall-frame: 0;
-
-  --wall-note-back: #ffffff;
-  --wall-note-back-1: #ffffff;
-  --wall-note-back-2: #ffffff;
-  --wall-note-border: 1px solid rgba(0, 0, 0, .05);
-  --wall-note-radius: 2px;
-  --wall-note-shadow: 2px 4px 10px rgba(0, 0, 0, .08);
-  --wall-mark-radius: 2px;
-  --wall-tilt: 1.5;
-
-  --wall-fix-content: "";
-  --wall-fix-width: 12px;
-  --wall-fix-height: 12px;
-  --wall-fix-radius: 50%;
-  --wall-fix-back: radial-gradient(circle at 34% 30%, #888888 0 16%, #444444 58%, #222222 100%);
-  --wall-fix-shadow: 0 2px 4px rgba(0, 0, 0, .3);
-
-  --wall-texture:
-    repeating-linear-gradient(45deg, rgba(0, 0, 0, .02) 0 1px, transparent 1px 4px),
-    repeating-linear-gradient(-45deg, rgba(0, 0, 0, .02) 0 1px, transparent 1px 4px);
-  --wall-texture-size: auto;
-
-  --wall-device-content: "";
-  --wall-device: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round'%3E%3Ccircle cx='12' cy='8.4' r='4.6'/%3E%3Cpath d='M12 13v8.4'/%3E%3Cpath d='M8.5 5.6a4.6 4.6 0 0 1 2.6-1.8' stroke-width='1.1'/%3E%3C/svg%3E");
+  --wall-sheet-shadow: 0 8px 32px rgba(25, 39, 45, .045);
 }
-
-/* Archive — a gallery portfolio. Cool-grey card, squared off, 
-   with memories taped cleanly onto the page. */
-[data-wall-theme="archive"] {
-  --wall-guest-frame: 1px solid #89919c;
-  --wall-paper: #f4f5f7;
-  --wall-paper-alt: #e6e8eb;
-  --wall-sheet: #ffffff;
-  --wall-ink: #1a1f26;
-  --wall-ink-soft: #4a5463;
-  --wall-accent: #2d3748;
-  --wall-accent-strong: #1a202c;
-  --wall-accent-soft: #edf2f7;
-  --wall-rule: rgba(26, 31, 38, .1);
-  --wall-rule-strong: rgba(26, 31, 38, .2);
-  --wall-chip-strong: #1a1f26;
-  --wall-chip: #2d3748;
-  --wall-chip-soft: #4a5463;
-  --wall-chip-alt: #364152;
-  --wall-chip-ink: #f8fafc;
-  --paper-000: var(--wall-note-back);
-
-  --font-display: "Iowan Old Style", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, ui-serif, serif;
-  --wall-prose-height: 1.7;
-  --wall-heading-weight: 600;
-  
-  --wall-eyebrow-font: var(--font-sans);
-  --wall-eyebrow-weight: 600;
-  --wall-eyebrow-tracking: .08em;
-
-  --wall-sheet-radius: 2px;
-  --wall-sheet-border: 2px solid #626d7b;
-  --wall-mark-radius: 0;
-  --wall-frame: 1px solid #aeb5be;
-  --wall-frame-inset: 10px;
-
-  --wall-note-back: #ffffff;
-  --wall-note-border: 1px solid rgba(26, 31, 38, .1);
-  --wall-note-radius: 0;
-  --wall-note-shadow: 0 4px 14px rgba(26, 31, 38, .08);
-  --wall-note-pad: 22px 22px 26px;
-  --wall-tilt: .7;
-
-  /* Frosted matte tape, clean and modern */
-  --wall-fix-content: "";
-  --wall-fix-width: 48px;
-  --wall-fix-height: 14px;
-  --wall-fix-radius: 1px;
-  --wall-fix-back: linear-gradient(180deg, rgba(240, 242, 245, .95), rgba(226, 232, 240, .9));
-  --wall-fix-shadow: 0 1px 3px rgba(0, 0, 0, .05), inset 0 0 0 1px rgba(255, 255, 255, .6);
-  --wall-fix-tilt: -1deg;
-
-  /* Shallow, irregular impressions like hammered card stock. The small
-     seamless tile adds relief without placing a pattern over the writing. */
-  --wall-texture: url("/assets/hammered-card.svg");
-  --wall-texture-size: 180px 180px;
-
-  --wall-device-content: none;
+[data-wall-theme][data-wall-colour="sage"] {
+  --wall-paper: #eff3ee;
+  --wall-paper-alt: #e0e8df;
+  --wall-sheet: #fbfdf9;
+  --wall-ink: #25352b;
+  --wall-ink-soft: #596c5e;
+  --wall-accent: #4d7058;
+  --wall-accent-strong: #35533e;
+  --wall-accent-soft: #dde8dc;
+  --wall-rule: rgba(42, 69, 48, .14);
+  --wall-rule-strong: rgba(42, 69, 48, .26);
+}
+[data-wall-theme][data-wall-colour="ocean"] {
+  --wall-paper: #edf3f6;
+  --wall-paper-alt: #dfe9ee;
+  --wall-sheet: #fbfdff;
+  --wall-ink: #263942;
+  --wall-ink-soft: #566e7a;
+  --wall-accent: #4b7085;
+  --wall-accent-strong: #34566b;
+  --wall-accent-soft: #dce9f0;
+  --wall-rule: rgba(37, 63, 78, .14);
+  --wall-rule-strong: rgba(37, 63, 78, .26);
 }
 
 /* ---- What the tokens above actually paint ----
@@ -3143,18 +3055,18 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 
 /* Guest routes use a page rather than the editor's canvas. Keep the frame
    outside its content so photos, controls and text never sit under a line. */
-.wall-page[data-wall-theme="linen"],
-.wall-page[data-wall-theme="archive"],
-.wall-page[data-wall-theme="harbour"] {
-  border: var(--wall-guest-frame);
-  padding-inline: clamp(18px, 3vw, 32px);
-  padding-bottom: clamp(24px, 3vw, 36px);
+.wall-page[data-wall-theme] {
+  border: var(--wall-sheet-border);
+  border-radius: var(--wall-sheet-radius);
+  padding: clamp(20px, 3vw, 32px);
   background-color: var(--wall-paper);
   background-image: var(--wall-texture);
   background-size: var(--wall-texture-size);
+  box-shadow: var(--wall-sheet-shadow);
 }
-.wall-page[data-wall-theme="harbour"] { border-radius: var(--wall-sheet-radius); }
-.theme-swatch[data-wall-theme="harbour"] { background-size: 76px 76px; }
+[data-wall-theme].canvas-sheet, [data-wall-theme].phone-screen {
+  background-color: var(--wall-paper);
+}
 
 /* The device again in the corner of the sheet, faint and large, the way a
    stationer prints their own mark on the stock they sell. It sits in the
@@ -3168,39 +3080,6 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 }
 [data-wall-theme].phone-screen { background-image: var(--wall-texture); background-size: var(--wall-texture-size); }
 
-/* Soft botanical clusters follow two corners, leaving the page edges clear. */
-[data-wall-theme="sage"] .canvas-body::before,
-[data-wall-theme="sage"] .phone-body::before {
-  background-image: var(--wall-floral-border), var(--wall-floral-bottom);
-  background-position: left top, right bottom;
-  background-repeat: no-repeat;
-  background-size: 76px 76px;
-}
-[data-wall-theme="sage"] .phone-body::before { background-size: 32px 32px; }
-[data-wall-theme="sage"].canvas-sheet::after,
-[data-wall-theme="sage"] .canvas-sheet::after { content: none; }
-.wall-page[data-wall-theme="sage"] {
-  padding-inline: clamp(22px, 3vw, 32px);
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: var(--wall-paper);
-  background-image: var(--wall-floral-border), var(--wall-floral-bottom);
-  background-position: 4px 4px, right 4px bottom 4px;
-  background-repeat: no-repeat;
-  background-size: 80px 80px;
-}
-.theme-swatch[data-wall-theme="sage"] {
-  background-image: var(--wall-floral-border), var(--wall-floral-bottom);
-  background-position: left top, right bottom;
-  background-repeat: no-repeat;
-  background-size: 15px 15px;
-}
-@media (max-width: 600px) {
-  [data-wall-theme="sage"] .canvas-body::before { background-size: 60px 60px; }
-  .wall-page[data-wall-theme="sage"] {
-    background-size: 64px 64px;
-  }
-}
 [data-wall-theme] .canvas-cover-photo,
 [data-wall-theme] .canvas-cover-empty {
   border-radius: var(--wall-sheet-radius) var(--wall-sheet-radius) 0 0;
@@ -3249,9 +3128,9 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 [data-wall-theme] .host-note-swatch {
   background: color-mix(in srgb, var(--accent) 9%, var(--wall-note-back));
   border: var(--wall-note-border);
-  border-style: double;
-  border-width: 4px;
-  border-left: 4px double var(--accent);
+  border-style: solid;
+  border-width: 1px;
+  border-left: 3px solid var(--accent);
   border-radius: var(--wall-note-radius);
 }
 [data-wall-theme] .host-note[data-note-style="pinned"],
@@ -3410,85 +3289,28 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
   font-style: var(--wall-eyebrow-style);
 }
 
-/* ---- The picker ---- */
-
+/* ---- Appearance choices ---- */
+.wall-appearance-picker { display: grid; gap: 16px; max-width: 390px; }
 .theme-picker { border: 0; padding: 0; margin: 0; min-width: 0; }
-.theme-picker legend {
-  padding: 0; margin-bottom: 8px;
-  font-size: var(--step--2); font-weight: 650; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--text-muted);
-}
-.theme-dropdown { position: relative; display: inline-block; }
-.theme-dropdown-trigger {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 12px 6px 6px; margin: 0;
-  border: 1px solid var(--rule-strong); border-radius: var(--radius-xs);
-  background: var(--surface); color: inherit; font-family: inherit;
-  font-size: var(--step--1); font-weight: 600;
-  cursor: pointer;
-}
-.theme-dropdown-trigger:hover:not(:disabled) { border-color: var(--text-muted); }
-.theme-dropdown-trigger:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-.theme-dropdown-trigger:disabled { opacity: .55; cursor: default; }
-
-.theme-dropdown-icon { margin-left: 4px; opacity: 0.6; }
-
-.theme-dropdown-menu {
-  position: absolute; top: 100%; left: 0; margin-top: 4px;
-  z-index: 10;
-  display: flex; flex-direction: column; gap: 4px;
-  padding: 6px;
-  background: var(--surface);
-  border: 1px solid var(--rule-strong); border-radius: var(--radius-xs);
-  box-shadow: var(--lift-sm, 0 4px 12px rgba(0,0,0,0.1));
-}
-
-.theme-options { display: flex; flex-wrap: wrap; gap: 8px; }
-.theme-option { position: relative; }
-.theme-option input {
-  position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer;
-}
-/* The chip is the label's own span, named as a child: the swatch inside it is
-   a span too, and a descendant selector was painting the drawing of the wall
-   with the chrome of the control around it. */
-.theme-option > span {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 12px 6px 6px; width: 100%;
-  border: 1px solid transparent; border-radius: var(--radius-xs);
-  background: var(--surface);
-  font-size: var(--step--1); font-weight: 600;
-  transition: background 0.1s;
-}
-.theme-option:hover input:not(:disabled) + span { background: var(--bg-alt); }
-
-/* The swatch is a wall the size of a stamp, painted by the theme it stands
-   for: its own stock and grain, with one memory on it drawn by the same
-   declaration that draws a real one. Three stripes of colour could not show
-   that Harbour rounds its corners or that Sage has no cards at all. */
-.theme-swatch {
-  display: grid; place-items: center;
-  width: 38px; height: 28px; flex: none; overflow: hidden;
-  background: var(--wall-paper); background-image: var(--wall-texture); background-size: var(--wall-texture-size);
-  border: 1px solid var(--wall-rule-strong); border-radius: var(--wall-sheet-radius);
-  outline: var(--wall-guest-frame); outline-offset: -4px;
-}
-.theme-swatch-note {
-  display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; gap: 3px;
-  width: 24px; height: 17px; padding: 3px 4px;
-  transform: rotate(calc(var(--wall-tilt) * -3deg));
-  /* A corner cut for a note the width of a fingernail: at full size Harbour's
-     12px reads as a rounded card, and at 24px it reads as a pill. */
-  border-radius: min(var(--wall-note-radius), 5px);
-}
-.theme-swatch-note i { display: block; height: 2px; background: var(--wall-ink); opacity: .5; }
-.theme-swatch-note i:last-child { width: 55%; background: var(--wall-accent); opacity: 1; }
-
-.theme-option input:checked + span { border-color: var(--text); box-shadow: inset 0 0 0 1px var(--text); }
-.theme-option input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 2px; }
-.theme-option input:hover:not(:disabled) + span { border-color: var(--text-muted); }
-.theme-option input:disabled + span { opacity: .55; }
-
-.theme-note { margin: 8px 0 0; font-size: var(--step--1); color: var(--text-muted); }
+.theme-picker legend { padding: 0; margin-bottom: 8px; font-size: .75rem; font-weight: 650; color: var(--text-muted); }
+.theme-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.theme-option, .colour-option { position: relative; min-width: 0; }
+.theme-option input, .colour-option input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.theme-option > span { display: grid; justify-items: center; gap: 8px; padding: 7px 7px 9px; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface-raised); font-size: .8rem; font-weight: 600; }
+.theme-swatch { display: grid; align-content: center; justify-items: center; gap: 7px; width: 100%; height: 70px; overflow: hidden; background: var(--wall-paper); background-image: var(--wall-texture); border: 1px solid var(--wall-rule); border-radius: min(var(--wall-sheet-radius), 10px); }
+.theme-swatch-title { font: var(--wall-heading-weight) 22px/1 var(--font-display); letter-spacing: var(--wall-heading-tracking); }
+.theme-swatch-note { display: grid; align-content: center; gap: 4px; width: 70%; height: 22px; padding: 5px 7px; border-radius: min(var(--wall-note-radius), 5px); transform: rotate(calc(var(--wall-tilt) * -3deg)); }
+.theme-swatch-note i { display: block; height: 2px; background: var(--wall-ink); opacity: .35; }
+.theme-swatch-note i:last-child { width: 55%; background: var(--wall-accent); opacity: .8; }
+.colour-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.colour-option > span { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--rule); border-radius: 8px; font-size: .8rem; font-weight: 600; background: var(--surface-raised); }
+.colour-option i { width: 19px; height: 19px; border: 4px solid var(--wall-paper); border-radius: 50%; background: var(--wall-accent); box-shadow: 0 0 0 1px var(--wall-rule-strong); }
+.theme-option input:checked + span, .colour-option input:checked + span { border-color: var(--text); box-shadow: 0 0 0 1px var(--text); }
+.theme-option input:focus-visible + span, .colour-option input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 3px; }
+.theme-option input:hover:not(:disabled) + span, .colour-option input:hover:not(:disabled) + span { border-color: var(--text-muted); }
+.theme-option input:disabled + span, .colour-option input:disabled + span { opacity: .55; }
+.theme-note { margin: 8px 0 0; font-size: .8rem; line-height: 1.5; color: var(--text-muted); }
+.wall-appearance-picker > .theme-note { margin: -4px 0 0; }
 
 /* ------------------- The public wall: on, off, and shared ---------------- */
 
@@ -3782,3 +3604,92 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 .canvas-note .canvas-note-photo-empty { min-height: 90px; padding: 12px; }
 .canvas-note .host-note-words { min-width: 0; }
 .canvas-note .canvas-note-message { font-size: 1.125rem; line-height: 1.55; }
+ .local-test-banner { padding: 10px 16px; background: #fff1ba; color: #372a08; text-align: center; font: 600 14px/1.5 system-ui; }
+ .local-test-banner a { color: #372a08; text-decoration: underline; }
+
+/* Preview the actual wall components at a smaller reading size. */
+.phone-wall-content { padding: 18px; zoom: .65; }
+.phone-wall-content .host-note-body { grid-template-columns: minmax(0, 1fr); }
+.phone-wall-content .host-note-photo { max-width: 100%; }
+.phone-wall-content .live-property-header h1, .phone-wall-content .stay-cover-titles h1 { font-size: 2rem; }
+.phone-wall-content .live-property-cover, .phone-wall-content .wall-cover-photo { max-height: 190px; }
+.phone-wall-content .essentials-grid { grid-template-columns: minmax(0, 1fr); }
+[data-wall-theme] .live-property-header > p, [data-wall-theme] .stay-welcome > p,
+[data-wall-theme] .note > p:first-of-type { font-family: var(--wall-prose-font); line-height: var(--wall-prose-height); }
+[data-wall-theme] .host-note-photo { border-radius: var(--wall-note-radius); }
+[data-wall-theme] .stay-portrait { color: var(--on-ink); font-size: clamp(1.1rem, 2.2vw, 1.7rem); }
+[data-wall-theme] .note img { width: 100%; border-radius: max(0px, calc(var(--wall-note-radius) - 4px)); }
+
+/* The selected palette belongs to the whole guest page, including its margins. */
+[data-wall-theme] {
+  --wall-background-image:
+    var(--wall-texture),
+    radial-gradient(ellipse at 8% 0%, color-mix(in srgb, var(--wall-accent) 13%, transparent), transparent 55%),
+    radial-gradient(ellipse at 100% 75%, color-mix(in srgb, var(--wall-accent) 7%, transparent), transparent 60%),
+    linear-gradient(135deg, var(--wall-paper), var(--wall-paper-alt));
+}
+.wall-page[data-wall-theme] {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.wall-page[data-wall-theme]::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--wall-paper);
+  background-image: var(--wall-background-image);
+}
+.local-test-banner { position: relative; z-index: 1; }
+[data-wall-theme].phone-screen,
+[data-wall-theme].canvas-sheet,
+.theme-swatch[data-wall-theme] {
+  background-color: var(--wall-paper);
+  background-image: var(--wall-background-image);
+}
+
+/* Light reading surfaces sit on the palette, instead of one solid coloured sheet. */
+[data-wall-theme] .stay-cover,
+[data-wall-theme] .live-property-header,
+[data-wall-theme] .stay-welcome {
+  background: var(--wall-sheet);
+  border: 1px solid var(--wall-rule);
+  border-radius: var(--wall-sheet-radius);
+  box-shadow: var(--wall-note-shadow);
+}
+[data-wall-theme] .stay-cover { overflow: hidden; }
+[data-wall-theme] .stay-cover .wall-cover-photo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  border-radius: 0;
+}
+[data-wall-theme] .stay-cover-caption {
+  padding: 22px 24px;
+  border-bottom: 0;
+}
+[data-wall-theme] .live-property-header,
+[data-wall-theme] .stay-welcome { padding: clamp(20px, 3vw, 30px); }
+[data-wall-theme] .live-property-header { margin-bottom: 28px; }
+[data-wall-theme] .live-property-cover { border-radius: max(0px, calc(var(--wall-sheet-radius) - 4px)); }
+[data-wall-theme] .stay-tip {
+  background: color-mix(in srgb, var(--wall-accent-soft) 60%, var(--wall-sheet));
+  border-radius: 0 var(--wall-note-radius) var(--wall-note-radius) 0;
+}
+[data-wall-theme] .essentials-grid { gap: 12px; }
+[data-wall-theme] .essential {
+  padding: 18px;
+  background: var(--wall-sheet);
+  border: 1px solid var(--wall-rule);
+  border-radius: var(--wall-note-radius);
+}
+
+@media (max-width: 600px) {
+  .wall-page[data-wall-theme] { padding: 16px 0 24px; }
+  [data-wall-theme] .stay-cover-caption { padding: 18px; }
+}

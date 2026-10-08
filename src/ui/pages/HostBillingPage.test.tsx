@@ -210,6 +210,37 @@ describe("property billing", () => {
     expect(await screen.findByText(/Cancelled\. This property stays live until 8 October 2026\./i)).toBeInTheDocument();
   });
 
+  it("still says cancelled after the webhook turns the property into a resumable one", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      cancelSubscription.mockResolvedValue({
+        status: "ok",
+        value: { serviceEndsAt: 1_791_000_000, serviceEndsOn: "1 October 2026", alreadySet: false, chargedAgain: false }
+      });
+      renderPage();
+      await screen.findByRole("heading", { name: "Billing", level: 2 });
+
+      fireEvent.click(screen.getByRole("button", { name: "Cancel this subscription" }));
+      fireEvent.click(screen.getByRole("button", { name: "Yes, cancel" }));
+      expect(await screen.findByText(/Cancelled\. This property stays live/i)).toBeInTheDocument();
+
+      // The webhook lands and the watch re-reads the property as cancelled.
+      loadProperty.mockResolvedValue({
+        status: "ok",
+        value: hostProperty({ lifecycle: "cancelled_pending_end", serviceEndsAt: "2026-10-01T00:00:00.000Z" })
+      });
+      await vi.advanceTimersByTimeAsync(3500);
+
+      expect(
+        await screen.findByText("Cancelled. The wall stays live until the paid period ends.")
+      ).toBeInTheDocument();
+      expect(screen.getByText(/Cancelled\. This property stays live/i)).toBeInTheDocument();
+      expect(screen.queryByText(/back on/i)).not.toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("keeps the cancellation standing when the server refuses", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ lifecycle: "trialing" }) });
     cancelSubscription.mockResolvedValue({ status: "error", message: "We could not reach Stripe." });

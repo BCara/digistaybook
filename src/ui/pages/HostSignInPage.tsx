@@ -13,6 +13,8 @@ import {
   type SignInOutcome
 } from "../auth/hostAuth";
 import { navigate } from "../routing";
+import { AuthenticatorChallenge } from "../auth/AuthenticatorChallenge";
+import type { MfaChallenge } from "../auth/reviewerMfa";
 
 type Feedback = { tone: "error" | "success"; message: string } | null;
 
@@ -28,7 +30,7 @@ const DASHBOARD = "/host";
 function goToDashboard() {
   // Client-side, so the dashboard does not have to boot the SDK and resolve
   // the session a second time immediately after this page just did both.
-  if (typeof window !== "undefined") navigate(DASHBOARD);
+  if (typeof window !== "undefined") navigate(new URLSearchParams(window.location.search).get("returnTo") === "operations" ? "/operations" : DASHBOARD);
 }
 
 function problemFor(problems: CredentialProblem[], field: CredentialProblem["field"]) {
@@ -45,9 +47,11 @@ export function HostSignInPage({ initialMode = "sign-in" }: { initialMode?: Host
   const [pending, setPending] = useState<null | "email" | "google" | "reset" | "create">(null);
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [problems, setProblems] = useState<CredentialProblem[]>([]);
+  const [challenge, setChallenge] = useState<MfaChallenge | null>(null);
 
   const busy = pending !== null;
   const creating = mode === "create";
+  if (challenge) return <AuthenticatorChallenge challenge={challenge} onComplete={goToDashboard} onCancel={() => { setChallenge(null); setPassword(""); }} />;
 
   // An anonymous Guest wall session is signed in but is never a Host, so the
   // form stays available to it rather than being treated as an active session.
@@ -97,6 +101,7 @@ export function HostSignInPage({ initialMode = "sign-in" }: { initialMode?: Host
       setPending(null);
     }
     if (outcome.status === "cancelled") return;
+    if (outcome.status === "mfa") { setPassword(""); setChallenge(outcome.challenge); return; }
     if (outcome.status === "error") {
       setFeedback({ tone: "error", message: outcome.message });
       return;

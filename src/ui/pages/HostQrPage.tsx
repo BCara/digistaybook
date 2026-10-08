@@ -6,6 +6,7 @@ import { publicWallUrl, stayWallPath } from "../../domain/wallAddress";
 import { useAuth } from "../auth/AuthProvider";
 import { PropertyShell } from "../host/PropertyShell";
 import { QrPlacard } from "../host/QrPlacard";
+import { GuestReviewPanel } from "../host/GuestReviewPanel";
 import { ensureStayToken, type HostProperty } from "../host/propertyStore";
 import { useProperty } from "../host/useProperty";
 import { propertyBlock } from "../host/usePropertyDraft";
@@ -22,9 +23,9 @@ import { propertyBlock } from "../host/usePropertyDraft";
  *
  * The wall address is here rather than beside the property name, because a
  * Host looks it up when they are thinking about the QR display and never while
- * they are writing a welcome note. Everything on this page is read-only. The
- * address is fixed at creation and the kit is unlocked by the subscription, so
- * a page offering to change either would be lying about who decides.
+ * they are writing a welcome note. The address is fixed at creation and the
+ * kit is unlocked by the subscription. Hosts can also choose here whether
+ * new memories require approval before publication.
  */
 
 function Shell({ title, children }: { title: string; children: ReactNode }) {
@@ -144,9 +145,12 @@ export function HostQrPage({ propertyId }: { propertyId: string }) {
 
           {!live && <div className="actions"><a className="btn btn-primary" href={`/host/property/${property.id}/${stayReason.section}`}>{stayReason.action}</a></div>}
           <div className="consequences">
-            <Wall reason={stayReason} title="The in-stay wall" address={stayUrl} live={live} href={stayWallPath(property.slug, property.stayToken)} configureHref={`/host/property/${property.id}`}>
-              The page guests open from your QR code.
-            </Wall>
+            <div className="qr-in-stay-wall">
+              <Wall reason={stayReason} title="The in-stay wall" address={stayUrl} live={live} href={stayWallPath(property.slug, property.stayToken)} configureHref={`/host/property/${property.id}`}>
+                The page guests open from your QR code.
+              </Wall>
+              <GuestReviewPanel key={propertyId} propertyId={propertyId} settingsOnly />
+            </div>
             <Wall reason={publicReason} title="The public wall" address={publicWallUrl(window.location.origin, property.slug)} live={live && !property.profile.displayWallOff} href={`/wall/${property.slug}`} configureHref={`/host/property/${property.id}/public`}>
               Share this link in your listing or guest messages.
             </Wall>

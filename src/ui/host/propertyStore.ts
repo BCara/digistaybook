@@ -312,6 +312,7 @@ export async function savePropertyName(
 /** Everything a Host writes about a property, bar the photographs. */
 const PROFILE_FIELDS = [
   "theme",
+  "colour",
   "displayWallOff",
   "location",
   "welcome",

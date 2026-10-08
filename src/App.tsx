@@ -8,6 +8,7 @@ import { PricingPage } from "./ui/pages/PricingPage";
 import { GuestWallPage } from "./ui/pages/GuestWallPage";
 import { StayWallPage } from "./ui/pages/StayWallPage";
 import { HostSignInPage } from "./ui/pages/HostSignInPage";
+import { HostAccountPage } from "./ui/pages/HostAccountPage";
 import { HostDashboardPage } from "./ui/pages/HostDashboardPage";
 import { HostModerationPage } from "./ui/pages/HostModerationPage";
 import { HostFeedbackPage } from "./ui/pages/HostFeedbackPage";
@@ -19,6 +20,8 @@ import { HostQrPage } from "./ui/pages/HostQrPage";
 import { HostWallDesignPage } from "./ui/pages/HostWallDesignPage";
 import { PrivacySafetyPage } from "./ui/pages/PrivacySafetyPage";
 import { SafetyOperationsPage } from "./ui/pages/SafetyOperationsPage";
+import { ReviewerSetupPage } from "./ui/pages/ReviewerSetupPage";
+import { RequireReviewer } from "./ui/auth/RequireReviewer";
 import { LegalDraftPage } from "./ui/pages/LegalDraftPage";
 import { NotFoundPage } from "./ui/pages/NotFoundPage";
 import { DEMO_SLUG } from "./ui/wall/demoWall";
@@ -36,6 +39,7 @@ function resolvePage(pathname: string) {
   }
   if (pathname === "/host/sign-in") return <HostSignInPage />;
   if (pathname === "/host/sign-up") return <HostSignInPage initialMode="create" />;
+  if (pathname === "/host/account") return <RequireHost><HostAccountPage /></RequireHost>;
   if (pathname === "/host")
     return (
       <RequireHost>
@@ -99,7 +103,8 @@ function resolvePage(pathname: string) {
       );
   }
   if (pathname === "/privacy-safety") return <PrivacySafetyPage />;
-  if (pathname === "/operations") return <RequireHost><SafetyOperationsPage /></RequireHost>;
+  if (pathname === "/operations/setup") return <RequireHost signInPath="/host/sign-in?returnTo=operations"><ReviewerSetupPage /></RequireHost>;
+  if (pathname === "/operations") return <RequireHost signInPath="/host/sign-in?returnTo=operations"><RequireReviewer><SafetyOperationsPage /></RequireReviewer></RequireHost>;
   if (pathname === "/terms") return <LegalDraftPage kind="terms" />;
   if (pathname === "/guest-terms") return <LegalDraftPage kind="guest-terms" />;
   if (pathname === "/privacy") return <LegalDraftPage kind="privacy" />;

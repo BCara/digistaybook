@@ -1,0 +1,123 @@
+{
+  "checkedDateSydney": "2026-10-05",
+  "project": "digistaybook-cbert",
+  "functions": {
+    "finishGuestContribution": {
+      "serviceConfig": {
+        "environmentVariables": {
+          "GUEST_CONTRIBUTIONS_ENABLED": "false",
+          "GUEST_TEST_PROPERTY_IDS": "chpLFZnSbGBPpoPRNBlb",
+          "GUEST_TEST_UNTIL": "2026-10-09T13:00:00Z"
+        },
+        "revision": "finishguestcontribution-00017-piv",
+        "serviceAccountEmail": "functions-runtime@digistaybook-cbert.iam.gserviceaccount.com"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-04T23:29:22.245064798Z"
+    },
+    "changeGuestContribution": {
+      "serviceConfig": {
+        "environmentVariables": {
+          "GUEST_CONTRIBUTIONS_ENABLED": "false",
+          "GUEST_TEST_PROPERTY_IDS": "chpLFZnSbGBPpoPRNBlb",
+          "GUEST_TEST_UNTIL": "2026-10-09T13:00:00Z"
+        },
+        "revision": "changeguestcontribution-00016-mis",
+        "serviceAccountEmail": "functions-runtime@digistaybook-cbert.iam.gserviceaccount.com"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-04T23:29:22.878155730Z"
+    },
+    "retryPendingScreening": {
+      "serviceConfig": {
+        "environmentVariables": {
+          "GUEST_CONTRIBUTIONS_ENABLED": "false",
+          "GUEST_TEST_PROPERTY_IDS": "chpLFZnSbGBPpoPRNBlb",
+          "GUEST_TEST_UNTIL": "2026-10-09T13:00:00Z"
+        },
+        "revision": "retrypendingscreening-00016-mit",
+        "serviceAccountEmail": "functions-runtime@digistaybook-cbert.iam.gserviceaccount.com"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-04T23:28:50.146814155Z"
+    },
+    "listHostGuestReview": {
+      "serviceConfig": {
+        "environmentVariables": {
+          "GUEST_CONTRIBUTIONS_ENABLED": "false",
+          "GUEST_TEST_PROPERTY_IDS": "chpLFZnSbGBPpoPRNBlb",
+          "GUEST_TEST_UNTIL": "2026-10-09T13:00:00Z"
+        },
+        "revision": "listhostguestreview-00012-dun",
+        "serviceAccountEmail": "functions-runtime@digistaybook-cbert.iam.gserviceaccount.com"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-04T23:29:21.946189141Z"
+    },
+    "setGuestReviewPolicy": {
+      "serviceConfig": {
+        "environmentVariables": {
+          "GUEST_CONTRIBUTIONS_ENABLED": "false",
+          "GUEST_TEST_PROPERTY_IDS": "chpLFZnSbGBPpoPRNBlb",
+          "GUEST_TEST_UNTIL": "2026-10-09T13:00:00Z"
+        },
+        "revision": "setguestreviewpolicy-00001-fol",
+        "serviceAccountEmail": "functions-runtime@digistaybook-cbert.iam.gserviceaccount.com"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-04T23:29:20.434758876Z"
+    },
+    "reviewGuestContribution": {
+      "serviceConfig": {
+        "environmentVariables": {
+          "GUEST_CONTRIBUTIONS_ENABLED": "false",
+          "GUEST_TEST_PROPERTY_IDS": "chpLFZnSbGBPpoPRNBlb",
+          "GUEST_TEST_UNTIL": "2026-10-09T13:00:00Z"
+        },
+        "revision": "reviewguestcontribution-00012-xad",
+        "serviceAccountEmail": "functions-runtime@digistaybook-cbert.iam.gserviceaccount.com"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-04T23:29:21.625095338Z"
+    },
+    "readSafetyCase": {
+      "serviceConfig": {
+        "environmentVariables": {
+          "GUEST_CONTRIBUTIONS_ENABLED": "false",
+          "GUEST_TEST_PROPERTY_IDS": "chpLFZnSbGBPpoPRNBlb",
+          "GUEST_TEST_UNTIL": "2026-10-09T13:00:00Z"
+        },
+        "revision": "readsafetycase-00002-saw",
+        "serviceAccountEmail": "functions-runtime@digistaybook-cbert.iam.gserviceaccount.com"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-04T23:28:43.145061933Z"
+    },
+    "readSafetyCasePhoto": {
+      "serviceConfig": {
+        "environmentVariables": {
+          "GUEST_CONTRIBUTIONS_ENABLED": "false",
+          "GUEST_TEST_PROPERTY_IDS": "chpLFZnSbGBPpoPRNBlb",
+          "GUEST_TEST_UNTIL": "2026-10-09T13:00:00Z"
+        },
+        "revision": "readsafetycasephoto-00001-hem",
+        "serviceAccountEmail": "functions-runtime@digistaybook-cbert.iam.gserviceaccount.com"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-04T23:29:12.464282706Z"
+    },
+    "resolveSafetyCase": {
+      "serviceConfig": {
+        "environmentVariables": {
+          "GUEST_CONTRIBUTIONS_ENABLED": "false",
+          "GUEST_TEST_PROPERTY_IDS": "chpLFZnSbGBPpoPRNBlb",
+          "GUEST_TEST_UNTIL": "2026-10-09T13:00:00Z"
+        },
+        "revision": "resolvesafetycase-00002-hev",
+        "serviceAccountEmail": "functions-runtime@digistaybook-cbert.iam.gserviceaccount.com"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-04T23:28:48.910193690Z"
+    }
+  }
+}

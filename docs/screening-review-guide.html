@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DigiStayBook — Screening &amp; review guide</title>
+  <style>
+    :root{color-scheme:light;--ink:#20372f;--muted:#53675e;--green:#175843;--line:#d7e2da;--paper:#fff;--bg:#f3f6f2;--amber:#fff4d8}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+    a{color:var(--green);text-underline-offset:3px}a:hover{text-decoration-thickness:2px}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #b06d13;outline-offset:3px}
+    main{max-width:1120px;margin:auto;padding:40px 24px 72px}header{padding:12px 0 24px}.eyebrow{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+    h1{font-size:clamp(32px,5vw,50px);line-height:1.13;letter-spacing:-.035em;margin:14px 0 18px;max-width:800px}h2{font-size:27px;line-height:1.3;margin:0 0 18px}h3{font-size:19px;line-height:1.4;margin:26px 0 10px}p{margin:12px 0}.intro{font-size:19px;max-width:850px}.meta,.small{font-size:14px;color:var(--muted)}
+    nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 24px}nav a{background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:14px;text-decoration:none}
+    section{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:28px;margin:20px 0;scroll-margin-top:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{border:1px solid var(--line);border-radius:12px;padding:20px}.card h3{margin:0 0 10px}.tag{display:inline-block;background:#e8f1eb;color:var(--green);font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;margin-bottom:10px}
+    .callout{background:var(--amber);border-left:4px solid #b57f1c;padding:16px 18px;border-radius:5px;margin:18px 0}.note{background:#edf5ef;border-left:4px solid var(--green);padding:16px 18px;border-radius:5px;margin:18px 0}.callout p,.note p{margin:0}.actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+    .button,button{display:inline-block;background:var(--green);border:1px solid var(--green);border-radius:7px;color:white;font:600 14px/1.5 system-ui;padding:9px 14px;text-decoration:none;cursor:pointer}.button.secondary,button.secondary{background:white;color:var(--green)}
+    ol,ul{padding-left:24px}li{margin:9px 0}li p{margin:6px 0}.table-wrap{overflow-x:auto;margin:18px 0}table{border-collapse:collapse;width:100%;font-size:15px}th,td{padding:12px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}th{background:#edf3ee;font-size:13px;letter-spacing:.025em}tbody tr:last-child td{border-bottom:0}
+    code{font:13px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;background:#edf2ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f1f5f1;border:1px solid var(--line);border-radius:9px;padding:16px;font:13px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace}input{font:15px system-ui;border:1px solid #8da799;border-radius:6px;padding:11px;width:min(100%,430px)}label{display:block;font-weight:600;margin:12px 0 6px}.step{color:var(--green);font-size:14px;font-weight:700;margin-bottom:7px}footer{font-size:13px;color:var(--muted);padding:10px 2px}.flow{display:flex;flex-wrap:wrap;align-items:center;gap:9px;font-size:14px;margin:18px 0}.flow span{border:1px solid var(--line);background:#f5f8f4;padding:9px 12px;border-radius:7px}.flow b{color:var(--green)}
+    #copy-status{min-height:24px;font-size:14px;color:var(--green)}.events th:first-child{width:30%}.record td{height:54px}.record code{font-size:12px}
+    @media(max-width:700px){main{padding:22px 14px 45px}section{padding:20px 16px}.grid{grid-template-columns:1fr}.card{padding:16px}h2{font-size:23px}th,td{padding:10px;font-size:14px}.intro{font-size:17px}}
+    @media print{body{background:white;font-size:11pt}main{max-width:none;padding:0}header{padding:0}h1{font-size:28pt}h2{font-size:17pt}h3{font-size:13pt}section{border:0;border-radius:0;padding:16px 0;margin:0}.grid{grid-template-columns:1fr 1fr}nav,button,.actions,.query-builder,#copy-status{display:none!important}a{color:inherit}th,td{font-size:9pt;padding:8px}.callout,.note,pre{break-inside:avoid}h2,h3{break-after:avoid}tr{break-inside:avoid}footer{font-size:9pt}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">DigiStayBook · Operator instructions</div>
+    <h1>Check screening.<br>Review the right queue.</h1>
+    <p class="intro">A practical guide for testing guest messages and photos, finding real screening results, and handling host review or restricted admin cases.</p>
+    <p class="meta">Prepared 6 October 2026 · Based on the current application source · Times and daily allowance use Australia/Sydney.</p>
+    <button class="secondary" id="print-guide" type="button">Print / save as PDF</button>
+  </header>
+  <nav aria-label="Guide sections">
+    <a href="#environment">1. Local or live?</a><a href="#local">2. Local walkthrough</a><a href="#live">3. Real screening</a><a href="#host">4. Host review</a><a href="#admin">5. Admin cases</a><a href="#decisions">6. Decisions</a><a href="#troubleshooting">7. Troubleshooting</a><a href="#record">8. Record a test</a>
+  </nav>
+
+  <section id="environment">
+    <div class="step">01 · Start here</div>
+    <h2>Confirm which environment you are using</h2>
+    <div class="grid">
+      <div class="card"><span class="tag">LOCAL TEST · SIMULATED</span><h3>Test the workflow</h3><p>The standard local launcher uses <code>http://127.0.0.1:5181</code> and project <code>demo-digistaybook</code>. Messages select a pretend result using test markers. Photos are processed, but their safety classification is also simulated.</p><p><strong>Ordinary text defaults to “clear”.</strong> Even “Fuck You” clears without a marker. This does not test Google's ability to recognise profanity.</p><a href="http://127.0.0.1:5181/__test" target="_blank" rel="noopener">Open local test home</a></div>
+      <div class="card"><span class="tag">LIVE TEST · REAL PROVIDERS</span><h3>Test classification</h3><p>The hosted test property uses project <code>digistaybook-cbert</code>. Google Natural Language screens text; Google Vision SafeSearch screens transformed photos. The app then applies its publication and review rules.</p><p>Detailed scores are in Cloud Logging. The admin screen shows safety cases and their flag categories; it does not show every submission or every score.</p><a href="https://digistaybook-cbert.web.app/host" target="_blank" rel="noopener">Open live host dashboard</a></div>
+    </div>
+    <div class="note"><p><strong>Use local tests to verify destinations and buttons. Use live tests to verify Google's actual response.</strong> A successful local flow does not prove real classification, real MFA, email delivery or production deletion.</p></div>
+    <p class="small">A localhost address alone is not proof of simulation: a differently configured dev server can connect to production. These local instructions describe <code>npm run test:local</code>, its test home and the demo emulator project.</p>
+  </section>
+
+  <section id="local">
+    <div class="step">02 · Local walkthrough</div>
+    <h2>Exercise the screening and review routes</h2>
+    <ol>
+      <li>From the DigiStayBook project folder, run <code>npm run test:local</code> if the test server is not already running. Open the <a href="http://127.0.0.1:5181/__test" target="_blank" rel="noopener">local test home</a>.</li>
+      <li>Sign in as the host using <code>host@example.test</code>, password <code>LocalTest-2026!</code>. Open Test Cottage → Moderation. For the first tests, leave <strong>Review content before publication</strong> off.</li>
+      <li>Open the <a href="http://127.0.0.1:5181/stay/test-cottage/LocalTestStayToken0001" target="_blank" rel="noopener">Test Cottage guest link</a> in a private window. Submit each harmless example below and note its time.</li>
+      <li>Use the host or operations account to inspect the destination. Press the relevant <strong>Refresh</strong> button after each submission or decision. Sign out before changing accounts.</li>
+    </ol>
+    <div class="table-wrap"><table>
+      <thead><tr><th scope="col">Submit this text</th><th scope="col">As a public memory</th><th scope="col">As private feedback</th></tr></thead>
+      <tbody>
+        <tr><td><code>A lovely test stay.</code></td><td>Publishes when host review is off. Waits for host approval when it is on.</td><td>Delivered to the host's Private feedback inbox.</td></tr>
+        <tr><td><code>[review] Please check this example.</code></td><td>Ready for host review in Moderation → Guest safety review.</td><td>Delivered to the host inbox; this marker does not create a feedback safety hold.</td></tr>
+        <tr><td><code>[safety] Harmless restricted example.</code></td><td>Restricted operations safety case; stays off the public wall.</td><td>Restricted operations safety case; withheld from the host inbox.</td></tr>
+        <tr><td><code>[outage] Harmless waiting example.</code></td><td>Pending and private. Retries with backoff; repeated failure eventually raises an alert.</td><td>Undelivered and private. Same bounded retry behaviour.</td></tr>
+        <tr><td><code>Contact guest@example.com</code></td><td>The separate contact-detail rule holds the memory for host review after the simulated clear scan.</td><td>Delivered privately unless another safety hold applies.</td></tr>
+      </tbody>
+    </table></div>
+    <p>Markers are case-insensitive. If several appear, <code>[outage]</code> takes priority, then <code>[safety]</code>, then <code>[review]</code>. Use one marker per test. <strong>Do not use markers to test live classification:</strong> the live provider treats them as ordinary text.</p>
+    <div class="actions"><a class="button" href="http://127.0.0.1:5181/host/property/test-cottage/moderation" target="_blank" rel="noopener">Local host review</a><a class="button secondary" href="http://127.0.0.1:5181/host/property/test-cottage/feedback" target="_blank" rel="noopener">Local feedback</a><a class="button secondary" href="http://127.0.0.1:5181/operations" target="_blank" rel="noopener">Local admin cases</a><a class="button secondary" href="http://127.0.0.1:4000" target="_blank" rel="noopener">Emulator data viewer</a></div>
+    <h3>Verify the complete local journey</h3>
+    <ul>
+      <li><strong>Host review:</strong> approve one <code>[review]</code> memory and confirm it appears on the public wall. Choose <strong>Keep off wall</strong> for another and confirm it stays hidden.</li>
+      <li><strong>Review switch:</strong> turn it on, submit a new clear memory, and confirm it waits. Turning it off does not publish items already waiting; approve them individually.</li>
+      <li><strong>Admin:</strong> sign in as <code>operations@example.test</code>, using the same local password. Choose Safety cases → Open case. Release one memory to the host, then approve it as the host. Delete a separate test case and confirm the wall has no visible post.</li>
+      <li><strong>Photos:</strong> attach an ordinary authorised photo to a <code>[safety]</code> memory; open it using the admin case's photo button. This tests photo access and review controls, not image classification.</li>
+      <li><strong>Recovery:</strong> edit your own outage memory in the same guest browser to remove <code>[outage]</code>. Check the new revision follows the clear route. Seeded posts belong to a different guest session.</li>
+    </ul>
+    <p class="small">Local operations access simulates the reviewer MFA requirement. The launcher runs local workers periodically; <code>npm run test:local:workers</code> runs due work, without bypassing backoff or deletion deadlines. Local tests do not emit the real provider score events.</p>
+  </section>
+
+  <section id="live">
+    <div class="step">03 · Real Google screening</div>
+    <h2>Submit a live test and inspect its results</h2>
+    <p>Use the existing owner-authorised test property, <strong>My Property Name</strong>, reference <code>chpLFZnSbGBPpoPRNBlb</code>. General public intake remains closed in the recorded configuration. The configured exception ends at <strong>midnight at the end of 9 October 2026, Sydney time</strong>. Confirm the guest link is still open before testing; this guide does not extend access or verify today's deployed settings.</p>
+    <ol>
+      <li>Sign in to the live host dashboard. Open the property's <strong>in-stay guest link or QR link</strong> in a private browser window. A plain public wall link cannot submit a memory.</li>
+      <li>Submit a uniquely labelled example, such as <code>SCREEN-01 Lovely stay and a beautiful garden</code>. Record the time. For photos, use an ordinary authorised garden or room image. To reproduce the profanity concern, use a synthetic example such as <code>SCREEN-02 Fuck you</code> and record the expected result as host review.</li>
+      <li>In <a href="https://console.firebase.google.com/project/digistaybook-cbert/firestore" target="_blank" rel="noopener">Firestore</a>, open <code>guestSubmissions</code>. Locate the record by <code>propertyId</code>, time and test label. Copy <code>screeningReference</code>, and record the document ID and <code>revision</code>. Delivered or held private feedback is moved out of the submission's raw text field, so find feedback records by property, time and kind.</li>
+      <li>Open <a href="https://console.cloud.google.com/logs/query?project=digistaybook-cbert" target="_blank" rel="noopener">Logs Explorer</a> with a Google account that has project log access. Set the time range to cover your test, paste the focused query below and run it.</li>
+      <li>Expand each entry's <code>jsonPayload</code>. Read the provider scores, the app's decision and the final state. Compare those with the actual guest wall or private inbox.</li>
+    </ol>
+    <p class="small">DigiStayBook admin permission and Google Cloud console permission are separate. One does not automatically grant the other.</p>
+    <div class="query-builder"><label for="reference">Submission screeningReference</label><input id="reference" maxlength="24" autocomplete="off" spellcheck="false" placeholder="Paste the 24-character reference"></div>
+    <pre id="focused-query">resource.type="cloud_run_revision"
+jsonPayload.screeningReference="PASTE_REFERENCE_HERE"</pre>
+    <button type="button" data-copy="focused-query">Copy focused query</button>
+    <p id="copy-status" role="status" aria-live="polite"></p>
+    <details><summary>Find recent screening events when you do not yet have a reference</summary>
+      <pre id="all-query">resource.type="cloud_run_revision"
+jsonPayload.event=~"^screening_(text_result|photo_result|provider_decision|memory_decision|feedback_decision|final_state|error)$"</pre>
+      <button class="secondary" type="button" data-copy="all-query">Copy all-events query</button>
+      <p>Use timestamps to find your test, then narrow to its reference. Logs deliberately exclude guest text and photo bytes.</p>
+    </details>
+    <div class="table-wrap"><table>
+      <thead><tr><th scope="col" style="width:30%">Event</th><th scope="col">What it tells you</th></tr></thead>
+      <tbody>
+        <tr><td><code>screening_text_result</code></td><td><code>categories</code> contains Google's category names and confidence scores from 0 to 1. Text uses the Australia endpoint.</td></tr>
+        <tr><td><code>screening_photo_result</code></td><td>One entry for each successfully scanned photo. <code>photoIndex</code> starts at 0. <code>categories</code> contains adult, violence, racy, medical and spoof likelihoods. Photo scanning uses the EU endpoint.</td></tr>
+        <tr><td><code>screening_provider_decision</code></td><td>The combined text/photo result: <code>clear</code>, <code>standard</code> or <code>critical</code>, with flags and thresholds.</td></tr>
+        <tr><td><code>screening_memory_decision</code></td><td>The app's memory decision after its contact/link check. <code>contactDetailsOrLinkHold: true</code> means that check added host review to a provider-clear result.</td></tr>
+        <tr><td><code>screening_final_state</code></td><td><code>finalStatus</code> is the committed publication/review status for that attempt. A clear screening result can still end as <code>standard</code> because host review is on. <code>state_changed_no_publication</code> means that attempt did not commit publication.</td></tr>
+        <tr><td><code>screening_feedback_decision</code></td><td>Private feedback verdict: <code>deliver</code> or <code>critical</code>. Feedback never publishes on the wall. Confirm actual delivery/holding in the stored record.</td></tr>
+        <tr><td><code>screening_error</code></td><td>A sanitised reason such as <code>provider_timeout</code>, <code>provider_http_403</code>, <code>invalid_provider_response</code> or <code>daily_capacity_exhausted</code>. Memories remain private; feedback remains undelivered.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note"><p><strong>Check the current revision.</strong> Editing a memory gives it a new screening reference. Retries of the same revision share a reference; distinguish them by timestamp. A provider score is not an accuracy percentage, and a “clear” scan alone does not prove publication.</p></div>
+  </section>
+
+  <section id="host">
+    <div class="step">04 · Property owner</div>
+    <h2>Review memories and private feedback as the host</h2>
+    <ol>
+      <li>Open your property → <strong>Moderation</strong> → <strong>Guest safety review</strong>. Press <strong>Refresh</strong>.</li>
+      <li><strong>Awaiting safety screening:</strong> the check has not completed. Content remains private, and the host cannot approve it yet.</li>
+      <li><strong>Ready for host review:</strong> read the message and use <strong>View … photos</strong> if present. Choose <strong>Approve memory</strong> to publish, or <strong>Keep off wall</strong> to leave it hidden. Refresh the guest wall to confirm the result.</li>
+      <li>For private messages, open the property's <strong>Private feedback</strong> page. Ordinary complaints, including rude or profane ones, can reach this inbox after screening. If a message needs safety review, use <strong>Report message</strong>; it leaves the inbox while operations reviews it.</li>
+    </ol>
+    <p><strong>Review content before publication</strong> holds even clear new memories for approval. It does not retrospectively hide published posts, and turning it off does not approve the existing queue.</p>
+    <p class="small">The queue is restricted to the owning host. An admin account does not automatically gain another host's approval controls. A serious safety case cannot be approved here. “All clear” describes this host queue; it does not establish that every submission passed every check.</p>
+  </section>
+
+  <section id="admin">
+    <div class="step">05 · Operations admin</div>
+    <h2>Open and resolve restricted safety cases</h2>
+    <div class="actions"><a class="button" href="https://digistaybook-cbert.web.app/operations" target="_blank" rel="noopener">Live admin operations</a><a class="button secondary" href="http://127.0.0.1:5181/operations" target="_blank" rel="noopener">Local admin operations</a></div>
+    <ol>
+      <li>Sign in to <code>/operations</code>. Live access requires an account with the <code>admin: true</code> claim and a sign-in completed with a second factor. The local operations test account uses a simulation.</li>
+      <li>Change <strong>Queue</strong> to <strong>Safety cases</strong>. Press <strong>Refresh queue</strong>. Use <strong>Load more cases</strong> if your case is not on the first page.</li>
+      <li>Find the case reference and press <strong>Open case</strong>. Read the message and the displayed flag categories. For a memory with photos, press <strong>View … case photos</strong>. Opening a message or photo is audited.</li>
+      <li>Add a short <strong>Decision note</strong> explaining the action. Keep the note about the decision rather than copying the guest's text.</li>
+      <li>Select the appropriate action below, then refresh the destination to verify it.</li>
+    </ol>
+    <div class="table-wrap"><table>
+      <thead><tr><th scope="col">Admin action</th><th scope="col">Guest memory</th><th scope="col">Private feedback</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Release to host</strong></td><td>Removes the safety hold and sends the unchanged revision to host review. <strong>It does not publish.</strong> If the guest edited the memory while held, the current revision returns for fresh screening.</td><td>Delivers the message to the property's private host inbox.</td></tr>
+        <tr><td><strong>Delete memory / Delete message</strong></td><td>Hides the post, clears the message and queues deletion of both photo copies. Confirm the deletion job separately; hiding is not proof that every stored copy has been removed.</td><td>Deletes the held message without sending it to the host.</td></tr>
+      </tbody>
+    </table></div>
+    <p>A guest-withdrawn memory cannot be released. Its existing safety hold can be resolved by deletion. Case photos are unavailable after release or deletion.</p>
+    <div class="callout"><p><strong>This is not an “all screening results” dashboard.</strong> Safety cases show serious automated flags and host-reported feedback. Clear or ordinary host-review submissions do not appear here. Detailed scores for any real scan must be checked in Logs Explorer.</p></div>
+    <p>For repeated screening failure, select the <strong>Alerts</strong> queue. For a deleted memory, select <strong>Deletion jobs</strong> and inspect its record/status using the appropriate data console. The operations overview currently lists these records; it does not provide a general retry or deletion-job execution button.</p>
+  </section>
+
+  <section id="decisions">
+    <div class="step">06 · Interpret the outcome</div>
+    <h2>Know why something published or was held</h2>
+    <div class="flow" aria-label="Memory processing"><span>Private submission</span><b aria-hidden="true">→</b><span>Text + photo checks</span><b aria-hidden="true">→</b><span>App rules</span><b aria-hidden="true">→</b><span>Publish / host review / safety case / wait</span></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th scope="col">Current live rule</th><th scope="col">Public memory</th><th scope="col">Private feedback</th></tr></thead>
+      <tbody>
+        <tr><td>All required checks complete; no hold.</td><td>Auto-publishes if host review is off. Otherwise waits for host approval.</td><td>Delivered privately to host.</td></tr>
+        <tr><td>Profanity, Insult, Toxic or another non-serious text category reaches confidence <code>0.8</code>.</td><td>Host review (<code>standard</code>).</td><td>Ordinary complaints are delivered; these categories alone do not open a safety case.</td></tr>
+        <tr><td>Violent, Sexual, Derogatory or Firearms &amp; Weapons reaches confidence <code>0.8</code>.</td><td>Restricted safety case (<code>critical</code>).</td><td>Restricted safety case; withheld.</td></tr>
+        <tr><td>Photo adult or violence is <code>LIKELY</code> / <code>VERY_LIKELY</code>.</td><td>Restricted safety case.</td><td>Private feedback is text only.</td></tr>
+        <tr><td>Photo medical or racy is <code>LIKELY</code> / <code>VERY_LIKELY</code>, with no serious flag.</td><td>Host review. Spoof alone does not add a photo hold.</td><td>Not applicable.</td></tr>
+        <tr><td>Email, phone number or external link detected after a clear memory scan.</td><td>Host review from the app's separate contact rule.</td><td>No equivalent public-wall contact hold.</td></tr>
+        <tr><td>Provider check fails or daily capacity is exhausted.</td><td>Pending, unpublished and private.</td><td>Undelivered and private, awaiting retry.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">These thresholds are provisional engineering rules, not calibrated accuracy guarantees. Short insults can miss the threshold; benign context can also be flagged. Check actual scores and log a mismatch. No automatic rejection or reporting to authorities is performed by this screening route.</p>
+    <h3>Confirm the stored state</h3>
+    <p>In <code>guestSubmissions</code>, <code>status: published</code> means published; <code>standard</code> means host review; <code>pending</code> means incomplete screening; <code>critical</code> with <code>safetyCaseOpen: true</code> means restricted safety review. <code>rejected</code> means the host chose Keep off wall. For feedback, inspect <code>feedbackStatus: delivered / held</code>; pending screening may have no feedbackStatus and <code>screeningFeedbackPending: true</code>. Also inspect the current public post's visibility and the actual wall; a later report, edit or deletion can change visibility after screening.</p>
+  </section>
+
+  <section id="troubleshooting">
+    <div class="step">07 · Resolve a confusing result</div>
+    <h2>Common checks</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th scope="col">What you see</th><th scope="col">What to check next</th></tr></thead>
+      <tbody>
+        <tr><td>An obvious insult publishes locally.</td><td>The local default is clear. Use <code>[review]</code> to test routing. Run a real provider test to assess classification.</td></tr>
+        <tr><td>An insult publishes live.</td><td>Find the current revision's scores and final state. Check the <code>0.8</code> threshold, host-review setting and whether a host approved it. Record a missed expected hold; the screenshot alone cannot identify the cause.</td></tr>
+        <tr><td>No admin safety case exists.</td><td>The item may be clear, ordinary host review, still pending or already resolved. Check Firestore and logs. Admin Safety cases is only one destination.</td></tr>
+        <tr><td>Admin access is denied.</td><td>Confirm the app account's admin claim and second-factor sign-in. Google Cloud ownership alone is insufficient. Ask the project owner to verify provisioning rather than weakening the access check.</td></tr>
+        <tr><td>The host sees Ready for host review despite clear scores.</td><td>Check the review switch and contact/link rule. Review does not always mean Google flagged the content.</td></tr>
+        <tr><td>No logs match.</td><td>Confirm production project, time range and current screening reference. Local simulated scans do not create real text/photo score events. An incomplete upload may not have started screening.</td></tr>
+        <tr><td>A submission stays pending.</td><td>Look for <code>screening_error</code>, <code>screeningBudgetWaiting</code>, retry fields and Alerts. Incomplete scans must remain private.</td></tr>
+        <tr><td>Daily capacity is exhausted.</td><td>Read <code>screeningDailyUsage/YYYY-MM-DD</code> for the Sydney date. The app shares 100 attempts/day and warns at 75. Edits, failures and retries consume attempts; a memory with multiple photos reserves one attempt. Wait for capacity after midnight; do not bypass the counter.</td></tr>
+        <tr><td>There is a warning or notification record.</td><td>Check actual email receipt separately. A queued notification or configured alert is not evidence that someone received it.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="record">
+    <div class="step">08 · Keep evidence</div>
+    <h2>Record expected and actual results</h2>
+    <p>For each case, record environment, label, property, time, submission ID, revision, screening reference, provider scores, expected destination, actual destination, reviewer and any decision. Mark unexecuted cases <strong>NOT RUN</strong>. This page is a guide; it does not fetch results or save a shared test ledger.</p>
+    <div class="table-wrap"><table class="record">
+      <thead><tr><th scope="col">Case</th><th scope="col">Expected</th><th scope="col">Actual / evidence</th></tr></thead>
+      <tbody>
+        <tr><td>Clear memory, review off</td><td>Public wall after completed checks</td><td>NOT RUN</td></tr>
+        <tr><td>Clear memory, review on</td><td>Host review; publishes only after approval</td><td>NOT RUN</td></tr>
+        <tr><td>Profanity / ordinary review example</td><td>Host review for a public memory</td><td>NOT RUN</td></tr>
+        <tr><td>Serious safety example</td><td>Admin case; no public post or host delivery</td><td>NOT RUN</td></tr>
+        <tr><td>Ordinary photo + benign text</td><td>Real text and photo results; correct final route</td><td>NOT RUN</td></tr>
+        <tr><td>Ordinary private complaint</td><td>Private host inbox; never on public wall</td><td>NOT RUN</td></tr>
+        <tr><td>Admin release / deletion</td><td>Correct destination and audit; deletion work verified separately</td><td>NOT RUN</td></tr>
+        <tr><td>Outage / recovery / changed revision</td><td>Private while incomplete; current revision checked before publication</td><td>NOT RUN</td></tr>
+      </tbody>
+    </table></div>
+    <p>Keep routing results and classification results separate. A local marker verifies a route. Real provider scores reveal what Google returned. The final stored state and destination show what DigiStayBook did with that result.</p>
+  </section>
+
+  <footer>Source checked: localTest, screening, guestPolicy, guestContributions, screeningDiagnostics, screeningBudget, screeningRetry, reporting, GuestReviewPanel and SafetyOperationsPage. Live deployment, individual test submissions and provider calibration were not re-verified when this guide was prepared. This file works directly from the NAS; console links require network access and the appropriate account.</footer>
+</main>
+<script>
+  document.getElementById('print-guide').addEventListener('click', () => window.print());
+  const reference = document.getElementById('reference');
+  const focused = document.getElementById('focused-query');
+  const status = document.getElementById('copy-status');
+  reference.addEventListener('input', () => {
+    const value = reference.value.trim();
+    const valid = /^[a-f0-9]{24}$/.test(value);
+    focused.textContent = 'resource.type="cloud_run_revision"\njsonPayload.screeningReference="' + (valid ? value : 'PASTE_REFERENCE_HERE') + '"';
+    status.textContent = value && !valid ? 'Use the 24-character hexadecimal screeningReference from Firestore.' : '';
+  });
+  document.querySelectorAll('[data-copy]').forEach(button => button.addEventListener('click', async () => {
+    const element = document.getElementById(button.dataset.copy);
+    try { await navigator.clipboard.writeText(element.textContent); status.textContent = 'Query copied. Paste it into Logs Explorer.'; }
+    catch { const range = document.createRange(); range.selectNodeContents(element); const selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(range); status.textContent = 'Query selected. Press Ctrl+C to copy it.'; }
+  }));
+</script>
+</body>
+</html>

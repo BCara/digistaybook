@@ -3,6 +3,8 @@ functions/node_modules/
 dist/
 functions/lib/
 .firebase/
+.local-test/
+firebase-export-*/
 .env
 .env.local
 .env.*.local
@@ -44,3 +46,13 @@ __pycache__/
 /tools/read_sections.py
 /tools/renumber.py
 /tools/restructure_v3.py
+
+# Tester photo pack, rebuilt by tools/make-tester-pack.py and sent separately
+/artifacts/tester-pack.zip
+
+# Local release scratch files and visual inspection artifacts. Preserve on disk.
+/tmp/
+/tmp-preview/
+/artifacts/moderation-refresh/
+/artifacts/theme-refresh/
+/docs/handbook/*-before-inventory-*.html
