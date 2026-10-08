@@ -10,7 +10,8 @@ assert.equal(process.env.FIREBASE_AUTH_EMULATOR_HOST, "127.0.0.1:9099");
 const require = createRequire(new URL("../functions/package.json", import.meta.url));
 require("firebase-admin/app").initializeApp({ projectId: "demo-digistaybook" });
 const db = require("firebase-admin/firestore").getFirestore();
-const { beginGuestContribution, processGuestSubmission, listGuestContributions, changeGuestContribution } = await import("../functions/lib/guestContributions.js");
+const { beginGuestContribution, processGuestSubmission, listGuestContributions, changeGuestContribution, reviewGuestContribution } = await import("../functions/lib/guestContributions.js");
+const { resolveSafetyCase } = await import("../functions/lib/reporting.js");
 const { guestPolicy } = await import("../functions/lib/guestPolicy.js");
 const suffix = randomUUID().slice(0, 8);
 const slug = `name-check-${suffix}`, propertyId = slug, stayToken = "GuestNameTestToken0001";
@@ -60,7 +61,14 @@ try {
   }
   for (const displayName of ["Mia & Sam", ""]) {
     const { id: publishedId } = await call("beginGuestContribution", { ...input, requestId: randomUUID(), displayName });
-    assert.equal((await call("finishGuestContribution", { id: publishedId })).status, "published");
+    // The default emulator provider is unavailable. Follow the authorised
+    // safety-release and host-approval path before checking public names.
+    assert.equal((await call("finishGuestContribution", { id: publishedId })).status, "pending");
+    assert.equal((await db.doc(`trustSafetyCases/${publishedId}:1`).get()).get("source"), "incomplete_screening");
+    await resolveSafetyCase.run({ auth: { uid: `name-reviewer-${suffix}`, token: { admin: true, firebase: { sign_in_second_factor: "totp" } } },
+      data: { id: `${publishedId}:1`, action: "release" } });
+    await reviewGuestContribution.run({ auth: { uid: `name-host-${suffix}`, token: { firebase: { sign_in_provider: "password" } } },
+      data: { id: publishedId, revision: 1, action: "approve" } });
     const wall = await call("getPublicWall", { slug }, false);
     assert.equal(wall.posts.find(post => post.id === publishedId).displayName, displayName);
     await call("changeGuestContribution", { id: publishedId, revision: 1, action: "delete" });
