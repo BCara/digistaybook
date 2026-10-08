@@ -2,6 +2,19 @@
 
 DigiStayBook is a B2B digital guestbook for short-term rental hosts.
 
+## Local Test
+
+Run `npm run test:local`, then open http://127.0.0.1:5181/__test for accounts and the walkthrough.
+This starts the isolated `demo-digistaybook` Firebase emulators and website. It restores saved data or seeds two hosts, an operations reviewer, three properties and eight guest scenarios. All three accounts use `LocalTest-2026!`: `host@example.test`, `host2@example.test`, and `operations@example.test`.
+
+- `npm run test:local:save` saves accounts, records and photos. The launcher also saves every 30 seconds and on Ctrl+C, keeping three recovery snapshots.
+- `npm run test:local:reset` replaces local Test data with the original examples. Sign out/back in afterward; clear site data or use a private window for fresh guest sessions.
+- `npm run test:local:workers` runs due screening retries and photo cleanup. The launcher runs these periodically; normal settle periods and retry backoff still apply.
+
+Use `[review]`, `[safety]` or `[outage]` in harmless messages to simulate screening routes; unmarked text is clear. Photo classification is simulated from those markers. Payments and real emails are disabled; inspect `notificationOutbox` in http://127.0.0.1:4000 for queued notices. Operations access uses a demo-only reviewer claim, not real MFA.
+
+Test runs on this computer only. Production remains `digistaybook-cbert`; no separate staging environment is used. Generated runtime/secrets/snapshots stay in ignored `.local-test/`. Restart the launcher after backend code changes. Local checks do not establish real Google classification, deployed App Check/MFA, payments, email receipt or cloud deletion/recovery.
+
 ## Project status
 
 This repository begins from the consolidated product and operational plan supplied in Google Drive. The implementation will be delivered in small, reviewable pull requests.

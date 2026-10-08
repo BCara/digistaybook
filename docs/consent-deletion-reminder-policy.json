@@ -1,0 +1,24 @@
+{
+  "displayName": "DigiStayBook manual consent deletion reminders",
+  "combiner": "OR",
+  "enabled": true,
+  "notificationChannels": ["projects/digistaybook-cbert/notificationChannels/5963023179476044485"],
+  "conditions": [{
+    "displayName": "Consent records are due for manual review",
+    "conditionMatchedLog": {
+      "filter": "jsonPayload.event=\"consent_deletion_reminder\"",
+      "labelExtractors": {
+        "records": "EXTRACT(jsonPayload.records)",
+        "due_count": "EXTRACT(jsonPayload.dueCount)",
+        "day": "EXTRACT(jsonPayload.day)",
+        "operations_url": "EXTRACT(jsonPayload.operationsUrl)"
+      }
+    }
+  }],
+  "alertStrategy": {"notificationRateLimit": {"period": "3600s"}, "autoClose": "3600s"},
+  "documentation": {
+    "mimeType": "text/markdown",
+    "subject": "DigiStayBook: manual consent deletion review",
+    "content": "Consent records due for manual deletion review: ${log.extracted_label.due_count}. Report date: ${log.extracted_label.day}.\n\nExact record paths (first two): ${log.extracted_label.records}\n\nWHY: The memory is deleted and 24 calendar months have passed after content deletion or final linked dispute closure, whichever is later. Recorded holds and open linked reviews are excluded.\n\nACTION: Open [Privacy & Safety operations](${log.extracted_label.operations_url}), select Consent deletion reviews, and check each due record for its exact path, deadline and reason. The full list is there if more than two records are due. Operations access requires the admin role and MFA. Project administrators can also view [the full review collection in Firebase console](https://console.firebase.google.com/project/digistaybook-cbert/firestore/databases/-default-/data/~2FconsentDeletionReview). Recheck immediately before deleting and confirm no unrecorded dispute/legal hold. Manually delete ONLY the named guestConsent document in Firebase console. This notification does not authorise deleting the memory, photos, submission, cases or audit records. Recheck afterward to record that the consent record is absent. Backup copies require separate handling.\n\nThis is a reminder, not automatic deletion or proof of email receipt. If the record paths say TEST, do not delete anything."
+  }
+}

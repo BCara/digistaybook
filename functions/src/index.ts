@@ -6,14 +6,16 @@ import { wallIsOpen, publicProperty, publicPost, unavailableWall, wallPreviewabl
 import { guestIntakeEnabled } from "./guestContributions.js";
 export { deleteStoredMedia } from "./storageDeletion.js";
 export { retryPendingScreening } from "./screeningRetry.js";
+export { notifyScreeningAllowance } from "./screeningBudget.js";
+export { notifyConsentDeletionReview, readConsentDeletionReview } from "./consentRetention.js";
 export { createHostProperty, deleteHostProperty, ensureStayToken } from "./propertyCreation.js";
 export { listHostExport, readHostExportPhoto } from "./hostExport.js";
-export { reportGuestMemory, submitPrivacyRequest, listHostReports, resolveContentReport, listSafetyOperations, readSafetyCase, resolveSafetyCase, escalatePrivacyDeadlines } from "./reporting.js";
+export { reportGuestMemory, submitPrivacyRequest, listHostReports, resolveContentReport, listSafetyOperations, readSafetyCase, readSafetyCasePhoto, resolveSafetyCase, escalatePrivacyDeadlines } from "./reporting.js";
 export { stripeWebhook } from "./stripeWebhook.js";
 export { activationOptions, createActivationCheckout } from "./stripeActivation.js";
 export { cancelSubscription, resumeSubscription } from "./stripeCancellation.js";
 export { beginGuestContribution, uploadGuestPhoto, finishGuestContribution, listGuestContributions,
-  changeGuestContribution, listHostGuestReview, reportPrivateFeedback, reviewGuestContribution, readGuestReviewPhoto, guestMemoryPhoto } from "./guestContributions.js";
+  changeGuestContribution, listHostGuestReview, setGuestReviewPolicy, reportPrivateFeedback, reviewGuestContribution, readGuestReviewPhoto, guestMemoryPhoto } from "./guestContributions.js";
 
 initializeApp();
 const db = getFirestore();
@@ -79,7 +81,7 @@ export const getPublicWall = onCall({ maxInstances: 10 }, async request => {
   if (!open && !wallPreviewable(latest.data(), uid)) return unavailableWall(latest.data(), property.id, uid);
   return { status: open ? "open" : "preview",
     // A closed wall takes no contributions, whoever is reading it.
-    contributionsEnabled: open && view === "stay" && guestIntakeEnabled(),
+    contributionsEnabled: open && view === "stay" && guestIntakeEnabled(property.id),
     ...(open ? {} : { owner: ownerRecovery(latest.data()!, property.id) }),
     property: publicProperty(latest.data()!, view),
     posts: posts.docs.map(post => publicPost(post.id, post.data())),

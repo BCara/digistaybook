@@ -46,7 +46,7 @@ export function StayWallPage({ propertySlug = "property", stayToken = null }: { 
   }
 
   return (
-    <div className="page wall-page stay-page">
+    <div className="page wall-page stay-page" data-wall-theme="linen" data-wall-colour="sand">
       {isDemo && (
         <p className="demo-ribbon">
           <span className="demo-ribbon-tag">Demo</span>

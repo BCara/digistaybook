@@ -1,0 +1,22 @@
+[
+  {"id":"T01","mode":"memory","text":"Thank you for a lovely stay. The garden was beautiful!","expected":"clear","reason":"Ordinary positive memory"},
+  {"id":"T02","mode":"memory","text":"The air conditioning was noisy and the kitchen needed cleaning.","expected":"clear","reason":"Ordinary criticism"},
+  {"id":"T03","mode":"memory","text":"The beach was bloody brilliant. We had a great time.","expected":"standard","reason":"Non-severe profanity belongs in host review when flagged; calibrate colloquial false positives"},
+  {"id":"T04","mode":"memory","text":"We stayed with our children and enjoyed the playground.","expected":"clear","reason":"Benign family reference"},
+  {"id":"T05","mode":"memory","text":"I hurt my ankle on our walk, but the first aid kit helped.","expected":"clear","reason":"Benign medical context; investigate over-holding"},
+  {"id":"T06","mode":"memory","text":"The museum explained the history of the war memorial.","expected":"clear","reason":"Historical context"},
+  {"id":"T07","mode":"memory","text":"Email me at guest@example.com for our holiday photos.","expected":"standard","reason":"Contact detail; local review rule after provider success"},
+  {"id":"T08","mode":"memory","text":"Visit https://example.com to see more photos.","expected":"standard","reason":"External link; local review rule after provider success"},
+  {"id":"T09","mode":"memory","text":"Call me on 0412 345 678.","expected":"standard","reason":"Phone number; synthetic example"},
+  {"id":"T10","mode":"memory","text":"I will come back tonight and kill the host.","expected":"critical","reason":"Explicit threat; restricted safety review; investigate any clear/host-only result"},
+  {"id":"T11","mode":"memory","text":"I will bring a gun and shoot the host.","expected":"critical","reason":"Weapon threat; restricted safety review"},
+  {"id":"T12","mode":"memory","text":"Those people are vermin and should be attacked.","expected":"critical","reason":"Dehumanisation and incitement; restricted safety review"},
+  {"id":"T13","mode":"memory","text":"Do not threaten staff. Everyone deserves to feel safe.","expected":"clear","reason":"Safety advice; negation false-positive test"},
+  {"id":"T14","mode":"memory","text":"The host helped us after someone shouted a threat outside.","expected":"clear","reason":"Reported incident rather than threatening intent"},
+  {"id":"T15","mode":"feedback","text":"The room was dirty and the service was terrible.","expected":"deliver","reason":"Private complaint"},
+  {"id":"T16","mode":"feedback","text":"This was a bloody awful stay and I want a refund.","expected":"deliver","reason":"Profanity and negative feedback alone should reach host"},
+  {"id":"T17","mode":"feedback","text":"Please contact me at guest@example.com about the broken heater.","expected":"deliver","reason":"Public-contact rule must not apply to private feedback"},
+  {"id":"T18","mode":"feedback","text":"I will come back tonight and kill you.","expected":"critical","reason":"Private threat; restricted safety team"},
+  {"id":"T19","mode":"feedback","text":"I am bringing a gun to shoot you.","expected":"critical","reason":"Private weapon threat"},
+  {"id":"T20","mode":"feedback","text":"Someone threatened me outside. Please help me contact the police.","expected":"deliver","reason":"Request for help; inspect context and false positives"}
+]

@@ -14,7 +14,7 @@
    on the display wall.
    ========================================================================= */
 
-import { defaultWallTheme, readWallTheme, type WallThemeId } from "./wallTheme";
+import { defaultWallTheme, defaultWallColour, readWallTheme, readWallColour, type WallThemeId, type WallColourId } from "./wallTheme";
 
 /** One line of house guidance: what it is, the answer, and the detail. */
 export type HouseFact = { term: string; detail: string; note: string };
@@ -119,6 +119,7 @@ export type PropertyProfile = {
    * them look unrelated would be making a mistake rather than a choice.
    */
   theme: WallThemeId;
+  colour: WallColourId;
   /**
    * True when a Host has taken the display wall off this property altogether:
    * no shareable wall and nothing to embed. The words are kept, as with the
@@ -241,6 +242,7 @@ export const writtenHostNotes = (profile: PropertyProfile): HostNote[] =>
 
 export const emptyProfile = (): PropertyProfile => ({
   theme: defaultWallTheme,
+  colour: defaultWallColour,
   displayWallOff: false,
   location: "",
   welcome: "",
@@ -357,6 +359,7 @@ export function readProfile(value: unknown): PropertyProfile {
   const data = value as Record<string, unknown>;
   return {
     theme: readWallTheme(data.theme),
+    colour: readWallColour(data.colour, data.theme),
     // Only an explicit `true` takes the display wall away, so an older
     // document, a missing field or a corrupted one keeps its wall.
     displayWallOff: data.displayWallOff === true,
@@ -406,7 +409,8 @@ const factIsEmpty = (fact: HouseFact) => !fact.term.trim() && !fact.detail.trim(
  */
 export function normalizeProfile(profile: PropertyProfile): PropertyProfile {
   return {
-    theme: profile.theme,
+    theme: readWallTheme(profile.theme),
+    colour: readWallColour(profile.colour, profile.theme),
     displayWallOff: profile.displayWallOff,
     location: profile.location.trim().slice(0, profileLimits.locationMax),
     welcome: profile.welcome.trim().slice(0, profileLimits.welcomeMax),

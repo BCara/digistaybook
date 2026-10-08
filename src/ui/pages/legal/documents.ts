@@ -3,7 +3,7 @@ import { legalVersions } from "../../../../functions/src/legal";
 /*
  * The guest- and host-facing legal texts. The Terms and Privacy Policy are the
  * handbook's drafts (A.6, A.7, last updated 4 August 2026), carried word for
- * word except the marked additions and updates through 2 October 2026:
+ * word except the marked additions and updates through 6 October 2026:
  * guest-facing terms, private feedback, Google screening and overseas processing.
  * None of it is approved. Counsel approves these exact versions (C-19), and
  * the approval is recorded in functions/src/legal.ts.
@@ -57,12 +57,12 @@ export const hostTerms: LegalDocument = {
 export const guestTerms: LegalDocument = {
   title: "Guest Terms",
   version: legalVersions.guestTerms,
-  lastUpdated: "2 October 2026",
+  lastUpdated: "6 October 2026",
   intro: ["These terms apply when you use a property’s DigiStayBook guestbook as a guest: reading its wall, adding a memory, or sending private feedback to your host. You do not need an account. The host of the property runs their guestbook; DigiStayBook provides the software."],
   sections: [
     { heading: "1. Adding a memory", added: true, paragraphs: [
       "A memory is a message and up to ten photos for the property’s guestbook wall. By submitting one you confirm you are 16 or older, that you took the photos or have the right to share them, and that everyone recognisable in them is happy for them to be shown.",
-      "You consent to your memory being shown publicly on that property’s guestbook, including on screens in the property and on any page where the host displays their wall. The host may hide, pin or remove memories, and nothing you post is guaranteed to stay up."
+      "You consent to your memory being shown publicly on that property’s guestbook, including on screens in the property and on any page where the host displays their wall. If you add an optional guest name, it is displayed with your memory; leaving it blank shows no name. The host may hide, pin or remove memories, and nothing you post is guaranteed to stay up."
     ] },
     { heading: "2. Private feedback", added: true, paragraphs: [
       "Private feedback goes to your host only and is never shown on the wall. It is not monitored in real time and your host cannot reply to it here. It is not a way to get help during your stay: for anything urgent, contact your host through your booking app, or the emergency services if anyone is in danger."
@@ -88,23 +88,23 @@ export const guestTerms: LegalDocument = {
     "These Guest Terms are new: the handbook’s A.6 covers Hosts only, while the guestbook form has always linked to “Guest Terms”.",
     "Age threshold (16) and the minors workflow are open register item C-11.",
     "Whether a licence from the guest to the host and DigiStayBook is needed for display, beyond consent, is for counsel.",
-    "Review the overseas photo-screening disclosure together with Privacy Policy section 4.1 and consent version handbook-5.3-draft-v3; this acknowledgement does not waive privacy rights."
+    `Review the overseas photo-screening disclosure together with Privacy Policy section 4.1 and consent version ${legalVersions.consent}; the checkbox mentions automated safety checks, while these documents explain overseas processing. This acknowledgement does not waive privacy rights.`
   ]
 };
 
 export const privacyPolicy: LegalDocument = {
   title: "Privacy Policy",
   version: legalVersions.privacy,
-  lastUpdated: "2 October 2026",
+  lastUpdated: "6 October 2026",
   intro: [],
   sections: [
     { heading: "1. Information collected", paragraphs: [
       "From Hosts: account information (email address, password, property names); billing information collected by Stripe, which DigiStayBook does not view or store in full; property configuration data such as welcome messages, house rules and display preferences; and marketing preference data — the host identity, normalised contact address, consent or withdrawal status, UTC timestamp, form or source identifier, and the exact consent wording and version. A minimal central suppression record is kept separately to prevent promotional messages after opt-out.",
-      "From Guests: user-generated content voluntarily uploaded to a Guest Wall; and limited technical and security data — IP address, browser type, device category, access time, anonymous session tokens and Firebase App Check signals. Where needed to prevent abuse, short-lived pseudonymous abuse keys may be derived without creating a persistent cross-session identifier. This information is used to route uploads, secure the Service, enforce rate limits, investigate reports and apply proportionate restrictions. It is access-controlled and retained only for the bounded period in the approved retention schedule."
+      "From Guests: user-generated content voluntarily uploaded to a Guest Wall, including messages, photos and an optional guest name displayed with the memory; and limited technical and security data — IP address, browser type, device category, access time, anonymous session tokens and Firebase App Check signals. Where needed to prevent abuse, short-lived pseudonymous abuse keys may be derived without creating a persistent cross-session identifier. This information is used to route uploads, secure the Service, enforce rate limits, investigate reports and apply proportionate restrictions. It is access-controlled and retained only for the bounded period in the approved retention schedule."
     ] },
     { heading: "1.1 Private feedback and automated screening", added: true, paragraphs: [
       "Guests may also send a Host private feedback. It is shown only to that Host and is never published.",
-      "Guest messages, photos and private feedback are checked automatically using Google Cloud’s content moderation services before they are published or delivered. Private feedback that appears to contain threats, sexual content or hate may be held and read by DigiStayBook’s restricted safety team, who release it to the Host or delete it. A Host may also send a feedback message to the safety team for review. Each time the safety team opens a held message, that access is recorded; the record does not contain the message."
+      "Guest names, messages, photos and private feedback are checked automatically using Google Cloud’s content moderation services before they are published or delivered. Private feedback that appears to contain threats, sexual content or hate may be held and read by DigiStayBook’s restricted safety team, who release it to the Host or delete it. A Host may also send a feedback message to the safety team for review. Each time the safety team opens a held message, that access is recorded; the record does not contain the message."
     ] },
     { heading: "2. How information is used", paragraphs: [
       "To provide the Service: hosting the guestbook, generating QR codes, and enabling Host moderation.",

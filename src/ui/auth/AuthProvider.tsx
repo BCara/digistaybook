@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { firebaseConfigured } from "../../lib/firebaseConfig";
 import { getFirebaseAuth } from "../../lib/firebase";
 
@@ -12,6 +12,7 @@ export type AuthStatus = "unconfigured" | "loading" | "error" | "signed-out" | "
 export type AuthState = {
   status: AuthStatus;
   user: import("firebase/auth").User | null;
+  refreshUser?: () => void;
 };
 
 const initialState: AuthState = {
@@ -60,6 +61,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const value = useMemo(() => state, [state]);
+  // Firebase profile updates mutate the User without emitting a sign-in event.
+  const refreshUser = useCallback(() => setState(previous => ({ ...previous })), []);
+  const value = useMemo(() => ({ ...state, refreshUser }), [state, refreshUser]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

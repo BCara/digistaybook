@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { guestCall } from "../../lib/guestSession";
 import { guestPolicy, feedbackBoundary } from "../../../functions/src/guestPolicy";
 
-type OwnPost = { id: string; message: string; revision: number; status: string };
+type OwnPost = { id: string; message: string; displayName?: string; revision: number; status: string };
 type OwnPage = { posts: OwnPost[]; nextCursor?: string | null };
 type Photo = { file: File; preview: string };
 function explain(error: unknown) {
@@ -35,6 +35,7 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
   onModeChange?: (mode: ContributionMode) => void;
 }) {
   const [message, setMessage] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [feedback, setFeedback] = useState("");
   // A submission is a memory for the wall or a private note to the Host, never
   // both: the two go to different readers, under different screening.
@@ -95,7 +96,7 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
     try {
       if (!current.id) current.id = (await guestCall<{ id: string }>(slug, "beginGuestContribution", {
         slug, stayToken, requestId: current.requestId, ...(memory
-          ? { message, feedback: "", photoCount: photos.length, consentAccepted: consent, consentVersion: guestPolicy.consentVersion }
+          ? { message, displayName: displayName.trim(), feedback: "", photoCount: photos.length, consentAccepted: consent, consentVersion: guestPolicy.consentVersion }
           : { message: "", feedback, photoCount: 0 })
       })).id;
       for (let index = current.uploaded; memory && index < photos.length; index++) {
@@ -109,7 +110,7 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
       setProgress(100);
       setNotice(result.status === "published" ? "Your memory is now on the wall." : result.message);
       if (result.status === "pending") setConfirmation(result.message);
-      if (memory) { photos.forEach(photo => URL.revokeObjectURL(photo.preview)); setPhotos([]); setMessage(""); setConsent(false); }
+      if (memory) { photos.forEach(photo => URL.revokeObjectURL(photo.preview)); setPhotos([]); setMessage(""); setDisplayName(""); setConsent(false); }
       else setFeedback("");
       attempt.current = null;
       await refresh(); onChanged();
@@ -139,7 +140,8 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
         <label><input type="radio" name="guest-mode" checked={mode === "feedback"} onChange={() => setMode("feedback")} /><span>Private feedback for your host</span></label>
       </fieldset>
       {mode === "memory" ? <>
-      <label>Your message<textarea value={message} maxLength={guestPolicy.maxMessage} disabled={locked} onChange={event => setMessage(event.target.value)} /></label>
+      <label><span>Guest name <span className="guest-field-optional">(optional)</span></span><input type="text" value={displayName} maxLength={guestPolicy.maxName} disabled={locked} onChange={event => setDisplayName(event.target.value)} placeholder="e.g. Mia & Sam" autoComplete="off" /></label>
+      <label>Your message<textarea value={message} placeholder="What made your stay memorable?" maxLength={guestPolicy.maxMessage} disabled={locked} onChange={event => setMessage(event.target.value)} /></label>
       <div className="guest-photo-picker">
         <label className="guest-photo-trigger" data-disabled={locked}>
           <input aria-label="Choose photos" aria-describedby="guest-photo-count" type="file" accept="image/jpeg,image/png,image/webp" multiple disabled={locked} onChange={event => { pick(event.target.files); event.target.value = ""; }} />
@@ -156,12 +158,15 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
         <img src={photo.preview} alt={`Selected photo ${index + 1}`} /><figcaption>{photo.file.name}</figcaption>
         <button type="button" disabled={locked} onClick={() => { URL.revokeObjectURL(photo.preview); setPhotos(previous => previous.filter((_, i) => i !== index)); }}>Remove photo {index + 1}</button>
       </figure>)}</div>
-      <p><a href="/guest-terms" target="_blank" rel="noreferrer">Guest Terms</a> · <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a></p>
-      <label className="guest-consent"><input type="checkbox" checked={consent} disabled={locked} onChange={event => setConsent(event.target.checked)} /><span>{guestPolicy.consentWording}</span></label>
+      <label className="guest-consent"><input type="checkbox" checked={consent} disabled={locked} onChange={event => setConsent(event.target.checked)} /><span>{guestPolicy.consentWording.split(/(Guest Terms|Privacy Policy)/).map((part, index) =>
+        part === "Guest Terms" || part === "Privacy Policy"
+          ? <a key={index} href={part === "Guest Terms" ? "/guest-terms" : "/privacy"} target="_blank" rel="noreferrer">{part}</a>
+          : part
+      )}</span></label>
       </> : <>
-      <label>Private feedback<textarea value={feedback} maxLength={guestPolicy.maxFeedback} disabled={locked} onChange={event => setFeedback(event.target.value)} aria-describedby="feedback-boundary" /></label>
+      <label>Private feedback<textarea value={feedback} placeholder="What could your host improve for future stays?" maxLength={guestPolicy.maxFeedback} disabled={locked} onChange={event => setFeedback(event.target.value)} aria-describedby="feedback-boundary" /></label>
       <p id="feedback-boundary" className="guest-feedback-note"><small>Only for your host, never shown on the wall. {feedbackBoundary}</small></p>
-      <p><a href="/guest-terms" target="_blank" rel="noreferrer">Guest Terms</a> · <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a></p>
+      <p className="guest-legal-links"><a href="/guest-terms" target="_blank" rel="noreferrer">Guest Terms</a> · <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a></p>
       </>}
       <button className="btn btn-primary" type="submit" disabled={busy}>{busy ? "Saving…" : attempt.current ? "Retry this submission" : mode === "memory" ? "Submit memory" : "Send to host"}</button>
       {attempt.current && !busy && <button type="button" className="btn btn-secondary" onClick={async () => {
@@ -172,18 +177,22 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
       }}>Cancel attempt and edit draft</button>}
       {busy && <progress aria-label="Submission progress" value={progress} max={100} />}
     </form>
-    {notice && <p role="status">{notice}</p>}
+    {notice && <p className="guest-submission-notice" role="status">{notice}</p>}
     <details className="guest-own-memories"><summary>Your memories in this browser</summary>
     <p>Manage memories from this browser. <a href="/privacy-safety">Need help removing one?</a></p>
-    <button type="button" disabled={busy} onClick={() => void refresh().catch(error => setNotice(explain(error)))}>Refresh my memories</button>
+    <button className="btn btn-secondary btn-sm" type="button" disabled={busy} onClick={() => void refresh().catch(error => setNotice(explain(error)))}>Refresh my memories</button>
     {own.filter(post => post.status !== "deleted").map(post => <article key={post.id}>
-      <p>{post.message || "Photo memory"}</p><p>{post.status === "published" ? "Published" : post.status === "uploading" ? "Upload incomplete" : "Pending safety screening or review"}</p>
+      {post.displayName?.trim() && <p className="guest-memory-name">{post.displayName}</p>}
+      <p className="guest-memory-message">{post.message || "Photo memory"}</p><p className="guest-memory-status" data-status={post.status}>{post.status === "published" ? "Published" : post.status === "uploading" ? "Upload incomplete" : "Pending safety screening or review"}</p>
       {editing === post.id ? <><label>Edit your message<textarea value={editText} maxLength={1200} onChange={event => setEditText(event.target.value)} /></label>
-        <button disabled={busy} onClick={() => void change(post, "edit")}>Save message</button><button disabled={busy} onClick={() => setEditing(null)}>Cancel edit</button></>
-        : <button disabled={busy || post.status === "uploading"} onClick={() => { setEditing(post.id); setEditText(post.message); }}>Edit message</button>}
-      <button disabled={busy} onClick={() => { if (window.confirm("Hide this memory and schedule its deletion?")) void change(post, "delete"); }}>Delete memory</button>
+        <div className="guest-memory-actions"><button className="btn btn-primary btn-sm" disabled={busy} onClick={() => void change(post, "edit")}>Save message</button><button className="btn btn-secondary btn-sm" disabled={busy} onClick={() => setEditing(null)}>Cancel edit</button></div></>
+        : null}
+      <div className="guest-memory-actions">
+        {editing !== post.id && <button className="btn btn-secondary btn-sm" disabled={busy || post.status === "uploading"} onClick={() => { setEditing(post.id); setEditText(post.message); }}>Edit message</button>}
+        <button className="btn btn-ghost btn-sm" disabled={busy} onClick={() => { if (window.confirm("Hide this memory and schedule its deletion?")) void change(post, "delete"); }}>Delete memory</button>
+      </div>
     </article>)}
-    {cursor && <button type="button" disabled={busy} onClick={() => void loadMore()}>Load more memories</button>}
+    {cursor && <button className="btn btn-secondary btn-sm" type="button" disabled={busy} onClick={() => void loadMore()}>Load more memories</button>}
     </details>
   </section>;
 }

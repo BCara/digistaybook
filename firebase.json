@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "predeploy": ["node tools/check-production-build.mjs"],
     "site": "digistaybook-cbert",
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],

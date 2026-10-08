@@ -70,27 +70,31 @@ export function HostModerationPage({ propertyId }: { propertyId: string }) {
 
   return (
     <PropertyShell property={property} current="moderation" className="moderation-page">
-      <HostReportsPanel key={`reports-${propertyId}`} propertyId={propertyId} />
+      <header className="moderation-intro">
+        <h2>Moderation</h2>
+        <p>Choose how memories are published, review new submissions and manage your wall.</p>
+      </header>
       <GuestReviewPanel key={propertyId} propertyId={propertyId} />
-      <h2>Moderation</h2>
-      {Array.isArray(posts) && posts.length > 0 && <p className="lede">
-        {Array.isArray(posts)
-          ? queueSummary(posts)
-          : `Everything guests have left at ${property.name}, and what is held back from the wall.`}
-      </p>}
-
-      {posts === null && <p className="lede" role="status">Reading this wall&rsquo;s memories…</p>}
-
-      {posts !== null && !Array.isArray(posts) && (
-        <div className="notice" role="alert">
-          <strong>We could not read this wall&rsquo;s memories.</strong>
-          <p>{posts.error}</p>
+      <HostReportsPanel key={`reports-${propertyId}`} propertyId={propertyId} />
+      <section className="moderation-wall" aria-labelledby="wall-memories-heading">
+        <div className="moderation-wall-heading">
+          <h2 id="wall-memories-heading">Wall memories</h2>
+          {Array.isArray(posts) && posts.length > 0 && <p>{queueSummary(posts)}</p>}
         </div>
-      )}
 
-      {Array.isArray(posts) && <ModerationQueue posts={posts} state={state} />}
-      {state.pageError && <p role="alert">{state.pageError}</p>}
-      {state.hasMore && <button className="btn btn-secondary" disabled={state.loadingMore} onClick={() => void state.loadMore()}>Load more wall memories</button>}
+        {posts === null && <p className="lede" role="status">Reading this wall&rsquo;s memories…</p>}
+
+        {posts !== null && !Array.isArray(posts) && (
+          <div className="notice" role="alert">
+            <strong>We could not read this wall&rsquo;s memories.</strong>
+            <p>{posts.error}</p>
+          </div>
+        )}
+
+        {Array.isArray(posts) && <ModerationQueue posts={posts} state={state} />}
+        {state.pageError && <p role="alert">{state.pageError}</p>}
+        {state.hasMore && <button className="btn btn-secondary" disabled={state.loadingMore} onClick={() => void state.loadMore()}>Load more wall memories</button>}
+      </section>
 
       <details className="fine-print">
         <summary>How moderation works</summary>

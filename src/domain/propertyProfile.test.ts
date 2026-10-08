@@ -260,17 +260,24 @@ describe("the theme both walls are printed on", () => {
   });
 
   it("keeps a theme this build knows and falls back for one it does not", () => {
-    expect(readProfile({ theme: "harbour" }).theme).toBe("harbour");
+    expect(readProfile({ theme: "harbour" })).toMatchObject({ theme: "studio", colour: "ocean" });
     // An older name, a newer one, or a corrupted field renders as the default
     // rather than as an unstyled wall.
     expect(readProfile({ theme: "midnight" }).theme).toBe("linen");
     expect(readProfile({ theme: 7 }).theme).toBe("linen");
   });
 
+  it("preserves the colour and recognises a colour-only edit", () => {
+    expect(readProfile({ colour: "ocean" }).colour).toBe("ocean");
+    expect(readProfile({ colour: "invalid" }).colour).toBe("sand");
+    expect(normalizeProfile(profile({ colour: "sage" })).colour).toBe("sage");
+    expect(sameProfileText(profile({ colour: "sand" }), profile({ colour: "sage" }))).toBe(false);
+  });
+
   it("survives a write, and counts as a change worth saving", () => {
-    expect(normalizeProfile(profile({ theme: "sage" })).theme).toBe("sage");
-    expect(sameProfileText(profile({ theme: "sage" }), profile({ theme: "studio" }))).toBe(false);
-    expect(sameProfileText(profile({ theme: "sage" }), profile({ theme: "sage" }))).toBe(true);
+    expect(normalizeProfile(profile({ theme: "archive" })).theme).toBe("archive");
+    expect(sameProfileText(profile({ theme: "archive" }), profile({ theme: "studio" }))).toBe(false);
+    expect(sameProfileText(profile({ theme: "archive" }), profile({ theme: "archive" }))).toBe(true);
   });
 });
 

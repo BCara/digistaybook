@@ -171,7 +171,7 @@ describe("the settings of one property", () => {
     renderPage();
     await settled();
 
-    expect(screen.getByText("Settings", { selector: ".banner-settings" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByLabelText("Settings", { selector: ".banner-settings" })).toHaveAttribute("aria-current", "page");
     expect(screen.queryByRole("link", { name: /Settings/ })).not.toBeInTheDocument();
     // It is not one of the ways of looking at the wall, so no row in the
     // column claims to be where you are standing.

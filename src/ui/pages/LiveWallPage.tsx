@@ -7,10 +7,11 @@ import { getFirebaseServices, wallReaderFunctions } from "../../lib/firebase";
 import { guestPhotoUrl } from "../../lib/guestSession";
 import { GuestContribution, type ContributionMode } from "../guest/GuestContribution";
 import { ReportMemory } from "../guest/ReportMemory";
-import { readWallTheme } from "../../domain/wallTheme";
-import { readHostNoteStyle, hostInitials } from "../../domain/propertyProfile";
+import { readWallTheme, readWallColour } from "../../domain/wallTheme";
+import { readHostNoteStyle } from "../../domain/propertyProfile";
 import { HostNotes } from "../wall/HostNotes";
-import { EssentialMark } from "../wall/EssentialMark";
+import { WallHeader } from "../wall/WallHeader";
+import { memoriesHeading } from "../wall/memoryHeading";
 import { WallSkeleton } from "../wall/WallSkeleton";
 import "../guest/guest.css";
 
@@ -18,7 +19,7 @@ import "../guest/guest.css";
 // closed to everyone else. It carries the owner's recovery fields so the page
 // can say why it is closed and what opens it.
 type Wall = { status: "open" | "preview"; owner?: WallOwner; contributionsEnabled?: boolean; property: { name: string; location: string; welcome: string; hosts: string; hostNotes?: { id: string; message: string; style?: string; photo?: { url: string; alt: string } | null }[];
-  theme?: string; guestPrompt?: string; hostPhoto?: { url: string; alt: string } | null;
+  theme?: string; colour?: string; guestPrompt?: string; hostPhoto?: { url: string; alt: string } | null;
   cover?: { url: string; alt: string } | null; houseInformation?: { heading: string; welcome: string; tip: string; facts: { term: string; detail: string; note: string }[] } | null };
   posts: { id: string; message: string; displayName: string; photoCount?: number }[]; nextCursor: string | null };
 
@@ -91,7 +92,7 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
   // stands down and the closed notice takes its place, exactly as served.
   const asGuest = Boolean(preview && guestView);
 
-  return <main className="page wall-page" data-wall-theme={readWallTheme(wall?.property.theme)} data-wall-view={served} data-wall-preview={preview ? "true" : undefined}>
+  return <main className="page wall-page" data-wall-theme={readWallTheme(wall?.property.theme)} data-wall-colour={readWallColour(wall?.property.colour, wall?.property.theme)} data-wall-view={served} data-wall-preview={preview ? "true" : undefined}>
     {preview?.owner && <PreviewBanner owner={preview.owner} view={served} guestView={guestView} onGuestView={setGuestView} />}
     {preview?.owner && !asGuest && <PreviewGaps property={preview.property} view={served} propertyId={preview.owner.propertyId} />}
     {asGuest && <UnavailableWall result={{ status: "unavailable" }} view={view} />}
@@ -126,37 +127,18 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
           the public welcome — the line written for that stranger — is not on
           it. `StayWallHeader` below is the same arrangement the canvas and
           the phone preview draw, so a Host is looking at one wall twice. */}
-      {served === "stay"
-        ? <StayWallHeader property={wall.property} preview={Boolean(preview)} />
-        : <header className="live-property-header" data-no-header-photos={!wall.property.cover && !wall.property.hostPhoto ? "true" : undefined}>
-            {wall.property.cover
-              ? <img className="live-property-cover" src={wall.property.cover.url} alt={wall.property.cover.alt} />
-              : preview && <p className="wall-ghost">No cover photo. Guests open straight onto your name.</p>}
-            {wall.property.location && <p>{wall.property.location}</p>}
-            <h1>{wall.property.name}</h1>
-            {wall.property.welcome
-              ? <p>{wall.property.welcome}</p>
-              : preview && <p className="wall-ghost">No welcome note. This is the first thing a guest reads.</p>}
-            {/* Initials stand in for a portrait that was never uploaded: the
-                hosts' names are the byline, and a property with names and no
-                photograph was losing the byline along with the picture. */}
-            {(wall.property.hostPhoto || wall.property.hosts) && <div className="host-byline">
-              {wall.property.hostPhoto
-                ? <img className="avatar avatar-lg avatar-photo" src={wall.property.hostPhoto.url} alt={wall.property.hostPhoto.alt || "Your hosts"} />
-                : <span className="avatar avatar-lg tone-2" aria-hidden="true">{hostInitials(wall.property.hosts)}</span>}
-              {wall.property.hosts && <b>{wall.property.hosts}</b>}
-            </div>}
-          </header>}
+      <WallHeader property={wall.property} view={served} preview={Boolean(preview)} />
       <HostNotes
         author={wall.property.hosts || "your hosts"}
         notes={(wall.property.hostNotes ?? []).map(note => ({
           id: note.id, message: note.message, style: readHostNoteStyle(note.style),
           photo: note.photo ? { src: note.photo.url, alt: note.photo.alt } : undefined
         }))} />
+      <h2 className="wall-heading">{memoriesHeading(wall.nextCursor ? null : wall.posts.length)}</h2>
       <section aria-label="Guest memories" className="note-grid">
         {wall.posts.map(post => <article className="note" key={post.id}>
           {Array.from({ length: post.photoCount ?? 0 }, (_, index) => <img key={index} src={guestPhotoUrl(post.id, index)} alt={`Guest memory photo ${index + 1}`} loading="lazy" />)}
-          <p>{post.message}</p><p>{post.displayName || "A guest"}</p><ReportMemory slug={slug} postId={post.id} /></article>)}
+          <p>{post.message}</p>{post.displayName?.trim() && <p>{post.displayName}</p>}<ReportMemory slug={slug} postId={post.id} /></article>)}
         {!wall.posts.length && <p className="field-hint">No memories yet.</p>}
       </section>
       {wall.nextCursor && <button className="btn btn-secondary" disabled={busy} onClick={() => void more()}>{busy ? "Loading…" : "Load more memories"}</button>}
@@ -197,82 +179,7 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
   </main>;
 }
 
-/** The property half of a served wall, as `publicProperty` projects it. */
-type WallProperty = Wall["property"];
 
-/**
- * How the in-stay wall opens.
- *
- * A guest reaches this wall by scanning the placard in the hallway, so the
- * first thing it has to do is confirm they scanned the right display: the
- * cover, then the property's name at the size that answers the question, then
- * the place. Only after that do the hosts speak.
- *
- * The public welcome is deliberately not here. It is the sentence written for
- * someone deciding whether to stay, and the person reading this has already
- * let themselves in — what they want is the arrival note and the Wi-Fi. This
- * is the arrangement the demo wall draws and the one the property canvas
- * previews, so the three are one wall rather than three.
- */
-function StayWallHeader({ property, preview }: { property: WallProperty; preview: boolean }) {
-  const house = property.houseInformation;
-  const paragraphs = (house?.welcome ?? "").split("\n").map(line => line.trim()).filter(Boolean);
-  const facts = house?.facts.filter(fact => fact.term.trim() && fact.detail.trim()) ?? [];
-  const heading = house?.heading.trim() ?? "";
-  const tip = house?.tip.trim() ?? "";
-  const hosts = property.hosts.trim();
-  /* The eyebrow labels a note, so it waits for a note to label; a heading on
-     its own is shown as the one line it is. Same rule as the phone preview. */
-  const noteBody = paragraphs.length > 0 || tip !== "";
-  const note = noteBody || heading !== "" || hosts !== "";
-  /* The hosts beside the property's name, hanging off the bottom edge of the
-     cover — the arrangement the canvas draws and the phone preview draws, and
-     until now the one thing the served wall did not. A Host who had just been
-     shown their portrait over the photograph opened the wall and found it
-     shrunk to a thumbnail beside a heading further down the page. */
-  const mark = property.hostPhoto
-    ? <img className="avatar avatar-photo stay-portrait" src={property.hostPhoto.url} alt={property.hostPhoto.alt || "Your hosts"} />
-    : hosts ? <span className="avatar tone-2 stay-portrait" aria-hidden="true">{hostInitials(hosts)}</span> : null;
-
-  return <>
-    <header className="stay-cover" data-no-header-photos={!property.cover && !property.hostPhoto ? "true" : undefined}>
-      {property.cover
-        ? <img className="wall-cover-photo" src={property.cover.url} alt={property.cover.alt} />
-        : preview && <p className="wall-ghost">No cover photo. Guests open straight onto your name.</p>}
-      <div className="stay-cover-caption">
-        {mark}
-        <div className="stay-cover-titles">
-          <h1>{property.name}</h1>
-          {property.location.trim() && <span>{property.location}</span>}
-        </div>
-      </div>
-    </header>
-
-    {note && <section className="stay-welcome" aria-label="A note from your hosts">
-      <div className="stay-welcome-head">
-        <div>
-          {noteBody && <p className="eyebrow">A note from your hosts</p>}
-          {heading && <h2>{heading}</h2>}
-        </div>
-      </div>
-      {paragraphs.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
-      {tip && <p className="stay-tip">{tip}</p>}
-      {hosts && <p className="stay-signature">{hosts}</p>}
-    </section>}
-    {!note && preview && <p className="wall-ghost">No arrival note. This is the first thing a guest reads.</p>}
-
-    {facts.length > 0 && <section className="essentials" aria-labelledby="essentials-heading">
-      <h2 className="wall-heading" id="essentials-heading">The essentials</h2>
-      <dl className="essentials-grid">
-        {facts.map((fact, index) => <div className="essential" key={index}>
-          <dt><EssentialMark term={fact.term} />{fact.term}</dt>
-          <dd><b>{fact.detail}</b>{fact.note && <small>{fact.note}</small>}</dd>
-        </div>)}
-      </dl>
-    </section>}
-    {facts.length === 0 && preview && <p className="wall-ghost">No house essentials. Wi-Fi, checkout and the bins go here.</p>}
-  </>;
-}
 
 /**
  * `signedIn` decides which app asks.

@@ -7,7 +7,12 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev": "vite --host",
+    "test:local": "node tools/local-test.mjs start",
+    "test:local:save": "node tools/local-test.mjs save",
+    "test:local:reset": "node tools/local-test.mjs reset",
+    "test:local:seed": "node tools/local-test.mjs seed",
+    "test:local:workers": "node tools/local-test.mjs workers",
+    "dev": "npm run test:local",
     "dev:emulator": "vite --host --mode emulator --port 5173 --strictPort",
     "emulators": "node tools/emulators.mjs",
     "build": "vite build",
@@ -18,8 +23,9 @@
     "status:check": "node tools/verify-implementation-status.mjs",
     "functions:build": "npm --prefix functions run build",
     "check": "npm run typecheck && npm run test && npm run build && npm run functions:build",
-    "test:server": "npm run functions:build && firebase emulators:exec --project demo-digistaybook --only auth,firestore,storage,functions \"vitest run --no-file-parallelism tests/firestore.rules.test.ts tests/storage.rules.test.ts && node tools/verify-public-wall.mjs && node tools/verify-guest-contribution.mjs && node tools/verify-storage-deletion.mjs && node tools/verify-reporting.mjs\"",
-    "check:all": "npm run check && npm run test:server"
+    "test:server": "npm run functions:build && firebase emulators:exec --project demo-digistaybook --only auth,firestore,storage,functions \"vitest run --no-file-parallelism tests/firestore.rules.test.ts tests/storage.rules.test.ts && node tools/verify-public-wall.mjs && node tools/verify-guest-contribution.mjs && node tools/verify-storage-deletion.mjs && node tools/verify-reporting.mjs && node tools/verify-incomplete-screening.mjs\"",
+    "check:all": "npm run check && npm run test:server",
+    "test:screening-incomplete": "npm run functions:build && node tools/verify-incomplete-screening.mjs"
   },
   "dependencies": {
     "fflate": "^0.8.3",

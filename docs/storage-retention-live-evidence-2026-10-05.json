@@ -1,0 +1,149 @@
+{
+  "backupSchedules": null,
+  "buckets": [
+    {
+      "location": "AUSTRALIA-SOUTHEAST1",
+      "name": "digistaybook-cbert-guest-published",
+      "soft_delete_policy": {
+        "effectiveTime": "2026-10-01T17:01:40.313+10:00",
+        "retentionDurationSeconds": "604800"
+      }
+    },
+    {
+      "location": "AUSTRALIA-SOUTHEAST1",
+      "name": "digistaybook-cbert-guest-quarantine",
+      "soft_delete_policy": {
+        "effectiveTime": "2026-10-01T17:00:19.127+10:00",
+        "retentionDurationSeconds": "604800"
+      }
+    },
+    {
+      "location": "US-CENTRAL1",
+      "name": "digistaybook-cbert.firebasestorage.app",
+      "soft_delete_policy": {
+        "effectiveTime": "2026-09-10T10:43:32.875+10:00",
+        "retentionDurationSeconds": "604800"
+      }
+    },
+    {
+      "lifecycle_config": {
+        "rule": [
+          {
+            "action": {
+              "type": "Delete"
+            },
+            "condition": {
+              "isLive": false,
+              "numNewerVersions": 3
+            }
+          }
+        ]
+      },
+      "location": "AUSTRALIA-SOUTHEAST1",
+      "name": "gcf-v2-sources-783692092748-australia-southeast1",
+      "soft_delete_policy": {
+        "effectiveTime": "2026-09-10T13:01:18.391+10:00",
+        "retentionDurationSeconds": "604800"
+      }
+    },
+    {
+      "lifecycle_config": {
+        "rule": [
+          {
+            "action": {
+              "type": "Delete"
+            },
+            "condition": {
+              "age": 1
+            }
+          }
+        ]
+      },
+      "location": "AUSTRALIA-SOUTHEAST1",
+      "name": "gcf-v2-uploads-783692092748.australia-southeast1.cloudfunctions.appspot.com",
+      "soft_delete_policy": {
+        "effectiveTime": "2026-09-10T13:01:00.751+10:00",
+        "retentionDurationSeconds": "604800"
+      }
+    }
+  ],
+  "logging": [
+    {
+      "name": "projects/digistaybook-cbert/locations/global/buckets/_Default",
+      "retentionDays": 30
+    },
+    {
+      "locked": true,
+      "name": "projects/digistaybook-cbert/locations/global/buckets/_Required",
+      "retentionDays": 400
+    }
+  ],
+  "schedulers": [
+    {
+      "name": "projects/digistaybook-cbert/locations/australia-southeast1/jobs/firebase-schedule-notifyConsentDeletionReview-australia-southeast1",
+      "schedule": "0 * * * *",
+      "state": "ENABLED",
+      "timeZone": "Australia/Sydney"
+    },
+    {
+      "name": "projects/digistaybook-cbert/locations/australia-southeast1/jobs/firebase-schedule-deleteStoredMedia-australia-southeast1",
+      "schedule": "every 5 minutes",
+      "state": "ENABLED",
+      "timeZone": "UTC"
+    },
+    {
+      "name": "projects/digistaybook-cbert/locations/australia-southeast1/jobs/firebase-schedule-notifyScreeningAllowance-australia-southeast1",
+      "schedule": "every 5 minutes",
+      "state": "ENABLED",
+      "timeZone": "UTC"
+    },
+    {
+      "name": "projects/digistaybook-cbert/locations/australia-southeast1/jobs/firebase-schedule-escalatePrivacyDeadlines-australia-southeast1",
+      "schedule": "every 60 minutes",
+      "state": "ENABLED",
+      "timeZone": "UTC"
+    },
+    {
+      "name": "projects/digistaybook-cbert/locations/australia-southeast1/jobs/firebase-schedule-retryPendingScreening-australia-southeast1",
+      "schedule": "every 5 minutes",
+      "state": "ENABLED",
+      "timeZone": "UTC"
+    }
+  ],
+  "checkedOnSydney": "2026-10-05",
+  "project": "digistaybook-cbert",
+  "firestore": {
+    "locationId": "nam5",
+    "name": "projects/digistaybook-cbert/databases/(default)",
+    "pointInTimeRecoveryEnablement": "POINT_IN_TIME_RECOVERY_DISABLED"
+  },
+  "ttl": [
+    {
+      "indexConfig": {
+        "ancestorField": "projects/digistaybook-cbert/databases/(default)/collectionGroups/__default__/fields/*"
+      },
+      "name": "projects/digistaybook-cbert/databases/(default)/collectionGroups/reportDuplicates/fields/expiresAt",
+      "ttlConfig": {
+        "state": "ACTIVE"
+      }
+    },
+    {
+      "indexConfig": {
+        "ancestorField": "projects/digistaybook-cbert/databases/(default)/collectionGroups/__default__/fields/*"
+      },
+      "name": "projects/digistaybook-cbert/databases/(default)/collectionGroups/reportRateLimits/fields/expiresAt",
+      "ttlConfig": {
+        "state": "ACTIVE"
+      }
+    },
+    {
+      "indexConfig": {
+        "ancestorField": "projects/digistaybook-cbert/databases/(default)/collectionGroups/__default__/fields/*"
+      },
+      "name": "projects/digistaybook-cbert/databases/(default)/collectionGroups/reportWallLimits/fields/expiresAt",
+      "ttlConfig": {
+        "state": "ACTIVE"
+      }
+    }
+  ]
+}

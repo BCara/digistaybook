@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-08",
+  "project": "digistaybook-cbert",
+  "failure": "listSafetyOperations returned HTTP 401 with auth VALID and app MISSING",
+  "cause": "Frontend reCAPTCHA Enterprise key differed from registered Firebase App Check provider key",
+  "fix": "Hosting configuration corrected to registered key; registered domains include digistaybook-cbert.web.app",
+  "asset": "/assets/index-BOwqCBnO.js",
+  "verified": "Live asset contains registered key and not old key; isolated production build and production-bundle guard passed",
+  "pending": "Authenticated reviewer queue/browser attestation retest; not marked passed",
+  "scope": "Hosting only; no MFA, reviewer role, Functions or security-rule changes"
+}

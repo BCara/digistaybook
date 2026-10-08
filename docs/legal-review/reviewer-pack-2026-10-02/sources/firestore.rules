@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    // Anonymous sessions exist only for Guest self-service (Terms 4.4). They are
+    // never Host sessions, so Host paths require a non-anonymous provider.
+    function isHost() {
+      return signedIn() && request.auth.token.firebase.sign_in_provider != 'anonymous';
+    }
+    function ownsProperty(propertyId) {
+      return isHost() && get(/databases/$(database)/documents/properties/$(propertyId)).data.ownerUid == request.auth.uid;
+    }
+
+    match /users/{uid} {
+      allow read: if isHost() && request.auth.uid == uid;
+      allow create: if isHost() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['displayName', 'email', 'createdAt', 'updatedAt']);
+      allow update: if isHost() && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'updatedAt']);
+      allow delete: if false;
+    }
+
+    match /properties/{propertyId} {
+      // This document includes billing and private configuration. Public
+      // rendering must use a server-selected projection, never this record.
+      allow get: if ownsProperty(propertyId);
+      // A query is evaluated against the query itself, not the documents it
+      // would return, so `ownsProperty` (which reads one document) can never
+      // satisfy a list. The Host dashboard is the only lister, and its query is
+      // already scoped to its own uid — that constraint is what is required
+      // here. There is deliberately no public listing of properties.
+      allow list: if isHost() && resource.data.ownerUid == request.auth.uid;
+      // Creation and permanent address reservation are one server transaction.
+      allow create: if false;
+      // `slug` is generated once at creation and printed on the QR display, so
+      // a client rename must not move a wall out from under placards already
+      // hanging in a property.
+      allow update: if ownsProperty(propertyId)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'profile', 'updatedAt'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 2 && request.resource.data.name.size() <= 60;
+      allow delete: if false;
+
+      match /posts/{postId} {
+        // Public callers use getPublicWall's field allowlist. A visible post
+        // can still contain consent, session and moderation metadata.
+        allow read: if ownsProperty(propertyId) && resource.data.visibility in ['visible', 'hidden_pending_review', 'hidden_by_host', 'deleted'];
+        allow write: if false;
+      }
+      match /{document=**} { allow read, write: if false; }
+    }
+
+    // Billing state a Host must not be able to influence. `trialConsumedAt`
+    // decides whether the 28-day trial is still available (BOP §4.1, first
+    // activated property only), so a client write here would be a free trial
+    // per property. The Host learns their eligibility from the activation
+    // callable's answer, never by reading this.
+    match /hosts/{uid} { allow read, write: if false; }
+
+    // The webhook idempotency ledger (BOP §5.7). Written only by the server,
+    // inside the same transaction as the entitlement it authorises. Nothing in
+    // the product reads it, and a client that could delete a row could replay
+    // an activation.
+    match /stripeEvents/{eventId} { allow read, write: if false; }
+
+    match /{document=**} { allow read, write: if false; }
+  }
+}

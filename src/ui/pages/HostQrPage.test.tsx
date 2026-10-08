@@ -1,4 +1,4 @@
-import { act, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { AuthContext, type AuthState } from "../auth/AuthProvider";
 import { HostQrPage } from "./HostQrPage";
 import { emptyProfile } from "../../domain/propertyProfile";
@@ -11,6 +11,10 @@ vi.mock("../../lib/firebaseConfig", () => ({
 
 const loadProperty = vi.fn();
 const ensureStayToken = vi.fn();
+const callable = vi.fn();
+
+vi.mock("../../lib/firebase", () => ({ getFirebaseServices: async () => ({ functions: {} }) }));
+vi.mock("firebase/functions", () => ({ httpsCallable: (_functions: unknown, name: string) => (data: unknown) => callable(name, data) }));
 
 vi.mock("../host/propertyStore", () => ({
   loadProperty: (...args: unknown[]) => loadProperty(...args),
@@ -52,6 +56,9 @@ beforeEach(() => {
   vi.clearAllMocks();
   loadProperty.mockResolvedValue({ status: "ok", value: hostProperty() });
   ensureStayToken.mockResolvedValue({ status: "ok", value: TOKEN });
+  callable.mockImplementation(async (name: string) => name === "listHostGuestReview"
+    ? { data: { posts: [], feedback: [], reviewContent: false } }
+    : { data: { reviewContent: true } });
 });
 
 const main = () => within(document.querySelector(".property-shell-main") as HTMLElement);
@@ -80,6 +87,13 @@ describe("walls and QR display", () => {
     // over a property that carries a token, because a placard is printed from
     // it and an address that moves is a card that scans to nothing.
     expect(ensureStayToken).not.toHaveBeenCalled();
+    const approval = await main().findByRole("checkbox", { name: "Require approval for new memories" });
+    expect(approval).not.toBeChecked();
+    fireEvent.click(approval);
+    await waitFor(() => expect(approval).toBeChecked());
+    expect(callable).toHaveBeenCalledWith("setGuestReviewPolicy", { propertyId: "prop-1", reviewContent: true });
+    expect(main().getByRole("link", { name: "Review waiting memories" })).toHaveAttribute("href", "/host/property/prop-1/moderation#new-memories");
+    expect(main().queryByRole("heading", { name: "New memories" })).not.toBeInTheDocument();
   });
 
   // The guestbook link is the slug and a secret the server mints. A property

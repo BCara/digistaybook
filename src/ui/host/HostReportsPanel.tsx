@@ -26,18 +26,23 @@ export function HostReportsPanel({ propertyId }: { propertyId: string }) {
     } catch { setNotice("This report could not be resolved. Refresh the queue; an internal safety review may be required."); }
     finally { setBusy(false); }
   }
-  return <section className="guest-review" aria-label="Guest reports">
+  return <section className="guest-review moderation-panel host-reports" aria-label="Guest reports">
     <div className="review-heading">
       <h2>Guest reports</h2>
-      {page && <span className="review-status">{page.reports.length === 0 ? "All clear" : `${page.reports.length} to review`}</span>}
+      {page && <span className="review-status" data-attention={page.reports.length > 0}>{page.reports.length === 0 ? "All clear" : `${page.reports.length}${page.nextCursor ? "+" : ""} to review`}</span>}
       <button className="btn btn-sm btn-secondary" aria-label="Refresh reports" disabled={busy} onClick={() => void refresh().catch(() => setNotice("Reports could not be loaded."))}>Refresh</button>
     </div>
-    {notice && <p role="status">{notice}</p>}
-    {page?.reports.map(report => <article key={report.id}>
-      <p>{reportReasons[report.reason]}</p><p>Memory reference: {report.postId}</p><p>Review by {new Date(report.reviewDueAt).toLocaleDateString()}</p>
-      <button disabled={busy} onClick={() => void resolve(report, "delete")}>Confirm removal</button>
-      <button disabled={busy} onClick={() => void resolve(report, "dismiss")}>Dismiss report</button>
+    <p className="review-description">Concerns guests have raised about memories on your wall.</p>
+    {notice && <p className="review-notice" role="status">{notice}</p>}
+    {!page && !notice && <p role="status">Loading reports…</p>}
+    {page?.reports.length === 0 && <p className="review-empty">No guest reports to review.</p>}
+    {page?.reports.map(report => <article className="review-report" key={report.id}>
+      <p className="review-report-reason">{reportReasons[report.reason]}</p><p className="review-description">Memory reference: {report.postId}</p><p className="review-report-due">Review by {new Date(report.reviewDueAt).toLocaleDateString()}</p>
+      <div className="review-memory-actions">
+        <button className="btn btn-sm btn-destructive" disabled={busy} onClick={() => void resolve(report, "delete")}>Confirm removal</button>
+        <button className="btn btn-sm btn-secondary" disabled={busy} onClick={() => void resolve(report, "dismiss")}>Dismiss report</button>
+      </div>
     </article>)}
-    {page?.nextCursor && <button disabled={busy} onClick={() => void more()}>Load more reports</button>}
+    {page?.nextCursor && <button className="btn btn-sm btn-secondary" disabled={busy} onClick={() => void more()}>Load more reports</button>}
   </section>;
 }

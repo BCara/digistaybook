@@ -1,8 +1,10 @@
 import { createHmac } from "node:crypto";
 import { FieldPath, FieldValue, getFirestore, Timestamp } from "firebase-admin/firestore";
+import { getStorage } from "firebase-admin/storage";
 import { defineSecret } from "firebase-functions/params";
 import { HttpsError, onCall, type CallableRequest } from "firebase-functions/v2/https";
 import { onSchedule } from "firebase-functions/v2/scheduler";
+import { localTestEnabled } from "./localTest.js";
 
 const hashSecret = defineSecret("REPORT_HASH_KEY");
 const options = { region: "australia-southeast1", enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true", secrets: process.env.FUNCTIONS_EMULATOR === "true" ? [] : [hashSecret], maxInstances: 5 };
@@ -24,7 +26,8 @@ function reporter(request: CallableRequest) {
   return createHmac("sha256", key).update(request.auth.uid).digest("hex");
 }
 export function requireOperations(request: CallableRequest) {
-  if (request.auth?.token.admin !== true || !request.auth.token.firebase?.sign_in_second_factor) {
+  const simulatedReviewer = localTestEnabled() && request.auth?.token.localTestOperations === true;
+  if (request.auth?.token.admin !== true || (!request.auth.token.firebase?.sign_in_second_factor && !simulatedReviewer)) {
     throw new HttpsError("permission-denied", "An authorised operations account with multi-factor sign-in is required.");
   }
   return request.auth.uid;
@@ -159,7 +162,7 @@ export const resolveContentReport = onCall({ ...options, secrets: [] }, async re
 
 export const listSafetyOperations = onCall({ ...options, secrets: [] }, async request => {
   requireOperations(request);
-  const queues = ["contentReports", "privacyRequests", "trustSafetyCases", "operationsAlerts", "deletionJobs"];
+  const queues = ["contentReports", "privacyRequests", "trustSafetyCases", "operationsAlerts", "deletionJobs", "consentDeletionReview"];
   const queue = request.data?.queue;
   if (!queues.includes(queue)) throw new HttpsError("invalid-argument", "Choose a queue.");
   let query = getFirestore().collection(queue).orderBy(FieldPath.documentId()).limit(26);
@@ -171,6 +174,7 @@ export const listSafetyOperations = onCall({ ...options, secrets: [] }, async re
   const page = await query.get(), docs = page.docs.slice(0, 25);
   // Restricted media and report text are never copied into the queue overview.
   return { items: docs.map(doc => ({ id: doc.id, propertyId: doc.get("propertyId") ?? null, status: doc.get("status"), kind: doc.get("kind") ?? doc.get("reason") ?? null,
+    screeningStatus: doc.get("screeningStatus") ?? null, screeningIncompleteReason: doc.get("screeningIncompleteReason") ?? null,
     reviewDueAt: doc.get("reviewDueAt")?.toDate?.().toISOString() ?? null })), nextCursor: page.size > 25 ? docs.at(-1)!.id : null };
 });
 
@@ -179,15 +183,32 @@ const caseId = (value: unknown) => {
   return value;
 };
 
-// Held private feedback is the only case kind the safety team can open here.
-// Opening one shows guest text to staff, so every opening is audited.
+// Restricted case access is limited to operations with MFA and audited.
 export const readSafetyCase = onCall({ ...options, secrets: [] }, async request => {
   const actor = requireOperations(request), reference = caseId(request.data?.id), db = getFirestore();
   const snapshot = await db.doc(`trustSafetyCases/${reference}`).get();
-  if (!snapshot.exists || snapshot.get("kind") !== "private_feedback") throw new HttpsError("not-found", "Only held private feedback can be opened here.");
+  if (!snapshot.exists || !["private_feedback", "guest_memory"].includes(snapshot.get("kind"))) throw new HttpsError("not-found", "This safety case cannot be opened here.");
   await db.collection("moderationAudit").add({ caseId: reference, propertyId: snapshot.get("propertyId"), action: "open_case", actor, createdAt: stamp() });
-  return { id: reference, propertyId: snapshot.get("propertyId"), source: snapshot.get("source"), categories: snapshot.get("categories") ?? [],
+  return { id: reference, kind: snapshot.get("kind"), propertyId: snapshot.get("propertyId"), source: snapshot.get("source"), categories: snapshot.get("categories") ?? [],
+    photoCount: ["open", "escalated"].includes(snapshot.get("status")) ? (snapshot.get("photos") ?? []).length : 0,
+    screeningStatus: snapshot.get("screeningStatus") ?? null, screeningIncompleteReason: snapshot.get("screeningIncompleteReason") ?? null,
     status: snapshot.get("status"), message: snapshot.get("message") ?? null, reviewDueAt: snapshot.get("reviewDueAt")?.toDate?.().toISOString() ?? null };
+});
+
+export const readSafetyCasePhoto = onCall({ ...options, secrets: [], memory: "512MiB" }, async request => {
+  const actor = requireOperations(request), reference = caseId(request.data?.id), index = request.data?.index, db = getFirestore();
+  const ref = db.doc(`trustSafetyCases/${reference}`), snapshot = await ref.get(), data = snapshot.data();
+  if (!data || data.kind !== "guest_memory" || !["open", "escalated"].includes(data.status)
+    || !Number.isInteger(index) || index < 0 || index >= (data.photos ?? []).length) throw new HttpsError("permission-denied", "This photo is not available for safety review.");
+  const photo = data.photos[index];
+  if (typeof photo.bucket !== "string" || typeof photo.path !== "string"
+    || !photo.path.startsWith(`properties/${data.propertyId}/`)) throw new HttpsError("failed-precondition", "The case photo reference is invalid.");
+  await db.collection("moderationAudit").add({ caseId: reference, propertyId: data.propertyId, action: "open_case_photo", photoIndex: index, actor, createdAt: stamp() });
+  const [bytes] = await getStorage().bucket(photo.bucket).file(photo.path).download();
+  const latest = await ref.get();
+  if (bytes.length > 5 * 1024 * 1024 || !["open", "escalated"].includes(latest.get("status"))
+    || latest.get("revision") !== data.revision) throw new HttpsError("permission-denied", "This photo is no longer available for safety review.");
+  return { base64: bytes.toString("base64"), contentType: "image/webp" };
 });
 
 export const resolveSafetyCase = onCall({ ...options, secrets: [] }, async request => {
@@ -197,15 +218,39 @@ export const resolveSafetyCase = onCall({ ...options, secrets: [] }, async reque
   const ref = db.doc(`trustSafetyCases/${reference}`);
   await db.runTransaction(async tx => {
     const snapshot = await tx.get(ref), data = snapshot.data();
-    if (!data || data.kind !== "private_feedback") throw new HttpsError("not-found", "Only held private feedback can be resolved here.");
+    if (!data || !["private_feedback", "guest_memory"].includes(data.kind)) throw new HttpsError("not-found", "This safety case cannot be resolved here.");
     if (!["open", "escalated"].includes(data.status)) throw new HttpsError("failed-precondition", "This case has already been resolved.");
     const property = await tx.get(db.doc(`properties/${data.propertyId}`));
-    if (action === "release") {
+    if (data.kind === "guest_memory") {
+      const submissionRef = db.doc(`guestSubmissions/${data.postId}`), postRef = db.doc(`properties/${data.propertyId}/posts/${data.postId}`);
+      const [submission, post] = await Promise.all([tx.get(submissionRef), tx.get(postRef)]), memory = submission.data();
+      if (!memory || memory.propertyId !== data.propertyId || memory.safetyCaseOpen !== true) throw new HttpsError("failed-precondition", "This memory no longer has this safety hold.");
+      if (action === "release") {
+        if (!property.exists || !post.exists || memory.status === "deleted" || post.get("visibility") === "deleted") throw new HttpsError("failed-precondition", "A removed memory cannot be released.");
+        const changed = memory.revision !== data.revision;
+        tx.update(submissionRef, { safetyCaseOpen: false, status: changed ? "pending" : "standard", updatedAt: stamp() });
+        tx.update(postRef, { safetyRestricted: false, visibility: changed ? "processing" : "hidden_pending_review", screeningStatus: changed ? "pending" : "standard",
+          hold: { source: "safety_review", reason: "released_to_host_review", detail: "", raisedAt: stamp() } });
+        if (changed) tx.update(submissionRef, { screeningRetryState: FieldValue.delete(), screeningRetryAt: FieldValue.delete() });
+        else tx.set(db.doc(`notificationOutbox/memory-held-${data.postId}-${memory.revision}`), { kind: "memory_held_for_host_review", propertyId: data.propertyId, postId: data.postId,
+          revision: memory.revision, status: "pending", createdAt: stamp() });
+      } else {
+        tx.update(submissionRef, { status: "deleted", message: "", safetyCaseOpen: false, updatedAt: stamp() });
+        if (post.exists) tx.update(postRef, { visibility: "deleted", message: "", pinned: false, safetyRestricted: false });
+        const objects = Array.from({ length: memory.photoCount }, (_, index) => [
+          { bucket: memory.bucket, path: `properties/${data.propertyId}/quarantine/${data.postId}/${index}.webp` },
+          { bucket: memory.publishedBucket, path: `properties/${data.propertyId}/published/${data.postId}/${index}.webp` }
+        ]).flat();
+        tx.set(db.doc(`deletionJobs/guest-${data.postId}`), { propertyId: data.propertyId, postId: data.postId, bucket: memory.bucket, objects,
+          paths: objects.filter(object => object.bucket === memory.bucket).map(object => object.path), source: "safety_review_delete", requiresSafetyReview: false,
+          status: "pending", createdAt: stamp(), dueAt: Timestamp.fromMillis(Date.now() + 72 * 3600000) });
+      }
+    } else if (action === "release") {
       if (!property.exists) throw new HttpsError("failed-precondition", "This property no longer exists, so the message can only be deleted.");
       tx.set(property.ref.collection("privateFeedback").doc(data.feedbackId), { message: data.message, createdAt: data.feedbackCreatedAt ?? stamp(), releasedAt: stamp() });
     }
     const status = action === "release" ? "released" : "deleted";
-    tx.update(ref, { status, message: FieldValue.delete(), resolvedAt: stamp(), resolvedBy: actor });
+    tx.update(ref, { status, message: FieldValue.delete(), photos: FieldValue.delete(), resolvedAt: stamp(), resolvedBy: actor });
     // The audit records the decision, never the message.
     tx.set(db.doc(`moderationAudit/case-${reference}-${action}`), { caseId: reference, propertyId: data.propertyId, action,
       previousStatus: data.status, newStatus: status, actor, note, createdAt: stamp() });

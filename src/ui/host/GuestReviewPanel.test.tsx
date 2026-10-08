@@ -18,3 +18,15 @@ it("shows feedback as plain text and lets the host report a message to the safet
   expect(screen.getByText("Bins were full")).toBeInTheDocument();
   expect(screen.getByRole("status")).toHaveTextContent("Reported");
 });
+
+it("persists the property review switch through the server and reflects the saved value", async () => {
+  callable.mockImplementation(async (name: string) => name === "listHostGuestReview"
+    ? { data: { posts: [], feedback: [], reviewContent: false } }
+    : { data: { reviewContent: true } });
+  render(<GuestReviewPanel propertyId="cottage" />);
+  const toggle = await screen.findByRole("checkbox", { name: "Require approval for new memories" });
+  expect(toggle).not.toBeChecked();
+  fireEvent.click(toggle);
+  await waitFor(() => expect(callable).toHaveBeenCalledWith("setGuestReviewPolicy", { propertyId: "cottage", reviewContent: true }));
+  await waitFor(() => expect(toggle).toBeChecked());
+});

@@ -1,14 +1,13 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import {
-  hostInitials,
   setupProgress,
   setupSteps,
-  welcomeParagraphs,
   writtenHostNotes,
   type PropertyProfile
 } from "../../domain/propertyProfile";
 import { memoriesHeading } from "../wall/memoryHeading";
-import { EssentialMark } from "../wall/EssentialMark";
+import { WallHeader } from "../wall/WallHeader";
+import { HostNotes } from "../wall/HostNotes";
 import type { WallCounts } from "./propertyStore";
 
 /**
@@ -27,205 +26,52 @@ import type { WallCounts } from "./propertyStore";
 
 export type WallView = "public" | "stay";
 
-export function WallPreview({
-  name,
-  profile,
-  counts = null,
-  view: fixed
-}: {
+export function WallPreview({ name, profile, counts = null, view: fixed }: {
   name: string;
   profile: PropertyProfile;
-  /**
-   * How many memories are on the wall, when the page has read them. The phone
-   * cannot show the memories themselves — they are read on the wall and judged
-   * on the moderation page — but it can head the section the way the wall does,
-   * which is how a Host sees that an empty wall says so.
-   */
   counts?: WallCounts | { error: string } | null;
-  /**
-   * Which wall to show. Passing it hands the choice to the page: the wall
-   * being edited is decided by which route a Host is on, and a switch inside
-   * the phone would be a second answer to a question already answered.
-   */
   view?: WallView;
 }) {
   const [chosen, setChosen] = useState<WallView>("public");
+  const previewId = useId();
   const view = fixed ?? chosen;
-  const paragraphs = welcomeParagraphs(profile.stayWelcome);
-  const facts = profile.facts.filter((fact) => fact.term.trim() && fact.detail.trim());
-  const heading = profile.stayHeading.trim();
-  const tip = profile.stayTip.trim();
-  const hosts = profile.hosts.trim();
-  /* The eyebrow labels a note, so it waits for a note to label: a heading on
-     its own is shown as the one line it is. The signature is not a label but
-     something a Host typed, so it stands wherever the note does. */
-  const noteBody = paragraphs.length > 0 || tip !== "";
-  const note = !profile.stayNoteOff && (noteBody || heading !== "" || hosts !== "");
   const memories = memoriesHeading(counts !== null && !("error" in counts) ? counts.visible : null);
-  /* A wall with nothing written on it yet is a card with one thing on it, so
-     the property's name is printed at the size that one thing deserves. */
-  const essentials = !profile.factsOff && facts.length > 0;
-  const alone = !note && !essentials;
-
-  /* The hosts beside the property's name, the way the canvas prints them: the
-     phone heads both walls the same way, so a Host looking from one to the
-     other is looking at the same wall twice rather than at two arrangements. */
-  const mark = profile.hostPhoto ? (
-    <img className="avatar avatar-photo phone-identity-avatar" src={profile.hostPhoto.url} alt={profile.hostPhoto.alt} />
-  ) : hosts ? (
-    <span className="avatar tone-2 phone-identity-avatar" aria-hidden="true">{hostInitials(hosts)}</span>
-  ) : null;
-
-  /* The hosts' own note stands above the memories on both walls rather than
-     among them, so the phone shows it there too — and says whose it is, which
-     is the whole reason it was taken out of the grid. It is the one note here
-     drawn with what is actually written in it: the guests' are read on the
-     wall and judged on the moderation page, and cannot be shown. */
-  const written = writtenHostNotes(profile);
-  const hostNotes = written.length > 0 && (
-    <div className="phone-notes">
-      <p className="phone-eyebrow">More from your hosts</p>
-      {written.map((note) => (
-        <div className="phone-note" data-note-style={note.style} key={note.id}>
-          {note.photo && <img className="phone-note-photo" src={note.photo.url} alt={note.photo.alt} />}
-          {note.message.trim() && <p className="phone-note-message">{note.message}</p>}
-          {hosts && (
-            <p className="phone-note-sign">
-              <b>{hosts}</b>
-            </p>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-
-  return (
-    <div className="wall-preview">
-      {fixed === undefined && (
-        <div className="preview-switch" role="tablist" aria-label="Preview which wall">
-          <button
-            type="button"
-            role="tab"
-            id="preview-tab-public"
-            aria-selected={view === "public"}
-            aria-controls="preview-panel"
-            className={view === "public" ? "active" : undefined}
-            onClick={() => setChosen("public")}
-          >
-            Public wall
-          </button>
-          <button
-            type="button"
-            role="tab"
-            id="preview-tab-stay"
-            aria-selected={view === "stay"}
-            aria-controls="preview-panel"
-            className={view === "stay" ? "active" : undefined}
-            onClick={() => setChosen("stay")}
-          >
-            After the QR scan
-          </button>
-        </div>
-      )}
-
-      <div className="phone">
-        <div
-          className="phone-screen"
-          data-wall-theme={profile.theme}
-          data-no-header-photos={!profile.cover && !profile.hostPhoto ? "true" : undefined}
-          id={fixed === undefined ? "preview-panel" : undefined}
-          role={fixed === undefined ? "tabpanel" : "group"}
-          aria-label={fixed === undefined ? undefined : "On a phone"}
-          aria-labelledby={
-            fixed === undefined ? (view === "public" ? "preview-tab-public" : "preview-tab-stay") : undefined
-          }
-        >
-          {profile.cover && <img className="phone-cover" src={profile.cover.url} alt={profile.cover.alt} />}
-
-          <div className="phone-body">
-            {view === "public" ? (
-              <>
-                <div className="phone-identity">
-                  {mark}
-                  <div className="phone-titles">
-                    <p className="phone-eyebrow">The wall at</p>
-                    <h3>{name}</h3>
-                    {profile.location.trim() && <p className="phone-location">{profile.location}</p>}
-                  </div>
-                </div>
-                {profile.welcome.trim() && <p className="phone-welcome">{profile.welcome}</p>}
-                {(hosts || profile.hostSince.trim()) && (
-                  <p className="phone-byline">
-                    <span>
-                      {hosts && <b>{hosts}</b>}
-                      {profile.hostSince.trim() && <small>Hosting here since {profile.hostSince}</small>}
-                    </span>
-                  </p>
-                )}
-                {hostNotes}
-                <p className="phone-heading">{memories}</p>
-              </>
-            ) : (
-              <>
-                {/* A guest arrives here from the placard in the hallway, so the
-                    wall names the property before it says anything else: it is
-                    the confirmation that they scanned the right display. It is
-                    the property's name rather than a Host's sentence, so it is
-                    on the wall whether or not anything else has been written. */}
-                <div className="phone-identity">
-                  {mark}
-                  <div className={alone ? "phone-stay-name alone" : "phone-stay-name"}>
-                    <b>{name}</b>
-                    {profile.location.trim() && <span>{profile.location}</span>}
-                  </div>
-                </div>
-
-                {note && (
-                  <div className="phone-stay-welcome">
-                    <div className="phone-stay-welcome-head">
-                      <div>
-                        {noteBody && <p className="phone-eyebrow">A note from your hosts</p>}
-                        {heading && <h3>{heading}</h3>}
-                      </div>
-                    </div>
-                    {paragraphs.map((paragraph) => <p className="phone-para" key={paragraph}>{paragraph}</p>)}
-                    {tip && <p className="phone-tip">{tip}</p>}
-                    {hosts && <p className="phone-signature">{hosts}</p>}
-                  </div>
-                )}
-
-                {!profile.factsOff && facts.length > 0 && (
-                  <>
-                    <p className="phone-heading">The essentials</p>
-                    <dl className="phone-facts">
-                      {facts.map((fact) => (
-                        <div key={fact.term}>
-                          <dt><EssentialMark term={fact.term} className="essential-mark phone-fact-mark" />{fact.term}</dt>
-                          <dd>
-                            <b>{fact.detail}</b>
-                            {fact.note && <small>{fact.note}</small>}
-                          </dd>
-                        </div>
-                      ))}
-                    </dl>
-                  </>
-                )}
-
-                {hostNotes}
-                <p className="phone-heading">{memories}</p>
-              </>
-            )}
-          </div>
-
-          {/* The contribution strip is not editable; it is here so the preview
-              is the whole guest view rather than only the parts a Host writes. */}
-          <div className="phone-composer" aria-hidden="true">
-            <span className="btn btn-primary btn-block btn-sm">Add a memory</span>
-          </div>
+  const property = {
+    name, location: profile.location, welcome: profile.welcome, hosts: profile.hosts,
+    cover: profile.cover, hostPhoto: profile.hostPhoto,
+    houseInformation: {
+      heading: profile.stayNoteOff ? "" : profile.stayHeading,
+      welcome: profile.stayNoteOff ? "" : profile.stayWelcome,
+      tip: profile.stayNoteOff ? "" : profile.stayTip,
+      facts: profile.factsOff ? [] : profile.facts
+    }
+  };
+  return <div className="wall-preview">
+    {fixed === undefined && <div className="preview-switch" role="tablist" aria-label="Preview which wall">
+      {(["public", "stay"] as const).map(option => <button key={option} type="button" role="tab"
+        id={`${previewId}-${option}`} aria-selected={view === option} aria-controls={previewId}
+        className={view === option ? "active" : undefined} onClick={() => setChosen(option)}>
+        {option === "public" ? "Public wall" : "After the QR scan"}
+      </button>)}
+    </div>}
+    <div className="phone">
+      <div className="phone-screen" data-wall-theme={profile.theme} data-wall-colour={profile.colour}
+        id={previewId} role={fixed === undefined ? "tabpanel" : "group"}
+        aria-label={fixed === undefined ? undefined : "On a phone"}
+        aria-labelledby={fixed === undefined ? `${previewId}-${view}` : undefined}>
+        <div className="phone-wall-content">
+          <WallHeader property={property} view={view} headingLevel={2} />
+          <HostNotes author={profile.hosts || "your hosts"} notes={writtenHostNotes(profile).map(note => ({
+            id: note.id, message: note.message, style: note.style,
+            photo: note.photo ? { src: note.photo.url, alt: note.photo.alt } : undefined
+          }))} />
+          <h2 className="wall-heading">{memories}</h2>
+          {/* Counts are available here; private guest content is read on the wall itself. */}
+          {counts !== null && !("error" in counts) && counts.visible === 0 && <p className="field-hint">No memories yet.</p>}
         </div>
       </div>
     </div>
-  );
+  </div>;
 }
 
 /**

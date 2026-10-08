@@ -1,14 +1,27 @@
 import { describe, expect, it } from "vitest";
-import { feedbackVerdict, memoryImageNeedsReview, memoryNeedsContactReview, memoryTextNeedsReview } from "./screening";
+import { feedbackVerdict, memoryImageNeedsReview, memoryImageVerdict, memoryNeedsContactReview, memoryTextNeedsReview, memoryTextVerdict } from "./screening";
 
 describe("wall memory provider mappings", () => {
   const safe = { adult: "VERY_UNLIKELY", spoof: "VERY_UNLIKELY", medical: "UNLIKELY", violence: "UNLIKELY", racy: "UNLIKELY" } as const;
 
-  it("holds a likely adult, medical, violent or racy image for host review", () => {
+  it("holds a likely adult, medical, violent or racy image for review", () => {
     expect(memoryImageNeedsReview([{ ...safe, adult: "LIKELY" }])).toBe(true);
     expect(memoryImageNeedsReview([{ ...safe, medical: "VERY_LIKELY" }])).toBe(true);
     expect(memoryImageNeedsReview([{ ...safe, racy: "LIKELY" }])).toBe(true);
     expect(memoryImageNeedsReview([{ ...safe, violence: "LIKELY", racy: "UNLIKELY" }])).toBe(true);
+  });
+
+  it.each(["adult", "violence"] as const)("routes likely %s photos to restricted safety review", category => {
+    for (const level of ["LIKELY", "VERY_LIKELY"] as const) {
+      expect(memoryImageVerdict([{ ...safe, [category]: level, racy: "LIKELY" }])).toEqual({ outcome: "critical", categories: [`Photo ${category}`] });
+    }
+    expect(memoryImageVerdict([{ ...safe, [category]: "POSSIBLE" }])).toEqual({ outcome: "clear" });
+  });
+
+  it("routes medical and racy flags alone to host review and ignores spoof alone", () => {
+    expect(memoryImageVerdict([{ ...safe, medical: "VERY_LIKELY" }])).toEqual({ outcome: "standard" });
+    expect(memoryImageVerdict([{ ...safe, racy: "VERY_LIKELY" }])).toEqual({ outcome: "standard" });
+    expect(memoryImageVerdict([{ ...safe, spoof: "VERY_LIKELY" }])).toEqual({ outcome: "clear" });
   });
 
   it("keeps low-likelihood images clear and never auto-rejects them", () => {
@@ -18,6 +31,18 @@ describe("wall memory provider mappings", () => {
   it("uses provider text categories as review signals without a profanity list", () => {
     expect(memoryTextNeedsReview([{ name: "Profanity", confidence: 0.8 }])).toBe(true);
     expect(memoryTextNeedsReview([{ name: "Toxic", confidence: 0.79 }])).toBe(false);
+  });
+
+  it.each(["Violent", "Sexual", "Derogatory", "Firearms & Weapons"])("routes %s flags to safety review for both routes", name => {
+    const categories = [{ name, confidence: 0.8 }, { name: "Profanity", confidence: 0.99 }];
+    expect(memoryTextVerdict(categories)).toEqual({ outcome: "critical", categories: [name] });
+    expect(feedbackVerdict(categories)).toEqual({ verdict: "critical", categories: [name] });
+  });
+
+  it("uses host review for profanity alone and keeps below-threshold safety signals clear", () => {
+    expect(memoryTextVerdict([{ name: "Profanity", confidence: 0.99 }])).toEqual({ outcome: "standard" });
+    expect(memoryTextVerdict([{ name: "Violent", confidence: 0.79 }])).toEqual({ outcome: "clear" });
+    expect(memoryTextVerdict([])).toEqual({ outcome: "clear" });
   });
 });
 

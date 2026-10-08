@@ -1,0 +1,49 @@
+{
+  "scope": "Metadata only; not object access, provider classification or guest-flow proof",
+  "revision": "finishguestcontribution-00014-kif",
+  "runtimeIdentity": "functions-runtime@digistaybook-cbert.iam.gserviceaccount.com",
+  "functionState": "ACTIVE",
+  "checkedAtUtc": "2026-10-02T11:11:13.0052642Z",
+  "project": "digistaybook-cbert",
+  "buckets": [
+    {
+      "name": "digistaybook-cbert-guest-quarantine",
+      "location": "AUSTRALIA-SOUTHEAST1",
+      "iamConfiguration": {
+        "bucketPolicyOnly": {
+          "enabled": true,
+          "lockedTime": "2026-12-30T07:00:19.127Z"
+        },
+        "uniformBucketLevelAccess": {
+          "enabled": true,
+          "lockedTime": "2026-12-30T07:00:19.127Z"
+        },
+        "publicAccessPrevention": "enforced"
+      },
+      "softDeletePolicy": {
+        "retentionDurationSeconds": "604800",
+        "effectiveTime": "2026-10-01T07:00:19.127Z"
+      }
+    },
+    {
+      "name": "digistaybook-cbert-guest-published",
+      "location": "AUSTRALIA-SOUTHEAST1",
+      "iamConfiguration": {
+        "bucketPolicyOnly": {
+          "enabled": true,
+          "lockedTime": "2026-12-30T07:01:40.313Z"
+        },
+        "uniformBucketLevelAccess": {
+          "enabled": true,
+          "lockedTime": "2026-12-30T07:01:40.313Z"
+        },
+        "publicAccessPrevention": "enforced"
+      },
+      "softDeletePolicy": {
+        "retentionDurationSeconds": "604800",
+        "effectiveTime": "2026-10-01T07:01:40.313Z"
+      }
+    }
+  ],
+  "intakeEnabled": "false"
+}

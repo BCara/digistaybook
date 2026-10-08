@@ -8,7 +8,7 @@ describe("server public wall projection", () => {
   });
   it("never forwards billing, house secrets, consent or moderation internals", () => {
     expect(publicProperty({ name: "Cottage", billing: { secret: "billing" }, profile: { welcome: "Welcome", facts: [{ detail: "wifi-password" }] } }))
-      .toEqual({ name: "Cottage", location: "", welcome: "Welcome", hosts: "", hostPhoto: null, hostNotes: [], theme: "", cover: null, guestPrompt: "", houseInformation: null });
+      .toEqual({ name: "Cottage", location: "", welcome: "Welcome", hosts: "", hostPhoto: null, hostNotes: [], theme: "", colour: "", cover: null, guestPrompt: "", houseInformation: null });
     expect(publicPost("p1", { message: "Hello", sessionId: "secret", consent: {}, hold: {}, photo: { url: "private" } }))
       .toEqual({ id: "p1", message: "Hello", displayName: "", createdAt: null, photoCount: 0 });
   });

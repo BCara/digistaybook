@@ -23,15 +23,29 @@ it("loads later memories without duplicating existing ones and keeps the cursor 
   expect(screen.queryByRole("button", { name: "Load more memories" })).not.toBeInTheDocument();
 });
 
-it("requires consent and does not collect a guest name or email", async () => {
+it("requires consent, offers an optional guest name and does not collect email", async () => {
   render(<GuestContribution slug="cottage" onChanged={() => {}} />);
   await screen.findByText("Your memories in this browser");
   fireEvent.change(screen.getByLabelText("Your message"), { target: { value: "A lovely stay" } });
   fireEvent.click(screen.getByRole("button", { name: "Submit memory" }));
   expect(screen.getByRole("status")).toHaveTextContent(/accept the consent/);
   expect(call.mock.calls.some(([, name]) => name === "beginGuestContribution")).toBe(false);
-  expect(screen.queryByLabelText(/email|your name/i)).not.toBeInTheDocument();
+  expect(screen.queryByLabelText(/email/i)).not.toBeInTheDocument();
+  expect(screen.getByRole("textbox", { name: "Guest name (optional)" })).not.toBeRequired();
   expect(screen.getByRole("link", { name: "Guest Terms" })).toHaveAttribute("href", "/guest-terms");
+});
+
+it.each([["  Mia & Sam  ", "Mia & Sam"], ["   ", ""]])("saves the optional name %j and clears it after success", async (input, saved) => {
+  call.mockImplementation(async (_slug, name) => name === "listGuestContributions" ? { posts: [] }
+    : name === "beginGuestContribution" ? { id: "named-memory" } : { status: "published", message: "Saved" });
+  render(<GuestContribution slug="cottage" onChanged={() => {}} />);
+  fireEvent.change(screen.getByRole("textbox", { name: "Guest name (optional)" }), { target: { value: input } });
+  fireEvent.change(screen.getByLabelText("Your message"), { target: { value: "A lovely stay" } });
+  fireEvent.click(screen.getByRole("checkbox"));
+  fireEvent.click(screen.getByRole("button", { name: "Submit memory" }));
+  await screen.findByText("Your memory is now on the wall.");
+  expect(call.mock.calls.find(([, name]) => name === "beginGuestContribution")![2]).toMatchObject({ displayName: saved });
+  expect(screen.getByRole("textbox", { name: "Guest name (optional)" })).toHaveValue("");
 });
 
 it("retains one request ID after a lost response and sends no feedback with a memory", async () => {
@@ -90,6 +104,7 @@ it("sends private feedback as its own submission, without the memory fields or c
   fireEvent.click(screen.getByRole("radio", { name: "Private feedback for your host" }));
   expect(screen.getByRole("heading", { name: "Private feedback for your host" })).toBeInTheDocument();
   expect(screen.queryByLabelText("Your message")).not.toBeInTheDocument();
+  expect(screen.queryByRole("textbox", { name: "Guest name (optional)" })).not.toBeInTheDocument();
   expect(screen.queryByLabelText("Choose photos")).not.toBeInTheDocument();
   expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
   expect(screen.getByText(/threats, sexual content or hate may be held/)).toBeInTheDocument();

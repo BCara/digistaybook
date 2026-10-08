@@ -30,4 +30,18 @@ describe("legal approval gate (GC-03)", () => {
     expect(guestPolicy.consentWording).not.toMatch(/this image/);
     expect(guestPolicy.consentVersion).toBe(legalVersions.consent);
   });
+  it("permits only an explicitly named property during its controlled testing window", () => {
+    vi.stubEnv("FUNCTIONS_EMULATOR", "false");
+    vi.stubEnv("GUEST_CONTRIBUTIONS_ENABLED", "false");
+    vi.stubEnv("GUEST_TEST_PROPERTY_IDS", " test-property ");
+    vi.stubEnv("GUEST_TEST_UNTIL", "2026-10-09T13:00:00Z");
+    const now = Date.parse("2026-10-02T12:00:00Z");
+    expect(guestIntakeEnabled("test-property", now)).toBe(true);
+    expect(guestIntakeEnabled("other-property", now)).toBe(false);
+    expect(guestIntakeEnabled(undefined, now)).toBe(false);
+    expect(guestIntakeEnabled("test-property", Date.parse("2026-10-09T13:00:00Z"))).toBe(false);
+    vi.stubEnv("GUEST_TEST_UNTIL", "invalid");
+    expect(guestIntakeEnabled("test-property", now)).toBe(false);
+    expect(legalApproval).toBeNull();
+  });
 });

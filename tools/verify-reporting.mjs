@@ -95,13 +95,10 @@ assert.equal((await db.doc(`operationsAlerts/deadline-${received.reference}`).ge
 const retryId = "reporting-screen-retry";
 await db.doc(`guestSubmissions/${retryId}`).set({ propertyId, status: "pending", revision: 1, message: "Synthetic text", feedback: "", photoCount: 0, createdAt: Timestamp.now() });
 await retryScreening(retryId, Date.now(), async () => ({ outcome: "unavailable", feedback: "held" }));
-assert.equal((await db.doc(`guestSubmissions/${retryId}`).get()).get("screeningRetryState"), "retry");
-await retryScreening(retryId, Date.now() + 60001, async () => ({ outcome: "clear", feedback: "clear" }));
-assert.equal((await db.doc(`guestSubmissions/${retryId}`).get()).get("status"), "published");
-await db.doc(`guestSubmissions/${retryId}`).update({ status: "pending", revision: 2, screeningRetryRevision: 2, screeningAttempts: 7, screeningRetryAt: Timestamp.fromMillis(0) });
-await retryScreening(retryId, Date.now(), async () => ({ outcome: "unavailable", feedback: "held" }));
-assert.equal((await db.doc(`guestSubmissions/${retryId}`).get()).get("screeningRetryState"), "needs_attention");
-assert.equal((await db.doc(`operationsAlerts/screening-${retryId}`).get()).get("status"), "pending");
+assert.equal((await db.doc(`guestSubmissions/${retryId}`).get()).get("screeningRetryState"), "complete");
+assert.equal((await db.doc(`trustSafetyCases/${retryId}:1`).get()).get("screeningStatus"), "incomplete");
+await retryScreening(retryId, Date.now() + 60001, async () => ({ outcome: "clear" }));
+assert.equal((await db.doc(`guestSubmissions/${retryId}`).get()).get("status"), "critical");
 const { processGuestSubmission } = await import("../functions/lib/guestContributions.js");
 await db.doc(`guestSubmissions/${retryId}`).update({ status: "pending", revision: 3, safetyCaseOpen: true });
 await db.doc(`properties/${propertyId}/posts/${retryId}`).update({ visibility: "processing" });
@@ -109,4 +106,4 @@ await processGuestSubmission(retryId, async () => ({ outcome: "clear", feedback:
 assert.equal((await db.doc(`guestSubmissions/${retryId}`).get()).get("status"), "pending");
 assert.equal((await db.doc(`properties/${propertyId}/posts/${retryId}`).get()).get("visibility"), "processing");
 console.log("PASS: owner-only paged ZIP source, excluded records, actual photo bytes, hidden-photo denial and open safety-case publication guard.");
-console.log("PASS: actual report hide/dedupe/cooldown, neutral acknowledgement, multiple-report restoration, ownership/MFA guards, private intake retry and deadline escalation. No email delivery claimed.");
+console.log("PASS: actual report hide/dedupe/cooldown, neutral acknowledgement, multiple-report restoration, ownership/MFA guards, incomplete-screening review hold and deadline escalation. No email delivery claimed.");

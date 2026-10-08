@@ -57,7 +57,10 @@ export function wallIsOpen(data: Record<string, any>, now = Date.now(), view: "p
 
 const text = (value: unknown, max = 1200) => typeof value === "string" ? value.slice(0, max) : "";
 function photo(value: any) {
-  if (!value || typeof value.url !== "string" || !/^https:\/\//.test(value.url)) return null;
+  if (!value || typeof value.url !== "string") return null;
+  const localPhoto = process.env.FUNCTIONS_EMULATOR === "true"
+    && /^http:\/\/127\.0\.0\.1:9199\/v0\/b\/demo-digistaybook\.firebasestorage\.app\/o\//.test(value.url);
+  if (!/^https:\/\//.test(value.url) && !localPhoto) return null;
   return { url: value.url.slice(0, 4096), alt: text(value.alt, 120) };
 }
 // The hosts' own notes. A property saved before there were several carries
@@ -81,7 +84,7 @@ export function publicProperty(data: Record<string, any>, view: "public" | "stay
   return {
     name: text(data.name, 60), location: text(profile.location, 200),
     welcome: text(profile.welcome), hosts: text(profile.hosts, 100), hostPhoto: photo(profile.hostPhoto),
-    hostNotes: hostNotes(profile), theme: text(profile.theme, 30), cover: photo(profile.cover), guestPrompt: text(profile.guestPrompt, 240),
+    hostNotes: hostNotes(profile), theme: text(profile.theme, 30), colour: text(profile.colour, 30), cover: photo(profile.cover), guestPrompt: text(profile.guestPrompt, 240),
     /* The house guidance is the in-stay wall's whole reason for existing
        (D-013), so reaching that wall is what earns it: the stay token is the
        gate, and `resolveWallView` has already turned a caller without one

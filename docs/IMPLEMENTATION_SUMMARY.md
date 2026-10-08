@@ -1,5 +1,31 @@
 # DigiStayBook — implementation progress
 
+**Consent reminders deployed 5 October 2026.** Guest consent now has an hourly
+eligibility review and daily 9am Sydney email reminders for manual deletion.
+The operations page shows the exact consent record, deadline and reason and can
+record observed absence after manual deletion. Open linked cases, recorded holds
+and unfinished media deletion block eligibility. No automatic consent deletion
+is enabled. Seven focused tests and the database emulator checks passed; the live
+worker ran successfully with zero currently due records. Email receipt remains
+unverified. See [manual consent retention](consent-retention-reminders-2026-10-05.md).
+
+**Release completed 5 October 2026.** The per-property host review switch,
+restricted memory-case text/photo controls, serious-photo routing and incomplete
+feedback retry policy are deployed. 606 tests passed (1 skipped), both builds
+passed, and emulator lifecycle/access/deletion checks passed. Nine selected
+Functions are ACTIVE. The scoped hosting build excludes unrelated billing
+edits. See [routing and release evidence](guest-screening-routing-2026-10-05.md).
+General intake remains off; the existing property test exception is unchanged.
+Earlier source-only notes below describe the pre-deployment stage.
+
+**Scoped update 5 October 2026.** Local source now automatically routes serious
+memory text flags to restricted safety review, using the same serious-category
+thresholds as private feedback. Profanity alone is ordinary host handling.
+Incomplete feedback scans now wait privately for bounded retry, matching the
+memory route. These changes are not deployed by this update. The review pack
+version 2 describes the shared outcome labels and remaining image-policy/live
+checks; earlier rows below retain their historical deployment wording.
+
 **Scoped update 2 October 2026.** The tables retain the earlier implementation record; current image-provider and privacy decisions are recorded in [the provider review](image-screening-provider-review-2026-10-02.md). Implemented means built and checked locally unless deployment evidence is stated separately. The app is not ready for public launch yet. Separate workstreams need checking before their work is counted here.
 
 ## Implemented

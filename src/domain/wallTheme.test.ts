@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
-import { defaultWallTheme, readWallTheme, wallTheme, wallThemes } from "./wallTheme";
+import { defaultWallTheme, readWallTheme, wallTheme, wallThemes, wallColours, readWallColour } from "./wallTheme";
 
 /* A theme is a name here and a block of design tokens in the stylesheet, and
    nothing in TypeScript can see the second half. That split is deliberate — it
@@ -23,15 +23,15 @@ describe("wall themes", () => {
     expect([...offered].sort()).toEqual([...declared].sort());
   });
 
-  it("gives each theme a paper of its own, not a colour of its own", () => {
+  it("gives each theme its own layout independent of colour", () => {
     for (const theme of wallThemes) {
       const block = styles.slice(styles.indexOf(`[data-wall-theme="${theme.id}"] {`));
       const tokens = block.slice(0, block.indexOf("\n}"));
 
       // The stock it is printed on, and the ink on it: no theme is complete
       // without them, whatever else it does or does not change.
-      expect(tokens).toContain("--wall-paper:");
-      expect(tokens).toContain("--wall-ink:");
+      expect(tokens).toContain("--wall-sheet-radius:");
+      expect(tokens).toContain("--wall-note-radius:");
       // And something a colour picker could not have given it. A theme that
       // only re-hues the wall is the same wall again under a new name.
       expect(
@@ -47,6 +47,8 @@ describe("wall themes", () => {
     expect(new Set(ids).size).toBe(ids.length);
     expect(ids).toContain(defaultWallTheme);
     expect(wallThemes[0].id).toBe(defaultWallTheme);
+    expect(wallThemes).toHaveLength(3);
+    expect(wallColours).toHaveLength(3);
   });
 
   it("reads a stored theme, and reads anything else as the default", () => {
@@ -56,6 +58,15 @@ describe("wall themes", () => {
     expect(readWallTheme("midnight")).toBe(defaultWallTheme);
     expect(readWallTheme(undefined)).toBe(defaultWallTheme);
     expect(readWallTheme(7)).toBe(defaultWallTheme);
+  });
+
+  it("maps older themes to the new collection and keeps their colour", () => {
+    expect(readWallTheme("harbour")).toBe("studio");
+    expect(readWallColour(undefined, "harbour")).toBe("ocean");
+    expect(readWallTheme("sage")).toBe("linen");
+    expect(readWallColour(undefined, "sage")).toBe("sage");
+    expect(readWallColour("ocean", "sage")).toBe("ocean");
+    expect(readWallColour("invalid")).toBe("sand");
   });
 
   it("says what each theme is as paper, in a line a Host can read", () => {

@@ -1,0 +1,44 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Property media: the cover, the hosts' photograph and the property's own
+    // photograph, all uploaded from the Host control centre. Everything else
+    // in the bucket stays default-deny.
+    match /properties/{propertyId}/media/{fileName} {
+      function property() {
+        return firestore.get(/databases/(default)/documents/properties/$(propertyId)).data;
+      }
+      // Anonymous sessions exist only for Guest self-service, so they are never
+      // owners — the same rule Firestore applies on every Host path.
+      function owns() {
+        return request.auth != null
+          && request.auth.token.firebase.sign_in_provider != 'anonymous'
+          && property().ownerUid == request.auth.uid;
+      }
+      function propertyIsPublic() {
+        return property().mode == 'live'
+          && property().get('profile', {}).get('displayWallOff', false) != true
+          && (property().lifecycle in ['trialing', 'active', 'grace_period']
+            || (property().lifecycle == 'cancelled_pending_end'
+              && property().get('serviceEndsAt', null) is timestamp
+              && property().serviceEndsAt > request.time));
+      }
+
+      // A photograph is as public as the wall that renders it: reachable by an
+      // unauthenticated guest once the property is live, and by nobody but the
+      // owner while it is still an unpublished draft.
+      allow read: if propertyIsPublic() || owns();
+      // Size and type are enforced here as well as in the browser, because the
+      // browser check is only a courtesy to the Host.
+      allow create, update: if owns()
+        && request.resource.size < 8 * 1024 * 1024
+        && request.resource.contentType.matches('image/(jpeg|png|webp)');
+      // `request.resource` is null on a delete, so it is granted separately.
+      allow delete: if owns();
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

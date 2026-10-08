@@ -1,5 +1,5 @@
 import { hostNoteStyle, hostNoteStyles, type HostNoteStyle } from "../../domain/propertyProfile";
-import type { WallThemeId } from "../../domain/wallTheme";
+import type { WallThemeId, WallColourId } from "../../domain/wallTheme";
 
 /**
  * How one of the hosts' notes is fixed to the wall.
@@ -17,6 +17,7 @@ import type { WallThemeId } from "../../domain/wallTheme";
 export function HostNoteStylePicker({
   name,
   theme,
+  colour,
   value,
   disabled,
   compact = false,
@@ -26,6 +27,7 @@ export function HostNoteStylePicker({
   name: string;
   /** The paper the property's walls are printed on, so a swatch is on it too. */
   theme: WallThemeId;
+  colour?: WallColourId;
   value: HostNoteStyle;
   disabled?: boolean;
   compact?: boolean;
@@ -46,7 +48,7 @@ export function HostNoteStylePicker({
               onChange={() => onChange(style.id)}
             />
             <span>
-              <span className="note-style-swatch" data-wall-theme={theme} aria-hidden="true">
+              <span className="note-style-swatch" data-wall-theme={theme} data-wall-colour={colour} aria-hidden="true">
                 <span className="host-note-swatch" data-note-style={style.id}>
                   <i />
                   <i />

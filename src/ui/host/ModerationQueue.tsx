@@ -114,10 +114,10 @@ function ConfirmPanel({ post, state, action }: { post: ModeratedPost; state: Que
 }
 
 function QueueCard({ post, state }: { post: ModeratedPost; state: QueueState }) {
-  const author = post.displayName || "A guest";
+  const author = post.displayName?.trim() ?? "";
   const actions = availableActions(post);
   const blocked = actionsUnavailable(post);
-  const hold = holdSummary(post);
+  const hold = post.visibility === "visible" ? null : holdSummary(post);
   const confirming = state.confirming?.postId === post.id ? state.confirming.action : null;
   const result = state.result?.postId === post.id ? state.result : null;
 
@@ -127,7 +127,7 @@ function QueueCard({ post, state }: { post: ModeratedPost; state: QueueState }) 
         <div className="note-photo">
           <img
             src={post.photo.url}
-            alt={post.photo.alt || `Photograph left by ${author}`}
+            alt={post.photo.alt || (author ? `Photograph left by ${author}` : "Guest memory photo")}
             width={post.photo.width || undefined}
             height={post.photo.height || undefined}
             loading="lazy"
@@ -145,9 +145,9 @@ function QueueCard({ post, state }: { post: ModeratedPost; state: QueueState }) 
       )}
 
       <footer className="note-sign">
-        <span className={`avatar tone-${toneIndex(author)}`} aria-hidden="true">{initials(author)}</span>
+        {author && <span className={`avatar tone-${toneIndex(author)}`} aria-hidden="true">{initials(author)}</span>}
         <span className="note-author">
-          <b>{author}</b>
+          {author && <b>{author}</b>}
           {post.createdAt && (
             <time dateTime={post.createdAt}>
               {post.stayedOn ? `Stayed ${post.stayedOn}` : `Posted ${formatDate(post.createdAt)}`}
@@ -157,7 +157,9 @@ function QueueCard({ post, state }: { post: ModeratedPost; state: QueueState }) 
       </footer>
 
       <StateLabel post={post} />
-      {hold && <p className="queue-hold">{hold}</p>}
+      {post.requiresScreenedReview && !blocked ? (
+        <p className="queue-hold">This new submission needs safety checks and host review. <a className="text-link" href="#new-memories">Review in New memories above</a>.</p>
+      ) : hold && <p className="queue-hold">{hold}</p>}
 
       {blocked ? (
         <p className="field-hint">{blocked}</p>
@@ -191,10 +193,10 @@ export function ModerationQueue({ posts, state }: { posts: ModeratedPost[]; stat
     <>
       {sections.map((section) => (
         <section className={`queue-section queue-${section.id}`} key={section.id} aria-labelledby={`queue-${section.id}`}>
-          <h2 id={`queue-${section.id}`}>
-            {section.title} <span className="queue-count">{section.posts.length}</span>
-          </h2>
-          <p className="queue-blurb">{section.blurb}</p>
+          <h3 id={`queue-${section.id}`}>
+            {section.id === "review" ? "Off the wall" : section.title} <span className="queue-count">{section.posts.length}</span>
+          </h3>
+          <p className="queue-blurb">{section.id === "review" ? "Hidden memories and their status. Review new submissions in New memories above." : section.blurb}</p>
           <div className="queue-grid">
             {section.posts.map((post) => (
               <QueueCard key={post.id} post={post} state={state} />

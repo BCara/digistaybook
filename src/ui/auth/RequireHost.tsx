@@ -17,11 +17,11 @@ function Blocked({ title, children }: { title: string; children: ReactNode }) {
  * protected tree; every other state (including an anonymous Guest session) is
  * refused without a development bypass.
  */
-export function RequireHost({ children }: { children: ReactNode }) {
+export function RequireHost({ children, signInPath = "/" }: { children: ReactNode; signInPath?: string }) {
   const { status } = useAuth();
   useEffect(() => {
-    if (status === "signed-out" || status === "guest") navigate("/", { replace: true });
-  }, [status]);
+    if (status === "signed-out" || status === "guest") navigate(signInPath, { replace: true });
+  }, [status, signInPath]);
 
   if (status === "host") return <>{children}</>;
 

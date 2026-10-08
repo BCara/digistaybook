@@ -6,9 +6,9 @@
 
 export const legalVersions = {
   hostTerms: "draft-2026-08-04",
-  guestTerms: "draft-2026-10-02",
-  privacy: "draft-2026-10-02",
-  consent: "handbook-5.3-draft-v3"
+  guestTerms: "draft-2026-10-06",
+  privacy: "draft-2026-10-06",
+  consent: "handbook-5.3-draft-v4"
 } as const;
 
 export type LegalApproval = {
@@ -31,4 +31,4 @@ export function legalApproved(approval: LegalApproval | null = legalApproval) {
 
 // The sentence a guest ticks before a memory is published. It names the
 // message and the photos, because a text-only memory has no image to consent to.
-export const consentWording = "I agree to the Guest Terms and Privacy Policy, understand that photos undergo automated safety checks involving overseas processing, consent to my message and any photos being displayed publicly on this property’s guestbook, and confirm I am 16 or older.";
+export const consentWording = "I agree to the Guest Terms and Privacy Policy, understand that photos undergo automated safety checks, consent to my message and any photos being displayed publicly on this property’s guestbook, and confirm I am 16 or older.";

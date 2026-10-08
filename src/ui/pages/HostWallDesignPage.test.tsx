@@ -194,35 +194,38 @@ describe("the guest view of a property", () => {
     // than from a row of swatches above the wall it prints.
     const side = within(screen.getByRole("group", { name: "Wall theme" }));
     // A property that has never chosen is on the default, and the sheet says so.
-    expect(side.getByRole("button")).toHaveTextContent("Linen");
+    expect(side.getByRole("radio", { name: "Linen" })).toBeChecked();
     expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "linen");
 
-    fireEvent.click(side.getByRole("button"));
-    fireEvent.click(screen.getByRole("radio", { name: "Harbour" }));
-    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "harbour");
+    fireEvent.click(side.getByRole("radio", { name: "Studio" }));
+    fireEvent.click(screen.getByRole("radio", { name: "Ocean" }));
+    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "studio");
 
     // The phone is printed on it too: the choice is read back at the size a
     // guest holds, not only on the canvas.
-    expect(document.querySelector(".phone-screen")).toHaveAttribute("data-wall-theme", "harbour");
+    expect(document.querySelector(".phone-screen")).toHaveAttribute("data-wall-theme", "studio");
 
     // It is part of the draft, so it saves on the same button as the words.
     fireEvent.click(save());
     await waitFor(() => expect(savePropertyProfile).toHaveBeenCalledTimes(1));
     const [, saved] = savePropertyProfile.mock.calls[0] as [string, PropertyProfile];
-    expect(saved.theme).toBe("harbour");
+    expect(saved.theme).toBe("studio");
+    expect(saved.colour).toBe("ocean");
+    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-colour", "ocean");
+    expect(document.querySelector(".phone-screen")).toHaveAttribute("data-wall-colour", "ocean");
   });
 
   it("offers the same theme on the public wall, since one property has one paper", async () => {
     loadProperty.mockResolvedValue({
       status: "ok",
-      value: hostProperty({ profile: { ...filledProfile, theme: "sage" } })
+      value: hostProperty({ profile: { ...filledProfile, theme: "archive" } })
     });
     renderPublic();
 
     await waitFor(() => expect(publicCanvas().getByLabelText("Property name")).toBeInTheDocument());
     const side = within(screen.getByRole("group", { name: "Wall theme" }));
-    expect(side.getByRole("button")).toHaveTextContent("Sage");
-    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "sage");
+    expect(side.getByRole("radio", { name: "Archive" })).toBeChecked();
+    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "archive");
   });
 
   it("says what the public wall is for, and hands over both ways of using it", async () => {
@@ -302,10 +305,10 @@ describe("the guest view of a property", () => {
     // stands in for the empty ones: the phone is what a guest would read, not
     // a list of what is still missing.
     expect(phone.getByText("Seabreeze Cottage")).toBeInTheDocument();
-    expect(document.querySelector(".phone-stay-name")).toContainElement(phone.getByText("Seabreeze Cottage"));
+    expect(document.querySelector(".phone-screen .stay-cover-titles")).toContainElement(phone.getByText("Seabreeze Cottage"));
     // A heading is something on the wall, so the name is not printed at the
     // size it takes when it is the only thing there.
-    expect(document.querySelector(".phone-stay-name")).not.toHaveClass("alone");
+    expect(document.querySelector(".phone-screen .stay-cover-titles")).not.toHaveClass("alone");
     expect(phone.getByRole("heading", { name: "Welcome" })).toBeInTheDocument();
     expect(phone.queryByText(/cover photograph/i)).not.toBeInTheDocument();
     expect(phone.queryByText("A note from your hosts")).not.toBeInTheDocument();
@@ -557,11 +560,11 @@ describe("the guest view of a property", () => {
     renderPage();
 
     await waitFor(() => expect(canvas().getByLabelText("Property name")).toBeInTheDocument());
-    expect(document.querySelector(".phone-stay-name")).toHaveClass("alone");
+    expect(document.querySelector(".phone-screen .stay-cover-titles h1")).toHaveTextContent("Seabreeze Cottage");
 
     // The first line written takes the wall back to its ordinary proportions.
     fireEvent.change(canvas().getByLabelText("Arrival heading"), { target: { value: "Welcome" } });
-    expect(document.querySelector(".phone-stay-name")).not.toHaveClass("alone");
+    expect(document.querySelector(".phone-screen .stay-cover-titles")).not.toHaveClass("alone");
   });
 
   it("says a wall is empty rather than counting to zero", async () => {

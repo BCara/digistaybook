@@ -203,7 +203,12 @@ function SubscriptionControls({
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [done, setDone] = useState<SubscriptionChange | null>(null);
+  // The action is kept with its answer because the lifecycle is not a record of
+  // it: once the webhook lands, a cancelled property reads as resumable, and a
+  // notice worked out from that would announce the opposite of what was done.
+  const [done, setDone] = useState<
+    { action: "cancel" | "resume"; from: string; change: SubscriptionChange } | null
+  >(null);
 
   const cancellable = CANCELLABLE.includes(property.lifecycle);
   const resumable = property.lifecycle === "cancelled_pending_end";
@@ -211,14 +216,15 @@ function SubscriptionControls({
 
   // The webhook lands a second or two after Stripe answers, so the band
   // overhead is briefly still showing the old lifecycle. The same watch as the
-  // one that follows activation, for the same reason.
+  // one that follows activation, for the same reason — and it stops once the
+  // change has arrived.
   useEffect(() => {
-    if (!done) return;
+    if (!done || lifecycle !== done.from) return;
     let stopped = false;
     const check = async () => {
       const outcome = await loadProperty(property.id);
       if (stopped || outcome.status !== "ok" || !outcome.value) return;
-      if (outcome.value.lifecycle !== lifecycle) publish({ status: "ready", property: outcome.value });
+      if (outcome.value.lifecycle !== done.from) publish({ status: "ready", property: outcome.value });
     };
     const timer = setInterval(() => void check(), 3000);
     return () => {
@@ -241,26 +247,25 @@ function SubscriptionControls({
       return;
     }
     setConfirming(false);
-    setDone(outcome.value);
+    setDone({ action, from: lifecycle, change: outcome.value });
   };
 
-  // `resumable` is read before the call, so on this screen it still describes
-  // what the property was: a resume answered here is a property that had been
-  // cancelled, and a cancel is one that had not.
   if (done) {
+    const resumed = done.action === "resume";
+    const date = done.change.serviceEndsOn;
     return (
       <div className="notice" role="status">
         <strong>
-          {resumable
-            ? done.serviceEndsOn
-              ? `Your subscription is back on. It renews on ${done.serviceEndsOn}.`
+          {resumed
+            ? date
+              ? `Your subscription is back on. It renews on ${date}.`
               : "Your subscription is back on."
-            : done.serviceEndsOn
-              ? `Cancelled. This property stays live until ${done.serviceEndsOn}.`
+            : date
+              ? `Cancelled. This property stays live until ${date}.`
               : "Cancelled. This property stays live until the end of the period you have paid for."}
         </strong>
         <p>
-          {resumable
+          {resumed
             ? "Nothing was charged for making this change."
             : "You will not be charged again. Everything on the wall is kept, and you can undo this any time before that date."}
         </p>

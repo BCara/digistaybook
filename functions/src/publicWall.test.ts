@@ -1,7 +1,24 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { publicProperty, wallIsOpen, unavailableWall, ownsProperty, wallPreviewable, resolveWallView, stayTokenMatches } from "./publicWall";
 
 describe("wall content projection", () => {
+  it.each(["public", "stay"] as const)("serves the same appearance on the %s wall", view => {
+    expect(publicProperty({ name: "Cottage", profile: { theme: "studio", colour: "sage" } }, view))
+      .toMatchObject({ theme: "studio", colour: "sage" });
+  });
+  it("serves local storage photos only in the emulator and rejects other HTTP sources", () => {
+    const url = "http://127.0.0.1:9199/v0/b/demo-digistaybook.firebasestorage.app/o/cover.webp?alt=media";
+    const project = (url: string) => publicProperty({ profile: { cover: { url, alt: "Cottage" } } }).cover;
+    try {
+      vi.stubEnv("FUNCTIONS_EMULATOR", "false");
+      expect(project(url)).toBeNull();
+      vi.stubEnv("FUNCTIONS_EMULATOR", "true");
+      expect(project(url)).toEqual({ url, alt: "Cottage" });
+      expect(project(url.replace("127.0.0.1", "example.com"))).toBeNull();
+      expect(project(url.replace("demo-digistaybook", "production"))).toBeNull();
+      expect(project("https://example.com/cover.webp")).not.toBeNull();
+    } finally { vi.unstubAllEnvs(); }
+  });
   it("turns off the public wall without disabling the in-stay wall", () => {
     const property = { mode: "live", lifecycle: "active", profile: { displayWallOff: true } };
     expect(wallIsOpen(property, Date.now(), "public")).toBe(false);

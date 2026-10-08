@@ -1,5 +1,44 @@
 # Guest contribution issues and decisions
 
+**Consent evidence update — 5 October 2026:** automatic reminders for manual
+consent deletion are deployed. The draft trigger is 24 months after associated
+content deletion or final dispute closure, whichever is later, with holds and
+linked open reviews excluded. This supersedes the missing consent-reminder
+schedule described in the historical GC-05 notes. Operator deletion, external
+dispute checks, backup handling and email receipt still require operational proof.
+See [implementation and manual procedure](consent-retention-reminders-2026-10-05.md).
+
+## Screening update — 5 October 2026
+
+**Release completed 5 October.** The property moderation panel now has the
+owner-only review switch. Serious adult/violence photo flags route to restricted
+safety cases; MFA operations can open case text/photos and release to host review
+or delete with photo cleanup. The updated screening and feedback retry rules
+are deployed in nine selected Functions, and the two UI components are deployed
+from a scoped frontend build. Full local check: 606 passed, 1 skipped; emulator
+review/access/deletion checks passed. General intake remains off; the existing
+property test exception is preserved. Current steps and proof are in
+[the routing/release record](guest-screening-routing-2026-10-05.md). The source-only
+notes immediately below describe the earlier stage of this same update.
+
+The owner selected shared labels for both routes: **Clear**, **Flagged for host**,
+**Flagged for safety review**, and **Screening pending**. Clear memories publish;
+clear feedback is delivered privately. Non-severe memory flags require host
+review; ordinary/profane feedback goes to the private host inbox. Serious text
+flags (Violent, Sexual, Derogatory, Firearms & Weapons at the existing provisional
+0.8 confidence threshold) now automatically open restricted safety cases for
+memories as well as feedback. Safety holds take priority over ordinary flags.
+Incomplete feedback scans now wait privately, with bounded retries and an
+operations alert after eight failed worker attempts. Neither route is delivered
+or published without a completed check. Current photo flags remain host review;
+serious-image routing and provider calibration remain open. This is a local
+source update, not a new deployment or legal approval. Earlier records below
+describe the previous implementation where they differ from this update.
+
+Memory-case opening and resolution controls are now implemented, tested and
+deployed. Reviewer staffing/MFA and real-provider/device calibration still need
+production evidence before opening general intake.
+
 > **Supporting reference.** The main current records are [Implementation summary](IMPLEMENTATION_SUMMARY.md) and [Plan deviations and gaps](PLAN_DEVIATIONS_AND_GAPS.md). This document retains the detailed history of its delivery.
 
 Created 8 September 2026. Authority: [DigiStayBook Business & Operating Plan](C:/Users/clbbe/Documents/Projects/DigiStayBook/docs/handbook/DIGISTAYBOOK_BUSINESS_AND_OPERATING_PLAN.html). Implementation evidence: [guest contribution delivery](C:/Users/clbbe/Documents/Projects/DigiStayBook/docs/guest-contribution-delivery-2026-09-08.md).
@@ -10,7 +49,7 @@ This is the issue register for this delivery. It does not amend or approve the h
 |---|---|---|---|
 | **GC-01 — launch blocker; calibration + live-flow proof** | §5.4, C-12/C-13 | The wall-memory `screenContent` adapter is now connected to the guest-contribution flow and deployed in the guest function revisions. The owner approved overseas image screening and Sydney photo storage; Google Vision uses the synchronous EU request adapter and wall text uses the Australia Natural Language endpoint. Its endpoint choice is not an EU-only contractual handling guarantee. Review-first handling and the public-text contact/link hold are approved. Numeric thresholds and the monthly false-positive pass mark remain open. A held-memory outbox event exists, but no email worker sends it. | Calibrate C-13 from labelled examples, set numeric cost controls, complete C-19 privacy review, then enable a controlled test path. Prove provider classifications, runtime service-account access, guest submission and outage paths; synthetic classifications are not provider evidence. `GUEST_CONTRIBUTIONS_ENABLED=false` remains in production. See [provider review](image-screening-provider-review-2026-10-02.md). |
 | **GC-02 — unapproved development limits** | §5.3, C-10, §8.1 | The handbook specifies ten images but leaves byte limits/downscaling open. The implementation provisionally accepts JPEG/PNG/WebP, 5 MiB per image, 25 MiB total, maximum 40 megapixels; rejects animation; rotates and transforms to WebP within 2000×2000. Progress is per completed photo, not a byte-level transfer estimate. | Approve or replace these limits against real-phone behaviour and cost assumptions, including HEIC support or clear rejection. Confirm that transformed images, rather than retained originals, are the intended product. Retest API request sizes, memory and poor-connectivity experience. Current image processing uses 1 GiB memory with one request at a time per instance. |
-| **GC-03 — launch blocker; owner/legal review** | §5.3, §6.6, C-11/C-19, A.6/A.7 | Guest Terms and Privacy are now `draft-2026-10-02`, including Sydney storage and overseas screening through Google's EU endpoint without an exclusive-region guarantee. Draft consent `handbook-5.3-draft-v3` names the message/photos and overseas checks, and stores guest-terms/privacy versions with the consent record. `legalApproval` remains null, so the server intake gate stays shut even if `GUEST_CONTRIBUTIONS_ENABLED=true`. | Counsel must approve the pages, consent, Google account terms/roles and overseas disclosures, 16+ threshold and minors workflow. Record approved versions, reviewer and date in `functions/src/legal.ts`, remove draft notices, and sync approved A.6/A.7 text to the NAS before enabling intake. This implementation is not legal approval. |
+| **GC-03 — launch blocker; owner/legal review** | §5.3, §6.6, C-11/C-19, A.6/A.7 | Guest Terms and Privacy are now `draft-2026-10-06`, covering optional public guest names, including Sydney storage and overseas screening through Google's EU endpoint without an exclusive-region guarantee. Draft consent `handbook-5.3-draft-v4` names the message/photos and automated safety checks, with compact inline links to the documents containing overseas-processing details, and stores guest-terms/privacy versions with the consent record. `legalApproval` remains null, so the server intake gate stays shut even if `GUEST_CONTRIBUTIONS_ENABLED=true`. | Counsel must approve the pages, consent, Google account terms/roles and overseas disclosures, 16+ threshold and minors workflow. Record approved versions, reviewer and date in `functions/src/legal.ts`, remove draft notices, and sync approved A.6/A.7 text to the NAS before enabling intake. This implementation is not legal approval. |
 | **GC-04 — deployment/configuration blocker** | §§5.11, 6.2, 6.5, A-04/A-15 | The production quarantine and delivery buckets now exist in `australia-southeast1` with uniform bucket access and public-access prevention enforced; their names are set in the per-project Functions environment file. Production IAM, App Check, anonymous Auth configuration, domain restrictions and preview resources still need end-to-end verification. | Verify runtime bucket access and direct-access denial in the deployed project. Verify actual App Check enforcement and one distinct anonymous UID per property. `GUEST_CONTRIBUTIONS_ENABLED` remains false until the legal and screening release gates pass. |
 | **GC-05 — launch blocker; incomplete retention operations** | §5.10, A-05 | Self-delete hides immediately and records paths in both buckets. The bounded deletion and quarantine-cleanup worker is deployed, and emulator tests cover retries and upload-settling races; production execution and deadline monitoring remain unverified. Both production buckets currently have seven-day soft delete, so the retention/restore policy must account for recoverable deleted objects. Abandoned uploads, rejected content, consent evidence, anonymous-account expiry and backup manifests still need their schedules. | Verify live worker runs, alerts, primary deletion within 72 hours and quarantine cleanup within 24 hours; decide whether seven-day bucket soft delete fits the approved privacy/restore policy. Exercise production deletion races. Critical-case references remain restricted with `requiresSafetyReview`; define hold ownership/review and backup restore manifest handling. |
 | **GC-06 — launch blocker at scale; abuse controls** | §§5.3, 5.5, 6.3.7–6.3.9 | Own contributions, host review and private feedback now have cursor pagination in the API and UI. The review query filters `pending`/`standard` before paging, and the emulator test reaches unresolved items after 140 closed entries. Intake is limited to ten new attempts per anonymous UID per hour, which does not stop a client creating new identities. | Verify pagination with realistic production data, add proportionate cross-identity abuse monitoring/rate controls with expiry, and confirm anonymous-account cleanup (C-24). Do not describe development caps as agreed commercial limits. |

@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { getFirebaseServices } from "../../lib/firebase";
 import "../guest/guest.css";
 
-type ReviewPost = { id: string; status: string; message: string; revision: number; photoCount: number };
-type Result = { posts: ReviewPost[]; feedback: { id: string; message: string }[]; reviewCursor?: string | null; feedbackCursor?: string | null };
+type ReviewPost = { id: string; status: string; message: string; displayName?: string; revision: number; photoCount: number };
+type Result = { posts: ReviewPost[]; feedback: { id: string; message: string }[]; reviewContent?: boolean; reviewCursor?: string | null; feedbackCursor?: string | null };
 export async function hostCall<T>(name: string, data: unknown): Promise<T> {
   const services = await getFirebaseServices();
   if (!services) throw new Error("Unavailable");
   const { httpsCallable } = await import("firebase/functions");
   return (await httpsCallable<unknown, T>(services.functions, name)(data)).data;
 }
-export function GuestReviewPanel({ propertyId, feedbackOnly = false }: { propertyId: string; feedbackOnly?: boolean }) {
+export function GuestReviewPanel({ propertyId, feedbackOnly = false, settingsOnly = false }: { propertyId: string; feedbackOnly?: boolean; settingsOnly?: boolean }) {
   const [result, setResult] = useState<Result | null>(null);
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
@@ -20,9 +20,9 @@ export function GuestReviewPanel({ propertyId, feedbackOnly = false }: { propert
   useEffect(() => { let active = true;
     setResult(null); setPhotos({}); setNotice("");
     void hostCall<Result>("listHostGuestReview", { propertyId, kind }).then(data => { if (active) setResult(data); })
-      .catch(() => { if (active) setNotice("This inbox could not be loaded. Try refreshing."); });
+      .catch(() => { if (active) setNotice(settingsOnly ? "The approval setting could not be loaded. Try again." : "This inbox could not be loaded. Try refreshing."); });
     return () => { active = false; };
-  }, [propertyId, kind]);
+  }, [propertyId, kind, settingsOnly]);
   async function loadMore() {
     if (busy || !result) return;
     setBusy(true); setNotice("");
@@ -39,6 +39,15 @@ export function GuestReviewPanel({ propertyId, feedbackOnly = false }: { propert
     setBusy(true); setNotice("");
     try { await hostCall("reviewGuestContribution", { id: post.id, revision: post.revision, action }); await refresh(); setNotice(action === "approve" ? "The memory is now published." : "The memory remains off the wall."); }
     catch { setNotice("The memory could not be changed. Refresh the queue and try again."); }
+    finally { setBusy(false); }
+  }
+  async function setReviewContent(reviewContent: boolean) {
+    setBusy(true); setNotice("");
+    try {
+      const saved = await hostCall<{ reviewContent: boolean }>("setGuestReviewPolicy", { propertyId, reviewContent });
+      setResult(previous => previous ? { ...previous, reviewContent: saved.reviewContent } : previous);
+      setNotice(saved.reviewContent ? "New memories will wait for your approval after screening." : "Clear new memories can publish automatically after screening. Memories already waiting still need review.");
+    } catch { setNotice("The review setting could not be saved. Try again."); }
     finally { setBusy(false); }
   }
   async function report(id: string) {
@@ -63,26 +72,60 @@ export function GuestReviewPanel({ propertyId, feedbackOnly = false }: { propert
     } catch { setNotice("These photos are no longer available for review. Refresh the queue."); }
     finally { setBusy(false); }
   }
-  return <section className="guest-review" aria-label={feedbackOnly ? "Private feedback inbox" : "Guest safety review"}>
+  return <>
+    {!feedbackOnly && result && <section className={`approval-settings${settingsOnly ? " approval-settings-compact" : ""}`} aria-label={settingsOnly ? "Memory approval" : undefined} aria-labelledby={settingsOnly ? undefined : "approval-settings-heading"}>
+      {!settingsOnly && <div className="approval-settings-copy">
+        <h3 id="approval-settings-heading">Memory approval</h3>
+        <p>Choose whether every new memory needs your approval before appearing on the wall.</p>
+      </div>}
+      <label className="switch approval-switch">
+        <input type="checkbox" aria-describedby="approval-settings-note" checked={result.reviewContent === true} disabled={busy} onChange={event => void setReviewContent(event.target.checked)} />
+        <span className="switch-track" aria-hidden="true"><span className="switch-knob" /></span>
+        <span className="switch-label">Require approval for new memories</span>
+        <span className="approval-switch-state" aria-hidden="true">{result.reviewContent ? "On" : "Off"}</span>
+      </label>
+      <p id="approval-settings-note" className="approval-settings-note">{settingsOnly
+        ? result.reviewContent ? "New memories wait for approval after safety checks." : "Clear memories publish automatically after safety checks."
+        : result.reviewContent
+        ? "On: new memories wait for you to approve them after safety checks."
+        : "Off: memories that pass safety checks can publish automatically. Flagged memories still need review."}</p>
+      {!settingsOnly && <p className="approval-settings-footnote">Safety checks always apply. This setting saves automatically.</p>}
+      {settingsOnly && <a className="text-link approval-settings-link" href={`/host/property/${propertyId}/moderation#new-memories`}>Review waiting memories</a>}
+    </section>}
+    {settingsOnly && !result && <section className="approval-settings approval-settings-compact" aria-label="Memory approval">
+      <h3>Memory approval</h3>
+      <p role="status">{notice || "Loading memory approval setting…"}</p>
+      {notice && <button className="btn btn-sm btn-secondary" disabled={busy} onClick={() => void refresh().then(() => setNotice("")).catch(() => setNotice("The approval setting could not be loaded. Try again."))}>Retry loading setting</button>}
+    </section>}
+    {settingsOnly && result && notice && <p className="form-feedback" role="status">{notice}</p>}
+    {!settingsOnly && <section id={feedbackOnly ? undefined : "new-memories"} className={`guest-review${feedbackOnly ? "" : " moderation-panel"}`} aria-label={feedbackOnly ? "Private feedback inbox" : "Guest safety review"}>
     <div className="review-heading">
-      <h2>{feedbackOnly ? "Private feedback" : "Guest safety review"}</h2>
-      {!feedbackOnly && result && <span className="review-status">{result.posts.length === 0 ? "All clear" : `${result.posts.length} to review`}</span>}
+      <h2>{feedbackOnly ? "Private feedback" : "New memories"}</h2>
+      {!feedbackOnly && result && <span className="review-status" data-attention={result.posts.length > 0}>{result.posts.length === 0 ? "All clear" : `${result.posts.length}${result.reviewCursor ? "+" : ""} to review`}</span>}
       <button className="btn btn-sm btn-secondary" aria-label="Refresh inbox" disabled={busy} onClick={() => void refresh().catch(() => setNotice("The inbox could not be refreshed."))}>Refresh</button>
     </div>
     {feedbackOnly && <p>Private guest feedback. Replies aren’t supported. If a message is threatening or abusive, report it to our safety team.</p>}
-    {notice && <p role="status">{notice}</p>}
+    {!feedbackOnly && <p className="review-description">New guest submissions awaiting safety checks or your approval.</p>}
+    {notice && <p className="review-notice" role="status">{notice}</p>}
     {!result && !notice && <p role="status">Loading inbox…</p>}
     {feedbackOnly ? result?.feedback.map(item => <article key={item.id}><p>{item.message}</p>
-      <button className="btn btn-sm btn-secondary" disabled={busy} onClick={() => void report(item.id)}>Report message</button></article>) : result?.posts.map(post => <article key={post.id}>
-      <p>{post.message}</p><p>{post.status === "pending" ? "Awaiting safety screening" : "Ready for host review"}</p>
+      <button className="btn btn-sm btn-secondary" disabled={busy} onClick={() => void report(item.id)}>Report message</button></article>) : result?.posts.map(post => <article className="review-memory" key={post.id}>
+      <div className="review-memory-heading">
+        {post.displayName?.trim() && <p className="review-memory-author">{post.displayName}</p>}
+        <span className="review-memory-state" data-pending={post.status === "pending"}>{post.status === "pending" ? "Safety checks in progress" : "Awaiting your approval"}</span>
+      </div>
+      {post.status === "pending" ? <p className="review-description">This memory will be available to review once safety checks finish.</p> : <p className="review-memory-message">{post.message}</p>}
       {post.status === "standard" && <>
-        {post.photoCount > 0 && <button disabled={busy} onClick={() => void loadPhotos(post)}>View {post.photoCount} photos</button>}
-        {photos[post.id]?.map((src, index) => <img key={index} src={src} alt={`Memory photo ${index + 1} for review`} />)}
-        <button disabled={busy} onClick={() => void act(post, "approve")}>Approve memory</button>
-        <button disabled={busy} onClick={() => void act(post, "reject")}>Keep off wall</button>
+        {post.photoCount > 0 && <button className="btn btn-sm btn-secondary" disabled={busy} onClick={() => void loadPhotos(post)}>View {post.photoCount} photos</button>}
+        <div className="review-memory-photos">{photos[post.id]?.map((src, index) => <img key={index} src={src} alt={`Memory photo ${index + 1} for review`} />)}</div>
+        <div className="review-memory-actions">
+          <button className="btn btn-sm btn-primary" disabled={busy} onClick={() => void act(post, "approve")}>Approve memory</button>
+          <button className="btn btn-sm btn-secondary" disabled={busy} onClick={() => void act(post, "reject")}>Keep off wall</button>
+        </div>
       </>}
     </article>)}
+    {!feedbackOnly && result?.posts.length === 0 && <p className="review-empty">No new memories waiting.</p>}
     {feedbackOnly && result?.feedback.length === 0 && <p>No feedback yet.</p>}
     {(feedbackOnly ? result?.feedbackCursor : result?.reviewCursor) && <button disabled={busy} onClick={() => void loadMore()}>{feedbackOnly ? "Load more feedback" : "Load more submissions"}</button>}
-  </section>;
+  </section>}</>;
 }

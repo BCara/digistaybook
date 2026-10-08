@@ -5,7 +5,7 @@ it("publishes the Guest Terms as a versioned draft, with private feedback and th
   render(<LegalDraftPage kind="guest-terms" />);
   expect(screen.getByRole("heading", { name: "Guest Terms" })).toBeInTheDocument();
   expect(screen.getByText("Draft — not yet approved.")).toBeInTheDocument();
-  expect(screen.getByText(/Version draft-2026-10-02/)).toBeInTheDocument();
+  expect(screen.getByText(/Version draft-2026-10-06/)).toBeInTheDocument();
   expect(screen.getByText(/not monitored in real time and your host cannot reply/)).toBeInTheDocument();
   expect(screen.getByRole("complementary", { name: "Open points for legal review" })).toBeInTheDocument();
 });
