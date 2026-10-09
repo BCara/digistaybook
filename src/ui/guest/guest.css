@@ -134,3 +134,4 @@
 .wall-footer-brand { margin-top: .75rem; color: var(--text-muted); }
 .wall-footer-brand a { color: inherit; font-weight: 500; text-decoration: none; }
 .wall-footer-brand a:hover { text-decoration: underline; }
+.guest-own-retry { margin-top: .75rem; }

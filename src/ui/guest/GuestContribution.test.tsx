@@ -128,3 +128,19 @@ it("asks for a message or a photo before submitting a memory", async () => {
   expect(screen.getByRole("status")).toHaveTextContent("Add a message or at least one photo.");
   expect(call.mock.calls.some(([, name]) => name === "beginGuestContribution")).toBe(false);
 });
+
+it("offers the refresh it names when the guest's own memories fail to load", async () => {
+  let attempts = 0;
+  call.mockImplementation(async (_slug, name) => {
+    if (name !== "listGuestContributions") return {};
+    if (++attempts === 1) throw new Error("offline");
+    return { posts: [{ id: "first", message: "First memory", revision: 1, status: "pending" }], nextCursor: null };
+  });
+  render(<GuestContribution slug="cottage" onChanged={() => {}} />);
+  expect(await screen.findByRole("status")).toHaveTextContent(/could not be loaded/);
+  fireEvent.click(screen.getByRole("button", { name: "Refresh my memories" }));
+  await screen.findByText("Your memories in this browser");
+  expect(screen.queryByText(/could not be loaded/)).not.toBeInTheDocument();
+  // The stand-in button goes once the section carrying the real one is back.
+  expect(screen.getAllByRole("button", { name: "Refresh my memories", hidden: true })).toHaveLength(1);
+});

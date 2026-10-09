@@ -20,6 +20,8 @@ async function base64(file: File) {
 }
 
 export type ContributionMode = "memory" | "feedback";
+const OWN_FAILED = "Your previous memories could not be loaded. Use Refresh my memories to try again.";
+
 export function GuestContribution({ slug, stayToken = null, onChanged, mode: requestedMode, onModeChange, prompt = "" }: {
   slug: string;
   /** The Host's question to guests, shown under the memory form's heading. */
@@ -55,17 +57,24 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
   useEffect(() => { if (confirmation) confirmationDialog.current?.showModal(); }, [confirmation]);
   const [own, setOwn] = useState<OwnPost[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
+  // The list never arrived, so the section holding its refresh button never
+  // appeared either; the retry has to stand beside the message instead.
+  const [ownFailed, setOwnFailed] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
   const attempt = useRef<{ requestId: string; id?: string; uploaded: number } | null>(null);
   useEffect(() => {
     let mounted = true;
-    setOwn([]); setCursor(null);
+    setOwn([]); setCursor(null); setOwnFailed(false);
     void guestCall<OwnPage>(slug, "listGuestContributions", {}).then(result => { if (mounted) { setOwn(result.posts); setCursor(result.nextCursor ?? null); } })
-      .catch(() => { if (mounted) setNotice("Your previous memories could not be loaded. Use Refresh my memories to try again."); });
+      .catch(() => { if (mounted) { setOwnFailed(true); setNotice(OWN_FAILED); } });
     return () => { mounted = false; photoRef.current.forEach(photo => URL.revokeObjectURL(photo.preview)); };
   }, [slug]);
-  async function refresh() { const result = await guestCall<OwnPage>(slug, "listGuestContributions", {}); setOwn(result.posts); setCursor(result.nextCursor ?? null); }
+  async function refresh() {
+    const result = await guestCall<OwnPage>(slug, "listGuestContributions", {});
+    setOwn(result.posts); setCursor(result.nextCursor ?? null);
+    if (ownFailed) { setOwnFailed(false); setNotice(current => current === OWN_FAILED ? "" : current); }
+  }
   async function loadMore() {
     if (busy || !cursor) return;
     setBusy(true);
@@ -181,6 +190,7 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
       {busy && <progress aria-label="Submission progress" value={progress} max={100} />}
     </form>
     {notice && <p className="guest-submission-notice" role="status">{notice}</p>}
+    {ownFailed && <button className="btn btn-secondary btn-sm guest-own-retry" type="button" disabled={busy} onClick={() => void refresh().catch(() => setNotice(OWN_FAILED))}>Refresh my memories</button>}
     {/* Nothing to manage yet, so nothing to open: the section appears with the first memory sent from this browser. */}
     {(own.some(post => post.status !== "deleted") || cursor) && <details className="guest-own-memories"><summary>Your memories in this browser</summary>
     <p>Manage memories from this browser. <a href="/privacy-safety">Need help removing one?</a></p>
