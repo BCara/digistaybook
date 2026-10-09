@@ -1,8 +1,8 @@
-import { type ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import { GuestReviewPanel } from "../host/GuestReviewPanel";
 import { HostReportsPanel } from "../host/HostReportsPanel";
 import { reportingLimits } from "../../domain/moderation";
-import { privacySlaDays, queueSummary } from "../../domain/postModeration";
+import { privacySlaDays } from "../../domain/postModeration";
 import { useAuth } from "../auth/AuthProvider";
 import { ModerationQueue } from "../host/ModerationQueue";
 import { PropertyShell } from "../host/PropertyShell";
@@ -42,6 +42,13 @@ export function HostModerationPage({ propertyId }: { propertyId: string }) {
   const { user } = useAuth();
   const state = useModerationQueue(propertyId, user?.uid);
   const block = propertyBlock(state.load, user?.uid);
+  // Both inboxes report how much is in them, so that when neither holds
+  // anything the page says so once instead of drawing two empty cards.
+  const [waiting, setWaiting] = useState<number | null>(null);
+  const [reports, setReports] = useState<number | null>(null);
+  const [refreshSignal, setRefreshSignal] = useState(0);
+  const onWaiting = useCallback((count: number) => setWaiting(count), []);
+  const onReports = useCallback((count: number) => setReports(count), []);
 
   if (block) {
     return (
@@ -72,15 +79,26 @@ export function HostModerationPage({ propertyId }: { propertyId: string }) {
     <PropertyShell property={property} current="moderation" className="moderation-page">
       <header className="moderation-intro">
         <h2>Moderation</h2>
-        <p>Choose how memories are published, review new submissions and manage your wall.</p>
+        <p>Decide what appears on your wall, and pin the memories you want guests to see first.</p>
       </header>
-      <GuestReviewPanel key={propertyId} propertyId={propertyId} />
-      <HostReportsPanel key={`reports-${propertyId}`} propertyId={propertyId} />
-      <section className="moderation-wall" aria-labelledby="wall-memories-heading">
-        <div className="moderation-wall-heading">
-          <h2 id="wall-memories-heading">Wall memories</h2>
-          {Array.isArray(posts) && posts.length > 0 && <p>{queueSummary(posts)}</p>}
+      <GuestReviewPanel key={propertyId} propertyId={propertyId} collapseWhenEmpty onCount={onWaiting} refreshSignal={refreshSignal} />
+      {waiting === 0 && reports === 0 && (
+        <div className="moderation-clear" role="status">
+          <span className="moderation-clear-mark" aria-hidden="true">✓</span>
+          <p><strong>You&rsquo;re all caught up.</strong> New memories and guest reports will appear here when they need you.</p>
+          <button type="button" className="btn btn-sm btn-ghost" onClick={() => setRefreshSignal((value) => value + 1)}>Check again</button>
         </div>
+      )}
+      <HostReportsPanel
+        key={`reports-${propertyId}`}
+        propertyId={propertyId}
+        collapseWhenEmpty
+        onCount={onReports}
+        refreshSignal={refreshSignal}
+        memoryText={(postId) => (Array.isArray(posts) ? posts.find((post) => post.id === postId)?.message || undefined : undefined)}
+      />
+      <section className="moderation-wall" aria-labelledby="wall-memories-heading">
+        <h2 id="wall-memories-heading" className="moderation-wall-heading">Your memories</h2>
 
         {posts === null && <p className="lede" role="status">Reading this wall&rsquo;s memories…</p>}
 

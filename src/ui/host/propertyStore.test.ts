@@ -1,15 +1,24 @@
 import { emptyProfile } from "../../domain/propertyProfile";
-import { createProperty, describeStoreError, savePropertyProfile } from "./propertyStore";
+import { createProperty, describeStoreError, loadProperty, savePropertyProfile } from "./propertyStore";
 
 const updateDoc = vi.fn().mockResolvedValue(undefined);
 const callProperty = vi.fn();
+const getDoc = vi.fn();
 vi.mock("../../lib/firebase", () => ({ getFirebaseServices: async () => ({ firestore: {}, functions: {}, auth: { currentUser: { uid: "host-a" } } }) }));
 vi.mock("firebase/functions", () => ({ httpsCallable: () => callProperty }));
 vi.mock("firebase/firestore", () => ({
   doc: (...parts: unknown[]) => parts,
   serverTimestamp: () => "server-time",
-  updateDoc: (...args: unknown[]) => updateDoc(...args)
+  updateDoc: (...args: unknown[]) => updateDoc(...args),
+  getDoc: (...args: unknown[]) => getDoc(...args)
 }));
+
+it.each([undefined, false, true, "true"])("reads approval policy %s from the property using the server's boolean default", async reviewContent => {
+  getDoc.mockResolvedValue({ id: "p1", exists: () => true, data: () => ({ reviewContent }) });
+  const result = await loadProperty("p1");
+  expect(result.status).toBe("ok");
+  if (result.status === "ok") expect(result.value?.reviewContent).toBe(reviewContent === true);
+});
 
 it("writes theme and wall visibility without overwriting independently saved photos", async () => {
   const profile = { ...emptyProfile(), theme: "studio" as const, colour: "ocean" as const, displayWallOff: true };

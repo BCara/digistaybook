@@ -14,7 +14,7 @@ it("loads later memories without duplicating existing ones and keeps the cursor 
     return { posts: [{ id: "first", message: "First memory", revision: 1, status: "pending" }, { id: "later", message: "Older memory", revision: 1, status: "pending" }], nextCursor: null };
   });
   render(<GuestContribution slug="cottage" onChanged={() => {}} />);
-  fireEvent.click(screen.getByText("Your memories in this browser"));
+  fireEvent.click(await screen.findByText("Your memories in this browser"));
   fireEvent.click(await screen.findByRole("button", { name: "Load more memories" }));
   await waitFor(() => expect(screen.getByRole("button", { name: "Load more memories" })).toBeEnabled());
   fireEvent.click(screen.getByRole("button", { name: "Load more memories" }));
@@ -25,7 +25,8 @@ it("loads later memories without duplicating existing ones and keeps the cursor 
 
 it("requires consent, offers an optional guest name and does not collect email", async () => {
   render(<GuestContribution slug="cottage" onChanged={() => {}} />);
-  await screen.findByText("Your memories in this browser");
+  await waitFor(() => expect(call).toHaveBeenCalledWith("cottage", "listGuestContributions", expect.anything()));
+  expect(screen.queryByText("Your memories in this browser")).not.toBeInTheDocument();
   fireEvent.change(screen.getByLabelText("Your message"), { target: { value: "A lovely stay" } });
   fireEvent.click(screen.getByRole("button", { name: "Submit memory" }));
   expect(screen.getByRole("status")).toHaveTextContent(/accept the consent/);
@@ -85,7 +86,7 @@ it("rejects more than ten photos and lets guests remove a selection", async () =
 it("uses the server revision for self-edit and self-delete", async () => {
   call.mockImplementation(async (_slug, name) => name === "listGuestContributions" ? { posts: [{ id: "own", message: "Original", revision: 3, status: "pending" }] } : { status: "pending" });
   render(<GuestContribution slug="cottage" onChanged={() => {}} />);
-  fireEvent.click(screen.getByText("Your memories in this browser"));
+  fireEvent.click(await screen.findByText("Your memories in this browser"));
   fireEvent.click(await screen.findByRole("button", { name: "Edit message" }));
   fireEvent.change(screen.getByLabelText("Edit your message"), { target: { value: "Updated" } });
   fireEvent.click(screen.getByRole("button", { name: "Save message" }));

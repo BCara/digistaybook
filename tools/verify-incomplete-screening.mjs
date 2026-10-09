@@ -39,7 +39,13 @@ for(const [suffix,scan,reason] of [['feedback-error',async()=>{throw new Error('
   await resolveSafetyCase.run({data:{id:'feedback-'+id,action:'release'},auth:ops});
   assert.equal((await db.doc(`properties/${propertyId}/privateFeedback/${id}`).get()).get('message'),'Synthetic private feedback');
 }
-const page=await listSafetyOperations.run({data:{queue:'trustSafetyCases'},auth:ops});
+const page=await listSafetyOperations.run({data:{queue:'trustSafetyCases',scope:'everything'},auth:ops});
+assert.ok(page.items.every(item=>item.queue==='trustSafetyCases'));
+assert.ok(page.summary.find(item=>item.queue==='trustSafetyCases').total>=5);
+// The default overview spans every queue, hides resolved cases and lists the oldest first.
+const outstanding=await listSafetyOperations.run({data:{},auth:ops});
+assert.ok(!outstanding.items.some(item=>item.id.startsWith(prefix)));
+assert.ok(outstanding.items.every((item,index,all)=>!index||!item.receivedAt||(all[index-1].receivedAt&&all[index-1].receivedAt<=item.receivedAt)));
 assert.ok(page.items.some(item=>item.id.startsWith(prefix)&&item.screeningStatus==='incomplete'));
 console.log('PASS: incomplete results, provider exceptions and allowance exhaustion create tagged restricted cases; no retry bypass; authorised memory/feedback release and host-access denial.');
 } finally {

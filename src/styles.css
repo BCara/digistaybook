@@ -787,6 +787,14 @@ button:disabled, .btn:disabled { cursor: not-allowed; opacity: .45; }
   border-radius: var(--radius-xs);
   box-shadow: var(--lift-sm);
 }
+/* A memory the Host pinned leads the wall and is marked as their pick, so a
+   guest can tell it was chosen rather than merely recent. */
+.note.note-pinned { border-color: var(--sage-700); box-shadow: inset 0 3px 0 var(--sage-700), var(--lift-md); }
+.note-pinned-label {
+  display: inline-flex; align-items: center; gap: 6px; margin: 0 0 12px;
+  color: var(--sage-700); font: 700 var(--step--2) var(--font-sans); letter-spacing: .08em; text-transform: uppercase;
+}
+.note-pinned-label::before { content: "★"; letter-spacing: 0; }
 .tilt-0 { transform: rotate(-.4deg); }
 .tilt-1 { transform: rotate(.45deg); }
 .tilt-2 { transform: rotate(-.15deg); }
@@ -1023,6 +1031,12 @@ button:disabled, .btn:disabled { cursor: not-allowed; opacity: .45; }
 
 .essentials { margin-bottom: clamp(40px, 6vw, 64px); }
 .essentials-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin: 0; }
+/* Fewer than four essentials share the row between them rather than leaving
+   empty columns at the end. `:where` keeps these at the base rule's weight,
+   so the narrow-screen and phone-preview columns further down still win. */
+.essentials-grid:where(:has(> :nth-child(3):last-child)) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.essentials-grid:where(:has(> :nth-child(2):last-child)) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.essentials-grid:where(:has(> :only-child)) { grid-template-columns: minmax(0, 1fr); }
 .essential { padding: 20px clamp(14px, 1.8vw, 22px); border-right: 1px solid var(--rule); }
 .essential:first-child { padding-left: 0; }
 .essential:last-child { border-right: 0; padding-right: 0; }
@@ -1993,9 +2007,8 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
   align-items: start;
   gap: clamp(20px, 2.6vw, 40px);
 }
-/* The canvas is tall and the phone is not, so the phone travels with the page
-   instead of leaving a column of nothing beside the essentials. */
-.design-body.with-phone .design-phone { position: sticky; top: 18px; }
+/* Keep the preview beneath the sticky site header as the canvas scrolls. */
+.design-body.with-phone .design-phone { position: sticky; top: 104px; }
 /* Under about a laptop there is no room for two walls abreast, and squeezing
    the canvas to make room is the wrong trade: the phone drops underneath. */
 @media (max-width: 1340px) {
@@ -2358,18 +2371,15 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 .moderation-intro h2 { margin: 0; font-size: var(--step-2); }
 .moderation-intro p { margin: 8px 0 0; max-width: 64ch; font-size: var(--step--1); color: var(--text-muted); }
 .property-shell .approval-settings {
-  display: grid; gap: 14px; margin-bottom: 24px; padding: clamp(18px, 3vw, 24px);
+  display: grid; gap: 2px; margin-bottom: 20px; padding: 8px 16px 10px;
   background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--sage-700);
   border-radius: var(--radius-md);
 }
-.property-shell .approval-settings h3 { margin: 0; font: 650 1.05rem var(--font-sans); }
-.approval-settings-copy p { margin: 6px 0 0; color: var(--text-muted); font-size: var(--step--1); }
-.approval-settings .approval-switch { position: relative; min-height: 44px; font-size: var(--step--1); }
+.approval-settings .approval-switch { position: relative; min-height: 40px; font-size: var(--step--1); font-weight: 600; }
 .approval-switch .switch-label { flex: 1; }
 .approval-switch-state { flex: none; font-size: .8rem; color: var(--text-muted); }
 .approval-switch:has(input:checked) .approval-switch-state { color: var(--sage-700); }
-.approval-settings-note { margin: 0; font-size: var(--step--1); line-height: 1.55; }
-.approval-settings-footnote { margin: 0; color: var(--text-muted); font-size: var(--step--2); }
+.approval-settings-note { margin: 0; color: var(--text-muted); font-size: var(--step--2); line-height: 1.5; }
 .approval-settings-link { justify-self: start; font-size: var(--step--1); }
 .qr-page .approval-settings { margin: 12px 0 8px; }
 .property-shell .approval-settings-compact {
@@ -2407,13 +2417,97 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 .review-report-reason { margin: 0; font-size: var(--step--1); font-weight: 650; }
 .review-report-due { margin: 10px 0 0; font-size: var(--step--2); color: var(--accent-strong); }
 .moderation-wall { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--rule-strong); }
-.moderation-wall-heading h2 { margin: 0; font: 650 1.2rem var(--font-sans); }
-.moderation-wall-heading > p { margin: 6px 0 0; font-size: var(--step--1); color: var(--text-muted); }
+.moderation-wall-heading { margin: 0; font: 650 1.2rem var(--font-sans); }
 .moderation-wall .queue-section { margin-top: 24px; }
 .moderation-wall .queue-section h3 { display: flex; align-items: baseline; gap: 10px; margin: 0; padding-bottom: 10px; font: 600 1rem var(--font-sans); border-bottom: 1px solid var(--rule); }
+.moderation-wall .queue-blurb { margin-top: 10px; }
+/* Recently deleted folds away: nothing in it can be acted on. */
+.moderation-wall details.queue-section > summary { cursor: pointer; list-style: none; }
+.moderation-wall details.queue-section > summary::-webkit-details-marker { display: none; }
+.moderation-wall details.queue-section > summary h3 { color: var(--text-muted); }
+.moderation-wall details.queue-section > summary h3::after { content: "Show"; margin-left: auto; font-size: var(--step--2); font-weight: 600; color: var(--text-muted); }
+.moderation-wall details.queue-section[open] > summary h3::after { content: "Hide"; }
+
+/* One line in place of two empty inbox cards. */
+.moderation-clear {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px 12px; margin-bottom: 20px; padding: 12px 16px;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-md);
+}
+.moderation-clear p { margin: 0; font-size: var(--step--1); color: var(--text-muted); }
+.moderation-clear strong { color: var(--text); }
+.moderation-clear-mark {
+  display: grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--sage-050); color: var(--sage-700); font-weight: 700; font-size: .85rem;
+}
+.moderation-clear .btn { margin: 0; flex: none; }
+@media (max-width: 560px) {
+  .moderation-clear { grid-template-columns: auto minmax(0, 1fr); }
+  .moderation-clear .btn { grid-column: 2; justify-self: start; padding-inline: 0; }
+}
+
+/* A pinned memory is the one the Host chose to lead with, so its row is
+   marked the way the wall marks it for guests. */
+.moderation-wall .queue-note.is-pinned { background: var(--sage-050); box-shadow: inset 3px 0 0 var(--sage-700); }
+.state-pill.is-pinned { color: var(--sage-700); border-color: var(--sage-700); background: var(--surface); }
+.state-pill.is-pinned::before { content: "★ "; }
+
+/* "More": the occasional actions, folded under the one a row leads with. */
+.queue-actions .btn { margin: 0; }
+.queue-more { position: relative; }
+.queue-more > summary { list-style: none; cursor: pointer; margin: 0; }
+.queue-more > summary::-webkit-details-marker { display: none; }
+.queue-more[open] > summary { color: var(--accent-strong); }
+.queue-more-menu {
+  position: absolute; z-index: 20; top: calc(100% + 6px); right: 0; width: min(300px, 80vw);
+  padding: 6px; background: var(--surface-raised); border: 1px solid var(--rule);
+  border-radius: var(--radius-sm); box-shadow: var(--lift-md, 0 10px 30px rgba(0, 0, 0, .14));
+}
+.queue-more-menu button {
+  display: grid; gap: 2px; width: 100%; padding: 9px 10px; text-align: left;
+  background: none; border: 0; border-radius: var(--radius-xs); color: inherit; font: inherit; cursor: pointer;
+}
+.queue-more-menu button:hover, .queue-more-menu button:focus-visible { background: var(--bg-alt); }
+.queue-more-menu button span { font-size: var(--step--1); font-weight: 600; }
+.queue-more-menu button small { color: var(--text-muted); font-size: var(--step--2); line-height: 1.4; }
+.queue-more-menu button.is-destructive span { color: var(--accent-strong); }
+.queue-more-menu button:disabled { opacity: .5; cursor: default; }
 .moderation-wall .queue-privacy h3 { border-bottom-color: var(--accent); }
 .moderation-page #new-memories { scroll-margin-top: 24px; }
-.moderation-wall .queue-grid { margin-top: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+/* On the Host's own page the wall is a ledger, not a pinboard: one memory per
+   row across the full width, words on the left and what may be done about
+   them on the right, so a wall with a season of memories on it stays a list a
+   Host can scan rather than a field of cards. */
+.moderation-wall .queue-grid {
+  display: block; margin-top: 16px;
+  background: var(--surface-raised); border: 1px solid var(--rule);
+  border-radius: var(--radius-sm); box-shadow: var(--lift-sm);
+}
+.moderation-wall .queue-note {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+  gap: 12px clamp(18px, 3vw, 32px); align-items: start;
+  padding: 16px clamp(16px, 2vw, 22px);
+  background: none; border: 0; border-bottom: 1px solid var(--rule);
+  border-radius: 0; box-shadow: none;
+}
+.moderation-wall .queue-note:last-child { border-bottom: 0; }
+.moderation-wall .queue-note-body:has(> .note-photo) {
+  display: grid; grid-template-columns: 96px minmax(0, 1fr); column-gap: 16px; align-items: start;
+}
+.moderation-wall .queue-note-body > .note-photo { grid-row: span 2; margin: 0; }
+.moderation-wall .queue-note .note-message { margin-top: 0; }
+.moderation-wall .queue-note .note-sign { margin-top: 10px; padding-top: 8px; }
+.moderation-wall .queue-note-side .queue-state { margin-top: 0; }
+.moderation-wall .queue-note-side .queue-actions { margin-top: 12px; align-items: center; }
+.moderation-wall .queue-note-side > .queue-actions:first-child { margin-top: 0; }
+.moderation-wall .queue-note-side { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+.moderation-wall .queue-note-side .queue-hold, .moderation-wall .queue-note-side .queue-confirm { text-align: left; align-self: stretch; }
+@media (max-width: 680px) {
+  .moderation-wall .queue-note { grid-template-columns: minmax(0, 1fr); }
+  .moderation-wall .queue-note-side { align-items: flex-start; text-align: left; }
+  .moderation-wall .queue-actions { position: relative; align-self: stretch; }
+  .queue-more { position: static; }
+  .queue-more-menu { right: auto; left: 0; }
+}
 .moderation-page details.fine-print { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--rule); }
 .queue-empty { padding: 1.5rem; border: 1px solid var(--rule); border-radius: 12px; text-align: center; color: var(--text-muted); }
 .moderation-page details.fine-print summary { cursor: pointer; }
@@ -3614,6 +3708,8 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 .phone-wall-content .live-property-header h1, .phone-wall-content .stay-cover-titles h1 { font-size: 2rem; }
 .phone-wall-content .live-property-cover, .phone-wall-content .wall-cover-photo { max-height: 190px; }
 .phone-wall-content .essentials-grid { grid-template-columns: minmax(0, 1fr); }
+.phone-wall-content .note-grid { columns: 1; }
+.phone-wall-content .note > img { display: block; max-width: 100%; height: auto; }
 [data-wall-theme] .live-property-header > p, [data-wall-theme] .stay-welcome > p,
 [data-wall-theme] .note > p:first-of-type { font-family: var(--wall-prose-font); line-height: var(--wall-prose-height); }
 [data-wall-theme] .host-note-photo { border-radius: var(--wall-note-radius); }
@@ -3693,3 +3789,31 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
   .wall-page[data-wall-theme] { padding: 16px 0 24px; }
   [data-wall-theme] .stay-cover-caption { padding: 18px; }
 }
+
+/* -------------------------- Operations overview ------------------------- */
+
+.ops-page { width: min(1040px, 100% - 2 * var(--gutter)); }
+.ops-summary { margin: 24px 0; }
+.ops-summary-total { margin: 0 0 12px; }
+.ops-tiles { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.ops-tile {
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 2px; width: 100%; height: 100%; padding: 12px 14px; text-align: left;
+  background: var(--surface-raised); color: var(--text); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); cursor: pointer; font: inherit;
+}
+.ops-tile:hover { border-color: var(--text); }
+.ops-tile[aria-pressed="true"] { border-color: var(--text); box-shadow: inset 0 0 0 1px var(--text); }
+.ops-tile-label { font-size: var(--step--1); font-weight: 650; }
+.ops-tile-count { font-family: var(--font-display); font-size: var(--step-2); line-height: 1.1; }
+.ops-tile-meta { font-size: var(--step--2); color: var(--text-muted); }
+.ops-overdue, .ops-tile-meta.ops-overdue { color: var(--accent-strong); font-weight: 650; }
+.ops-controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin: 8px 0; }
+.ops-controls label { flex: 1 1 220px; }
+.ops-list { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 10px; }
+.ops-item { padding: 14px 16px; background: var(--surface-raised); border: 1px solid var(--rule); border-left: 4px solid var(--rule-strong); border-radius: var(--radius-sm); }
+.ops-item-overdue { border-left-color: var(--accent-strong); }
+.ops-item-closed { opacity: .72; }
+.ops-item h2 { font-size: var(--step-0); margin: 6px 0 4px; }
+.ops-item-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.ops-queue-tag { font-size: var(--step--2); font-weight: 650; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); }
+.ops-item-facts { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 8px; font-size: var(--step--1); color: var(--text-muted); }
+.ops-item-facts code { overflow-wrap: anywhere; }

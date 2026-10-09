@@ -1,0 +1,24 @@
+{
+  "displayName": "DigiStayBook new items for safety review",
+  "combiner": "OR",
+  "enabled": true,
+  "notificationChannels": ["projects/digistaybook-cbert/notificationChannels/5963023179476044485"],
+  "conditions": [{
+    "displayName": "New safety, report, privacy or alert items, or a photo deletion stuck",
+    "conditionMatchedLog": {
+      "filter": "jsonPayload.event=\"operations_new_items\"",
+      "labelExtractors": {
+        "new_count": "EXTRACT(jsonPayload.newCount)",
+        "queues": "EXTRACT(jsonPayload.queues)",
+        "kinds": "EXTRACT(jsonPayload.kinds)",
+        "operations_url": "EXTRACT(jsonPayload.operationsUrl)"
+      }
+    }
+  }],
+  "alertStrategy": {"notificationRateLimit": {"period": "300s"}, "autoClose": "1800s"},
+  "documentation": {
+    "mimeType": "text/markdown",
+    "subject": "DigiStayBook: ${log.extracted_label.new_count} new item(s) for safety review",
+    "content": "New since the last check: ${log.extracted_label.queues}. A stuck photo deletion is one that is held behind a safety review or that the deletion worker gave up on; it is listed under Deletion jobs.\n\nKinds: ${log.extracted_label.kinds}.\n\nACTION: Open [Privacy & Safety operations](${log.extracted_label.operations_url}). It lists everything outstanding, oldest first. Operations access requires the admin role and MFA.\n\nThis email contains counts only. Guest text, names, photos and contact details stay in the operations page. Emails are limited to one every 5 minutes, so check the page for the full list."
+  }
+}

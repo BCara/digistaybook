@@ -131,7 +131,24 @@ describe("the moderation queue", () => {
 
     const held = within(cardFor("Please take the photo of my children down."));
     expect(held.getByRole("button", { name: "Publish to the wall" })).toBeInTheDocument();
-    expect(held.getByRole("button", { name: "Confirm permanent deletion" })).toBeInTheDocument();
+    expect(held.getByRole("button", { name: "Delete" })).toBeInTheDocument();
+  });
+
+  it("leads each memory with one action, marks a pinned one, and folds the rest under More", async () => {
+    listWallPosts.mockResolvedValue({ status: "ok", value: [post({ pinned: true }), post({ id: "memory-4", message: "Lovely week." })] });
+    renderPage();
+
+    await screen.findByRole("heading", { name: /On the wall/ });
+    const pinned = cardFor("Four days of sea air and we already want to come back.");
+    expect(pinned).toHaveClass("is-pinned");
+    expect(within(pinned).getByText("Pinned")).toBeInTheDocument();
+    expect(within(pinned).getByRole("button", { name: "Unpin" })).toBeInTheDocument();
+
+    const plain = cardFor("Lovely week.");
+    expect(plain).not.toHaveClass("is-pinned");
+    expect(within(plain).getByText("More", { exact: false }).closest("details")).toContainElement(
+      within(plain).getByRole("button", { name: "Delete" })
+    );
   });
 
   it("sends a reversible action straight to the server", async () => {
@@ -155,9 +172,9 @@ describe("the moderation queue", () => {
 
     await screen.findByRole("heading", { name: /Privacy and takedown requests/ });
     const card = within(cardFor("Please take the photo of my children down."));
-    fireEvent.click(card.getByRole("button", { name: "Confirm permanent deletion" }));
+    fireEvent.click(card.getByRole("button", { name: "Delete" }));
 
-    expect(await screen.findByRole("alertdialog")).toHaveTextContent(/Delete this memory permanently\?/);
+    expect(await screen.findByRole("alertdialog")).toHaveTextContent(/Delete this memory\? .*permanently removed within 72 hours/);
     expect(moderatePost).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole("button", { name: "Keep it as it is" }));
@@ -169,8 +186,8 @@ describe("the moderation queue", () => {
     renderPage();
 
     await screen.findByRole("heading", { name: /Privacy and takedown requests/ });
-    fireEvent.click(within(cardFor("Please take the photo of my children down.")).getByRole("button", { name: "Confirm permanent deletion" }));
-    fireEvent.click(await screen.findByRole("button", { name: /^Yes, confirm permanent deletion$/i }));
+    fireEvent.click(within(cardFor("Please take the photo of my children down.")).getByRole("button", { name: "Delete" }));
+    fireEvent.click(await screen.findByRole("button", { name: /^Yes, delete$/i }));
 
     await waitFor(() => expect(moderatePost).toHaveBeenCalledWith(expect.objectContaining({ action: "delete" })));
     expect(await screen.findByRole("heading", { name: /Recently deleted/ })).toBeInTheDocument();

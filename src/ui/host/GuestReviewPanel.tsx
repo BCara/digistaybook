@@ -10,19 +10,42 @@ export async function hostCall<T>(name: string, data: unknown): Promise<T> {
   const { httpsCallable } = await import("firebase/functions");
   return (await httpsCallable<unknown, T>(services.functions, name)(data)).data;
 }
-export function GuestReviewPanel({ propertyId, feedbackOnly = false, settingsOnly = false }: { propertyId: string; feedbackOnly?: boolean; settingsOnly?: boolean }) {
-  const [result, setResult] = useState<Result | null>(null);
+type PanelProps = {
+  propertyId: string; feedbackOnly?: boolean;
+  /** Told how many memories wait, so a page can say "all caught up" once for every inbox. */
+  onCount?: (count: number) => void;
+  /** Draw nothing but the switch while the inbox is empty. */
+  collapseWhenEmpty?: boolean;
+  /** Changing it reads the inbox again. */
+  refreshSignal?: number;
+} & (
+  | { settingsOnly: true; reviewContent: boolean; onReviewContentSaved?: (reviewContent: boolean) => void }
+  | { settingsOnly?: false; reviewContent?: never; onReviewContentSaved?: never }
+);
+export function GuestReviewPanel({ propertyId, feedbackOnly = false, settingsOnly = false, reviewContent, onReviewContentSaved, onCount, collapseWhenEmpty = false, refreshSignal = 0 }: PanelProps) {
+  const [result, setResult] = useState<Result | null>(() => settingsOnly ? { posts: [], feedback: [], reviewContent } : null);
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
   const [photos, setPhotos] = useState<Record<string, string[]>>({});
   const kind = feedbackOnly ? "feedback" : "review";
   const refresh = async () => { setResult(await hostCall<Result>("listHostGuestReview", { propertyId, kind })); setPhotos({}); };
   useEffect(() => { let active = true;
-    setResult(null); setPhotos({}); setNotice("");
+    // The QR page already read the policy with the property. Opening its
+    // switch must not start (or wait for) a moderation inbox request.
+    if (settingsOnly) return;
+    // The switch stays drawn while the inbox is read again; only the
+    // memories under it are replaced.
+    setPhotos({}); setNotice("");
     void hostCall<Result>("listHostGuestReview", { propertyId, kind }).then(data => { if (active) setResult(data); })
-      .catch(() => { if (active) setNotice(settingsOnly ? "The approval setting could not be loaded. Try again." : "This inbox could not be loaded. Try refreshing."); });
+      .catch(() => { if (active) setNotice("This inbox could not be loaded. Try refreshing."); });
     return () => { active = false; };
-  }, [propertyId, kind, settingsOnly]);
+  }, [propertyId, kind, settingsOnly, refreshSignal]);
+  const waiting = result?.posts.length;
+  useEffect(() => { if (!settingsOnly && !feedbackOnly && waiting !== undefined) onCount?.(waiting); }, [waiting, settingsOnly, feedbackOnly, onCount]);
+  const collapsed = collapseWhenEmpty && !feedbackOnly && result?.posts.length === 0 && !result.reviewCursor && !notice;
+  useEffect(() => {
+    if (settingsOnly) setResult({ posts: [], feedback: [], reviewContent });
+  }, [settingsOnly, reviewContent]);
   async function loadMore() {
     if (busy || !result) return;
     setBusy(true); setNotice("");
@@ -46,6 +69,7 @@ export function GuestReviewPanel({ propertyId, feedbackOnly = false, settingsOnl
     try {
       const saved = await hostCall<{ reviewContent: boolean }>("setGuestReviewPolicy", { propertyId, reviewContent });
       setResult(previous => previous ? { ...previous, reviewContent: saved.reviewContent } : previous);
+      onReviewContentSaved?.(saved.reviewContent);
       setNotice(saved.reviewContent ? "New memories will wait for your approval after screening." : "Clear new memories can publish automatically after screening. Memories already waiting still need review.");
     } catch { setNotice("The review setting could not be saved. Try again."); }
     finally { setBusy(false); }
@@ -73,11 +97,9 @@ export function GuestReviewPanel({ propertyId, feedbackOnly = false, settingsOnl
     finally { setBusy(false); }
   }
   return <>
-    {!feedbackOnly && result && <section className={`approval-settings${settingsOnly ? " approval-settings-compact" : ""}`} aria-label={settingsOnly ? "Memory approval" : undefined} aria-labelledby={settingsOnly ? undefined : "approval-settings-heading"}>
-      {!settingsOnly && <div className="approval-settings-copy">
-        <h3 id="approval-settings-heading">Memory approval</h3>
-        <p>Choose whether every new memory needs your approval before appearing on the wall.</p>
-      </div>}
+    {/* One slim bar: the switch already names the setting, so a heading and a
+        paragraph restating it only pushed the memories down the page. */}
+    {!feedbackOnly && result && <section className={`approval-settings${settingsOnly ? " approval-settings-compact" : ""}`} aria-label="Memory approval">
       <label className="switch approval-switch">
         <input type="checkbox" aria-describedby="approval-settings-note" checked={result.reviewContent === true} disabled={busy} onChange={event => void setReviewContent(event.target.checked)} />
         <span className="switch-track" aria-hidden="true"><span className="switch-knob" /></span>
@@ -87,18 +109,12 @@ export function GuestReviewPanel({ propertyId, feedbackOnly = false, settingsOnl
       <p id="approval-settings-note" className="approval-settings-note">{settingsOnly
         ? result.reviewContent ? "New memories wait for approval after safety checks." : "Clear memories publish automatically after safety checks."
         : result.reviewContent
-        ? "On: new memories wait for you to approve them after safety checks."
-        : "Off: memories that pass safety checks can publish automatically. Flagged memories still need review."}</p>
-      {!settingsOnly && <p className="approval-settings-footnote">Safety checks always apply. This setting saves automatically.</p>}
+        ? "Every new memory waits for you to approve it."
+        : "New memories go live once they pass safety checks. Anything flagged waits for you."}</p>
       {settingsOnly && <a className="text-link approval-settings-link" href={`/host/property/${propertyId}/moderation#new-memories`}>Review waiting memories</a>}
     </section>}
-    {settingsOnly && !result && <section className="approval-settings approval-settings-compact" aria-label="Memory approval">
-      <h3>Memory approval</h3>
-      <p role="status">{notice || "Loading memory approval setting…"}</p>
-      {notice && <button className="btn btn-sm btn-secondary" disabled={busy} onClick={() => void refresh().then(() => setNotice("")).catch(() => setNotice("The approval setting could not be loaded. Try again."))}>Retry loading setting</button>}
-    </section>}
     {settingsOnly && result && notice && <p className="form-feedback" role="status">{notice}</p>}
-    {!settingsOnly && <section id={feedbackOnly ? undefined : "new-memories"} className={`guest-review${feedbackOnly ? "" : " moderation-panel"}`} aria-label={feedbackOnly ? "Private feedback inbox" : "Guest safety review"}>
+    {!settingsOnly && !collapsed && <section id={feedbackOnly ? undefined : "new-memories"} className={`guest-review${feedbackOnly ? "" : " moderation-panel"}`} aria-label={feedbackOnly ? "Private feedback inbox" : "Guest safety review"}>
     <div className="review-heading">
       <h2>{feedbackOnly ? "Private feedback" : "New memories"}</h2>
       {!feedbackOnly && result && <span className="review-status" data-attention={result.posts.length > 0}>{result.posts.length === 0 ? "All clear" : `${result.posts.length}${result.reviewCursor ? "+" : ""} to review`}</span>}

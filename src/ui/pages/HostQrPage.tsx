@@ -149,7 +149,10 @@ export function HostQrPage({ propertyId }: { propertyId: string }) {
               <Wall reason={stayReason} title="The in-stay wall" address={stayUrl} live={live} href={stayWallPath(property.slug, property.stayToken)} configureHref={`/host/property/${property.id}`}>
                 The page guests open from your QR code.
               </Wall>
-              <GuestReviewPanel key={propertyId} propertyId={propertyId} settingsOnly />
+              <GuestReviewPanel key={propertyId} propertyId={propertyId} settingsOnly reviewContent={property.reviewContent === true}
+                onReviewContentSaved={reviewContent => setLoad(current => current.status === "ready" && current.property.id === propertyId
+                  ? { status: "ready", property: { ...current.property, reviewContent } }
+                  : current)} />
             </div>
             <Wall reason={publicReason} title="The public wall" address={publicWallUrl(window.location.origin, property.slug)} live={live && !property.profile.displayWallOff} href={`/wall/${property.slug}`} configureHref={`/host/property/${property.id}/public`}>
               Share this link in your listing or guest messages.

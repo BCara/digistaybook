@@ -47,7 +47,8 @@ async function moderateText(text: string): Promise<{ name?: string; confidence?:
   if (!response.ok) throw new Error(`moderateText ${response.status}`);
   const body = await response.json() as { moderationCategories?: { name?: string; confidence?: number }[] };
   if (!Array.isArray(body.moderationCategories) || !body.moderationCategories.every(category =>
-    typeof category.name === "string" && /^[A-Za-z &-]{1,80}$/.test(category.name)
+    // Google names include commas ("Death, Harm & Tragedy") and every response lists all of them.
+    typeof category.name === "string" && /^[A-Za-z ,&-]{1,80}$/.test(category.name)
     && typeof category.confidence === "number" && Number.isFinite(category.confidence) && category.confidence >= 0 && category.confidence <= 1)) {
     throw new Error("Incomplete text moderation response");
   }

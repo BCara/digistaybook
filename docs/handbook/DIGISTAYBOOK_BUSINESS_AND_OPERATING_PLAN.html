@@ -73,6 +73,9 @@
     .lead { max-width: 880px; color: var(--muted); font-size: 1.04rem; }
     .statement { margin: 18px 0; padding: 15px 18px; border-left: 5px solid var(--green); border-radius: 8px; background: var(--green-soft); }
     .table-wrap { margin: 14px 0 24px; overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+    .flow-figure { margin: 16px 0 26px; padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); }
+    .flow-figure svg { display: block; width: 100%; height: auto; }
+    .flow-figure figcaption { margin-top: 8px; color: var(--muted); font-size: .86rem; }
     table { width: 100%; min-width: 720px; border-collapse: collapse; background: white; }
     th, td { padding: 11px 13px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
     th { color: white; background: var(--green); font-size: .86rem; }
@@ -108,7 +111,7 @@
       .cover { min-height: 240mm; display: flex; flex-direction: column; justify-content: center; break-after: page; }
       .plan-section { margin: 0 0 25px; }
       h2, h3, h4 { break-after: avoid; }
-      table, .statement, .card { break-inside: avoid; }
+      table, .statement, .card, .flow-figure { break-inside: avoid; }
       a { color: inherit; text-decoration: none; }
     }
   </style>
@@ -1134,6 +1137,144 @@
         <h3 id="content-moderation">5.4 Content moderation and safety</h3>
         <p id="screening-decisions-final-2026-10-06"><strong>Final screening decisions &mdash; 6 October 2026:</strong> retain the current providers, category thresholds and routing. Clear memories publish unless host review is enabled; ordinary flags and screened contact details or links go to host review. Clear or ordinary private feedback goes to the private host inbox. Serious text or photo flags go to restricted safety review. An incomplete check goes to the same restricted queue tagged <strong>Screening incomplete</strong>, with the reason shown to the reviewer, and cannot be released by automatic retry. These are the agreed test expectations; reopen a decision only when testing identifies an issue, recording the failure and resulting change. Calibration and device tests verify these choices. Live deployment and end-to-end verification of the incomplete-screening change remain pending.</p>
         <p>Every guest submission is screened before it can appear publicly. Automated screening is a risk-control tool, not a guarantee, and is never described as one.</p>
+        <h4 id="screening-flow-as-built">Screening flow at a glance &mdash; as built, 8 October 2026</h4>
+        <p>This is how the deployed code routes every guest submission. Where an older dated note in this section disagrees, this block and the code win. The code lives in <code>functions/src/screening.ts</code> (checks and thresholds), <code>visionScreening.ts</code> (photo check), <code>guestPolicy.ts</code> (serious-text thresholds), <code>guestContributions.ts</code> (routing), <code>reporting.ts</code> (safety view decisions) and <code>operationsNotify.ts</code> (operations emails).</p>
+        <figure class="flow-figure" aria-labelledby="memory-flow-caption">
+          <svg viewBox="0 0 980 500" role="img" aria-labelledby="memory-flow-caption" xmlns="http://www.w3.org/2000/svg" font-family="inherit" font-size="13">
+            <defs><marker id="flow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5d6963"/></marker></defs>
+            <g fill="none" stroke="#5d6963" stroke-width="1.4">
+              <path d="M490 54V76" marker-end="url(#flow-arrow)"/>
+              <path d="M490 150V168M130 168H850"/>
+              <path d="M130 168V186" marker-end="url(#flow-arrow)"/><path d="M370 168V186" marker-end="url(#flow-arrow)"/><path d="M610 168V186" marker-end="url(#flow-arrow)"/><path d="M850 168V186" marker-end="url(#flow-arrow)"/>
+              <path d="M130 246V272" marker-end="url(#flow-arrow)"/><path d="M370 246V272" marker-end="url(#flow-arrow)"/><path d="M610 246V272" marker-end="url(#flow-arrow)"/><path d="M850 246V272" marker-end="url(#flow-arrow)"/>
+              <path d="M130 350V376" marker-end="url(#flow-arrow)"/><path d="M370 350V376" marker-end="url(#flow-arrow)"/><path d="M610 350V376" marker-end="url(#flow-arrow)"/><path d="M850 350V376" marker-end="url(#flow-arrow)"/>
+            </g>
+            <rect x="340" y="10" width="300" height="44" rx="8" fill="#fffdf8" stroke="#d9d2c5"/>
+            <text x="490" y="29" text-anchor="middle" font-weight="700" fill="#24312c">Guest memory</text>
+            <text x="490" y="46" text-anchor="middle" fill="#5d6963">optional name, message, up to 10 photos</text>
+            <rect x="160" y="80" width="660" height="70" rx="8" fill="#fffdf8" stroke="#24312c"/>
+            <text x="490" y="102" text-anchor="middle" font-weight="700" fill="#24312c">Automated screening &#8212; on the server, while everything is private</text>
+            <text x="490" y="121" text-anchor="middle" fill="#24312c">Name + message: Google Natural Language (Australia) &#183; Each photo: Google Vision SafeSearch (EU)</text>
+            <text x="490" y="139" text-anchor="middle" fill="#5d6963">then, only if Google found nothing: our own contact-details and link check</text>
+            <rect x="20" y="190" width="220" height="56" rx="8" fill="#e7f2ed" stroke="#245f50"/>
+            <text x="130" y="213" text-anchor="middle" font-weight="700" fill="#245f50">Clear</text>
+            <text x="130" y="232" text-anchor="middle" fill="#245f50">no flags at all</text>
+            <rect x="260" y="190" width="220" height="56" rx="8" fill="#fff0bd" stroke="#9a7413"/>
+            <text x="370" y="213" text-anchor="middle" font-weight="700" fill="#6e520b">Borderline</text>
+            <text x="370" y="232" text-anchor="middle" fill="#6e520b">ordinary flag or contact details</text>
+            <rect x="500" y="190" width="220" height="56" rx="8" fill="#f6e6de" stroke="#8f3a20"/>
+            <text x="610" y="213" text-anchor="middle" font-weight="700" fill="#8f3a20">Critical</text>
+            <text x="610" y="232" text-anchor="middle" fill="#8f3a20">serious text or photo flag</text>
+            <rect x="740" y="190" width="220" height="56" rx="8" fill="#ecebe6" stroke="#5d6963"/>
+            <text x="850" y="213" text-anchor="middle" font-weight="700" fill="#24312c">Screening incomplete</text>
+            <text x="850" y="232" text-anchor="middle" fill="#5d6963">check failed or allowance used</text>
+            <rect x="20" y="276" width="220" height="74" rx="8" fill="#fffdf8" stroke="#245f50"/>
+            <text x="130" y="298" text-anchor="middle" font-weight="700" fill="#24312c">On the wall</text>
+            <text x="130" y="317" text-anchor="middle" fill="#5d6963">or host review, if the host turned</text>
+            <text x="130" y="334" text-anchor="middle" fill="#5d6963">on Review before publication</text>
+            <rect x="260" y="276" width="220" height="74" rx="8" fill="#fffdf8" stroke="#9a7413"/>
+            <text x="370" y="298" text-anchor="middle" font-weight="700" fill="#24312c">Host review queue</text>
+            <text x="370" y="317" text-anchor="middle" fill="#5d6963">hidden from the wall;</text>
+            <text x="370" y="334" text-anchor="middle" fill="#5d6963">host is notified</text>
+            <rect x="500" y="276" width="220" height="74" rx="8" fill="#fffdf8" stroke="#8f3a20"/>
+            <text x="610" y="298" text-anchor="middle" font-weight="700" fill="#24312c">Safety view</text>
+            <text x="610" y="317" text-anchor="middle" fill="#5d6963">restricted; host bypassed;</text>
+            <text x="610" y="334" text-anchor="middle" fill="#5d6963">operations emailed</text>
+            <rect x="740" y="276" width="220" height="74" rx="8" fill="#fffdf8" stroke="#5d6963"/>
+            <text x="850" y="298" text-anchor="middle" font-weight="700" fill="#24312c">Safety view</text>
+            <text x="850" y="317" text-anchor="middle" fill="#5d6963">tagged Screening incomplete;</text>
+            <text x="850" y="334" text-anchor="middle" fill="#5d6963">operations emailed</text>
+            <rect x="20" y="380" width="220" height="104" rx="8" fill="#fffdf8" stroke="#d9d2c5"/>
+            <text x="130" y="402" text-anchor="middle" fill="#24312c">Photos leave quarantine.</text>
+            <text x="130" y="421" text-anchor="middle" fill="#24312c">If a guest reports it, it is</text>
+            <text x="130" y="440" text-anchor="middle" fill="#24312c">hidden while the report is</text>
+            <text x="130" y="459" text-anchor="middle" fill="#24312c">open; dismissing restores it.</text>
+            <rect x="260" y="380" width="220" height="104" rx="8" fill="#fffdf8" stroke="#d9d2c5"/>
+            <text x="370" y="402" text-anchor="middle" fill="#24312c">Host approves &#8594; on the wall</text>
+            <text x="370" y="421" text-anchor="middle" fill="#24312c">Host rejects &#8594; hidden by host</text>
+            <text x="370" y="440" text-anchor="middle" fill="#5d6963">(kept, not deleted)</text>
+            <rect x="500" y="380" width="460" height="104" rx="8" fill="#fffdf8" stroke="#8f3a20"/>
+            <text x="730" y="402" text-anchor="middle" font-weight="700" fill="#24312c">Reviewer decides (opening the case and photos is logged)</text>
+            <text x="730" y="421" text-anchor="middle" fill="#24312c">Release, unchanged &#8594; host review queue (never straight to the wall)</text>
+            <text x="730" y="440" text-anchor="middle" fill="#24312c">Release, guest edited it meanwhile &#8594; screened again from the top</text>
+            <text x="730" y="459" text-anchor="middle" fill="#24312c">Delete &#8594; text cleared now; photos deleted within 72 hours</text>
+            <text x="730" y="476" text-anchor="middle" fill="#5d6963">a stuck photo deletion emails operations</text>
+          </svg>
+          <figcaption id="memory-flow-caption">Figure 5.4a &#8212; Guest memory screening: what goes to the wall, to the host and to the safety view, and what happens next.</figcaption>
+        </figure>
+        <figure class="flow-figure" aria-labelledby="feedback-flow-caption">
+          <svg viewBox="0 0 980 330" role="img" aria-labelledby="feedback-flow-caption" xmlns="http://www.w3.org/2000/svg" font-family="inherit" font-size="13">
+            <defs><marker id="flow-arrow-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5d6963"/></marker></defs>
+            <g fill="none" stroke="#5d6963" stroke-width="1.4">
+              <path d="M490 54V76" marker-end="url(#flow-arrow-b)"/>
+              <path d="M490 136V152M180 152H800"/>
+              <path d="M180 152V166" marker-end="url(#flow-arrow-b)"/><path d="M490 152V166" marker-end="url(#flow-arrow-b)"/><path d="M800 152V166" marker-end="url(#flow-arrow-b)"/>
+              <path d="M180 226V246" marker-end="url(#flow-arrow-b)"/><path d="M490 226V246" marker-end="url(#flow-arrow-b)"/><path d="M800 226V246" marker-end="url(#flow-arrow-b)"/>
+            </g>
+            <rect x="350" y="10" width="280" height="44" rx="8" fill="#fffdf8" stroke="#d9d2c5"/>
+            <text x="490" y="29" text-anchor="middle" font-weight="700" fill="#24312c">Private feedback</text>
+            <text x="490" y="46" text-anchor="middle" fill="#5d6963">text only, for the host&#8217;s eyes</text>
+            <rect x="210" y="80" width="560" height="56" rx="8" fill="#fffdf8" stroke="#24312c"/>
+            <text x="490" y="102" text-anchor="middle" font-weight="700" fill="#24312c">Automated screening &#8212; Google Natural Language (Australia)</text>
+            <text x="490" y="121" text-anchor="middle" fill="#5d6963">only the four serious categories can hold feedback; complaints are what it is for</text>
+            <rect x="40" y="170" width="280" height="56" rx="8" fill="#e7f2ed" stroke="#245f50"/>
+            <text x="180" y="193" text-anchor="middle" font-weight="700" fill="#245f50">Deliver</text>
+            <text x="180" y="212" text-anchor="middle" fill="#245f50">including rude, negative or profane text</text>
+            <rect x="350" y="170" width="280" height="56" rx="8" fill="#f6e6de" stroke="#8f3a20"/>
+            <text x="490" y="193" text-anchor="middle" font-weight="700" fill="#8f3a20">Critical</text>
+            <text x="490" y="212" text-anchor="middle" fill="#8f3a20">Violent, Sexual, Derogatory or Firearms</text>
+            <rect x="660" y="170" width="280" height="56" rx="8" fill="#ecebe6" stroke="#5d6963"/>
+            <text x="800" y="193" text-anchor="middle" font-weight="700" fill="#24312c">Screening incomplete</text>
+            <text x="800" y="212" text-anchor="middle" fill="#5d6963">check failed or allowance used</text>
+            <rect x="40" y="250" width="280" height="68" rx="8" fill="#fffdf8" stroke="#245f50"/>
+            <text x="180" y="273" text-anchor="middle" font-weight="700" fill="#24312c">Host&#8217;s private inbox</text>
+            <text x="180" y="292" text-anchor="middle" fill="#5d6963">the host can report a message,</text>
+            <text x="180" y="309" text-anchor="middle" fill="#5d6963">which sends it to the safety view</text>
+            <rect x="350" y="250" width="590" height="68" rx="8" fill="#fffdf8" stroke="#8f3a20"/>
+            <text x="645" y="273" text-anchor="middle" font-weight="700" fill="#24312c">Safety view &#8212; operations emailed</text>
+            <text x="645" y="292" text-anchor="middle" fill="#24312c">Release &#8594; delivered to the host&#8217;s private inbox</text>
+            <text x="645" y="309" text-anchor="middle" fill="#24312c">Delete &#8594; message deleted; the host never sees it</text>
+          </svg>
+          <figcaption id="feedback-flow-caption">Figure 5.4b &#8212; Private feedback screening.</figcaption>
+        </figure>
+        <h4 id="screening-checks">How each check is done</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Check</th><th>Done by</th><th>What it looks at</th><th>What it returns</th></tr></thead>
+            <tbody>
+              <tr><td>Text moderation</td><td>Google Cloud Natural Language <code>moderateText</code>, called on <code>au-language.googleapis.com</code> (Australia). 5-second time limit.</td><td>Memories: the optional guest name and the message, together. Private feedback: the feedback text.</td><td>A confidence score from 0 to 1 for each of Google&rsquo;s moderation categories, such as Toxic, Insult, Profanity, Derogatory, Violent, Sexual, Firearms &amp; Weapons, Death, Harm &amp; Tragedy, Health, Religion &amp; Belief, Illicit Drugs and Politics.</td></tr>
+              <tr><td>Photo SafeSearch</td><td>Google Cloud Vision SafeSearch, called on <code>eu-vision.googleapis.com</code> (EU), one request per photo, with no fallback to other regions. 10-second time limit.</td><td>Each photo after our server has re-encoded it (at most 2000&times;2000 pixels, WebP, metadata stripped). The original upload is never sent. Photos stay stored in Sydney.</td><td>A likelihood for adult, racy, violence, medical and spoof: very unlikely, unlikely, possible, likely or very likely. Spoof is ignored.</td></tr>
+              <tr><td>Contact details and links</td><td>Our own code (<code>memoryNeedsContactReview</code>), memories only.</td><td>The name and message, but only after Google has returned a clear result.</td><td>Turns a clear memory into borderline if it contains an email address, a web address or domain, or a phone-like number of 8 or more digits. It can never clear anything.</td></tr>
+              <tr><td>Daily screening allowance</td><td>Our own code (<code>screeningBudget.ts</code>).</td><td>Every memory and feedback screening attempt, counted per Sydney day.</td><td>100 attempts a day, with an email warning to operations at 75. Once the limit is reached, submissions are not sent to Google; they go to the safety view as screening incomplete.</td></tr>
+              <tr><td>Host&rsquo;s review switch</td><td>A property setting the host controls.</td><td>Only memories that are already clear.</td><td>When on, clear memories wait in the host review queue instead of publishing.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h4 id="screening-outcomes">What borderline, critical and screening incomplete mean</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Outcome</th><th>Exact rule in the code</th><th>Memory goes to</th><th>Private feedback goes to</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Clear</strong></td><td>No text category at 0.8 or above, no photo rated likely or very likely in any checked category, and no contact details or links.</td><td>The wall, or the host review queue if the host&rsquo;s review switch is on.</td><td>The host&rsquo;s private inbox.</td></tr>
+              <tr><td><strong>Borderline</strong> (called <code>standard</code> in the code)</td><td>Any text category other than the four serious ones at 0.8 or above &mdash; for example Toxic, Insult, Profanity, Health or Religion &amp; Belief; <em>or</em> a photo rated likely or very likely for racy or medical only; <em>or</em> an otherwise clear memory containing contact details or a link.</td><td>The host review queue, hidden, with the host notified. The host approves or rejects.</td><td>Not used. Anything short of critical is delivered to the host&rsquo;s private inbox.</td></tr>
+              <tr><td><strong>Critical</strong></td><td>Text scoring 0.8 or above for Violent, Sexual, Derogatory, or Firearms &amp; Weapons (<code>guestPolicy.feedbackHold</code>); <em>or</em> any photo rated likely or very likely for adult or violence. Critical wins if the text and photo results differ.</td><td>The safety view. The host is bypassed and never sees it unless a reviewer releases it.</td><td>The safety view.</td></tr>
+              <tr><td><strong>Screening incomplete</strong></td><td>Google could not give a complete answer: a call failed or timed out, the response was missing or malformed, credentials were unavailable, or the daily allowance had been reached. The reviewer sees which reason.</td><td>The safety view, tagged <strong>Screening incomplete</strong>. This is not a finding that the content is harmful. Automatic retries cannot release it.</td><td>The safety view, tagged the same way.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Nothing is ever rejected automatically; a person makes every removal decision. The guest only ever sees a neutral &ldquo;saved for review&rdquo; message, never which route was taken. If the screening function itself stops before reaching any decision, the memory stays private and a background worker retries every 5 minutes, backing off, for up to 8 attempts; it then raises a <strong>Screening failed</strong> alert in the safety view. In the Local Test environment Google is not called: the markers <code>[review]</code>, <code>[safety]</code> and <code>[outage]</code> in the text choose borderline, critical and incomplete.</p>
+        <h4 id="safety-view-decisions">After a decision in the safety view</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Item</th><th>Release</th><th>Delete</th></tr></thead>
+            <tbody>
+              <tr><td>Guest memory, unchanged since it was held</td><td>Goes to the host review queue and the host is notified. It is not published until the host approves.</td><td rowspan="2">The memory is marked deleted and its text cleared at once. A photo deletion job removes the quarantine and published copies within 72 hours. If that job is held behind a safety review or the worker gives up, operations is emailed.</td></tr>
+              <tr><td>Guest memory the guest edited while it was held</td><td>The new version is screened again from the start.</td></tr>
+              <tr><td>Private feedback</td><td>Delivered to the host&rsquo;s private inbox.</td><td>Deleted. The host never sees it.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Opening a case, viewing its photos and every decision are recorded in the moderation audit with the reviewer and an optional note, never the message itself. Reviewers need the admin role and multi-factor sign-in. <strong>Operations emails:</strong> the notifier built on 8 October 2026 emails <code>codebertcreations@gmail.com</code> within about 6 minutes when a new safety case, content report, privacy request or alert arrives, or when a photo deletion gets stuck. Each email gives counts and kinds only, never guest text or photos, and at most one is sent every 5 minutes. It goes live once the functions are deployed and its Cloud Monitoring alert (<code>docs/operations-new-items-alert-policy.json</code>) is created; until then, check the operations page.</p>
         <p><strong>Implementation status, 2 October 2026:</strong> memory intake, private quarantine paths, fail-closed routing, bounded screening retries, host review and a restricted Trust &amp; Safety case queue are implemented locally and the guest-contribution function revisions now connect and deploy the wall-memory screen. Photos are sent as transformed bytes to Google Vision SafeSearch&rsquo;s EU endpoint; wall text is sent to the Australia Natural Language endpoint. Provider flags map provisionally to host review and provider failure remains private. Approved category thresholds, cost controls and end-to-end guest deployment evidence remain open. The two production guest-media buckets exist in Sydney with public-access prevention and uniform bucket access, but live application object access is unverified. Private feedback has its separate Natural Language <code>moderateText</code> check using the Australia endpoint: selected threat, sexual, derogatory and firearms categories at confidence 0.8 or above are held for restricted review; other feedback is delivered to the host, including if the provider fails. Direct provider calls succeeded for synthetic/test examples, but the deployed feedback and memory functions have not been exercised with guest intake enabled. These thresholds remain engineering settings pending C-13 review.</p>
         <h4>Quarantine-first architecture</h4>
         <p>On submission, files are uploaded to a private, non-public storage bucket and the post is assigned a processing status. The proposed server-side scan covers both image and text safety; the memory provider adapter is still disconnected, so posts remain private. After a successful provider scan, a local rule sends public posts containing contact details or external links to host review. It cannot clear a failed scan or override a more severe result. No custom profanity blacklist is approved. No biometric data and no facial-recognition template is generated, extracted or stored from a guest image &mdash; a hard constraint driven by biometric privacy law, not a preference.</p>

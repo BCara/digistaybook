@@ -20,8 +20,10 @@ async function base64(file: File) {
 }
 
 export type ContributionMode = "memory" | "feedback";
-export function GuestContribution({ slug, stayToken = null, onChanged, mode: requestedMode, onModeChange }: {
+export function GuestContribution({ slug, stayToken = null, onChanged, mode: requestedMode, onModeChange, prompt = "" }: {
   slug: string;
+  /** The Host's question to guests, shown under the memory form's heading. */
+  prompt?: string;
   /**
    * The guestbook link's token. A memory is left by someone who was in the
    * property, and holding this is what stands for that, so it is sent with
@@ -133,15 +135,16 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
       <button type="button" onClick={() => confirmationDialog.current?.close()}>Back to the guestbook</button>
     </dialog>
     <h2 id="guest-contribution-heading">{mode === "memory" ? "Add a memory" : "Private feedback for your host"}</h2>
+    {mode === "memory" && prompt.trim() && <p className="guest-contribution-prompt" id="guest-contribution-prompt">{prompt}</p>}
     <form onSubmit={event => void submit(event)}>
       <fieldset className="guest-mode" disabled={locked}>
         <legend>What would you like to leave?</legend>
         <label><input type="radio" name="guest-mode" checked={mode === "memory"} onChange={() => setMode("memory")} /><span>A memory for the wall</span></label>
-        <label><input type="radio" name="guest-mode" checked={mode === "feedback"} onChange={() => setMode("feedback")} /><span>Private feedback for your host</span></label>
+        <label className="guest-mode-secondary"><input type="radio" name="guest-mode" checked={mode === "feedback"} onChange={() => setMode("feedback")} /><span>Private feedback for your host</span></label>
       </fieldset>
       {mode === "memory" ? <>
+      <label>Your message<textarea value={message} aria-describedby={prompt.trim() ? "guest-contribution-prompt" : undefined} placeholder="What made your stay memorable?" maxLength={guestPolicy.maxMessage} disabled={locked} onChange={event => setMessage(event.target.value)} /></label>
       <label><span>Guest name <span className="guest-field-optional">(optional)</span></span><input type="text" value={displayName} maxLength={guestPolicy.maxName} disabled={locked} onChange={event => setDisplayName(event.target.value)} placeholder="e.g. Mia & Sam" autoComplete="off" /></label>
-      <label>Your message<textarea value={message} placeholder="What made your stay memorable?" maxLength={guestPolicy.maxMessage} disabled={locked} onChange={event => setMessage(event.target.value)} /></label>
       <div className="guest-photo-picker">
         <label className="guest-photo-trigger" data-disabled={locked}>
           <input aria-label="Choose photos" aria-describedby="guest-photo-count" type="file" accept="image/jpeg,image/png,image/webp" multiple disabled={locked} onChange={event => { pick(event.target.files); event.target.value = ""; }} />
@@ -178,7 +181,8 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
       {busy && <progress aria-label="Submission progress" value={progress} max={100} />}
     </form>
     {notice && <p className="guest-submission-notice" role="status">{notice}</p>}
-    <details className="guest-own-memories"><summary>Your memories in this browser</summary>
+    {/* Nothing to manage yet, so nothing to open: the section appears with the first memory sent from this browser. */}
+    {(own.some(post => post.status !== "deleted") || cursor) && <details className="guest-own-memories"><summary>Your memories in this browser</summary>
     <p>Manage memories from this browser. <a href="/privacy-safety">Need help removing one?</a></p>
     <button className="btn btn-secondary btn-sm" type="button" disabled={busy} onClick={() => void refresh().catch(error => setNotice(explain(error)))}>Refresh my memories</button>
     {own.filter(post => post.status !== "deleted").map(post => <article key={post.id}>
@@ -193,6 +197,6 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
       </div>
     </article>)}
     {cursor && <button className="btn btn-secondary btn-sm" type="button" disabled={busy} onClick={() => void loadMore()}>Load more memories</button>}
-    </details>
+    </details>}
   </section>;
 }

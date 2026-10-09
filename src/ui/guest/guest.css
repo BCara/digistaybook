@@ -1,5 +1,7 @@
 .guest-contribution { max-width: 48rem; margin: 1.5rem auto; padding: clamp(1.15rem, 3vw, 2rem); border: 1px solid var(--rule); border-radius: 20px; background: var(--surface-raised); box-shadow: 0 8px 28px rgb(0 0 0 / 3%); }
 .guest-contribution > h2 { margin-bottom: 1.25rem; font-size: clamp(1.65rem, 3vw, 2rem); letter-spacing: -.025em; }
+.guest-contribution > h2:has(+ .guest-contribution-prompt) { margin-bottom: .4rem; }
+.guest-contribution-prompt { margin: 0 0 1.5rem; color: var(--text-muted); font-size: 1rem; line-height: 1.5; }
 .guest-contribution form, .guest-contribution label { display: grid; gap: .6rem; }
 .guest-contribution form { gap: 1.25rem; }
 .guest-contribution textarea { width: 100%; min-height: 9rem; box-sizing: border-box; padding: 1rem; border-color: var(--rule); border-radius: 12px; background: var(--surface); font-size: .95rem; font-weight: 400; line-height: 1.6; }
@@ -63,6 +65,8 @@
 .guest-mode { display: flex; flex-wrap: wrap; gap: .75rem; margin: 0; padding: 0; border: 0; min-width: 0; }
 .guest-mode legend { padding: 0; margin-bottom: .65rem; font-size: .875rem; font-weight: 600; }
 .guest-contribution .guest-mode label { display: flex; align-items: center; gap: .6rem; flex: 1 1 14rem; min-height: 50px; padding: .8rem 1rem; box-sizing: border-box; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); font-size: .875rem; cursor: pointer; transition: background-color .15s, border-color .15s; }
+.guest-contribution .guest-mode label.guest-mode-secondary { flex: 0 1 auto; min-height: 40px; padding: .5rem .85rem; font-size: .8125rem; color: var(--text-muted); }
+.guest-contribution .guest-mode label.guest-mode-secondary:has(input:checked) { color: var(--text); }
 .guest-mode label:hover { border-color: var(--accent); }
 .guest-mode label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
 .guest-mode label:focus-within { outline: 2px solid currentColor; outline-offset: 3px; }

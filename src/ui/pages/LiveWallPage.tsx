@@ -21,7 +21,7 @@ import "../guest/guest.css";
 type Wall = { status: "open" | "preview"; owner?: WallOwner; contributionsEnabled?: boolean; property: { name: string; location: string; welcome: string; hosts: string; hostNotes?: { id: string; message: string; style?: string; photo?: { url: string; alt: string } | null }[];
   theme?: string; colour?: string; guestPrompt?: string; hostPhoto?: { url: string; alt: string } | null;
   cover?: { url: string; alt: string } | null; houseInformation?: { heading: string; welcome: string; tip: string; facts: { term: string; detail: string; note: string }[] } | null };
-  posts: { id: string; message: string; displayName: string; photoCount?: number }[]; nextCursor: string | null };
+  posts: { id: string; message: string; displayName: string; photoCount?: number; pinned?: boolean }[]; nextCursor: string | null };
 
 const LOADING = "Loading this guestbook…";
 
@@ -136,7 +136,8 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
         }))} />
       <h2 className="wall-heading">{memoriesHeading(wall.nextCursor ? null : wall.posts.length)}</h2>
       <section aria-label="Guest memories" className="note-grid">
-        {wall.posts.map(post => <article className="note" key={post.id}>
+        {wall.posts.map(post => <article className={`note${post.pinned ? " note-pinned" : ""}`} key={post.id}>
+          {post.pinned && <p className="note-pinned-label">Host favourite</p>}
           {Array.from({ length: post.photoCount ?? 0 }, (_, index) => <img key={index} src={guestPhotoUrl(post.id, index)} alt={`Guest memory photo ${index + 1}`} loading="lazy" />)}
           <p>{post.message}</p>{post.displayName?.trim() && <p>{post.displayName}</p>}<ReportMemory slug={slug} postId={post.id} /></article>)}
         {!wall.posts.length && <p className="field-hint">No memories yet.</p>}
@@ -152,8 +153,7 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
             <button className="btn btn-ghost" aria-expanded={false} aria-controls="wall-contribution" onClick={() => { setContributionMode("feedback"); setFormOpened(true); setContributing(true); }}>Private feedback</button>
           </div>}
         <div id="wall-contribution" hidden={!contributing}>
-        {contributing && contributionMode === "memory" && wall.property.guestPrompt && <p>{wall.property.guestPrompt}</p>}
-        {formOpened && <GuestContribution key={slug} slug={slug} stayToken={stayToken} mode={contributionMode} onModeChange={setContributionMode} onChanged={() => {
+        {formOpened && <GuestContribution key={slug} slug={slug} stayToken={stayToken} prompt={wall.property.guestPrompt} mode={contributionMode} onModeChange={setContributionMode} onChanged={() => {
         void readWall(slug, view, stayToken, Boolean(auth.user)).then(result => { if (result.status !== "unavailable") setWall(result); else { setWall(null); setUnavailable({ ...result, sessionUid: auth.user?.uid }); setStatus(""); } })
           .catch(() => setStatus("The wall could not refresh. Your saved memory is still in Your memories below."));
       }} />}

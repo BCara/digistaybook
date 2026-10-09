@@ -187,23 +187,22 @@ export const actionCopy: Record<PostAction, ActionCopy> = {
     destructive: false
   },
   delete: {
-    label: "Confirm permanent deletion",
-    hint: "Hides the memory immediately and schedules deletion of its stored copies.",
-    confirm:
-      "Delete this memory permanently? It will be hidden now and its stored copies scheduled for deletion.",
-    done: "Hidden from public view. Permanent deletion is scheduled.",
+    label: "Delete",
+    hint: "Moves it to Recently deleted, where it is permanently removed within 72 hours.",
+    confirm: "Delete this memory? It moves to Recently deleted and is permanently removed within 72 hours. This cannot be undone.",
+    done: "Deleted. You’ll find it in Recently deleted until it is permanently removed.",
     destructive: true
   },
   pin: {
     label: "Pin to the top",
-    hint: "Holds it above the other memories, where arriving guests read first.",
+    hint: "Shows it first on your wall, marked as a host favourite.",
     confirm: null,
     done: "Pinned to the top of the wall.",
     destructive: false
   },
   unpin: {
     label: "Unpin",
-    hint: "Returns it to the wall in date order.",
+    hint: "Returns it to its place among the other memories.",
     confirm: null,
     done: "Unpinned.",
     destructive: false
@@ -329,13 +328,13 @@ const SECTION_COPY: Record<QueueSectionId, { title: string; blurb: string }> = {
     blurb: `A guest has asked for their own content to come down. You are the data controller for your guestbook: resolve each one within ${privacySlaDays} days, or it escalates to our Privacy & Safety team.`
   },
   review: {
-    title: "Waiting for you",
+    title: "Off the wall",
     blurb:
-      "Reported by a guest, or held back by automated screening. Nobody but you can see these until you publish them."
+      "Hidden from guests. Publish one to put it back, or delete it for good."
   },
   wall: {
     title: "On the wall",
-    blurb: "Live for anyone with your wall link. Pin the ones you want arriving guests to read first."
+    blurb: "Pinned memories are shown first on your wall, highlighted as host favourites."
   },
   restricted: {
     title: "Held by DigiStayBook",
@@ -343,7 +342,7 @@ const SECTION_COPY: Record<QueueSectionId, { title: string; blurb: string }> = {
   },
   removed: {
     title: "Recently deleted",
-    blurb: "Off the wall and scheduled for deletion from our systems. Kept here briefly as a record."
+    blurb: "Permanently removed from our systems within 72 hours. These cannot be restored."
   }
 };
 

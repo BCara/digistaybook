@@ -15,6 +15,11 @@ const savePropertyName = vi.fn();
 const savePropertyProfile = vi.fn();
 const uploadPropertyPhoto = vi.fn();
 const removePropertyPhoto = vi.fn();
+const loadPreviewMemories = vi.fn();
+
+vi.mock("../host/wallPreviewStore", () => ({
+  loadPreviewMemories: (...args: unknown[]) => loadPreviewMemories(...args)
+}));
 
 vi.mock("../host/propertyStore", () => ({
   loadProperty: (...args: unknown[]) => loadProperty(...args),
@@ -97,6 +102,7 @@ function renderPublic(state: AuthState = hostSession) {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  loadPreviewMemories.mockResolvedValue({ status: "ok", value: { posts: [], nextCursor: null } });
   loadProperty.mockResolvedValue({ status: "ok", value: hostProperty() });
   loadWallCounts.mockResolvedValue({ status: "ok", value: { visible: 12, hidden: 1 } });
   savePropertyName.mockImplementation((_id: string, name: string) =>
@@ -115,6 +121,18 @@ const save = () => canvas().getByRole("button", { name: "Save changes" });
 const publicSave = () => publicCanvas().getByRole("button", { name: "Save changes" });
 
 describe("the guest view of a property", () => {
+  it("includes published guest memories in the phone beside the editor", async () => {
+    loadPreviewMemories.mockResolvedValue({ status: "ok", value: {
+      posts: [{ id: "guest-1", message: "We watched the sunrise from the garden.", displayName: "Sam", photoCount: 0 }],
+      nextCursor: null
+    } });
+    renderPage();
+    const phone = within(await screen.findByRole("group", { name: "On a phone" }));
+    expect(await phone.findByText("We watched the sunrise from the garden.")).toBeInTheDocument();
+    expect(phone.getByText("Sam")).toBeInTheDocument();
+    expect(loadPreviewMemories).toHaveBeenCalledWith("seabreeze-cottage", "stay", "AbCdEfGhIjKlMnOpQrStUv", undefined);
+  });
+
   it("opens on the wall the QR display leads to, laid out as a guest meets it", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
     renderPage();

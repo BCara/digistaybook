@@ -96,6 +96,40 @@ describe("walls and QR display", () => {
     expect(main().queryByRole("heading", { name: "New memories" })).not.toBeInTheDocument();
   });
 
+  it.each([undefined, false, true])("shows the saved approval policy %s without waiting for an inbox request", async reviewContent => {
+    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ reviewContent }) });
+    callable.mockImplementation(() => new Promise(() => {}));
+    renderPage();
+    await screen.findByRole("heading", { name: "Walls and QR display", level: 2 });
+    const approval = main().getByRole("checkbox", { name: "Require approval for new memories" });
+    expect(approval).toHaveProperty("checked", reviewContent === true);
+    expect(approval).toBeEnabled();
+    expect(screen.queryByText("Loading memory approval setting…")).not.toBeInTheDocument();
+    expect(callable).not.toHaveBeenCalled();
+  });
+
+  it("keeps the saved approval policy when a change fails", async () => {
+    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ reviewContent: true }) });
+    callable.mockRejectedValue(new Error("Unavailable"));
+    renderPage();
+    const approval = await screen.findByRole("checkbox", { name: "Require approval for new memories" });
+    fireEvent.click(approval);
+    expect(await screen.findByText("The review setting could not be saved. Try again.")).toBeInTheDocument();
+    expect(approval).toBeChecked();
+    expect(approval).toBeEnabled();
+  });
+
+  it("remembers a confirmed policy change when returning while the property refresh is slow", async () => {
+    const { unmount } = renderPage();
+    const approval = await screen.findByRole("checkbox", { name: "Require approval for new memories" });
+    fireEvent.click(approval);
+    await waitFor(() => expect(approval).toBeChecked());
+    unmount();
+    loadProperty.mockImplementation(() => new Promise(() => {}));
+    renderPage();
+    expect(screen.getByRole("checkbox", { name: "Require approval for new memories" })).toBeChecked();
+  });
+
   // The guestbook link is the slug and a secret the server mints. A property
   // made before there were any carries no secret, and its placard would scan
   // to the public wall — so the one screen that shows the link is the one that

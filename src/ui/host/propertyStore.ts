@@ -50,6 +50,8 @@ export type HostProperty = PropertySummary & {
    * wall.
    */
   stayToken?: string | null;
+  /** Server-saved policy; older properties publish clear memories by default. */
+  reviewContent?: boolean;
   /** Everything the Host writes about the property; see domain/propertyProfile. */
   profile: PropertyProfile;
 };
@@ -156,6 +158,7 @@ function toHostProperty(id: string, data: Record<string, unknown>): HostProperty
     createdAt: isoOrNull(data.createdAt),
     updatedAt: isoOrNull(data.updatedAt),
     stayToken: isStayToken(data.stayToken) ? data.stayToken : null,
+    reviewContent: data.reviewContent === true,
     profile: readProfile(data.profile),
     billing: billing && {
       trialEndsAt: isoOrNull(billing.trialEndsAt),

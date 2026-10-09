@@ -9,6 +9,7 @@ import { memoriesHeading } from "../wall/memoryHeading";
 import { WallHeader } from "../wall/WallHeader";
 import { HostNotes } from "../wall/HostNotes";
 import type { WallCounts } from "./propertyStore";
+import { PreviewMemories } from "./PreviewMemories";
 
 /**
  * The property dashboard's centre of gravity: the wall being edited.
@@ -18,19 +19,21 @@ import type { WallCounts } from "./propertyStore";
  * a half-filled property looks broken rather than unfinished. The preview
  * renders the draft, not the saved document, so it moves as they type.
  *
- * Nothing a Host has not written appears here. An empty field is drawn as the
- * absence a guest would meet, not as a prompt describing what belongs there:
+ * Host content follows the draft, and published guest memories are read from
+ * the wall. An empty field is drawn as the absence a guest would meet:
  * the phone answers "what do they read", and the setup meter beside it answers
  * "what is still missing".
  */
 
 export type WallView = "public" | "stay";
 
-export function WallPreview({ name, profile, counts = null, view: fixed }: {
+export function WallPreview({ name, profile, counts = null, view: fixed, slug, stayToken = null }: {
   name: string;
   profile: PropertyProfile;
   counts?: WallCounts | { error: string } | null;
   view?: WallView;
+  slug?: string | null;
+  stayToken?: string | null;
 }) {
   const [chosen, setChosen] = useState<WallView>("public");
   const previewId = useId();
@@ -66,8 +69,9 @@ export function WallPreview({ name, profile, counts = null, view: fixed }: {
             photo: note.photo ? { src: note.photo.url, alt: note.photo.alt } : undefined
           }))} />
           <h2 className="wall-heading">{memories}</h2>
-          {/* Counts are available here; private guest content is read on the wall itself. */}
-          {counts !== null && !("error" in counts) && counts.visible === 0 && <p className="field-hint">No memories yet.</p>}
+          {slug
+            ? <PreviewMemories key={`${slug}/${view}/${stayToken ?? ""}`} slug={slug} view={view} token={stayToken} />
+            : counts !== null && !("error" in counts) && counts.visible === 0 && <p className="field-hint">No memories yet.</p>}
         </div>
       </div>
     </div>

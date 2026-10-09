@@ -64,3 +64,24 @@ it("opens memory photos and releases a memory without promising publication", as
   fireEvent.click(screen.getByRole("button", { name: "Release to host" }));
   expect(await screen.findByRole("alert")).toHaveTextContent("It has not been published.");
 });
+
+it("summarises every queue and lists outstanding items oldest first with their queue", async () => {
+  call.mockReset();
+  call.mockImplementation(async () => ({
+    items: [
+      { id: "old", queue: "privacyRequests", propertyId: null, status: "escalated", kind: "takedown", receivedAt: "2026-01-02T00:00:00Z", outstanding: true, reviewDueAt: "2026-01-16T00:00:00Z" },
+      { id: "new", queue: "trustSafetyCases", propertyId: "cottage", status: "open", kind: "guest_memory", receivedAt: "2026-10-01T00:00:00Z", outstanding: true, reviewDueAt: null }
+    ],
+    summary: [{ queue: "privacyRequests", total: 4, outstanding: 1, overdue: 1, oldestOutstandingAt: "2026-01-02T00:00:00Z" },
+      { queue: "trustSafetyCases", total: 9, outstanding: 2, overdue: 0, oldestOutstandingAt: "2026-10-01T00:00:00Z" }],
+    matching: 3, partial: false
+  }));
+  render(<SafetyOperationsPage />);
+  expect(await screen.findByText(/outstanding across all queues/)).toBeInTheDocument();
+  expect(call).toHaveBeenCalledWith("listSafetyOperations", { queue: "all", scope: "outstanding" });
+  const headings = screen.getAllByRole("heading", { level: 2 }).map(heading => heading.textContent);
+  expect(headings).toEqual(["Takedown request", "Held guest memory"]);
+  expect(screen.getByText(/Overdue since/)).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: /Safety cases/ }));
+  await waitFor(() => expect(call).toHaveBeenCalledWith("listSafetyOperations", { queue: "trustSafetyCases", scope: "outstanding" }));
+});

@@ -8,6 +8,7 @@ export { deleteStoredMedia } from "./storageDeletion.js";
 export { retryPendingScreening } from "./screeningRetry.js";
 export { notifyScreeningAllowance } from "./screeningBudget.js";
 export { notifyConsentDeletionReview, readConsentDeletionReview } from "./consentRetention.js";
+export { notifyNewOperationsItems } from "./operationsNotify.js";
 export { createHostProperty, deleteHostProperty, ensureStayToken } from "./propertyCreation.js";
 export { listHostExport, readHostExportPhoto } from "./hostExport.js";
 export { reportGuestMemory, submitPrivacyRequest, listHostReports, resolveContentReport, listSafetyOperations, readSafetyCase, readSafetyCasePhoto, resolveSafetyCase, escalatePrivacyDeadlines } from "./reporting.js";
@@ -75,7 +76,13 @@ export const getPublicWall = onCall({ maxInstances: 10 }, async request => {
   // fewer round trip in front of every guest. Neither ordering is airtight -
   // a suspension committed after this read still lands after the response -
   // and the next request is what closes that in both.
-  const [posts, latest] = await Promise.all([query.get(), property.ref.get()]);
+  // Pinned memories lead the first page, whatever their date: pinning is the
+  // Host saying "read this one first", and a pin the wall ignores is a button
+  // that does nothing. They are left out of the dated pages so none appears
+  // twice. Equality filters only, so no composite index is needed.
+  const pinnedQuery = cursor ? null : property.ref.collection("posts")
+    .where("visibility", "==", "visible").where("pinned", "==", true).limit(12);
+  const [posts, latest, pinned] = await Promise.all([query.get(), property.ref.get(), pinnedQuery?.get()]);
   if (!latest.exists) return { status: "unavailable" };
   const open = wallIsOpen(latest.data()!, Date.now(), view);
   if (!open && !wallPreviewable(latest.data(), uid)) return unavailableWall(latest.data(), property.id, uid);
@@ -84,7 +91,11 @@ export const getPublicWall = onCall({ maxInstances: 10 }, async request => {
     contributionsEnabled: open && view === "stay" && guestIntakeEnabled(property.id),
     ...(open ? {} : { owner: ownerRecovery(latest.data()!, property.id) }),
     property: publicProperty(latest.data()!, view),
-    posts: posts.docs.map(post => publicPost(post.id, post.data())),
+    posts: [
+      ...(pinned?.docs ?? []).map(post => ({ ...publicPost(post.id, post.data()), pinned: true }))
+        .sort((x, y) => (y.createdAt ?? "").localeCompare(x.createdAt ?? "")),
+      ...posts.docs.filter(post => post.get("pinned") !== true).map(post => publicPost(post.id, post.data()))
+    ],
     nextCursor: posts.size === 25 ? posts.docs.at(-1)!.id : null };
 });
 

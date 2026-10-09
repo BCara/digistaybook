@@ -43,6 +43,14 @@ describe("connected wall memory screening", () => {
     state.fetch.mockResolvedValue(new Response(JSON.stringify({})));
     await expect(screenContent({ message: "Hello", photos: [] })).rejects.toThrow("Incomplete text moderation response");
   });
+  it("accepts the full category list Google returns for ordinary text", async () => {
+    const names = ["Toxic", "Insult", "Profanity", "Derogatory", "Sexual", "Death, Harm & Tragedy", "Violent", "Firearms & Weapons",
+      "Public Safety", "Health", "Religion & Belief", "Illicit Drugs", "War & Conflict", "Politics", "Finance", "Legal"];
+    state.fetch.mockImplementation(async (url: string) => url.includes("vision.googleapis.com")
+      ? new Response(JSON.stringify({ responses: [{ safeSearchAnnotation: clearPhoto }] }))
+      : new Response(JSON.stringify({ moderationCategories: names.map(name => ({ name, confidence: 0.05 })) })));
+    await expect(screenContent({ message: "A lovely stay", photos: [] })).resolves.toEqual({ outcome: "clear" });
+  });
   it("records real category results with the reference but never the test text or photo bytes", async () => {
     await withScreeningDiagnostics("private-guest-id", 1, () => screenContent({ message: "Private test message", photos: [{ bucket: "guest-quarantine", path: "private-photo-path" }] }));
     const events = state.info.mock.calls.map(call => call[1]);

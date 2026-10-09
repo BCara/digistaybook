@@ -5,6 +5,7 @@ import { createRequire } from 'node:module';
 import { randomUUID } from 'node:crypto';
 import { createServer } from 'node:net';
 import { setTimeout as delay } from 'node:timers/promises';
+import {rememberProcessTree,stopProcessTree} from './local-test-processes.mjs';
 
 const project = 'demo-digistaybook';
 const password = 'LocalTest-2026!';
@@ -18,6 +19,8 @@ delete localEnv.GOOGLE_APPLICATION_CREDENTIALS;
 delete localEnv.NODE_TLS_REJECT_UNAUTHORIZED;
 function run(args, options = {}) {
   const child = spawn(process.execPath, args, { stdio: 'inherit', env: localEnv, ...options });
+  child.stdout?.pipe(process.stdout);
+  child.stderr?.pipe(process.stderr);
   return child;
 }
 async function completed(child) {
@@ -190,32 +193,80 @@ async function start() {
     if(snapshot.project!==project || !path.startsWith(root+'/') && !path.startsWith(root+'\\')) throw new Error('Invalid Test snapshot path');
     args.push('--import',path);
   }
-  const emulator=run(args); let web; let stopping=false; let timer;
-  const stop = async () => {
-    if(stopping) return; stopping=true; clearInterval(timer);
-    try { await save(); } catch(e) { console.error('Automatic save failed; last saved snapshot remains:',e.message); }
-    web?.kill(); emulator.kill(); process.exit(0);
+  // Separate process groups prevent Windows Ctrl+C from killing Firebase before
+  // the launcher has saved. Always wait for the entire emulator tree to stop.
+  const childOptions={detached:true,windowsHide:true,stdio:['ignore','pipe','pipe']};
+  const emulator=run(args,childOptions); let web; let stopping=false; let timer;
+  let emulatorMembers=[]; let webMembers=[]; let maintenance=Promise.resolve();
+  const watchdog=spawn(process.execPath,['tools/local-test-watchdog.mjs'],{
+    detached:true,windowsHide:true,stdio:['ignore','ignore','ignore','ipc']
+  });
+  watchdog.on('error',error=>console.error('Local cleanup watchdog failed:',error.message));
+  const trackTrees=()=>{
+    if(watchdog.connected) watchdog.send({action:'track',trees:[
+      {pid:emulator.pid,members:emulatorMembers},...(web ? [{pid:web.pid,members:webMembers}] : [])
+    ]},error=>{if(error)console.error('Local cleanup tracking failed:',error.message);});
   };
-  process.on('SIGINT',stop); process.on('SIGTERM',stop);
+  let shutdown;
+  const stop = (saveFirst=true,code=0) => {
+    if(shutdown) return shutdown;
+    stopping=true; clearInterval(timer);
+    shutdown=(async()=>{
+      await maintenance;
+      if(saveFirst) {
+        try { await save(); } catch(e) { console.error('Automatic save failed; last saved snapshot remains:',e.message); code=1; }
+      }
+      const results=await Promise.allSettled([stopProcessTree(web,webMembers),stopProcessTree(emulator,emulatorMembers)]);
+      for(const result of results) if(result.status==='rejected') {
+        console.error('Local Test cleanup failed:',result.reason.message); code=1;
+      }
+      if(watchdog.connected) await new Promise(resolve=>watchdog.send({action:'disarm'},()=>resolve()));
+      process.exit(code);
+    })();
+    return shutdown;
+  };
+  process.on('SIGINT',()=>void stop()); process.on('SIGTERM',()=>void stop());
+  emulator.once('error',error=>{console.error('Local emulators failed:',error.message);void stop(false,1);});
+  emulator.once('exit',(code,signal)=>{
+    if(!stopping) {
+      console.error(`Local emulators stopped unexpectedly (${signal ?? code}). Restoring Test will use the last completed save.`);
+      void stop(false,1);
+    }
+  });
   try {
     let online=false;
     for(let i=0;i<120;i++) {
-      if(emulator.exitCode !== null) throw new Error('Emulators stopped during startup');
+      if(stopping || emulator.exitCode !== null) throw new Error('Emulators stopped during startup');
+      if(i%5===0) {emulatorMembers=await rememberProcessTree(emulator);trackTrees();}
       try { await ready(); online=true; break; } catch { await delay(1000); }
     }
     if(!online) throw new Error('Local Functions did not become ready');
+    emulatorMembers=await rememberProcessTree(emulator);
     await seed();
     const frontendEnv={...localEnv};
     for(const key of Object.keys(frontendEnv)) if(key.startsWith('VITE_')) delete frontendEnv[key];
-    web=run(['node_modules/vite/bin/vite.js','--mode','emulator','--host','127.0.0.1','--port','5181','--strictPort'],{env:frontendEnv});
+    web=run(['node_modules/vite/bin/vite.js','--mode','emulator','--host','127.0.0.1','--port','5181','--strictPort'],{...childOptions,env:frontendEnv});
+    web.once('error',error=>{console.error('Local website failed:',error.message);void stop(true,1);});
+    web.once('exit',(code,signal)=>{if(!stopping){console.error(`Local website stopped (${signal ?? code}).`);void stop(true,1);}});
+    webMembers=await rememberProcessTree(web);
+    trackTrees();
     console.log('\nTEST READY: http://127.0.0.1:5181/__test\nCtrl+C saves and stops. Periodic save and local workers run every 30 seconds.');
     let busy=false;
-    timer=setInterval(async()=>{if(busy||stopping)return;busy=true;try{await workers();await save();}catch(e){console.error('Local maintenance:',e.message);}finally{busy=false;}},30000);
-    for(const child of [emulator,web]) child.once('exit',()=>{if(!stopping){stopping=true;clearInterval(timer);web?.kill();emulator.kill();process.exitCode=1;}});
-  } catch(e) { stopping=true; web?.kill();emulator.kill();throw e; }
+    timer=setInterval(()=>{
+      if(busy||stopping)return;
+      busy=true;
+      maintenance=(async()=>{
+        try {emulatorMembers=await rememberProcessTree(emulator);webMembers=await rememberProcessTree(web);trackTrees();}
+        catch(e) {console.error('Local process tracking failed:',e.message);}
+        try { await workers(); } catch(e) { console.error('Local workers failed:',e.message); }
+        // A worker failure should not prevent a healthy emulator from saving.
+        try { await save(); } catch(e) { console.error('Local save failed; last completed snapshot retained:',e.message); }
+      })().finally(()=>{busy=false;});
+    },30000);
+  } catch(e) { console.error('Local Test startup failed:',e.message); await stop(false,1); }
 }
 const command=process.argv[2];
 const action={start,seed,save,reset,workers}[command];
 if(!action) throw new Error('Use start, seed, save, reset or workers');
-await action();
-if(command !== 'start') process.exit(0);
+try { await action(); } catch(error) { console.error('Local Test:',error.message); process.exitCode=1; }
+if(command !== 'start') process.exit(process.exitCode ?? 0);

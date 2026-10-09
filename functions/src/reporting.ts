@@ -1,5 +1,5 @@
 import { createHmac } from "node:crypto";
-import { FieldPath, FieldValue, getFirestore, Timestamp } from "firebase-admin/firestore";
+import { FieldPath, FieldValue, getFirestore, Timestamp, type QueryDocumentSnapshot } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
 import { defineSecret } from "firebase-functions/params";
 import { HttpsError, onCall, type CallableRequest } from "firebase-functions/v2/https";
@@ -160,22 +160,50 @@ export const resolveContentReport = onCall({ ...options, secrets: [] }, async re
   return { status: "resolved" };
 });
 
+// Statuses that still need staff or worker attention, per queue.
+export const OUTSTANDING: Record<string, string[]> = {
+  contentReports: ["open", "internal", "escalated"], privacyRequests: ["awaiting_verification", "verified", "escalated"],
+  trustSafetyCases: ["open", "escalated"], operationsAlerts: ["pending"],
+  deletionJobs: ["pending", "retry", "processing", "held", "needs_attention"], consentDeletionReview: ["due", "needs_attention"]
+};
+// Consent reviews are rewritten on every scan, so their retention deadline stands in for a received date.
+const AGE_FIELD: Record<string, string> = { consentDeletionReview: "reviewDueAt" };
+const OVERVIEW_LIMIT = 100, OUTSTANDING_SCAN = 500;
+const iso = (value: any) => value?.toDate?.().toISOString() ?? null;
+
 export const listSafetyOperations = onCall({ ...options, secrets: [] }, async request => {
   requireOperations(request);
-  const queues = ["contentReports", "privacyRequests", "trustSafetyCases", "operationsAlerts", "deletionJobs", "consentDeletionReview"];
-  const queue = request.data?.queue;
-  if (!queues.includes(queue)) throw new HttpsError("invalid-argument", "Choose a queue.");
-  let query = getFirestore().collection(queue).orderBy(FieldPath.documentId()).limit(26);
-  if (request.data?.cursor) {
-    const cursor = request.data.cursor;
-    if (typeof cursor !== "string" || !/^[A-Za-z0-9_:-]{1,512}$/.test(cursor)) throw new HttpsError("invalid-argument", "Invalid page reference.");
-    query = query.startAfter(cursor);
-  }
-  const page = await query.get(), docs = page.docs.slice(0, 25);
+  const queues = Object.keys(OUTSTANDING), queue = request.data?.queue ?? "all", scope = request.data?.scope ?? "outstanding";
+  if (queue !== "all" && !queues.includes(queue)) throw new HttpsError("invalid-argument", "Choose a queue.");
+  if (!["outstanding", "everything"].includes(scope)) throw new HttpsError("invalid-argument", "Choose outstanding or all items.");
+  const db = getFirestore(), now = Date.now(), selected = queue === "all" ? queues : [queue];
+  const rowsOf = (name: string, docs: QueryDocumentSnapshot[]) => docs.map(doc => ({ doc, queue: name, receivedAt: iso(doc.get(AGE_FIELD[name] ?? "createdAt")) as string | null }));
+  // Outstanding sets are small working queues: read them whole and order in memory, avoiding composite indexes.
+  const queueState = await Promise.all(queues.map(async name => {
+    const collection = db.collection(name);
+    const [total, open] = await Promise.all([collection.count().get(), collection.where("status", "in", OUTSTANDING[name]).limit(OUTSTANDING_SCAN).get()]);
+    const outstanding = open.size < OUTSTANDING_SCAN ? open.size : (await collection.where("status", "in", OUTSTANDING[name]).count().get()).data().count;
+    const rows = rowsOf(name, open.docs);
+    return { rows, truncated: open.size >= OUTSTANDING_SCAN, summary: { queue: name, total: total.data().count, outstanding,
+      overdue: open.docs.filter(doc => (doc.get("reviewDueAt")?.toMillis?.() ?? Infinity) <= now).length,
+      oldestOutstandingAt: rows.map(row => row.receivedAt).filter(Boolean).sort()[0] ?? null } };
+  }));
+  const summary = queueState.map(state => state.summary);
+  const pages = scope === "outstanding"
+    ? queueState.filter(state => selected.includes(state.summary.queue))
+    : await Promise.all(selected.map(async name => {
+      const page = await db.collection(name).orderBy(AGE_FIELD[name] ?? "createdAt").limit(OVERVIEW_LIMIT).get();
+      return { rows: rowsOf(name, page.docs), truncated: page.size >= OVERVIEW_LIMIT };
+    }));
+  const rows = pages.flatMap(page => page.rows)
+    .sort((a, b) => (a.receivedAt ?? "￿").localeCompare(b.receivedAt ?? "￿") || a.doc.id.localeCompare(b.doc.id));
+  const matching = summary.filter(item => selected.includes(item.queue)).reduce((sum, item) => sum + (scope === "outstanding" ? item.outstanding : item.total), 0);
   // Restricted media and report text are never copied into the queue overview.
-  return { items: docs.map(doc => ({ id: doc.id, propertyId: doc.get("propertyId") ?? null, status: doc.get("status"), kind: doc.get("kind") ?? doc.get("reason") ?? null,
+  return { items: rows.slice(0, OVERVIEW_LIMIT).map(({ doc, queue: name, receivedAt }) => ({ id: doc.id, queue: name, propertyId: doc.get("propertyId") ?? null, status: doc.get("status"),
+    kind: doc.get("kind") ?? doc.get("reason") ?? null, receivedAt, outstanding: OUTSTANDING[name].includes(doc.get("status")),
     screeningStatus: doc.get("screeningStatus") ?? null, screeningIncompleteReason: doc.get("screeningIncompleteReason") ?? null,
-    reviewDueAt: doc.get("reviewDueAt")?.toDate?.().toISOString() ?? null })), nextCursor: page.size > 25 ? docs.at(-1)!.id : null };
+    reviewDueAt: iso(doc.get("reviewDueAt")) })),
+    summary, matching, partial: pages.some(page => page.truncated) || rows.length > OVERVIEW_LIMIT, nextCursor: null };
 });
 
 const caseId = (value: unknown) => {

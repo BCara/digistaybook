@@ -1293,6 +1293,8 @@ export function HostWallDesignPage({
               profile={profile}
               counts={draft.counts}
               view={view}
+              slug={property.slug}
+              stayToken={property.stayToken}
             />
           </aside>
         )}

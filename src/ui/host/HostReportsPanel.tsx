@@ -3,13 +3,24 @@ import { hostCall } from "./GuestReviewPanel";
 import { reportReasons, type ReportReason } from "../../domain/postModeration";
 type Report = { id: string; postId: string; reason: ReportReason; reviewDueAt: string };
 type Page = { reports: Report[]; nextCursor: string | null };
-export function HostReportsPanel({ propertyId }: { propertyId: string }) {
+export function HostReportsPanel({ propertyId, onCount, collapseWhenEmpty = false, refreshSignal = 0, memoryText }: {
+  propertyId: string;
+  onCount?: (count: number) => void;
+  /** Draw nothing while there are no reports. */
+  collapseWhenEmpty?: boolean;
+  /** Changing it reads the reports again. */
+  refreshSignal?: number;
+  /** The reported memory's words, when the page has them, in place of its ID. */
+  memoryText?: (postId: string) => string | undefined;
+}) {
   const [page, setPage] = useState<Page | null>(null), [busy, setBusy] = useState(false), [notice, setNotice] = useState("");
   async function refresh() { setPage(await hostCall<Page>("listHostReports", { propertyId })); }
   useEffect(() => { let active = true;
     void hostCall<Page>("listHostReports", { propertyId }).then(result => { if (active) setPage(result); }).catch(() => { if (active) setNotice("Reports could not be loaded. Try refreshing."); });
     return () => { active = false; };
-  }, [propertyId]);
+  }, [propertyId, refreshSignal]);
+  const open = page?.reports.length;
+  useEffect(() => { if (open !== undefined) onCount?.(open); }, [open, onCount]);
   async function more() {
     if (!page?.nextCursor || busy) return;
     setBusy(true);
@@ -26,6 +37,7 @@ export function HostReportsPanel({ propertyId }: { propertyId: string }) {
     } catch { setNotice("This report could not be resolved. Refresh the queue; an internal safety review may be required."); }
     finally { setBusy(false); }
   }
+  if (collapseWhenEmpty && page?.reports.length === 0 && !page.nextCursor && !notice) return null;
   return <section className="guest-review moderation-panel host-reports" aria-label="Guest reports">
     <div className="review-heading">
       <h2>Guest reports</h2>
@@ -37,7 +49,7 @@ export function HostReportsPanel({ propertyId }: { propertyId: string }) {
     {!page && !notice && <p role="status">Loading reports…</p>}
     {page?.reports.length === 0 && <p className="review-empty">No guest reports to review.</p>}
     {page?.reports.map(report => <article className="review-report" key={report.id}>
-      <p className="review-report-reason">{reportReasons[report.reason]}</p><p className="review-description">Memory reference: {report.postId}</p><p className="review-report-due">Review by {new Date(report.reviewDueAt).toLocaleDateString()}</p>
+      <p className="review-report-reason">{reportReasons[report.reason]}</p><p className="review-description">{memoryText?.(report.postId) ? `“${memoryText(report.postId)}”` : `Memory reference: ${report.postId}`}</p><p className="review-report-due">Review by {new Date(report.reviewDueAt).toLocaleDateString()}</p>
       <div className="review-memory-actions">
         <button className="btn btn-sm btn-destructive" disabled={busy} onClick={() => void resolve(report, "delete")}>Confirm removal</button>
         <button className="btn btn-sm btn-secondary" disabled={busy} onClick={() => void resolve(report, "dismiss")}>Dismiss report</button>
