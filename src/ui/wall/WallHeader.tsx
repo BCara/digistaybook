@@ -110,6 +110,17 @@ export function StayWallHeader({ property, preview, headingLevel = 1, links = []
     </section>}
     {!note && preview && <p className="wall-ghost">No arrival note. This is the first thing a guest reads.</p>}
 
+    {/* Part of the hosts' welcome, so it sits with it, ahead of the essentials. */}
+    {tip && <aside className="stay-tip-card stay-card" aria-label="A tip from your hosts">
+      <span className="stay-icon stay-icon-quiet">
+        <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M7.6 14.4h4.8M8.2 17h3.6M10 2.6a5 5 0 0 0-2.9 9.1c.4.3.5.7.5 1.2v.5h4.8v-.5c0-.5.2-.9.5-1.2A5 5 0 0 0 10 2.6Z" /></svg>
+      </span>
+      <div>
+        <p className="stay-eyebrow">A little tip from your hosts</p>
+        <p className="stay-tip-text">{tip}</p>
+      </div>
+    </aside>}
+
     {quickLinks.length > 0 && <nav className="stay-links" aria-labelledby={essentialsId}>
       <h2 className="stay-section-title" id={essentialsId} aria-level={headingLevel + 1}>Your stay essentials</h2>
       <p className="stay-section-lede">Quick links to the key information for your stay.</p>
@@ -128,16 +139,6 @@ export function StayWallHeader({ property, preview, headingLevel = 1, links = []
       {facts.map((fact, index) => <StayFact key={index} id={factId(index)} fact={fact} headingLevel={headingLevel + 2} />)}
     </section>}
     {facts.length === 0 && preview && <p className="wall-ghost">No house essentials. Wi-Fi, checkout and the bins go here.</p>}
-
-    {tip && <aside className="stay-tip-card stay-card" aria-label="A tip from your hosts">
-      <span className="stay-icon stay-icon-quiet">
-        <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M7.6 14.4h4.8M8.2 17h3.6M10 2.6a5 5 0 0 0-2.9 9.1c.4.3.5.7.5 1.2v.5h4.8v-.5c0-.5.2-.9.5-1.2A5 5 0 0 0 10 2.6Z" /></svg>
-      </span>
-      <div>
-        <p className="stay-eyebrow">A little tip from your hosts</p>
-        <p className="stay-tip-text">{tip}</p>
-      </div>
-    </aside>}
   </div>;
 }
 
