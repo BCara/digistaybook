@@ -81,9 +81,14 @@ await property.collection("posts").doc("delete-me").set({ visibility: "visible",
 await moderate({ postId: "delete-me", action: "delete", requestId: "delete-request" });
 await moderate({ postId: "delete-me", action: "delete", requestId: "delete-request" });
 assert.equal((await property.collection("posts").doc("delete-me").get()).get("photo"), undefined);
-assert.deepEqual((await db.doc(`deletionJobs/${property.id}:delete-request`).get()).get("paths"), [`properties/${property.id}/media/test.jpg`]);
+// Host deletions are retained privately for restoration, not queued for purge.
+assert.equal((await db.doc(`deletionJobs/${property.id}:delete-request`).get()).exists, false);
+const archived = (await db.doc(`deletedContentArchive/${property.id}:delete-me`).get()).data();
+assert.equal(archived.status, "retained");
+assert.equal(archived.post.message, "Delete this");
+assert.equal(archived.post.photo.path, `properties/${property.id}/media/test.jpg`);
 await moderate({ postId: "post-0", action: "hide", requestId: "delete-request" }, 409);
 await moderate({ postId: "hidden", action: "publish", requestId: "critical-attempt" }, 403);
 await property.collection("posts").doc("reported").set({ visibility: "hidden_pending_review", message: "Reported", openReportCount: 1 });
 await moderate({ postId: "reported", action: "publish", requestId: "unresolved-report" }, 400);
-console.log("PASS: authenticated moderation, repeat deletion, preserved object target, replay collision, restricted payload denial and unresolved-report guard.");
+console.log("PASS: authenticated moderation, repeat deletion, retained deleted content, replay collision, restricted payload denial and unresolved-report guard.");

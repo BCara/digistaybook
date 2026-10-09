@@ -75,11 +75,11 @@ it.each(["public", "stay"] as const)("opens the %s route with its own content an
     expect(screen.queryByText("Welcome")).not.toBeInTheDocument();
     expect(screen.getByText("Welcome inside")).toBeInTheDocument();
     expect(screen.queryByText("Guest contribution form")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Add a memory" }));
+    fireEvent.click(screen.getByRole("button", { name: "Add to guestbook" }));
     expect(screen.getByText("Guest contribution form")).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Back to wall" }));
     expect(screen.getByText("Guest contribution form")).not.toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "Add a memory" }));
+    fireEvent.click(screen.getByRole("button", { name: "Add to guestbook" }));
     expect(screen.getByText("Guest contribution form")).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Back to wall" }));
     // Private feedback is offered by name and opens the form on that choice.
@@ -247,7 +247,7 @@ describe("an owner previewing their own closed wall", () => {
     call.mockResolvedValue({ data: preview });
     render(<LiveWallPage slug="cottage" view="stay" />);
     await screen.findByRole("heading", { name: "Real cottage" });
-    expect(screen.queryByRole("button", { name: "Add a memory" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Add to guestbook" })).not.toBeInTheDocument();
     expect(screen.getByText(/The add-a-memory button appears here once this wall is open/)).toBeInTheDocument();
   });
 

@@ -36,6 +36,8 @@ export type EssentialMarkName =
   | "pets"
   | "quiet"
   | "help"
+  | "home"
+  | "book"
   | "note";
 
 /**
@@ -122,6 +124,8 @@ const drawings: Record<EssentialMarkName, ReactElement> = {
   ),
   quiet: <path d="M15.6 12.4A6.8 6.8 0 0 1 7 3.6a6.8 6.8 0 1 0 8.6 8.8Z" />,
   help: <path d="M3.4 4.2h13.2v9.2H9.2l-4 3.2v-3.2H3.4Z" />,
+  home: <path d="M3.4 9.2 10 3.6l6.6 5.6M5.2 7.8v8.6h3.6v-4.6h2.4v4.6h3.6V7.8" />,
+  book: <path d="M10 5.6c-1.8-1.3-4-1.8-6.6-1.6v11.2c2.6-.2 4.8.3 6.6 1.6m0-11.2c1.8-1.3 4-1.8 6.6-1.6v11.2c-2.6-.2-4.8.3-6.6 1.6m0-11.2v11.2" />,
   note: (
     <>
       <circle cx="10" cy="10" r="6.6" />
@@ -131,11 +135,14 @@ const drawings: Record<EssentialMarkName, ReactElement> = {
   )
 };
 
-/** The mark for one essentials label, drawn at the size of the text beside it. */
-export function EssentialMark({ term, className = "essential-mark" }: { term: string; className?: string }) {
+/**
+ * The mark for one essentials label, drawn at the size of the text beside it.
+ * `name` picks a mark outright, for a link that is not one of the Host's lines.
+ */
+export function EssentialMark({ term, name, className = "essential-mark" }: { term: string; name?: EssentialMarkName; className?: string }) {
   return (
     <svg className={className} viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      {drawings[essentialMarkName(term)]}
+      {drawings[name ?? essentialMarkName(term)]}
     </svg>
   );
 }

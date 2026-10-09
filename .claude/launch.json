@@ -9,6 +9,12 @@
       "autoPort": true
     },
     {
+      "name": "web-plain",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "--port", "5182", "--strictPort"],
+      "port": 5182
+    },
+    {
       "name": "web-emulator",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev:emulator"],

@@ -24,6 +24,8 @@ type Wall = { status: "open" | "preview"; owner?: WallOwner; contributionsEnable
   posts: { id: string; message: string; displayName: string; photoCount?: number; pinned?: boolean }[]; nextCursor: string | null };
 
 const LOADING = "Loading this guestbook…";
+const HOST_NOTES_ID = "wall-host-notes";
+const MEMORIES_ID = "wall-memories";
 
 export function LiveWallPage({ slug, view = "public", stayToken = null }: {
   slug: string;
@@ -78,6 +80,15 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
     finally { setBusy(false); }
   }
 
+  // The pinned buttons sit at the bottom of the screen and the form opens at
+  // the bottom of the wall, which can be a long way down from the guest.
+  function openContribution(mode: ContributionMode) {
+    setContributionMode(mode);
+    setFormOpened(true);
+    setContributing(true);
+    requestAnimationFrame(() => document.getElementById("wall-contribution")?.scrollIntoView?.({ behavior: "smooth", block: "start" }));
+  }
+
   /* Which wall actually came back, which is not always the one that was
      asked for. The in-stay wall is reached with the token printed on the
      placard; a caller without it is served the public wall "whatever view it
@@ -127,14 +138,18 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
           the public welcome — the line written for that stranger — is not on
           it. `StayWallHeader` below is the same arrangement the canvas and
           the phone preview draw, so a Host is looking at one wall twice. */}
-      <WallHeader property={wall.property} view={served} preview={Boolean(preview)} />
+      <WallHeader property={wall.property} view={served} preview={Boolean(preview)} links={served === "stay" ? [
+        ...(wall.property.hostNotes?.length ? [{ href: `#${HOST_NOTES_ID}`, label: "From your hosts", mark: "home" as const }] : []),
+        { href: `#${MEMORIES_ID}`, label: "Guestbook", mark: "book" as const }
+      ] : undefined} />
       <HostNotes
+        id={HOST_NOTES_ID}
         author={wall.property.hosts || "your hosts"}
         notes={(wall.property.hostNotes ?? []).map(note => ({
           id: note.id, message: note.message, style: readHostNoteStyle(note.style),
           photo: note.photo ? { src: note.photo.url, alt: note.photo.alt } : undefined
         }))} />
-      <h2 className="wall-heading">{memoriesHeading(wall.nextCursor ? null : wall.posts.length)}</h2>
+      <h2 className="wall-heading" id={MEMORIES_ID}>{memoriesHeading(wall.nextCursor ? null : wall.posts.length)}</h2>
       <section aria-label="Guest memories" className="note-grid">
         {wall.posts.map(post => <article className={`note${post.pinned ? " note-pinned" : ""}`} key={post.id}>
           {post.pinned && <p className="note-pinned-label">Host favourite</p>}
@@ -147,10 +162,15 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
         {contributing
           ? <button className="btn btn-primary" aria-expanded aria-controls="wall-contribution" onClick={() => setContributing(false)}>Back to wall</button>
           // A guest with a complaint should not have to guess that it lives
-          // behind "Add a memory", so the private route is offered by name.
-          : <div className="wall-contribution-choices">
-            <button className="btn btn-primary" aria-expanded={false} aria-controls="wall-contribution" onClick={() => { setContributionMode("memory"); setFormOpened(true); setContributing(true); }}>Add a memory</button>
-            <button className="btn btn-ghost" aria-expanded={false} aria-controls="wall-contribution" onClick={() => { setContributionMode("feedback"); setFormOpened(true); setContributing(true); }}>Private feedback</button>
+          // behind the guestbook, so the private route is offered by name.
+          // Both are pinned to the bottom of the phone, so the guestbook is
+          // one tap away from wherever on the wall a guest has scrolled to.
+          : <div className="wall-contribution-choices wall-contribution-pinned">
+            <button className="btn btn-primary" aria-expanded={false} aria-controls="wall-contribution" onClick={() => openContribution("memory")}>
+              Add to guestbook
+              <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><path d="m8 5 5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </button>
+            <button className="btn btn-ghost" aria-expanded={false} aria-controls="wall-contribution" onClick={() => openContribution("feedback")}>Private feedback</button>
           </div>}
         <div id="wall-contribution" hidden={!contributing}>
         {formOpened && <GuestContribution key={slug} slug={slug} stayToken={stayToken} prompt={wall.property.guestPrompt} mode={contributionMode} onModeChange={setContributionMode} onChanged={() => {

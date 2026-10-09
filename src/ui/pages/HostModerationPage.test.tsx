@@ -112,6 +112,21 @@ describe("the moderation queue", () => {
     expect(screen.getByText("Four days of sea air and we already want to come back.")).toBeInTheDocument();
   });
 
+  it("switches between the wall's memories and the private feedback inbox", async () => {
+    renderPage();
+    const memoriesTab = await screen.findByRole("tab", { name: "Your memories" });
+    expect(memoriesTab).toHaveAttribute("aria-selected", "true");
+    await screen.findByText("Four days of sea air and we already want to come back.");
+
+    fireEvent.click(screen.getByRole("tab", { name: "Private feedback" }));
+    expect(screen.getByRole("tab", { name: "Private feedback" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("region", { name: "Private feedback inbox" })).toBeInTheDocument();
+    expect(screen.queryByText("Four days of sea air and we already want to come back.")).not.toBeInTheDocument();
+
+    fireEvent.click(memoriesTab);
+    expect(screen.getByText("Four days of sea air and we already want to come back.")).toBeInTheDocument();
+  });
+
   it("says why a memory is held back, and how long is left to resolve it", async () => {
     renderPage();
 
@@ -174,7 +189,7 @@ describe("the moderation queue", () => {
     const card = within(cardFor("Please take the photo of my children down."));
     fireEvent.click(card.getByRole("button", { name: "Delete" }));
 
-    expect(await screen.findByRole("alertdialog")).toHaveTextContent(/Delete this memory\? .*permanently removed within 72 hours/);
+    expect(await screen.findByRole("alertdialog")).toHaveTextContent(/Delete this memory\? .*This cannot be undone/);
     expect(moderatePost).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole("button", { name: "Keep it as it is" }));

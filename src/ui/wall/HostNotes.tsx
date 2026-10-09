@@ -39,17 +39,20 @@ export function HostNotes({
   notes,
   author,
   /** The hosts' own photograph, when they have one; initials stand in otherwise. */
-  portrait
+  portrait,
+  id
 }: {
   notes: readonly WallHostNote[];
   /** How the hosts sign the wall: "Ana & Tom". */
   author: string;
   portrait?: WallNotePhoto;
+  /** An anchor, so the in-stay wall's quick links can jump here. */
+  id?: string;
 }) {
   if (notes.length === 0) return null;
 
   return (
-    <aside className="host-notes" aria-label={`More from ${author}, who host here`}>
+    <aside className="host-notes" id={id} aria-label={`More from ${author}, who host here`}>
       {/* One line over the stack rather than one per note: a reader is being
           told whose these are, and being told it three times would read as
           three unrelated asides rather than as the hosts talking. */}

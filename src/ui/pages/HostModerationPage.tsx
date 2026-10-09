@@ -49,6 +49,15 @@ export function HostModerationPage({ propertyId }: { propertyId: string }) {
   const [refreshSignal, setRefreshSignal] = useState(0);
   const onWaiting = useCallback((count: number) => setWaiting(count), []);
   const onReports = useCallback((count: number) => setReports(count), []);
+  // The wall's memories and the private feedback inbox share this screen as
+  // two tabs. The choice rides in the hash so a link can open either one.
+  const [tab, setTab] = useState<"memories" | "feedback">(() =>
+    typeof window !== "undefined" && window.location.hash === "#feedback" ? "feedback" : "memories"
+  );
+  const chooseTab = (next: "memories" | "feedback") => {
+    setTab(next);
+    if (typeof window !== "undefined") window.history.replaceState(null, "", next === "feedback" ? "#feedback" : window.location.pathname + window.location.search);
+  };
 
   if (block) {
     return (
@@ -97,9 +106,30 @@ export function HostModerationPage({ propertyId }: { propertyId: string }) {
         refreshSignal={refreshSignal}
         memoryText={(postId) => (Array.isArray(posts) ? posts.find((post) => post.id === postId)?.message || undefined : undefined)}
       />
-      <section className="moderation-wall" aria-labelledby="wall-memories-heading">
-        <h2 id="wall-memories-heading" className="moderation-wall-heading">Your memories</h2>
+      <div className="moderation-tabs" role="tablist" aria-label="Memories or private feedback">
+        {(["memories", "feedback"] as const).map((option) => (
+          <button
+            key={option}
+            type="button"
+            role="tab"
+            id={`moderation-tab-${option}`}
+            aria-selected={tab === option}
+            aria-controls={`moderation-panel-${option}`}
+            className={tab === option ? "active" : undefined}
+            onClick={() => chooseTab(option)}
+          >
+            {option === "memories" ? "Your memories" : "Private feedback"}
+          </button>
+        ))}
+      </div>
 
+      {tab === "feedback" && (
+        <div id="moderation-panel-feedback" role="tabpanel" aria-labelledby="moderation-tab-feedback" className="moderation-feedback">
+          <GuestReviewPanel key={`feedback-${propertyId}`} propertyId={propertyId} feedbackOnly />
+        </div>
+      )}
+
+      {tab === "memories" && <section id="moderation-panel-memories" role="tabpanel" className="moderation-wall" aria-labelledby="moderation-tab-memories">
         {posts === null && <p className="lede" role="status">Reading this wall&rsquo;s memories…</p>}
 
         {posts !== null && !Array.isArray(posts) && (
@@ -112,7 +142,7 @@ export function HostModerationPage({ propertyId }: { propertyId: string }) {
         {Array.isArray(posts) && <ModerationQueue posts={posts} state={state} />}
         {state.pageError && <p role="alert">{state.pageError}</p>}
         {state.hasMore && <button className="btn btn-secondary" disabled={state.loadingMore} onClick={() => void state.loadMore()}>Load more wall memories</button>}
-      </section>
+      </section>}
 
       <details className="fine-print">
         <summary>How moderation works</summary>

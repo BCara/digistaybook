@@ -12,7 +12,7 @@ vi.mock("../../lib/firebaseConfig", () => ({ firebaseConfig: {}, firebaseConfigu
 describe("first UI slices", () => {
   it("keeps Guest contribution blocked until consent is provided", () => {
     render(<StayWallPage propertySlug="demo-cottage" />);
-    fireEvent.click(screen.getByRole("button", { name: "Add a memory" }));
+    fireEvent.click(screen.getByRole("button", { name: "Add to guestbook" }));
     fireEvent.change(screen.getByLabelText("Your message"), { target: { value: "A lovely stay" } });
     fireEvent.click(screen.getByRole("button", { name: "Continue" }));
     expect(screen.getByRole("status")).toHaveTextContent(/accept the content consent/i);

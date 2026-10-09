@@ -188,9 +188,9 @@ export const actionCopy: Record<PostAction, ActionCopy> = {
   },
   delete: {
     label: "Delete",
-    hint: "Moves it to Recently deleted, where it is permanently removed within 72 hours.",
-    confirm: "Delete this memory? It moves to Recently deleted and is permanently removed within 72 hours. This cannot be undone.",
-    done: "Deleted. You’ll find it in Recently deleted until it is permanently removed.",
+    hint: "Takes it off your wall and moves it to Recently deleted.",
+    confirm: "Delete this memory? It comes off your wall and moves to Recently deleted. This cannot be undone.",
+    done: "Deleted. You’ll find it in Recently deleted.",
     destructive: true
   },
   pin: {
@@ -254,7 +254,7 @@ export function actionsUnavailable(post: ModeratedPost): string | null {
     return "DigiStayBook has taken this one out of your hands. Our Trust & Safety team is reviewing it and will write to you.";
   }
   if (post.visibility === "deleted") {
-    return "Deleted. It is off the wall and scheduled for removal from our systems.";
+    return "Deleted. It is off the wall.";
   }
   return null;
 }
@@ -342,7 +342,7 @@ const SECTION_COPY: Record<QueueSectionId, { title: string; blurb: string }> = {
   },
   removed: {
     title: "Recently deleted",
-    blurb: "Permanently removed from our systems within 72 hours. These cannot be restored."
+    blurb: "Taken off your wall. These cannot be restored."
   }
 };
 

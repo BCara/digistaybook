@@ -11,7 +11,6 @@ import { HostSignInPage } from "./ui/pages/HostSignInPage";
 import { HostAccountPage } from "./ui/pages/HostAccountPage";
 import { HostDashboardPage } from "./ui/pages/HostDashboardPage";
 import { HostModerationPage } from "./ui/pages/HostModerationPage";
-import { HostFeedbackPage } from "./ui/pages/HostFeedbackPage";
 import { HostExportPage } from "./ui/pages/HostExportPage";
 import { HostBillingPage } from "./ui/pages/HostBillingPage";
 import { HostBillingOverviewPage } from "./ui/pages/HostBillingOverviewPage";
@@ -64,7 +63,11 @@ function resolvePage(pathname: string) {
     // which change what the property is rather than what its walls say.
     const [propertyId, section] = pathname.slice("/host/property/".length).split("/");
     if (propertyId && section === "export") return <RequireHost><HostExportPage key={propertyId} propertyId={propertyId} /></RequireHost>;
-    if (propertyId && section === "feedback") return <RequireHost><HostFeedbackPage propertyId={propertyId} /></RequireHost>;
+    // Private feedback is a tab on the moderation page now; an old link lands on it.
+    if (propertyId && section === "feedback") {
+      window.location.replace(`/host/property/${propertyId}/moderation#feedback`);
+      return null;
+    }
     if (propertyId && !section)
       return (
         <RequireHost>

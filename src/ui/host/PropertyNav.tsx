@@ -30,7 +30,7 @@ import { ActionDisclosure } from "../ActionDisclosure";
  */
 
 /** A row in this column: one of the ways of looking at the property. */
-export type NavSection = "design" | "public" | "qr" | "moderation" | "billing" | "feedback" | "export";
+export type NavSection = "design" | "public" | "qr" | "moderation" | "billing" | "export";
 
 /**
  * Where in the property a screen is standing. Settings is one of these and is
@@ -52,7 +52,6 @@ export type PropertySection = NavSection | "settings";
  */
 const marks: Record<NavSection, ReactElement> = {
   export: <path d="M10 2v11m-4-4 4 4 4-4M3 14v4h14v-4" />,
-  feedback: <path d="M3 4h14v10H7l-4 3Z" />,
   design: <path d="m12.6 3.4 4 4L7.2 16.8H3.2v-4Zm-1.5 1.5 4 4" />,
   public: (
     <path d="M10 2.8a7.2 7.2 0 1 0 0 14.4 7.2 7.2 0 0 0 0-14.4Zm-7.2 7.2h14.4M10 2.8c1.9 2 2.9 4.5 2.9 7.2s-1 5.2-2.9 7.2c-1.9-2-2.9-4.5-2.9-7.2s1-5.2 2.9-7.2Z" />
@@ -101,7 +100,6 @@ export function PropertyNav({
     { key: "public", label: "Public wall", href: `${base}/public` },
     { key: "qr", label: "Walls and QR display", href: `${base}/qr` },
     { key: "moderation", label: "Moderation", href: `${base}/moderation` },
-    { key: "feedback", label: "Private feedback", href: `${base}/feedback` },
     { key: "export", label: "Export guestbook", href: `${base}/export` },
     { key: "billing", label: draft ? "Publish" : "Billing", href: `${base}/billing` }
   ];

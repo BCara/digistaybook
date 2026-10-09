@@ -1,0 +1,341 @@
+/* -----------------------------------------------------------------------
+   The in-stay wall, laid out for a phone.
+
+   The property and its hosts first, then a grid of quick links to each line
+   the hosts wrote, then those lines in full, then a tip. The guestbook button
+   is pinned to the bottom of the screen by the page around it.
+
+   Every rule hangs off `[data-wall-theme] .stay-wall` so it outranks the
+   older stay rules in styles.css whatever order the two sheets load in, and
+   every colour is a wall token, so each theme carries this layout with it.
+   ----------------------------------------------------------------------- */
+
+[data-wall-theme] .stay-wall {
+  --stay-radius: max(12px, var(--wall-sheet-radius, 12px));
+  --stay-gap: 12px;
+  display: grid;
+  gap: 18px;
+  margin-bottom: clamp(28px, 5vw, 48px);
+}
+
+[data-wall-theme] .stay-wall .stay-card {
+  background: var(--wall-sheet, var(--surface-raised));
+  border: 1px solid var(--wall-rule, var(--rule));
+  border-radius: var(--stay-radius);
+  box-shadow: var(--wall-note-shadow, 0 4px 18px rgb(0 0 0 / 4%));
+}
+
+[data-wall-theme] .stay-wall .stay-eyebrow {
+  margin: 0;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+/* ---- Cover, name and place ---- */
+
+[data-wall-theme] .stay-wall .stay-cover {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+[data-wall-theme] .stay-wall .stay-cover .wall-cover-photo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: none;
+  aspect-ratio: 16 / 7;
+  margin: 0;
+  object-fit: cover;
+  border-radius: var(--stay-radius);
+}
+[data-wall-theme] .stay-wall .stay-cover-titles {
+  display: grid;
+  gap: 8px;
+  padding: 0 4px;
+  overflow-wrap: anywhere;
+}
+[data-wall-theme] .stay-wall .stay-cover-titles h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 8vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -.02em;
+  line-height: 1.08;
+}
+[data-wall-theme] .stay-wall .stay-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: .8rem;
+  font-weight: 500;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+[data-wall-theme] .stay-wall .stay-location svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.6;
+}
+
+/* ---- Welcome from the hosts ---- */
+
+[data-wall-theme] .stay-wall .stay-welcome,
+[data-wall-theme] .stay-wall .stay-welcome-plain {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  margin: 0;
+  padding: clamp(16px, 4vw, 26px);
+}
+[data-wall-theme] .stay-wall .stay-welcome:not(:has(.stay-portrait)) { grid-template-columns: minmax(0, 1fr); }
+[data-wall-theme] .stay-wall .stay-portrait {
+  width: clamp(72px, 20vw, 104px);
+  height: clamp(72px, 20vw, 104px);
+  margin: 0;
+  border: 0;
+  border-radius: 50%;
+  font-size: clamp(1.1rem, 4vw, 1.6rem);
+}
+[data-wall-theme] .stay-wall .stay-welcome-words { display: grid; gap: 8px; min-width: 0; }
+[data-wall-theme] .stay-wall .stay-welcome-words h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 5vw, 1.85rem);
+  font-weight: 600;
+  line-height: 1.15;
+}
+/* The hosts' words run the full width of the card under the portrait row. */
+[data-wall-theme] .stay-wall .stay-welcome-body { grid-column: 1 / -1; display: grid; gap: 10px; }
+[data-wall-theme] .stay-wall .stay-welcome-body p { margin: 0; max-width: 62ch; color: var(--text-muted); line-height: 1.6; }
+[data-wall-theme] .stay-wall .stay-hosts { display: grid; gap: 2px; margin: 0; color: var(--text); }
+[data-wall-theme] .stay-wall .stay-welcome-words .stay-hosts { margin-bottom: 4px; color: var(--text); }
+[data-wall-theme] .stay-wall .stay-hosts b {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 4.4vw, 1.4rem);
+  font-weight: 500;
+}
+
+/* ---- Quick links ---- */
+
+[data-wall-theme] .stay-wall .stay-links { display: grid; gap: 4px; margin-top: 10px; }
+[data-wall-theme] .stay-wall .stay-section-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 6vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.15;
+}
+[data-wall-theme] .stay-wall .stay-section-lede { margin: 0 0 12px; color: var(--text-muted); }
+[data-wall-theme] .stay-wall .stay-links ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* The tiles are narrow on a phone, so their badges are a size down. */
+[data-wall-theme] .stay-wall .stay-links .stay-icon { width: 38px; height: 38px; }
+[data-wall-theme] .stay-wall .stay-links .stay-icon .essential-mark { width: 20px; height: 20px; }
+[data-wall-theme] .stay-wall .stay-links .stay-chevron { width: 16px; height: 16px; }
+/* On the narrowest tiles the label needs the chevron's room more than the
+   tile needs telling it is tappable. */
+[data-wall-theme] .stay-wall .stay-links li { container-type: inline-size; }
+@container (max-width: 180px) {
+  [data-wall-theme] .stay-wall .stay-links .stay-chevron { display: none; }
+}
+[data-wall-theme] .stay-wall .stay-links a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 100%;
+  min-height: 64px;
+  box-sizing: border-box;
+  padding: 10px 8px 10px 10px;
+  background: var(--wall-sheet, var(--surface-raised));
+  border: 1px solid var(--wall-rule, var(--rule));
+  border-radius: var(--stay-radius);
+  box-shadow: var(--wall-note-shadow, none);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color .15s, transform .15s;
+}
+[data-wall-theme] .stay-wall .stay-links a:hover { border-color: var(--accent); }
+[data-wall-theme] .stay-wall .stay-links a:active { transform: scale(.98); }
+[data-wall-theme] .stay-wall .stay-links a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+[data-wall-theme] .stay-wall .stay-link-label {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+[data-wall-theme] .stay-wall .stay-chevron {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The round, softly tinted badge every mark sits in. */
+[data-wall-theme] .stay-wall .stay-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+[data-wall-theme] .stay-wall .stay-icon svg,
+[data-wall-theme] .stay-wall .stay-icon .essential-mark {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+[data-wall-theme] .stay-wall .stay-icon-quiet { background: var(--bg-alt, var(--wall-paper-alt)); color: var(--text-muted); }
+
+/* ---- The lines in full ---- */
+
+[data-wall-theme] .stay-wall .stay-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: var(--stay-gap);
+}
+[data-wall-theme] .stay-wall .stay-fact {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 14px;
+  scroll-margin-top: var(--stay-scroll-offset);
+}
+/* Arriving from a quick link, the card says it is the one. */
+[data-wall-theme] .stay-wall .stay-fact:target { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+[data-wall-theme] .stay-wall .stay-fact-head { display: flex; align-items: center; gap: 12px; }
+[data-wall-theme] .stay-wall .stay-fact-head h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+[data-wall-theme] .stay-wall .stay-fact-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--bg, var(--wall-paper));
+  border-radius: max(8px, calc(var(--stay-radius) - 4px));
+}
+[data-wall-theme] .stay-wall .stay-fact-detail {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+[data-wall-theme] .stay-wall .stay-fact-note { margin: 0; padding: 0 4px; color: var(--text-muted); font-size: .92rem; line-height: 1.5; }
+[data-wall-theme] .stay-wall .stay-copy {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+[data-wall-theme] .stay-wall .stay-copy:hover { background: var(--wall-sheet, var(--surface-raised)); border-color: var(--wall-rule, var(--rule)); color: var(--text); }
+[data-wall-theme] .stay-wall .stay-copy svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---- Tip ---- */
+
+[data-wall-theme] .stay-wall .stay-tip-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; }
+[data-wall-theme] .stay-wall .stay-tip-card > div { display: grid; gap: 4px; min-width: 0; }
+[data-wall-theme] .stay-wall .stay-tip-text { margin: 0; font-family: var(--font-display); font-size: 1.05rem; line-height: 1.45; }
+
+/* Jumps from the quick links glide rather than cut, unless asked not to. */
+@media (prefers-reduced-motion: no-preference) {
+  :root:has(.stay-wall) { scroll-behavior: smooth; }
+}
+/* Clear of the site's sticky bar when a quick link lands here. */
+:root { --stay-scroll-offset: 96px; }
+.host-notes[id], .wall-heading[id] { scroll-margin-top: var(--stay-scroll-offset); }
+
+/* ---- The pinned guestbook button ---- */
+
+.wall-contribution-pinned {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 4px 12px;
+  margin: 0;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  background: color-mix(in srgb, var(--bg, #fff) 86%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--rule);
+}
+.wall-contribution-pinned .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 1 1 auto;
+  max-width: 440px;
+  min-height: 52px;
+  margin: 0;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 12%);
+}
+.wall-contribution-pinned .btn-ghost { flex: none; min-height: 44px; margin: 0; padding-inline: 6px; font-size: .9rem; white-space: nowrap; }
+/* Room under the last of the wall, so the pinned bar never sits on it. */
+.wall-page:has(.wall-contribution-pinned) { padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }

@@ -1,7 +1,7 @@
 import { useState, useRef, type FormEvent } from "react";
 import { guestContributionSchema } from "../../domain/guestContribution";
 import { HostNotes } from "../wall/HostNotes";
-import { EssentialMark } from "../wall/EssentialMark";
+import { StayWallHeader } from "../wall/WallHeader";
 import { MemoryWall } from "../wall/MemoryWall";
 import { LiveWallPage } from "./LiveWallPage";
 import { DEMO_SLUG, demoPosts, demoProperty, houseEssentials, hostWallNotes, hostWelcome, wallPhotos } from "../wall/demoWall";
@@ -55,66 +55,30 @@ export function StayWallPage({ propertySlug = "property", stayToken = null }: { 
         </p>
       )}
 
-      <div className="stay-cover">
-        <img
-          className="wall-cover-photo"
-          src={property.cover.src}
-          alt={property.cover.alt}
-          width={property.cover.width}
-          height={property.cover.height}
-          fetchPriority="high"
-        />
-        {/* Confirms at a glance that they scanned the right property, so it
-            is the largest thing on the wall before the hosts' own words: a
-            guest arriving from the placard is asking "is this the place?"
-            before they are asking anything else. The hosts hang off the
-            bottom edge of the cover beside it, the way the canvas and the
-            phone preview draw them — and the way `LiveWallPage` draws the
-            served wall, because it is the same wall. */}
-        <div className="stay-cover-caption">
-          {property.hostPhoto ? (
-            <img className="avatar avatar-photo stay-portrait" src={property.hostPhoto.src} alt={property.hostPhoto.alt} />
-          ) : property.hostInitials ? (
-            <span className="avatar tone-2 stay-portrait" aria-hidden="true">{property.hostInitials}</span>
-          ) : null}
-          <div className="stay-cover-titles">
-            <b>{property.name}</b>
-            <span>{property.location}</span>
-          </div>
-        </div>
-      </div>
-
-      <header className="stay-welcome">
-        <div className="stay-welcome-head">
-          <div>
-            <p className="eyebrow">A note from your hosts</p>
-            <h1>{hostWelcome.heading}</h1>
-          </div>
-        </div>
-        {hostWelcome.body.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-        <p className="stay-tip">{hostWelcome.tip}</p>
-        <p className="stay-signature">{property.hosts}</p>
-      </header>
-
-      <section className="essentials" aria-labelledby="essentials-heading">
-        <h2 className="wall-heading" id="essentials-heading">The essentials</h2>
-        <dl className="essentials-grid">
-          {houseEssentials.map((item) => (
-            <div className="essential" key={item.term}>
-              <dt><EssentialMark term={item.term} />{item.term}</dt>
-              <dd>
-                <b>{item.detail}</b>
-                <small>{item.note}</small>
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </section>
+      {/* The same header the served wall draws, fed from the demo's data, so
+          the demo is what a real guest would see and not a lookalike. */}
+      <StayWallHeader
+        preview={false}
+        property={{
+          name: property.name,
+          location: property.location,
+          welcome: property.welcome,
+          hosts: property.hosts,
+          cover: { url: property.cover.src, alt: property.cover.alt },
+          hostPhoto: property.hostPhoto ? { url: property.hostPhoto.src, alt: property.hostPhoto.alt } : null,
+          houseInformation: { heading: hostWelcome.heading, welcome: hostWelcome.body.join("\n"), tip: hostWelcome.tip, facts: houseEssentials }
+        }}
+        links={[
+          { href: "#wall-host-notes", label: "From your hosts", mark: "home" },
+          { href: "#memory-wall-heading", label: "Guestbook", mark: "book" }
+        ]}
+      />
 
       {/* Whatever else the hosts want said. It belongs with what they wrote
           above rather than with the memories below: it is not a memory, and a
           guest reading it as one would be reading it wrong. */}
       <HostNotes
+        id="wall-host-notes"
         notes={hostWallNotes.map((note) => ({
           id: note.id,
           message: note.message,
@@ -156,11 +120,14 @@ export function StayWallPage({ propertySlug = "property", stayToken = null }: { 
         </form>
       </dialog>
 
-      <div className="stay-composer">
-        <button type="button" className="btn btn-primary btn-block" onClick={() => dialogRef.current?.showModal()}>Add a memory</button>
-      </div>
-
       <MemoryWall posts={demoPosts} heading={memoriesHeading(demoPosts.length)} />
+
+      <div className="wall-contribution-pinned">
+        <button type="button" className="btn btn-primary" onClick={() => dialogRef.current?.showModal()}>
+          Add to guestbook
+          <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><path d="m8 5 5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </button>
+      </div>
 
       <aside className="guest-wall-powered-by" aria-label="About DigiStayBook">
         <p>Loved your stay? <a href="/">Powered by DigiStayBook &mdash; Create a digital guestbook for your property.</a></p>

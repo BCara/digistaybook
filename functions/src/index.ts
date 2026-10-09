@@ -4,6 +4,7 @@ import { FieldValue, getFirestore, Timestamp } from "firebase-admin/firestore";
 import { HttpsError, onCall, onRequest } from "firebase-functions/v2/https";
 import { wallIsOpen, publicProperty, publicPost, unavailableWall, wallPreviewable, ownerRecovery, resolveWallView } from "./publicWall.js";
 import { guestIntakeEnabled } from "./guestContributions.js";
+import { ARCHIVE_RETENTION_HOLD, archiveDeletedPost } from "./deletedContentArchive.js";
 export { deleteStoredMedia } from "./storageDeletion.js";
 export { retryPendingScreening } from "./screeningRetry.js";
 export { notifyScreeningAllowance } from "./screeningBudget.js";
@@ -182,10 +183,11 @@ function changes(action: Action, uid: string): Record<string, unknown> {
         hold: { source: "host_decision", reason: null, detail: "", raisedAt: now }
       };
     case "delete":
-      // The document is tombstoned rather than removed, so the retention sweep
-      // still has the record it needs to delete the Storage object and close
-      // any open report. Nothing readable by a guest survives it.
-      return { ...stamp, visibility: "deleted", pinned: false, deletedAt: now, message: "", displayName: "", photo: FieldValue.delete() };
+      // The document is tombstoned so nothing readable by a guest or the Host
+      // survives it. The content itself is copied to the private deleted
+      // content archive first and kept, so a mistaken delete can be undone.
+      return { ...stamp, visibility: "deleted", pinned: false, deletedAt: now, message: "", displayName: "", photo: FieldValue.delete(),
+        retentionHold: ARCHIVE_RETENTION_HOLD };
     case "pin":
       return { ...stamp, pinned: true };
     case "unpin":
@@ -246,6 +248,8 @@ export const moderatePost = onCall(
       const guestSnapshot = guestRef ? await tx.get(guestRef) : null;
       const guestData = guestSnapshot?.data();
       if (guestRef && (!guestData || guestData.propertyId !== propertyId)) throw new HttpsError("failed-precondition", "This memory needs internal review.");
+      const feedbackRef = guestRef ? propertyRef.collection("privateFeedback").doc(guestRef.id) : null;
+      const feedback = action === "delete" && feedbackRef ? await tx.get(feedbackRef) : null;
 
       // A replay returns the post as it already stands rather than applying
       // the action twice; the first attempt may simply have lost its answer.
@@ -273,28 +277,13 @@ export const moderatePost = onCall(
       if (guestRef && guestData && ["publish", "hide", "delete"].includes(action)) {
         tx.update(guestRef, { status: action === "publish" ? "published" : action === "hide" ? "hidden_by_host" : "deleted",
           ...(action === "delete" ? { message: "", feedback: "", revision: guestData.revision + 1 } : {}), updatedAt: FieldValue.serverTimestamp() });
-        if (action === "delete") {
-          tx.delete(propertyRef.collection("privateFeedback").doc(guestId));
-          tx.set(db.collection("deletionJobs").doc(`guest-${guestId}`), { propertyId, postId,
-            objects: Array.from({ length: guestData.photoCount }, (_, index) => [
-              { bucket: guestData.bucket, path: `properties/${propertyId}/quarantine/${guestId}/${index}.webp` },
-              { bucket: guestData.publishedBucket, path: `properties/${propertyId}/published/${guestId}/${index}.webp` }
-            ]).flat(), status: "pending", source: "host_delete", createdAt: FieldValue.serverTimestamp(),
-            dueAt: Timestamp.fromMillis(Date.now() + 72 * 3600000),
-            requiresSafetyReview: guestData.safetyCaseOpen === true });
-        }
+        if (action === "delete") tx.delete(propertyRef.collection("privateFeedback").doc(guestId));
       }
       if (action === "delete") {
-        // Preserve object targets privately before clearing the public record.
-        // A worker must finish this job before permanent deletion is claimed.
-        const photo = existing.get("photo");
-        const photos = existing.get("photos");
-        const paths = [photo, ...(Array.isArray(photos) ? photos : [])]
-          .map(item => item?.path).filter((path): path is string => typeof path === "string" && path.startsWith(`properties/${propertyId}/`));
-        tx.set(db.collection("deletionJobs").doc(`${propertyId}:${requestId}`), {
-          propertyId, postId, paths: [...new Set(paths)], status: "pending",
-          createdAt: FieldValue.serverTimestamp(), requestedBy: auth.uid
-        });
+        // Host deletions are retained rather than purged: no deletion job is
+        // queued and the photographs stay in Storage. See deletedContentArchive.
+        archiveDeletedPost(tx, { propertyId, postId, source: "host_delete", deletedBy: auth.uid, post: existing.data()!,
+          guestSubmissionId: guestRef?.id ?? null, guestSubmission: guestData ?? null, privateFeedback: feedback?.data() ?? null });
       }
       tx.update(postRef, { ...changes(action, auth.uid), ...(action === "delete" ? { photos: FieldValue.delete() } : {}) });
 

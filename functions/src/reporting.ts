@@ -5,6 +5,7 @@ import { defineSecret } from "firebase-functions/params";
 import { HttpsError, onCall, type CallableRequest } from "firebase-functions/v2/https";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { localTestEnabled } from "./localTest.js";
+import { ARCHIVE_RETENTION_HOLD, archiveDeletedPost } from "./deletedContentArchive.js";
 
 const hashSecret = defineSecret("REPORT_HASH_KEY");
 const options = { region: "australia-southeast1", enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true", secrets: process.env.FUNCTIONS_EMULATOR === "true" ? [] : [hashSecret], maxInstances: 5 };
@@ -131,27 +132,24 @@ export const resolveContentReport = onCall({ ...options, secrets: [] }, async re
     if (!post.exists) throw new HttpsError("not-found", "This memory is unavailable.");
     const guestRef = post.get("guestSubmissionId") ? db.doc(`guestSubmissions/${post.get("guestSubmissionId")}`) : null;
     const guest = guestRef ? await tx.get(guestRef) : null;
+    const feedback = action === "delete" && guestRef ? await tx.get(propertyRef.collection("privateFeedback").doc(guestRef.id)) : null;
     if (post.get("safetyRestricted") || post.get("visibility") === "restricted" || guest?.get("safetyCaseOpen")) throw new HttpsError("failed-precondition", "Resolve the separate safety hold first.");
     const remaining = Math.max(0, (post.get("openReportCount") ?? 0) - (report.get("outcome") === "hidden_pending_review" ? 1 : 0));
     const restore = action === "dismiss" && remaining === 0 && post.get("reportRestoreAllowed") === true && post.get("visibility") === "hidden_pending_review" && post.get("hold")?.source === "guest_report"
       && (!guest?.exists || (post.get("screeningStatus") === "clear" && guest.get("mediaLocation") === "published" && ["published", "standard"].includes(guest.get("status"))));
     tx.update(reportRef, { status: action === "delete" ? "deleted" : "dismissed", resolver: request.auth!.uid, resolvedAt: stamp() });
     tx.update(postRef, { openReportCount: remaining, ...(restore ? { visibility: "visible", hold: FieldValue.delete() } : {}),
-      ...(action === "delete" ? { visibility: "deleted", pinned: false, message: "", displayName: "", photos: FieldValue.delete(), photo: FieldValue.delete() } : {}) });
+      ...(action === "delete" ? { visibility: "deleted", pinned: false, message: "", displayName: "", photos: FieldValue.delete(), photo: FieldValue.delete(),
+        deletedAt: stamp(), retentionHold: ARCHIVE_RETENTION_HOLD } : {}) });
     if (restore && guestRef) tx.update(guestRef, { status: "published", updatedAt: stamp() });
     if (action === "delete") {
+      // Host deletions are retained rather than purged: no deletion job is
+      // queued and the photographs stay in Storage. See deletedContentArchive.
+      if (post.get("visibility") !== "deleted") archiveDeletedPost(tx, { propertyId: propertyRef.id, postId: postRef.id, source: "host_report_delete", deletedBy: request.auth!.uid,
+        reportId, post: post.data()!, guestSubmissionId: guestRef?.id ?? null, guestSubmission: guest?.data() ?? null, privateFeedback: feedback?.data() ?? null });
       if (guest?.exists && guestRef) {
-        const data = guest.data()!, submissionId = guestRef.id;
-        tx.update(guestRef, { status: "deleted", message: "", feedback: "", revision: data.revision + 1, updatedAt: stamp() });
-        tx.delete(propertyRef.collection("privateFeedback").doc(submissionId));
-        tx.set(db.doc(`deletionJobs/guest-${submissionId}`), { propertyId: propertyRef.id, postId: postRef.id, status: "pending", createdAt: stamp(), dueAt: Timestamp.fromMillis(Date.now() + 72 * 3600000),
-          objects: Array.from({ length: data.photoCount }, (_, index) => [
-            { bucket: data.bucket, path: `properties/${propertyRef.id}/quarantine/${submissionId}/${index}.webp` },
-            { bucket: data.publishedBucket, path: `properties/${propertyRef.id}/published/${submissionId}/${index}.webp` }
-          ]).flat() });
-      } else {
-        const paths = [post.get("photo"), ...(post.get("photos") ?? [])].map(item => item?.path).filter(path => typeof path === "string" && path.startsWith(`properties/${propertyRef.id}/`));
-        tx.set(db.doc(`deletionJobs/report-${reportId}`), { propertyId: propertyRef.id, postId: postRef.id, paths, status: "pending", createdAt: stamp(), dueAt: Timestamp.fromMillis(Date.now() + 72 * 3600000) });
+        tx.update(guestRef, { status: "deleted", message: "", feedback: "", revision: guest.get("revision") + 1, updatedAt: stamp() });
+        tx.delete(propertyRef.collection("privateFeedback").doc(guestRef.id));
       }
     }
     tx.set(db.doc(`moderationAudit/report-${reportId}`), { propertyId: propertyRef.id, postId: postRef.id, reportId, action, actor: request.auth!.uid,
