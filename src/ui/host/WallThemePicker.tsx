@@ -1,4 +1,4 @@
-import { wallTheme, wallThemes, wallColours, type WallThemeId, type WallColourId } from "../../domain/wallTheme";
+import { wallTheme, wallThemes, type WallThemeId, type WallColourId } from "../../domain/wallTheme";
 
 export function WallThemePicker({ value, colour, disabled, onChange, onColourChange }: {
   value: WallThemeId;
@@ -25,10 +25,12 @@ export function WallThemePicker({ value, colour, disabled, onChange, onColourCha
       </div>
       <p className="theme-note">{wallTheme(value).note}</p>
     </fieldset>
+    {/* Each theme names its own three colourways; the choice is kept by
+        position, so switching theme keeps the first, second or third. */}
     <fieldset className="theme-picker colour-picker">
-      <legend>Wall colour</legend>
+      <legend>Colourway</legend>
       <div className="colour-options">
-        {wallColours.map(option => <label className="colour-option" key={option.id}>
+        {wallTheme(value).colourways.map(option => <label className="colour-option" key={option.id}>
           <input type="radio" name="wall-colour" value={option.id} checked={colour === option.id}
             disabled={disabled} onChange={() => onColourChange(option.id)} />
           <span><i data-wall-theme={value} data-wall-colour={option.id} aria-hidden="true" />{option.name}</span>

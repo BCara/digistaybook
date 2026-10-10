@@ -63,15 +63,16 @@ export function WallPreview({ name, profile, counts = null, view: fixed, slug, s
         aria-label={fixed === undefined ? undefined : "On a phone"}
         aria-labelledby={fixed === undefined ? `${previewId}-${view}` : undefined}>
         <div className="phone-wall-content">
-          <WallHeader property={property} view={view} headingLevel={2} />
-          <HostNotes author={profile.hosts || "your hosts"} notes={writtenHostNotes(profile).map(note => ({
+          <WallHeader property={property} view={view} headingLevel={2} hostNotes={<HostNotes author={profile.hosts || "your hosts"} notes={writtenHostNotes(profile).map(note => ({
             id: note.id, message: note.message, style: note.style,
             photo: note.photo ? { src: note.photo.url, alt: note.photo.alt } : undefined
-          }))} />
-          <h2 className="wall-heading">{memories}</h2>
-          {slug
-            ? <PreviewMemories key={`${slug}/${view}/${stayToken ?? ""}`} slug={slug} view={view} token={stayToken} />
-            : counts !== null && !("error" in counts) && counts.visible === 0 && <p className="field-hint">No memories yet.</p>}
+          }))} />} />
+          <div className="wall-memories">
+            <h2 className="wall-heading">{memories}</h2>
+            {slug
+              ? <PreviewMemories key={`${slug}/${view}/${stayToken ?? ""}`} slug={slug} view={view} token={stayToken} />
+              : counts !== null && !("error" in counts) && counts.visible === 0 && <p className="field-hint">No memories yet.</p>}
+          </div>
         </div>
       </div>
     </div>

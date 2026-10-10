@@ -1,9 +1,9 @@
 /* -----------------------------------------------------------------------
    The in-stay wall, laid out for a phone.
 
-   The property and its hosts first, then a grid of quick links to each line
-   the hosts wrote, then those lines in full, then a tip. The guestbook button
-   is pinned to the bottom of the screen by the page around it.
+   The property, the hosts' note and their tip first, then a button for each
+   essential, then the rest of what the hosts wrote, then the essentials in
+   full. The guestbook button closes the memories at the end of the page.
 
    Every rule hangs off `[data-wall-theme] .stay-wall` so it outranks the
    older stay rules in styles.css whatever order the two sheets load in, and
@@ -223,6 +223,14 @@
 }
 [data-wall-theme] .stay-wall .stay-icon-quiet { background: var(--bg-alt, var(--wall-paper-alt)); color: var(--text-muted); }
 
+/* The hosts' notes sit in this grid between the buttons and the lines they
+   point to, so the grid's gap spaces them, not their own margin. */
+[data-wall-theme] .stay-wall .host-notes { margin: 6px 0 0; }
+
+/* The Host's canvas draws the same button row over its editor. */
+[data-wall-theme] .stay-wall.canvas-stay-links { margin: 8px 0 clamp(20px, 3vw, 28px); }
+.canvas-essential[id] { scroll-margin-top: var(--stay-scroll-offset, 80px); }
+
 /* ---- The lines in full ---- */
 
 [data-wall-theme] .stay-wall .stay-facts {
@@ -305,37 +313,37 @@
 :root { --stay-scroll-offset: 96px; }
 .host-notes[id], .wall-heading[id] { scroll-margin-top: var(--stay-scroll-offset); }
 
-/* ---- The pinned guestbook button ---- */
+/* ---- Adding a memory ----
+   The way to add one closes the memories, in the flow of the page: a guest
+   reaches it by reading to the end, and nothing floats over what they are
+   reading. Each theme dresses the panel in wallThemes.css. */
 
-.wall-contribution-pinned {
-  position: fixed;
-  inset: auto 0 0;
-  z-index: 30;
+.wall-contribution-panel {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
-  gap: 4px 12px;
-  margin: 0;
-  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
-  background: color-mix(in srgb, var(--bg, #fff) 86%, transparent);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border-top: 1px solid var(--rule);
+  justify-content: space-between;
+  gap: 12px 18px;
+  margin: clamp(20px, 3vw, 28px) 0 0;
+  padding: clamp(16px, 3vw, 22px);
+  background: var(--wall-sheet, var(--surface-raised));
+  border: 1px solid var(--wall-rule, var(--rule));
+  border-radius: var(--wall-note-radius, 12px);
 }
-.wall-contribution-pinned .btn-primary {
+.wall-contribution-lede {
+  flex: 1 1 14rem;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+.wall-contribution-panel .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  flex: 1 1 auto;
-  max-width: 440px;
-  min-height: 52px;
+  min-height: 48px;
   margin: 0;
-  border-radius: 999px;
-  font-size: 1.05rem;
-  box-shadow: 0 6px 20px rgb(0 0 0 / 12%);
+  font-size: 1.02rem;
 }
-.wall-contribution-pinned .btn-ghost { flex: none; min-height: 44px; margin: 0; padding-inline: 6px; font-size: .9rem; white-space: nowrap; }
-/* Room under the last of the wall, so the pinned bar never sits on it. */
-.wall-page:has(.wall-contribution-pinned) { padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
+.wall-contribution-panel .btn-ghost { flex: none; min-height: 44px; margin: 0; padding-inline: 6px; font-size: .9rem; white-space: nowrap; }

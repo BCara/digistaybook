@@ -25,7 +25,8 @@ import { PropertyShell } from "../host/PropertyShell";
 import { stayWallPath } from "../../domain/wallAddress";
 import { WallPreview } from "../host/WallPreview";
 import { memoriesHeading } from "../wall/memoryHeading";
-import { EssentialMark } from "../wall/EssentialMark";
+import { EssentialMark, essentialMarkName } from "../wall/EssentialMark";
+import { StayEssentialLinks } from "../wall/WallHeader";
 import { WallThemePicker } from "../host/WallThemePicker";
 import { PublicWallSettings } from "../host/PublicWallSettings";
 import type { HostProperty, WallCounts } from "../host/propertyStore";
@@ -1040,6 +1041,26 @@ export function HostWallDesignPage({
                     </p>
                   )}
 
+                  {/* The guest's wall puts a button for each essential here,
+                    then the Host's own notes, then the essentials in full, so
+                    the canvas does too. The buttons are drawn from the lines
+                    below by the wall's own component, and only for a line a
+                    guest would get: one with a label and an answer. */}
+                  {!profile.factsOff && profile.facts.some(fact => fact.term.trim() && fact.detail.trim()) && (
+                    <div className="stay-wall canvas-stay-links">
+                      <StayEssentialLinks
+                        id="canvas-stay-essentials"
+                        headingLevel={3}
+                        links={profile.facts.flatMap((fact, index) =>
+                          fact.term.trim() && fact.detail.trim()
+                            ? [{ href: `#canvas-essential-${index}`, label: fact.term, mark: essentialMarkName(fact.term) }]
+                            : [])}
+                      />
+                    </div>
+                  )}
+
+                  {hostNoteCards}
+
                   {/* The essentials are on the wall unless a Host says otherwise:
                     most properties answer these questions, and one that does
                     not can take the whole section off. The lines are kept when
@@ -1070,7 +1091,7 @@ export function HostWallDesignPage({
                       </p>
                       <dl className="canvas-essentials">
                         {profile.facts.map((fact, index) => (
-                          <div className="canvas-essential" key={index}>
+                          <div className="canvas-essential" id={`canvas-essential-${index}`} key={index}>
                             <dt>
                               <EssentialMark
                                 term={fact.term}
@@ -1195,8 +1216,8 @@ export function HostWallDesignPage({
                     that guests write on the wall itself — and the line under
                     the notes says it in words, with the wall itself a click
                     away. What stands here now is the Host's own card, in the
-                    grid, because that is where it will be read. */}
-                  {hostNoteCards}
+                    grid, because that is where it will be read. It is drawn
+                    above the essentials now, where the wall reads it. */}
                   <MemoryChrome
                     property={property}
                     counts={draft.counts}

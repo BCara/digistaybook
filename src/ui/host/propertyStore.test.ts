@@ -21,11 +21,11 @@ it.each([undefined, false, true, "true"])("reads approval policy %s from the pro
 });
 
 it("writes theme and wall visibility without overwriting independently saved photos", async () => {
-  const profile = { ...emptyProfile(), theme: "studio" as const, colour: "ocean" as const, displayWallOff: true };
+  const profile = { ...emptyProfile(), theme: "seaside" as const, colour: "ocean" as const, displayWallOff: true };
   const result = await savePropertyProfile("p1", profile);
   expect(result.status).toBe("ok");
   const fields = updateDoc.mock.calls.at(-1)![1];
-  expect(fields["profile.theme"]).toBe("studio");
+  expect(fields["profile.theme"]).toBe("seaside");
   expect(fields["profile.colour"]).toBe("ocean");
   expect(fields["profile.displayWallOff"]).toBe(true);
   expect(fields).not.toHaveProperty("profile.cover");

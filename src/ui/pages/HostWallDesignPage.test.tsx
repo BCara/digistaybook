@@ -212,22 +212,23 @@ describe("the guest view of a property", () => {
     // than from a row of swatches above the wall it prints.
     const side = within(screen.getByRole("group", { name: "Wall theme" }));
     // A property that has never chosen is on the default, and the sheet says so.
-    expect(side.getByRole("radio", { name: "Linen" })).toBeChecked();
+    expect(side.getByRole("radio", { name: "Warm Linen" })).toBeChecked();
     expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "linen");
 
-    fireEvent.click(side.getByRole("radio", { name: "Studio" }));
-    fireEvent.click(screen.getByRole("radio", { name: "Ocean" }));
-    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "studio");
+    fireEvent.click(side.getByRole("radio", { name: "Playful Seaside" }));
+    // Each theme names its own colourways: Seaside's third is Berry.
+    fireEvent.click(screen.getByRole("radio", { name: "Berry" }));
+    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "seaside");
 
     // The phone is printed on it too: the choice is read back at the size a
     // guest holds, not only on the canvas.
-    expect(document.querySelector(".phone-screen")).toHaveAttribute("data-wall-theme", "studio");
+    expect(document.querySelector(".phone-screen")).toHaveAttribute("data-wall-theme", "seaside");
 
     // It is part of the draft, so it saves on the same button as the words.
     fireEvent.click(save());
     await waitFor(() => expect(savePropertyProfile).toHaveBeenCalledTimes(1));
     const [, saved] = savePropertyProfile.mock.calls[0] as [string, PropertyProfile];
-    expect(saved.theme).toBe("studio");
+    expect(saved.theme).toBe("seaside");
     expect(saved.colour).toBe("ocean");
     expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-colour", "ocean");
     expect(document.querySelector(".phone-screen")).toHaveAttribute("data-wall-colour", "ocean");
@@ -236,14 +237,14 @@ describe("the guest view of a property", () => {
   it("offers the same theme on the public wall, since one property has one paper", async () => {
     loadProperty.mockResolvedValue({
       status: "ok",
-      value: hostProperty({ profile: { ...filledProfile, theme: "archive" } })
+      value: hostProperty({ profile: { ...filledProfile, theme: "editorial" } })
     });
     renderPublic();
 
     await waitFor(() => expect(publicCanvas().getByLabelText("Property name")).toBeInTheDocument());
     const side = within(screen.getByRole("group", { name: "Wall theme" }));
-    expect(side.getByRole("radio", { name: "Archive" })).toBeChecked();
-    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "archive");
+    expect(side.getByRole("radio", { name: "Editorial" })).toBeChecked();
+    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "editorial");
   });
 
   it("says what the public wall is for, and hands over both ways of using it", async () => {
@@ -612,6 +613,28 @@ describe("the guest view of a property", () => {
     expect(saved.factsOff).toBe(true);
     // The lines are kept, so putting the section back does not cost them.
     expect(saved.facts).toEqual([{ term: "Wi-Fi", detail: "SEABREEZE-5G", note: "On the fridge magnet" }]);
+  });
+
+  it("lays the in-stay wall out as the guest's: essentials buttons, the hosts' notes, then the essentials", async () => {
+    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: { ...filledProfile, hostNotes: [hostNote()] } }) });
+    renderPage();
+    await waitFor(() => expect(canvas().getByLabelText("Line 1: answer")).toBeInTheDocument());
+
+    const before = (first: Element | null, second: Element | null) =>
+      Boolean(first && second && first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING);
+    const form = document.querySelector("form") as HTMLElement;
+    const buttons = form.querySelector(".stay-links");
+    // The row is the essentials and nothing else, each one jumping to its line.
+    expect(within(buttons as HTMLElement).getAllByRole("link").map(link => [link.textContent, link.getAttribute("href")]))
+      .toEqual([["Wi-Fi", "#canvas-essential-0"]]);
+    expect(before(buttons, form.querySelector(".host-notes"))).toBe(true);
+    expect(before(form.querySelector(".host-notes"), form.querySelector("#canvas-essential-0"))).toBe(true);
+
+    // The phone draws the guest's wall in the same order.
+    const phone = document.querySelector(".phone-screen") as HTMLElement;
+    expect(within(phone.querySelector(".stay-links") as HTMLElement).getAllByRole("link").map(link => link.textContent)).toEqual(["Wi-Fi"]);
+    expect(before(phone.querySelector(".stay-links"), phone.querySelector(".host-notes"))).toBe(true);
+    expect(before(phone.querySelector(".host-notes"), phone.querySelector(".stay-facts"))).toBe(true);
   });
 
   it("puts the essentials back with the lines that were written on them", async () => {

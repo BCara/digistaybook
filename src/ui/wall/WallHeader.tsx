@@ -1,7 +1,8 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 import { hostInitials } from "../../domain/propertyProfile";
 import { EssentialMark, essentialMarkName, type EssentialMarkName } from "./EssentialMark";
 import "./stayWall.css";
+import "./wallThemes.css";
 
 export type WallHeaderProperty = {
   name: string; location: string; welcome: string; hosts: string;
@@ -11,10 +12,16 @@ export type WallHeaderProperty = {
 };
 type WallProperty = WallHeaderProperty;
 
-/** The saved wall and draft phone preview render these same components. */
-export function WallHeader({ property, view, preview = false, headingLevel = 1, links }: { property: WallHeaderProperty; view: "public" | "stay"; preview?: boolean; headingLevel?: number; links?: readonly StayQuickLink[] }) {
-  if (view === "stay") return <StayWallHeader property={property} preview={preview} headingLevel={headingLevel} links={links} />;
-  return <header className="live-property-header" data-no-header-photos={!property.cover && !property.hostPhoto ? "true" : undefined}>
+/**
+ * The saved wall and draft phone preview render these same components.
+ *
+ * `hostNotes` is drawn by the caller and placed here because where it goes
+ * depends on the wall: under the header on the public wall, and between the
+ * essentials buttons and the essentials in full on the in-stay wall.
+ */
+export function WallHeader({ property, view, preview = false, headingLevel = 1, hostNotes }: { property: WallHeaderProperty; view: "public" | "stay"; preview?: boolean; headingLevel?: number; hostNotes?: ReactNode }) {
+  if (view === "stay") return <StayWallHeader property={property} preview={preview} headingLevel={headingLevel} hostNotes={hostNotes} />;
+  return <><header className="live-property-header" data-no-header-photos={!property.cover && !property.hostPhoto ? "true" : undefined}>
             {property.cover
               ? <img className="live-property-cover" src={property.cover.url} alt={property.cover.alt} />
               : preview && <p className="wall-ghost">No cover photo. Guests open straight onto your name.</p>}
@@ -32,15 +39,8 @@ export function WallHeader({ property, view, preview = false, headingLevel = 1, 
                 : <span className="avatar avatar-lg tone-2" aria-hidden="true">{hostInitials(property.hosts)}</span>}
               {property.hosts && <b>{property.hosts}</b>}
             </div>}
-          </header>;
+          </header>{hostNotes}</>;
 }
-
-/**
- * A link the page around the header adds to the quick links. The hosts'
- * notes and the memories are drawn outside this component, but a guest
- * scanning the quick links should be able to jump to them too.
- */
-export type StayQuickLink = { href: string; label: string; mark: EssentialMarkName };
 
 /** Lines worth copying onto a phone keyboard: passwords and door codes. */
 const copyable = new Set<EssentialMarkName>(["wifi", "keys"]);
@@ -50,11 +50,12 @@ const anchorSafe = (id: string): string => id.replace(/[^a-zA-Z0-9_-]/g, "");
 
 /**
  * The in-stay wall, laid out for a phone held in a hallway: the property and
- * the hosts first, then one tap to each line a guest came for, then those
- * lines in full further down. The guestbook button is pinned by the page.
+ * the hosts first, then one tap to each line a guest came for, then whatever
+ * else the hosts wrote, then those lines in full. The buttons are the
+ * essentials and nothing else; the guestbook button ends the page.
  */
-export function StayWallHeader({ property, preview, headingLevel = 1, links = [] }: {
-  property: WallProperty; preview: boolean; headingLevel?: number; links?: readonly StayQuickLink[];
+export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes }: {
+  property: WallProperty; preview: boolean; headingLevel?: number; hostNotes?: ReactNode;
 }) {
   const baseId = `stay${anchorSafe(useId())}`;
   const essentialsId = `${baseId}-essentials`;
@@ -73,10 +74,7 @@ export function StayWallHeader({ property, preview, headingLevel = 1, links = []
     : hosts ? <span className="avatar tone-2 stay-portrait" aria-hidden="true">{hostInitials(hosts)}</span> : null;
   /* Each fact is linked by position, because two lines can share a label. */
   const factId = (index: number) => `${baseId}-fact-${index}`;
-  const quickLinks: StayQuickLink[] = [
-    ...facts.map((fact, index) => ({ href: `#${factId(index)}`, label: fact.term, mark: essentialMarkName(fact.term) })),
-    ...links
-  ];
+  const quickLinks = facts.map((fact, index) => ({ href: `#${factId(index)}`, label: fact.term, mark: essentialMarkName(fact.term) }));
 
   return <div className="stay-wall">
     <header className="stay-cover" data-no-header-photos={!property.cover && !property.hostPhoto ? "true" : undefined}>
@@ -121,25 +119,40 @@ export function StayWallHeader({ property, preview, headingLevel = 1, links = []
       </div>
     </aside>}
 
-    {quickLinks.length > 0 && <nav className="stay-links" aria-labelledby={essentialsId}>
-      <h2 className="stay-section-title" id={essentialsId} aria-level={headingLevel + 1}>Your stay essentials</h2>
-      <p className="stay-section-lede">Quick links to the key information for your stay.</p>
-      <ul>
-        {quickLinks.map(link => <li key={link.href}>
-          <a href={link.href}>
-            <span className="stay-icon"><EssentialMark term={link.label} name={link.mark} /></span>
-            <span className="stay-link-label">{link.label}</span>
-            <svg className="stay-chevron" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="m8 5 5 5-5 5" /></svg>
-          </a>
-        </li>)}
-      </ul>
-    </nav>}
+    {quickLinks.length > 0 && <StayEssentialLinks id={essentialsId} links={quickLinks} headingLevel={headingLevel + 1} />}
+
+    {hostNotes}
 
     {facts.length > 0 && <section className="stay-facts" aria-label="House information">
       {facts.map((fact, index) => <StayFact key={index} id={factId(index)} fact={fact} headingLevel={headingLevel + 2} />)}
     </section>}
     {facts.length === 0 && preview && <p className="wall-ghost">No house essentials. Wi-Fi, checkout and the bins go here.</p>}
   </div>;
+}
+
+/**
+ * One button per essential, each jumping to that line in full further down.
+ * Exported because the Host's canvas draws the same row over its editor, so
+ * the property page is laid out the way the guest's wall is. It must sit
+ * inside a `.stay-wall` under a `[data-wall-theme]`, which is where its
+ * styles hang.
+ */
+export function StayEssentialLinks({ id, links, headingLevel }: {
+  id: string; links: readonly { href: string; label: string; mark: EssentialMarkName }[]; headingLevel: number;
+}) {
+  return <nav className="stay-links" aria-labelledby={id}>
+    <h2 className="stay-section-title" id={id} aria-level={headingLevel}>Your stay essentials</h2>
+    <p className="stay-section-lede">Quick links to the key information for your stay.</p>
+    <ul>
+      {links.map(link => <li key={link.href}>
+        <a href={link.href}>
+          <span className="stay-icon"><EssentialMark term={link.label} name={link.mark} /></span>
+          <span className="stay-link-label">{link.label}</span>
+          <svg className="stay-chevron" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="m8 5 5 5-5 5" /></svg>
+        </a>
+      </li>)}
+    </ul>
+  </nav>;
 }
 
 function StayFact({ id, fact, headingLevel }: { id: string; fact: { term: string; detail: string; note: string }; headingLevel: number }) {

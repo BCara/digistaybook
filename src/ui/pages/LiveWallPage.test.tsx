@@ -37,7 +37,8 @@ it.each(["public", "stay"] as const)("applies the saved theme and colour on the 
   }, posts: [], nextCursor: null } });
   render(<LiveWallPage slug="real-cottage" view={view} />);
   await screen.findByRole("heading", { name: "Real cottage" });
-  expect(document.querySelector(".wall-page")).toHaveAttribute("data-wall-theme", "archive");
+  // Archive was retired; a wall saved on it is read as Editorial, its successor.
+  expect(document.querySelector(".wall-page")).toHaveAttribute("data-wall-theme", "editorial");
   expect(document.querySelector(".wall-page")).toHaveAttribute("data-wall-colour", "ocean");
 });
 

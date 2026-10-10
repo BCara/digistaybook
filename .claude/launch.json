@@ -4,27 +4,61 @@
     {
       "name": "web",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--port", "5180"],
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5180"
+      ],
       "port": 5180,
       "autoPort": true
     },
     {
       "name": "web-plain",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["vite", "--port", "5182", "--strictPort"],
+      "runtimeArgs": [
+        "vite",
+        "--port",
+        "5182",
+        "--strictPort"
+      ],
       "port": 5182
     },
     {
       "name": "web-emulator",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev:emulator"],
+      "runtimeArgs": [
+        "run",
+        "dev:emulator"
+      ],
       "port": 5173
     },
     {
       "name": "web-emulator-alt",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["vite", "--host", "--mode", "emulator", "--port", "5181", "--strictPort"],
+      "runtimeArgs": [
+        "vite",
+        "--host",
+        "--mode",
+        "emulator",
+        "--port",
+        "5181",
+        "--strictPort"
+      ],
       "port": 5181
+    },
+    {
+      "name": "web-dist",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "vite",
+        "preview",
+        "--port",
+        "5183",
+        "--strictPort"
+      ],
+      "port": 5183
     }
   ]
 }

@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
-import { defaultWallTheme, readWallTheme, wallTheme, wallThemes, wallColours, readWallColour } from "./wallTheme";
+import { defaultWallTheme, readWallTheme, wallTheme, wallThemes, wallColourIds, wallColourName, readWallColour } from "./wallTheme";
 
 /* A theme is a name here and a block of design tokens in the stylesheet, and
    nothing in TypeScript can see the second half. That split is deliberate — it
@@ -12,6 +12,7 @@ import { defaultWallTheme, readWallTheme, wallTheme, wallThemes, wallColours, re
    else's name. So the stylesheet is read here as text and the two halves are
    held against each other. */
 const styles = readFileSync(resolve(process.cwd(), "src/styles.css"), "utf8");
+const structure = readFileSync(resolve(process.cwd(), "src/ui/wall/wallThemes.css"), "utf8");
 
 describe("wall themes", () => {
   it("offers every theme the stylesheet can actually paint, and no other", () => {
@@ -47,13 +48,12 @@ describe("wall themes", () => {
     expect(new Set(ids).size).toBe(ids.length);
     expect(ids).toContain(defaultWallTheme);
     expect(wallThemes[0].id).toBe(defaultWallTheme);
-    expect(wallThemes).toHaveLength(3);
-    expect(wallColours).toHaveLength(3);
+    expect(wallThemes).toHaveLength(4);
+    expect(wallColourIds).toHaveLength(3);
   });
 
   it("reads a stored theme, and reads anything else as the default", () => {
-    expect(readWallTheme("studio")).toBe("studio");
-    expect(readWallTheme("archive")).toBe("archive");
+    for (const theme of wallThemes) expect(readWallTheme(theme.id)).toBe(theme.id);
     // An older name, a newer one, a corrupted field: paper, not an unstyled wall.
     expect(readWallTheme("midnight")).toBe(defaultWallTheme);
     expect(readWallTheme(undefined)).toBe(defaultWallTheme);
@@ -61,7 +61,11 @@ describe("wall themes", () => {
   });
 
   it("maps older themes to the new collection and keeps their colour", () => {
-    expect(readWallTheme("harbour")).toBe("studio");
+    // Studio and Archive were the last collection; nothing stored is rewritten.
+    expect(readWallTheme("studio")).toBe("linen");
+    expect(readWallTheme("archive")).toBe("editorial");
+    expect(readWallColour("ocean", "archive")).toBe("ocean");
+    expect(readWallTheme("harbour")).toBe("linen");
     expect(readWallColour(undefined, "harbour")).toBe("ocean");
     expect(readWallTheme("sage")).toBe("linen");
     expect(readWallColour(undefined, "sage")).toBe("sage");
@@ -77,6 +81,26 @@ describe("wall themes", () => {
       // The note is the one place a theme is described, so it describes the
       // stock rather than repeating the name back.
       expect(theme.note.length).toBeGreaterThan(40);
+    }
+  });
+
+  it("gives every theme three named colourways, each painted by the stylesheet", () => {
+    for (const theme of wallThemes) {
+      expect(theme.colourways.map((option) => option.id)).toEqual([...wallColourIds]);
+      expect(new Set(theme.colourways.map((option) => option.name)).size).toBe(3);
+      // The first colourway is the theme's own block; the other two are named.
+      expect(styles).toContain(`[data-wall-theme="${theme.id}"][data-wall-colour="sage"] {`);
+      expect(styles).toContain(`[data-wall-theme="${theme.id}"][data-wall-colour="ocean"] {`);
+    }
+    expect(wallColourName("editorial", "sage")).toBe("Bordeaux");
+    expect(wallColourName("seaside", "sand")).toBe("Cobalt Peach");
+    expect(wallColourName("journal", "ocean")).toBe("Plum");
+  });
+
+  it("gives each theme structure of its own, not only a palette", () => {
+    for (const theme of wallThemes) {
+      const rules = structure.split(`[data-wall-theme="${theme.id}"][data-wall-theme]`).length - 1;
+      expect(rules).toBeGreaterThan(10);
     }
   });
 });

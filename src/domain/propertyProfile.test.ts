@@ -260,7 +260,11 @@ describe("the theme both walls are printed on", () => {
   });
 
   it("keeps a theme this build knows and falls back for one it does not", () => {
-    expect(readProfile({ theme: "harbour" })).toMatchObject({ theme: "studio", colour: "ocean" });
+    expect(readProfile({ theme: "harbour" })).toMatchObject({ theme: "linen", colour: "ocean" });
+    // The two retired layouts are read as their nearest successor, colour kept.
+    expect(readProfile({ theme: "archive", colour: "sage" })).toMatchObject({ theme: "editorial", colour: "sage" });
+    expect(readProfile({ theme: "studio", colour: "ocean" })).toMatchObject({ theme: "linen", colour: "ocean" });
+    expect(readProfile({ theme: "journal" }).theme).toBe("journal");
     // An older name, a newer one, or a corrupted field renders as the default
     // rather than as an unstyled wall.
     expect(readProfile({ theme: "midnight" }).theme).toBe("linen");
@@ -275,9 +279,9 @@ describe("the theme both walls are printed on", () => {
   });
 
   it("survives a write, and counts as a change worth saving", () => {
-    expect(normalizeProfile(profile({ theme: "archive" })).theme).toBe("archive");
-    expect(sameProfileText(profile({ theme: "archive" }), profile({ theme: "studio" }))).toBe(false);
-    expect(sameProfileText(profile({ theme: "archive" }), profile({ theme: "archive" }))).toBe(true);
+    expect(normalizeProfile(profile({ theme: "journal" })).theme).toBe("journal");
+    expect(sameProfileText(profile({ theme: "journal" }), profile({ theme: "seaside" }))).toBe(false);
+    expect(sameProfileText(profile({ theme: "editorial" }), profile({ theme: "editorial" }))).toBe(true);
   });
 });
 

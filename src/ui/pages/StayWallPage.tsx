@@ -6,6 +6,7 @@ import { MemoryWall } from "../wall/MemoryWall";
 import { LiveWallPage } from "./LiveWallPage";
 import { DEMO_SLUG, demoPosts, demoProperty, houseEssentials, hostWallNotes, hostWelcome, wallPhotos } from "../wall/demoWall";
 import { memoriesHeading } from "../wall/memoryHeading";
+import { readWallColour, readWallTheme } from "../../domain/wallTheme";
 
 const MESSAGE_LIMIT = 1200;
 const NAME_LIMIT = 80;
@@ -27,6 +28,11 @@ export function StayWallPage({ propertySlug = "property", stayToken = null }: { 
   const [consent, setConsent] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  // The demo can be printed on any theme (`?theme=journal&colour=sage`), so
+  // the four can be compared on the same words and photographs.
+  const search = typeof window === "undefined" ? null : new URLSearchParams(window.location.search);
+  const theme = readWallTheme(search?.get("theme"));
+  const colour = readWallColour(search?.get("colour"));
   if (propertySlug !== DEMO_SLUG) return <LiveWallPage key={propertySlug} slug={propertySlug} view="stay" stayToken={stayToken} />;
 
   function submit(event: FormEvent) {
@@ -46,7 +52,7 @@ export function StayWallPage({ propertySlug = "property", stayToken = null }: { 
   }
 
   return (
-    <div className="page wall-page stay-page" data-wall-theme="linen" data-wall-colour="sand">
+    <div className="page wall-page stay-page" data-wall-theme={theme} data-wall-colour={colour}>
       {isDemo && (
         <p className="demo-ribbon">
           <span className="demo-ribbon-tag">Demo</span>
@@ -68,24 +74,20 @@ export function StayWallPage({ propertySlug = "property", stayToken = null }: { 
           hostPhoto: property.hostPhoto ? { url: property.hostPhoto.src, alt: property.hostPhoto.alt } : null,
           houseInformation: { heading: hostWelcome.heading, welcome: hostWelcome.body.join("\n"), tip: hostWelcome.tip, facts: houseEssentials }
         }}
-        links={[
-          { href: "#wall-host-notes", label: "From your hosts", mark: "home" },
-          { href: "#memory-wall-heading", label: "Guestbook", mark: "book" }
-        ]}
-      />
-
-      {/* Whatever else the hosts want said. It belongs with what they wrote
-          above rather than with the memories below: it is not a memory, and a
-          guest reading it as one would be reading it wrong. */}
-      <HostNotes
-        id="wall-host-notes"
-        notes={hostWallNotes.map((note) => ({
-          id: note.id,
-          message: note.message,
-          style: note.style,
-          photo: note.photo ? wallPhotos[note.photo] : undefined
-        }))}
-        author={property.hosts}
+        // Whatever else the hosts want said, between the essentials buttons
+        // and the essentials in full. It belongs with what they wrote rather
+        // than with the memories below: it is not a memory, and a guest
+        // reading it as one would be reading it wrong.
+        hostNotes={<HostNotes
+          id="wall-host-notes"
+          notes={hostWallNotes.map((note) => ({
+            id: note.id,
+            message: note.message,
+            style: note.style,
+            photo: note.photo ? wallPhotos[note.photo] : undefined
+          }))}
+          author={property.hosts}
+        />}
       />
 
       <dialog ref={dialogRef} className="contribution-dialog" aria-labelledby="contribution-title">
@@ -120,13 +122,16 @@ export function StayWallPage({ propertySlug = "property", stayToken = null }: { 
         </form>
       </dialog>
 
+      <div className="wall-memories">
       <MemoryWall posts={demoPosts} heading={memoriesHeading(demoPosts.length)} />
 
-      <div className="wall-contribution-pinned">
+      <div className="wall-contribution-panel">
+        <p className="wall-contribution-lede">Leave a memory from your stay.</p>
         <button type="button" className="btn btn-primary" onClick={() => dialogRef.current?.showModal()}>
           Add to guestbook
           <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><path d="m8 5 5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </button>
+      </div>
       </div>
 
       <aside className="guest-wall-powered-by" aria-label="About DigiStayBook">

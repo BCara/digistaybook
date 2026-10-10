@@ -1,0 +1,665 @@
+/* -----------------------------------------------------------------------
+   The four wall themes, as structure.
+
+   Colours, type and corners are tokens in styles.css. What a token cannot
+   say lives here: Editorial's numbered guidance rows, Seaside's arched cover
+   and the band its memories sit on, the Journal's polaroid and ruled sheet.
+   Every rule is scoped to one theme's attribute and paints the components
+   every wall already renders, so the saved wall, the demo and the Host's
+   phone preview are one wall in four dresses, not four walls.
+
+   The attribute is matched twice on purpose: styles.css can land after this
+   file in a production bundle, and a theme must outrank its shared rules
+   whichever order the two load in.
+
+   Decoration is drawn with pseudo-elements and masks, so none of it is in
+   the accessibility tree, none of it needs a field filled in, and every
+   drawing takes its colour from the colourway.
+   ----------------------------------------------------------------------- */
+
+[data-wall-theme] {
+  --wall-wave-line: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 10'><path d='M0 5q5-4.5 10 0t10 0 10 0 10 0' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'/></svg>");
+  --wall-wave-edge: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 12'><path d='M0 12V6q5-6 10 0t10 0 10 0 10 0v6Z'/></svg>");
+  --wall-sun: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round'><circle cx='20' cy='20' r='7.5'/><path d='M20 3v5M20 32v5M3 20h5M32 20h5M8 8l3.5 3.5M28.5 28.5 32 32M8 32l3.5-3.5M28.5 11.5 32 8'/></g></svg>");
+  --wall-shell: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 36'><g fill='none' stroke='black' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'><path d='M20 33 4.5 16A16.5 13 0 0 1 35.5 16Z'/><path d='M20 33 10.5 6.5M20 33V3.5M20 33l9.5-26.5M20 33 5.5 12.5M20 33l14.5-20.5'/></g></svg>");
+  --wall-leaf: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 40'><g fill='none' stroke='black' stroke-width='1.4' stroke-linecap='round'><path d='M12 39V4'/><path d='M12 10q-7-1-8-7 7 0 8 7ZM12 10q7-1 8-7-7 0-8 7ZM12 19q-7-1-8-7 7 0 8 7ZM12 19q7-1 8-7-7 0-8 7ZM12 28q-7-1-8-7 7 0 8 7ZM12 28q7-1 8-7-7 0-8 7Z'/></g></svg>");
+}
+
+/* Every theme reads in its own body face, not the site's. */
+.wall-page[data-wall-theme],
+[data-wall-theme].phone-screen { font-family: var(--wall-body-font); }
+
+/* ========================== Warm Linen ================================ */
+
+/* Cover first: the name is set on the photograph, low and to the left, over
+   a shade deep enough to read white type on whatever the Host uploaded. */
+[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo) {
+  display: grid;
+  grid-template-areas: "cover";
+  gap: 0;
+}
+[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo) > * { grid-area: cover; }
+[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover .wall-cover-photo { aspect-ratio: 16 / 10; }
+@media (min-width: 720px) {
+  [data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover .wall-cover-photo { aspect-ratio: 16 / 8; }
+}
+[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo) .stay-cover-titles {
+  align-self: end;
+  padding: clamp(48px, 12vw, 96px) clamp(16px, 4vw, 28px) clamp(16px, 4vw, 24px);
+  border-radius: 0 0 var(--stay-radius) var(--stay-radius);
+  background: linear-gradient(180deg, transparent, rgba(16, 14, 10, .62) 55%, rgba(16, 14, 10, .78));
+  color: #fff;
+}
+[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo) .stay-cover-titles h1 { color: #fff; text-shadow: 0 1px 12px rgba(0, 0, 0, .35); }
+[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo) .stay-location { color: rgba(255, 255, 255, .92); }
+[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo) .stay-location svg { stroke: currentColor; }
+[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-location { letter-spacing: .04em; text-transform: none; font-size: .95rem; }
+[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover-titles h1 { font-weight: 500; }
+[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-tip-card { background: color-mix(in srgb, var(--wall-accent-soft) 70%, var(--wall-sheet)); border-color: transparent; }
+[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-tip-card .stay-icon { background: var(--wall-sheet); color: var(--wall-accent-strong); }
+[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-tip-card .stay-eyebrow { color: var(--wall-accent-strong); }
+[data-wall-theme="linen"][data-wall-theme] .host-note-sign b { color: var(--wall-accent-strong); font-style: italic; font-weight: 500; font-size: 1.3rem; }
+[data-wall-theme="linen"][data-wall-theme] .note { border-radius: var(--wall-note-radius); }
+[data-wall-theme="linen"][data-wall-theme] .wall-contribution-panel { background: color-mix(in srgb, var(--wall-accent-soft) 55%, var(--wall-sheet)); border-color: transparent; }
+
+/* ============================ Editorial =============================== */
+
+/* A printed page: the title leads, the photograph is cut square under it,
+   and thin rules do all the work cards do elsewhere. */
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall { gap: clamp(22px, 4vw, 34px); }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-card {
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--wall-rule-strong);
+  border-radius: 0;
+  box-shadow: none;
+}
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-cover-titles { order: -1; padding: 0; gap: 10px; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-cover-titles h1 {
+  font-size: clamp(2.4rem, 11vw, 4.4rem);
+  font-weight: 500;
+  letter-spacing: -.03em;
+  line-height: 1;
+}
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-location { color: var(--wall-accent-strong); font-size: .78rem; letter-spacing: .3em; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-location svg { display: none; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-cover .wall-cover-photo { border-radius: 0; aspect-ratio: 3 / 2; }
+@media (min-width: 720px) {
+  [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-cover .wall-cover-photo { aspect-ratio: 16 / 7; }
+}
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-welcome,
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-welcome-plain { padding: clamp(18px, 3vw, 26px) 0 0; border-top: 0; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-portrait {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--wall-accent-strong);
+  box-shadow: inset 0 0 0 1px var(--wall-accent);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: .12em;
+}
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-welcome-words h2 { font-size: clamp(1.7rem, 6.5vw, 2.6rem); font-weight: 500; line-height: 1.08; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-welcome-body p { color: var(--wall-ink); font-family: var(--font-display); font-size: 1.15rem; line-height: 1.6; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-hosts b {
+  font-family: var(--font-sans);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--wall-ink-soft);
+}
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-tip-card {
+  display: grid;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--wall-rule-strong);
+}
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-tip-card .stay-icon { display: none; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-tip-card > div { gap: 6px 22px; }
+@media (min-width: 560px) {
+  [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-tip-card > div { grid-template-columns: 9rem minmax(0, 1fr); align-items: baseline; }
+  [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-tip-text { padding-left: 22px; border-left: 1px solid var(--wall-rule-strong); }
+}
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-eyebrow { letter-spacing: .3em; color: var(--wall-ink-soft); }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-tip-text { font-style: italic; font-size: 1.2rem; }
+
+/* Section titles in spaced capitals. */
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-section-title,
+[data-wall-theme="editorial"][data-wall-theme] .wall-heading,
+[data-wall-theme="editorial"][data-wall-theme] .host-note-eyebrow {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 4.6vw, 1.7rem);
+  font-weight: 500;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--wall-ink);
+}
+[data-wall-theme="editorial"][data-wall-theme] .wall-heading::before { content: none; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-section-lede { font-size: .92rem; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-links ul { grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 0 24px; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-links a {
+  min-height: 52px;
+  padding: 10px 0;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--wall-rule-strong);
+  border-radius: 0;
+  box-shadow: none;
+}
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-links .stay-icon { display: none; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-link-label { font-weight: 500; font-size: 1.1rem; }
+
+/* House guidance as numbered rows: number, label, answer, note. They stack
+   on a phone and line up as a table once there is room for four columns. */
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-facts {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  counter-reset: stay-fact;
+  border-top: 1px solid var(--wall-ink);
+}
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact {
+  counter-increment: stay-fact;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  grid-template-areas: "number head" "number body" "number note";
+  gap: 4px 14px;
+  padding: 16px 0;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--wall-rule-strong);
+  border-radius: 0;
+  box-shadow: none;
+}
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact::before {
+  content: counter(stay-fact, decimal-leading-zero);
+  grid-area: number;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--wall-accent-strong);
+}
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact:target { box-shadow: inset 3px 0 0 var(--wall-accent); }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-head { grid-area: head; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-head .stay-icon { display: none; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-head h3 { font-size: 1.3rem; font-weight: 500; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-body { grid-area: body; padding: 0; background: none; border-radius: 0; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-detail { font-size: 1.2rem; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-note { grid-area: note; padding: 0; }
+@media (min-width: 720px) {
+  [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact {
+    grid-template-columns: 4rem minmax(0, .9fr) minmax(0, 1.3fr) minmax(0, 1.3fr);
+    grid-template-areas: "number head body note";
+    align-items: center;
+    gap: 0;
+  }
+  [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact > :not(.stay-fact-head) { padding-left: 18px; border-left: 1px solid var(--wall-rule-strong); }
+  [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-head { padding-right: 18px; border-left: 1px solid var(--wall-rule-strong); padding-left: 18px; }
+}
+
+[data-wall-theme="editorial"][data-wall-theme] .host-notes { gap: 0; }
+[data-wall-theme="editorial"][data-wall-theme] .host-note,
+[data-wall-theme="editorial"][data-wall-theme] .host-note[data-note-style="pinned"] {
+  padding: 20px 0;
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--wall-rule-strong);
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+}
+/* Pinned, on a page with nothing to pin to: set in from a rule in the accent. */
+[data-wall-theme="editorial"][data-wall-theme] .host-note[data-note-style="pinned"] { padding-left: 18px; box-shadow: inset 2px 0 0 var(--wall-accent); }
+[data-wall-theme="editorial"][data-wall-theme] .host-note[data-note-style="pinned"]::before { content: none; }
+[data-wall-theme="editorial"][data-wall-theme] .host-note-photo { padding: 0; border: 0; border-radius: 0; background: none; }
+[data-wall-theme="editorial"][data-wall-theme] .host-note-photo img { border-radius: 0; }
+[data-wall-theme="editorial"][data-wall-theme] .host-note-message { font-family: var(--font-display); font-size: 1.2rem; }
+[data-wall-theme="editorial"][data-wall-theme] .host-note-sign { border-top: 0; padding-top: 0; margin-top: 14px; }
+[data-wall-theme="editorial"][data-wall-theme] .host-note-sign b {
+  font-family: var(--font-sans); font-size: .76rem; font-weight: 600;
+  letter-spacing: .28em; text-transform: uppercase; color: var(--wall-accent-strong);
+}
+
+[data-wall-theme="editorial"][data-wall-theme] .note,
+[data-wall-theme="editorial"][data-wall-theme] .note.note-pinned {
+  padding: 20px 0 20px 2.8rem;
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--wall-rule);
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+}
+/* A memory is a quotation, so it opens with a mark in the accent. */
+[data-wall-theme="editorial"][data-wall-theme] .note::before {
+  content: "\201C";
+  top: 14px; left: 0;
+  width: auto; height: auto;
+  background: none; box-shadow: none; transform: none;
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  line-height: 1;
+  color: var(--wall-accent);
+}
+[data-wall-theme="editorial"][data-wall-theme] .note-message,
+[data-wall-theme="editorial"][data-wall-theme] .note > p:first-of-type { font-family: var(--font-display); font-style: italic; }
+[data-wall-theme="editorial"][data-wall-theme] .note-sign { border-top: 0; margin-top: 10px; padding-top: 0; }
+[data-wall-theme="editorial"][data-wall-theme] .note-author b {
+  font-family: var(--font-sans); font-size: .76rem; font-weight: 600; letter-spacing: .24em; text-transform: uppercase;
+}
+[data-wall-theme="editorial"][data-wall-theme] .note-photo { padding: 0; border: 0; border-radius: 0; }
+[data-wall-theme="editorial"][data-wall-theme] .wall-contribution-panel {
+  background: var(--wall-pop);
+  color: var(--wall-pop-ink);
+  border: 0;
+  border-radius: 0;
+  padding: clamp(18px, 4vw, 28px);
+}
+[data-wall-theme="editorial"][data-wall-theme] .wall-contribution-lede {
+  font-family: var(--font-sans); font-size: .8rem; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; line-height: 1.8;
+}
+[data-wall-theme="editorial"][data-wall-theme] .wall-contribution-panel .btn-primary {
+  background: transparent;
+  color: var(--wall-pop-ink);
+  border: 1px solid currentColor;
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.15rem;
+}
+[data-wall-theme="editorial"][data-wall-theme] .wall-contribution-panel .btn-primary:hover { background: rgba(255, 255, 255, .12); }
+[data-wall-theme="editorial"][data-wall-theme] .wall-contribution-panel .btn-ghost { color: var(--wall-pop-ink); }
+[data-wall-theme="editorial"][data-wall-theme] .live-property-header {
+  padding: 0 0 24px;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--wall-rule-strong);
+  border-radius: 0;
+  box-shadow: none;
+}
+[data-wall-theme="editorial"][data-wall-theme] .live-property-header h1 { font-size: clamp(2.4rem, 11vw, 4.4rem); line-height: 1; }
+[data-wall-theme="editorial"][data-wall-theme] .live-property-cover { border-radius: 0; }
+
+/* ========================== Playful Seaside =========================== */
+
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall { gap: 20px; }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-card { border: 2px solid var(--wall-ink); box-shadow: none; }
+
+/* An arched cover, outlined in the ink. */
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-cover { position: relative; }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-cover .wall-cover-photo,
+[data-wall-theme="seaside"][data-wall-theme] .live-property-cover {
+  aspect-ratio: 16 / 11;
+  border: 3px solid var(--wall-ink);
+  border-radius: 50% 50% var(--wall-note-radius) var(--wall-note-radius) / 30% 30% var(--wall-note-radius) var(--wall-note-radius);
+}
+@media (min-width: 720px) {
+  [data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-cover .wall-cover-photo { aspect-ratio: 16 / 8; }
+}
+/* A sun over the arch's corner, and a shell after the place name. */
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo)::before {
+  content: "";
+  position: absolute;
+  top: -8px; left: 0;
+  width: clamp(40px, 11vw, 62px);
+  height: clamp(40px, 11vw, 62px);
+  background: var(--wall-pop);
+  -webkit-mask: var(--wall-sun) center / contain no-repeat;
+  mask: var(--wall-sun) center / contain no-repeat;
+  pointer-events: none;
+}
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-location::after {
+  content: "";
+  width: 22px; height: 20px;
+  background: var(--wall-pop);
+  -webkit-mask: var(--wall-shell) center / contain no-repeat;
+  mask: var(--wall-shell) center / contain no-repeat;
+}
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-cover-titles { justify-items: center; text-align: center; }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-cover-titles h1 {
+  font-size: clamp(2.1rem, 9.5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--wall-ink);
+}
+/* A wave under the name. */
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-cover-titles h1::after {
+  content: "";
+  display: block;
+  width: min(140px, 40%);
+  height: 10px;
+  margin: 8px auto 0;
+  background: var(--wall-pop);
+  -webkit-mask: var(--wall-wave-line) left center / 40px 10px repeat-x;
+  mask: var(--wall-wave-line) left center / 40px 10px repeat-x;
+}
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-location { justify-content: center; letter-spacing: .02em; text-transform: none; font-size: 1rem; color: var(--wall-ink-soft); }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-location svg { fill: var(--wall-pop); stroke: var(--wall-ink); }
+
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-welcome,
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-welcome-plain {
+  background: var(--wall-accent-soft);
+  border-color: transparent;
+  border-radius: 30px;
+}
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-portrait { background: var(--wall-ink); color: #fff; box-shadow: 0 0 0 4px var(--wall-sheet); }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-welcome-words h2 { font-weight: 800; color: var(--wall-ink); }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-welcome-body p { color: var(--wall-ink-soft); }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-eyebrow { letter-spacing: .06em; color: var(--wall-ink-soft); }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-hosts b { font-family: var(--font-display); font-weight: 700; }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-tip-card { background: var(--wall-accent-soft); border-color: transparent; border-radius: 28px; }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-tip-card .stay-icon { background: var(--wall-sheet); color: var(--wall-ink); }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-tip-text { font-family: var(--wall-body-font); font-weight: 600; }
+
+/* Section titles in heavy rounded type with a wave running off to the edge. */
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-section-title,
+[data-wall-theme="seaside"][data-wall-theme] .wall-heading,
+[data-wall-theme="seaside"][data-wall-theme] .host-note-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -.01em;
+  text-transform: none;
+  color: var(--wall-ink);
+}
+[data-wall-theme="seaside"][data-wall-theme] .wall-heading::before { content: none; }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-section-title::after,
+[data-wall-theme="seaside"][data-wall-theme] .wall-heading::after,
+[data-wall-theme="seaside"][data-wall-theme] .host-note-eyebrow::after {
+  content: "";
+  flex: 1;
+  min-width: 40px;
+  height: 10px;
+  background: var(--wall-ink);
+  -webkit-mask: var(--wall-wave-line) left center / 40px 10px repeat-x;
+  mask: var(--wall-wave-line) left center / 40px 10px repeat-x;
+}
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-links a {
+  border: 2px solid var(--wall-ink);
+  border-radius: 20px;
+  box-shadow: 3px 3px 0 var(--wall-pop);
+}
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-icon { background: var(--wall-accent-soft); color: var(--wall-ink); }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-link-label,
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-fact-head h3 { font-weight: 800; }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-fact { border-radius: 20px; padding: 16px; }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-fact-head .stay-icon { background: none; width: 36px; height: 36px; }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-fact-head .stay-icon .essential-mark { width: 30px; height: 30px; stroke-width: 2; }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-fact-body {
+  background: color-mix(in srgb, var(--wall-ink) 9%, var(--wall-sheet));
+  border-radius: 18px;
+}
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-fact-detail { font-family: var(--wall-body-font); font-weight: 700; }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-copy { color: var(--wall-ink); }
+
+[data-wall-theme="seaside"][data-wall-theme] .host-note {
+  background: var(--wall-sheet);
+  border: 2px solid var(--wall-ink);
+  border-radius: 20px;
+}
+[data-wall-theme="seaside"][data-wall-theme] .host-note[data-note-style="pinned"] {
+  border: 2px solid var(--wall-ink);
+  border-radius: 20px;
+  box-shadow: 5px 5px 0 var(--wall-pop);
+  transform: rotate(-.8deg);
+}
+[data-wall-theme="seaside"][data-wall-theme] .host-note[data-note-style="pinned"]:nth-of-type(even) { transform: rotate(.7deg); }
+[data-wall-theme="seaside"][data-wall-theme] .host-note[data-note-style="pinned"]::before {
+  width: 18px; height: 18px; top: -10px;
+  background: var(--wall-pop);
+  box-shadow: inset 0 0 0 2px var(--wall-ink);
+}
+[data-wall-theme="seaside"][data-wall-theme] .host-note-photo { padding: 0; border: 2px solid var(--wall-ink); border-radius: 16px; overflow: hidden; background: var(--wall-sheet); }
+[data-wall-theme="seaside"][data-wall-theme] .host-note-photo img { border-radius: 0; }
+[data-wall-theme="seaside"][data-wall-theme] .host-note-message { font-family: var(--wall-body-font); }
+[data-wall-theme="seaside"][data-wall-theme] .host-note-sign { border-top: 0; padding-top: 0; margin-top: 12px; }
+[data-wall-theme="seaside"][data-wall-theme] .host-note-sign b { font-family: var(--font-display); font-weight: 700; }
+
+/* The memories and the way to add one sit on a band of the ink, with a wave
+   for its top edge. */
+[data-wall-theme="seaside"][data-wall-theme] .wall-memories {
+  position: relative;
+  margin-top: clamp(30px, 5vw, 44px);
+  padding: clamp(26px, 5vw, 40px) clamp(14px, 4vw, 30px) clamp(20px, 4vw, 30px);
+  background: var(--wall-ink);
+  border-radius: 0 0 28px 28px;
+  color: var(--wall-sheet);
+}
+[data-wall-theme="seaside"][data-wall-theme] .wall-memories::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: -11px;
+  height: 12px;
+  background: var(--wall-ink);
+  -webkit-mask: var(--wall-wave-edge) left bottom / 40px 12px repeat-x;
+  mask: var(--wall-wave-edge) left bottom / 40px 12px repeat-x;
+  pointer-events: none;
+}
+[data-wall-theme="seaside"][data-wall-theme] .wall-memories .wall-heading { color: var(--wall-sheet); }
+[data-wall-theme="seaside"][data-wall-theme] .wall-memories .wall-heading::after { background: var(--wall-pop); }
+[data-wall-theme="seaside"][data-wall-theme] .wall-memories .field-hint { color: var(--wall-sheet); }
+[data-wall-theme="seaside"][data-wall-theme] .wall-memories .note {
+  color: var(--wall-ink);
+  background: var(--wall-sheet);
+  border: 0;
+  border-radius: 20px;
+  transform: none;
+}
+[data-wall-theme="seaside"][data-wall-theme] .wall-memories .note .note-author time { color: var(--wall-ink-soft); }
+[data-wall-theme="seaside"][data-wall-theme] .wall-memories .note-photo { border-radius: 14px; }
+[data-wall-theme="seaside"][data-wall-theme] .wall-memories .guest-contribution,
+[data-wall-theme="seaside"][data-wall-theme] .wall-memories .wall-contribution-closed { color: var(--wall-ink); }
+[data-wall-theme="seaside"][data-wall-theme] .wall-memories > .btn-secondary,
+[data-wall-theme="seaside"][data-wall-theme] .wall-memories .memory-wall + .btn-secondary { color: var(--wall-sheet); border-color: var(--wall-sheet); background: transparent; }
+[data-wall-theme="seaside"][data-wall-theme] .wall-memories .wall-contribution-action > .btn-primary { background: var(--wall-pop); color: var(--wall-pop-ink); }
+[data-wall-theme="seaside"][data-wall-theme] .wall-contribution-panel {
+  background: var(--wall-pop);
+  color: var(--wall-pop-ink);
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 12px 12px clamp(18px, 4vw, 28px);
+}
+@media (max-width: 520px) {
+  [data-wall-theme="seaside"][data-wall-theme] .wall-contribution-panel { border-radius: 26px; padding: 16px; }
+  [data-wall-theme="seaside"][data-wall-theme] .wall-contribution-panel .btn-primary { flex: 1 1 100%; }
+}
+[data-wall-theme="seaside"][data-wall-theme] .wall-contribution-lede { font-family: var(--wall-body-font); font-weight: 600; font-size: 1rem; }
+[data-wall-theme="seaside"][data-wall-theme] .wall-contribution-panel .btn-primary { border-radius: 999px; font-family: var(--font-display); font-weight: 800; }
+[data-wall-theme="seaside"][data-wall-theme] .wall-contribution-panel .btn-ghost { color: var(--wall-pop-ink); }
+[data-wall-theme="seaside"][data-wall-theme] .live-property-header { background: var(--wall-accent-soft); border: 0; border-radius: 30px; box-shadow: none; }
+
+/* ======================== Rustic Guest Journal ======================== */
+
+[data-wall-theme="journal"][data-wall-theme] .stay-wall { gap: 22px; }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-card {
+  background: var(--wall-sheet);
+  border: 0;
+  border-radius: var(--wall-note-radius);
+  box-shadow: var(--wall-note-shadow);
+}
+
+/* The cover is a polaroid, taped in at an angle. The name sits beside it on
+   a wide screen and under it on a phone. */
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-cover { position: relative; gap: 18px; }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-cover .wall-cover-photo,
+[data-wall-theme="journal"][data-wall-theme] .live-property-cover {
+  aspect-ratio: 4 / 3;
+  padding: 10px 10px 34px;
+  background: #fdfaf2;
+  border-radius: 2px;
+  box-shadow: 0 2px 3px rgba(60, 40, 20, .12), 0 16px 26px -16px rgba(60, 40, 20, .55);
+  transform: rotate(-1.6deg);
+}
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo)::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: -8px;
+  left: 50%;
+  width: 92px;
+  height: 22px;
+  background: var(--wall-fix-back);
+  box-shadow: var(--wall-fix-shadow);
+  transform: translateX(-50%) rotate(3deg);
+  pointer-events: none;
+}
+@media (min-width: 720px) {
+  [data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo) {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 34px;
+  }
+  [data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo)::before { left: 26%; }
+}
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-cover-titles { gap: 12px; }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-cover-titles h1 { font-size: clamp(2rem, 8.5vw, 3rem); font-weight: 600; letter-spacing: 0; line-height: 1.12; }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-cover-titles h1::after {
+  content: "";
+  display: block;
+  width: min(220px, 75%);
+  height: 3px;
+  margin-top: 10px;
+  border-radius: 2px;
+  background: var(--wall-accent);
+  transform: rotate(-1deg);
+}
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-location { font-family: var(--font-display); letter-spacing: .02em; text-transform: none; font-size: 1rem; color: var(--wall-ink-soft); }
+
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-welcome,
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-welcome-plain { transform: rotate(-.5deg); }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-portrait {
+  background: transparent;
+  color: var(--wall-ink);
+  box-shadow: inset 0 0 0 1.5px var(--wall-ink);
+  font-family: var(--font-display);
+}
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-welcome-words h2 { font-size: clamp(1.4rem, 5.6vw, 1.9rem); }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-welcome-body p { color: var(--wall-ink); font-size: 1.05rem; }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-eyebrow { font-family: var(--font-display); letter-spacing: .04em; text-transform: none; font-size: .9rem; color: var(--wall-ink-soft); }
+/* A signature in a hand, set large enough to read. */
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-hosts b,
+[data-wall-theme="journal"][data-wall-theme] .host-note-sign b,
+[data-wall-theme="journal"][data-wall-theme] .note-author b {
+  font-family: var(--wall-hand-font);
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--wall-accent-strong);
+}
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-tip-card {
+  position: relative;
+  background: color-mix(in srgb, var(--wall-accent-soft) 85%, var(--wall-sheet));
+  transform: rotate(.7deg);
+  margin-top: 6px;
+}
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-tip-card::before {
+  content: "";
+  position: absolute;
+  top: -9px; left: 50%;
+  width: 64px; height: 18px;
+  background: var(--wall-fix-back);
+  box-shadow: var(--wall-fix-shadow);
+  transform: translateX(-50%) rotate(-3deg);
+  pointer-events: none;
+}
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-tip-card .stay-icon { background: transparent; color: var(--wall-accent-strong); }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-tip-card .stay-eyebrow { color: var(--wall-accent-strong); }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-tip-text { font-family: var(--wall-body-font); }
+
+/* Section titles are labels stuck on the page. */
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-section-title,
+[data-wall-theme="journal"][data-wall-theme] .wall-heading,
+[data-wall-theme="journal"][data-wall-theme] .host-note-eyebrow {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  padding: 6px 16px 7px;
+  background: var(--wall-pop);
+  color: var(--wall-pop-ink);
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 4.6vw, 1.4rem);
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-transform: none;
+  line-height: 1.25;
+  border-radius: 2px;
+  transform: rotate(-1deg);
+}
+[data-wall-theme="journal"][data-wall-theme] .wall-heading::before,
+[data-wall-theme="journal"][data-wall-theme] .wall-heading::after { content: none; }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-section-lede { margin-top: 10px; }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-links a { border: 0; border-radius: 2px; box-shadow: var(--wall-note-shadow); }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-icon { background: transparent; color: var(--wall-accent-strong); }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-link-label { font-size: .98rem; }
+
+/* House guidance on one ruled sheet, bound down its left edge. */
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-facts {
+  position: relative;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  padding: 10px clamp(14px, 3vw, 24px) 10px 46px;
+  background-color: var(--wall-sheet);
+  background-image:
+    linear-gradient(90deg, transparent 36px, color-mix(in srgb, var(--wall-accent) 45%, transparent) 36px 37px, transparent 37px),
+    repeating-linear-gradient(180deg, transparent 0 27px, var(--wall-rule) 27px 28px);
+  border-radius: 2px;
+  box-shadow: var(--wall-note-shadow);
+}
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-facts::before {
+  content: "";
+  position: absolute;
+  top: 10px; bottom: 10px; left: 8px;
+  width: 16px;
+  background: radial-gradient(circle at 50% 50%, transparent 3px, var(--wall-ink-soft) 3.5px 5px, transparent 5.5px) 0 0 / 16px 24px repeat-y;
+  opacity: .7;
+  pointer-events: none;
+}
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-fact {
+  padding: 14px 0;
+  background: none;
+  border: 0;
+  border-bottom: 1.5px solid color-mix(in srgb, var(--wall-accent) 55%, transparent);
+  border-radius: 0;
+  box-shadow: none;
+}
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-fact:last-child { border-bottom: 0; }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-fact:target { box-shadow: inset 3px 0 0 var(--wall-accent); }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-fact-head h3 { font-size: 1.1rem; }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-fact-body { padding: 0; background: none; border-radius: 0; }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-fact-detail { font-family: var(--font-display); font-weight: 600; font-size: 1.1rem; }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-fact-note { padding: 0; font-style: italic; color: var(--wall-ink); }
+
+[data-wall-theme="journal"][data-wall-theme] .host-note { background: var(--wall-sheet); border: 1px dashed var(--wall-rule-strong); border-radius: 2px; }
+[data-wall-theme="journal"][data-wall-theme] .host-note[data-note-style="pinned"] { border: 0; box-shadow: var(--wall-note-shadow); }
+[data-wall-theme="journal"][data-wall-theme] .host-note-photo {
+  padding: 8px 8px 24px;
+  background: #fdfaf2;
+  border: 0;
+  border-radius: 2px;
+  box-shadow: 0 2px 3px rgba(60, 40, 20, .12), 0 10px 18px -12px rgba(60, 40, 20, .5);
+  transform: rotate(-2deg);
+}
+[data-wall-theme="journal"][data-wall-theme] .host-note-photo img { border-radius: 0; }
+[data-wall-theme="journal"][data-wall-theme] .host-note-sign { border-top: 0; padding-top: 0; margin-top: 12px; justify-content: flex-end; }
+
+/* Memories taped into the journal, each at its own angle. */
+[data-wall-theme="journal"][data-wall-theme] .note { --wall-fix-content: ""; background: var(--wall-sheet); border: 0; margin-top: 12px; }
+[data-wall-theme="journal"][data-wall-theme] .note-grid > .note:nth-child(3n + 1) { transform: rotate(-.8deg); }
+[data-wall-theme="journal"][data-wall-theme] .note-grid > .note:nth-child(3n + 2) { transform: rotate(.6deg); }
+[data-wall-theme="journal"][data-wall-theme] .note-grid > .note:nth-child(3n) { transform: rotate(-.3deg); }
+[data-wall-theme="journal"][data-wall-theme] .note-sign { border-top: 0; padding-top: 0; }
+[data-wall-theme="journal"][data-wall-theme] .note-photo { background: #fdfaf2; border: 0; box-shadow: 0 1px 2px rgba(60, 40, 20, .15); }
+[data-wall-theme="journal"][data-wall-theme] .wall-contribution-panel {
+  background: var(--wall-sheet);
+  border: 1px dashed var(--wall-rule-strong);
+  border-radius: 2px;
+}
+[data-wall-theme="journal"][data-wall-theme] .wall-contribution-lede { font-family: var(--font-display); }
+[data-wall-theme="journal"][data-wall-theme] .wall-contribution-panel .btn-primary { border-radius: 3px; font-family: var(--font-display); }
+[data-wall-theme="journal"][data-wall-theme] .live-property-header { background: var(--wall-sheet); border: 0; border-radius: 2px; }
+[data-wall-theme="journal"][data-wall-theme] .live-property-cover { margin-bottom: 18px; }
+
+/* Nothing on any wall moves for a reader who asked it not to. */
+@media (prefers-reduced-motion: reduce) {
+  [data-wall-theme] .stay-wall .stay-links a { transition: none; }
+}

@@ -22,7 +22,9 @@ export const createHostProperty = onCall({ region: "australia-southeast1", maxIn
     if (incoming[key] !== undefined && (typeof incoming[key] !== "string" || incoming[key].length > max)) throw new HttpsError("invalid-argument", "Check the property details.");
     profile[key] = (incoming[key] ?? "").trim();
   }
-  profile.theme = ["linen", "studio", "archive", "harbour", "sage"].includes(incoming.theme) ? incoming.theme : "linen";
+  // New themes, and the older names walls were saved with, which are still read (see src/domain/wallTheme.ts).
+  profile.theme = ["linen", "editorial", "seaside", "journal", "studio", "archive", "harbour", "sage"].includes(incoming.theme) ? incoming.theme : "linen";
+  profile.colour = ["sand", "sage", "ocean"].includes(incoming.colour) ? incoming.colour : "sand";
   for (const key of ["displayWallOff", "stayNoteOff", "factsOff"]) profile[key] = incoming[key] === true;
   for (const key of ["cover", "avatar", "hostPhoto"]) profile[key] = null;
   // The hosts' own notes arrive as words and a choice of how each is fixed to

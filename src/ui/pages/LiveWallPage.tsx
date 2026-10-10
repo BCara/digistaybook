@@ -80,8 +80,7 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
     finally { setBusy(false); }
   }
 
-  // The pinned buttons sit at the bottom of the screen and the form opens at
-  // the bottom of the wall, which can be a long way down from the guest.
+  // The form opens under the buttons, which may be below the fold on a long wall.
   function openContribution(mode: ContributionMode) {
     setContributionMode(mode);
     setFormOpened(true);
@@ -138,17 +137,16 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
           the public welcome — the line written for that stranger — is not on
           it. `StayWallHeader` below is the same arrangement the canvas and
           the phone preview draw, so a Host is looking at one wall twice. */}
-      <WallHeader property={wall.property} view={served} preview={Boolean(preview)} links={served === "stay" ? [
-        ...(wall.property.hostNotes?.length ? [{ href: `#${HOST_NOTES_ID}`, label: "From your hosts", mark: "home" as const }] : []),
-        { href: `#${MEMORIES_ID}`, label: "Guestbook", mark: "book" as const }
-      ] : undefined} />
-      <HostNotes
+      <WallHeader property={wall.property} view={served} preview={Boolean(preview)} hostNotes={<HostNotes
         id={HOST_NOTES_ID}
         author={wall.property.hosts || "your hosts"}
         notes={(wall.property.hostNotes ?? []).map(note => ({
           id: note.id, message: note.message, style: readHostNoteStyle(note.style),
           photo: note.photo ? { src: note.photo.url, alt: note.photo.alt } : undefined
-        }))} />
+        }))} />} />
+      {/* The memories and the way to add one end the page together, so a
+          theme can set them on their own band of paper. */}
+      <div className="wall-memories">
       <h2 className="wall-heading" id={MEMORIES_ID}>{memoriesHeading(wall.nextCursor ? null : wall.posts.length)}</h2>
       <section aria-label="Guest memories" className="note-grid">
         {wall.posts.map(post => <article className={`note${post.pinned ? " note-pinned" : ""}`} key={post.id}>
@@ -163,9 +161,10 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
           ? <button className="btn btn-primary" aria-expanded aria-controls="wall-contribution" onClick={() => setContributing(false)}>Back to wall</button>
           // A guest with a complaint should not have to guess that it lives
           // behind the guestbook, so the private route is offered by name.
-          // Both are pinned to the bottom of the phone, so the guestbook is
-          // one tap away from wherever on the wall a guest has scrolled to.
-          : <div className="wall-contribution-choices wall-contribution-pinned">
+          // They close the memories rather than float over the page: this is
+          // a web page, not an app with a tab bar.
+          : <div className="wall-contribution-choices wall-contribution-panel">
+            <p className="wall-contribution-lede">{wall.property.guestPrompt?.trim() || "Leave a memory from your stay."}</p>
             <button className="btn btn-primary" aria-expanded={false} aria-controls="wall-contribution" onClick={() => openContribution("memory")}>
               Add to guestbook
               <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><path d="m8 5 5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -186,6 +185,7 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
           ? "The add-a-memory button appears here once this wall is open."
           : "Adding memories is temporarily unavailable. Please try again later."}
       </p>)}
+      </div>
     </>}
     {/* The two links every wall carries, wherever the page got to: the wall,
         the closed notice and the failure all end here. They are the only

@@ -3018,6 +3018,9 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
   /* ---- Voice ---- */
   --wall-prose-font: var(--font-display);
   --wall-prose-height: 1.55;
+  /* The face of everything that is not a heading, and a hand for signatures. */
+  --wall-body-font: var(--font-sans);
+  --wall-hand-font: var(--font-display);
   --wall-heading-weight: 600;
   --wall-heading-tracking: normal;
   --wall-heading-style: normal;
@@ -3053,85 +3056,191 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
   color: var(--text);
 }
 
-/* Three layouts. Palette tokens are shared by every layout and drawing. */
+/* Four layouts. Each sets its type, its corners and how its paper behaves;
+   the colourway blocks below set every colour, so the two choices stay
+   independent. Structure that tokens cannot express — an arched cover, a
+   ruled guidance sheet — lives with the wall's components in
+   src/ui/wall/wallThemes.css, scoped to the same attribute. */
 [data-wall-theme="linen"] {
-  --font-display: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
-  --wall-heading-weight: 500;
-  --wall-heading-tracking: -.025em;
-  --wall-sheet-radius: 12px;
-  --wall-note-radius: 8px;
-  --wall-frame: 0;
-  --wall-texture: repeating-linear-gradient(0deg, rgba(60, 48, 35, .018) 0 1px, transparent 1px 4px);
-  --wall-tilt: .35;
-}
-[data-wall-theme="studio"] {
-  --font-display: var(--font-sans);
-  --wall-heading-weight: 650;
-  --wall-heading-tracking: -.035em;
-  --wall-sheet-radius: 20px;
-  --wall-note-radius: 16px;
-  --wall-note-shadow: 0 5px 18px rgba(25, 39, 45, .045);
-  --wall-frame: 0;
-  --wall-tilt: 0;
-}
-[data-wall-theme="archive"] {
-  --font-display: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
-  --wall-heading-weight: 600;
-  --wall-heading-tracking: -.03em;
-  --wall-sheet-radius: 2px;
-  --wall-note-radius: 2px;
-  --wall-note-shadow: none;
-  --wall-note-cap: 2px solid var(--wall-accent);
-  --wall-sheet-border: 1px solid var(--wall-rule-strong);
-  --wall-frame: 0;
-  --wall-tilt: 0;
-}
-
-/* Sand is also the fallback for older documents with no colour field. */
-[data-wall-theme] {
-  --wall-paper: #f7f3ec;
-  --wall-paper-alt: #eee7db;
-  --wall-sheet: #fffdf9;
-  --wall-ink: #292824;
-  --wall-ink-soft: #69655d;
-  --wall-accent: #956047;
-  --wall-accent-strong: #77462f;
-  --wall-accent-soft: #efe2d7;
-  --wall-rule: rgba(73, 59, 42, .14);
-  --wall-rule-strong: rgba(73, 59, 42, .26);
-  --wall-chip-strong: var(--wall-accent-strong);
-  --wall-chip: var(--wall-accent);
-  --wall-chip-soft: var(--wall-accent);
-  --wall-chip-alt: var(--wall-ink);
-  --wall-chip-ink: #ffffff;
+  --font-display: "Iowan Old Style", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --wall-body-font: var(--font-sans);
   --wall-prose-font: var(--font-sans);
   --wall-prose-height: 1.7;
   --wall-eyebrow-tracking: .1em;
   --wall-sheet-shadow: 0 8px 32px rgba(25, 39, 45, .045);
+  --wall-heading-weight: 500;
+  --wall-heading-tracking: -.02em;
+  --wall-sheet-radius: 14px;
+  --wall-note-radius: 12px;
+  --wall-note-shadow: 0 6px 22px rgba(60, 44, 28, .06);
+  --wall-frame: 0;
+  --wall-texture: repeating-linear-gradient(0deg, rgba(60, 48, 35, .018) 0 1px, transparent 1px 4px);
+  --wall-tilt: 0;
 }
-[data-wall-theme][data-wall-colour="sage"] {
-  --wall-paper: #eff3ee;
-  --wall-paper-alt: #e0e8df;
-  --wall-sheet: #fbfdf9;
-  --wall-ink: #25352b;
-  --wall-ink-soft: #596c5e;
-  --wall-accent: #4d7058;
-  --wall-accent-strong: #35533e;
-  --wall-accent-soft: #dde8dc;
-  --wall-rule: rgba(42, 69, 48, .14);
-  --wall-rule-strong: rgba(42, 69, 48, .26);
+[data-wall-theme="editorial"] {
+  --font-display: Didot, "Bodoni 72", "Bodoni MT", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --wall-body-font: var(--font-sans);
+  --wall-prose-font: var(--font-display);
+  --wall-prose-height: 1.6;
+  --wall-heading-weight: 500;
+  --wall-heading-tracking: -.02em;
+  --wall-eyebrow-tracking: .28em;
+  --wall-sheet-radius: 0px;
+  --wall-note-radius: 0px;
+  --wall-note-shadow: none;
+  --wall-sheet-shadow: none;
+  --wall-frame: 0;
+  --wall-tilt: 0;
 }
-[data-wall-theme][data-wall-colour="ocean"] {
-  --wall-paper: #edf3f6;
-  --wall-paper-alt: #dfe9ee;
-  --wall-sheet: #fbfdff;
-  --wall-ink: #263942;
-  --wall-ink-soft: #566e7a;
-  --wall-accent: #4b7085;
-  --wall-accent-strong: #34566b;
-  --wall-accent-soft: #dce9f0;
-  --wall-rule: rgba(37, 63, 78, .14);
-  --wall-rule-strong: rgba(37, 63, 78, .26);
+[data-wall-theme="seaside"] {
+  --font-display: ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", "Varela Round", Nunito, "Trebuchet MS", ui-sans-serif, sans-serif;
+  --wall-body-font: ui-rounded, "SF Pro Rounded", "Segoe UI", "Trebuchet MS", ui-sans-serif, system-ui, sans-serif;
+  --wall-prose-font: var(--wall-body-font);
+  --wall-heading-weight: 800;
+  --wall-heading-tracking: -.01em;
+  --wall-sheet-radius: 26px;
+  --wall-note-radius: 18px;
+  --wall-note-border: 2px solid var(--wall-ink);
+  --wall-note-shadow: none;
+  --wall-frame: 0;
+  --wall-tilt: 0;
+}
+[data-wall-theme="journal"] {
+  --font-display: "American Typewriter", "Courier Prime", Rockwell, "Roboto Slab", "Courier New", Courier, ui-monospace, serif;
+  --wall-body-font: Charter, "Bitstream Charter", "Iowan Old Style", Georgia, serif;
+  --wall-prose-font: var(--wall-body-font);
+  --wall-hand-font: "Segoe Script", "Bradley Hand", "Snell Roundhand", "Apple Chancery", "Brush Script MT", cursive;
+  --wall-heading-weight: 600;
+  --wall-heading-tracking: 0;
+  --wall-sheet-radius: 3px;
+  --wall-note-radius: 2px;
+  --wall-note-shadow: 0 2px 2px rgba(60, 40, 20, .08), 0 10px 18px -12px rgba(60, 40, 20, .45);
+  --wall-frame: 0;
+  --wall-tilt: 1.4;
+  /* Paper fibre: two fine, out-of-step gratings, too faint to read as a pattern under text. */
+  --wall-texture:
+    repeating-linear-gradient(93deg, rgba(90, 60, 30, .025) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(-2deg, rgba(90, 60, 30, .02) 0 1px, transparent 1px 11px);
+  /* Everything pinned in the journal is taped in. */
+  --wall-fix-width: 64px;
+  --wall-fix-height: 18px;
+  --wall-fix-radius: 1px;
+  --wall-fix-back: rgba(222, 205, 160, .78);
+  --wall-fix-shadow: 0 1px 1px rgba(60, 40, 20, .12);
+  --wall-fix-tilt: -3deg;
+}
+
+/* ---- Colourways ----
+   Three seed colours each (paper, ink, accent), with derived tones. The
+   accent is the fill; `--wall-accent-strong` is the same hue darkened until it
+   reads as text on the paper, and the chip pair is what a primary button is
+   drawn with. Linen Terracotta is also the fallback for a wall with no
+   colour, and each theme's own block is its first colourway. */
+[data-wall-theme] {
+  --wall-paper: #f7f2e8;
+  --wall-paper-alt: #efe6d6;
+  --wall-sheet: #fffcf6;
+  --wall-ink: #292a26;
+  --wall-ink-soft: #5f5b52;
+  --wall-accent: #b4472a;
+  --wall-accent-strong: #973a20;
+  --wall-accent-soft: #f4e1d6;
+  --wall-pop: #b4472a;
+  --wall-pop-ink: #ffffff;
+  --wall-rule: rgba(73, 59, 42, .14);
+  --wall-rule-strong: rgba(73, 59, 42, .28);
+  --wall-chip-strong: #b4472a;
+  --wall-chip: #b4472a;
+  --wall-chip-soft: #973a20;
+  --wall-chip-alt: var(--wall-ink);
+  --wall-chip-ink: #ffffff;
+}
+[data-wall-theme="linen"][data-wall-colour="sage"] {
+  --wall-paper: #f4f2e8; --wall-paper-alt: #e7e8da; --wall-sheet: #fdfcf6;
+  --wall-ink: #283a2e; --wall-ink-soft: #56645a;
+  --wall-accent: #60765c; --wall-accent-strong: #4a5f47; --wall-accent-soft: #e1e8dc;
+  --wall-pop: #60765c; --wall-chip-strong: #4f654b; --wall-chip: #60765c; --wall-chip-soft: #3f523d;
+  --wall-rule: rgba(42, 69, 48, .14); --wall-rule-strong: rgba(42, 69, 48, .28);
+}
+[data-wall-theme="linen"][data-wall-colour="ocean"] {
+  --wall-paper: #edf3f0; --wall-paper-alt: #dde9e4; --wall-sheet: #fbfdfc;
+  --wall-ink: #213c3a; --wall-ink-soft: #4f6866;
+  --wall-accent: #34756d; --wall-accent-strong: #275c55; --wall-accent-soft: #d6e9e5;
+  --wall-pop: #34756d; --wall-chip-strong: #2e6a63; --wall-chip: #34756d; --wall-chip-soft: #234f4a;
+  --wall-rule: rgba(33, 60, 58, .14); --wall-rule-strong: rgba(33, 60, 58, .28);
+}
+
+[data-wall-theme="editorial"][data-wall-colour] {
+  --wall-paper: #f6f1e7; --wall-paper-alt: #ece5d6; --wall-sheet: #fbf8f1;
+  --wall-ink: #222222; --wall-ink-soft: #57544e;
+  --wall-accent: #727a51; --wall-accent-strong: #565c3a; --wall-accent-soft: #e6e6d6;
+  --wall-pop: #656c46; --wall-pop-ink: #ffffff;
+  --wall-chip-strong: #222222; --wall-chip: #565c3a; --wall-chip-soft: #3c3c3c; --wall-chip-ink: #ffffff;
+  --wall-rule: rgba(34, 34, 34, .16); --wall-rule-strong: rgba(34, 34, 34, .4);
+}
+[data-wall-theme="editorial"][data-wall-colour="sage"] {
+  --wall-paper: #f6efe9; --wall-paper-alt: #ede2da; --wall-sheet: #fbf7f3;
+  --wall-ink: #2d2025; --wall-ink-soft: #63555a;
+  --wall-accent: #7b354a; --wall-accent-strong: #7b354a; --wall-accent-soft: #f0dde2;
+  --wall-pop: #7b354a; --wall-chip-strong: #2d2025; --wall-chip: #7b354a; --wall-chip-soft: #4a3a40;
+  --wall-rule: rgba(45, 32, 37, .16); --wall-rule-strong: rgba(45, 32, 37, .4);
+}
+[data-wall-theme="editorial"][data-wall-colour="ocean"] {
+  --wall-paper: #f2f1ec; --wall-paper-alt: #e5e4dd; --wall-sheet: #faf9f5;
+  --wall-ink: #202b38; --wall-ink-soft: #545e69;
+  --wall-accent: #405c7a; --wall-accent-strong: #36506c; --wall-accent-soft: #dfe6ee;
+  --wall-pop: #405c7a; --wall-chip-strong: #202b38; --wall-chip: #405c7a; --wall-chip-soft: #3a4756;
+  --wall-rule: rgba(32, 43, 56, .16); --wall-rule-strong: rgba(32, 43, 56, .4);
+}
+
+/* Seaside's ink is its colour: the type is cobalt, teal or berry, and the
+   seed accent is a light fill that only ever carries ink on top of it. */
+[data-wall-theme="seaside"][data-wall-colour] {
+  --wall-paper: #fff5dc; --wall-paper-alt: #ffe9c4; --wall-sheet: #fffbf1;
+  --wall-ink: #244bd8; --wall-ink-soft: #3047a3;
+  --wall-accent: #244bd8; --wall-accent-strong: #1b3aa8; --wall-accent-soft: #ffe0d4;
+  --wall-pop: #ffa88b; --wall-pop-ink: #172f8c;
+  --wall-chip-strong: #244bd8; --wall-chip: #244bd8; --wall-chip-soft: #1b3aa8; --wall-chip-ink: #ffffff;
+  --wall-rule: rgba(36, 75, 216, .22); --wall-rule-strong: rgba(36, 75, 216, .5);
+}
+[data-wall-theme="seaside"][data-wall-colour="sage"] {
+  --wall-paper: #f2f7dd; --wall-paper-alt: #e4eec4; --wall-sheet: #fbfdf1;
+  --wall-ink: #145a62; --wall-ink-soft: #24525a;
+  --wall-accent: #145a62; --wall-accent-strong: #0f474e; --wall-accent-soft: #fbe8b8;
+  --wall-pop: #f2bf4b; --wall-pop-ink: #0d3d43;
+  --wall-chip-strong: #145a62; --wall-chip: #145a62; --wall-chip-soft: #0f474e;
+  --wall-rule: rgba(20, 90, 98, .22); --wall-rule-strong: rgba(20, 90, 98, .5);
+}
+[data-wall-theme="seaside"][data-wall-colour="ocean"] {
+  --wall-paper: #fff2e5; --wall-paper-alt: #fde3cf; --wall-sheet: #fffaf4;
+  --wall-ink: #772b53; --wall-ink-soft: #6a3352;
+  --wall-accent: #772b53; --wall-accent-strong: #5e1f40; --wall-accent-soft: #f8dbe3;
+  --wall-pop: #e8a2b5; --wall-pop-ink: #4f1a36;
+  --wall-chip-strong: #772b53; --wall-chip: #772b53; --wall-chip-soft: #5e1f40;
+  --wall-rule: rgba(119, 43, 83, .22); --wall-rule-strong: rgba(119, 43, 83, .5);
+}
+
+[data-wall-theme="journal"][data-wall-colour] {
+  --wall-paper: #f1e5cd; --wall-paper-alt: #e6d5b5; --wall-sheet: #f9f1df;
+  --wall-ink: #49352b; --wall-ink-soft: #6a5444;
+  --wall-accent: #ab513b; --wall-accent-strong: #8b3f2b; --wall-accent-soft: #eed6c8;
+  --wall-pop: #ab513b; --wall-pop-ink: #ffffff;
+  --wall-chip-strong: #9c4934; --wall-chip: #ab513b; --wall-chip-soft: #7d3826; --wall-chip-ink: #ffffff;
+  --wall-rule: rgba(73, 53, 43, .16); --wall-rule-strong: rgba(73, 53, 43, .34);
+}
+[data-wall-theme="journal"][data-wall-colour="sage"] {
+  --wall-paper: #eee8d7; --wall-paper-alt: #ded6bd; --wall-sheet: #f7f3e6;
+  --wall-ink: #2c3b2e; --wall-ink-soft: #536050;
+  --wall-accent: #59724e; --wall-accent-strong: #44593b; --wall-accent-soft: #dfe5d2;
+  --wall-pop: #59724e; --wall-chip-strong: #4d6443; --wall-chip: #59724e; --wall-chip-soft: #3a4d33;
+  --wall-rule: rgba(44, 59, 46, .16); --wall-rule-strong: rgba(44, 59, 46, .34);
+}
+[data-wall-theme="journal"][data-wall-colour="ocean"] {
+  --wall-paper: #f0e6db; --wall-paper-alt: #e2d3c3; --wall-sheet: #f8f1e9;
+  --wall-ink: #433143; --wall-ink-soft: #66546a;
+  --wall-accent: #84566f; --wall-accent-strong: #6b4259; --wall-accent-soft: #ecdbe2;
+  --wall-pop: #84566f; --wall-chip-strong: #7a4d66; --wall-chip: #84566f; --wall-chip-soft: #5d3a4e;
+  --wall-rule: rgba(67, 49, 67, .16); --wall-rule-strong: rgba(67, 49, 67, .34);
 }
 
 /* ---- What the tokens above actually paint ----
@@ -3402,7 +3511,7 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 .wall-appearance-picker { display: grid; gap: 16px; max-width: 390px; }
 .theme-picker { border: 0; padding: 0; margin: 0; min-width: 0; }
 .theme-picker legend { padding: 0; margin-bottom: 8px; font-size: .75rem; font-weight: 650; color: var(--text-muted); }
-.theme-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.theme-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .theme-option, .colour-option { position: relative; min-width: 0; }
 .theme-option input, .colour-option input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
 .theme-option > span { display: grid; justify-items: center; gap: 8px; padding: 7px 7px 9px; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface-raised); font-size: .8rem; font-weight: 600; }
