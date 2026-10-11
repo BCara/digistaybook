@@ -43,6 +43,7 @@ export function HostSignInPage({ initialMode = "sign-in" }: { initialMode?: Host
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [pending, setPending] = useState<null | "email" | "google" | "reset" | "create">(null);
   const [feedback, setFeedback] = useState<Feedback>(null);
@@ -222,16 +223,29 @@ export function HostSignInPage({ initialMode = "sign-in" }: { initialMode?: Host
         )}
 
         <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          autoComplete={creating ? "new-password" : "current-password"}
-          value={password}
-          aria-describedby={creating ? "password-hint" : undefined}
-          aria-invalid={problemFor(problems, "password") ? true : undefined}
-          onChange={(event) => setPassword(event.target.value)}
-          disabled={!firebaseConfigured || busy}
-        />
+        <div className="password-field">
+          <input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete={creating ? "new-password" : "current-password"}
+            value={password}
+            aria-describedby={creating ? "password-hint" : undefined}
+            aria-invalid={problemFor(problems, "password") ? true : undefined}
+            onChange={(event) => setPassword(event.target.value)}
+            disabled={!firebaseConfigured || busy}
+          />
+          <button
+            type="button"
+            className="password-toggle"
+            aria-controls="password"
+            aria-pressed={showPassword}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            onClick={() => setShowPassword((shown) => !shown)}
+            disabled={!firebaseConfigured || busy}
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
         {creating && (
           <p className="field-hint" id="password-hint">
             {problemFor(problems, "password") ?? `At least ${passwordMinimumLength} characters.`}
@@ -243,7 +257,7 @@ export function HostSignInPage({ initialMode = "sign-in" }: { initialMode?: Host
             <label htmlFor="confirm-password">Confirm password</label>
             <input
               id="confirm-password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               autoComplete="new-password"
               value={confirmPassword}
               aria-describedby="confirm-hint"

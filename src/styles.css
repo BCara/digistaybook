@@ -1105,6 +1105,18 @@ input, textarea, select {
 input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: var(--ring); }
 input:disabled, textarea:disabled, select:disabled { background: var(--bg-alt); color: var(--text-muted); cursor: not-allowed; }
 textarea { min-height: 132px; resize: vertical; }
+/* A password input with its Show/Hide switch sitting inside the right edge. */
+.password-field { position: relative; }
+.password-field input { padding-right: 76px; }
+.password-toggle {
+  position: absolute; top: 50%; right: 6px; transform: translateY(-50%);
+  min-height: 0; padding: 6px 10px; border: 0; border-radius: var(--radius-xs);
+  background: none; box-shadow: none; color: var(--accent);
+  font: inherit; font-size: var(--step--1); font-weight: 600; cursor: pointer;
+}
+.password-toggle:hover:not(:disabled) { background: var(--bg-alt); }
+.password-toggle:focus-visible { outline: none; box-shadow: var(--ring); }
+.password-toggle:disabled { color: var(--text-muted); cursor: not-allowed; }
 .check-row { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; font-weight: 400; font-size: .99rem; line-height: 1.55; color: var(--text-muted); }
 .check-row input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); }
 .form-feedback { margin: 0; padding: 12px 15px; background: var(--bg-alt); border-left: 2px solid var(--accent); color: var(--text-muted); font-size: .99rem; }
