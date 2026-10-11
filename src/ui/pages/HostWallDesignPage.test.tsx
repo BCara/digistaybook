@@ -215,8 +215,8 @@ describe("the guest view of a property", () => {
     expect(side.getByRole("radio", { name: "Warm Linen" })).toBeChecked();
     expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "linen");
 
-    fireEvent.click(side.getByRole("radio", { name: "Playful Seaside" }));
-    // Each theme names its own colourways: Seaside's third is Berry.
+    fireEvent.click(side.getByRole("radio", { name: "Playful" }));
+    // Each theme names its own colourways: Playful's third is Berry.
     fireEvent.click(screen.getByRole("radio", { name: "Berry" }));
     expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "seaside");
 

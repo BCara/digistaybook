@@ -312,7 +312,10 @@ button:disabled, .btn:disabled { cursor: not-allowed; opacity: .45; }
 
 /* ------------------------------ Footer --------------------------------- */
 
+/* Positioned so it paints over a guest wall's fixed page background, which
+   otherwise covers it and leaves its pale logo and links on cream. */
 .site-footer {
+  position: relative; z-index: 1;
   background: var(--surface-inverse); color: var(--text-inverse);
   padding: clamp(52px, 7vw, 88px) var(--gutter) 32px;
 }

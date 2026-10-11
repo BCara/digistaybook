@@ -19,7 +19,7 @@ export const wallThemes: readonly WallTheme[] = [
     colourways: colourways("Terracotta", "Sage", "Sea Glass") },
   { id: "editorial", name: "Editorial", note: "A strong title, thin rules, numbered guidance and almost no card chrome.",
     colourways: colourways("Olive", "Bordeaux", "Ink Blue") },
-  { id: "seaside", name: "Playful Seaside", note: "Bold rounded type, an arched cover, outlined blocks and a wave under the memories.",
+  { id: "seaside", name: "Playful", note: "Bold rounded type, an arched cover, outlined blocks and a bright band under the memories.",
     colourways: colourways("Cobalt Peach", "Lagoon", "Berry") },
   { id: "journal", name: "Rustic Guest Journal", note: "Typewriter headings, a polaroid cover, taped notes and a ruled guidance sheet.",
     colourways: colourways("Rust", "Forest", "Plum") }
