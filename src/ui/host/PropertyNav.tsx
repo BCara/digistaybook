@@ -99,7 +99,7 @@ export function PropertyNav({
     { key: "design", label: "Property view", href: base },
     { key: "public", label: "Public wall", href: `${base}/public` },
     { key: "qr", label: "Walls and QR display", href: `${base}/qr` },
-    { key: "moderation", label: "Moderation", href: `${base}/moderation` },
+    { key: "moderation", label: "Inbox & moderation", href: `${base}/moderation` },
     { key: "export", label: "Export guestbook", href: `${base}/export` },
     { key: "billing", label: draft ? "Publish" : "Billing", href: `${base}/billing` }
   ];

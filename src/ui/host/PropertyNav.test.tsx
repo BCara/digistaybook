@@ -5,7 +5,7 @@ describe('property page navigation', () => {
   it('offers mobile page links and closes after choosing one', () => {
     const { container } = render(<PropertyNav mobile propertyId="cottage" current="moderation" draft />);
     const panel = container.querySelector('details')!;
-    expect(panel.querySelector('summary')).toHaveTextContent('Moderation');
+    expect(panel.querySelector('summary')).toHaveTextContent('Inbox & moderation');
     panel.open = true;
     const link = screen.getByRole('link', { name: 'Walls and QR display' });
     expect(link).toHaveAttribute('href', '/host/property/cottage/qr');

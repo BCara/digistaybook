@@ -31,6 +31,11 @@ Documents on the NAS:
 - `DIGISTAYBOOK_DEVELOPER_AND_LAUNCH_CHECKLIST.html` — developer-only checks
 - `digistaybook_WIP_v3.html`
 
+One level up, in `projects/DigiStayBook/`:
+
+- `todo.html` — work parked for later (e.g. keeping the guestbook warm). Edited
+  only on the NAS; there is no repo copy.
+
 ## Access
 
 **Reading** works without credentials over HTTP:

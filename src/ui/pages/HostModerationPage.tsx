@@ -87,7 +87,7 @@ export function HostModerationPage({ propertyId }: { propertyId: string }) {
   return (
     <PropertyShell property={property} current="moderation" className="moderation-page">
       <header className="moderation-intro">
-        <h2>Moderation</h2>
+        <h2>Inbox &amp; moderation</h2>
         <p>Decide what appears on your wall, and pin the memories you want guests to see first.</p>
       </header>
       <GuestReviewPanel key={propertyId} propertyId={propertyId} collapseWhenEmpty onCount={onWaiting} refreshSignal={refreshSignal} />

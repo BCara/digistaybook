@@ -277,7 +277,7 @@ describe("property billing", () => {
 
     const nav = within(screen.getByRole("navigation", { name: "This property" }));
     expect(nav.getByText("Billing", { selector: "span[aria-current]" })).toHaveAttribute("aria-current", "page");
-    expect(nav.getByRole("link", { name: "Moderation" })).toHaveAttribute(
+    expect(nav.getByRole("link", { name: "Inbox & moderation" })).toHaveAttribute(
       "href",
       "/host/property/prop-1/moderation"
     );

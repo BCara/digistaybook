@@ -168,7 +168,11 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
       </div>
       <div className="guest-photo-previews">{photos.map((photo, index) => <figure key={photo.preview}>
         <img src={photo.preview} alt={`Selected photo ${index + 1}`} /><figcaption>{photo.file.name}</figcaption>
-        <button type="button" disabled={locked} onClick={() => { URL.revokeObjectURL(photo.preview); setPhotos(previous => previous.filter((_, i) => i !== index)); }}>Remove photo {index + 1}</button>
+        <button type="button" className="guest-photo-remove" aria-label={`Remove photo ${index + 1}`} title="Remove photo" disabled={locked} onClick={() => { URL.revokeObjectURL(photo.preview); setPhotos(previous => previous.filter((_, i) => i !== index)); }}>
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 6h18" /><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /><path d="M10 11v6" /><path d="M14 11v6" />
+          </svg>
+        </button>
       </figure>)}</div>
       <label className="guest-consent"><input type="checkbox" checked={consent} disabled={locked} onChange={event => setConsent(event.target.checked)} /><span>{guestPolicy.consentWording.split(/(Guest Terms|Privacy Policy)/).map((part, index) =>
         part === "Guest Terms" || part === "Privacy Policy"

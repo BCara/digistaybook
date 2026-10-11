@@ -212,7 +212,7 @@ describe("walls and QR display", () => {
 
     expect(nav().getByText("Walls and QR display", { selector: "[aria-current]" })).toHaveAttribute("aria-current", "page");
     expect(nav().getByRole("link", { name: "Property view" })).toHaveAttribute("href", "/host/property/prop-1");
-    expect(nav().getByRole("link", { name: "Moderation" })).toHaveAttribute(
+    expect(nav().getByRole("link", { name: "Inbox & moderation" })).toHaveAttribute(
       "href",
       "/host/property/prop-1/moderation"
     );

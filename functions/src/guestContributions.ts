@@ -33,6 +33,10 @@ function uid(request: CallableRequest, guest = true) {
 // explicitly owner-authorised, property-scoped test can use the drafts.
 export function guestIntakeEnabled(propertyId?: string, now = Date.now()) {
   if (process.env.FUNCTIONS_EMULATOR === "true" || (process.env.GUEST_CONTRIBUTIONS_ENABLED === "true" && legalApproved())) return true;
+  // Owner decision (11 Oct 2026): open intake on every property before counsel
+  // has approved the texts. This is not legal approval - `legalApproval` stays
+  // null and each submission records the draft versions it was made under.
+  if (process.env.GUEST_INTAKE_OWNER_OVERRIDE === "true") return true;
   // Explicit owner-authorised production testing exception. No legal approval
   // is fabricated; only the named property can use draft texts until expiry.
   const expires = Date.parse(process.env.GUEST_TEST_UNTIL ?? "");
@@ -129,7 +133,8 @@ export const beginGuestContribution = onCall(options, async request => {
     tx.set(sessionRef, { propertyId: property.id, hour, attempts: attempts + 1, updatedAt: stamp() });
     tx.create(ref, { propertyId: property.id, uid: owner, kind: memory ? "memory" : "feedback", fingerprint, message, displayName, feedback, photoCount: count,
       bucket, publishedBucket, slots: {}, bytes: 0, revision: 1, status: "uploading", createdAt: stamp(), updatedAt: stamp(),
-      intakeMode: legalApproved() ? "approved" : process.env.FUNCTIONS_EMULATOR === "true" ? "emulator" : "owner_authorised_test" });
+      intakeMode: legalApproved() ? "approved" : process.env.FUNCTIONS_EMULATOR === "true" ? "emulator"
+        : process.env.GUEST_INTAKE_OWNER_OVERRIDE === "true" ? "owner_override" : "owner_authorised_test" });
     if (memory) tx.create(db().doc(`guestConsent/${id}`), { propertyId: property.id, postId: id, sessionUid: owner,
       wording: guestPolicy.consentWording, version: guestPolicy.consentVersion,
       guestTermsVersion: legalVersions.guestTerms, privacyVersion: legalVersions.privacy, acceptedAt: stamp() });

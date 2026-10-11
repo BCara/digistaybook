@@ -44,4 +44,11 @@ describe("legal approval gate (GC-03)", () => {
     expect(guestIntakeEnabled("test-property", now)).toBe(false);
     expect(legalApproval).toBeNull();
   });
+  it("opens intake on every property under the owner override, without recording approval", () => {
+    vi.stubEnv("FUNCTIONS_EMULATOR", "false");
+    vi.stubEnv("GUEST_CONTRIBUTIONS_ENABLED", "false");
+    vi.stubEnv("GUEST_INTAKE_OWNER_OVERRIDE", "true");
+    expect(guestIntakeEnabled("any-property")).toBe(true);
+    expect(legalApproved()).toBe(false);
+  });
 });

@@ -105,7 +105,7 @@ describe("the moderation queue", () => {
   it("shows every memory on the wall, hidden ones included, in its own pile", async () => {
     renderPage();
 
-    expect(await screen.findByRole("heading", { name: "Moderation", level: 2 })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Inbox & moderation", level: 2 })).toBeInTheDocument();
     expect(await screen.findByRole("heading", { name: /Privacy and takedown requests/ })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /On the wall/ })).toBeInTheDocument();
     expect(screen.getByText("Please take the photo of my children down.")).toBeInTheDocument();
