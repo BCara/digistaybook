@@ -661,6 +661,180 @@
 [data-wall-theme="journal"][data-wall-theme] .live-property-header { background: var(--wall-sheet); border: 0; border-radius: 2px; }
 [data-wall-theme="journal"][data-wall-theme] .live-property-cover { margin-bottom: 18px; }
 
+/* ========================= The Host's canvas ==========================
+
+   The property view draws the in-stay wall with the wall's own classes, so
+   every rule above already reaches it. What is left is the canvas's own:
+   its cover is a button around the photograph rather than the photograph,
+   its words are fields, and each field must stay readable while it is
+   being typed into on whatever the theme puts behind it. */
+
+[data-wall-theme] .stay-wall.canvas-stay {
+  margin-bottom: 0;
+  padding-top: clamp(20px, 3.4vw, 40px);
+}
+/* The cover's frame belongs to the photograph, so it is drawn on the
+   photograph and on the empty frame waiting for one, in the same shape. */
+[data-wall-theme] .canvas-stay .stay-cover .canvas-cover-photo,
+[data-wall-theme] .canvas-stay .stay-cover .canvas-cover-empty {
+  height: auto;
+  min-height: 180px;
+  aspect-ratio: 16 / 7;
+  border: 0;
+  border-radius: var(--stay-radius);
+}
+[data-wall-theme] .canvas-stay .stay-cover .canvas-cover-empty { border: 1px dashed var(--wall-rule-strong, var(--rule-strong)); }
+[data-wall-theme] .canvas-stay .stay-cover-titles .canvas-field { text-align: inherit; }
+[data-wall-theme] .canvas-stay .stay-cover-titles .form-feedback { text-transform: none; letter-spacing: 0; }
+[data-wall-theme] .canvas-stay .stay-location { display: flex; }
+[data-wall-theme] .canvas-stay .stay-location .canvas-field { flex: 1; min-width: 0; }
+/* The location placeholder is long; on the wall it is one quiet line. */
+[data-wall-theme] .canvas-stay .stay-location .canvas-area { letter-spacing: inherit; }
+
+/* The photograph sits in the hosts' card, where the wall puts it, with the
+   button to change it under it. */
+[data-wall-theme] .canvas-stay .canvas-welcome-card .canvas-portrait { gap: 6px; }
+[data-wall-theme] .canvas-stay .canvas-welcome-card .canvas-portrait-photo,
+[data-wall-theme] .canvas-stay .canvas-welcome-card .canvas-portrait-mark { border: 0; }
+[data-wall-theme] .canvas-stay .canvas-welcome-card .canvas-portrait-mark .camera-mark { width: 40%; height: 40%; }
+[data-wall-theme] .canvas-stay .canvas-welcome-card .canvas-portrait-action { white-space: normal; max-width: 9rem; text-align: center; }
+[data-wall-theme] .canvas-stay .canvas-welcome-card > .canvas-includes { grid-column: 1 / -1; margin: 0; }
+[data-wall-theme] .canvas-stay .stay-welcome-plain > .canvas-includes { grid-column: auto; }
+/* On a phone the card's controls (always shown on touch) need the width, so
+   the photograph stands above the words rather than beside them. */
+@media (max-width: 560px) {
+  [data-wall-theme] .canvas-stay .canvas-welcome-card { grid-template-columns: minmax(0, 1fr); justify-items: start; }
+  [data-wall-theme] .canvas-stay .canvas-welcome-card > * { width: 100%; }
+  [data-wall-theme] .canvas-stay .canvas-welcome-card > .canvas-portrait-wrap { width: auto; }
+  [data-wall-theme] .canvas-stay .canvas-welcome-card .canvas-optional { flex-wrap: wrap; }
+}
+[data-wall-theme] .canvas-stay .canvas-eyebrow { margin: 0; }
+[data-wall-theme] .canvas-stay .stay-welcome-words .canvas-heading { margin: 0; }
+[data-wall-theme] .canvas-stay .stay-hosts { flex: 1; min-width: 0; }
+[data-wall-theme] .canvas-stay .stay-welcome-body.canvas-optional { display: flex; }
+[data-wall-theme] .canvas-stay .canvas-stay-note { max-width: 62ch; color: var(--wall-ink, var(--text)); }
+[data-wall-theme] .canvas-stay .stay-tip-card .canvas-optional { align-items: center; }
+[data-wall-theme] .canvas-stay .stay-tip-card .canvas-tip { padding: 4px 8px; border-left: 0; }
+
+/* The essentials in full are the wall's fact cards; the remove button and
+   any problem with the line run the width of the card under them. */
+[data-wall-theme] .canvas-stay .stay-facts.canvas-essentials { margin: 6px 0; }
+[data-wall-theme] .canvas-stay .stay-fact-head h3 { flex: 1; min-width: 0; }
+[data-wall-theme] .canvas-stay .stay-fact-body .canvas-field { flex: 1; min-width: 0; }
+[data-wall-theme] .canvas-stay .stay-fact > .form-feedback,
+[data-wall-theme] .canvas-stay .stay-fact > .btn { grid-column: 1 / -1; }
+[data-wall-theme] .canvas-stay .stay-fact > .btn { justify-self: start; margin-top: 0; padding-top: 0; }
+[data-wall-theme] .canvas-stay .stay-fact-note.canvas-field { padding: 0; }
+
+/* The memories band carries its own ink on Playful, so the canvas's
+   labels and small print take the band's colour rather than the page's. */
+[data-wall-theme] .canvas-memories.wall-memories label,
+[data-wall-theme] .canvas-memories.wall-memories .canvas-guest-note { color: inherit; }
+[data-wall-theme] .canvas-memories.wall-memories .canvas-guest-note .text-link { color: inherit; }
+
+/* ---- Warm Linen: the name on the photograph ---- */
+[data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) {
+  display: grid;
+  grid-template-areas: "cover";
+  gap: 0;
+}
+[data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) > * { grid-area: cover; }
+[data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-photo { aspect-ratio: 16 / 10; }
+@media (min-width: 720px) {
+  [data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-photo { aspect-ratio: 16 / 8; }
+}
+[data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) .stay-cover-titles {
+  position: relative;
+  z-index: 2;
+  align-self: end;
+  padding: clamp(48px, 9vw, 80px) clamp(16px, 4vw, 28px) clamp(16px, 4vw, 24px);
+  border-radius: 0 0 var(--stay-radius) var(--stay-radius);
+  background: linear-gradient(180deg, transparent, rgba(16, 14, 10, .62) 55%, rgba(16, 14, 10, .78));
+  color: #fff;
+}
+[data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) .stay-cover-titles h1 { color: #fff; text-shadow: 0 1px 12px rgba(0, 0, 0, .35); }
+[data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) .stay-location { color: rgba(255, 255, 255, .92); }
+[data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) .stay-location svg { stroke: currentColor; }
+/* Fields on the photograph keep white type while they are typed into. */
+[data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) .stay-cover-titles :is(.canvas-line, .canvas-area)::placeholder { color: rgba(255, 255, 255, .72); }
+[data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) .stay-cover-titles :is(.canvas-line, .canvas-area):is(:hover, :focus):not(:disabled) {
+  background: rgba(0, 0, 0, .28);
+  border-color: rgba(255, 255, 255, .55);
+  color: #fff;
+}
+/* The cover's menu stays above the name laid over it. */
+[data-wall-theme="linen"][data-wall-theme] .canvas-stay .canvas-cover-menu { z-index: 3; }
+
+/* ---- Editorial: the title leads, the photograph is cut square ---- */
+[data-wall-theme="editorial"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-photo,
+[data-wall-theme="editorial"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-empty { border-radius: 0; aspect-ratio: 3 / 2; }
+@media (min-width: 720px) {
+  [data-wall-theme="editorial"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-photo,
+  [data-wall-theme="editorial"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-empty { aspect-ratio: 16 / 7; }
+}
+[data-wall-theme="editorial"][data-wall-theme] .canvas-stay .canvas-cover-action { border-radius: 0; }
+
+/* ---- Playful: the arch, the sun over its corner ---- */
+[data-wall-theme="seaside"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-photo,
+[data-wall-theme="seaside"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-empty {
+  aspect-ratio: 16 / 11;
+  border: 3px solid var(--wall-ink);
+  border-radius: 50% 50% var(--wall-note-radius) var(--wall-note-radius) / 30% 30% var(--wall-note-radius) var(--wall-note-radius);
+}
+[data-wall-theme="seaside"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-empty { border-style: dashed; }
+@media (min-width: 720px) {
+  [data-wall-theme="seaside"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-photo,
+  [data-wall-theme="seaside"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-empty { aspect-ratio: 16 / 8; }
+}
+[data-wall-theme="seaside"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo)::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: -8px; left: 0;
+  width: clamp(40px, 11vw, 62px);
+  height: clamp(40px, 11vw, 62px);
+  background: var(--wall-pop);
+  -webkit-mask: var(--wall-sun) center / contain no-repeat;
+  mask: var(--wall-sun) center / contain no-repeat;
+  pointer-events: none;
+}
+[data-wall-theme="seaside"][data-wall-theme] .canvas-stay .stay-location { justify-content: center; }
+[data-wall-theme="seaside"][data-wall-theme] .canvas-stay .stay-location .canvas-field { flex: 0 1 24rem; }
+
+/* ---- Rustic Guest Journal: a polaroid, taped in ---- */
+[data-wall-theme="journal"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-photo,
+[data-wall-theme="journal"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-empty {
+  aspect-ratio: 4 / 3;
+  padding: 10px 10px 34px;
+  background-color: #fdfaf2;
+  background-clip: padding-box;
+  border-radius: 2px;
+  box-shadow: 0 2px 3px rgba(60, 40, 20, .12), 0 16px 26px -16px rgba(60, 40, 20, .55);
+  transform: rotate(-1.6deg);
+}
+[data-wall-theme="journal"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-empty { border: 0; outline: 1px dashed var(--wall-rule-strong); outline-offset: -10px; }
+[data-wall-theme="journal"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo)::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: -8px;
+  left: 50%;
+  width: 92px;
+  height: 22px;
+  background: var(--wall-fix-back);
+  box-shadow: var(--wall-fix-shadow);
+  transform: translateX(-50%) rotate(3deg);
+  pointer-events: none;
+}
+@media (min-width: 720px) {
+  [data-wall-theme="journal"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 34px;
+  }
+  [data-wall-theme="journal"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo)::before { left: 26%; }
+}
+
 /* Nothing on any wall moves for a reader who asked it not to. */
 @media (prefers-reduced-motion: reduce) {
   [data-wall-theme] .stay-wall .stay-links a { transition: none; }

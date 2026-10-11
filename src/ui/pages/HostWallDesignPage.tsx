@@ -171,7 +171,7 @@ function MemoryChrome({
   );
 
   return (
-    <section className="canvas-memories" aria-label="Memories from guests">
+    <section className="canvas-memories wall-memories" aria-label="Memories from guests">
       <h2 className="wall-heading">{heading}</h2>
       {children}
       {/* Guests' notes cannot be shown here — they are read on the wall and
@@ -600,6 +600,177 @@ export function HostWallDesignPage({
     </section>
   );
 
+  const coverControl = (
+    <>
+        {/* The whole cover is the control, not the pill sitting on it: an
+          empty photograph area reads as somewhere to drop a photograph, and
+          a Host who aims at the middle of it should not find nothing there.
+          The pill stays as the visible affordance, drawn inside the button
+          rather than beside it, so there is still exactly one control. */}
+        <div className="canvas-cover-wrap" style={{ position: "relative" }}>
+          <div className="canvas-cover">
+            <button
+              type="button"
+              className="canvas-cover-hit"
+              aria-label={
+                profile.cover ? "Change cover photo" : "Add a cover photo"
+              }
+              disabled={coverBusy}
+              onClick={() => coverInput.current?.click()}
+            >
+              {profile.cover ? (
+                <img
+                  className="canvas-cover-photo"
+                  src={profile.cover.url}
+                  alt={profile.cover.alt}
+                />
+              ) : (
+                <span className="canvas-cover-empty">
+                  <CameraMark />
+                  <b>The photograph across the top of both walls</b>A wide one
+                  of the property works best. It is the first thing a guest
+                  sees.
+                </span>
+              )}
+              {(!profile.cover || coverBusy) && <span
+                className="btn btn-secondary btn-sm canvas-cover-action"
+                role={coverBusy ? "status" : undefined}
+              >
+                {coverBusy ? (coverProgress >= 1 ? "Saving photo…" : coverProgress > 0 ? `Uploading ${Math.round(coverProgress * 100)}%…` : "Uploading…") : profile.cover ? "Change cover photo" : "Add a cover photo"}
+              </span>}
+            </button>
+            <input
+              ref={coverInput}
+              className="visually-hidden"
+              type="file"
+              accept={profileLimits.photoTypes.join(",")}
+              aria-label="Cover photo: choose an image file"
+              disabled={coverBusy}
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                event.target.value = "";
+                if (file && !coverBusy) void uploadCover(file);
+              }}
+            />
+            {coverError && <p className="form-feedback" role="alert">{coverError}</p>}
+          </div>
+          {profile.cover && (
+            <ActionDisclosure className="canvas-cover-menu" label="Edit cover">
+              <div className="cover-menu-actions">
+                <button type="button" disabled={coverBusy} onClick={() => coverInput.current?.click()}>Change cover photo</button>
+            <button
+              type="button"
+              onClick={() => set("cover", null)}
+              disabled={coverBusy}
+            >
+              Remove cover photo
+            </button>
+              </div>
+            </ActionDisclosure>
+          )}
+        </div>
+    </>
+  );
+
+      {/* Same again for the portrait: the frame itself is the button,
+        so clicking the picture — or the empty square where one
+        belongs — is what a Host expects it to be. */}
+  const portraitControl = (
+      <div className="canvas-portrait-wrap" style={{ position: "relative" }}>
+        <button
+          type="button"
+          className="canvas-portrait"
+          aria-label={
+            profile.hostPhoto
+              ? "Change your photograph"
+              : "Add your photograph"
+          }
+          disabled={portraitBusy}
+          onClick={() => photoInput.current?.click()}
+        >
+          {profile.hostPhoto ? (
+            <img
+              className="canvas-portrait-photo stay-portrait"
+              src={profile.hostPhoto.url}
+              alt={profile.hostPhoto.alt}
+            />
+          ) : (
+            <span className="canvas-portrait-mark stay-portrait" aria-hidden="true">
+              {/* Initials stand for a Host who has typed their names; with
+                nothing to draw, the square says what it wants — a
+                photograph — rather than asking a question back. */}
+              {profile.hosts ? (
+                hostInitials(profile.hosts)
+              ) : (
+                <CameraMark />
+              )}
+            </span>
+          )}
+          <span
+            className="btn btn-ghost btn-sm canvas-portrait-action"
+            role={portraitBusy ? "status" : undefined}
+          >
+            {portraitBusy ? (portraitProgress >= 1 ? "Saving photo…" : portraitProgress > 0 ? `Uploading ${Math.round(portraitProgress * 100)}%…` : "Uploading…") : profile.hostPhoto
+              ? "Change your photograph"
+              : "Add your photograph"}
+          </span>
+        </button>
+        <input
+          ref={photoInput}
+          className="visually-hidden"
+          type="file"
+          accept={profileLimits.photoTypes.join(",")}
+          aria-label="Your photograph: choose an image file"
+          disabled={portraitBusy}
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+            event.target.value = "";
+            if (file && !portraitBusy) void uploadPortrait(file);
+          }}
+        />
+        {profile.hostPhoto && (
+          <button
+            type="button"
+            className="canvas-portrait-remove"
+            aria-label="Remove photo"
+            onClick={() => set("hostPhoto", null)}
+            disabled={portraitBusy}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>
+        )}
+      {portraitError && <p className="form-feedback" role="alert">{portraitError}</p>}
+    </div>
+  );
+
+  const nameInput = (
+      <CanvasParagraph
+        label="Property name"
+        value={draft.name}
+        placeholder="The name guests see"
+        maxLength={propertyIdentityLimits.nameMax}
+        disabled={draft.saving}
+        invalid={nameProblem ? true : undefined}
+        onChange={value => draft.setName(value.replace(/[\r\n]+/g, " "))}
+      />
+  );
+  const nameFeedback = nameProblem && (
+    <p className="form-feedback" role="alert">
+      {nameProblem}
+    </p>
+  );
+  const locationInput = (
+      <CanvasParagraph
+        label="Where the property is"
+        value={profile.location}
+        placeholder="10 Street Name, Town, Postcode"
+        maxLength={profileLimits.locationMax}
+        disabled={draft.saving}
+        className="canvas-location"
+        onChange={(value) => set("location", value.replace(/[\r\n]+/g, " "))}
+      />
+  );
+
   return (
     // The band overhead is fed the draft rather than the saved property: this
     // is the screen the name, the place and the cover are typed on, and a
@@ -679,173 +850,36 @@ export function HostWallDesignPage({
             data-wall-theme={profile.theme}
             data-wall-colour={profile.colour}
           >
-            {/* The whole cover is the control, not the pill sitting on it: an
-              empty photograph area reads as somewhere to drop a photograph, and
-              a Host who aims at the middle of it should not find nothing there.
-              The pill stays as the visible affordance, drawn inside the button
-              rather than beside it, so there is still exactly one control. */}
-            <div className="canvas-cover-wrap" style={{ position: "relative" }}>
-              <div className="canvas-cover">
-                <button
-                  type="button"
-                  className="canvas-cover-hit"
-                  aria-label={
-                    profile.cover ? "Change cover photo" : "Add a cover photo"
-                  }
-                  disabled={coverBusy}
-                  onClick={() => coverInput.current?.click()}
-                >
-                  {profile.cover ? (
-                    <img
-                      className="canvas-cover-photo"
-                      src={profile.cover.url}
-                      alt={profile.cover.alt}
-                    />
-                  ) : (
-                    <span className="canvas-cover-empty">
-                      <CameraMark />
-                      <b>The photograph across the top of both walls</b>A wide one
-                      of the property works best. It is the first thing a guest
-                      sees.
-                    </span>
-                  )}
-                  {(!profile.cover || coverBusy) && <span
-                    className="btn btn-secondary btn-sm canvas-cover-action"
-                    role={coverBusy ? "status" : undefined}
-                  >
-                    {coverBusy ? (coverProgress >= 1 ? "Saving photo…" : coverProgress > 0 ? `Uploading ${Math.round(coverProgress * 100)}%…` : "Uploading…") : profile.cover ? "Change cover photo" : "Add a cover photo"}
-                  </span>}
-                </button>
-                <input
-                  ref={coverInput}
-                  className="visually-hidden"
-                  type="file"
-                  accept={profileLimits.photoTypes.join(",")}
-                  aria-label="Cover photo: choose an image file"
-                  disabled={coverBusy}
-                  onChange={(event) => {
-                    const file = event.target.files?.[0];
-                    event.target.value = "";
-                    if (file && !coverBusy) void uploadCover(file);
-                  }}
-                />
-                {coverError && <p className="form-feedback" role="alert">{coverError}</p>}
-              </div>
-              {profile.cover && (
-                <ActionDisclosure className="canvas-cover-menu" label="Edit cover">
-                  <div className="cover-menu-actions">
-                    <button type="button" disabled={coverBusy} onClick={() => coverInput.current?.click()}>Change cover photo</button>
-                <button
-                  type="button"
-                  onClick={() => set("cover", null)}
-                  disabled={coverBusy}
-                >
-                  Remove cover photo
-                </button>
-                  </div>
-                </ActionDisclosure>
-              )}
-            </div>
-            
-            <div className="canvas-body">
-              <div className="canvas-identity">
-                {/* Same again for the portrait: the frame itself is the button,
-                  so clicking the picture — or the empty square where one
-                  belongs — is what a Host expects it to be. */}
-                <div className="canvas-portrait-wrap" style={{ position: "relative" }}>
-                  <button
-                    type="button"
-                    className="canvas-portrait"
-                    aria-label={
-                      profile.hostPhoto
-                        ? "Change your photograph"
-                        : "Add your photograph"
-                    }
-                    disabled={portraitBusy}
-                    onClick={() => photoInput.current?.click()}
-                  >
-                    {profile.hostPhoto ? (
-                      <img
-                        className="canvas-portrait-photo"
-                        src={profile.hostPhoto.url}
-                        alt={profile.hostPhoto.alt}
-                      />
-                    ) : (
-                      <span className="canvas-portrait-mark" aria-hidden="true">
-                        {/* Initials stand for a Host who has typed their names; with
-                          nothing to draw, the square says what it wants — a
-                          photograph — rather than asking a question back. */}
-                        {profile.hosts ? (
-                          hostInitials(profile.hosts)
-                        ) : (
-                          <CameraMark />
-                        )}
-                      </span>
-                    )}
-                    <span
-                      className="btn btn-ghost btn-sm canvas-portrait-action"
-                      role={portraitBusy ? "status" : undefined}
-                    >
-                      {portraitBusy ? (portraitProgress >= 1 ? "Saving photo…" : portraitProgress > 0 ? `Uploading ${Math.round(portraitProgress * 100)}%…` : "Uploading…") : profile.hostPhoto
-                        ? "Change your photograph"
-                        : "Add your photograph"}
-                    </span>
-                  </button>
-                  <input
-                    ref={photoInput}
-                    className="visually-hidden"
-                    type="file"
-                    accept={profileLimits.photoTypes.join(",")}
-                    aria-label="Your photograph: choose an image file"
-                    disabled={portraitBusy}
-                    onChange={(event) => {
-                      const file = event.target.files?.[0];
-                      event.target.value = "";
-                      if (file && !portraitBusy) void uploadPortrait(file);
-                    }}
-                  />
-                  {profile.hostPhoto && (
-                    <button
-                      type="button"
-                      className="canvas-portrait-remove"
-                      aria-label="Remove photo"
-                      onClick={() => set("hostPhoto", null)}
-                      disabled={portraitBusy}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>
-                  )}
-                </div>
-                {portraitError && <p className="form-feedback" role="alert">{portraitError}</p>}
+            {view === "public" && coverControl}
 
-                <div className="canvas-titles">
-                  <h2 className="canvas-name">
-                    <CanvasParagraph
-                      label="Property name"
-                      value={draft.name}
-                      placeholder="The name guests see"
-                      maxLength={propertyIdentityLimits.nameMax}
-                      disabled={draft.saving}
-                      invalid={nameProblem ? true : undefined}
-                      onChange={value => draft.setName(value.replace(/[\r\n]+/g, " "))}
-                    />
-                  </h2>
-                  {nameProblem && (
-                    <p className="form-feedback" role="alert">
-                      {nameProblem}
-                    </p>
-                  )}
-                  <CanvasParagraph
-                    label="Where the property is"
-                    value={profile.location}
-                    placeholder="10 Street Name, Town, Postcode"
-                    maxLength={profileLimits.locationMax}
-                    disabled={draft.saving}
-                    className="canvas-location"
-                    onChange={(value) => set("location", value.replace(/[\r\n]+/g, " "))}
-                  />
+            {/* The in-stay wall is drawn with the guest wall's own classes, so
+              each theme dresses the canvas exactly as it dresses the wall:
+              the cover, the name and the place, the hosts' card, the tip and
+              the essentials. Only the fields and their controls are the
+              canvas's own. */}
+            <div className={view === "public" ? "canvas-body" : "canvas-body stay-wall canvas-stay"}>
+              {view === "public" ? (
+                <div className="canvas-identity">
+                  {portraitControl}
+                  <div className="canvas-titles">
+                    <h2 className="canvas-name">{nameInput}</h2>
+                    {nameFeedback}
+                    {locationInput}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <header className="stay-cover canvas-stay-cover">
+                  {coverControl}
+                  <div className="stay-cover-titles canvas-stay-titles">
+                    <h1 className="canvas-name" aria-level={2}>{nameInput}</h1>
+                    {nameFeedback}
+                    <div className="stay-location">
+                      <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 18s5.6-5.4 5.6-9.6a5.6 5.6 0 0 0-11.2 0C4.4 12.6 10 18 10 18Z" /><circle cx="10" cy="8.4" r="2" /></svg>
+                      {locationInput}
+                    </div>
+                  </div>
+                </header>
+              )}
 
               {view === "public" ? (
                 <>
@@ -902,15 +936,14 @@ export function HostWallDesignPage({
                 </>
               ) : (
                 <>
-                  {/* The note is on the wall unless a Host says otherwise, and
-                    every line in it is still optional: a Host who answers
-                    everything at the door can take the whole thing off, and a
-                    blank line printed on a guest's wall is worse than no line.
-                    Leaving a line out is leaving it empty, so what is stored
-                    says the same thing the page does. */}
+                  {/* The hosts' card, as the guest's wall draws it: the
+                    photograph beside the heading and the names, the note under
+                    them. With the note off, the card still says whose house
+                    this is, and the offer to put the note back stands in it. */}
                   {!profile.stayNoteOff ? (
-                    <>
-                      <div className="canvas-note-heading-group">
+                    <section className="stay-welcome stay-card canvas-welcome-card" aria-label="A note from your hosts">
+                      {portraitControl}
+                      <div className="stay-welcome-words">
                         <p className="canvas-eyebrow canvas-eyebrow-omit">
                           A note from your hosts
                           <Omit
@@ -922,7 +955,7 @@ export function HostWallDesignPage({
 
                         {shows("stayHeading") && (
                           <div className="canvas-optional canvas-heading-edit">
-                            <h3 className="canvas-heading">
+                            <h2 className="canvas-heading" aria-level={3}>
                               <CanvasParagraph
                                 label="Arrival heading"
                                 value={profile.stayHeading}
@@ -931,7 +964,7 @@ export function HostWallDesignPage({
                                 disabled={draft.saving}
                                 onChange={(value) => set("stayHeading", value.replace(/[\r\n]+/g, " "))}
                               />
-                            </h3>
+                            </h2>
                             <Omit
                               label="Leave the heading out"
                               iconOnly
@@ -941,10 +974,23 @@ export function HostWallDesignPage({
                           </div>
                         )}
 
+                        {(profile.hosts.trim() || signing) && (
+                          <div className="canvas-optional">
+                            <p className="stay-hosts"><span className="stay-eyebrow">Your hosts,</span> <b>{hosts}</b></p>
+                            <Omit
+                              label="Leave your names out"
+                              disabled={draft.saving}
+                              onClick={() => {
+                                set("hosts", "");
+                                setSigning(false);
+                              }}
+                            />
+                          </div>
+                        )}
                       </div>
 
                       {shows("stayWelcome") && (
-                        <div className="canvas-optional">
+                        <div className="stay-welcome-body canvas-optional">
                           <CanvasParagraph
                             label="Arrival note"
                             value={profile.stayWelcome}
@@ -958,39 +1004,6 @@ export function HostWallDesignPage({
                             label="Leave the arrival note out"
                             disabled={draft.saving}
                             onClick={() => omit("stayWelcome")}
-                          />
-                        </div>
-                      )}
-
-                      {shows("stayTip") && (
-                        <div className="canvas-optional">
-                          <CanvasLine
-                            label="One local recommendation"
-                            value={profile.stayTip}
-                            placeholder="The bakery behind the lighthouse. Go before 9am."
-                            maxLength={profileLimits.stayTipMax}
-                            disabled={draft.saving}
-                            className="canvas-tip"
-                            onChange={(value) => set("stayTip", value)}
-                          />
-                          <Omit
-                            label="Leave the recommendation out"
-                            disabled={draft.saving}
-                            onClick={() => omit("stayTip")}
-                          />
-                        </div>
-                      )}
-
-                      {(profile.hosts.trim() || signing) && (
-                        <div className="canvas-optional">
-                          <p className="canvas-signature">{hosts}</p>
-                          <Omit
-                            label="Leave your names out"
-                            disabled={draft.saving}
-                            onClick={() => {
-                              set("hosts", "");
-                              setSigning(false);
-                            }}
                           />
                         </div>
                       )}
@@ -1030,15 +1043,47 @@ export function HostWallDesignPage({
                           )}
                         </p>
                       )}
-                    </>
+                    </section>
                   ) : (
-                    <p className="canvas-includes canvas-includes-lead">
-                      <Include
-                        label="a note from your hosts"
-                        disabled={draft.saving}
-                        onClick={includeStayNote}
-                      />
-                    </p>
+                    <section className="stay-welcome-plain stay-card canvas-welcome-card" aria-label="Your hosts">
+                      {portraitControl}
+                      <p className="canvas-includes">
+                        <Include
+                          label="a note from your hosts"
+                          disabled={draft.saving}
+                          onClick={includeStayNote}
+                        />
+                      </p>
+                    </section>
+                  )}
+
+                  {/* Part of the hosts' welcome on the wall, so it stands with
+                    it here too, ahead of the essentials. */}
+                  {!profile.stayNoteOff && shows("stayTip") && (
+                    <aside className="stay-tip-card stay-card" aria-label="A tip from your hosts">
+                      <span className="stay-icon stay-icon-quiet">
+                        <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M7.6 14.4h4.8M8.2 17h3.6M10 2.6a5 5 0 0 0-2.9 9.1c.4.3.5.7.5 1.2v.5h4.8v-.5c0-.5.2-.9.5-1.2A5 5 0 0 0 10 2.6Z" /></svg>
+                      </span>
+                      <div>
+                        <p className="stay-eyebrow">A little tip from your hosts</p>
+                        <div className="canvas-optional">
+                          <CanvasLine
+                            label="One local recommendation"
+                            value={profile.stayTip}
+                            placeholder="The bakery behind the lighthouse. Go before 9am."
+                            maxLength={profileLimits.stayTipMax}
+                            disabled={draft.saving}
+                            className="canvas-tip stay-tip-text"
+                            onChange={(value) => set("stayTip", value)}
+                          />
+                          <Omit
+                            label="Leave the recommendation out"
+                            disabled={draft.saving}
+                            onClick={() => omit("stayTip")}
+                          />
+                        </div>
+                      </div>
+                    </aside>
                   )}
 
                   {/* The guest's wall puts a button for each essential here,
@@ -1089,27 +1134,31 @@ export function HostWallDesignPage({
                         answer every week. Up to {profileLimits.factsMax} lines,
                         and only ever on this wall.
                       </p>
-                      <dl className="canvas-essentials">
+                      <div className="stay-facts canvas-essentials">
                         {profile.facts.map((fact, index) => (
-                          <div className="canvas-essential" id={`canvas-essential-${index}`} key={index}>
-                            <dt>
-                              <EssentialMark
-                                term={fact.term}
-                                className="essential-mark canvas-essential-mark"
-                              />
-                              <CanvasLine
-                                label={`Line ${index + 1}: label`}
-                                value={fact.term}
-                                placeholder="Wi-Fi"
-                                maxLength={profileLimits.factTermMax}
-                                disabled={draft.saving}
-                                invalid={factProblem(index) ? true : undefined}
-                                onChange={(value) =>
-                                  setFact(index, "term", value)
-                                }
-                              />
-                            </dt>
-                            <dd>
+                          <article className="stay-fact stay-card canvas-essential" id={`canvas-essential-${index}`} key={index}>
+                            <div className="stay-fact-head">
+                              <span className="stay-icon">
+                                <EssentialMark
+                                  term={fact.term}
+                                  className="essential-mark canvas-essential-mark"
+                                />
+                              </span>
+                              <h3 aria-level={4}>
+                                <CanvasLine
+                                  label={`Line ${index + 1}: label`}
+                                  value={fact.term}
+                                  placeholder="Wi-Fi"
+                                  maxLength={profileLimits.factTermMax}
+                                  disabled={draft.saving}
+                                  invalid={factProblem(index) ? true : undefined}
+                                  onChange={(value) =>
+                                    setFact(index, "term", value)
+                                  }
+                                />
+                              </h3>
+                            </div>
+                            <div className="stay-fact-body">
                               <CanvasParagraph
                                 label={`Line ${index + 1}: answer`}
                                 value={fact.detail}
@@ -1117,46 +1166,46 @@ export function HostWallDesignPage({
                                 maxLength={profileLimits.factDetailMax}
                                 disabled={draft.saving}
                                 invalid={factProblem(index) ? true : undefined}
-                                className="canvas-essential-detail"
+                                className="canvas-essential-detail stay-fact-detail"
                                 onChange={(value) =>
                                   setFact(index, "detail", value)
                                 }
                               />
-                              <CanvasParagraph
-                                label={`Line ${index + 1}: detail`}
-                                value={fact.note}
-                                placeholder={factExample(fact.term).note}
-                                maxLength={profileLimits.factNoteMax}
-                                disabled={draft.saving}
-                                className="canvas-essential-note"
-                                onChange={(value) =>
-                                  setFact(index, "note", value)
-                                }
-                              />
-                              {factProblem(index) && (
-                                <p className="form-feedback" role="alert">
-                                  {factProblem(index)}
-                                </p>
-                              )}
-                              <button
-                                type="button"
-                                className="btn btn-ghost btn-sm"
-                                onClick={() =>
-                                  set(
-                                    "facts",
-                                    profile.facts.filter(
-                                      (_, position) => position !== index,
-                                    ),
-                                  )
-                                }
-                                disabled={draft.saving}
-                              >
-                                Remove {fact.term.trim() || `line ${index + 1}`}
-                              </button>
-                            </dd>
-                          </div>
+                            </div>
+                            <CanvasParagraph
+                              label={`Line ${index + 1}: detail`}
+                              value={fact.note}
+                              placeholder={factExample(fact.term).note}
+                              maxLength={profileLimits.factNoteMax}
+                              disabled={draft.saving}
+                              className="canvas-essential-note stay-fact-note"
+                              onChange={(value) =>
+                                setFact(index, "note", value)
+                              }
+                            />
+                            {factProblem(index) && (
+                              <p className="form-feedback" role="alert">
+                                {factProblem(index)}
+                              </p>
+                            )}
+                            <button
+                              type="button"
+                              className="btn btn-ghost btn-sm"
+                              onClick={() =>
+                                set(
+                                  "facts",
+                                  profile.facts.filter(
+                                    (_, position) => position !== index,
+                                  ),
+                                )
+                              }
+                              disabled={draft.saving}
+                            >
+                              Remove {fact.term.trim() || `line ${index + 1}`}
+                            </button>
+                          </article>
                         ))}
-                      </dl>
+                      </div>
                       {/* Suggestions rather than rows written into every new
                     property: nothing is here until a Host picks it. What a pick
                     brings is the whole line — label, answer and detail — not a
