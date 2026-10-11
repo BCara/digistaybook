@@ -620,12 +620,12 @@ export function HostWallDesignPage({
             >
               {profile.cover ? (
                 <img
-                  className="canvas-cover-photo"
+                  className={view === "public" ? "canvas-cover-photo live-property-cover" : "canvas-cover-photo"}
                   src={profile.cover.url}
                   alt={profile.cover.alt}
                 />
               ) : (
-                <span className="canvas-cover-empty">
+                <span className={view === "public" ? "canvas-cover-empty live-property-cover" : "canvas-cover-empty"}>
                   <CameraMark />
                   <b>The photograph across the top of both walls</b>A wide one
                   of the property works best. It is the first thing a guest
@@ -850,39 +850,19 @@ export function HostWallDesignPage({
             data-wall-theme={profile.theme}
             data-wall-colour={profile.colour}
           >
-            {view === "public" && coverControl}
-
-            {/* The in-stay wall is drawn with the guest wall's own classes, so
-              each theme dresses the canvas exactly as it dresses the wall:
-              the cover, the name and the place, the hosts' card, the tip and
-              the essentials. Only the fields and their controls are the
-              canvas's own. */}
-            <div className={view === "public" ? "canvas-body" : "canvas-body stay-wall canvas-stay"}>
+            {/* Both walls are drawn with the guest walls' own classes, so each
+              theme dresses the canvas exactly as it dresses the wall it
+              stands for: the public wall's one header card, or the in-stay
+              wall's cover, hosts' card, tip and essentials. Only the fields
+              and their controls are the canvas's own. */}
+            <div className={view === "public" ? "canvas-body canvas-public" : "canvas-body stay-wall canvas-stay"}>
               {view === "public" ? (
-                <div className="canvas-identity">
-                  {portraitControl}
-                  <div className="canvas-titles">
-                    <h2 className="canvas-name">{nameInput}</h2>
-                    {nameFeedback}
-                    {locationInput}
-                  </div>
-                </div>
-              ) : (
-                <header className="stay-cover canvas-stay-cover">
+                <header className="live-property-header canvas-public-header"
+                  data-no-header-photos={!profile.cover && !profile.hostPhoto ? "true" : undefined}>
                   {coverControl}
-                  <div className="stay-cover-titles canvas-stay-titles">
-                    <h1 className="canvas-name" aria-level={2}>{nameInput}</h1>
-                    {nameFeedback}
-                    <div className="stay-location">
-                      <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 18s5.6-5.4 5.6-9.6a5.6 5.6 0 0 0-11.2 0C4.4 12.6 10 18 10 18Z" /><circle cx="10" cy="8.4" r="2" /></svg>
-                      {locationInput}
-                    </div>
-                  </div>
-                </header>
-              )}
-
-              {view === "public" ? (
-                <>
+                  <div className="canvas-public-location">{locationInput}</div>
+                  <h1 className="canvas-name" aria-level={2}>{nameInput}</h1>
+                  {nameFeedback}
                   <CanvasParagraph
                     label="A short welcome for the public wall"
                     value={profile.welcome}
@@ -892,23 +872,12 @@ export function HostWallDesignPage({
                     className="canvas-welcome"
                     onChange={(value) => set("welcome", value)}
                   />
-
-                  <div className="canvas-byline">
-                    <span className="canvas-byline-mark" aria-hidden="true">
-                      {profile.hostPhoto ? (
-                        <img
-                          className="avatar avatar-photo"
-                          src={profile.hostPhoto.url}
-                          alt=""
-                        />
-                      ) : (
-                        <span className="avatar tone-2">
-                          {profile.hosts ? hostInitials(profile.hosts) : "?"}
-                        </span>
-                      )}
-                    </span>
+                  {/* The byline is where the public wall shows the hosts'
+                    photograph, so it is where the canvas changes it. */}
+                  <div className="host-byline canvas-byline">
+                    {portraitControl}
                     <span className="canvas-byline-text">
-                      {hosts}
+                      <b>{hosts}</b>
                       {/* The wall writes the words and the Host writes only the
                         year, so the sentence is split rather than asking them
                         to type a line they cannot see the shape of. */}
@@ -926,7 +895,23 @@ export function HostWallDesignPage({
                       </span>
                     </span>
                   </div>
+                </header>
+              ) : (
+                <header className="stay-cover canvas-stay-cover">
+                  {coverControl}
+                  <div className="stay-cover-titles canvas-stay-titles">
+                    <h1 className="canvas-name" aria-level={2}>{nameInput}</h1>
+                    {nameFeedback}
+                    <div className="stay-location">
+                      <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 18s5.6-5.4 5.6-9.6a5.6 5.6 0 0 0-11.2 0C4.4 12.6 10 18 10 18Z" /><circle cx="10" cy="8.4" r="2" /></svg>
+                      {locationInput}
+                    </div>
+                  </div>
+                </header>
+              )}
 
+              {view === "public" ? (
+                <>
                   {hostNoteCards}
                   <MemoryChrome
                     property={property}
