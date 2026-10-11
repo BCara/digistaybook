@@ -299,6 +299,64 @@
   stroke-linejoin: round;
 }
 
+/* ---- One essential, opened in front of the page ----
+   A tapped essential button grows into its card over the wall, rather than
+   sending the guest down the page to find it. */
+
+[data-wall-theme] .stay-wall .stay-fact-sheet {
+  position: fixed;
+  width: min(440px, calc(100vw - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  background: transparent;
+  border: none;
+  color: var(--text);
+}
+[data-wall-theme] .stay-wall .stay-fact-sheet::backdrop {
+  background: rgb(0 0 0 / 45%);
+  backdrop-filter: blur(2px);
+}
+[data-wall-theme] .stay-wall .stay-fact-sheet .stay-fact {
+  padding: 20px;
+  padding-right: 60px;
+  background: var(--wall-sheet, var(--surface-raised));
+  border: 1px solid var(--wall-rule, var(--rule));
+  border-radius: var(--stay-radius);
+  box-shadow: 0 18px 48px rgb(0 0 0 / 22%);
+}
+[data-wall-theme] .stay-wall .stay-fact-sheet .stay-fact-detail { font-size: 1.35rem; }
+[data-wall-theme] .stay-wall .stay-sheet-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+[data-wall-theme] .stay-wall .stay-sheet-close:hover { border-color: var(--wall-rule, var(--rule)); color: var(--text); }
+[data-wall-theme] .stay-wall .stay-sheet-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+[data-wall-theme] .stay-wall .stay-sheet-close svg {
+  width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round;
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-wall-theme] .stay-wall .stay-fact-sheet[open] { animation: stay-sheet-grow 220ms cubic-bezier(.2, .8, .2, 1); }
+  [data-wall-theme] .stay-wall .stay-fact-sheet[open]::backdrop { animation: stay-sheet-fade 220ms ease-out; }
+}
+@keyframes stay-sheet-grow { from { opacity: 0; transform: scale(.35); } to { opacity: 1; transform: none; } }
+@keyframes stay-sheet-fade { from { opacity: 0; } to { opacity: 1; } }
+
 /* ---- Tip ---- */
 
 [data-wall-theme] .stay-wall .stay-tip-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; }
@@ -347,3 +405,39 @@
   font-size: 1.02rem;
 }
 .wall-contribution-panel .btn-ghost { flex: none; min-height: 44px; margin: 0; padding-inline: 6px; font-size: .9rem; white-space: nowrap; }
+
+/* ---- On a desktop ----
+   Laid out for a phone, the page scaled up with the column: at the full
+   940px the cover alone stood over 400px tall, and the welcome, the tip and
+   the essentials were all below the fold. On a wide screen the cover is a
+   band rather than a picture, the type is a step down from its phone-filling
+   size, and the tip stands beside the welcome it belongs to, so a guest
+   opening the page sees the property, the hosts and the essentials together.
+   Only on the guest's page: the Host's phone preview is narrow at any width.
+   The doubled attribute outranks each theme's own sizes. */
+@media (min-width: 720px) {
+  /* A set height wins over every theme's aspect ratio. */
+  .wall-page[data-wall-theme][data-wall-theme] .stay-wall .stay-cover .wall-cover-photo { height: clamp(200px, 32vh, 300px); }
+  .wall-page[data-wall-theme][data-wall-theme] .stay-wall .stay-cover-titles h1 { font-size: 2.5rem; }
+  .wall-page[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-cover-titles h1 { font-size: 3.2rem; }
+  .wall-page[data-wall-theme][data-wall-theme] .stay-wall .stay-welcome,
+  .wall-page[data-wall-theme][data-wall-theme] .stay-wall .stay-welcome-plain { gap: 14px 18px; }
+  .wall-page[data-wall-theme][data-wall-theme] .stay-wall .stay-portrait { width: 76px; height: 76px; }
+  .wall-page[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-portrait { width: 52px; height: 52px; }
+  .wall-page[data-wall-theme][data-wall-theme] .stay-wall .stay-welcome-words h2 { font-size: 1.6rem; }
+  .wall-page[data-wall-theme][data-wall-theme] .stay-wall .stay-section-title { font-size: 1.75rem; }
+
+  .wall-page[data-wall-theme][data-wall-theme] .stay-wall { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); }
+  .wall-page[data-wall-theme][data-wall-theme] .stay-wall > * { grid-column: 1 / -1; }
+  .wall-page[data-wall-theme][data-wall-theme] .stay-wall > :is(.stay-welcome, .stay-welcome-plain):has(+ .stay-tip-card) { grid-column: 1; }
+  .wall-page[data-wall-theme][data-wall-theme] .stay-wall > :is(.stay-welcome, .stay-welcome-plain) + .stay-tip-card {
+    grid-column: 2;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  /* Editorial sets its tip as two columns with a rule between; in a third of
+     the width it reads better stacked. */
+  .wall-page[data-wall-theme][data-wall-theme] .stay-wall > :is(.stay-welcome, .stay-welcome-plain) + .stay-tip-card > div { grid-template-columns: minmax(0, 1fr); }
+  .wall-page[data-wall-theme][data-wall-theme] .stay-wall > :is(.stay-welcome, .stay-welcome-plain) + .stay-tip-card .stay-tip-text { padding-left: 0; border-left: 0; }
+}
