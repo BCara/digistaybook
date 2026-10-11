@@ -211,6 +211,9 @@ describe("the guest view of a property", () => {
     // The paper is chosen from the column on the left, with the views, rather
     // than from a row of swatches above the wall it prints.
     const side = within(screen.getByRole("group", { name: "Wall theme" }));
+    // Only the chosen theme shows until the host asks to change it.
+    expect(side.queryByRole("radio")).not.toBeInTheDocument();
+    fireEvent.click(side.getByRole("button", { name: /Warm Linen/ }));
     // A property that has never chosen is on the default, and the sheet says so.
     expect(side.getByRole("radio", { name: "Warm Linen" })).toBeChecked();
     expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "linen");
@@ -243,6 +246,7 @@ describe("the guest view of a property", () => {
 
     await waitFor(() => expect(publicCanvas().getByLabelText("Property name")).toBeInTheDocument());
     const side = within(screen.getByRole("group", { name: "Wall theme" }));
+    fireEvent.click(side.getByRole("button", { name: /Editorial/ }));
     expect(side.getByRole("radio", { name: "Editorial" })).toBeChecked();
     expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "editorial");
   });

@@ -3511,27 +3511,42 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 }
 
 /* ---- Appearance choices ---- */
-.wall-appearance-picker { display: grid; gap: 16px; max-width: 390px; }
+.wall-appearance-picker { display: grid; gap: 14px; max-width: 390px; }
 .theme-picker { border: 0; padding: 0; margin: 0; min-width: 0; }
-.theme-picker legend { padding: 0; margin-bottom: 8px; font-size: .75rem; font-weight: 650; color: var(--text-muted); }
-.theme-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.theme-picker legend { padding: 0; margin-bottom: 6px; font-size: .75rem; font-weight: 650; color: var(--text-muted); }
+.colour-current { font-weight: 500; }
+/* The chosen theme, as one row that opens the others. */
+.theme-current { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 5px 10px 5px 5px; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface-raised); color: var(--text); font: inherit; text-align: left; cursor: pointer; }
+.theme-current:hover:not(:disabled) { border-color: var(--text-muted); }
+.theme-current:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.theme-current:disabled { opacity: .55; cursor: default; }
+.theme-current .theme-swatch { flex: none; width: 52px; height: 36px; gap: 3px; }
+.theme-current .theme-swatch-title { font-size: 14px; }
+.theme-current .theme-swatch-note { height: 11px; padding: 2px 4px; gap: 2px; }
+.theme-current-name { flex: 1; min-width: 0; font-size: .85rem; font-weight: 600; }
+.theme-current-action { font-size: .75rem; font-weight: 600; color: var(--text-muted); }
+.theme-current-action::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 6px; border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: translateY(-2px) rotate(45deg); }
+.theme-current[aria-expanded="true"] .theme-current-action::after { transform: translateY(1px) rotate(-135deg); }
+/* Every option is the same size, whatever the length of its name. */
+.theme-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 6px; margin-top: 6px; }
+.theme-options[hidden] { display: none; }
 .theme-option, .colour-option { position: relative; min-width: 0; }
 .theme-option input, .colour-option input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
-.theme-option > span { display: grid; justify-items: center; gap: 8px; padding: 7px 7px 9px; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface-raised); font-size: .8rem; font-weight: 600; }
-.theme-swatch { display: grid; align-content: center; justify-items: center; gap: 7px; width: 100%; height: 70px; overflow: hidden; background: var(--wall-paper); background-image: var(--wall-texture); border: 1px solid var(--wall-rule); border-radius: min(var(--wall-sheet-radius), 10px); }
-.theme-swatch-title { font: var(--wall-heading-weight) 22px/1 var(--font-display); letter-spacing: var(--wall-heading-tracking); }
-.theme-swatch-note { display: grid; align-content: center; gap: 4px; width: 70%; height: 22px; padding: 5px 7px; border-radius: min(var(--wall-note-radius), 5px); transform: rotate(calc(var(--wall-tilt) * -3deg)); }
+.theme-option > span { display: grid; grid-template-rows: auto 1fr; justify-items: center; align-items: center; gap: 5px; height: 100%; box-sizing: border-box; padding: 5px 5px 6px; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface-raised); }
+.theme-option-name { font-size: .75rem; font-weight: 600; line-height: 1.25; text-align: center; }
+.theme-swatch { display: grid; align-content: center; justify-items: center; gap: 5px; width: 100%; height: 48px; overflow: hidden; background: var(--wall-paper); background-image: var(--wall-texture); border: 1px solid var(--wall-rule); border-radius: min(var(--wall-sheet-radius), 8px); }
+.theme-swatch-title { font: var(--wall-heading-weight) 18px/1 var(--font-display); letter-spacing: var(--wall-heading-tracking); }
+.theme-swatch-note { display: grid; align-content: center; gap: 3px; width: 70%; height: 16px; padding: 3px 6px; border-radius: min(var(--wall-note-radius), 5px); transform: rotate(calc(var(--wall-tilt) * -3deg)); }
 .theme-swatch-note i { display: block; height: 2px; background: var(--wall-ink); opacity: .35; }
 .theme-swatch-note i:last-child { width: 55%; background: var(--wall-accent); opacity: .8; }
-.colour-options { display: flex; flex-wrap: wrap; gap: 8px; }
-.colour-option > span { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--rule); border-radius: 8px; font-size: .8rem; font-weight: 600; background: var(--surface-raised); }
-.colour-option i { width: 19px; height: 19px; border: 4px solid var(--wall-paper); border-radius: 50%; background: var(--wall-accent); box-shadow: 0 0 0 1px var(--wall-rule-strong); }
+/* Colourways are just the colour; the legend names the chosen one. */
+.colour-options { display: flex; gap: 8px; }
+.colour-option > span { display: grid; place-items: center; width: 44px; height: 44px; box-sizing: border-box; border: 1px solid var(--rule); border-radius: 50%; background: var(--surface-raised); }
+.colour-option i { width: 26px; height: 26px; border: 5px solid var(--wall-paper); border-radius: 50%; background: var(--wall-accent); box-shadow: 0 0 0 1px var(--wall-rule-strong); }
 .theme-option input:checked + span, .colour-option input:checked + span { border-color: var(--text); box-shadow: 0 0 0 1px var(--text); }
 .theme-option input:focus-visible + span, .colour-option input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 3px; }
 .theme-option input:hover:not(:disabled) + span, .colour-option input:hover:not(:disabled) + span { border-color: var(--text-muted); }
 .theme-option input:disabled + span, .colour-option input:disabled + span { opacity: .55; }
-.theme-note { margin: 8px 0 0; font-size: .8rem; line-height: 1.5; color: var(--text-muted); }
-.wall-appearance-picker > .theme-note { margin: -4px 0 0; }
 
 /* ------------------- The public wall: on, off, and shared ---------------- */
 
@@ -3722,7 +3737,6 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
   .banner-settings { border: 1px solid var(--rule); }
   .banner-titles { min-width: 0; overflow-wrap: anywhere; }
   .design-controls { margin-bottom: 12px; }
-  .theme-note { font-size: .8rem; line-height: 1.5; }
   .canvas-cover-empty { height: auto; min-height: 180px; padding: 20px 16px 76px; }
   .canvas-cover-empty b { font-size: 1.2rem; line-height: 1.35; }
   .canvas-cover-action { max-width: calc(100% - 24px); white-space: normal; }
