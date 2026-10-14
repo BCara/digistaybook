@@ -131,11 +131,9 @@ function ActionButtons({
                 type="button"
                 className={actionCopy[action].destructive ? "is-destructive" : undefined}
                 disabled={busy}
-                aria-describedby={`${post.id}-${action}-hint`}
                 onClick={() => run(action)}
               >
                 <span>{label(action)}</span>
-                <small id={`${post.id}-${action}-hint`} aria-hidden="true">{actionCopy[action].hint}</small>
               </button>
             ))}
           </div>

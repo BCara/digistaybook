@@ -148,7 +148,7 @@ export const lifecycleLabels: Record<PropertyLifecycle, string> = {
   grace_period: "Payment overdue",
   suspended: "Suspended",
   cancelled_pending_end: "Cancelled",
-  dormant: "Dormant",
+  dormant: "Inactive",
   deletion_scheduled: "Deletion scheduled",
   deleted: "Deleted"
 };

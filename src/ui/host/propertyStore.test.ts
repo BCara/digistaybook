@@ -1,10 +1,11 @@
 import { emptyProfile } from "../../domain/propertyProfile";
-import { createProperty, describeStoreError, loadProperty, savePropertyProfile } from "./propertyStore";
+import { createProperty, describeStoreError, listOwnedProperties, loadProperty, savePropertyProfile } from "./propertyStore";
 
 const updateDoc = vi.fn().mockResolvedValue(undefined);
 const callProperty = vi.fn();
 const getDoc = vi.fn();
-vi.mock("../../lib/firebase", () => ({ getFirebaseServices: async () => ({ firestore: {}, functions: {}, auth: { currentUser: { uid: "host-a" } } }) }));
+const startup = vi.hoisted(() => vi.fn().mockResolvedValue({}));
+vi.mock("../../lib/firebase", () => ({ getFirebaseFirestore: startup, getFirebaseServices: async () => ({ firestore: {}, functions: {}, auth: { currentUser: { uid: "host-a" } } }) }));
 vi.mock("firebase/functions", () => ({ httpsCallable: () => callProperty }));
 vi.mock("firebase/firestore", () => ({
   doc: (...parts: unknown[]) => parts,
@@ -12,6 +13,21 @@ vi.mock("firebase/firestore", () => ({
   updateDoc: (...args: unknown[]) => updateDoc(...args),
   getDoc: (...args: unknown[]) => getDoc(...args)
 }));
+
+it.each([listOwnedProperties, loadProperty])("bounds a read even when database startup stalls", async read => {
+  vi.useFakeTimers();
+  startup.mockReturnValueOnce(new Promise(() => {}));
+  try {
+    const result = read("host-a");
+    await vi.advanceTimersByTimeAsync(15000);
+    expect(await result).toEqual({ status: "error", message: expect.stringMatching(/couldn’t load/) });
+  } finally { vi.useRealTimers(); }
+});
+
+it("turns database startup rejection into a recoverable read error", async () => {
+  startup.mockRejectedValueOnce({ code: "unavailable" });
+  expect(await listOwnedProperties("host-a")).toEqual({ status: "error", message: expect.stringMatching(/check your connection/) });
+});
 
 it.each([undefined, false, true, "true"])("reads approval policy %s from the property using the server's boolean default", async reviewContent => {
   getDoc.mockResolvedValue({ id: "p1", exists: () => true, data: () => ({ reviewContent }) });

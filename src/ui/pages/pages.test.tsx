@@ -41,7 +41,10 @@ describe("first UI slices", () => {
     unmount();
 
     render(<StayWallPage propertySlug="demo-cottage" />);
-    expect(screen.getByText(wifi)).toBeInTheDocument();
+    // On the in-stay wall it is behind its button, opened over the page.
+    expect(screen.queryByText(wifi)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: houseEssentials[0]!.term }));
+    expect(screen.getByRole("dialog", { name: houseEssentials[0]!.term })).toHaveTextContent(wifi);
   });
 
   it("shows the same guest memories on both walls", () => {

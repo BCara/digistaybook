@@ -18,7 +18,7 @@ export function wallUnavailableReason(property: Availability, view: "stay" | "pu
     return { title: "Property is in setup mode", message: "Finish activation before sharing the guest links.", action: "Review activation", section: "billing" };
   }
   if (view === "public" && property.publicWallOff) {
-    return { title: "Public wall is switched off", message: "Turn it on to let visitors open this link. Your in-stay wall is separate.", action: "Turn on public wall", section: "public" };
+    return { title: "Public wall is switched off", message: "Turn it on to let visitors open this link. Your guest wall is separate.", action: "Turn on public wall", section: "public" };
   }
   return { title: "Guest access is paused", message: "Check billing to restore access.", action: "Review billing", section: "billing" };
 }

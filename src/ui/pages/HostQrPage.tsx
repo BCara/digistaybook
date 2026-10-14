@@ -1,5 +1,5 @@
 import { wallUnavailableReason } from "../../domain/wallAvailability";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { canDownloadQrKit, isPubliclyReadable } from "../../domain/property";
 import { stayWallUrl } from "../../domain/qrCode";
 import { publicWallUrl, stayWallPath } from "../../domain/wallAddress";
@@ -10,6 +10,7 @@ import { GuestReviewPanel } from "../host/GuestReviewPanel";
 import { ensureStayToken, type HostProperty } from "../host/propertyStore";
 import { useProperty } from "../host/useProperty";
 import { propertyBlock } from "../host/usePropertyDraft";
+import "./hostQr.css";
 
 /**
  * The two walls this property is served on, and the placard that leads to one
@@ -44,7 +45,7 @@ function Shell({ title, children }: { title: string; children: ReactNode }) {
  * than vanishing and leaving a Host to wonder whether they lost it.
  */
 function Wall({
-  title, address, live, href, configureHref, reason, children
+  title, address, live, href, configureHref, reason, showReason = false, children
 }: {
   title: string;
   address: string;
@@ -52,12 +53,31 @@ function Wall({
   href: string;
   configureHref: string;
   reason: ReturnType<typeof wallUnavailableReason>;
+  showReason?: boolean;
   children: ReactNode;
 }) {
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
+  useEffect(() => {
+    setCopyState("idle");
+  }, [address]);
+  useEffect(() => {
+    if (copyState !== "copied") return;
+    const timer = window.setTimeout(() => setCopyState("idle"), 2500);
+    return () => window.clearTimeout(timer);
+  }, [copyState]);
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(address);
+      setCopyState("copied");
+    } catch {
+      setCopyState("error");
+    }
+  }
   return (
-    <div className={live ? "consequence" : "consequence consequence-off"}>
+    <section className="qr-wall-card" aria-label={title}>
       <div className="qr-wall-head">
-        <strong>{title}</strong>
+        <h3>{title}</h3>
+        <span className="qr-wall-status" data-live={live}>{live ? "Live" : "Offline"}</span>
         <a className="qr-wall-configure" href={configureHref} aria-label={`Configure ${title.toLowerCase()}`} title={`Configure ${title.toLowerCase()}`}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
             <path d="m9 3-.5 2-2 .9-1.9-.6-2 3.4 1.5 1.4v2.3l-1.5 1.4 2 3.4 1.9-.6 2 .9.5 2h4l.5-2 2-.9 1.9.6 2-3.4-1.5-1.4v-2.3l1.5-1.4-2-3.4-1.9.6-2-.9-.5-2Z" />
@@ -65,15 +85,20 @@ function Wall({
           </svg>
         </a>
       </div>
-      <p>{children}</p>
+      <p className="qr-wall-description">{children}</p>
       <p className="wall-address"><code>{address}</code></p>
-      {!live && <p className="field-hint">{reason.title}. {reason.message}</p>}
-      {live && (
-        <div className="qr-wall-actions">
+      {showReason && <p className="field-hint">{reason.title}. {reason.message}</p>}
+      <div className="qr-wall-actions">
+        <button type="button" className="btn btn-secondary btn-sm" onClick={() => void copyLink()} aria-label={`Copy link to ${title.toLowerCase()}`}>
+          {copyState === "copied" ? "Copied" : "Copy link"}
+        </button>
+        <span className="visually-hidden" role="status">{copyState === "copied" ? `${title} link copied.` : ""}</span>
+        {live && (
           <a className="btn btn-secondary btn-sm" href={href}>Open {title.toLowerCase()}</a>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+      {copyState === "error" && <p className="field-hint" role="status">Could not copy. Select and copy the link above.</p>}
+    </section>
   );
 }
 
@@ -137,16 +162,16 @@ export function HostQrPage({ propertyId }: { propertyId: string }) {
       <div className="qr-page-layout">
         <div className="qr-page-walls">
           <h2>Walls and QR display</h2>
-          <p className="lede">
-            {live
-              ? "Your guest links and printable QR code."
-              : stayReason.title}
-          </p>
-
-          {!live && <div className="actions"><a className="btn btn-primary" href={`/host/property/${property.id}/${stayReason.section}`}>{stayReason.action}</a></div>}
-          <div className="consequences">
+          <p className="lede">Your guest links and printable QR code.</p>
+          {!live && (
+            <div className="qr-access-notice">
+              <div><strong>{stayReason.title}</strong><p>{stayReason.message}</p></div>
+              <a className="btn btn-secondary btn-sm" href={`/host/property/${property.id}/${stayReason.section}`}>{stayReason.action}</a>
+            </div>
+          )}
+          <div className="qr-wall-list">
             <div className="qr-in-stay-wall">
-              <Wall reason={stayReason} title="The in-stay wall" address={stayUrl} live={live} href={stayWallPath(property.slug, property.stayToken)} configureHref={`/host/property/${property.id}`}>
+              <Wall reason={stayReason} title="The guest wall" address={stayUrl} live={live} href={stayWallPath(property.slug, property.stayToken)} configureHref={`/host/property/${property.id}`}>
                 The page guests open from your QR code.
               </Wall>
               <GuestReviewPanel key={propertyId} propertyId={propertyId} settingsOnly reviewContent={property.reviewContent === true}
@@ -154,7 +179,7 @@ export function HostQrPage({ propertyId }: { propertyId: string }) {
                   ? { status: "ready", property: { ...current.property, reviewContent } }
                   : current)} />
             </div>
-            <Wall reason={publicReason} title="The public wall" address={publicWallUrl(window.location.origin, property.slug)} live={live && !property.profile.displayWallOff} href={`/wall/${property.slug}`} configureHref={`/host/property/${property.id}/public`}>
+            <Wall reason={publicReason} showReason={live && property.profile.displayWallOff === true} title="The public wall" address={publicWallUrl(window.location.origin, property.slug)} live={live && !property.profile.displayWallOff} href={`/wall/${property.slug}`} configureHref={`/host/property/${property.id}/public`}>
               Share this link in your listing or guest messages.
             </Wall>
           </div>

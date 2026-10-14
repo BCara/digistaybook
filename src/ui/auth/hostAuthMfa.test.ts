@@ -1,6 +1,6 @@
 import { it, expect, vi, beforeEach } from "vitest";
 const mocks = vi.hoisted(() => ({ email: vi.fn(), google: vi.fn(), challenge: vi.fn() }));
-vi.mock("../../lib/firebase", () => ({ getFirebaseServices: async () => ({ auth: {} }) }));
+vi.mock("../../lib/firebase", () => ({ getFirebaseAuth: async () => ({ auth: {} }) }));
 vi.mock("./reviewerMfa", () => ({ mfaChallenge: mocks.challenge }));
 vi.mock("firebase/auth", () => ({ signInWithEmailAndPassword: mocks.email, signInWithPopup: mocks.google, GoogleAuthProvider: class {} }));
 import { signInWithEmail, signInWithGoogle } from "./hostAuth";

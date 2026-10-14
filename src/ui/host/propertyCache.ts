@@ -19,6 +19,21 @@ import type { HostProperty } from "./propertyStore";
  * never opens on the first one's property.
  */
 const seen = new Map<string, HostProperty>();
+const lists = new Map<string, string[]>();
+
+/** A complete list, including an empty one, belongs to the account that read it. */
+export function recallOwnedProperties(ownerUid: string): HostProperty[] | null {
+  const ids = lists.get(ownerUid);
+  return ids ? ids.flatMap(id => {
+    const property = seen.get(id);
+    return property?.ownerUid === ownerUid ? [property] : [];
+  }) : null;
+}
+
+export function rememberOwnedProperties(ownerUid: string, properties: readonly HostProperty[]): void {
+  rememberProperties(properties);
+  lists.set(ownerUid, properties.filter(property => property.ownerUid === ownerUid).map(property => property.id));
+}
 
 /** What is known about a property right now, or null if it has not been read. */
 export function recallProperty(propertyId: string): HostProperty | null {
@@ -37,4 +52,5 @@ export function rememberProperties(properties: readonly HostProperty[]): void {
 /** Called on sign-out, and between tests. */
 export function forgetProperties(): void {
   seen.clear();
+  lists.clear();
 }

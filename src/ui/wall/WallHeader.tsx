@@ -16,8 +16,8 @@ type WallProperty = WallHeaderProperty;
  * The saved wall and draft phone preview render these same components.
  *
  * `hostNotes` is drawn by the caller and placed here because where it goes
- * depends on the wall: under the header on the public wall, and between the
- * essentials buttons and the essentials in full on the in-stay wall.
+ * depends on the wall: under the header on the public wall, and under the
+ * essentials buttons on the in-stay wall.
  */
 export function WallHeader({ property, view, preview = false, headingLevel = 1, hostNotes }: { property: WallHeaderProperty; view: "public" | "stay"; preview?: boolean; headingLevel?: number; hostNotes?: ReactNode }) {
   if (view === "stay") return <StayWallHeader property={property} preview={preview} headingLevel={headingLevel} hostNotes={hostNotes} />;
@@ -45,14 +45,15 @@ export function WallHeader({ property, view, preview = false, headingLevel = 1, 
 /** Lines worth copying onto a phone keyboard: passwords and door codes. */
 const copyable = new Set<EssentialMarkName>(["wifi", "keys"]);
 
-/** `useId` output is not guaranteed to be safe in a URL fragment. */
+/** `useId` output is not guaranteed to be safe in an element id. */
 const anchorSafe = (id: string): string => id.replace(/[^a-zA-Z0-9_-]/g, "");
 
 /**
  * The in-stay wall, laid out for a phone held in a hallway: the property and
  * the hosts first, then one tap to each line a guest came for, then whatever
- * else the hosts wrote, then those lines in full. The buttons are the
- * essentials and nothing else; the guestbook button ends the page.
+ * else the hosts wrote. The buttons are the only place the essentials are
+ * drawn, on every theme: a tapped one opens over the page, so a guest never
+ * scrolls to find the Wi-Fi. The guestbook button ends the page.
  */
 export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes }: {
   property: WallProperty; preview: boolean; headingLevel?: number; hostNotes?: ReactNode;
@@ -72,11 +73,8 @@ export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes 
   const mark = property.hostPhoto
     ? <img className="avatar avatar-photo stay-portrait" src={property.hostPhoto.url} alt={property.hostPhoto.alt || "Your hosts"} />
     : hosts ? <span className="avatar tone-2 stay-portrait" aria-hidden="true">{hostInitials(hosts)}</span> : null;
-  /* Each fact is linked by position, because two lines can share a label. */
-  const factId = (index: number) => `${baseId}-fact-${index}`;
-  const quickLinks = facts.map((fact, index) => ({ href: `#${factId(index)}`, label: fact.term, mark: essentialMarkName(fact.term) }));
-  /* A tapped essential opens over the page rather than scrolling to its line,
-     and grows out of the button that was tapped. */
+  const quickLinks = facts.map(fact => ({ label: fact.term, mark: essentialMarkName(fact.term) }));
+  /* A tapped essential opens over the page, growing out of its button. */
   const [opened, setOpened] = useState<{ index: number; from: DOMRect } | null>(null);
 
   return <div className="stay-wall">
@@ -125,12 +123,9 @@ export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes 
     {quickLinks.length > 0 && <StayEssentialLinks id={essentialsId} links={quickLinks} headingLevel={headingLevel + 1}
       onOpen={(index, from) => setOpened({ index, from })} />}
 
-    {hostNotes}
-
-    {facts.length > 0 && <section className="stay-facts" aria-label="House information">
-      {facts.map((fact, index) => <StayFact key={index} id={factId(index)} fact={fact} headingLevel={headingLevel + 2} />)}
-    </section>}
     {facts.length === 0 && preview && <p className="wall-ghost">No house essentials. Wi-Fi, checkout and the bins go here.</p>}
+
+    {hostNotes}
 
     {opened && facts[opened.index] && <StayFactSheet fact={facts[opened.index]} from={opened.from}
       headingLevel={headingLevel + 2} onClose={() => setOpened(null)} />}
@@ -156,7 +151,11 @@ function StayFactSheet({ fact, from, headingLevel, onClose }: {
     return () => sheet.close();
   }, [from]);
   const closeOnBackdrop = (event: MouseEvent<HTMLDialogElement>) => { if (event.target === event.currentTarget) onClose(); };
-  return <dialog ref={dialog} className="stay-fact-sheet" aria-label={fact.term} onClose={onClose} onCancel={onClose} onClick={closeOnBackdrop}>
+  /* `close` is queued, so the one from an effect's cleanup can land after the
+     effect has opened the sheet again (React's development double run does
+     exactly that). A sheet that is open was not closed. */
+  const closed = () => { if (!dialog.current?.open) onClose(); };
+  return <dialog ref={dialog} className="stay-fact-sheet" aria-label={fact.term} onClose={closed} onCancel={onClose} onClick={closeOnBackdrop}>
     <StayFact fact={fact} headingLevel={headingLevel} />
     <button type="button" className="stay-sheet-close" aria-label="Close" onClick={onClose}>
       <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="m5.5 5.5 9 9m0-9-9 9" /></svg>
@@ -165,40 +164,37 @@ function StayFactSheet({ fact, from, headingLevel, onClose }: {
 }
 
 /**
- * One button per essential, each jumping to that line in full further down,
- * or, given `onOpen`, opening it where the guest is. The link stays a link, so
- * a guest without scripts still lands on the line.
- * Exported because the Host's canvas draws the same row over its editor, so
- * the property page is laid out the way the guest's wall is. It must sit
- * inside a `.stay-wall` under a `[data-wall-theme]`, which is where its
- * styles hang.
+ * One button per essential, each opening that line over the page.
+ * Exported because the Host's canvas draws the same row, opening each line's
+ * editor instead, so the property page is laid out the way the guest's wall
+ * is. It must sit inside a `.stay-wall` under a `[data-wall-theme]`, which is
+ * where its styles hang. `children` follow the buttons, for the canvas's
+ * offers of more lines.
  */
-export function StayEssentialLinks({ id, links, headingLevel, onOpen }: {
-  id: string; links: readonly { href: string; label: string; mark: EssentialMarkName }[]; headingLevel: number;
-  onOpen?: (index: number, from: DOMRect) => void;
+export function StayEssentialLinks({ id, links, headingLevel, onOpen, heading, children }: {
+  id: string; links: readonly { label: string; mark: EssentialMarkName; invalid?: boolean }[]; headingLevel: number;
+  onOpen: (index: number, from: DOMRect) => void; heading?: ReactNode; children?: ReactNode;
 }) {
   return <nav className="stay-links" aria-labelledby={id}>
-    <h2 className="stay-section-title" id={id} aria-level={headingLevel}>Your stay essentials</h2>
+    <h2 className="stay-section-title" id={id} aria-level={headingLevel}>{heading ?? "Your stay essentials"}</h2>
     <p className="stay-section-lede">Quick links to the key information for your stay.</p>
     <ul>
-      {links.map((link, index) => <li key={link.href}>
-        <a href={link.href} aria-haspopup={onOpen ? "dialog" : undefined} onClick={onOpen && (event => {
-          if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
-          event.preventDefault();
-          onOpen(index, event.currentTarget.getBoundingClientRect());
-        })}>
+      {links.map((link, index) => <li key={index}>
+        <button type="button" className="stay-link" aria-haspopup="dialog" data-invalid={link.invalid ? "true" : undefined}
+          onClick={event => onOpen(index, event.currentTarget.getBoundingClientRect())}>
           <span className="stay-icon"><EssentialMark term={link.label} name={link.mark} /></span>
           <span className="stay-link-label">{link.label}</span>
           <svg className="stay-chevron" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="m8 5 5 5-5 5" /></svg>
-        </a>
+        </button>
       </li>)}
     </ul>
+    {children}
   </nav>;
 }
 
-function StayFact({ id, fact, headingLevel }: { id?: string; fact: { term: string; detail: string; note: string }; headingLevel: number }) {
+function StayFact({ fact, headingLevel }: { fact: { term: string; detail: string; note: string }; headingLevel: number }) {
   const kind = essentialMarkName(fact.term);
-  return <article className="stay-fact stay-card" id={id} data-fact={kind}>
+  return <article className="stay-fact stay-card" data-fact={kind}>
     <div className="stay-fact-head">
       <span className="stay-icon"><EssentialMark term={fact.term} /></span>
       <h3 aria-level={headingLevel}>{fact.term}</h3>

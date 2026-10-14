@@ -318,7 +318,7 @@ expected outcome for every step in this part, and is not repeated in each one.
 
 ---
 
-### C.3 — In-stay wall (the QR display destination)
+### C.3 — Guest wall (the QR display destination)
 
 **Action:** navigate to `/stay/demo-cottage`
 

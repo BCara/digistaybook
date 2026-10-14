@@ -1,4 +1,4 @@
-import { getFirebaseServices } from "../../lib/firebase";
+import { getFirebaseFirestore, getFirebaseServices } from "../../lib/firebase";
 import { preparePhoto } from "./preparePhoto";
 import { transferPhoto } from "./transferPhoto";
 import type { PropertyLifecycle, PropertyMode, PropertySummary } from "../../domain/property";
@@ -172,42 +172,42 @@ function toHostProperty(id: string, data: Record<string, unknown>): HostProperty
 }
 
 async function firestore() {
-  const services = await getFirebaseServices();
-  return services?.firestore ?? null;
+  return getFirebaseFirestore();
 }
 
 /** Every property this Host owns, newest first. */
 export async function listOwnedProperties(ownerUid: string): Promise<StoreOutcome<HostProperty[]>> {
-  const database = await firestore();
-  if (!database) return { status: "error", message: UNCONFIGURED };
   try {
-    const { collection, getDocs, query, where } = await import("firebase/firestore");
-    const snapshot = await withDeadline(
-      getDocs(query(collection(database, "properties"), where("ownerUid", "==", ownerUid)))
-    );
-    // Sorted here rather than with orderBy so the query needs no composite index.
-    const properties = snapshot.docs
-      .map((entry) => toHostProperty(entry.id, entry.data() as Record<string, unknown>))
-      .sort((a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? "") || a.name.localeCompare(b.name));
-    return { status: "ok", value: properties };
+    return await withDeadline((async (): Promise<StoreOutcome<HostProperty[]>> => {
+      const database = await firestore();
+      if (!database) return { status: "error", message: UNCONFIGURED };
+      const { collection, getDocs, query, where } = await import("firebase/firestore");
+      const snapshot = await getDocs(query(collection(database, "properties"), where("ownerUid", "==", ownerUid)));
+      // Sorted here rather than with orderBy so the query needs no composite index.
+      const properties = snapshot.docs
+        .map((entry) => toHostProperty(entry.id, entry.data() as Record<string, unknown>))
+        .sort((a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? "") || a.name.localeCompare(b.name));
+      return { status: "ok", value: properties };
+    })());
   } catch (error) {
     return describeStoreError(error);
   }
 }
 
 export async function loadProperty(propertyId: string): Promise<StoreOutcome<HostProperty | null>> {
-  const database = await firestore();
-  if (!database) return { status: "error", message: UNCONFIGURED };
   try {
-    const { doc, getDoc } = await import("firebase/firestore");
-    const snapshot = await withDeadline(getDoc(doc(database, "properties", propertyId)));
-    if (!snapshot.exists()) return { status: "ok", value: null };
-    return { status: "ok", value: toHostProperty(snapshot.id, snapshot.data() as Record<string, unknown>) };
+    return await withDeadline((async (): Promise<StoreOutcome<HostProperty | null>> => {
+      const database = await firestore();
+      if (!database) return { status: "error", message: UNCONFIGURED };
+      const { doc, getDoc } = await import("firebase/firestore");
+      const snapshot = await getDoc(doc(database, "properties", propertyId));
+      if (!snapshot.exists()) return { status: "ok", value: null };
+      return { status: "ok", value: toHostProperty(snapshot.id, snapshot.data() as Record<string, unknown>) };
+    })());
   } catch (error) {
     return describeStoreError(error);
   }
 }
-
 /**
  * A new property is always an owned sandbox draft, the only shape Firestore
  * rules accept from a client. Going live is a billing transition the server

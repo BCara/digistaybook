@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { AuthContext, type AuthState } from "../auth/AuthProvider";
 import { HostWallDesignPage } from "./HostWallDesignPage";
 import { emptyProfile, type HostNote, type PropertyProfile } from "../../domain/propertyProfile";
@@ -115,10 +115,160 @@ beforeEach(() => {
   removePropertyPhoto.mockResolvedValue({ status: "ok", value: null });
 });
 
-const canvas = (name = "Property view") => within(screen.getByRole("form", { name }));
+const canvas = (name = "Guest wall") => within(screen.getByRole("form", { name }));
 const publicCanvas = () => canvas("Public wall");
 const save = () => canvas().getByRole("button", { name: "Save changes" });
 const publicSave = () => publicCanvas().getByRole("button", { name: "Save changes" });
+
+describe("switching the phone editor between Edit and Preview", () => {
+  let resize: (width: number) => void;
+  beforeEach(() => {
+    let width = 393;
+    const queries = new Map<string, { matches: boolean; listeners: Set<() => void> }>();
+    const matches = (query: string) => width <= Number(query.match(/max-width: (\d+)px/)?.[1] ?? 0);
+    vi.stubGlobal("matchMedia", (query: string) => {
+      let list = queries.get(query);
+      if (!list) {
+        list = { matches: matches(query), listeners: new Set() };
+        queries.set(query, list);
+      }
+      return {
+        get matches() { return list.matches; }, media: query,
+        addEventListener: (_event: string, listener: () => void) => list.listeners.add(listener),
+        removeEventListener: (_event: string, listener: () => void) => list.listeners.delete(listener),
+      };
+    });
+    vi.stubGlobal("scrollTo", vi.fn());
+    resize = next => {
+      width = next;
+      queries.forEach((list, query) => {
+        const nextMatches = matches(query);
+        if (nextMatches !== list.matches) {
+          list.matches = nextMatches;
+          list.listeners.forEach(listener => listener());
+        }
+      });
+    };
+  });
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("previews unsaved edits without saving or replacing the editor, then restores them", async () => {
+    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
+    loadPreviewMemories.mockResolvedValue({ status: "ok", value: {
+      posts: [{ id: "guest-1", message: "A lovely stay by the beach.", displayName: "Sam", photoCount: 0 }], nextCursor: null,
+    } });
+    renderPage();
+    const edit = await screen.findByRole("button", { name: "Edit" });
+    const preview = screen.getByRole("button", { name: "Preview" });
+    const form = screen.getByRole("form", { name: "Guest wall" });
+    expect(edit).toHaveAttribute("aria-pressed", "true");
+    expect(screen.queryByRole("complementary", { name: "This wall on a phone" })).not.toBeInTheDocument();
+    fireEvent.change(within(form).getByLabelText("Property name"), { target: { value: "Our beach cottage" } });
+    fireEvent.change(within(form).getByLabelText("Arrival heading"), { target: { value: "Come on in" } });
+
+    fireEvent.click(preview);
+    expect(preview).toHaveAttribute("aria-pressed", "true");
+    expect(form).not.toBeVisible();
+    expect(screen.queryByRole("button", { name: "Save changes" })).not.toBeInTheDocument();
+    const wall = within(screen.getByRole("complementary", { name: "This wall on a phone" }));
+    expect(wall.getByRole("heading", { name: "Our beach cottage" })).toBeInTheDocument();
+    expect(wall.getByRole("heading", { name: "Come on in" })).toBeInTheDocument();
+    expect(await wall.findByText("A lovely stay by the beach.")).toBeInTheDocument();
+    expect(wall.queryByRole("textbox")).not.toBeInTheDocument();
+    expect(screen.getByText("Preview includes your unsaved changes.")).toBeInTheDocument();
+
+    fireEvent.click(edit);
+    expect(screen.getByRole("form", { name: "Guest wall" })).toBe(form);
+    expect(within(form).getByLabelText("Property name")).toHaveValue("Our beach cottage");
+    expect(within(form).getByLabelText("Arrival heading")).toHaveValue("Come on in");
+    expect(within(form).getByRole("button", { name: "Save changes" })).toBeEnabled();
+    expect(savePropertyName).not.toHaveBeenCalled();
+    expect(savePropertyProfile).not.toHaveBeenCalled();
+    expect(loadProperty).toHaveBeenCalledTimes(1);
+  });
+
+  it("changes and saves the theme from the mobile dock while keeping Preview current", async () => {
+    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
+    renderPage();
+    await screen.findByRole("button", { name: "Edit" });
+    const theme = screen.getByRole("group", { name: "Wall theme" });
+    expect(document.querySelector(".mobile-edit-dock")).toContainElement(theme);
+    expect(document.querySelector(".property-side-tools")).not.toBeInTheDocument();
+    fireEvent.click(within(theme).getByRole("button", { name: /Warm Linen/ }));
+    fireEvent.click(within(theme).getByRole("radio", { name: "Playful" }));
+    expect(within(theme).getByRole("button", { name: /Playful/ })).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(screen.getByRole("radio", { name: "Berry" }));
+    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "seaside");
+    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-colour", "ocean");
+
+    fireEvent.click(screen.getByRole("button", { name: "Preview" }));
+    expect(screen.queryByRole("group", { name: "Wall theme" })).not.toBeInTheDocument();
+    expect(document.querySelector(".phone-screen")).toHaveAttribute("data-wall-theme", "seaside");
+    expect(document.querySelector(".phone-screen")).toHaveAttribute("data-wall-colour", "ocean");
+    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    expect(screen.getByRole("radio", { name: "Berry" })).toBeChecked();
+    fireEvent.click(save());
+    await waitFor(() => expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ theme: "seaside", colour: "ocean" })));
+  });
+
+  it("closes the mobile theme choices with Escape or an outside tap without changing the draft", async () => {
+    renderPage();
+    await screen.findByRole("button", { name: "Edit" });
+    const theme = within(screen.getByRole("group", { name: "Wall theme" }));
+    const toggle = theme.getByRole("button", { name: /Warm Linen/ });
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    expect(toggle).toHaveFocus();
+    fireEvent.click(toggle);
+    fireEvent.click(canvas().getByLabelText("Arrival heading"));
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    expect(save()).toBeDisabled();
+  });
+
+  it("switches the public wall too, hiding its sharing controls in Preview", async () => {
+    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
+    renderPublic();
+    await screen.findByRole("button", { name: "Edit" });
+    expect(screen.getByRole("region", { name: "This wall" })).toBeVisible();
+    fireEvent.change(publicCanvas().getByLabelText("A short welcome for the public wall"), { target: { value: "Thank you for staying with us." } });
+    fireEvent.click(screen.getByRole("button", { name: "Preview" }));
+    expect(screen.queryByRole("region", { name: "This wall" })).not.toBeInTheDocument();
+    expect(within(screen.getByRole("complementary", { name: "This wall on a phone" })).getByText("Thank you for staying with us.")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    expect(publicCanvas().getByLabelText("A short welcome for the public wall")).toHaveValue("Thank you for staying with us.");
+    expect(screen.getByRole("region", { name: "This wall" })).toBeVisible();
+  });
+
+  it("restores each mode's scroll position when switching back", async () => {
+    renderPage();
+    const edit = await screen.findByRole("button", { name: "Edit" });
+    const preview = screen.getByRole("button", { name: "Preview" });
+    vi.stubGlobal("scrollY", 1375);
+    fireEvent.click(preview);
+    vi.stubGlobal("scrollY", 480);
+    fireEvent.click(edit);
+    expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 1375, behavior: "instant" });
+    fireEvent.click(preview);
+    expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 480, behavior: "instant" });
+  });
+
+  it("keeps both surfaces available on desktop when resized from mobile Preview", async () => {
+    renderPage();
+    await screen.findByRole("button", { name: "Edit" });
+    fireEvent.click(screen.getByRole("button", { name: "Preview" }));
+    act(() => resize(1440));
+    expect(screen.queryByRole("group", { name: "Wall editor mode" })).not.toBeInTheDocument();
+    expect(screen.getByRole("form", { name: "Guest wall" })).toBeVisible();
+    expect(screen.getByRole("complementary", { name: "This wall on a phone" })).toBeVisible();
+    expect(document.querySelector(".mobile-edit-dock")).not.toBeInTheDocument();
+    expect(document.querySelector(".property-side-tools")).toContainElement(screen.getByRole("group", { name: "Wall theme" }));
+    act(() => resize(393));
+    expect(screen.getByRole("button", { name: "Preview" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.queryByRole("form", { name: "Guest wall" })).not.toBeInTheDocument();
+  });
+});
 
 describe("the guest view of a property", () => {
   it("includes published guest memories in the phone beside the editor", async () => {
@@ -144,7 +294,7 @@ describe("the guest view of a property", () => {
     // And nothing stands between the top of the screen and the wall: the page
     // used to open on a title, a lede and a line about who reaches this wall,
     // all of which the banner and the nav already said.
-    expect(screen.queryByRole("heading", { name: "Property view" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Guest wall" })).not.toBeInTheDocument();
     expect(screen.queryByText(/Type straight into it/i)).not.toBeInTheDocument();
     expect(canvas().getByRole("img", { name: coverPhoto.alt })).toHaveAttribute("src", coverPhoto.url);
     expect(canvas().getByLabelText("Where the property is")).toHaveValue("St Anthony Head, Cornwall");
@@ -154,7 +304,7 @@ describe("the guest view of a property", () => {
 
   it("asks for the writing prompt once: the box to type in belongs to a Host writing their own", async () => {
     renderPage();
-    await screen.findByRole("form", { name: "Property view" });
+    await screen.findByRole("form", { name: "Guest wall" });
 
     // An offered prompt is chosen from the list, and the list is the whole of
     // it — the box underneath used to repeat the line word for word.
@@ -176,7 +326,7 @@ describe("the guest view of a property", () => {
       value: hostProperty({ profile: profile({ guestPrompt: "Tell us where you swam." }) })
     });
     renderPage();
-    await screen.findByRole("form", { name: "Property view" });
+    await screen.findByRole("form", { name: "Guest wall" });
 
     expect(canvas().getByLabelText("Writing prompt for guests")).toHaveValue("custom");
     expect(canvas().getByLabelText("Your prompt")).toHaveValue("Tell us where you swam.");
@@ -200,7 +350,7 @@ describe("the guest view of a property", () => {
     // And the nav says which wall this is, since the page no longer asks.
     const nav = within(screen.getByRole("navigation", { name: "This property" }));
     expect(nav.getByText("Public wall", { selector: "span[aria-current]" })).toHaveAttribute("aria-current", "page");
-    expect(nav.getByRole("link", { name: "Property view" })).toHaveAttribute("href", "/host/property/prop-1");
+    expect(nav.getByRole("link", { name: "Guest wall" })).toHaveAttribute("href", "/host/property/prop-1");
   });
 
   it("prints the canvas and the phone on the theme the property chose, and saves it with the words", async () => {
@@ -444,7 +594,7 @@ describe("the guest view of a property", () => {
     // With the token on it. The wall only answers with the arrival note and
     // the essentials to the address on the placard, so a tokenless link would
     // show this Host the public wall and none of what they just wrote.
-    expect(canvas().getByRole("link", { name: "Open the in-stay wall as guests see it" })).toHaveAttribute(
+    expect(canvas().getByRole("link", { name: "Open the guest wall as guests see it" })).toHaveAttribute(
       "href",
       "/stay/seabreeze-cottage/AbCdEfGhIjKlMnOpQrStUv"
     );
@@ -603,7 +753,7 @@ describe("the guest view of a property", () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
     renderPage();
     await waitFor(() => expect(canvas().getByLabelText("Line 1: answer")).toBeInTheDocument());
-    expect(canvas().getByText("The essentials")).toBeInTheDocument();
+    expect(canvas().getByText("Your stay essentials")).toBeInTheDocument();
 
     fireEvent.click(canvas().getByRole("button", { name: "Leave the essentials out" }));
 
@@ -619,7 +769,7 @@ describe("the guest view of a property", () => {
     expect(saved.facts).toEqual([{ term: "Wi-Fi", detail: "SEABREEZE-5G", note: "On the fridge magnet" }]);
   });
 
-  it("lays the in-stay wall out as the guest's: essentials buttons, the hosts' notes, then the essentials", async () => {
+  it("lays the in-stay wall out as the guest's: the essentials as buttons at the top, then the hosts' notes", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: { ...filledProfile, hostNotes: [hostNote()] } }) });
     renderPage();
     await waitFor(() => expect(canvas().getByLabelText("Line 1: answer")).toBeInTheDocument());
@@ -627,18 +777,31 @@ describe("the guest view of a property", () => {
     const before = (first: Element | null, second: Element | null) =>
       Boolean(first && second && first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING);
     const form = document.querySelector("form") as HTMLElement;
-    const buttons = form.querySelector(".stay-links");
-    // The row is the essentials and nothing else, each one jumping to its line.
-    expect(within(buttons as HTMLElement).getAllByRole("link").map(link => [link.textContent, link.getAttribute("href")]))
-      .toEqual([["Wi-Fi", "#canvas-essential-0"]]);
-    expect(before(buttons, form.querySelector(".host-notes"))).toBe(true);
-    expect(before(form.querySelector(".host-notes"), form.querySelector("#canvas-essential-0"))).toBe(true);
+    const row = form.querySelector(".stay-links ul") as HTMLElement;
+    // The row is the essentials and nothing else, and they are drawn nowhere
+    // else: each line's editor waits, closed, until its button is tapped.
+    expect(within(row).getAllByRole("button").map(button => button.textContent)).toEqual(["Wi-Fi"]);
+    expect(before(row, form.querySelector(".host-notes"))).toBe(true);
+    expect(screen.queryByRole("dialog", { name: "Wi-Fi" })).not.toBeInTheDocument();
+    fireEvent.click(within(row).getByRole("button", { name: "Wi-Fi" }));
+    expect(within(screen.getByRole("dialog", { name: "Wi-Fi" })).getByLabelText("Line 1: answer")).toHaveValue("SEABREEZE-5G");
+    fireEvent.click(within(screen.getByRole("dialog", { name: "Wi-Fi" })).getByRole("button", { name: "Close" }));
+    expect(screen.queryByRole("dialog", { name: "Wi-Fi" })).not.toBeInTheDocument();
 
-    // The phone draws the guest's wall in the same order.
+    // The phone draws the guest's wall in the same order, with no list of the
+    // lines in full underneath.
     const phone = document.querySelector(".phone-screen") as HTMLElement;
-    expect(within(phone.querySelector(".stay-links") as HTMLElement).getAllByRole("link").map(link => link.textContent)).toEqual(["Wi-Fi"]);
+    expect(within(phone.querySelector(".stay-links ul") as HTMLElement).getAllByRole("button").map(button => button.textContent)).toEqual(["Wi-Fi"]);
     expect(before(phone.querySelector(".stay-links"), phone.querySelector(".host-notes"))).toBe(true);
-    expect(before(phone.querySelector(".host-notes"), phone.querySelector(".stay-facts"))).toBe(true);
+    expect(phone.querySelector(".stay-fact")).toBeNull();
+  });
+
+  it("opens a line it has just added, so its example answer is corrected where it was picked", async () => {
+    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
+    renderPage();
+    await waitFor(() => expect(canvas().getByRole("button", { name: "Add a line" })).toBeInTheDocument());
+    fireEvent.click(canvas().getByRole("button", { name: "Add a line" }));
+    expect(within(screen.getByRole("dialog", { name: "Line 2" })).getByLabelText("Line 2: label")).toHaveValue("");
   });
 
   it("puts the essentials back with the lines that were written on them", async () => {
@@ -726,7 +889,7 @@ describe("the guest view of a property", () => {
     const phone = within(screen.getByRole("complementary", { name: "This wall on a phone" }));
     expect(phone.getByText("Come on in")).toBeInTheDocument();
     // It follows the wall the page is on, and has no second switch of its own.
-    expect(phone.getByText("SEABREEZE-5G")).toBeInTheDocument();
+    expect(phone.getByRole("button", { name: "Wi-Fi" })).toBeInTheDocument();
     expect(screen.queryByRole("tablist", { name: "Preview which wall" })).not.toBeInTheDocument();
 
     // The canvas is still the canvas: the phone is beside the work, not over it.
@@ -756,6 +919,24 @@ describe("the guest view of a property", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Preview" }));
     expect(page).toHaveClass("has-phone");
+  });
+
+  it("always shows the phone, with no button to hide it, once it drops under the canvas", async () => {
+    const original = window.matchMedia;
+    window.matchMedia = ((query: string) => ({
+      matches: query === "(max-width: 1340px)",
+      media: query,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    })) as unknown as typeof window.matchMedia;
+    try {
+      renderPage();
+      await waitFor(() => expect(canvas().getByLabelText("Property name")).toBeInTheDocument());
+      expect(screen.getByRole("complementary", { name: "This wall on a phone" })).toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: "Hide the phone" })).not.toBeInTheDocument();
+    } finally {
+      window.matchMedia = original;
+    }
   });
 
   it("writes the wall in place and saves the whole page in one write", async () => {
@@ -929,7 +1110,7 @@ describe("the guest view of a property", () => {
 
   it("is the property's own address, so the trail names it rather than offering it", async () => {
     renderPage();
-    await screen.findByRole("form", { name: "Property view" });
+    await screen.findByRole("form", { name: "Guest wall" });
 
     // The property view is where /host/property/{id} lands, so the crumb for
     // this property is the page you are already on.
@@ -937,7 +1118,7 @@ describe("the guest view of a property", () => {
     expect(screen.getByRole("link", { name: "Your properties" })).toHaveAttribute("href", "/host");
 
     const nav = within(screen.getByRole("navigation", { name: "This property" }));
-    expect(nav.getByText("Property view", { selector: "span[aria-current]" })).toHaveAttribute("aria-current", "page");
+    expect(nav.getByText("Guest wall", { selector: "span[aria-current]" })).toHaveAttribute("aria-current", "page");
     expect(nav.getByRole("link", { name: "Public wall" })).toHaveAttribute(
       "href",
       "/host/property/prop-1/public"
@@ -954,7 +1135,7 @@ describe("the guest view of a property", () => {
       value: hostProperty({ lifecycle: "draft", mode: "sandbox", billing: null })
     });
     renderPage();
-    await screen.findByRole("form", { name: "Property view" });
+    await screen.findByRole("form", { name: "Guest wall" });
 
     expect(screen.getByRole("link", { name: "Publish this property" })).toHaveAttribute(
       "href",
@@ -972,7 +1153,7 @@ describe("the guest view of a property", () => {
 
   it("keeps the band free of a publish control once the property is live", async () => {
     renderPage();
-    await screen.findByRole("form", { name: "Property view" });
+    await screen.findByRole("form", { name: "Guest wall" });
 
     expect(screen.queryByRole("link", { name: "Publish this property" })).not.toBeInTheDocument();
     const nav = within(screen.getByRole("navigation", { name: "This property" }));
@@ -983,7 +1164,7 @@ describe("the guest view of a property", () => {
 
 it('lets long property headings and addresses wrap while keeping stored values single-line', async () => {
   renderPage();
-  await screen.findByRole('form', { name: 'Property view' });
+  await screen.findByRole('form', { name: 'Guest wall' });
   const name = canvas().getByLabelText('Property name');
   const address = canvas().getByLabelText('Where the property is');
   const heading = canvas().getByLabelText('Arrival heading');

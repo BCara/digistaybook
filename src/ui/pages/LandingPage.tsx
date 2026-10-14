@@ -283,7 +283,7 @@ function VisitorLandingPage() {
             <p>Open the demo to see exactly what your guests see, then set up your first property.</p>
             <div className="actions">
               <a className="btn btn-primary" href="/wall/demo-cottage">Open the public wall</a>
-              <a className="btn btn-secondary" href="/stay/demo-cottage">See the in-stay view</a>
+              <a className="btn btn-secondary" href="/stay/demo-cottage">See the guest wall</a>
             </div>
           </div>
         </section>

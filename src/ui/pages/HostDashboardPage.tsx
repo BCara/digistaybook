@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { firebaseConfigured } from "../../lib/firebaseConfig";
 import { lifecycleSummaries } from "../../domain/property";
 import { attentionItems } from "../../domain/billingSchedule";
 import { useAuth } from "../auth/AuthProvider";
-import { rememberProperties, rememberProperty } from "../host/propertyCache";
+import { recallOwnedProperties, rememberOwnedProperties, rememberProperty } from "../host/propertyCache";
 import { listOwnedProperties, type HostProperty } from "../host/propertyStore";
 import { AddPropertyDialog, type PropertyWizardResult } from "../host/PropertyDialog";
 import { formatDate, StatePills } from "../host/PropertyState";
@@ -12,7 +12,7 @@ import { DashboardOverview } from "../host/DashboardOverview";
 
 type LoadState =
   | { status: "loading" }
-  | { status: "ready"; properties: HostProperty[] }
+  | { status: "ready"; ownerUid: string; properties: HostProperty[]; warning?: string }
   | { status: "error"; message: string };
 
 /** What was just added, kept so the list can be introduced by its newest entry. */
@@ -133,26 +133,38 @@ function PropertyCard({ property, now, onDelete }: {
 export function HostDashboardPage() {
   const { user } = useAuth();
   const uid = user?.uid ?? null;
-  const [load, setLoad] = useState<LoadState>({ status: "loading" });
+  const [storedLoad, setLoad] = useState<LoadState>(() => {
+    const known = uid ? recallOwnedProperties(uid) : null;
+    return known && uid ? { status: "ready", ownerUid: uid, properties: known } : { status: "loading" };
+  });
+  const load: LoadState = storedLoad.status === "ready" && storedLoad.ownerUid !== uid ? { status: "loading" } : storedLoad;
+  const request = useRef(0);
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState<Added | null>(null);
 
   const refresh = useCallback(async (ownerUid: string) => {
+    const version = ++request.current;
     const outcome = await listOwnedProperties(ownerUid);
+    if (version !== request.current) return;
     // This list is the whole property, not a summary of it, so a property
     // opened from here opens on what the card was already showing rather than
     // blanking while it is read a second time.
-    if (outcome.status === "ok") rememberProperties(outcome.value);
-    setLoad(
+    if (outcome.status === "ok") rememberOwnedProperties(ownerUid, outcome.value);
+    setLoad(current =>
       outcome.status === "ok"
-        ? { status: "ready", properties: outcome.value }
-        : { status: "error", message: outcome.message }
+        ? { status: "ready", ownerUid, properties: outcome.value }
+        : current.status === "ready" && current.ownerUid === ownerUid
+          ? { ...current, warning: outcome.message }
+          : { status: "error", message: outcome.message }
     );
   }, []);
 
   useEffect(() => {
     if (!firebaseConfigured || !uid) return;
+    const known = recallOwnedProperties(uid);
+    setLoad(known ? { status: "ready", ownerUid: uid, properties: known } : { status: "loading" });
     void refresh(uid);
+    return () => { request.current++; };
   }, [uid, refresh]);
 
   /**
@@ -274,10 +286,17 @@ export function HostDashboardPage() {
 
         {load.status === "loading" && <p className="lede" role="status">Loading your properties…</p>}
 
+        {load.status === "ready" && load.warning && <p role="status">Your saved list is shown. {load.warning}</p>}
+
         {load.status === "error" && (
           <div className="notice" role="alert">
             <strong>We could not load your properties.</strong>
             <p>{load.message}</p>
+            <button type="button" className="btn btn-secondary" onClick={() => {
+              if (!uid) return;
+              setLoad({ status: "loading" });
+              void refresh(uid);
+            }}>Try again</button>
           </div>
         )}
 
@@ -312,7 +331,12 @@ export function HostDashboardPage() {
                 key={property.id}
                 property={property}
                 now={now}
-                onDelete={(deletedId) => setLoad(prev => prev.status === "ready" ? { ...prev, properties: prev.properties.filter(p => p.id !== deletedId) } : prev)}
+                onDelete={(deletedId) => setLoad(prev => {
+                  if (prev.status !== "ready") return prev;
+                  const properties = prev.properties.filter(p => p.id !== deletedId);
+                  rememberOwnedProperties(prev.ownerUid, properties);
+                  return { ...prev, properties };
+                })}
               />
             ))}
           </div>

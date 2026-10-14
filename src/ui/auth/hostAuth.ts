@@ -1,4 +1,4 @@
-import { getFirebaseServices } from "../../lib/firebase";
+import { getFirebaseAuth, getFirebaseServices } from "../../lib/firebase";
 import { forgetProperties } from "../host/propertyCache";
 import { mfaChallenge, type MfaChallenge } from "./reviewerMfa";
 
@@ -75,7 +75,7 @@ export function describeAuthError(error: unknown, context: AuthContextKind = "si
 }
 
 export async function signInWithEmail(email: string, password: string): Promise<SignInOutcome> {
-  const services = await getFirebaseServices();
+  const services = await getFirebaseAuth();
   if (!services) return { status: "error", message: UNCONFIGURED };
   try {
     const { signInWithEmailAndPassword } = await import("firebase/auth");
@@ -89,13 +89,13 @@ export async function signInWithEmail(email: string, password: string): Promise<
 }
 
 export async function signInWithGoogle(): Promise<SignInOutcome> {
-  const services = await getFirebaseServices();
+  const services = await getFirebaseAuth();
   if (!services) return { status: "error", message: UNCONFIGURED };
   try {
     const { GoogleAuthProvider, signInWithPopup } = await import("firebase/auth");
     const credential = await signInWithPopup(services.auth, new GoogleAuthProvider());
     // Google sign-in doubles as sign-up, so a first-time Host gets a profile too.
-    await ensureHostProfile(credential.user);
+    void ensureHostProfile(credential.user);
     return { status: "success" };
   } catch (error) {
     const challenge = mfaChallenge(services.auth, error);
@@ -149,9 +149,9 @@ export function validateNewHostCredentials(input: {
  * would strand a Host with an account they cannot reach.
  */
 async function ensureHostProfile(user: { uid: string; email: string | null; displayName: string | null }, displayName?: string) {
-  const services = await getFirebaseServices();
-  if (!services) return;
   try {
+    const services = await getFirebaseServices();
+    if (!services) return;
     const { doc, getDoc, serverTimestamp, setDoc } = await import("firebase/firestore");
     const reference = doc(services.firestore, "users", user.uid);
     if ((await getDoc(reference)).exists()) return;
@@ -191,7 +191,7 @@ export async function createHostAccount(
 }
 
 export async function sendHostPasswordReset(email: string): Promise<SignInOutcome> {
-  const services = await getFirebaseServices();
+  const services = await getFirebaseAuth();
   if (!services) return { status: "error", message: UNCONFIGURED };
   try {
     const { sendPasswordResetEmail } = await import("firebase/auth");
@@ -206,7 +206,7 @@ export async function signOutHost(): Promise<void> {
   // Whatever was read of this account's properties goes with the session: the
   // next Host on this browser must not open on the last one's property.
   forgetProperties();
-  const services = await getFirebaseServices();
+  const services = await getFirebaseAuth();
   if (!services) return;
   const { signOut } = await import("firebase/auth");
   await signOut(services.auth);

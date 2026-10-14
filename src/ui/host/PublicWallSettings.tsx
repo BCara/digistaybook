@@ -122,7 +122,7 @@ export function PublicWallSettings({
         </label>
         <p className="wall-share-say">
           {off
-            ? "This wall is off. Its address reaches nobody and nothing here is shared, but every word is kept for whenever you turn it back on. Your in-stay wall and the QR display are unaffected."
+            ? "This wall is off. Its address reaches nobody and nothing here is shared, but every word is kept for whenever you turn it back on. Your guest wall and the QR display are unaffected."
             : "Share your memories anywhere with a single link. Drop it in your listing, email it to a guest who just checked out, or embed it on your own site. No house rules or checkout instructions here, just pure nostalgia."}
         </p>
       </div>

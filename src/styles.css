@@ -2230,7 +2230,6 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 }
 .canvas-optional:hover .canvas-omit,
 .canvas-eyebrow-omit:hover .canvas-omit,
-.canvas-essentials-heading:hover .canvas-omit,
 .canvas-note:hover .canvas-omit,
 .canvas-omit:focus-visible { opacity: 1; }
 .canvas-omit:hover { color: var(--accent-strong); border-color: var(--rule); background: var(--bg-alt); }
@@ -2257,15 +2256,6 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 .canvas-tip { padding-left: 12px; border-left: 2px solid var(--accent); font-size: 1.02rem; }
 .canvas-signature { margin: 6px 0 0; max-width: 24ch; font-family: var(--font-display); font-style: italic; font-size: var(--step-2); }
 
-.canvas-essentials-heading { margin: 18px 0 0; }
-/* wall-heading ends in a rule that eats the free space, so the control goes
-   after it and the rule stays between the words and the button. */
-.canvas-essentials-heading .canvas-omit { order: 3; }
-.canvas-essentials {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
-  align-items: stretch; gap: 14px; margin: 18px 0;
-}
-.canvas-essentials:empty { display: none; }
 .canvas-essential {
   min-width: 0; padding: 18px; display: flex; flex-direction: column;
   border: 1px solid var(--rule); border-radius: 10px; background: var(--surface-raised);
@@ -2493,12 +2483,11 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
   border-radius: var(--radius-sm); box-shadow: var(--lift-md, 0 10px 30px rgba(0, 0, 0, .14));
 }
 .queue-more-menu button {
-  display: grid; gap: 2px; width: 100%; padding: 9px 10px; text-align: left;
+  display: grid; align-items: center; width: 100%; min-height: 44px; padding: 9px 10px; text-align: left;
   background: none; border: 0; border-radius: var(--radius-xs); color: inherit; font: inherit; cursor: pointer;
 }
 .queue-more-menu button:hover, .queue-more-menu button:focus-visible { background: var(--bg-alt); }
 .queue-more-menu button span { font-size: var(--step--1); font-weight: 600; }
-.queue-more-menu button small { color: var(--text-muted); font-size: var(--step--2); line-height: 1.4; }
 .queue-more-menu button.is-destructive span { color: var(--accent-strong); }
 .queue-more-menu button:disabled { opacity: .5; cursor: default; }
 .moderation-wall .queue-privacy h3 { border-bottom-color: var(--accent); }
@@ -2847,7 +2836,7 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
   .canvas-optional { flex-wrap: wrap; }
   .canvas-optional > *:first-child { flex: 1 0 100%; }
   .canvas-omit { align-self: flex-start; }
-  .canvas-eyebrow-omit, .canvas-essentials-heading { flex-wrap: wrap; }
+  .canvas-eyebrow-omit { flex-wrap: wrap; }
 
   /* A screen's own title and opening line are set for a desk. On a phone they
      were a display heading over six lines of large grey type, standing
@@ -3396,33 +3385,17 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 }
 
 /* ---- The same note, on the canvas ----
-   On the wall a note is a card: tinted stock, a frame, an inch of quiet round
-   the edge. In the editor that chrome is only in the way -- the two shapes are
-   already shown, at the size of a stamp, by the picker in the note's own
-   header -- so here the note is the fields themselves, flush to the column.
-   Placed after the themed card so it undoes it on every wall. */
-.canvas-note,
-[data-wall-theme] .canvas-note,
-.canvas-note[data-note-style="pinned"],
-[data-wall-theme] .canvas-note[data-note-style="pinned"] {
-  padding: 0;
-  background: none;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  transform: none;
-}
-/* No card, nothing to fasten it with. */
-.canvas-note[data-note-style="pinned"]::before,
-[data-wall-theme] .canvas-note[data-note-style="pinned"]::before { content: none; }
+   Drawn by the very rules that draw it on the wall -- stock, frame, padding,
+   tilt and fixing -- so what the host edits is what the guest will see. An
+   earlier reset flattened it here, but each theme's own card outranked the
+   reset's border and not its padding, leaving the words against the frame. */
 /* The frame is a control to be filled rather than the photograph itself, so it
    takes less of the row than the wall gives the picture: the words are what is
    being written here. */
 @media (min-width: 640px) {
   .canvas-note .host-note-body { grid-template-columns: minmax(120px, 3fr) minmax(0, 8fr); }
 }
-/* With the padding gone there is no margin to hang the remove control in, so
-   it stands at the end of the note rather than over the words. It keeps its
+/* The remove control stands at the end of the note rather than over the words. It keeps its
    row whether or not it is showing, so nothing moves on hover. */
 .canvas-note { display: grid; }
 .canvas-note .canvas-omit { position: static; justify-self: end; margin: 2px 0 0; }
@@ -3559,6 +3532,68 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 .theme-option input:focus-visible + span, .colour-option input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 3px; }
 .theme-option input:hover:not(:disabled) + span, .colour-option input:hover:not(:disabled) + span { border-color: var(--text-muted); }
 .theme-option input:disabled + span, .colour-option input:disabled + span { opacity: .55; }
+
+/* Keep the wall in view while editing on a phone. */
+@media (max-width: 1340px) {
+  .design-page .design-controls { display: none; }
+  .design-page .wall-canvas, .design-page .canvas-sheet { width: 100%; min-width: 0; }
+  .design-page .canvas-body { grid-template-columns: minmax(0, 1fr); }
+  .design-page .canvas-body > * { min-width: 0; }
+  .design-page .canvas-stay-cover, .design-page .canvas-stay-titles { grid-template-columns: minmax(0, 1fr); }
+  .design-page .canvas-cover-wrap { min-width: 0; }
+  .design-page .canvas-cover-empty { width: 100%; grid-template-columns: minmax(0, 1fr); }
+  .design-page .canvas-cover-hit { white-space: normal; }
+}
+@media (min-width: 761px) and (max-width: 1040px) {
+  .app-shell:has(.design-page) .site-header { min-width: 0; }
+  .app-shell:has(.design-page) .header-account { flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+}
+@media (max-width: 620px) {
+  body:has(.design-page) { min-width: 0; }
+  .app-shell:has(.design-page) .site-header { padding-block: 10px; gap: 12px; }
+  .app-shell:has(.design-page) .site-header .brand { min-width: 0; }
+  .app-shell:has(.design-page) .site-header .brand-mark { height: 40px; width: auto; max-width: 100%; object-fit: contain; }
+  .app-shell:has(.design-page) .nav-toggle { flex: none; min-height: 44px; padding: 8px 14px; }
+
+  .design-page { width: calc(100% - 32px); padding-top: 14px; }
+  .design-page .property-banner { padding-bottom: 10px; }
+  .design-page .property-banner .eyebrow { margin-bottom: 8px; font-size: .7rem; }
+  .design-page .banner-row { gap: 8px; }
+  .design-page .banner-identity { gap: 10px; }
+  .design-page .banner-thumb { width: 44px; }
+  .design-page .property-banner h1 { font-size: 1.25rem; line-height: 1.2; }
+  .design-page .banner-location { font-size: .8rem; line-height: 1.4; margin-top: 4px; }
+  .design-page .banner-titles .state-pills { gap: 6px; margin-top: 8px; }
+  .design-page .state-pill { padding: 3px 7px; font-size: .65rem; letter-spacing: .06em; }
+  .design-page .banner-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .design-page .banner-action { padding: 8px 12px; font-size: .8rem; }
+
+  .design-page .property-shell-body { padding-top: 14px; gap: 14px; }
+  .design-page .wall-appearance-picker {
+    max-width: none; gap: 10px; padding: 12px;
+    background: var(--surface-raised); border: 1px solid var(--rule); border-radius: 12px;
+  }
+  .design-page .theme-picker legend { font-size: .7rem; }
+  .design-page .theme-current { min-height: 44px; background: var(--bg); }
+  .design-page .theme-current .theme-swatch { width: 44px; height: 32px; }
+  .design-page .colour-picker legend { float: left; width: calc(100% - 148px); margin: 0; padding-top: 4px; line-height: 1.4; }
+  .design-page .colour-current { display: block; }
+  .design-page .colour-options { justify-content: flex-end; gap: 8px; }
+  .design-page .canvas-byline { flex-wrap: wrap; }
+  .design-page .canvas-byline-text { flex-basis: 160px; }
+  .design-page .canvas-since { min-width: 0; flex: 1; }
+
+  .design-page .canvas-savebar {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px 12px;
+    padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 0px));
+    box-shadow: 0 -8px 16px -16px var(--text);
+  }
+  .design-page .canvas-savebar > button {
+    order: 2; grid-column: 2; width: auto; min-height: 44px; padding: 10px 14px; font-size: .8rem;
+  }
+  .design-page .canvas-savebar .save-note { order: 1; font-size: .75rem; line-height: 1.4; }
+  .design-page .canvas-savebar .save-note.failed { order: 3; grid-column: 1 / -1; }
+}
 
 /* ------------------- The public wall: on, off, and shared ---------------- */
 
@@ -3784,6 +3819,8 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
   justify-content: center; border: 0; margin-top: -6px;
 }
 .banner-name-row .banner-settings .banner-mark { display: block; width: 22px; height: 22px; }
+.banner-utilities { display: flex; align-items: center; flex: none; gap: 4px; margin-top: -6px; }
+.banner-utilities .banner-settings { margin-top: 0; }
 @media (max-width: 620px) {
   .banner-identity { width: 100%; }
   .banner-name-row h1 { flex: 1; }
@@ -3809,10 +3846,16 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 .cover-menu-actions button:hover { background: var(--bg-alt); }
 @media (max-width: 620px) {
   .property-side > .property-nav { display: none; }
-  .property-mobile-nav { display: block; margin-top: 10px; }
+  .property-mobile-nav { display: block; margin-top: 0; }
+  .banner-utilities .property-mobile-nav { margin: 0; }
   .property-page-menu { position: relative; }
-  .property-page-menu > summary { background: transparent; padding-left: 0; border: 0; }
-  .property-page-menu ul { width: min(300px, calc(100vw - 40px)); }
+  .property-page-menu > summary {
+    display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 10px;
+    border: 1px solid var(--rule); border-radius: 8px; background: var(--surface-raised);
+  }
+  .property-page-menu > summary::after { content: none; }
+  .property-menu-mark { flex: none; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+  .property-page-menu ul { z-index: 20; width: min(300px, calc(100vw - 40px)); max-height: min(360px, calc(100dvh - 160px)); overflow-y: auto; }
   .property-page-menu .nav-item { min-height: 44px; gap: 10px; white-space: normal; }
   .property-page-menu [aria-current='page'] { background: var(--bg-alt); color: var(--text); font-weight: 650; }
   .property-side:has(> .property-nav:only-child) { display: none; }
@@ -3834,10 +3877,7 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 }
 
 /* Notes read as one card; secondary editing controls open only when needed. */
-[data-wall-theme] .canvas-note {
-  padding: 16px; border: 1px solid var(--rule); border-radius: 6px;
-  background: var(--surface); gap: 16px; margin-bottom: 18px;
-}
+[data-wall-theme] .canvas-note { gap: 16px; margin-bottom: 18px; }
 .canvas-note .wizard-note-header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; }
 .canvas-note .wizard-note-title { margin: 0; flex: 1; }
 .canvas-note-settings { margin-left: auto; }

@@ -232,6 +232,18 @@ describe("an owner previewing their own closed wall", () => {
     property, posts: [{ id: "1", message: "First memory", displayName: "A guest" }], nextCursor: null };
   beforeEach(() => { auth.status = "host"; auth.user = { uid: "owner" }; });
 
+  it("loads memory photos through the owner reader while guest access has ended", async () => {
+    call.mockResolvedValueOnce({ data: { ...preview,
+      owner: { ...preview.owner, lifecycle: "dormant", mode: "live" },
+      posts: [{ id: "photo-memory", message: "This is my memory", photoCount: 1 }]
+    } });
+    call.mockResolvedValue({ data: { base64: "cGhvdG8=" } });
+    render(<LiveWallPage slug="cottage" view="stay" />);
+    expect(await screen.findByRole("img", { name: "Guest memory photo 1" })).toHaveAttribute("src", "data:image/webp;base64,cGhvdG8=");
+    expect(call).toHaveBeenCalledWith({ propertyId: "p-1", postId: "photo-memory", index: 0 });
+    expect(screen.getByRole("complementary", { name: "Preview of a closed wall" })).toHaveTextContent("Guest access has ended");
+  });
+
   it("shows the wall itself, said plainly to be closed to everyone else", async () => {
     call.mockResolvedValue({ data: preview });
     render(<LiveWallPage slug="cottage" view="stay" />);

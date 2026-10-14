@@ -5,8 +5,9 @@ describe('property page navigation', () => {
   it('offers mobile page links and closes after choosing one', () => {
     const { container } = render(<PropertyNav mobile propertyId="cottage" current="moderation" draft />);
     const panel = container.querySelector('details')!;
-    expect(panel.querySelector('summary')).toHaveTextContent('Inbox & moderation');
+    expect(panel.querySelector('summary')).toHaveTextContent('Property menu');
     panel.open = true;
+    expect(screen.getByRole('link', { name: 'Inbox & moderation' })).toHaveAttribute('aria-current', 'page');
     const link = screen.getByRole('link', { name: 'Walls and QR display' });
     expect(link).toHaveAttribute('href', '/host/property/cottage/qr');
     fireEvent.click(link);
@@ -27,7 +28,7 @@ describe('property page navigation', () => {
   });
   it('keeps desktop navigation links', () => {
     render(<PropertyNav propertyId="cottage" current="settings" />);
-    expect(screen.getByRole('link', { name: 'Property view' })).toHaveAttribute('href', '/host/property/cottage');
+    expect(screen.getByRole('link', { name: 'Guest wall' })).toHaveAttribute('href', '/host/property/cottage');
     expect(screen.getByRole('link', { name: 'Billing' })).toBeInTheDocument();
   });
 });

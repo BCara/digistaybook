@@ -1,7 +1,7 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 
 /** A small disclosure that closes after an action, an outside tap or Escape. */
-export function ActionDisclosure({ label, className, children }: { label: string; className: string; children: ReactNode }) {
+export function ActionDisclosure({ label, className, title, children }: { label: ReactNode; className: string; title?: string; children: ReactNode }) {
   const panel = useRef<HTMLDetailsElement>(null);
   useEffect(() => {
     function dismiss(event: MouseEvent) {
@@ -18,5 +18,5 @@ export function ActionDisclosure({ label, className, children }: { label: string
     document.addEventListener('keydown', escape);
     return () => { document.removeEventListener('click', dismiss); document.removeEventListener('keydown', escape); };
   }, []);
-  return <details ref={panel} className={className}><summary>{label}</summary>{children}</details>;
+  return <details ref={panel} className={className}><summary title={title}>{label}</summary>{children}</details>;
 }

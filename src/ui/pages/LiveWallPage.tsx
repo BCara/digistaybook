@@ -4,7 +4,7 @@ import { PreviewBanner, type WallOwner } from "../wall/PreviewBanner";
 import { PreviewGaps } from "../wall/PreviewGaps";
 import { useEffect, useState } from "react";
 import { getFirebaseServices, wallReaderFunctions } from "../../lib/firebase";
-import { guestPhotoUrl } from "../../lib/guestSession";
+import { MemoryPhoto } from "../wall/MemoryPhoto";
 import { GuestContribution, type ContributionMode } from "../guest/GuestContribution";
 import { ReportMemory } from "../guest/ReportMemory";
 import { readWallTheme, readWallColour } from "../../domain/wallTheme";
@@ -151,7 +151,7 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
       <section aria-label="Guest memories" className="note-grid">
         {wall.posts.map(post => <article className={`note${post.pinned ? " note-pinned" : ""}`} key={post.id}>
           {post.pinned && <p className="note-pinned-label">Host favourite</p>}
-          {Array.from({ length: post.photoCount ?? 0 }, (_, index) => <img key={index} src={guestPhotoUrl(post.id, index)} alt={`Guest memory photo ${index + 1}`} loading="lazy" />)}
+          {Array.from({ length: post.photoCount ?? 0 }, (_, index) => <MemoryPhoto key={index} postId={post.id} index={index} ownerPropertyId={preview?.owner?.propertyId} sessionUid={auth.user?.uid} />)}
           <p>{post.message}</p>{post.displayName?.trim() && <p>{post.displayName}</p>}<ReportMemory slug={slug} postId={post.id} /></article>)}
         {!wall.posts.length && <p className="field-hint">No memories yet.</p>}
       </section>

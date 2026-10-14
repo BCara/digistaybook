@@ -75,10 +75,8 @@ export function HostBillingOverviewPage() {
   }
 
   return (
-    <div className="page">
-      <p className="eyebrow">Host control centre</p>
+    <div className="page billing-overview">
       <h1>Billing</h1>
-      <p className="lede">Every renewal across your properties, in the order it happens.</p>
 
       {load.status === "loading" && <p className="lede" role="status">Loading your billing…</p>}
 
@@ -142,7 +140,7 @@ function BillingBody({ properties, now = Date.now() }: { properties: HostPropert
       <section className="host-section" aria-labelledby="billing-schedule">
         <h2 id="billing-schedule">Coming up</h2>
         {schedule.length === 0
-          ? <p className="lede">Nothing is scheduled. No property has a running subscription.</p>
+          ? <p className="billing-empty">No upcoming payments.</p>
           : scheduleByMonth(schedule).map((group) => (
               <div key={group.month ?? "undated"}>
                 <p className="billing-month">{group.month ?? "Date not set"}</p>

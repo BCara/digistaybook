@@ -128,7 +128,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <a href="/#features">Features</a>
               <a href="/pricing">Pricing</a>
               <a href="/wall/demo-cottage">Public wall demo</a>
-              <a href="/stay/demo-cottage">In-stay guest view</a>
+              <a href="/stay/demo-cottage">Guest wall demo</a>
             </nav>
           </div>
           <div className="footer-col">

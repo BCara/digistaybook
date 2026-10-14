@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ReactNode } from "react";
-import { isPubliclyReadable } from "../../domain/property";
-import { stayWallPath } from "../../domain/wallAddress";
 import {
   hasDisplayWall,
   profileLimits,
@@ -55,6 +53,7 @@ export function PropertyShell({
   profile,
   className,
   aside,
+  toolbar,
   onChangeAvatar,
   children
 }: {
@@ -72,6 +71,8 @@ export function PropertyShell({
    * thing being edited down the page.
    */
   aside?: ReactNode;
+  /** Controls shared by the working surface and its preview. */
+  toolbar?: ReactNode;
   onChangeAvatar?: (photo: PropertyPhoto | null) => void;
   children: ReactNode;
 }) {
@@ -94,11 +95,7 @@ export function PropertyShell({
 
   const avatar = uploaded ?? shown.avatar;
   const location = shown.location.trim();
-  // Two different reasons a guest cannot reach the public wall, and the
-  // banner has to name the right one: the subscription decides whether walls
-  // are served at all, and the Host decides whether this property has a
-  // public one.
-  const served = isPubliclyReadable(property);
+  // The property's navigation marks whether its public wall is switched off.
   const wallOn = hasDisplayWall(shown);
   const draft = property.lifecycle === "draft";
 
@@ -184,51 +181,32 @@ export function PropertyShell({
             <div className="banner-titles">
               <div className="banner-name-row">
                 <h1>{title}</h1>
-                {onSettings ? (
-                  <span className="banner-settings is-current" aria-current="page" aria-label="Settings" title="Settings">
-                    {settingsMark}
-                  </span>
-                ) : (
-                  <a className="banner-settings" href={`/host/property/${property.id}/settings`} aria-label="Settings" title="Settings">
-                    {settingsMark}
-                  </a>
-                )}
+                <div className="banner-utilities">
+                  {onSettings ? (
+                    <span className="banner-settings is-current" aria-current="page" aria-label="Settings" title="Settings">
+                      {settingsMark}
+                    </span>
+                  ) : (
+                    <a className="banner-settings" href={`/host/property/${property.id}/settings`} aria-label="Settings" title="Settings">
+                      {settingsMark}
+                    </a>
+                  )}
+                  <PropertyNav mobile propertyId={property.id} current={current} publicWallOff={!wallOn} draft={draft} />
+                </div>
               </div>
               {location ? <p className="banner-location">{location}</p> : null}
               <StatePills lifecycle={property.lifecycle} mode={property.mode} billingHref={`/host/property/${property.id}/billing`} />
-              <PropertyNav mobile propertyId={property.id} current={current} publicWallOff={!wallOn} draft={draft} />
               {problem && <p className="form-feedback banner-photo-problem" role="alert">{problem}</p>}
             </div>
           </div>
 
-          <div className="banner-actions">
-            <a
-              className={`btn btn-secondary btn-sm banner-action ${served ? "" : "is-unavailable"}`}
-              /* The guestbook link, token and all. Without the token this
-                 is the public wall wearing the in-stay wall's name: the
-                 server hands house guidance to the placard's link and to
-                 nobody else, so a Host checking their arrival note through a
-                 tokenless address is shown a wall it was never on. */
-              href={stayWallPath(property.slug, property.stayToken)}
-              title={
-                served
-                  ? undefined
-                  : draft
-                      ? "This property is still a private draft. You are viewing a preview. Publish it to serve its wall to guests."
-                      : "This property has no in-stay wall yet. Walls are served only while a property is live and its subscription is running."
-              }
-            >
-              <ActionMark>
-                <path d="M7.4 8.6a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8Zm0 1.6c-2.4 0-4.4 1.4-4.4 3.2v2.4h8.8v-2.4c0-1.8-2-3.2-4.4-3.2Zm6.4-1.6a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 1.6c-.5 0-1 .1-1.4.2 1 .8 1.6 1.9 1.6 3v2.4H18v-2.4c0-1.8-1.9-3.2-4.2-3.2Z" />
-              </ActionMark>
-              View in-stay wall
-            </a>
-            {/* The one thing a draft property is waiting for. It is a primary
+          {draft && (
+            <div className="banner-actions">
+              {/* The one thing a draft property is waiting for. It is a primary
                 control rather than another quiet one because until it is done
                 nothing on this screen reaches a guest, and it is here rather
                 than only on the billing screen because that is the screen a
                 Host has to already know to look for. */}
-            {draft && (
               <a
                 className="btn btn-primary btn-sm banner-action"
                 href={`/host/property/${property.id}/billing`}
@@ -239,11 +217,12 @@ export function PropertyShell({
                 </ActionMark>
                 Publish this property
               </a>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </header>
 
+      {toolbar}
       <div className="property-shell-body">
         <div className="property-side">
           <PropertyNav propertyId={property.id} current={current} publicWallOff={!wallOn} draft={draft} />

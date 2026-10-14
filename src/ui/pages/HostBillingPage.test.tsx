@@ -126,11 +126,11 @@ describe("property billing", () => {
     expect(facts().getByText("1 September 2026")).toBeInTheDocument();
   });
 
-  it("keeps the wall control in the property header", async () => {
+  it("does not repeat the wall-viewing control on the billing page", async () => {
     renderPage();
     await screen.findByRole("heading", { name: "Billing", level: 2 });
 
-    expect(screen.getByRole("link", { name: "View in-stay wall" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "View guest wall" })).not.toBeInTheDocument();
   });
 
   it("offers nothing that would set a lifecycle or take a payment from this client", async () => {
@@ -505,4 +505,3 @@ describe("applying a promotion code", () => {
     expect(screen.queryByText(/Code LAUNCH100 applied/)).not.toBeInTheDocument();
   });
 });
-

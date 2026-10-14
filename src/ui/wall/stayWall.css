@@ -160,14 +160,19 @@
 @container (max-width: 180px) {
   [data-wall-theme] .stay-wall .stay-links .stay-chevron { display: none; }
 }
-[data-wall-theme] .stay-wall .stay-links a {
+[data-wall-theme] .stay-wall .stay-links .stay-link {
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
   height: 100%;
   min-height: 64px;
   box-sizing: border-box;
+  margin: 0;
   padding: 10px 8px 10px 10px;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
   background: var(--wall-sheet, var(--surface-raised));
   border: 1px solid var(--wall-rule, var(--rule));
   border-radius: var(--stay-radius);
@@ -176,9 +181,9 @@
   text-decoration: none;
   transition: border-color .15s, transform .15s;
 }
-[data-wall-theme] .stay-wall .stay-links a:hover { border-color: var(--accent); }
-[data-wall-theme] .stay-wall .stay-links a:active { transform: scale(.98); }
-[data-wall-theme] .stay-wall .stay-links a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+[data-wall-theme] .stay-wall .stay-links .stay-link:hover { border-color: var(--accent); }
+[data-wall-theme] .stay-wall .stay-links .stay-link:active { transform: scale(.98); }
+[data-wall-theme] .stay-wall .stay-links .stay-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 [data-wall-theme] .stay-wall .stay-link-label {
   flex: 1;
   min-width: 0;
@@ -227,9 +232,13 @@
    point to, so the grid's gap spaces them, not their own margin. */
 [data-wall-theme] .stay-wall .host-notes { margin: 6px 0 0; }
 
-/* The Host's canvas draws the same button row over its editor. */
+/* The Host's canvas draws the same button row, each opening its editor. A
+   line the wall would drop (a label with no answer) says so on its button. */
 [data-wall-theme] .stay-wall.canvas-stay-links { margin: 8px 0 clamp(20px, 3vw, 28px); }
-.canvas-essential[id] { scroll-margin-top: var(--stay-scroll-offset, 80px); }
+[data-wall-theme] .stay-wall .stay-links .stay-link[data-invalid] { border-color: var(--accent); border-style: dashed; }
+[data-wall-theme] .stay-wall.canvas-stay-links .field-hint { margin: 12px 0 4px; }
+[data-wall-theme] .stay-wall .canvas-essentials-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 10px 0 0; }
+[data-wall-theme] .stay-wall .canvas-essentials-actions .canvas-omit { opacity: 1; }
 
 /* ---- The lines in full ---- */
 
@@ -319,7 +328,13 @@
   background: rgb(0 0 0 / 45%);
   backdrop-filter: blur(2px);
 }
-[data-wall-theme] .stay-wall .stay-fact-sheet .stay-fact {
+[data-wall-theme] .stay-wall .stay-fact-sheet .stay-fact-detail { font-size: 1.35rem; }
+/* A theme may set its essentials as ruled table rows with no card behind
+   them (editorial's four columns on a desktop). In a 440px sheet over a
+   blurred page that reads as a loose strip of text, so the sheet is always
+   a solid card, stacked as on a phone. The doubled attribute outranks the
+   themes, which load after this file. */
+[data-wall-theme][data-wall-theme] .stay-wall .stay-fact-sheet .stay-fact {
   padding: 20px;
   padding-right: 60px;
   background: var(--wall-sheet, var(--surface-raised));
@@ -327,7 +342,13 @@
   border-radius: var(--stay-radius);
   box-shadow: 0 18px 48px rgb(0 0 0 / 22%);
 }
-[data-wall-theme] .stay-wall .stay-fact-sheet .stay-fact-detail { font-size: 1.35rem; }
+[data-wall-theme="editorial"][data-wall-theme][data-wall-theme] .stay-wall .stay-fact-sheet .stay-fact {
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+  grid-template-areas: "mark head" "mark body" "mark note";
+  align-items: start;
+  gap: 4px 14px;
+}
+[data-wall-theme][data-wall-theme] .stay-wall .stay-fact-sheet :is(.stay-fact-head h3, .stay-fact-body, .stay-fact-note) { padding-left: 0; border-left: 0; }
 [data-wall-theme] .stay-wall .stay-sheet-close {
   position: absolute;
   top: 12px;
@@ -411,8 +432,7 @@
    940px the cover alone stood over 400px tall, and the welcome, the tip and
    the essentials were all below the fold. On a wide screen the cover is a
    band rather than a picture, the type is a step down from its phone-filling
-   size, and the tip stands beside the welcome it belongs to, so a guest
-   opening the page sees the property, the hosts and the essentials together.
+   size, and the tip sits full width under the welcome it belongs to.
    Only on the guest's page: the Host's phone preview is narrow at any width.
    The doubled attribute outranks each theme's own sizes. */
 @media (min-width: 720px) {
@@ -426,18 +446,4 @@
   .wall-page[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-portrait { width: 52px; height: 52px; }
   .wall-page[data-wall-theme][data-wall-theme] .stay-wall .stay-welcome-words h2 { font-size: 1.6rem; }
   .wall-page[data-wall-theme][data-wall-theme] .stay-wall .stay-section-title { font-size: 1.75rem; }
-
-  .wall-page[data-wall-theme][data-wall-theme] .stay-wall { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); }
-  .wall-page[data-wall-theme][data-wall-theme] .stay-wall > * { grid-column: 1 / -1; }
-  .wall-page[data-wall-theme][data-wall-theme] .stay-wall > :is(.stay-welcome, .stay-welcome-plain):has(+ .stay-tip-card) { grid-column: 1; }
-  .wall-page[data-wall-theme][data-wall-theme] .stay-wall > :is(.stay-welcome, .stay-welcome-plain) + .stay-tip-card {
-    grid-column: 2;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  /* Editorial sets its tip as two columns with a rule between; in a third of
-     the width it reads better stacked. */
-  .wall-page[data-wall-theme][data-wall-theme] .stay-wall > :is(.stay-welcome, .stay-welcome-plain) + .stay-tip-card > div { grid-template-columns: minmax(0, 1fr); }
-  .wall-page[data-wall-theme][data-wall-theme] .stay-wall > :is(.stay-welcome, .stay-welcome-plain) + .stay-tip-card .stay-tip-text { padding-left: 0; border-left: 0; }
 }

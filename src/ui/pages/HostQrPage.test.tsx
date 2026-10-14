@@ -65,6 +65,43 @@ const main = () => within(document.querySelector(".property-shell-main") as HTML
 const nav = () => within(screen.getByRole("navigation", { name: "This property" }));
 
 describe("walls and QR display", () => {
+  it("copies the full guest link, including its token, and reports clipboard failures", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText } });
+    renderPage();
+    const copy = await screen.findByRole("button", { name: "Copy link to the guest wall" });
+    fireEvent.click(copy);
+    await waitFor(() => expect(copy).toHaveTextContent("Copied"));
+    expect(writeText).toHaveBeenCalledWith(`${window.location.origin}/stay/seabreeze-cottage/${TOKEN}`);
+    writeText.mockRejectedValue(new Error("Clipboard unavailable"));
+    fireEvent.click(screen.getByRole("button", { name: "Copy link to the public wall" }));
+    expect(await screen.findByText("Could not copy. Select and copy the link above.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Copy link to the public wall" })).toHaveTextContent("Copy link");
+  });
+
+  it("states ended access once while keeping both links available to copy", async () => {
+    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ lifecycle: "dormant" }) });
+    renderPage();
+    await screen.findByRole("heading", { name: "Walls and QR display", level: 2 });
+    expect(main().getAllByText("Guest access has ended")).toHaveLength(1);
+    expect(main().getAllByText("The service period is over. Billing has your options.")).toHaveLength(1);
+    expect(main().getAllByText("Offline")).toHaveLength(2);
+    expect(main().getByRole("link", { name: "Review billing" })).toHaveAttribute("href", "/host/property/prop-1/billing");
+    expect(main().getByRole("button", { name: "Copy link to the guest wall" })).toBeEnabled();
+    expect(main().getByRole("button", { name: "Copy link to the public wall" })).toBeEnabled();
+    expect(main().queryByRole("link", { name: "Open the public wall" })).not.toBeInTheDocument();
+  });
+
+  it("explains a separately switched-off public wall while the in-stay wall remains live", async () => {
+    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: { ...emptyProfile(), displayWallOff: true } }) });
+    renderPage();
+    expect(await screen.findByText(/Public wall is switched off\./)).toBeInTheDocument();
+    expect(main().getByRole("link", { name: "Open the guest wall" })).toBeInTheDocument();
+    expect(main().queryByRole("link", { name: "Open the public wall" })).not.toBeInTheDocument();
+    expect(main().getByRole("link", { name: "Configure the public wall" })).toHaveAttribute("href", "/host/property/prop-1/public");
+    expect(document.querySelector(".qr-access-notice")).not.toBeInTheDocument();
+  });
+
   it("names both walls, their addresses, and the way into each", async () => {
     renderPage();
     await screen.findByRole("heading", { name: "Walls and QR display", level: 2 });
@@ -75,11 +112,11 @@ describe("walls and QR display", () => {
       "href",
       "/wall/seabreeze-cottage"
     );
-    expect(main().getByRole("link", { name: "Open the in-stay wall" })).toHaveAttribute(
+    expect(main().getByRole("link", { name: "Open the guest wall" })).toHaveAttribute(
       "href",
       `/stay/seabreeze-cottage/${TOKEN}`
     );
-    expect(main().getByRole("link", { name: "Configure the in-stay wall" })).toHaveAttribute("href", "/host/property/prop-1");
+    expect(main().getByRole("link", { name: "Configure the guest wall" })).toHaveAttribute("href", "/host/property/prop-1");
     expect(main().getByRole("link", { name: "Configure the public wall" })).toHaveAttribute("href", "/host/property/prop-1/public");
     const guestLink = document.querySelector(".qr-page-kit .qr-guest-link a");
     expect(guestLink).toHaveAttribute("href", `${window.location.origin}/stay/seabreeze-cottage/${TOKEN}`);
@@ -140,7 +177,7 @@ describe("walls and QR display", () => {
     await screen.findByRole("heading", { name: "Walls and QR display", level: 2 });
 
     expect(ensureStayToken).toHaveBeenCalledWith("prop-1");
-    expect(await main().findByRole("link", { name: "Open the in-stay wall" })).toHaveAttribute(
+    expect(await main().findByRole("link", { name: "Open the guest wall" })).toHaveAttribute(
       "href",
       `/stay/seabreeze-cottage/${TOKEN}`
     );
@@ -158,9 +195,9 @@ describe("walls and QR display", () => {
     // towards publication should be able to see where the wall will be.
     expect(main().getByText(`${window.location.origin}/wall/seabreeze-cottage`)).toBeInTheDocument();
     expect(main().queryByRole("link", { name: "Open the public wall" })).not.toBeInTheDocument();
-    expect(main().queryByRole("link", { name: "Open the in-stay wall" })).not.toBeInTheDocument();
+    expect(main().queryByRole("link", { name: "Open the guest wall" })).not.toBeInTheDocument();
     expect(main().getByText("Not published yet")).toBeInTheDocument();
-    expect(main().getByRole("link", { name: "Configure the in-stay wall" })).toBeInTheDocument();
+    expect(main().getByRole("link", { name: "Configure the guest wall" })).toBeInTheDocument();
     expect(main().getByRole("link", { name: "Configure the public wall" })).toBeInTheDocument();
   });
 
@@ -211,7 +248,7 @@ describe("walls and QR display", () => {
     await screen.findByRole("heading", { name: "Walls and QR display", level: 2 });
 
     expect(nav().getByText("Walls and QR display", { selector: "[aria-current]" })).toHaveAttribute("aria-current", "page");
-    expect(nav().getByRole("link", { name: "Property view" })).toHaveAttribute("href", "/host/property/prop-1");
+    expect(nav().getByRole("link", { name: "Guest wall" })).toHaveAttribute("href", "/host/property/prop-1");
     expect(nav().getByRole("link", { name: "Inbox & moderation" })).toHaveAttribute(
       "href",
       "/host/property/prop-1/moderation"

@@ -50,6 +50,15 @@ await getStorage().bucket(exportBucket).file(`properties/${propertyId}/published
 await db.doc(`guestSubmissions/post-9`).set({ propertyId, status: "published", mediaLocation: "published", publishedBucket: exportBucket, photoCount: 1, revision: 1 });
 const exportedPhoto = await call("readHostExportPhoto", { propertyId, postId: "post-9", index: 0 }, host);
 assert.deepEqual(Buffer.from(exportedPhoto.base64, "base64"), exportBytes);
+// A closed wall may still be previewed by its owner, including memory photos.
+await db.doc(`properties/${propertyId}`).update({ lifecycle: "dormant" });
+const previewPhoto = await call("readHostExportPhoto", { propertyId, postId: "post-9", index: 0 }, host);
+assert.deepEqual(Buffer.from(previewPhoto.base64, "base64"), exportBytes);
+await call("readHostExportPhoto", { propertyId, postId: "post-9", index: 0 }, stranger, 403);
+await call("readHostExportPhoto", { propertyId, postId: "post-9", index: 0 }, guest, 403);
+const closedPhoto = await fetch("http://127.0.0.1:5001/demo-digistaybook/australia-southeast1/guestMemoryPhoto?id=post-9&index=0");
+assert.equal(closedPhoto.status, 404);
+await db.doc(`properties/${propertyId}`).update({ lifecycle: "active" });
 await db.doc(`properties/${propertyId}/posts/post-9`).update({ visibility: "hidden_pending_review" });
 await call("readHostExportPhoto", { propertyId, postId: "post-9", index: 0 }, host, 403);
 const request = { slug, postId: "post-0", reason: "privacy", requestId: randomUUID() };

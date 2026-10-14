@@ -137,7 +137,7 @@
 [data-wall-theme="editorial"][data-wall-theme] .wall-heading::before { content: none; }
 [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-section-lede { font-size: .92rem; }
 [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-links ul { grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 0 24px; }
-[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-links a {
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-links .stay-link {
   min-height: 52px;
   padding: 10px 0;
   background: none;
@@ -180,21 +180,21 @@
   color: var(--wall-accent-strong);
 }
 [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-head .stay-icon .essential-mark { width: 26px; height: 26px; stroke-width: 1.3; }
-[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-head h3 { grid-area: head; font-size: 1.3rem; font-weight: 500; }
+/* Label, answer and note at one size, so a row reads as one line. */
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-head h3 { grid-area: head; font-size: 1.15rem; font-weight: 500; }
 [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-body { grid-area: body; padding: 0; background: none; border-radius: 0; }
-[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-detail { font-size: 1.2rem; }
-[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-note { grid-area: note; padding: 0; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-detail { font-size: 1.15rem; }
+[data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-note { grid-area: note; padding: 0; font-size: 1.15rem; }
 @media (min-width: 720px) {
   [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact {
     grid-template-columns: 3.2rem minmax(0, .9fr) minmax(0, 1.3fr) minmax(0, 1.3fr);
     grid-template-areas: "mark head body note";
-    align-items: center;
-    gap: 0;
+    /* One shared baseline, no rules between columns: the answer and note
+       are different faces, so centred cells and vertical rules never lined
+       up, and a wrapping note stretched its rule past the rest. */
+    align-items: baseline;
+    gap: 0 24px;
   }
-  [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-head .stay-icon { align-self: center; }
-  [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-head h3,
-  [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-body,
-  [data-wall-theme="editorial"][data-wall-theme] .stay-wall .stay-fact-note { padding-left: 18px; border-left: 1px solid var(--wall-rule-strong); }
 }
 
 [data-wall-theme="editorial"][data-wall-theme] .host-notes { gap: 0; }
@@ -347,7 +347,7 @@
 [data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-welcome-body p { color: var(--wall-ink-soft); }
 [data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-eyebrow { letter-spacing: .06em; color: var(--wall-ink-soft); }
 [data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-hosts b { font-family: var(--font-display); font-weight: 700; }
-[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-tip-card { background: var(--wall-accent-soft); border-color: transparent; border-radius: 28px; }
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-tip-card { background: color-mix(in srgb, var(--wall-ink) 12%, var(--wall-sheet)); border-color: transparent; border-radius: 28px; }
 [data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-tip-card .stay-icon { background: var(--wall-sheet); color: var(--wall-ink); }
 [data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-tip-text { font-family: var(--wall-body-font); font-weight: 600; }
 
@@ -377,7 +377,7 @@
   -webkit-mask: var(--wall-wave-line) left center / 40px 10px repeat-x;
   mask: var(--wall-wave-line) left center / 40px 10px repeat-x;
 }
-[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-links a {
+[data-wall-theme="seaside"][data-wall-theme] .stay-wall .stay-links .stay-link {
   border: 2px solid var(--wall-ink);
   border-radius: 20px;
   box-shadow: 3px 3px 0 var(--wall-pop);
@@ -590,7 +590,7 @@
 [data-wall-theme="journal"][data-wall-theme] .wall-heading::before,
 [data-wall-theme="journal"][data-wall-theme] .wall-heading::after { content: none; }
 [data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-section-lede { margin-top: 10px; }
-[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-links a { border: 0; border-radius: 2px; box-shadow: var(--wall-note-shadow); }
+[data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-links .stay-link { border: 0; border-radius: 2px; box-shadow: var(--wall-note-shadow); }
 [data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-icon { background: transparent; color: var(--wall-accent-strong); }
 [data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-link-label { font-size: .98rem; }
 
@@ -718,7 +718,6 @@
 
 /* The essentials in full are the wall's fact cards; the remove button and
    any problem with the line run the width of the card under them. */
-[data-wall-theme] .canvas-stay .stay-facts.canvas-essentials { margin: 6px 0; }
 [data-wall-theme] .canvas-stay .stay-fact-head h3 { flex: 1; min-width: 0; }
 [data-wall-theme] .canvas-stay .stay-fact-body .canvas-field { flex: 1; min-width: 0; }
 [data-wall-theme] .canvas-stay .stay-fact > .form-feedback,
@@ -888,5 +887,5 @@
 
 /* Nothing on any wall moves for a reader who asked it not to. */
 @media (prefers-reduced-motion: reduce) {
-  [data-wall-theme] .stay-wall .stay-links a { transition: none; }
+  [data-wall-theme] .stay-wall .stay-links .stay-link { transition: none; }
 }

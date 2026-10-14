@@ -492,7 +492,7 @@ export function PropertyWizard({
           <section className="wizard-essentials" aria-labelledby="wizard-essentials-heading">
             <h4 id="wizard-essentials-heading">House guidance</h4>
             <p className="field-hint">
-              Wi-Fi, bins, heating, checkout. Up to {profileLimits.factsMax} lines, on the in-stay wall only.
+              Wi-Fi, bins, heating, checkout. Up to {profileLimits.factsMax} lines, on the guest wall only.
             </p>
 
             {problemFor(problems, "facts") && (

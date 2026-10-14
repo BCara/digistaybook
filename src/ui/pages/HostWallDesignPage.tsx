@@ -1,4 +1,4 @@
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { propertyIdentityLimits } from "../../domain/property";
 import {
   emptyFact,
@@ -39,6 +39,7 @@ import {
   type PhotoSlot,
 } from "../host/photoSlots";
 import { propertyBlock, usePropertyDraft } from "../host/usePropertyDraft";
+import "./hostWallEditor.css";
 
 /**
  * A wall of the property, laid out as the guest meets it, and written into
@@ -341,11 +342,59 @@ export function HostWallDesignPage({
   // for, and the join it shows is most useful to the Host who does not yet
   // know to look for it; the button is still there for the one who wants the
   // canvas to itself.
-  const [showPhone, setShowPhone] = useState(true);
+  const [phoneWanted, setShowPhone] = useState(true);
+  // Tablets stack the preview; phones switch between editing and previewing.
+  const phoneBelow = useMediaQuery(PHONE_BELOW_QUERY);
+  const showPhone = phoneWanted || phoneBelow;
+  const mobileEditor = useMediaQuery(MOBILE_EDITOR_QUERY);
+  const [mobileMode, setMobileMode] = useState<"edit" | "preview">("edit");
+  const modeSwitch = useRef<HTMLDivElement>(null);
+  const modeScroll = useRef<Partial<Record<"edit" | "preview", number>>>({});
+  const modeChanged = useRef(false);
+  const mobilePreview = mobileEditor && mobileMode === "preview";
+  const editDock = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const dock = editDock.current;
+    if (!mobileEditor || mobilePreview || !dock) return;
+    const form = dock.closest("form");
+    const update = () => {
+      const height = Math.ceil(dock.getBoundingClientRect().height);
+      if (height > 0) form?.style.setProperty("--mobile-edit-dock-height", `${height}px`);
+    };
+    update();
+    const observer = typeof ResizeObserver === "function" ? new ResizeObserver(update) : null;
+    observer?.observe(dock);
+    return () => {
+      observer?.disconnect();
+      form?.style.removeProperty("--mobile-edit-dock-height");
+    };
+  }, [mobileEditor, mobilePreview, draft.load.status]);
+
+  function changeMobileMode(next: "edit" | "preview") {
+    if (next === mobileMode) return;
+    modeScroll.current[mobileMode] = window.scrollY;
+    modeChanged.current = true;
+    setMobileMode(next);
+  }
+
+  useLayoutEffect(() => {
+    if (!mobileEditor || !modeChanged.current || !modeSwitch.current) return;
+    modeChanged.current = false;
+    const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0;
+    // The banner scrolls normally; the switch's sticky position is not its
+    // original place in the document when a host switches far down the wall.
+    const bannerBottom = modeSwitch.current.previousElementSibling?.getBoundingClientRect().bottom ?? 0;
+    const start = bannerBottom + window.scrollY + 14 - headerHeight;
+    window.scrollTo({ top: Math.max(0, modeScroll.current[mobileMode] ?? start), behavior: "instant" });
+  }, [mobileEditor, mobileMode]);
   // A Host who has asked to write their own prompt keeps the box to write it
   // in, even while it is empty. Deciding from the value alone would take the
   // box away the moment they cleared it to start again.
   const [writingPrompt, setWritingPrompt] = useState(false);
+  // The essential whose editor is open over the canvas, and the button it
+  // grew from (none for a line that was just added).
+  const [openFact, setOpenFact] = useState<{ index: number; from: DOMRect | null } | null>(null);
 
   const block = propertyBlock(draft.load, user?.uid);
   if (block) {
@@ -381,6 +430,10 @@ export function HostWallDesignPage({
   // cards on the wall are numbered, so the window says which one it changes.
 
   const nameProblem = draft.problems.identity[0]?.message;
+  const addFact = (fact: PropertyProfile["facts"][number]) => {
+    set("facts", [...profile.facts, fact]);
+    setOpenFact({ index: profile.facts.length, from: null });
+  };
   const factProblem = (index: number) =>
     draft.problems.profile.find(
       (problem) => problem.field === "facts" && problem.index === index,
@@ -771,6 +824,33 @@ export function HostWallDesignPage({
       />
   );
 
+  const themePicker = (
+    <WallThemePicker
+      value={profile.theme}
+      colour={profile.colour}
+      disabled={draft.saving}
+      compact={mobileEditor}
+      onChange={(theme) => set("theme", theme)}
+      onColourChange={(colour) => set("colour", colour)}
+    />
+  );
+  const saveBar = (
+    <div className="save-bar canvas-savebar">
+      <button type="submit" disabled={draft.saving || !draft.dirty}>
+        {draft.saving ? "Saving…" : "Save changes"}
+      </button>
+      {draft.problems.failure ? (
+        <span className="save-note failed" role="alert">{draft.problems.failure}</span>
+      ) : draft.saved ? (
+        <span className="save-note" role="status">Saved. Your walls read this immediately.</span>
+      ) : (
+        <span className="save-note">
+          {draft.dirty ? "Unsaved changes. This is what they will read." : "Everything here is saved."}
+        </span>
+      )}
+    </div>
+  );
+
   return (
     // The band overhead is fed the draft rather than the saved property: this
     // is the screen the name, the place and the cover are typed on, and a
@@ -789,16 +869,16 @@ export function HostWallDesignPage({
       name={draft.name}
       profile={profile}
       onChangeAvatar={(photo) => draft.setProfile(withPhotoInSlot(draft.profile, "avatar", photo))}
-      className={showPhone ? "design-page has-phone" : "design-page"}
-      aside={
-        <WallThemePicker
-          value={profile.theme}
-          colour={profile.colour}
-          disabled={draft.saving}
-          onChange={(theme) => set("theme", theme)}
-          onColourChange={(colour) => set("colour", colour)}
-        />
-      }
+      className={`design-page${showPhone ? " has-phone" : ""}${mobilePreview ? " is-mobile-preview" : ""}`}
+      toolbar={mobileEditor && (
+        <div className="mobile-wall-switch" ref={modeSwitch} role="group" aria-label="Wall editor mode">
+          <button type="button" aria-pressed={mobileMode === "edit"} aria-controls="wall-edit-panel"
+            onClick={() => changeMobileMode("edit")}>Edit</button>
+          <button type="button" aria-pressed={mobileMode === "preview"} aria-controls="wall-preview-panel"
+            onClick={() => changeMobileMode("preview")}>Preview</button>
+        </div>
+      )}
+      aside={mobileEditor ? undefined : themePicker}
     >
       {/* The page opens on the wall itself. A title, a lede and a line about
           who can reach this wall used to stand here, and all three said what
@@ -813,34 +893,40 @@ export function HostWallDesignPage({
           above the wall itself: the decision to have one, then the link and
           the embed code that are the two ways of using it. */}
       {view === "public" && (
-        <PublicWallSettings
-          property={property}
-          off={profile.displayWallOff}
-          disabled={draft.saving}
-          onChange={(off) => set("displayWallOff", off)}
-        />
+        <div hidden={mobilePreview}>
+          <PublicWallSettings
+            property={property}
+            off={profile.displayWallOff}
+            disabled={draft.saving}
+            onChange={(off) => set("displayWallOff", off)}
+          />
+        </div>
       )}
 
-      <div className="design-controls">
-        {/* The preview is a phone that opens down the right of the page and
-            follows the draft as it is typed. It does not take the page over:
-            a Host reads the phone and keeps writing on the wall beside it. */}
-        <button
-          type="button"
-          className="btn btn-secondary btn-sm"
-          aria-pressed={showPhone}
-          onClick={() => setShowPhone(!showPhone)}
-        >
-          {showPhone ? "Hide the phone" : "Preview"}
-        </button>
-      </div>
+      {!phoneBelow && (
+        <div className="design-controls">
+          {/* The preview is a phone that opens down the right of the page and
+              follows the draft as it is typed. It does not take the page over:
+              a Host reads the phone and keeps writing on the wall beside it. */}
+          <button
+            type="button"
+            className="btn btn-secondary btn-sm"
+            aria-pressed={showPhone}
+            onClick={() => setShowPhone(!showPhone)}
+          >
+            {showPhone ? "Hide the phone" : "Preview"}
+          </button>
+        </div>
+      )}
 
       <div className={showPhone ? "design-body with-phone" : "design-body"}>
         <form
           className="wall-canvas"
+          id="wall-edit-panel"
+          hidden={mobilePreview}
           onSubmit={draft.save}
           noValidate
-          aria-label={view === "public" ? "Public wall" : "Property view"}
+          aria-label={view === "public" ? "Public wall" : "Guest wall"}
         >
           {/* The sheet is printed on the theme the property chose, so what a
             Host types into is the paper a guest will read it on. */}
@@ -933,6 +1019,7 @@ export function HostWallDesignPage({
                           A note from your hosts
                           <Omit
                             label="Leave the whole note out"
+                            iconOnly
                             disabled={draft.saving}
                             onClick={omitStayNote}
                           />
@@ -964,6 +1051,7 @@ export function HostWallDesignPage({
                             <p className="stay-hosts"><span className="stay-eyebrow">Your hosts,</span> <b>{hosts}</b></p>
                             <Omit
                               label="Leave your names out"
+                              iconOnly
                               disabled={draft.saving}
                               onClick={() => {
                                 set("hosts", "");
@@ -987,6 +1075,7 @@ export function HostWallDesignPage({
                           />
                           <Omit
                             label="Leave the arrival note out"
+                            iconOnly
                             disabled={draft.saving}
                             onClick={() => omit("stayWelcome")}
                           />
@@ -1052,17 +1141,18 @@ export function HostWallDesignPage({
                       <div>
                         <p className="stay-eyebrow">A little tip from your hosts</p>
                         <div className="canvas-optional">
-                          <CanvasLine
+                          <CanvasParagraph
                             label="One local recommendation"
                             value={profile.stayTip}
                             placeholder="The bakery behind the lighthouse. Go before 9am."
                             maxLength={profileLimits.stayTipMax}
                             disabled={draft.saving}
                             className="canvas-tip stay-tip-text"
-                            onChange={(value) => set("stayTip", value)}
+                            onChange={(value) => set("stayTip", value.replace(/[\r\n]+/g, " "))}
                           />
                           <Omit
                             label="Leave the recommendation out"
+                            iconOnly
                             disabled={draft.saving}
                             onClick={() => omit("stayTip")}
                           />
@@ -1071,31 +1161,14 @@ export function HostWallDesignPage({
                     </aside>
                   )}
 
-                  {/* The guest's wall puts a button for each essential here,
-                    then the Host's own notes, then the essentials in full, so
-                    the canvas does too. The buttons are drawn from the lines
-                    below by the wall's own component, and only for a line a
-                    guest would get: one with a label and an answer. */}
-                  {!profile.factsOff && profile.facts.some(fact => fact.term.trim() && fact.detail.trim()) && (
-                    <div className="stay-wall canvas-stay-links">
-                      <StayEssentialLinks
-                        id="canvas-stay-essentials"
-                        headingLevel={3}
-                        links={profile.facts.flatMap((fact, index) =>
-                          fact.term.trim() && fact.detail.trim()
-                            ? [{ href: `#canvas-essential-${index}`, label: fact.term, mark: essentialMarkName(fact.term) }]
-                            : [])}
-                      />
-                    </div>
-                  )}
-
-                  {hostNoteCards}
-
-                  {/* The essentials are on the wall unless a Host says otherwise:
-                    most properties answer these questions, and one that does
-                    not can take the whole section off. The lines are kept when
-                    it goes, so putting it back does not cost them the Wi-Fi
-                    password twice. */}
+                  {/* The essentials sit where the guest's wall puts them, as
+                    the same row of buttons, on every theme. A tapped one opens
+                    that line's editor over the page, as the guest's wall opens
+                    the line itself. A line still missing its label or answer
+                    gets a button too, so the Host can get back to it. They are
+                    on the wall unless a Host says otherwise; the lines are kept
+                    when the section goes, so putting it back does not cost them
+                    the Wi-Fi password twice. */}
                   {profile.factsOff ? (
                     <p className="canvas-includes canvas-includes-lead">
                       <Include
@@ -1105,23 +1178,83 @@ export function HostWallDesignPage({
                       />
                     </p>
                   ) : (
-                    <>
-                      <h3 className="wall-heading canvas-essentials-heading">
-                        The essentials
-                        <Omit
-                          label="Leave the essentials out"
-                          disabled={draft.saving}
-                          onClick={() => set("factsOff", true)}
-                        />
-                      </h3>
-                      <p className="field-hint">
-                        Wi-Fi, bins, heating, checkout &mdash; the questions you
-                        answer every week. Up to {profileLimits.factsMax} lines,
-                        and only ever on this wall.
-                      </p>
-                      <div className="stay-facts canvas-essentials">
-                        {profile.facts.map((fact, index) => (
-                          <article className="stay-fact stay-card canvas-essential" id={`canvas-essential-${index}`} key={index}>
+                    <div className="stay-wall canvas-stay-links">
+                      <StayEssentialLinks
+                        id="canvas-stay-essentials"
+                        headingLevel={3}
+                        links={profile.facts.map((fact, index) => ({
+                          label: fact.term.trim() || `Line ${index + 1}`,
+                          mark: essentialMarkName(fact.term),
+                          invalid: Boolean(factProblem(index)),
+                        }))}
+                        onOpen={(index, from) => setOpenFact({ index, from })}
+                      >
+                        <p className="field-hint">
+                          Wi-Fi, bins, heating, checkout &mdash; the questions you
+                          answer every week. Tap one to change it. Up to{" "}
+                          {profileLimits.factsMax} lines, and only ever on this wall.
+                        </p>
+                        {/* Suggestions rather than rows written into every new
+                          property: nothing is here until a Host picks it. What a
+                          pick brings is the whole line (label, answer and
+                          detail), not a label with the answer left as an
+                          example. The pick opens at once, which is what makes
+                          correcting the example the obvious next move. */}
+                        {profile.facts.length < profileLimits.factsMax && (
+                          <p className="canvas-includes">
+                            {unusedFactSuggestions(profile.facts)
+                              .slice(
+                                0,
+                                profileLimits.factsMax - profile.facts.length,
+                              )
+                              .map((suggestion) => (
+                                <Include
+                                  key={suggestion.term}
+                                  label={suggestion.term}
+                                  disabled={draft.saving}
+                                  onClick={() => addFact({ ...suggestion })}
+                                />
+                              ))}
+                            {/* The same offer, for a line none of the
+                              suggestions cover: it starts empty, so the Host
+                              types the label as well as the answer. */}
+                            <Include
+                              label="Custom"
+                              disabled={draft.saving}
+                              onClick={() => addFact(emptyFact())}
+                            />
+                          </p>
+                        )}
+                        <p className="canvas-essentials-actions">
+                          <button
+                            type="button"
+                            className="btn btn-secondary btn-sm"
+                            onClick={() => addFact(emptyFact())}
+                            disabled={
+                              draft.saving ||
+                              profile.facts.length >= profileLimits.factsMax
+                            }
+                          >
+                            Add a line
+                          </button>
+                          <Omit
+                            label="Leave the essentials out"
+                            disabled={draft.saving}
+                            onClick={() => { setOpenFact(null); set("factsOff", true); }}
+                          />
+                        </p>
+                      </StayEssentialLinks>
+                      {/* Every line's editor is drawn, closed, so its fields
+                        stay part of the form; only the tapped one opens. */}
+                      {profile.facts.map((fact, index) => (
+                        <EssentialSheet
+                          key={index}
+                          label={fact.term.trim() || `Line ${index + 1}`}
+                          open={openFact?.index === index}
+                          from={openFact?.index === index ? openFact.from : null}
+                          onClose={() => setOpenFact(null)}
+                        >
+                          <article className="stay-fact stay-card canvas-essential" id={`canvas-essential-${index}`}>
                             <div className="stay-fact-head">
                               <span className="stay-icon">
                                 <EssentialMark
@@ -1176,74 +1309,26 @@ export function HostWallDesignPage({
                             <button
                               type="button"
                               className="btn btn-ghost btn-sm"
-                              onClick={() =>
+                              onClick={() => {
+                                setOpenFact(null);
                                 set(
                                   "facts",
                                   profile.facts.filter(
                                     (_, position) => position !== index,
                                   ),
-                                )
-                              }
+                                );
+                              }}
                               disabled={draft.saving}
                             >
                               Remove {fact.term.trim() || `line ${index + 1}`}
                             </button>
                           </article>
-                        ))}
-                      </div>
-                      {/* Suggestions rather than rows written into every new
-                    property: nothing is here until a Host picks it. What a pick
-                    brings is the whole line — label, answer and detail — not a
-                    label with the answer left as an example. A label on its own
-                    is drawn on this canvas but dropped from the wall, so the
-                    line would read as written while guests never saw it. The
-                    example answer is on the wall from the moment it is picked,
-                    which is what makes correcting it the obvious next move. */}
-                      {profile.facts.length < profileLimits.factsMax && (
-                        <p className="canvas-includes">
-                          {unusedFactSuggestions(profile.facts)
-                            .slice(
-                              0,
-                              profileLimits.factsMax - profile.facts.length,
-                            )
-                            .map((suggestion) => (
-                              <Include
-                                key={suggestion.term}
-                                label={suggestion.term}
-                                disabled={draft.saving}
-                                onClick={() =>
-                                  set("facts", [...profile.facts, { ...suggestion }])
-                                }
-                              />
-                            ))}
-                          {/* The same offer, for a line none of the
-                            suggestions cover: it starts empty, so the Host
-                            types the label as well as the answer. */}
-                          <Include
-                            label="Custom"
-                            disabled={draft.saving}
-                            onClick={() =>
-                              set("facts", [...profile.facts, emptyFact()])
-                            }
-                          />
-                        </p>
-                      )}
-
-                      <button
-                        type="button"
-                        className="btn btn-secondary btn-sm"
-                        onClick={() =>
-                          set("facts", [...profile.facts, emptyFact()])
-                        }
-                        disabled={
-                          draft.saving ||
-                          profile.facts.length >= profileLimits.factsMax
-                        }
-                      >
-                        Add a line
-                      </button>
-                    </>
+                        </EssentialSheet>
+                      ))}
+                    </div>
                   )}
+
+                  {hostNoteCards}
 
                   {/* The box a guest types into used to be drawn here, above the
                     notes, greyed and captioned as theirs. It said one thing —
@@ -1296,7 +1381,7 @@ export function HostWallDesignPage({
                         href={stayWallPath(property.slug, property.stayToken)}
                         target="_blank"
                         rel="noreferrer"
-                        aria-label="Open the in-stay wall as guests see it"
+                        aria-label="Open the guest wall as guests see it"
                       >
                         Open this wall as guests see it &rarr;
                       </a>
@@ -1307,30 +1392,16 @@ export function HostWallDesignPage({
             </div>
           </div>
 
-          <div className="save-bar canvas-savebar">
-            <button type="submit" disabled={draft.saving || !draft.dirty}>
-              {draft.saving ? "Saving…" : "Save changes"}
-            </button>
-            {draft.problems.failure ? (
-              <span className="save-note failed" role="alert">
-                {draft.problems.failure}
-              </span>
-            ) : draft.saved ? (
-              <span className="save-note" role="status">
-                Saved. Your walls read this immediately.
-              </span>
-            ) : (
-              <span className="save-note">
-                {draft.dirty
-                  ? "Unsaved changes. This is what they will read."
-                  : "Everything here is saved."}
-              </span>
-            )}
-          </div>
+          {mobileEditor ? (
+            <div className="mobile-edit-dock" ref={editDock}>
+              {themePicker}
+              {saveBar}
+            </div>
+          ) : saveBar}
         </form>
 
         {showPhone && (
-          <aside className="design-phone" aria-label="This wall on a phone">
+          <aside className="design-phone" id="wall-preview-panel" hidden={mobileEditor && !mobilePreview} aria-label="This wall on a phone">
             {/* The phone follows the canvas as it is typed, which is not obvious
               from a picture of a phone standing beside a page. One line says
               so, above the thing it is describing. */}
@@ -1339,9 +1410,12 @@ export function HostWallDesignPage({
               word is swapped rather than dropped, because "on the left" is
               the whole point of the sentence on the screen it is true of. */}
             <p className="design-phone-note">
-              Edit the wall <span className="where-beside">on the left</span>
-              <span className="where-above">above</span>. The phone follows as
-              you type.
+              {mobileEditor ? (
+                draft.dirty ? "Preview includes your unsaved changes." : "This is how your guests see the wall."
+              ) : (
+                <>Edit the wall <span className="where-beside">on the left</span>
+                <span className="where-above">above</span>. The phone follows as you type.</>
+              )}
             </p>
             <WallPreview
               name={draft.name.trim() || property.name}
@@ -1378,5 +1452,63 @@ export function HostWallDesignPage({
         }}
       />
     </PropertyShell>
+  );
+}
+
+/** Matches the width at which styles.css drops the phone under the canvas. */
+const PHONE_BELOW_QUERY = "(max-width: 1340px)";
+const MOBILE_EDITOR_QUERY = "(max-width: 620px)";
+
+function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = useState(
+    () => typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia(query).matches,
+  );
+  useEffect(() => {
+    if (typeof window.matchMedia !== "function") return;
+    const list = window.matchMedia(query);
+    const update = () => setMatches(list.matches);
+    update();
+    list.addEventListener("change", update);
+    return () => list.removeEventListener("change", update);
+  }, [query]);
+  return matches;
+}
+
+/**
+ * One essential's editor, opened over the canvas from its button the way the
+ * guest's wall opens the line itself. Always in the page, so its fields stay
+ * part of the form, and closed until it is tapped: a native modal dialog, so
+ * Escape, the backdrop and focus behave. It must sit inside the `.stay-wall`,
+ * where the guest's sheet takes its styles.
+ */
+function EssentialSheet({ label, open, from, onClose, children }: {
+  label: string; open: boolean; from: DOMRect | null; onClose: () => void; children: ReactNode;
+}) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  useLayoutEffect(() => {
+    const sheet = dialog.current;
+    if (!sheet || !open) return;
+    sheet.showModal();
+    if (from) {
+      const box = sheet.getBoundingClientRect();
+      sheet.style.transformOrigin = `${from.left + from.width / 2 - box.left}px ${from.top + from.height / 2 - box.top}px`;
+    } else {
+      sheet.style.transformOrigin = "";
+    }
+    return () => sheet.close();
+  }, [open, from]);
+  return (
+    <dialog
+      ref={dialog}
+      className="stay-fact-sheet"
+      aria-label={label}
+      onCancel={(event) => { event.preventDefault(); onClose(); }}
+      onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}
+    >
+      {children}
+      <button type="button" className="stay-sheet-close" aria-label="Close" onClick={onClose}>
+        <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="m5.5 5.5 9 9m0-9-9 9" /></svg>
+      </button>
+    </dialog>
   );
 }

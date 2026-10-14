@@ -96,7 +96,7 @@ export function PropertyNav({
 }) {
   const base = `/host/property/${propertyId}`;
   const sections: { key: NavSection; label: string; href: string }[] = [
-    { key: "design", label: "Property view", href: base },
+    { key: "design", label: "Guest wall", href: base },
     { key: "public", label: "Public wall", href: `${base}/public` },
     { key: "qr", label: "Walls and QR display", href: `${base}/qr` },
     { key: "moderation", label: "Inbox & moderation", href: `${base}/moderation` },
@@ -110,7 +110,14 @@ export function PropertyNav({
 
   if (mobile) return (
     <nav className="property-mobile-nav" aria-label="Property pages">
-      <ActionDisclosure key={current} className="property-page-menu" label={sections.find(section => section.key === current)?.label ?? "Settings"}>
+      <ActionDisclosure key={current} className="property-page-menu" title="Property menu" label={
+        <>
+          <svg className="property-menu-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <span className="visually-hidden">Property menu</span>
+        </>
+      }>
         <ul>{sections.map(section => (
           <li key={section.key}>
             <a className="nav-item" href={section.href} aria-current={section.key === current ? "page" : undefined}>
@@ -149,4 +156,3 @@ export function PropertyNav({
     </nav>
   );
 }
-

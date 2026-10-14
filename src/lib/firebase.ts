@@ -19,6 +19,7 @@ export const FUNCTIONS_REGION = "australia-southeast1";
 let services: FirebaseServices | null = null;
 let initializing: Promise<FirebaseServices> | null = null;
 let authStartup: Promise<{ app: import("firebase/app").FirebaseApp; auth: import("firebase/auth").Auth }> | null = null;
+let databaseStartup: Promise<import("firebase/firestore").Firestore | null> | null = null;
 
 /** Session restoration must not wait for database, uploads or attestation. */
 export function getFirebaseAuth() {
@@ -85,25 +86,37 @@ export async function getFirebaseServices(): Promise<FirebaseServices | null> {
   return initializing;
 }
 
+/** Property reads need attested Firestore, without waiting for upload/callable SDKs. */
+export function getFirebaseFirestore(): Promise<import("firebase/firestore").Firestore | null> {
+  if (!firebaseConfigured) return Promise.resolve(null);
+  if (!databaseStartup) databaseStartup = (async () => {
+    const [account, firestoreModule] = await Promise.all([getFirebaseAuth(), import("firebase/firestore")]);
+    if (!account) return null;
+    await attachAppCheck(account.app);
+    const firestore = firestoreModule.getFirestore(account.app);
+    if (import.meta.env.VITE_USE_FIREBASE_EMULATORS === "true") {
+      firestoreModule.connectFirestoreEmulator(firestore, "127.0.0.1", 8080);
+    }
+    return firestore;
+  })().catch(error => { databaseStartup = null; throw error; });
+  return databaseStartup;
+}
+
 async function initializeServices(): Promise<FirebaseServices> {
-  const [account, firestoreModule, storageModule, functionsModule] =
+  const [account, firestore, storageModule, functionsModule] =
     await Promise.all([
       getFirebaseAuth(),
-      import("firebase/firestore"),
+      getFirebaseFirestore(),
       import("firebase/storage"),
       import("firebase/functions")
     ]);
   // A named guest app may already exist. It must never become the application's
   // host/account Auth instance, and does not imply the default app exists.
-  if (!account) throw new Error("Firebase is not configured");
+  if (!account || !firestore) throw new Error("Firebase is not configured");
   const { app, auth } = account;
-  // Before any service is used, so the first privileged call carries a token.
-  await attachAppCheck(app);
-  const firestore = firestoreModule.getFirestore(app);
   const storage = storageModule.getStorage(app);
   const functions = functionsModule.getFunctions(app, FUNCTIONS_REGION);
   if (import.meta.env.VITE_USE_FIREBASE_EMULATORS === "true") {
-    firestoreModule.connectFirestoreEmulator(firestore, "127.0.0.1", 8080);
     storageModule.connectStorageEmulator(storage, "127.0.0.1", 9199);
     functionsModule.connectFunctionsEmulator(functions, "127.0.0.1", 5001);
   }

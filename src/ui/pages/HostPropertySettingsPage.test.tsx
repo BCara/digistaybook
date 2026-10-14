@@ -109,7 +109,7 @@ describe("the settings of one property", () => {
     expect(dialog().getByText("Step 1 of 3")).toBeInTheDocument();
     expect(dialog().getByLabelText(/Where the property is/)).toHaveValue("St Anthony Head, Cornwall");
     // The wall it is standing over is still there, and still the property view.
-    expect(screen.getByRole("form", { name: "Property view" })).toBeInTheDocument();
+    expect(screen.getByRole("form", { name: "Guest wall" })).toBeInTheDocument();
   });
 
   it("carries everything the wall carries, not just what the property is", async () => {
@@ -176,7 +176,7 @@ describe("the settings of one property", () => {
     // It is not one of the ways of looking at the wall, so no row in the
     // column claims to be where you are standing.
     const nav = within(screen.getByRole("navigation", { name: "This property" }));
-    expect(nav.getByRole("link", { name: "Property view" })).toHaveAttribute("href", "/host/property/prop-1");
+    expect(nav.getByRole("link", { name: "Guest wall" })).toHaveAttribute("href", "/host/property/prop-1");
     expect(nav.queryByText("Settings")).not.toBeInTheDocument();
   });
 

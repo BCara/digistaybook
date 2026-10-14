@@ -2,6 +2,14 @@ import { wallUnavailableReason } from "../../domain/wallAvailability";
 
 export type WallOwner = { propertyId: string; lifecycle: string; mode: string; publicWallOff: boolean };
 
+function ActionIcon({ action }: { action: "view" | "edit" | "next" }) {
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+    {action === "view" && <><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></>}
+    {action === "edit" && <><path d="m15 5 4 4M4 20l4-1 12-12a2.8 2.8 0 0 0-4-4L4 15Z" /><path d="M13 20h7" /></>}
+    {action === "next" && <><path d="M5 12h14m-6-6 6 6-6 6" /></>}
+  </svg>;
+}
+
 /**
  * The bar an owner reads above their own closed wall.
  *
@@ -36,10 +44,11 @@ export function PreviewBanner({
       </p>
       <div className="wall-preview-actions">
         <button type="button" className="btn btn-secondary btn-sm" aria-pressed={guestView} onClick={() => onGuestView(!guestView)}>
-          {guestView ? "Back to your preview" : "Guest's view"}
+          <ActionIcon action="view" />
+          <span>{guestView ? "Back to your preview" : "Guest's view"}</span>
         </button>
-        <a className="btn btn-secondary btn-sm" href={`${base}${view === "public" ? "/public" : ""}`}>Edit this wall</a>
-        <a className="btn btn-primary btn-sm" href={`${base}/${reason.section}`}>{reason.action}</a>
+        <a className="btn btn-secondary btn-sm" href={`${base}${view === "public" ? "/public" : ""}`}><ActionIcon action="edit" /><span>Edit this wall</span></a>
+        <a className="btn btn-primary btn-sm" href={`${base}/${reason.section}`}><ActionIcon action="next" /><span>{reason.action}</span></a>
       </div>
     </aside>
   );

@@ -561,7 +561,7 @@ export function setupSteps(profile: PropertyProfile): SetupStep[] {
       id: "cover",
       label: "A cover photo",
       hint: profile.displayWallOff
-        ? "The photograph at the top of the in-stay wall."
+        ? "The photograph at the top of the guest wall."
         : "The photograph at the top of both walls.",
       done: profile.cover !== null
     },

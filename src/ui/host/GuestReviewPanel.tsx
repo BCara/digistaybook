@@ -101,16 +101,14 @@ export function GuestReviewPanel({ propertyId, feedbackOnly = false, settingsOnl
         paragraph restating it only pushed the memories down the page. */}
     {!feedbackOnly && result && <section className={`approval-settings${settingsOnly ? " approval-settings-compact" : ""}`} aria-label="Memory approval">
       <label className="switch approval-switch">
-        <input type="checkbox" aria-describedby="approval-settings-note" checked={result.reviewContent === true} disabled={busy} onChange={event => void setReviewContent(event.target.checked)} />
+        <input type="checkbox" aria-describedby={settingsOnly || result.reviewContent ? "approval-settings-note" : undefined} checked={result.reviewContent === true} disabled={busy} onChange={event => void setReviewContent(event.target.checked)} />
         <span className="switch-track" aria-hidden="true"><span className="switch-knob" /></span>
         <span className="switch-label">Require approval for new memories</span>
         <span className="approval-switch-state" aria-hidden="true">{result.reviewContent ? "On" : "Off"}</span>
       </label>
-      <p id="approval-settings-note" className="approval-settings-note">{settingsOnly
+      {(settingsOnly || result.reviewContent) && <p id="approval-settings-note" className="approval-settings-note">{settingsOnly
         ? result.reviewContent ? "New memories wait for approval after safety checks." : "Clear memories publish automatically after safety checks."
-        : result.reviewContent
-        ? "Every new memory waits for you to approve it."
-        : "New memories go live once they pass safety checks. Anything flagged waits for you."}</p>
+        : "Every new memory waits for you to approve it."}</p>}
       {settingsOnly && <a className="text-link approval-settings-link" href={`/host/property/${propertyId}/moderation#new-memories`}>Review waiting memories</a>}
     </section>}
     {settingsOnly && result && notice && <p className="form-feedback" role="status">{notice}</p>}

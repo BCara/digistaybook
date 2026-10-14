@@ -1,8 +1,9 @@
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { AuthContext, type AuthState } from "../auth/AuthProvider";
 import { HostDashboardPage } from "./HostDashboardPage";
 import { emptyProfile } from "../../domain/propertyProfile";
 import type { HostProperty } from "../host/propertyStore";
+import { recallOwnedProperties, rememberOwnedProperties } from "../host/propertyCache";
 
 vi.mock("../../lib/firebaseConfig", () => ({
   firebaseConfig: {},
@@ -81,6 +82,48 @@ function addProperty(name: string, answers: { location?: string; hosts?: string 
 }
 
 describe("host dashboard", () => {
+  it("shows the known list immediately while refreshing it in the background", async () => {
+    rememberOwnedProperties("host-a", [hostProperty()]);
+    listOwnedProperties.mockReturnValue(new Promise(() => {}));
+    renderDashboard();
+    expect(screen.getByRole("link", { name: "Seabreeze Cottage" })).toBeInTheDocument();
+    expect(screen.queryByText("Loading your properties…")).not.toBeInTheDocument();
+    expect(listOwnedProperties).toHaveBeenCalledWith("host-a");
+  });
+
+  it("keeps known properties available and explains a failed refresh", async () => {
+    rememberOwnedProperties("host-a", [hostProperty()]);
+    listOwnedProperties.mockResolvedValue({ status: "error", message: "Check your connection." });
+    renderDashboard();
+    expect(await screen.findByText(/Your saved list is shown/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Seabreeze Cottage" })).toBeInTheDocument();
+  });
+
+  it("never opens another account's cached list", () => {
+    rememberOwnedProperties("host-b", [hostProperty({ ownerUid: "host-b" })]);
+    listOwnedProperties.mockReturnValue(new Promise(() => {}));
+    renderDashboard();
+    expect(screen.queryByRole("link", { name: "Seabreeze Cottage" })).not.toBeInTheDocument();
+    expect(screen.getByText("Loading your properties…")).toBeInTheDocument();
+  });
+
+  it("ignores a list response after the dashboard has unmounted", async () => {
+    let finish!: (value: unknown) => void;
+    listOwnedProperties.mockReturnValue(new Promise(resolve => { finish = resolve; }));
+    const view = renderDashboard();
+    view.unmount();
+    await act(async () => { finish({ status: "ok", value: [hostProperty()] }); });
+    expect(recallOwnedProperties("host-a")).toBeNull();
+  });
+
+  it("retries a failed first load", async () => {
+    listOwnedProperties.mockResolvedValueOnce({ status: "error", message: "Check your connection." });
+    listOwnedProperties.mockResolvedValueOnce({ status: "ok", value: [hostProperty()] });
+    renderDashboard();
+    fireEvent.click(await screen.findByRole("button", { name: "Try again" }));
+    expect(await screen.findByRole("link", { name: "Seabreeze Cottage" })).toBeInTheDocument();
+  });
+
   it("lists the properties this host owns, with their server-owned state", async () => {
     listOwnedProperties.mockResolvedValue({
       status: "ok",
