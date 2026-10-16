@@ -131,7 +131,7 @@ export async function scanConsentReviews(now = new Date()) {
   if (dueCount) warn("DigiStayBook consent records need manual deletion review", {
     event: "consent_deletion_reminder", day, dueCount,
     records: sample.docs.map(doc => `${doc.get("consentPath")} (due ${doc.get("dueAt").toDate().toISOString().slice(0, 10)})`).join("; "),
-    operationsUrl: "https://digistaybook-cbert.web.app/operations", recipient: "codebertcreations@gmail.com"
+    operationsUrl: "https://digistaybook.com/operations", recipient: "codebertcreations@gmail.com"
   });
   await stateRef.set({ notifiedDay: day, dueCount, notificationLogEmittedAt: dueCount ? stamp() : null }, { merge: true });
 }

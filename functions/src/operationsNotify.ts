@@ -41,7 +41,7 @@ export async function announceNewOperationsItems(now = Date.now()) {
   const items = [...pages.flat(), ...stuck], summary = describeNewItems(items);
   // Only counts and kinds leave the system: no guest text, names, photos or contact details.
   if (items.length) warn("DigiStayBook has new items for safety review", {
-    event: "operations_new_items", ...summary, operationsUrl: "https://digistaybook-cbert.web.app/operations", recipient: "codebertcreations@gmail.com"
+    event: "operations_new_items", ...summary, operationsUrl: "https://digistaybook.com/operations", recipient: "codebertcreations@gmail.com"
   });
   await stateRef.set({ sweptUntil: window ? until : since, stuckAnnounced: stuckKeys, sweptAt: FieldValue.serverTimestamp(), lastNewCount: items.length });
   return items.length ? summary : null;
