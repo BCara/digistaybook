@@ -4,10 +4,11 @@ import { LegalDraftPage } from "./LegalDraftPage";
 it("publishes the Guest Terms as a versioned draft, with private feedback and the review points", () => {
   render(<LegalDraftPage kind="guest-terms" />);
   expect(screen.getByRole("heading", { name: "Guest Terms" })).toBeInTheDocument();
-  expect(screen.getByText("Draft — not yet approved.")).toBeInTheDocument();
+  expect(screen.queryByText(/not yet approved/)).not.toBeInTheDocument();
   expect(screen.getByText(/Version draft-2026-10-06/)).toBeInTheDocument();
   expect(screen.getByText(/not monitored in real time and your host cannot reply/)).toBeInTheDocument();
-  expect(screen.getByRole("complementary", { name: "Open points for legal review" })).toBeInTheDocument();
+  expect(screen.queryByText(/Draft legal copy|new in this draft/)).not.toBeInTheDocument();
+  expect(screen.queryByRole("complementary", { name: "Open points for legal review" })).not.toBeInTheDocument();
 });
 
 it("carries private feedback and Google screening in the draft Privacy Policy", () => {
