@@ -59,6 +59,19 @@
         "--strictPort"
       ],
       "port": 5183
+    },
+    {
+      "name": "hosting-dist",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "firebase",
+        "emulators:start",
+        "--only",
+        "hosting",
+        "--project",
+        "digistaybook-cbert"
+      ],
+      "port": 5000
     }
   ]
 }

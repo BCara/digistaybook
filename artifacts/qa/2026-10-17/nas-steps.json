@@ -1,0 +1,2060 @@
+[
+  {
+    "id": "TP-PUB-01-S01",
+    "test": "TP-PUB-01",
+    "env": "both",
+    "action": "Read the home page.",
+    "expected": "It explains that DigiStayBook is a guestbook for holiday-rental hosts, and mentions a 28-day free trial. There is a way to sign up or sign in."
+  },
+  {
+    "id": "TP-PUB-01-S02",
+    "test": "TP-PUB-01",
+    "env": "both",
+    "action": "Click Pricing.",
+    "expected": "A Monthly and an Annual price, each per property. Both plans list the same features. It says the free trial is 28 days and is for your first property."
+  },
+  {
+    "id": "TP-PUB-01-S03",
+    "test": "TP-PUB-01",
+    "env": "both",
+    "action": "Change Show prices in to each option in turn.",
+    "expected": "The prices change to that currency and are whole amounts (for example $15, not $14.87). Write down the Australian monthly and annual prices. You compare them at checkout in TP-BILL-01."
+  },
+  {
+    "id": "TP-PUB-01-S04",
+    "test": "TP-PUB-01",
+    "env": "both",
+    "action": "Look for anything about tax.",
+    "expected": "If tax is mentioned it says exactly: “DigiStayBook may be deductible as a business expense. Eligibility depends on your circumstances and business use; seek tax advice.” Nothing else about tax."
+  },
+  {
+    "id": "TP-PUB-01-S05",
+    "test": "TP-PUB-01",
+    "env": "both",
+    "action": "Look for how to cancel.",
+    "expected": "It says cancelling is done in the host dashboard, and that the wall keeps working until the end of the period already paid for."
+  },
+  {
+    "id": "TP-PUB-01-S06",
+    "test": "TP-PUB-01",
+    "env": "both",
+    "action": "Read both pages for promises.",
+    "expected": "No promise of more bookings, higher star ratings, more reviews, more money, less damage or cleaner guests, and no claim of a link with Airbnb, Booking.com or similar."
+  },
+  {
+    "id": "TP-PROP-02-S01",
+    "test": "TP-PROP-02",
+    "env": "both",
+    "action": "On the home page click See a live public wall (or Open the public wall).",
+    "expected": "A sample property’s wall opens, with guest memories and a “Demo” label."
+  },
+  {
+    "id": "TP-PROP-02-S02",
+    "test": "TP-PROP-02",
+    "env": "both",
+    "action": "Click See what guests see →.",
+    "expected": "The in-stay demo opens: a note from the hosts, The essentials (Wi-Fi and so on) and guest memories below."
+  },
+  {
+    "id": "TP-PROP-02-S03",
+    "test": "TP-PROP-02",
+    "env": "both",
+    "action": "Click Add a memory, type a short message, tick the consent box and press Continue.",
+    "expected": "It tells you this is a demo and nothing is sent. No error appears."
+  },
+  {
+    "id": "TP-PROP-02-S04",
+    "test": "TP-PROP-02",
+    "env": "both",
+    "action": "Scroll to the very bottom.",
+    "expected": "A small line reads “Loved your stay? Powered by DigiStayBook…”. It does not pop up or cover anything. Clicking it takes you to the DigiStayBook home page."
+  },
+  {
+    "id": "TP-PROP-02-S05",
+    "test": "TP-PROP-02",
+    "env": "both",
+    "action": "Open the same demo pages on your phone.",
+    "expected": "They fit the screen without scrolling sideways."
+  },
+  {
+    "id": "TP-PUB-02-S01",
+    "test": "TP-PUB-02",
+    "env": "both",
+    "action": "At the bottom of the home page click Privacy & Safety.",
+    "expected": "A form opens without signing in. It says DigiStayBook cannot help with bookings, property access, maintenance or problems during a stay, and that guests should contact their host through the booking app for those."
+  },
+  {
+    "id": "TP-PUB-02-S02",
+    "test": "TP-PUB-02",
+    "env": "both",
+    "action": "Look at what the form asks for.",
+    "expected": "Request type (Privacy request, Content takedown, Urgent safety concern), Details and Contact email. Nothing unrelated."
+  },
+  {
+    "id": "TP-PUB-02-S03",
+    "test": "TP-PUB-02",
+    "env": "both",
+    "action": "Test site only Choose Privacy request. In Details type “TEST, please ignore. Tester check TP-PUB-02”. Enter your test inbox address and press Submit request.",
+    "expected": "A confirmation that the request was received. It does not promise that anything will be deleted."
+  },
+  {
+    "id": "TP-PUB-02-S04",
+    "test": "TP-PUB-02",
+    "env": "both",
+    "action": "From the links at the bottom of the page, open Terms and then Privacy.",
+    "expected": "Both open without signing in. (They may say “draft”. That is expected. Note it.)"
+  },
+  {
+    "id": "TP-ACC-01-S01",
+    "test": "TP-ACC-01",
+    "env": "both",
+    "action": "Click Host sign in, then Create a host account.",
+    "expected": "A form with Your name (optional), Email, Password, Confirm password, and a Continue with Google button."
+  },
+  {
+    "id": "TP-ACC-01-S02",
+    "test": "TP-ACC-01",
+    "env": "both",
+    "action": "Before typing anything, read the line under Password.",
+    "expected": "It says “At least 8 characters”."
+  },
+  {
+    "id": "TP-ACC-01-S03",
+    "test": "TP-ACC-01",
+    "env": "both",
+    "action": "Not built yet Look for a tick box about marketing emails or news.",
+    "expected": "There is one, and it starts un-ticked."
+  },
+  {
+    "id": "TP-ACC-01-S04",
+    "test": "TP-ACC-01",
+    "env": "both",
+    "action": "Not built yet Look for links to the Terms and the Privacy Policy.",
+    "expected": "They are next to the Create account button."
+  },
+  {
+    "id": "TP-ACC-01-S05",
+    "test": "TP-ACC-01",
+    "env": "both",
+    "action": "Type a 7-character password in both password boxes and press Create account.",
+    "expected": "Refused, with a message that says what to fix (at least 8 characters)."
+  },
+  {
+    "id": "TP-ACC-01-S06",
+    "test": "TP-ACC-01",
+    "env": "both",
+    "action": "Type two different passwords and press Create account.",
+    "expected": "Refused, with a message that they do not match."
+  },
+  {
+    "id": "TP-ACC-01-S07",
+    "test": "TP-ACC-01",
+    "env": "both",
+    "action": "Fill it in properly and press Create account.",
+    "expected": "You land on your dashboard (“Your host overview”) showing “No properties yet”."
+  },
+  {
+    "id": "TP-ACC-01-S08",
+    "test": "TP-ACC-01",
+    "env": "both",
+    "action": "Click Sign out, then sign back in with the same email and password.",
+    "expected": "You are back on the same dashboard."
+  },
+  {
+    "id": "TP-ACC-02-S01",
+    "test": "TP-ACC-02",
+    "env": "pre",
+    "action": "Click Host sign in, then Continue with Google, and sign in as Host B.",
+    "expected": "You come back to DigiStayBook and land on the dashboard."
+  },
+  {
+    "id": "TP-ACC-02-S02",
+    "test": "TP-ACC-02",
+    "env": "pre",
+    "action": "Think back over every screen you passed.",
+    "expected": "You weren’t signed up for marketing emails, and weren’t made to agree to them."
+  },
+  {
+    "id": "TP-ACC-02-S03",
+    "test": "TP-ACC-02",
+    "env": "pre",
+    "action": "Sign out, then Continue with Google again as Host B.",
+    "expected": "You’re back in the same account."
+  },
+  {
+    "id": "TP-ACC-03-S01",
+    "test": "TP-ACC-03",
+    "env": "both",
+    "action": "Go to Host sign in, type Host A’s email address, then click Forgot your password?",
+    "expected": "The page says “If that address belongs to a host account, a password reset email is on its way.” An email arrives within 5 minutes (check spam). Write down its subject line."
+  },
+  {
+    "id": "TP-ACC-03-S02",
+    "test": "TP-ACC-03",
+    "env": "both",
+    "action": "Click the link in the email and choose a new password. Keep it in your password manager; do not enter it in this test document.",
+    "expected": "You can sign in with the new password."
+  },
+  {
+    "id": "TP-ACC-03-S03",
+    "test": "TP-ACC-03",
+    "env": "both",
+    "action": "Click the same link in the email again.",
+    "expected": "It is refused because it has already been used."
+  },
+  {
+    "id": "TP-ACC-03-S04",
+    "test": "TP-ACC-03",
+    "env": "both",
+    "action": "Request another reset. Wait at least 61 minutes, then click the new link.",
+    "expected": "It is refused as expired, and you are told how to ask for a new one."
+  },
+  {
+    "id": "TP-ACC-03-S05",
+    "test": "TP-ACC-03",
+    "env": "both",
+    "action": "Request a reset for nobody@example.com.",
+    "expected": "Exactly the same message as step 1. The page does not reveal whether that account exists."
+  },
+  {
+    "id": "TP-ACC-08-S01",
+    "test": "TP-ACC-08",
+    "env": "pre",
+    "action": "Look in your test inbox.",
+    "expected": "An email asks you to confirm your email address."
+  },
+  {
+    "id": "TP-ACC-08-S02",
+    "test": "TP-ACC-08",
+    "env": "pre",
+    "action": "Without confirming, create a property (as in TP-PROP-01) and press Publish this property.",
+    "expected": "You are asked to confirm your email address first, and you cannot reach payment."
+  },
+  {
+    "id": "TP-ACC-05-S01",
+    "test": "TP-ACC-05",
+    "env": "pre",
+    "action": "In the dashboard, look for account settings where you can change your password or email address.",
+    "expected": "They exist."
+  },
+  {
+    "id": "TP-ACC-05-S02",
+    "test": "TP-ACC-05",
+    "env": "pre",
+    "action": "Change the password.",
+    "expected": "You are asked to sign in again first. Afterwards the new password works, and a “your password was changed” email arrives."
+  },
+  {
+    "id": "TP-ACC-05-S03",
+    "test": "TP-ACC-05",
+    "env": "pre",
+    "action": "Change the email address to your second address.",
+    "expected": "A confirmation email goes to the new address. Nothing changes until you click it."
+  },
+  {
+    "id": "TP-PROP-01-S01",
+    "test": "TP-PROP-01",
+    "env": "both",
+    "action": "On the dashboard click Add your first property.",
+    "expected": "A short setup opens (property name, what it says to guests, house guidance). Nothing asks for payment."
+  },
+  {
+    "id": "TP-PROP-01-S02",
+    "test": "TP-PROP-01",
+    "env": "both",
+    "action": "Enter the property name, an arrival note and one line under House guidance (for example Wi-Fi: TestNetwork / password123). Finish with Create property.",
+    "expected": "The property is created and shows on the dashboard as a draft (private)."
+  },
+  {
+    "id": "TP-PROP-01-S03",
+    "test": "TP-PROP-01",
+    "env": "both",
+    "action": "Open the property. Add a cover photo and your own photograph.",
+    "expected": "Each upload shows progress and then appears. No payment prompt."
+  },
+  {
+    "id": "TP-PROP-01-S04",
+    "test": "TP-PROP-01",
+    "env": "both",
+    "action": "Find Wall theme and try every theme (Linen, Studio, Archive, Harbour, Sage).",
+    "expected": "The wall preview changes each time and still shows your own words and photos. No theme is locked or sold as an extra."
+  },
+  {
+    "id": "TP-PROP-01-S05",
+    "test": "TP-PROP-01",
+    "env": "both",
+    "action": "Not built yet Look for a choice of layout called Mosaic or Spotlight.",
+    "expected": "Both are available."
+  },
+  {
+    "id": "TP-PROP-01-S06",
+    "test": "TP-PROP-01",
+    "env": "both",
+    "action": "Open Walls and QR display.",
+    "expected": "Print placard is locked, with the reason shown (“Printing unlocks with an active trial or subscription”)."
+  },
+  {
+    "id": "TP-PROP-01-S07",
+    "test": "TP-PROP-01",
+    "env": "both",
+    "action": "Click Open the in-stay wall.",
+    "expected": "You see a preview with a clear banner saying only you can see it. It cannot be mistaken for the real guest page."
+  },
+  {
+    "id": "TP-PROP-01-S08",
+    "test": "TP-PROP-01",
+    "env": "both",
+    "action": "Copy the Guest link address, open a private window and paste it.",
+    "expected": "A page says “This guestbook isn’t open to visitors” (not an error page)."
+  },
+  {
+    "id": "TP-PROP-03-S01",
+    "test": "TP-PROP-03",
+    "env": "pre",
+    "action": "Add a property called Empty Cottage, fill in only the name, and skip everything optional.",
+    "expected": "The property is created."
+  },
+  {
+    "id": "TP-PROP-03-S02",
+    "test": "TP-PROP-03",
+    "env": "pre",
+    "action": "Press Publish this property.",
+    "expected": "Before you can pay, you are told to add at least one note or piece of house guidance first, so the first guest does not find an empty wall."
+  },
+  {
+    "id": "TP-PROP-03-S03",
+    "test": "TP-PROP-03",
+    "env": "pre",
+    "action": "Add an arrival note, then click Open the in-stay wall.",
+    "expected": "Your note is at the top of the wall."
+  },
+  {
+    "id": "TP-PROP-04-S01",
+    "test": "TP-PROP-04",
+    "env": "pre",
+    "action": "Look at the dashboard.",
+    "expected": "All four properties are listed (Draft Cottage, Trial Cottage, Active Cottage, Paused Cottage). Each shows its state in words."
+  },
+  {
+    "id": "TP-PROP-04-S02",
+    "test": "TP-PROP-04",
+    "env": "pre",
+    "action": "Look at each property card.",
+    "expected": "Each one says what to do next for that property."
+  },
+  {
+    "id": "TP-PROP-04-S03",
+    "test": "TP-PROP-04",
+    "env": "pre",
+    "action": "Open Draft Cottage, go to Settings, change the name to “Draft Cottage EDITED” and press Save changes.",
+    "expected": "Only that property changes. The other three are untouched."
+  },
+  {
+    "id": "TP-PROP-04-S04",
+    "test": "TP-PROP-04",
+    "env": "pre",
+    "action": "Click Billing at the top of the dashboard.",
+    "expected": "Each paid property is listed separately with its own price and date."
+  },
+  {
+    "id": "TP-SEC-06-S01",
+    "test": "TP-SEC-06",
+    "env": "pre",
+    "action": "Open Active Cottage and copy the address from the browser’s address bar. Sign out.",
+    "expected": ""
+  },
+  {
+    "id": "TP-SEC-06-S02",
+    "test": "TP-SEC-06",
+    "env": "pre",
+    "action": "Sign in as Host A and paste that address into the address bar.",
+    "expected": "You cannot see or change the property. You get a “not found” or “no access” message, and nothing of Host C’s is shown."
+  },
+  {
+    "id": "TP-SEC-06-S03",
+    "test": "TP-SEC-06",
+    "env": "pre",
+    "action": "Add /moderation to the end of the address and try again. Then try /billing.",
+    "expected": "Same result each time."
+  },
+  {
+    "id": "TP-SEC-06-S04",
+    "test": "TP-SEC-06",
+    "env": "pre",
+    "action": "Sign out and paste the address again.",
+    "expected": "You are asked to sign in. Nothing is shown."
+  },
+  {
+    "id": "TP-BILL-01-S01",
+    "test": "TP-BILL-01",
+    "env": "both",
+    "action": "Open the property and press Publish this property.",
+    "expected": "You are asked “Where will you be billed?”. Choose Australia."
+  },
+  {
+    "id": "TP-BILL-01-S02",
+    "test": "TP-BILL-01",
+    "env": "both",
+    "action": "Choose Monthly.",
+    "expected": "Under Before you continue, the trial end date is shown as a real date (for example 27 October 2026), not “in 28 days”. The price matches what you wrote down."
+  },
+  {
+    "id": "TP-BILL-01-S03",
+    "test": "TP-BILL-01",
+    "env": "both",
+    "action": "Read the text beside the tick box.",
+    "expected": "It says “I understand I will be billed $[price] on [date] if I do not cancel”, with the real price and date filled in."
+  },
+  {
+    "id": "TP-BILL-01-S04",
+    "test": "TP-BILL-01",
+    "env": "both",
+    "action": "Press Start free trial without ticking the box.",
+    "expected": "You cannot continue, and you are told why."
+  },
+  {
+    "id": "TP-BILL-01-S05",
+    "test": "TP-BILL-01",
+    "env": "both",
+    "action": "Choose Annual instead.",
+    "expected": "The annual price and the date it will be charged are shown the same way."
+  },
+  {
+    "id": "TP-BILL-01-S06",
+    "test": "TP-BILL-01",
+    "env": "both",
+    "action": "Look for whether the price includes GST.",
+    "expected": "It says whether GST is included or not."
+  },
+  {
+    "id": "TP-BILL-01-S07",
+    "test": "TP-BILL-01",
+    "env": "both",
+    "action": "Press Back to the property.",
+    "expected": "Nothing has been charged."
+  },
+  {
+    "id": "TP-PROP-05-S01",
+    "test": "TP-PROP-05",
+    "env": "pre",
+    "action": "Open Test Cottage 1, press Publish this property, choose Australia and Monthly, tick the box and press Start free trial.",
+    "expected": "A Stripe payment page opens (its address starts with checkout.stripe.com). DigiStayBook itself never shows you a box for card details."
+  },
+  {
+    "id": "TP-PROP-05-S02",
+    "test": "TP-PROP-05",
+    "env": "pre",
+    "action": "Enter the declined card and submit.",
+    "expected": "Stripe says the card was declined. The property is not live."
+  },
+  {
+    "id": "TP-PROP-05-S03",
+    "test": "TP-PROP-05",
+    "env": "pre",
+    "action": "Change the card number to the one that always works and submit.",
+    "expected": "You come back to DigiStayBook. It says it is finishing activation, then that the subscription was set up. Within a minute the property shows as live on a trial."
+  },
+  {
+    "id": "TP-PROP-05-S04",
+    "test": "TP-PROP-05",
+    "env": "pre",
+    "action": "Open Billing for the property.",
+    "expected": "It shows when the trial ends and the first charge. The same amount and date you saw at checkout."
+  },
+  {
+    "id": "TP-PROP-05-S05",
+    "test": "TP-PROP-05",
+    "env": "pre",
+    "action": "Open Walls and QR display.",
+    "expected": "Print placard is now available."
+  },
+  {
+    "id": "TP-PROP-05-S06",
+    "test": "TP-PROP-05",
+    "env": "pre",
+    "action": "Paste the Guest link into a private window.",
+    "expected": "The real guest wall opens (not the “isn’t open to visitors” page)."
+  },
+  {
+    "id": "TP-PROP-07-S01",
+    "test": "TP-PROP-07",
+    "env": "both",
+    "action": "Press Publish this property, choose Australia and Monthly, then click Have a promotion code?, type the code and press Apply.",
+    "expected": "The code is accepted and the amount to pay drops to zero."
+  },
+  {
+    "id": "TP-PROP-07-S02",
+    "test": "TP-PROP-07",
+    "env": "both",
+    "action": "Tick the box and continue.",
+    "expected": "On the Stripe page nothing is charged. Live site: if you are asked for a card, stop and report it. Never type a real card. Test site: if asked, use 4242 4242 4242 4242 and note that it asked."
+  },
+  {
+    "id": "TP-PROP-07-S03",
+    "test": "TP-PROP-07",
+    "env": "both",
+    "action": "Come back to DigiStayBook and open Walls and QR display.",
+    "expected": "The property is live and Print placard is available, just as after a paid activation."
+  },
+  {
+    "id": "TP-PROP-07-S04",
+    "test": "TP-PROP-07",
+    "env": "both",
+    "action": "Open Billing for the property.",
+    "expected": "No charge is shown, and no amount is shown wrongly."
+  },
+  {
+    "id": "TP-BILL-03-S01",
+    "test": "TP-BILL-03",
+    "env": "pre",
+    "action": "Press Publish this property, choose Australia and Monthly.",
+    "expected": "No free trial is offered. It says you will be billed today and that the trial is for your first property only."
+  },
+  {
+    "id": "TP-BILL-03-S02",
+    "test": "TP-BILL-03",
+    "env": "pre",
+    "action": "Pay with 4242 4242 4242 4242.",
+    "expected": "The property goes live immediately, and Billing shows it was charged today."
+  },
+  {
+    "id": "TP-QR-01-S01",
+    "test": "TP-QR-01",
+    "env": "both",
+    "action": "Open Walls and QR display and press Print placard.",
+    "expected": "The print window opens with a placard showing the property name, a QR code and the web address under it."
+  },
+  {
+    "id": "TP-QR-01-S02",
+    "test": "TP-QR-01",
+    "env": "both",
+    "action": "Print it on A4.",
+    "expected": "The QR code and text are sharp."
+  },
+  {
+    "id": "TP-QR-01-S03",
+    "test": "TP-QR-01",
+    "env": "both",
+    "action": "Point your phone camera at the printed QR code from about arm’s length.",
+    "expected": "The phone offers a link. Opening it shows this property’s in-stay wall in the browser. No app download is asked for."
+  },
+  {
+    "id": "TP-QR-01-S04",
+    "test": "TP-QR-01",
+    "env": "both",
+    "action": "In Settings, rename the property to “Test Cottage One” and save. Scan the same printed placard again.",
+    "expected": "It still works and shows the new name. The placard does not need reprinting."
+  },
+  {
+    "id": "TP-WALL-03-S01",
+    "test": "TP-WALL-03",
+    "env": "pre",
+    "action": "In the property menu open Public wall, press Copy link and paste it into a private window.",
+    "expected": "A public version of the wall: your name and welcome, but no house rules or Wi-Fi, and no way to add a memory."
+  },
+  {
+    "id": "TP-WALL-03-S02",
+    "test": "TP-WALL-03",
+    "env": "pre",
+    "action": "Back in the dashboard, turn the Public wall switch off. Reload the private window.",
+    "expected": "The public link now shows a “not open” page."
+  },
+  {
+    "id": "TP-WALL-03-S03",
+    "test": "TP-WALL-03",
+    "env": "pre",
+    "action": "Scan your printed placard.",
+    "expected": "The in-stay wall still works. Only the public link was switched off."
+  },
+  {
+    "id": "TP-WALL-03-S04",
+    "test": "TP-WALL-03",
+    "env": "pre",
+    "action": "Turn the Public wall switch back on.",
+    "expected": "The public link works again."
+  },
+  {
+    "id": "TP-GUEST-01-S01",
+    "test": "TP-GUEST-01",
+    "env": "both",
+    "action": "Select the placard/guest link for the environment you are testing. Start the stopwatch and scan the placard, or open its guest link on the supported local computer.",
+    "expected": "The selected local wall opens without sign-in. The default local launcher binds to loopback: a separate phone cannot reach it. Record a desktop run as Desktop; leave the physical-mobile result R / Needs review with the access reason until engineering configures phone access. The dedicated live test property opens on the phone without an app, sign-in or email address. Its property and guest link belong to this live run, not the local fixtures."
+  },
+  {
+    "id": "TP-GUEST-01-S02",
+    "test": "TP-GUEST-01",
+    "env": "both",
+    "action": "Read the top of the wall.",
+    "expected": "The property name, the host’s note, The essentials, and a prompt suggesting what to write."
+  },
+  {
+    "id": "TP-GUEST-01-S03",
+    "test": "TP-GUEST-01",
+    "env": "both",
+    "action": "Submit a clear control memory: use “A lovely stay; thank you” and an ordinary permitted photo, with no contact details, links or screening markers. Note the property’s host-review setting before submission. Tick consent and submit once.",
+    "expected": "Photo progress is shown. Complete clear simulated screening with host review off can return “Your memory is now on the wall.” If review is needed, “Memory received” explains the hold instead. A pending dialog is not required for a published memory. Photo progress is shown. A clear result with host review off can return “Your memory is now on the wall.” A review or incomplete-screening result can show “Memory received” with its explanation. Record the actual confirmation; do not fail a successful publication just because the pending dialog did not appear."
+  },
+  {
+    "id": "TP-GUEST-01-S04",
+    "test": "TP-GUEST-01",
+    "env": "both",
+    "action": "Stop the stopwatch.",
+    "expected": "Record the total elapsed time separately for each environment. The target is under one minute for the complete submission, including any screening performed before confirmation. Record any delay rather than assuming both environments behave at the same speed."
+  },
+  {
+    "id": "TP-GUEST-01-S05",
+    "test": "TP-GUEST-01",
+    "env": "both",
+    "action": "Open Your memories in this browser and inspect the memory from this run. Use Refresh my memories if needed. Compare its displayed status and wall visibility with the host-review setting and screening result.",
+    "expected": "A clear simulated memory on an active property with host review off should show Published and be visible on the wall. With host review on or a review/safety/outage fixture, it can show Pending safety screening or review and remain unpublished. Screening is simulated; it is not permanently switched off. A clear real-provider result with host review off and no other hold should show Published and be visible on the wall. Host-requested review, ordinary flags, contact/link review, serious safety flags or incomplete screening can show Pending safety screening or review. The broad pending label does not identify the reason: match the submission at TP-OPS-09. Unexpected or persistent pending needs an observed explanation, not an automatic pass."
+  },
+  {
+    "id": "TP-GUEST-01-S06",
+    "test": "TP-GUEST-01",
+    "env": "both",
+    "action": "In the same browser profile, close the tab and reopen the same environment’s guest link/placard. Do not switch property or environment for this persistence check.",
+    "expected": "The same submitted memory remains under Your memories in this browser. Its status can advance from Pending safety screening or review to Published after processing/approval; it need not retain an earlier pending label. Record the reopened status independently for Local Test and Live site."
+  },
+  {
+    "id": "TP-GUEST-01-S07",
+    "test": "TP-GUEST-01",
+    "env": "both",
+    "action": "Do steps 1–4 again somewhere with weak signal (for example mobile data only, far from Wi-Fi).",
+    "expected": "Repeat only a network condition the local setup can actually exercise. A loopback-only computer run does not prove a phone’s mobile-data journey. Record unavailable physical/mobile-network coverage as R / Needs review and explain why. Repeat steps 1–4 on the dedicated live test property with weak signal. Upload progress is shown and recoverable errors explain how to retry. Record the actual confirmation, elapsed time and final status; a successful memory may already be Published."
+  },
+  {
+    "id": "TP-GUEST-02-S01",
+    "test": "TP-GUEST-02",
+    "env": "both",
+    "action": "Scan the placard, tap Add a memory, type a message, leave the consent box un-ticked and tap Submit memory.",
+    "expected": "Nothing is sent. The message says “Please read and accept the consent before submitting.”"
+  },
+  {
+    "id": "TP-GUEST-02-S02",
+    "test": "TP-GUEST-02",
+    "env": "both",
+    "action": "Read the consent wording word for word.",
+    "expected": "It says: “I agree to the Guest Terms and Privacy Policy, consent to this image being displayed publicly, and confirm I am over 16 years of age.” If it is different, copy the exact wording into your note."
+  },
+  {
+    "id": "TP-GUEST-02-S03",
+    "test": "TP-GUEST-02",
+    "env": "both",
+    "action": "Tap the Guest Terms and Privacy Policy links.",
+    "expected": "Both open."
+  },
+  {
+    "id": "TP-GUEST-02-S04",
+    "test": "TP-GUEST-02",
+    "env": "both",
+    "action": "Look at every box on the form.",
+    "expected": "No name, email or phone number is required."
+  },
+  {
+    "id": "TP-GUEST-03-S01",
+    "test": "TP-GUEST-03",
+    "env": "both",
+    "action": "Tap Add a memory and read around Choose photos before choosing anything.",
+    "expected": "The provisional limits are shown up front: up to 10 JPEG/PNG/WebP photos, 5 MiB per file, 25 MiB total and 40 megapixels per photo. Memory text and private feedback each allow up to 1,200 characters. Record any missing or different wording."
+  },
+  {
+    "id": "TP-GUEST-03-S02",
+    "test": "TP-GUEST-03",
+    "env": "both",
+    "action": "Choose photo-01 to photo-10 (ten files), tick consent and submit.",
+    "expected": "All ten are accepted, shown as previews, and upload with progress."
+  },
+  {
+    "id": "TP-GUEST-03-S03",
+    "test": "TP-GUEST-03",
+    "env": "both",
+    "action": "Start a new memory and choose all eleven photos (photo-01 to photo-11).",
+    "expected": "Refused with “Choose no more than ten photos.”. Not silently dropped."
+  },
+  {
+    "id": "TP-GUEST-03-S04",
+    "test": "TP-GUEST-03",
+    "env": "both",
+    "action": "Choose too-big.jpg.",
+    "expected": "Refused, and the message names the size limit. Your message is still there."
+  },
+  {
+    "id": "TP-GUEST-03-S05",
+    "test": "TP-GUEST-03",
+    "env": "both",
+    "action": "Choose not-a-photo.jpg.",
+    "expected": "Refused as a file that could not be read as a photo."
+  },
+  {
+    "id": "TP-GUEST-03-S06",
+    "test": "TP-GUEST-03",
+    "env": "both",
+    "action": "Choose animated.gif, then a video from your phone.",
+    "expected": "Both refused. It says videos and animated images are not supported."
+  },
+  {
+    "id": "TP-GUEST-03-S07",
+    "test": "TP-GUEST-03",
+    "env": "both",
+    "action": "On each real phone, choose an ordinary supported photo from the camera roll, submit a memory and check its preview and eventual wall display after screening/review. Record phone model, OS, browser version, original file type and outcome.",
+    "expected": "The supported photo previews and uploads with progress, without losing the draft or becoming stuck. After publication it displays correctly oriented. Android and iPhone each need an observed result; a desktop or emulator pass does not cover this step."
+  },
+  {
+    "id": "TP-GUEST-03-S08",
+    "test": "TP-GUEST-03",
+    "env": "both",
+    "action": "On the iPhone, try both a camera-roll photo captured in High Efficiency mode and an original .heic file selected through Files. Have engineering confirm the original format and the actual uploaded format; the browser may convert the camera-roll selection.",
+    "expected": "Record whether each photo is converted, uploaded as HEIC or refused, and whether a preview and final image work. HEIC policy is unresolved: record the observed outcome for owner/engineering decision rather than assume support. If unsupported, a clear message explains which formats to use and preserves the draft. Silent failure is a fail; a converted camera-roll upload alone does not prove native HEIC support."
+  },
+  {
+    "id": "TP-GUEST-03-S09",
+    "test": "TP-GUEST-03",
+    "env": "both",
+    "action": "Using valid supported photos below 40 megapixels, try one file of exactly 5 MiB (5,242,880 bytes), then one just over 5 MiB. Keep each submission below the total limit.",
+    "expected": "The file at the limit uploads; the file above it is refused with a clear size-limit message, and the draft remains. Engineering verifies the exact fixture sizes; do not infer bytes from a rounded file-size label."
+  },
+  {
+    "id": "TP-GUEST-03-S10",
+    "test": "TP-GUEST-03",
+    "env": "both",
+    "action": "Choose no more than ten supported photos, each at or below 5 MiB and 40 megapixels. Test a set totalling exactly 25 MiB (26,214,400 bytes), then a separate set just above 25 MiB.",
+    "expected": "The set at the total limit uploads. The set above it is refused with a clear total-size message; nothing is published from that failed attempt and the draft remains recoverable. If an earlier check blocks the test, record it as blocked rather than passed."
+  },
+  {
+    "id": "TP-GUEST-03-S11",
+    "test": "TP-GUEST-03",
+    "env": "both",
+    "action": "Choose a valid supported photo of exactly 40,000,000 pixels, then one just above that count. Both files must be below 5 MiB. Engineering confirms width multiplied by height.",
+    "expected": "The image at the pixel limit uploads. The image above it is refused with a clear image-dimension/megapixel explanation. Your message remains. After publication, engineering verifies the accepted image is converted to WebP within 2000 by 2000 pixels with metadata removed."
+  },
+  {
+    "id": "TP-GUEST-03-S12",
+    "test": "TP-GUEST-03",
+    "env": "both",
+    "action": "In Add a memory, paste and submit each harmless text fixture: 1,199 characters, exactly 1,200 characters, then 1,201 characters. Use a supported photo if required, and tick consent. Count spaces and punctuation; avoid leading/trailing whitespace in these fixtures.",
+    "expected": "The 1,199- and 1,200-character messages are accepted in full and remain intact in Your memories and, after publication, on the wall. The form prevents text beyond 1,200 or clearly explains the limit before submission. Record whether typing and pasting are capped; no accepted message exceeds the limit."
+  },
+  {
+    "id": "TP-GUEST-03-S13",
+    "test": "TP-GUEST-03",
+    "env": "both",
+    "action": "Repeat the 1,199-, 1,200- and 1,201-character tests in Private feedback. Check accepted messages in the test host inbox after screening.",
+    "expected": "The first two are delivered privately and intact. The form prevents text beyond 1,200 or clearly explains the limit. Feedback stays off the public wall. Record the exact retained length if pasting is capped; do not mistake a shortened message for acceptance of all 1,201 characters."
+  },
+  {
+    "id": "TP-GUEST-03-S14",
+    "test": "TP-GUEST-03",
+    "env": "both",
+    "action": "Ask engineering to submit the 1,201-character memory and feedback fixtures directly to the backend on the authorised test environment, bypassing the form limit. Repeat the device checks and boundary checks on both real phones; record separate outcomes in the notes.",
+    "expected": "Both over-limit backend requests are rejected and neither produces a published memory or delivered feedback. Each phone has recorded evidence for text, photo sizes, total size and pixel boundaries. Missing phones, fixtures or backend access are recorded as blocked. These limits remain provisional until the owner reviews device results and decides HEIC treatment."
+  },
+  {
+    "id": "TP-GUEST-04-S01",
+    "test": "TP-GUEST-04",
+    "env": "both",
+    "action": "On the first phone, scan the placard. Under Your memories in this browser tap Edit message, change the text and tap Save message.",
+    "expected": "The edit saves and says it will be screened again. Clear simulated screening can return it to Published with host review off; review/safety/outage fixtures keep it held as appropriate. The edit saves and says it will be screened again. Final status follows the new real-provider result, host-review setting and open restrictions. Do not require an edited clear memory to remain pending."
+  },
+  {
+    "id": "TP-GUEST-04-S02",
+    "test": "TP-GUEST-04",
+    "env": "both",
+    "action": "Tap Delete memory and confirm.",
+    "expected": "It says the memory is hidden and its deletion is scheduled."
+  },
+  {
+    "id": "TP-GUEST-04-S03",
+    "test": "TP-GUEST-04",
+    "env": "both",
+    "action": "On the second device, open the same wall.",
+    "expected": "There is no “Your memories” list for the first guest’s memories, and no edit or delete button on anything that device did not write."
+  },
+  {
+    "id": "TP-GUEST-04-S04",
+    "test": "TP-GUEST-04",
+    "env": "both",
+    "action": "On Host D’s wall (see TP-RPT-01 for how to open it), look at the memories.",
+    "expected": "Other guests’ memories offer Report memory only. Never edit or delete."
+  },
+  {
+    "id": "TP-GUEST-05-S01",
+    "test": "TP-GUEST-05",
+    "env": "both",
+    "action": "On Host D’s in-stay wall, tap Private feedback beside Add a memory.",
+    "expected": "The form opens with Private feedback for your host selected. It says only the host sees this message, there are no replies here, and to use the booking app for help during the stay."
+  },
+  {
+    "id": "TP-GUEST-05-S02",
+    "test": "TP-GUEST-05",
+    "env": "both",
+    "action": "Type “TEST feedback. The kettle is slow” and tap Send to host.",
+    "expected": "The clear test feedback is accepted without a photo picker or public-display consent box. Its local screening/delivery is simulated; the local host inbox is the result to check. The feedback is accepted without a photo picker or public-display consent box. Record whether confirmation says sent, waiting for screening or saved for review. Only the observed host inbox proves delivery; no real-provider outcome is inferred from the test text alone."
+  },
+  {
+    "id": "TP-GUEST-05-S03",
+    "test": "TP-GUEST-05",
+    "env": "both",
+    "action": "Check the wall and the selected test property’s Private feedback inbox, signed in as its owner. Use the local host for Local Test and the dedicated live host for Live site.",
+    "expected": "The message never appears on either guest wall. Clear local feedback reaches the local host inbox and has no Reply button. [safety]/[outage] fixtures are separate routing checks; they are not expected to deliver here. The message never appears on either guest wall. A complete non-serious screening result delivers it to the correct private host inbox, with no Reply button. Serious flags or incomplete screening may keep it held: record the actual state and time waited and follow TP-OPS-09-S03 or TP-OPS-09-S05. Acceptance alone is not delivery proof."
+  },
+  {
+    "id": "TP-GUEST-05-S04",
+    "test": "TP-GUEST-05",
+    "env": "both",
+    "action": "On that feedback message, look for Report message.",
+    "expected": "The host can report the message for safety review. Do not report this harmless test message; leave it for the next tester."
+  },
+  {
+    "id": "TP-GUEST-06-S01",
+    "test": "TP-GUEST-06",
+    "env": "both",
+    "action": "Add a memory with the text “Double tap test”, tick consent, and tap Submit memory twice quickly.",
+    "expected": "Only one “Double tap test” appears under Your memories."
+  },
+  {
+    "id": "TP-GUEST-06-S02",
+    "test": "TP-GUEST-06",
+    "env": "both",
+    "action": "Add a memory with a photo. Straight after tapping submit, turn on flight mode. Wait for the error, turn flight mode off and tap Retry this submission.",
+    "expected": "The error explains what happened, the retry works, and you end up with exactly one memory."
+  },
+  {
+    "id": "TP-GUEST-07-S01",
+    "test": "TP-GUEST-07",
+    "env": "both",
+    "action": "With the host-review switch off, submit the harmless memory “A lovely stay; thank you” and separate harmless private feedback. Give each submission its own reference. Then ask operations to complete TP-OPS-09-S01.",
+    "expected": "After complete clear screening, the memory can publish and the feedback reaches only the host inbox. No safety case is expected."
+  },
+  {
+    "id": "TP-GUEST-07-S02",
+    "test": "TP-GUEST-07",
+    "env": "both",
+    "action": "Turn host review on for the disposable property and submit another clear memory. Hand its reference to TP-OPS-09-S02.",
+    "expected": "The memory waits for host approval even though screening is clear. It stays off both walls until approved. This is host-requested review, not a serious safety case."
+  },
+  {
+    "id": "TP-GUEST-07-S03",
+    "test": "TP-GUEST-07",
+    "env": "both",
+    "action": "Submit [review] Controlled ordinary fixture as a memory and separately as private feedback. The local marker selects ordinary review; it does not represent a named provider category.Submit the owner-approved ordinary-category fixture as a memory and separately as private feedback. Record the actual provider result; do not use local routing markers to claim live classification.Continue at TP-OPS-09-S02.",
+    "expected": "Ordinary-flagged memories wait for the host. Ordinary private feedback is delivered privately. A local marker proves this route only; it does not prove a named Google category."
+  },
+  {
+    "id": "TP-GUEST-07-S04",
+    "test": "TP-GUEST-07",
+    "env": "both",
+    "action": "Submit [safety] Controlled routing fixture as a memory and separately as private feedback. The simulated safety category is Local test safety fixture.Submit approved serious-category fixtures from TP-GUEST-08 as a memory and separate private feedback. Record the actual provider categories.Send the references to TP-OPS-09-S03.",
+    "expected": "Both routes open restricted safety review, with no public memory or host feedback delivery. In Local Test the category is Local test safety fixture; a production category must be evidenced by the actual provider result."
+  },
+  {
+    "id": "TP-GUEST-07-S05",
+    "test": "TP-GUEST-07",
+    "env": "both",
+    "action": "Submit [outage] Controlled outage fixture as a memory and separately as private feedback.Coordinate an authorised scoped screening failure with engineering, then submit separate memory and feedback cases. Do not apply a production-wide override.Follow TP-OPS-09-S05 and TP-OPS-03.",
+    "expected": "Each incomplete scan opens restricted review tagged Screening incomplete. The reason is visible to operations; memory stays unpublished and feedback stays undelivered. Record how failure was produced."
+  },
+  {
+    "id": "TP-GUEST-07-S06",
+    "test": "TP-GUEST-07",
+    "env": "both",
+    "action": "After clear screening, submit separate memories containing a synthetic email, a harmless link and a synthetic phone number. Use tester@example.invalid, https://example.invalid/test and an owner-approved dummy phone number. Send each reference to TP-OPS-09-S02.",
+    "expected": "The contact/link rule adds host review to memories, even with host-requested review off. It cannot override a serious category or incomplete scan. No personal contact data is needed."
+  },
+  {
+    "id": "TP-GUEST-07-S07",
+    "test": "TP-GUEST-07",
+    "env": "both",
+    "action": "Submit [review] [safety] Combined fixture, then [safety] [outage] Combined fixture. These markers check local route precedence.Use approved combined-signal fixtures and record the actual provider signals. Controlled response injection belongs in an isolated harness and proves routing only.Follow TP-OPS-09-S06.",
+    "expected": "Safety takes priority over ordinary review. An incomplete scan remains a restricted incomplete-screening case. No lower-priority clear or host-review signal publishes the content."
+  },
+  {
+    "id": "TP-GUEST-08-S01",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Toxic using approved fixture TXT-TOXIC. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S02 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this category alone puts the memory in host review; private feedback is delivered to the host inbox. It does not create a serious safety case by itself. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S02",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Derogatory using approved fixture TXT-DEROGATORY. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S03 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this serious text category sends both memory and feedback to restricted Safety Review. The case carries this category; memory stays off the walls and feedback stays out of the host inbox. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S03",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Violent using approved fixture TXT-VIOLENT. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S03 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this serious text category sends both memory and feedback to restricted Safety Review. The case carries this category; memory stays off the walls and feedback stays out of the host inbox. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S04",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Sexual using approved fixture TXT-SEXUAL. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S03 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this serious text category sends both memory and feedback to restricted Safety Review. The case carries this category; memory stays off the walls and feedback stays out of the host inbox. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S05",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Insult using approved fixture TXT-INSULT. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S02 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this category alone puts the memory in host review; private feedback is delivered to the host inbox. It does not create a serious safety case by itself. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S06",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Profanity using approved fixture TXT-PROFANITY. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S02 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this category alone puts the memory in host review; private feedback is delivered to the host inbox. It does not create a serious safety case by itself. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S07",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Death, Harm & Tragedy using approved fixture TXT-DEATH-HARM-TRAGEDY. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S02 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this category alone puts the memory in host review; private feedback is delivered to the host inbox. It does not create a serious safety case by itself. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S08",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Firearms & Weapons using approved fixture TXT-FIREARMS-WEAPONS. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S03 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this serious text category sends both memory and feedback to restricted Safety Review. The case carries this category; memory stays off the walls and feedback stays out of the host inbox. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S09",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Public Safety using approved fixture TXT-PUBLIC-SAFETY. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S02 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this category alone puts the memory in host review; private feedback is delivered to the host inbox. It does not create a serious safety case by itself. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S10",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Health using approved fixture TXT-HEALTH. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S02 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this category alone puts the memory in host review; private feedback is delivered to the host inbox. It does not create a serious safety case by itself. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S11",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Religion & Belief using approved fixture TXT-RELIGION-BELIEF. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S02 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this category alone puts the memory in host review; private feedback is delivered to the host inbox. It does not create a serious safety case by itself. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S12",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Illicit Drugs using approved fixture TXT-ILLICIT-DRUGS. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S02 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this category alone puts the memory in host review; private feedback is delivered to the host inbox. It does not create a serious safety case by itself. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S13",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target War & Conflict using approved fixture TXT-WAR-CONFLICT. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S02 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this category alone puts the memory in host review; private feedback is delivered to the host inbox. It does not create a serious safety case by itself. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S14",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Finance using approved fixture TXT-FINANCE. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S02 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this category alone puts the memory in host review; private feedback is delivered to the host inbox. It does not create a serious safety case by itself. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S15",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Politics using approved fixture TXT-POLITICS. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S02 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this category alone puts the memory in host review; private feedback is delivered to the host inbox. It does not create a serious safety case by itself. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-08-S16",
+    "test": "TP-GUEST-08",
+    "env": "both",
+    "action": "Target Legal using approved fixture TXT-LEGAL. The default Local Test markers cannot identify this individual Google category. Engineering must supply an isolated complete-response test with this category at 0.800 and other signals below hold thresholds. Record the memory and feedback route separately; mark unavailable category-specific checks R / Needs review. This proves routing, not Google classification.Submit the approved text as a memory and separately as private feedback, with host review off. Record the actual Google categories and scores. If the intended category is missed, record that mismatch; do not substitute a simulated result.Hand both references to TP-OPS-09-S02 and TP-OPS-09-S04.",
+    "expected": "At or above 0.800, this category alone puts the memory in host review; private feedback is delivered to the host inbox. It does not create a serious safety case by itself. Below-threshold results follow the actual rules. If the real provider misses the intended category, record the mismatch and mark category coverage Needs review; an intended fixture label is not a classification result."
+  },
+  {
+    "id": "TP-GUEST-09-S01",
+    "test": "TP-GUEST-09",
+    "env": "both",
+    "action": "Target photo category adult with approved fixture IMG-ADULT, harmless text and host review off.Local screening markers do not classify a photo. Engineering supplies an isolated complete SafeSearch response with this category LIKELY/VERY_LIKELY and other signals VERY_UNLIKELY. Mark unavailable per-category checks R / Needs review.Submit the approved photo as a memory and record all actual Google SafeSearch likelihoods. A file name or intended category does not prove classification.Continue at TP-OPS-09-S03 and TP-OPS-09-S04.",
+    "expected": "LIKELY/VERY_LIKELY adult opens restricted Safety Review tagged Photo adult. The memory/photo is unavailable publicly until the authorised route allows it. Photo screening applies to memory photos; the private-feedback form is text-only. Actual Google classifications must be observed, not inferred from the file name."
+  },
+  {
+    "id": "TP-GUEST-09-S02",
+    "test": "TP-GUEST-09",
+    "env": "both",
+    "action": "Target photo category violence with approved fixture IMG-VIOLENCE, harmless text and host review off.Local screening markers do not classify a photo. Engineering supplies an isolated complete SafeSearch response with this category LIKELY/VERY_LIKELY and other signals VERY_UNLIKELY. Mark unavailable per-category checks R / Needs review.Submit the approved photo as a memory and record all actual Google SafeSearch likelihoods. A file name or intended category does not prove classification.Continue at TP-OPS-09-S03 and TP-OPS-09-S04.",
+    "expected": "LIKELY/VERY_LIKELY violence opens restricted Safety Review tagged Photo violence. The memory/photo is unavailable publicly until the authorised route allows it. Photo screening applies to memory photos; the private-feedback form is text-only. Actual Google classifications must be observed, not inferred from the file name."
+  },
+  {
+    "id": "TP-GUEST-09-S03",
+    "test": "TP-GUEST-09",
+    "env": "both",
+    "action": "Target photo category medical with approved fixture IMG-MEDICAL, harmless text and host review off.Local screening markers do not classify a photo. Engineering supplies an isolated complete SafeSearch response with this category LIKELY/VERY_LIKELY and other signals VERY_UNLIKELY. Mark unavailable per-category checks R / Needs review.Submit the approved photo as a memory and record all actual Google SafeSearch likelihoods. A file name or intended category does not prove classification.Continue at TP-OPS-09-S02 and TP-OPS-09-S04.",
+    "expected": "LIKELY/VERY_LIKELY medical goes to host review, without a serious safety case from that signal alone. Photo screening applies to memory photos; the private-feedback form is text-only. Actual Google classifications must be observed, not inferred from the file name."
+  },
+  {
+    "id": "TP-GUEST-09-S04",
+    "test": "TP-GUEST-09",
+    "env": "both",
+    "action": "Target photo category racy with approved fixture IMG-RACY, harmless text and host review off.Local screening markers do not classify a photo. Engineering supplies an isolated complete SafeSearch response with this category LIKELY/VERY_LIKELY and other signals VERY_UNLIKELY. Mark unavailable per-category checks R / Needs review.Submit the approved photo as a memory and record all actual Google SafeSearch likelihoods. A file name or intended category does not prove classification.Continue at TP-OPS-09-S02 and TP-OPS-09-S04.",
+    "expected": "LIKELY/VERY_LIKELY racy goes to host review, without a serious safety case from that signal alone. Photo screening applies to memory photos; the private-feedback form is text-only. Actual Google classifications must be observed, not inferred from the file name."
+  },
+  {
+    "id": "TP-GUEST-09-S05",
+    "test": "TP-GUEST-09",
+    "env": "both",
+    "action": "Target photo category spoof with approved fixture IMG-SPOOF, harmless text and host review off.Local screening markers do not classify a photo. Engineering supplies an isolated complete SafeSearch response with this category LIKELY/VERY_LIKELY and other signals VERY_UNLIKELY. Mark unavailable per-category checks R / Needs review.Submit the approved photo as a memory and record all actual Google SafeSearch likelihoods. A file name or intended category does not prove classification.Continue at TP-OPS-09-S01 and TP-OPS-09-S04.",
+    "expected": "Spoof alone creates no hold from this image signal. With all other checks clear and host review off, the memory may publish. Photo screening applies to memory photos; the private-feedback form is text-only. Actual Google classifications must be observed, not inferred from the file name."
+  },
+  {
+    "id": "TP-GUEST-09-S06",
+    "test": "TP-GUEST-09",
+    "env": "both",
+    "action": "Submit a clear control photo with complete low-risk likelihoods, then an isolated UNKNOWN-likelihood response; keep all other checks clear. Continue at TP-OPS-09-S01.",
+    "expected": "Clear/valid UNKNOWN signals alone do not cause a hold. Host-requested review and other flags still apply. Record the actual classification and destination."
+  },
+  {
+    "id": "TP-GUEST-09-S07",
+    "test": "TP-GUEST-09",
+    "env": "both",
+    "action": "Arrange an authorised missing or invalid SafeSearch field response in an isolated test harness, or a scoped approved photo-scan failure. Submit a memory and continue at TP-OPS-09-S05.",
+    "expected": "An incomplete photo check is not treated as clear. Restricted Safety Review shows Screening incomplete and its reason; the memory stays unpublished."
+  },
+  {
+    "id": "TP-RPT-01-S01",
+    "test": "TP-RPT-01",
+    "env": "pre",
+    "action": "Find the memory that starts “Report test”. Tap Report memory, choose a reason and tap Send report.",
+    "expected": "It says “Report received. It will be reviewed.” and nothing more. It does not say the memory was deleted."
+  },
+  {
+    "id": "TP-RPT-01-S02",
+    "test": "TP-RPT-01",
+    "env": "pre",
+    "action": "Reload the wall on the second device.",
+    "expected": "That memory is no longer on the wall."
+  },
+  {
+    "id": "TP-RPT-01-S03",
+    "test": "TP-RPT-01",
+    "env": "pre",
+    "action": "As Host D, open Moderation and find Guest reports.",
+    "expected": "The report is listed with its reason. Nothing shows who reported it."
+  },
+  {
+    "id": "TP-WALL-01-S01",
+    "test": "TP-WALL-01",
+    "env": "pre",
+    "action": "Look at the order of the wall.",
+    "expected": "The host’s notes and The essentials are at the top. Guest memories follow, newest first (check the dates)."
+  },
+  {
+    "id": "TP-WALL-01-S02",
+    "test": "TP-WALL-01",
+    "env": "pre",
+    "action": "As Host D, open Moderation, choose an older memory and press Pin to the top. Reload the wall.",
+    "expected": "That memory now sits above the other guest memories."
+  },
+  {
+    "id": "TP-WALL-01-S03",
+    "test": "TP-WALL-01",
+    "env": "pre",
+    "action": "Press Unpin and reload.",
+    "expected": "It goes back to its place by date."
+  },
+  {
+    "id": "TP-WALL-01-S04",
+    "test": "TP-WALL-01",
+    "env": "pre",
+    "action": "Not built yet Look for a way for a guest to copy the text of a memory (for example the Wi-Fi password).",
+    "expected": "A copy button is there and works."
+  },
+  {
+    "id": "TP-WALL-01-S05",
+    "test": "TP-WALL-01",
+    "env": "pre",
+    "action": "Not built yet In the dashboard, look for switches to hide all guest photos, or all guest messages, from the wall.",
+    "expected": "Both switches exist and work separately."
+  },
+  {
+    "id": "TP-SCR-03-S01",
+    "test": "TP-SCR-03",
+    "env": "pre",
+    "action": "On a test property without a stored review preference, submit a fully clear memory. Then turn Review content before publication on and submit another clear memory.",
+    "expected": "Missing preference defaults to off: the first memory can publish after all checks pass. With review on, the second waits for host approval and stays off both walls."
+  },
+  {
+    "id": "TP-SCR-03-S02",
+    "test": "TP-SCR-03",
+    "env": "pre",
+    "action": "As the unrelated host and as a signed-out visitor, try changing the setting through the UI and backend. As the owner, save the setting and reload.",
+    "expected": "Only the owner can change it. The saved value persists. Unauthorised calls cannot change the property's review policy."
+  },
+  {
+    "id": "TP-SCR-03-S03",
+    "test": "TP-SCR-03",
+    "env": "pre",
+    "action": "With review off, submit separate clear-scanned memories containing an email address, phone number and external link. Also submit ordinary profanity without serious flags.",
+    "expected": "Each memory waits for host review despite review being off. Contact detection does not clear a failed provider scan or override a serious flag. Private feedback with ordinary complaints/contact details remains private and follows its own screening rules."
+  },
+  {
+    "id": "TP-SCR-03-S04",
+    "test": "TP-SCR-03",
+    "env": "pre",
+    "action": "With clear and ordinary memories waiting, turn review off. Turn it on again after a different clear memory has already published.",
+    "expected": "Turning review off does not bulk-publish existing waiting items. Turning it on does not retroactively hide published memories. Approve waiting items individually."
+  },
+  {
+    "id": "TP-SCR-03-S05",
+    "test": "TP-SCR-03",
+    "env": "pre",
+    "action": "Approve one ordinary-held memory and reject another. Repeat with a clear memory held only by the review switch. Check both walls, submission status and photo access.",
+    "expected": "Only an eligible current revision can be approved. Approved memories become visible; rejected memories remain off the walls and public photo access is denied. Record the actual rejection/deletion policy without assuming immediate object deletion."
+  },
+  {
+    "id": "TP-SCR-03-S06",
+    "test": "TP-SCR-03",
+    "env": "pre",
+    "action": "Attempt approval with a stale revision, an open report, a safety hold and an offline property, using separate fixtures. Attempt approval as another host.",
+    "expected": "Each unsafe or unauthorised approval is refused. Refreshing or changing the switch does not bypass the report, revision, safety or property checks."
+  },
+  {
+    "id": "TP-SCR-03-S07",
+    "test": "TP-SCR-03",
+    "env": "pre",
+    "action": "For an ordinary held memory, check the notification outbox and, where configured, the test host email inbox.",
+    "expected": "The hold is recorded once for that revision. Record outbox creation and actual email receipt separately; a queued notification is not proof of delivery."
+  },
+  {
+    "id": "TP-SCR-06-S01",
+    "test": "TP-SCR-06",
+    "env": "pre",
+    "action": "As a signed-out user, ordinary host, unrelated host and operations account without MFA, try opening case messages, reading individual case photos and resolving each case through both UI and direct backend calls.",
+    "expected": "All attempts are denied. Restricted text and photos are absent from ordinary host/public views and exports. Hiding UI controls alone does not count as access denial."
+  },
+  {
+    "id": "TP-SCR-06-S02",
+    "test": "TP-SCR-06",
+    "env": "pre",
+    "action": "As an authorised operations admin with MFA, open a memory case and each individual photo, then a private-feedback case. Inspect the audit trail.",
+    "expected": "Authorised content is readable. Each message/case opening and photo opening records actor, case reference, action and timestamp. Audit/log records do not copy the message or photo bytes; photo delivery does not issue permanent public download tokens."
+  },
+  {
+    "id": "TP-SCR-06-S03",
+    "test": "TP-SCR-06",
+    "env": "pre",
+    "action": "Release an unchanged memory case to the host. Repeat with host review switched off.",
+    "expected": "The safety hold clears and the memory enters ordinary host review. Release does not publish it, even with review off. The case is resolved, restricted references are cleared, and the decision is audited."
+  },
+  {
+    "id": "TP-SCR-06-S04",
+    "test": "TP-SCR-06",
+    "env": "pre",
+    "action": "Edit a memory while it is safety-held, then release the old case. Also try approving or resolving a stale revision.",
+    "expected": "Release queues the current changed revision for fresh screening rather than approving the old content. Stale decisions cannot publish it. A new serious result reopens the appropriate restricted case; other results follow the current policy."
+  },
+  {
+    "id": "TP-SCR-06-S05",
+    "test": "TP-SCR-06",
+    "env": "pre",
+    "action": "Release a private-feedback case, then delete a separate feedback case. Try releasing feedback after its property has been removed.",
+    "expected": "Released feedback reaches only the owning host inbox once. Deleted feedback is not delivered and its restricted message is cleared. A case whose property no longer exists cannot be released. Decisions are audited."
+  },
+  {
+    "id": "TP-SCR-06-S06",
+    "test": "TP-SCR-06",
+    "env": "pre",
+    "action": "Delete a memory case. Inspect the post, submission, case, both photo buckets and the deletion job; run the authorised deletion worker on the test environment.",
+    "expected": "The memory is hidden, message cleared and case references removed. Deletion is queued for quarantine and delivery objects with the existing 72-hour due date. Record actual removal of every object separately from job creation; backup/recovery retention is a separate check."
+  },
+  {
+    "id": "TP-SCR-06-S07",
+    "test": "TP-SCR-06",
+    "env": "pre",
+    "action": "As the guest, withdraw a safety-held memory. Try releasing it, then resolve the hold by deletion through operations.",
+    "expected": "Withdrawal hides it immediately. It cannot be released. Operations deletion resolves the safety hold so scheduled object deletion can proceed; it never republishes the withdrawn memory."
+  },
+  {
+    "id": "TP-SCR-06-S08",
+    "test": "TP-SCR-06",
+    "env": "pre",
+    "action": "After release or deletion, retry every saved case-photo request. Race a photo read against case resolution; repeat a resolution action.",
+    "expected": "New requests and reads whose state recheck sees resolution are denied. Repeat resolution cannot deliver twice. Previously downloaded external copies cannot be revoked and are not evidence of endpoint access after resolution."
+  },
+  {
+    "id": "TP-SCR-07-S01",
+    "test": "TP-SCR-07",
+    "env": "pre",
+    "action": "Request photo delivery before screening completes, during host review and during a restricted safety hold. Try anonymous direct bucket URLs and saved storage/object references.",
+    "expected": "The application refuses public photo delivery for all unpublished states. Guest-photo buckets deny unauthorised direct access; a known object path does not bypass application checks."
+  },
+  {
+    "id": "TP-SCR-07-S02",
+    "test": "TP-SCR-07",
+    "env": "pre",
+    "action": "For a published visible memory on an active property, load its application photo endpoint. Then separately hide the post, remove it, open a safety restriction and take the property offline; retry the saved endpoint after each change.",
+    "expected": "The valid published photo is served. Each state change prevents new delivery. Check both public and in-stay pages; endpoint denial is verified directly rather than inferred only from disappearing UI."
+  },
+  {
+    "id": "TP-SCR-07-S03",
+    "test": "TP-SCR-07",
+    "env": "pre",
+    "action": "Have engineering change submission revision/status, post visibility or property availability while the endpoint is retrieving a photo.",
+    "expected": "The final state recheck denies delivery when status/revision/visibility/availability has changed. Publication checks are repeated before bytes are sent."
+  },
+  {
+    "id": "TP-SCR-07-S04",
+    "test": "TP-SCR-07",
+    "env": "pre",
+    "action": "Edit a published memory and let it enter pending screening. Complete clear, ordinary-held and serious-held scans in separate cases.",
+    "expected": "The edited revision stays off the wall until its current scan completes. The old result cannot restore it. Each final result follows the review setting and safety/report checks; old saved photo requests do not bypass the pending state."
+  },
+  {
+    "id": "TP-SCR-07-S05",
+    "test": "TP-SCR-07",
+    "env": "pre",
+    "action": "Open a guest report or safety hold while a scan/approval is finishing, then attempt dismissal/restoration while another report or hold remains.",
+    "expected": "A concurrent report or hold prevents publication/restoration. Dismissing one report cannot override another open report or restricted case. Record final state and saved-endpoint access."
+  },
+  {
+    "id": "TP-SCR-07-S06",
+    "test": "TP-SCR-07",
+    "env": "pre",
+    "action": "Inspect successful photo response headers and attempt invalid IDs and out-of-range photo indexes.",
+    "expected": "Photo responses specify private, no-store caching. Invalid requests return no photo or private record details. Record the limits of previously downloaded/cached external copies separately from new endpoint requests."
+  },
+  {
+    "id": "TP-SCR-08-S01",
+    "test": "TP-SCR-08",
+    "env": "live",
+    "action": "Before calling Google, have the owner/reviewer label each fixture's intended route independently. Include clear text, ordinary profanity/complaints, all four serious text categories, slang/misspellings, quoted or reported incidents, benign historical references and mixed serious/ordinary signals. Use both text routes.",
+    "expected": "Fixture IDs, intended routes, language/context and review rationale are recorded before provider scores are known. Confidence describes category confidence, not swear-word severity. Missing fixture coverage is recorded as blocked."
+  },
+  {
+    "id": "TP-SCR-08-S02",
+    "test": "TP-SCR-08",
+    "env": "live",
+    "action": "Prepare representative photo fixtures for adult, violence, medical, racy, spoof, benign swimwear/medical contexts and mixed multi-photo submissions. Use lawful approved synthetic or licensed examples; do not use real guest photos or illegal material.",
+    "expected": "Each intended route is documented. This checks calibration of the provisional likelihood mapping, not age, consent, legality or comprehensive detection. Text/contact details embedded in photos remain a separately documented detection gap."
+  },
+  {
+    "id": "TP-SCR-08-S03",
+    "test": "TP-SCR-08",
+    "env": "live",
+    "action": "Submit every approved fixture to real Google screening through the application. Record submission/revision, screening reference, provider categories/scores/likelihoods, final route and elapsed time.",
+    "expected": "Observed application routing matches the actual provider result and configured rules. Record a missed harmful classification or benign false positive even when the application correctly follows that score. Do not fabricate scores to make a real-provider test pass."
+  },
+  {
+    "id": "TP-SCR-08-S04",
+    "test": "TP-SCR-08",
+    "env": "live",
+    "action": "Compare observed classifications with the independent intended routes. Count and review false positives, false negatives and uncertain cases for each route/category/context with the owner and safety reviewer.",
+    "expected": "The calibration report records discrepancies, proposed threshold/wording changes and a dated owner decision. Acceptance criteria and minimum sample coverage are agreed before declaring calibration passed. A small successful sample is not a guarantee of detecting all harmful content."
+  },
+  {
+    "id": "TP-SCR-08-S05",
+    "test": "TP-SCR-08",
+    "env": "live",
+    "action": "On both real phones, follow a clear memory with review off, a clear memory with review on, an ordinary-held memory and a serious-held memory from submission through host or safety review. Follow clear/ordinary feedback delivery and serious feedback release/deletion.",
+    "expected": "Record separate phone/browser results and complete journeys: guest confirmation, wall/inbox visibility, appropriate reviewer access, decisions and final photo access. Provider connectivity alone does not prove any complete journey."
+  },
+  {
+    "id": "TP-SCR-08-S06",
+    "test": "TP-SCR-08",
+    "env": "live",
+    "action": "Check runtime provider endpoint diagnostics, notification receipt, reviewer MFA/access, staff ownership and the deletion follow-up for the real-provider run.",
+    "expected": "Configured regional endpoints, actual notification receipt, successful authorised review and object-removal evidence are recorded separately. Missing staffing, email or deletion evidence stays outstanding even if routing passes."
+  },
+  {
+    "id": "TP-SCR-08-S07",
+    "test": "TP-SCR-08",
+    "env": "live",
+    "action": "Create a result row per fixture/route/device with expected outcome, actual outcome, pass/fail/blocked, evidence location and reviewer decision. Clean up test submissions using their normal deletion workflows.",
+    "expected": "Routing tests, real-provider calibration, device results and operational evidence each have their own outcomes. Documented steps or an earlier build/test count are not recorded as a pass. Owner reviews remaining gaps before broader intake; legal approval remains a separate release condition."
+  },
+  {
+    "id": "TP-MOD-08-S01",
+    "test": "TP-MOD-08",
+    "env": "pre",
+    "action": "Look at how the page is grouped.",
+    "expected": "Groups named in words: Pinned to the top, On the wall, Hidden, waiting on you, Off the wall, Held by DigiStayBook, Deleted."
+  },
+  {
+    "id": "TP-MOD-08-S02",
+    "test": "TP-MOD-08",
+    "env": "pre",
+    "action": "On the memory “Curation test 1” press Take off the wall and confirm. Reload the wall.",
+    "expected": "It moves to Off the wall and is gone from the wall."
+  },
+  {
+    "id": "TP-MOD-08-S03",
+    "test": "TP-MOD-08",
+    "env": "pre",
+    "action": "Press Publish to the wall on the same memory. Reload the wall.",
+    "expected": "It is back."
+  },
+  {
+    "id": "TP-MOD-08-S04",
+    "test": "TP-MOD-08",
+    "env": "pre",
+    "action": "On “Curation test 2” press Delete and confirm.",
+    "expected": "The confirmation says it will be permanently removed within 72 hours. It moves to Recently deleted, its words are removed, and it is gone from the wall."
+  },
+  {
+    "id": "TP-MOD-08-S05",
+    "test": "TP-MOD-08",
+    "env": "pre",
+    "action": "Look at anything under Held by DigiStayBook or Awaiting safety screening.",
+    "expected": "There is no way for the host to publish these."
+  },
+  {
+    "id": "TP-MOD-08-S06",
+    "test": "TP-MOD-08",
+    "env": "pre",
+    "action": "On any memory press Report to DigiStayBook.",
+    "expected": "A confirmation that it has been sent to DigiStayBook."
+  },
+  {
+    "id": "TP-RPT-02-S01",
+    "test": "TP-RPT-02",
+    "env": "pre",
+    "action": "Open Moderation → Guest reports.",
+    "expected": "Each report shows its reason, and each reported memory is hidden from the wall."
+  },
+  {
+    "id": "TP-RPT-02-S02",
+    "test": "TP-RPT-02",
+    "env": "pre",
+    "action": "On one report press Dismiss report.",
+    "expected": "The memory goes back on the wall (as long as no other report or safety hold applies)."
+  },
+  {
+    "id": "TP-RPT-02-S03",
+    "test": "TP-RPT-02",
+    "env": "pre",
+    "action": "On the other press Confirm removal and confirm.",
+    "expected": "It says the memory is hidden and its deletion is scheduled. It is not on the wall."
+  },
+  {
+    "id": "TP-DASH-01-S01",
+    "test": "TP-DASH-01",
+    "env": "both",
+    "action": "Dashboard.",
+    "expected": "Every property, its state in words, and what to do next."
+  },
+  {
+    "id": "TP-DASH-01-S02",
+    "test": "TP-DASH-01",
+    "env": "both",
+    "action": "Walls and QR display.",
+    "expected": "Print placard, and the guest link to copy."
+  },
+  {
+    "id": "TP-DASH-01-S03",
+    "test": "TP-DASH-01",
+    "env": "both",
+    "action": "Not built yet Also look for Download QR code and Email QR code.",
+    "expected": "Both are there."
+  },
+  {
+    "id": "TP-DASH-01-S04",
+    "test": "TP-DASH-01",
+    "env": "both",
+    "action": "Moderation.",
+    "expected": "The memories and the guest reports for this property."
+  },
+  {
+    "id": "TP-DASH-01-S05",
+    "test": "TP-DASH-01",
+    "env": "both",
+    "action": "Private feedback.",
+    "expected": "A separate inbox with no reply button."
+  },
+  {
+    "id": "TP-DASH-01-S06",
+    "test": "TP-DASH-01",
+    "env": "both",
+    "action": "Property view (the design page).",
+    "expected": "The wall theme, the Writing prompt for guests choice with suggested prompts, and a phone preview."
+  },
+  {
+    "id": "TP-DASH-01-S07",
+    "test": "TP-DASH-01",
+    "env": "both",
+    "action": "Billing.",
+    "expected": "Plan, trial end date or next payment, and a way to cancel."
+  },
+  {
+    "id": "TP-DASH-01-S08",
+    "test": "TP-DASH-01",
+    "env": "both",
+    "action": "Not built yet Also in Billing, look for past invoices or receipts, and a way to change the card.",
+    "expected": "Both are there."
+  },
+  {
+    "id": "TP-DASH-01-S09",
+    "test": "TP-DASH-01",
+    "env": "both",
+    "action": "Export guestbook.",
+    "expected": "A way to download a copy of the wall."
+  },
+  {
+    "id": "TP-DASH-01-S10",
+    "test": "TP-DASH-01",
+    "env": "both",
+    "action": "Not built yet Look for account security (change password, sign out of other devices).",
+    "expected": "It is there."
+  },
+  {
+    "id": "TP-EXP-01-S01",
+    "test": "TP-EXP-01",
+    "env": "pre",
+    "action": "Open Seaside Cottage → Export guestbook and start the export.",
+    "expected": "One or more ZIP files download. It says when all parts are done."
+  },
+  {
+    "id": "TP-EXP-01-S02",
+    "test": "TP-EXP-01",
+    "env": "pre",
+    "action": "Open a ZIP file.",
+    "expected": "It contains the messages and the photos, and a page you can open in the browser to read them offline."
+  },
+  {
+    "id": "TP-EXP-01-S03",
+    "test": "TP-EXP-01",
+    "env": "pre",
+    "action": "Look for “Curation test 2” and for the private feedback.",
+    "expected": "Neither is in the download."
+  },
+  {
+    "id": "TP-BILL-07-S01",
+    "test": "TP-BILL-07",
+    "env": "pre",
+    "action": "Look at the dashboard.",
+    "expected": "Grace Cottage says there’s a payment problem."
+  },
+  {
+    "id": "TP-BILL-07-S02",
+    "test": "TP-BILL-07",
+    "env": "pre",
+    "action": "Open Grace Cottage → Billing.",
+    "expected": "It says a payment did not go through, that the wall stays live meanwhile, and how to fix it."
+  },
+  {
+    "id": "TP-BILL-07-S03",
+    "test": "TP-BILL-07",
+    "env": "pre",
+    "action": "Not built yet Look for the date the wall would go offline.",
+    "expected": "An exact date is shown (14 days after the failed payment)."
+  },
+  {
+    "id": "TP-BILL-07-S04",
+    "test": "TP-BILL-07",
+    "env": "pre",
+    "action": "Copy Grace Cottage’s Guest link (Walls and QR display) and open it on your phone.",
+    "expected": "The full wall opens. Nothing mentions payment."
+  },
+  {
+    "id": "TP-BILL-07-S05",
+    "test": "TP-BILL-07",
+    "env": "pre",
+    "action": "Add a memory on it.",
+    "expected": "It is accepted as normal."
+  },
+  {
+    "id": "TP-BILL-08-S01",
+    "test": "TP-BILL-08",
+    "env": "pre",
+    "action": "Open Offline Cottage → Billing.",
+    "expected": "It says the wall is offline until a payment succeeds, and everything on it is kept."
+  },
+  {
+    "id": "TP-BILL-08-S02",
+    "test": "TP-BILL-08",
+    "env": "pre",
+    "action": "Copy its Guest link and open it on your phone.",
+    "expected": "A proper page says the guestbook isn’t open (not a blank or error page). It doesn’t mention payment."
+  },
+  {
+    "id": "TP-BILL-08-S03",
+    "test": "TP-BILL-08",
+    "env": "pre",
+    "action": "Not built yet Look for a way to pay and bring it back online yourself.",
+    "expected": "There is one."
+  },
+  {
+    "id": "TP-BILL-10-S01",
+    "test": "TP-BILL-10",
+    "env": "pre",
+    "action": "Open Test Cottage 3 → Billing → Cancel this subscription.",
+    "expected": "Before you confirm, it shows the exact date the wall stays live until, that you will not be charged again, and that memories are kept."
+  },
+  {
+    "id": "TP-BILL-10-S02",
+    "test": "TP-BILL-10",
+    "env": "pre",
+    "action": "Press Keep it.",
+    "expected": "Nothing changes."
+  },
+  {
+    "id": "TP-BILL-10-S03",
+    "test": "TP-BILL-10",
+    "env": "pre",
+    "action": "Cancel again and press Yes, cancel.",
+    "expected": "“Cancelled. This property stays live until [date].”"
+  },
+  {
+    "id": "TP-BILL-10-S04",
+    "test": "TP-BILL-10",
+    "env": "pre",
+    "action": "Scan or open Test Cottage 3’s guest link.",
+    "expected": "The wall still works."
+  },
+  {
+    "id": "TP-BILL-10-S05",
+    "test": "TP-BILL-10",
+    "env": "pre",
+    "action": "Under Changed your mind? press Keep this subscription.",
+    "expected": "It is back on, and it says nothing was charged for the change."
+  },
+  {
+    "id": "TP-BILL-10-S06",
+    "test": "TP-BILL-10",
+    "env": "pre",
+    "action": "Cancel Test Cottage 3 again and leave it cancelled.",
+    "expected": "Cancelled, with the end date shown."
+  },
+  {
+    "id": "TP-BILL-10-S07",
+    "test": "TP-BILL-10",
+    "env": "pre",
+    "action": "Open Test Cottage 1 → Billing → Cancel the free trial → Yes, cancel.",
+    "expected": "It says you will not be charged."
+  },
+  {
+    "id": "TP-BILL-10-S08",
+    "test": "TP-BILL-10",
+    "env": "pre",
+    "action": "Create a property called Test Cottage 4 and start checkout (don’t pay).",
+    "expected": "Still no free trial offered. Cancelling the first one does not give you another trial."
+  },
+  {
+    "id": "TP-EM-00-S01",
+    "test": "TP-EM-00",
+    "env": "both",
+    "action": "Password reset (TP-ACC-03).",
+    "expected": "Arrived."
+  },
+  {
+    "id": "TP-EM-00-S02",
+    "test": "TP-EM-00",
+    "env": "both",
+    "action": "Not built yet “Your DigiStayBook account is ready” (TP-ACC-01).",
+    "expected": "Arrived."
+  },
+  {
+    "id": "TP-EM-00-S03",
+    "test": "TP-EM-00",
+    "env": "both",
+    "action": "Not built yet “[Property] is live. Here is your QR kit”, after every property goes live (TP-PROP-05, TP-PROP-07, TP-BILL-03).",
+    "expected": "Arrived each time, with the placard attached or linked."
+  },
+  {
+    "id": "TP-EM-00-S04",
+    "test": "TP-EM-00",
+    "env": "both",
+    "action": "Not built yet A receipt after paying (TP-BILL-03).",
+    "expected": "Arrived, itemised."
+  },
+  {
+    "id": "TP-EM-00-S05",
+    "test": "TP-EM-00",
+    "env": "both",
+    "action": "Not built yet Cancellation confirmation (TP-BILL-10).",
+    "expected": "Arrived, with the date access ends."
+  },
+  {
+    "id": "TP-EM-00-S06",
+    "test": "TP-EM-00",
+    "env": "both",
+    "action": "Not built yet “Action required” to Host D when a guest reports a memory (TP-RPT-01).",
+    "expected": "Arrived. It contains no photo from the memory."
+  },
+  {
+    "id": "TP-EM-00-S07",
+    "test": "TP-EM-00",
+    "env": "both",
+    "action": "For every email that did arrive, read it.",
+    "expected": "It names the property where relevant, has one clear button whose link works, and contains no advert, discount or upsell."
+  },
+  {
+    "id": "TP-MOB-01-S01",
+    "test": "TP-MOB-01",
+    "env": "both",
+    "action": "Sign in on the phone.",
+    "expected": "The sign-in page fits the screen."
+  },
+  {
+    "id": "TP-MOB-01-S02",
+    "test": "TP-MOB-01",
+    "env": "both",
+    "action": "Open Test Cottage 1, change the arrival note and press Save changes.",
+    "expected": "It saves. Every button can be reached and tapped easily."
+  },
+  {
+    "id": "TP-MOB-01-S03",
+    "test": "TP-MOB-01",
+    "env": "both",
+    "action": "Open each page from the property menu.",
+    "expected": "Each fits the screen without scrolling sideways."
+  },
+  {
+    "id": "TP-A11Y-03-S01",
+    "test": "TP-A11Y-03",
+    "env": "both",
+    "action": "Press Tab repeatedly through the sign-in page and then the dashboard.",
+    "expected": "You can always see which item is selected (an outline or highlight)."
+  },
+  {
+    "id": "TP-A11Y-03-S02",
+    "test": "TP-A11Y-03",
+    "env": "both",
+    "action": "Open an in-stay wall and leave a memory using only the keyboard (Tab to move, Space to tick, Enter to press).",
+    "expected": "Possible, including the consent box and Submit."
+  },
+  {
+    "id": "TP-A11Y-03-S03",
+    "test": "TP-A11Y-03",
+    "env": "both",
+    "action": "Test site only As Host D, take a memory off the wall and publish it again with the keyboard only.",
+    "expected": "Possible."
+  },
+  {
+    "id": "TP-A11Y-03-S04",
+    "test": "TP-A11Y-03",
+    "env": "both",
+    "action": "Watch the order as you tab.",
+    "expected": "It goes down the page in order and doesn’t get stuck."
+  },
+  {
+    "id": "TP-A11Y-03-S05",
+    "test": "TP-A11Y-03",
+    "env": "both",
+    "action": "Zoom the browser to 200% (Ctrl and +, or Cmd and + on a Mac).",
+    "expected": "Everything is still readable and nothing is cut off. You can still leave a memory."
+  },
+  {
+    "id": "TP-A11Y-02-S01",
+    "test": "TP-A11Y-02",
+    "env": "pre",
+    "action": "Look at property states on the dashboard, the groups on the Moderation page, Host E’s billing warnings, and a photo upload error.",
+    "expected": "Each one is described in words (for example “Draft”, “Hidden, waiting on you”), not only by a coloured dot or border."
+  },
+  {
+    "id": "TP-A11Y-02-S02",
+    "test": "TP-A11Y-02",
+    "env": "pre",
+    "action": "Look at the buttons for reporting, pinning and deleting.",
+    "expected": "Each has a word on it, not just an icon."
+  },
+  {
+    "id": "TP-SEC-03-S01",
+    "test": "TP-SEC-03",
+    "env": "both",
+    "action": "Look through every menu and link on the home page, the dashboard and a guest wall.",
+    "expected": "There is no link to a staff, operations or admin area."
+  },
+  {
+    "id": "TP-SEC-03-S02",
+    "test": "TP-SEC-03",
+    "env": "both",
+    "action": "Signed in as Host A, add /operations to the end of the site address.",
+    "expected": "Refused: it says access needs an authorised operations account. No queues or data are shown."
+  },
+  {
+    "id": "TP-SEC-03-S03",
+    "test": "TP-SEC-03",
+    "env": "both",
+    "action": "Sign out and try the same address.",
+    "expected": "You are asked to sign in. Nothing is shown."
+  },
+  {
+    "id": "TP-OPS-01-S01",
+    "test": "TP-OPS-01",
+    "env": "live",
+    "action": "Create a test property and contribution under each account. Record both property IDs.",
+    "expected": "Each account sees only its own dashboard, properties, feedback and host review items."
+  },
+  {
+    "id": "TP-OPS-01-S02",
+    "test": "TP-OPS-01",
+    "env": "live",
+    "action": "As the other host, open the first property URL and attempt to read or change it. Repeat with the accounts swapped.",
+    "expected": "The server refuses cross-account reads and writes. No private content is returned."
+  },
+  {
+    "id": "TP-OPS-01-S03",
+    "test": "TP-OPS-01",
+    "env": "live",
+    "action": "Open each property guest link in separate guest sessions; try a contribution or photo reference from the other property.",
+    "expected": "The session cannot contribute to or access restricted content belonging to the other property."
+  },
+  {
+    "id": "TP-OPS-02-S01",
+    "test": "TP-OPS-02",
+    "env": "live",
+    "action": "Try the photo endpoint and copied storage URL while signed out, as the other host and as an unrelated guest.",
+    "expected": "Quarantine, host-review and safety-held photos remain inaccessible. Private feedback never appears in public responses."
+  },
+  {
+    "id": "TP-OPS-02-S02",
+    "test": "TP-OPS-02",
+    "env": "live",
+    "action": "Publish an approved test photo and confirm it displays through the application; then hide it and repeat the same photo request.",
+    "expected": "The published photo displays; hiding it blocks subsequent direct requests. Record the URL, time and response status; an old browser screenshot is not proof of current access."
+  },
+  {
+    "id": "TP-OPS-02-S03",
+    "test": "TP-OPS-02",
+    "env": "live",
+    "action": "Check host exports and the public wall for held content and private feedback.",
+    "expected": "Restricted content and private feedback are absent from ordinary public views and host exports."
+  },
+  {
+    "id": "TP-OPS-03-S01",
+    "test": "TP-OPS-03",
+    "env": "live",
+    "action": "Submit a memory whose text/photo screening cannot complete; repeat for private feedback. Record submission and case IDs.",
+    "expected": "Each opens restricted safety review tagged Screening incomplete. The reviewer sees the reason. Memory stays unpublished; feedback stays undelivered."
+  },
+  {
+    "id": "TP-OPS-03-S02",
+    "test": "TP-OPS-03",
+    "env": "live",
+    "action": "Attempt host approval, public photo access and ordinary-host case access.",
+    "expected": "All bypass attempts are refused; the host cannot open the restricted case."
+  },
+  {
+    "id": "TP-OPS-03-S03",
+    "test": "TP-OPS-03",
+    "env": "live",
+    "action": "Retry after provider recovery, and edit the held memory without resolving its case.",
+    "expected": "An open case still prevents automatic publication or feedback delivery. A retry cannot silently clear it."
+  },
+  {
+    "id": "TP-OPS-03-S04",
+    "test": "TP-OPS-03",
+    "env": "live",
+    "action": "Use the authorised MFA reviewer to release the case.",
+    "expected": "An unchanged memory goes to host review; an edited memory is screened again; released feedback reaches only the private inbox. Record the audit and destination."
+  },
+  {
+    "id": "TP-OPS-03-S05",
+    "test": "TP-OPS-03",
+    "env": "live",
+    "action": "Record how the failure was produced.",
+    "expected": "A scoped injected failure proves failure routing only. A real Google result is required for provider classification evidence."
+  },
+  {
+    "id": "TP-OPS-04-S01",
+    "test": "TP-OPS-04",
+    "env": "live",
+    "action": "Submit clear memories with the host-review switch off and on. Submit an ordinary flagged memory and a memory with contact details or a link.",
+    "expected": "Clear memories publish with review off and wait for host approval with review on. Ordinary flags and screened contact details/links enter host review."
+  },
+  {
+    "id": "TP-OPS-04-S02",
+    "test": "TP-OPS-04",
+    "env": "live",
+    "action": "Send clear and ordinary private feedback, then submit authorised serious-text and serious-photo examples.",
+    "expected": "Ordinary feedback reaches the private inbox. Serious text and serious-photo results enter restricted safety review. Record the actual provider categories and resulting route; do not rely on fixture labels alone."
+  },
+  {
+    "id": "TP-OPS-04-S03",
+    "test": "TP-OPS-04",
+    "env": "live",
+    "action": "Sign in as a normal host, an authorised reviewer without MFA and an authorised reviewer with MFA. Open a restricted case and its photos.",
+    "expected": "Only the authorised reviewer signed in with MFA can access case data. A Google-account security setting alone is not evidence of Firebase MFA. Local reviewer simulation does not satisfy this live check."
+  },
+  {
+    "id": "TP-OPS-04-S04",
+    "test": "TP-OPS-04",
+    "env": "live",
+    "action": "Release and delete separate disposable cases, and try the same resolution twice.",
+    "expected": "Release follows the agreed destination; deletion hides the content and schedules photo removal. Actions are audited and cannot resurrect deleted content or apply a second conflicting resolution."
+  },
+  {
+    "id": "TP-OPS-05-S01",
+    "test": "TP-OPS-05",
+    "env": "live",
+    "action": "Open the guest link or QR code on each device, submit a message/photo, edit and delete it, and send separate private feedback.",
+    "expected": "The journeys complete with clear acknowledgements, correct privacy and no host interface exposed to guests."
+  },
+  {
+    "id": "TP-OPS-05-S02",
+    "test": "TP-OPS-05",
+    "env": "live",
+    "action": "Try ten permitted images, an extra image, oversized/unsupported files and an iPhone HEIC selection. Interrupt an upload and retry it.",
+    "expected": "Limits are enforced with clear recovery messages and no duplicate submission. Record the observed HEIC handling and any device issue."
+  },
+  {
+    "id": "TP-OPS-05-S03",
+    "test": "TP-OPS-05",
+    "env": "live",
+    "action": "Use keyboard navigation on desktop and check small screens, consent and error messages.",
+    "expected": "Controls remain reachable and readable; required memory consent is enforced. Mark unavailable physical-device checks blocked rather than claiming a pass."
+  },
+  {
+    "id": "TP-OPS-06-S01",
+    "test": "TP-OPS-06",
+    "env": "live",
+    "action": "Delete a test memory with photos; repeat for a memory held in safety review.",
+    "expected": "The contribution immediately disappears from public views and direct photo requests. The correct deletion job lists its objects."
+  },
+  {
+    "id": "TP-OPS-06-S02",
+    "test": "TP-OPS-06",
+    "env": "live",
+    "action": "After the deletion worker runs, verify the submission state and every listed object in the live storage buckets.",
+    "expected": "Every targeted live object is absent. A queued job, hidden post or local test result alone is not deletion proof. Record timestamps and evidence."
+  },
+  {
+    "id": "TP-OPS-06-S03",
+    "test": "TP-OPS-06",
+    "env": "live",
+    "action": "Check feedback removal, retained consent/audit records and any recoverable or backup copies against section 5.10.",
+    "expected": "The report identifies what was deleted, what remains and why. Live-object deletion is distinguished from soft deletion, recovery and backup retention."
+  },
+  {
+    "id": "TP-OPS-06-S04",
+    "test": "TP-OPS-06",
+    "env": "live",
+    "action": "Before any wider cleanup, list the dedicated account/property IDs and the exact records/files to remove.",
+    "expected": "Cleanup stays within the approved test scope. No customer data or test account/property is deleted merely because this check passed."
+  },
+  {
+    "id": "TP-OPS-07-S01",
+    "test": "TP-OPS-07",
+    "env": "live",
+    "action": "The owner configures the 50c price for the selected dedicated test account/property. Record the property and Stripe price/subscription references.",
+    "expected": "The test configuration is identifiable and scoped to the test property/account. Its currency and billing interval are recorded; the ordinary published prices remain separately documented."
+  },
+  {
+    "id": "TP-OPS-07-S02",
+    "test": "TP-OPS-07",
+    "env": "live",
+    "action": "Open live checkout for that property and inspect the total and whether payment is immediate or follows a trial.",
+    "expected": "The intended 50c amount, currency, any tax and charge date are clearly shown. If checkout differs from the agreed test setup, mark it blocked and correct the setup before paying."
+  },
+  {
+    "id": "TP-OPS-07-S03",
+    "test": "TP-OPS-07",
+    "env": "live",
+    "action": "Complete the agreed live payment journey, where payment is needed, and return to the property.",
+    "expected": "Record the actual Stripe charge/invoice and the resulting property state. A successful redirect alone is not payment or webhook proof. If no charge occurs during a trial, record that accurately; do not claim a paid checkout passed."
+  },
+  {
+    "id": "TP-OPS-07-S04",
+    "test": "TP-OPS-07",
+    "env": "live",
+    "action": "Cancel a test subscription and separately cancel a test trial where available. Record the subscription state, next charge and access end date.",
+    "expected": "The dashboard and Stripe subscription agree on cancellation and any scheduled end date. The trial cancellation shows whether a future charge is prevented. Record observations; future renewal prevention is not proved by a button click alone."
+  },
+  {
+    "id": "TP-OPS-07-S05",
+    "test": "TP-OPS-07",
+    "env": "live",
+    "action": "If testing the restore/keep-subscription control, restore once and then cancel again so the final state is clear.",
+    "expected": "The resulting subscription, charge schedule and property access match the UI. Record the final state and any real charge; do not leave an unintended renewal active."
+  },
+  {
+    "id": "TP-OPS-07-S06",
+    "test": "TP-OPS-07",
+    "env": "live",
+    "action": "Enter the results and evidence in the shared NAS register, using Mobile/Desktop and Pass/Fail for each step.",
+    "expected": "Live payments, cancellation, any refund and any outstanding checks are recorded separately. A cancellation is not recorded as a refund without refund evidence. No account/property cleanup occurs as part of this check."
+  },
+  {
+    "id": "TP-OPS-08-S01",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Developer: check the live Firebase project uses Authentication with Identity Platform, then enable authenticator-app MFA using the documented project configuration method.",
+    "expected": "Record the project and enabled configuration. This enables the capability; it does not enrol the reviewer."
+  },
+  {
+    "id": "TP-OPS-08-S02",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Owner/developer: select the reviewer account, verify its email and arrange its authorised operations role.",
+    "expected": "The correct account is authorised for operations. Ordinary test-host accounts remain ordinary hosts."
+  },
+  {
+    "id": "TP-OPS-08-S03",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Developer: build an enrolment screen with recent sign-in, QR code, manual key and confirmation-code entry.",
+    "expected": "Only a valid authenticator code completes enrolment. Cancelling leaves enrolment incomplete."
+  },
+  {
+    "id": "TP-OPS-08-S04",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Developer: build the authenticator challenge for each supported sign-in route and deploy the changes.",
+    "expected": "Live sign-in handles the Firebase MFA challenge and reports incorrect codes clearly. The local simulated reviewer is separate from this check."
+  },
+  {
+    "id": "TP-OPS-08-S05",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Owner: sign in, scan the setup QR code in an authenticator app and enter its current code. Sign out and sign in again.",
+    "expected": "Firebase records the factor and the fresh live sign-in requests the authenticator code. Record the account reference and time, without recording the key or codes."
+  },
+  {
+    "id": "TP-OPS-08-S06",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Try an incorrect code, a code outside the configured acceptance window and cancelling the challenge.",
+    "expected": "No completed MFA sign-in and no restricted data. Record the configured acceptance window rather than assuming a code expires immediately at a 30-second boundary."
+  },
+  {
+    "id": "TP-OPS-08-S07",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Check operations access while signed out, as an ordinary host and as an authorised reviewer without a completed MFA sign-in. Test the server endpoints as well as the page.",
+    "expected": "All are denied. The live server requires both the operations role and evidence of a second-factor sign-in. Google-account two-step verification alone is not this evidence."
+  },
+  {
+    "id": "TP-OPS-08-S08",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Sign in as the authorised MFA reviewer and open the operations queue, a held case and its photos.",
+    "expected": "Access succeeds. The incomplete-screening tag and reason are visible where applicable. Opening a case or photo records the reviewer in the audit."
+  },
+  {
+    "id": "TP-OPS-08-S09",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Release one disposable memory case, release held feedback and delete a separate disposable case.",
+    "expected": "Memory goes to host review or renewed screening; feedback goes to the private inbox; deletion hides content and queues file removal. Actions are audited."
+  },
+  {
+    "id": "TP-OPS-08-S10",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Verify sign-out, a fresh sign-in after reviewer permissions are withdrawn on a disposable account, and the documented existing-session revocation behaviour.",
+    "expected": "Signed-out and newly unauthorised sessions are denied. Record any delay or gap for existing sessions instead of assuming immediate revocation."
+  },
+  {
+    "id": "TP-OPS-08-S11",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Document the lost-authenticator recovery process and verify it using a disposable reviewer account.",
+    "expected": "Identify who can perform recovery and verify re-enrolment. Recovery must not provide password-only access to Safety Review. Do not record authenticator keys or codes in the test report."
+  },
+  {
+    "id": "TP-OPS-08-S12",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Repeat the supported reviewer journey on mobile and desktop; record each step, evidence and fault in the shared NAS register.",
+    "expected": "Actual device coverage is marked. Unavailable setup or live checks are recorded as blocked in notes, never as passed."
+  },
+  {
+    "id": "TP-OPS-08-S13",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Content reports: Select Content reports and refresh. Using a disposable test memory, submit a clearly labelled test report through the guest reporting flow, then refresh and locate its exact report reference.",
+    "expected": "The queue loads without an access error. The test report appears with its reference and status. Restricted report text and photos are absent from the overview. Record creation and queue-load results separately if either is blocked."
+  },
+  {
+    "id": "TP-OPS-08-S14",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Privacy requests: Select Privacy requests and refresh. Submit a clearly labelled synthetic privacy request through Privacy & Safety using the test contact address, then locate its exact request reference.",
+    "expected": "The queue loads and the test request appears with reference, status and any applicable review deadline. Do not treat a received request as completed deletion. Record the request ID and receipt/queue evidence."
+  },
+  {
+    "id": "TP-OPS-08-S15",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Safety cases: Select Safety cases and refresh. Locate a disposable held memory or private-feedback case from the screening tests, and a screening-incomplete case where available. Open the case; use the existing release/delete tests for decisions.",
+    "expected": "The queue loads with the expected case references and statuses. Opening permitted case content is audited. Incomplete screening has its reason tagged; content stays private until the approved route permits publication or delivery. Record missing fixtures or unsupported live tagging as pending/faults."
+  },
+  {
+    "id": "TP-OPS-08-S16",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Alerts: Select Alerts and refresh. Ask engineering to identify a controlled test alert or create one through the relevant test-only overdue/deadline scenario, then locate its exact reference. Do not age real customer cases to generate an alert.",
+    "expected": "The queue loads. The known test alert appears with reference, kind and status. Empty queues show No items in this queue. If no test alert exists, queue loading can pass while alert creation/visibility remains pending."
+  },
+  {
+    "id": "TP-OPS-08-S17",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Deletion jobs: Select Deletion jobs and refresh. Delete a disposable test memory with uploaded photos using TP-OPS-06, then identify the exact deletion-job reference and refresh after the worker runs.",
+    "expected": "The queue loads and the expected job/status is visible. Verify each targeted storage object separately under TP-OPS-06; a listed or completed job alone is not proof that files were deleted. Record job ID, timestamps and actual object evidence."
+  },
+  {
+    "id": "TP-OPS-08-S18",
+    "test": "TP-OPS-08",
+    "env": "live",
+    "action": "Consent deletion reviews: Select Consent deletion reviews and refresh. Identify a disposable consent-review fixture through the retention tests. Click Check consent retention; verify its exact consent path, status and available deadline/action/evidence. If manual deletion is due, use only the authorised disposable fixture and recheck afterward.",
+    "expected": "The queue loads and the known review appears. The expanded review points to the correct consent record; after authorised deletion, rechecking reflects the actual record state. Do not delete a real guest consent record for this test or claim long-term expiry is automated. If no fixture exists, mark that portion pending."
+  },
+  {
+    "id": "TP-OPS-09-S01",
+    "test": "TP-OPS-09",
+    "env": "both",
+    "action": "Match the clear controls from TP-GUEST-07-S01, TP-GUEST-09-S05, TP-GUEST-09-S06 to authorised diagnostics by property, submission/revision and screening reference. Check public/in-stay visibility and private-feedback delivery; look for any unexpected safety case.",
+    "expected": "A clear memory with host review off is visible after screening; feedback is private. Spoof/valid UNKNOWN alone does not create a safety hold. No queue item is expected for a clear submission."
+  },
+  {
+    "id": "TP-OPS-09-S02",
+    "test": "TP-OPS-09",
+    "env": "both",
+    "action": "Match all ordinary-category submissions from TP-GUEST-08, review-on/contact cases from TP-GUEST-07, and medical/racy cases from TP-GUEST-09. Check the host-review list using each exact reference. Check private feedback separately.",
+    "expected": "The held memory belongs to the correct host/property and stays off both walls before approval. Ordinary private feedback reaches the host inbox. Operations uses authorised diagnostics to verify non-serious provider categories; they are not expected as restricted safety cases."
+  },
+  {
+    "id": "TP-OPS-09-S03",
+    "test": "TP-OPS-09",
+    "env": "both",
+    "action": "For every serious text category in TP-GUEST-08 and adult/violence photo category in TP-GUEST-09, find the exact memory or feedback case in Safety Review. Match submission/revision, property, categories and screening reference. Perform the access checks in TP-OPS-04-S03 and TP-OPS-08-S08.",
+    "expected": "Each serious fixture has a matching restricted case with the observed category. Text cases cover both memory and feedback; photo cases cover memories. Ordinary hosts cannot read case content, release it, or access its restricted photos."
+  },
+  {
+    "id": "TP-OPS-09-S04",
+    "test": "TP-OPS-09",
+    "env": "both",
+    "action": "Reconcile every category case from TP-GUEST-08 and TP-GUEST-09 against its provider result. Record one line per memory/feedback variation: fixture, submission, revision, category, score/likelihood, actual destination and evidence.",
+    "expected": "All 16 text categories and all 5 photo categories have observed results or an explicit Needs review / blocked reason. Local markers and isolated responses prove routing only. A real-provider category miss stays outstanding even if application routing follows the returned score."
+  },
+  {
+    "id": "TP-OPS-09-S05",
+    "test": "TP-OPS-09",
+    "env": "both",
+    "action": "Open every incomplete-screening reference from TP-GUEST-07-S05 and TP-GUEST-09-S07. Verify the tagged reason and private state, then continue TP-OPS-03 with those same references.",
+    "expected": "Both text routes and the photo-memory route have correctly matched incomplete-screening cases. A retry or host approval cannot silently publish/deliver while a restricted case remains unresolved."
+  },
+  {
+    "id": "TP-OPS-09-S06",
+    "test": "TP-OPS-09",
+    "env": "both",
+    "action": "Check the combined cases from TP-GUEST-07-S07. Resolve separate disposable ordinary and serious cases using TP-OPS-04-S04 and TP-OPS-08-S09. Keep unresolved cases until their corresponding guest/operations checks are complete.",
+    "expected": "The strongest restriction wins. A safety release follows the configured host-review/rescreening or private-feedback route. Reviewer decisions are audited; deletion is a separate authorised action with file-removal evidence under TP-OPS-06."
+  },
+  {
+    "id": "TP-OPS-09-S07",
+    "test": "TP-OPS-09",
+    "env": "both",
+    "action": "Hand the category checklist back to the guest tester. Use the originating TP-GUEST-07, TP-GUEST-08 or TP-GUEST-09 step ID in each operations result and consolidate the paired guest/operations evidence in the shared register.",
+    "expected": "Every guest fixture has an operations result or explicit pending reason. Guest confirmation alone and a generic loaded queue do not complete the paired test. Record guest outcome and operations outcome separately."
+  }
+]

@@ -1,0 +1,20 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./vite.config" without a file extension (vite.ai-qa.config.ts:2:18). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+9:28:09 am [vite] (client) Re-optimizing dependencies because vite config has changed
+
+  VITE v8.2.0   ai-qa   ready in 333 ms
+
+  ➜  Local:   http://127.0.0.1:15182/
+9:28:11 am [vite] (client) [optimizer] scanning dependencies...
+9:28:50 am [vite] vite.ai-qa.config.ts changed, restarting server...
+9:28:50 am [vite] server restarted.
+9:41:30 am [vite] (client) page reload artifacts/qa/2026-10-17/nas-after.html
+9:41:30 am [vite] (client) page reload artifacts/qa/2026-10-17/nas-after.html
+9:41:31 am [vite] (client) page reload artifacts/qa/2026-10-17/local-after.html
+9:41:31 am [vite] (client) page reload docs/handbook/DIGISTAYBOOK_TEST_PROCEDURES.html
+9:41:31 am [vite] (client) page reload artifacts/qa/2026-10-17/local-after.html
+9:43:35 am [vite] (client) page reload artifacts/qa/2026-10-17/nas-after.html
+9:43:36 am [vite] (client) page reload artifacts/qa/2026-10-17/local-after.html
+9:43:36 am [vite] (client) page reload docs/handbook/DIGISTAYBOOK_TEST_PROCEDURES.html
+9:43:36 am [vite] (client) page reload artifacts/qa/2026-10-17/local-after.html

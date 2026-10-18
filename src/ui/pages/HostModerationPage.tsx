@@ -9,6 +9,7 @@ import { PropertyShell } from "../host/PropertyShell";
 import { useModerationQueue } from "../host/useModerationQueue";
 import { propertyBlock } from "../host/usePropertyDraft";
 import type { HostProperty } from "../host/propertyStore";
+import "./hostModeration.css";
 
 /**
  * Moderation for one property, on its own route.
@@ -83,19 +84,36 @@ export function HostModerationPage({ propertyId }: { propertyId: string }) {
   // this account owns.
   const property = (state.load as { status: "ready"; property: HostProperty }).property;
   const posts = state.posts;
+  // The tab counts what a Host can still act on; the deleted pile is counted
+  // on its own row at the foot of the list.
+  const memoryCount = Array.isArray(posts) ? posts.filter((post) => post.visibility !== "deleted").length : null;
 
   return (
     <PropertyShell property={property} current="moderation" className="moderation-page">
       <header className="moderation-intro">
-        <h2>Inbox &amp; moderation</h2>
-        <p>Decide what appears on your wall, and pin the memories you want guests to see first.</p>
+        <div>
+          <h2>Inbox &amp; moderation</h2>
+          <p>Manage guest memories and private feedback.</p>
+        </div>
+        <a className="moderation-back" href={`/host/property/${property.id}`}>
+          <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M16 10H4m0 0 5-5m-5 5 5 5" /></svg>
+          Back to property
+        </a>
       </header>
       <GuestReviewPanel key={propertyId} propertyId={propertyId} collapseWhenEmpty onCount={onWaiting} refreshSignal={refreshSignal} />
       {waiting === 0 && reports === 0 && (
         <div className="moderation-clear" role="status">
-          <span className="moderation-clear-mark" aria-hidden="true">✓</span>
-          <p><strong>You&rsquo;re all caught up.</strong> New memories and guest reports will appear here when they need you.</p>
-          <button type="button" className="btn btn-sm btn-ghost" onClick={() => setRefreshSignal((value) => value + 1)}>Check again</button>
+          <span className="moderation-clear-mark" aria-hidden="true">
+            <svg viewBox="0 0 20 20" focusable="false"><path d="m5 10.5 3.2 3.2L15 7" /></svg>
+          </span>
+          <p><strong>All caught up</strong> <span>No memories or reports need your attention.</span></p>
+          <button type="button" className="moderation-refresh" onClick={() => setRefreshSignal((value) => value + 1)}>
+            <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+              <path d="M16.2 8.5A6.3 6.3 0 0 0 4.6 6.6M3.8 11.5a6.3 6.3 0 0 0 11.6 1.9" />
+              <path d="M4.3 3.4v3.4h3.4M15.7 16.6v-3.4h-3.4" />
+            </svg>
+            Refresh
+          </button>
         </div>
       )}
       <HostReportsPanel
@@ -118,7 +136,8 @@ export function HostModerationPage({ propertyId }: { propertyId: string }) {
             className={tab === option ? "active" : undefined}
             onClick={() => chooseTab(option)}
           >
-            {option === "memories" ? "Your memories" : "Private feedback"}
+            {option === "memories" ? "Memories" : "Private feedback"}
+            {option === "memories" && memoryCount !== null && <span className="queue-count">{memoryCount}</span>}
           </button>
         ))}
       </div>
@@ -145,7 +164,12 @@ export function HostModerationPage({ propertyId }: { propertyId: string }) {
       </section>}
 
       <details className="fine-print">
-        <summary>How moderation works</summary>
+        <summary>
+          <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+            <circle cx="10" cy="10" r="7.5" /><path d="M7.9 7.9a2.2 2.2 0 1 1 3 2c-.6.3-.9.7-.9 1.3v.4" /><circle cx="10" cy="14.2" r=".4" />
+          </svg>
+          How moderation works
+        </summary>
         <p>
           A reported memory is hidden pending review straight away. A reporter is placed on a{" "}
           {reportingLimits.cooldownHours}-hour cooldown after {reportingLimits.reporterDistinctPostsTenMinutes}{" "}
@@ -157,10 +181,6 @@ export function HostModerationPage({ propertyId }: { propertyId: string }) {
           {privacySlaDays} days escalates to our Privacy &amp; Safety team, who will act on it for you.
         </p>
       </details>
-
-      <div className="actions">
-        <a className="btn btn-secondary" href={`/host/property/${property.id}`}>Back to the property</a>
-      </div>
     </PropertyShell>
   );
 }

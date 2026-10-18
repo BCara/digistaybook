@@ -1,0 +1,30 @@
+
+> digistaybook@0.1.0 build
+> vite build
+
+vite v8.2.0 building client environment for production...
+[2K
+transforming...✓ 224 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                          1.35 kB │ gzip:   0.59 kB
+dist/assets/logo-long-B5vI4r0p.png     213.74 kB
+dist/assets/index-BO3Y_ZPA.css         224.94 kB │ gzip:  39.36 kB
+dist/assets/index.esm-D2iIXfOP.js        0.68 kB │ gzip:   0.38 kB
+dist/assets/index.esm-CciA6q8L.js        8.30 kB │ gzip:   3.28 kB
+dist/assets/exportArchive-WsZe26HF.js   10.21 kB │ gzip:   5.31 kB
+dist/assets/index.esm-DEJCnZof.js       13.21 kB │ gzip:   4.83 kB
+dist/assets/index.esm-D7S4VnaE.js       34.74 kB │ gzip:  11.15 kB
+dist/assets/index.esm-DMXprY2g.js      554.99 kB │ gzip: 161.95 kB
+dist/assets/index-DMPXy74z.js          757.82 kB │ gzip: 222.75 kB
+
+[INEFFECTIVE_DYNAMIC_IMPORT] node_modules/firebase/auth/dist/esm/index.esm.js is dynamically imported by src/lib/firebase.ts, src/lib/guestSession.ts, src/ui/auth/AuthProvider.tsx, src/ui/auth/hostAuth.ts but also statically imported by src/ui/auth/hostAccount.ts, src/ui/auth/reviewerMfa.ts, src/ui/pages/ReviewerSetupPage.tsx, dynamic import will not move module into another chunk.
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[INEFFECTIVE_DYNAMIC_IMPORT] src/ui/host/propertyStore.ts is dynamically imported by src/ui/pages/HostDashboardPage.tsx but also statically imported by src/ui/host/PhotoField.tsx, src/ui/host/PropertyDialog.tsx, src/ui/host/PropertyShell.tsx, src/ui/host/moderationStore.ts, src/ui/host/useProperty.ts, ..., dynamic import will not move module into another chunk.
+
+✓ built in 623ms

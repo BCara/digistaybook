@@ -1,0 +1,1694 @@
+[
+  {
+    "step": "TP-GUEST-08-S01",
+    "label": "Toxic",
+    "route": "memory",
+    "id": "ai-cat-41a8f4bd-a916-435d-9af2-ed00ffac2f6b",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S01",
+    "label": "Toxic",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-0030356a-a9e0-4f79-9bfa-c0a21ad95fe2",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.8
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": true,
+    "feedbackStatus": "delivered",
+    "caseId": null,
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S02",
+    "label": "Derogatory",
+    "route": "memory",
+    "id": "ai-cat-77456010-d342-4aa4-9cfc-c026c3e54a5d",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "critical",
+      "categories": [
+        "Derogatory"
+      ]
+    },
+    "status": "critical",
+    "visibility": "restricted",
+    "caseId": "ai-cat-77456010-d342-4aa4-9cfc-c026c3e54a5d:1",
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S02",
+    "label": "Derogatory",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-349d59bc-3324-4388-95d9-b190f8034f2d",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.8
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": false,
+    "feedbackStatus": "held",
+    "caseId": "feedback-ai-cat-feedback-349d59bc-3324-4388-95d9-b190f8034f2d",
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S03",
+    "label": "Violent",
+    "route": "memory",
+    "id": "ai-cat-cf9a54a4-a9fa-4091-9d9a-00f6b3e891ad",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "critical",
+      "categories": [
+        "Violent"
+      ]
+    },
+    "status": "critical",
+    "visibility": "restricted",
+    "caseId": "ai-cat-cf9a54a4-a9fa-4091-9d9a-00f6b3e891ad:1",
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S03",
+    "label": "Violent",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-00cd9ec6-905f-4177-8b3f-e43cb76409d2",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.8
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": false,
+    "feedbackStatus": "held",
+    "caseId": "feedback-ai-cat-feedback-00cd9ec6-905f-4177-8b3f-e43cb76409d2",
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S04",
+    "label": "Sexual",
+    "route": "memory",
+    "id": "ai-cat-6c8390a4-1fbe-4274-80ed-94c3aaeab147",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "critical",
+      "categories": [
+        "Sexual"
+      ]
+    },
+    "status": "critical",
+    "visibility": "restricted",
+    "caseId": "ai-cat-6c8390a4-1fbe-4274-80ed-94c3aaeab147:1",
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S04",
+    "label": "Sexual",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-160b034e-27fa-4910-9431-9ba2fdd5f272",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.8
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": false,
+    "feedbackStatus": "held",
+    "caseId": "feedback-ai-cat-feedback-160b034e-27fa-4910-9431-9ba2fdd5f272",
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S05",
+    "label": "Insult",
+    "route": "memory",
+    "id": "ai-cat-35e84953-8477-4b1a-b3f0-0c54e9a036cd",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S05",
+    "label": "Insult",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-2cacfeb4-7055-4be8-a935-a2d473a02313",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.8
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": true,
+    "feedbackStatus": "delivered",
+    "caseId": null,
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S06",
+    "label": "Profanity",
+    "route": "memory",
+    "id": "ai-cat-39f6350d-1b3e-45d3-9be4-10a4c2c0c843",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S06",
+    "label": "Profanity",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-7b46c999-caf1-46e8-a197-fbfeaf2fb7be",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.8
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": true,
+    "feedbackStatus": "delivered",
+    "caseId": null,
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S07",
+    "label": "Death, Harm & Tragedy",
+    "route": "memory",
+    "id": "ai-cat-363764c0-7fdc-4c0f-bd9b-5c3b695d09e1",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S07",
+    "label": "Death, Harm & Tragedy",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-d6808f7f-742a-4962-9e7e-d95a66894af0",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.8
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": true,
+    "feedbackStatus": "delivered",
+    "caseId": null,
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S08",
+    "label": "Firearms & Weapons",
+    "route": "memory",
+    "id": "ai-cat-82fc48d3-9335-4035-aaff-6c52e876fb5c",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "critical",
+      "categories": [
+        "Firearms & Weapons"
+      ]
+    },
+    "status": "critical",
+    "visibility": "restricted",
+    "caseId": "ai-cat-82fc48d3-9335-4035-aaff-6c52e876fb5c:1",
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S08",
+    "label": "Firearms & Weapons",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-559bb7a4-1be6-4b3c-9a6f-e6ed15876663",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.8
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": false,
+    "feedbackStatus": "held",
+    "caseId": "feedback-ai-cat-feedback-559bb7a4-1be6-4b3c-9a6f-e6ed15876663",
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S09",
+    "label": "Public Safety",
+    "route": "memory",
+    "id": "ai-cat-09fd24d9-462b-40db-b15e-237fdf2dfc64",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S09",
+    "label": "Public Safety",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-496f3be9-34b8-4253-92de-a39927a2820f",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.8
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": true,
+    "feedbackStatus": "delivered",
+    "caseId": null,
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S10",
+    "label": "Health",
+    "route": "memory",
+    "id": "ai-cat-ba201626-db26-42db-acdd-f60cf1877d2e",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S10",
+    "label": "Health",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-83857eee-85f0-44e8-ba88-8d9948b7e89d",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.8
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": true,
+    "feedbackStatus": "delivered",
+    "caseId": null,
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S11",
+    "label": "Religion & Belief",
+    "route": "memory",
+    "id": "ai-cat-e65a2c04-de6b-4fae-b198-3c7384122ae2",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S11",
+    "label": "Religion & Belief",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-8387387e-7d95-4f4e-ab15-94a9349fe2b2",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.8
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": true,
+    "feedbackStatus": "delivered",
+    "caseId": null,
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S12",
+    "label": "Illicit Drugs",
+    "route": "memory",
+    "id": "ai-cat-946cca51-17c6-474a-859c-e89eb36d3ce7",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S12",
+    "label": "Illicit Drugs",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-5c24bc58-66d6-4d65-965a-915852460921",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.8
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": true,
+    "feedbackStatus": "delivered",
+    "caseId": null,
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S13",
+    "label": "War & Conflict",
+    "route": "memory",
+    "id": "ai-cat-d9d0c27b-123c-4994-a3a1-0a4868b714f8",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S13",
+    "label": "War & Conflict",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-f4871a4c-3779-4aec-b47e-bfe44ce9af59",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.8
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": true,
+    "feedbackStatus": "delivered",
+    "caseId": null,
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S14",
+    "label": "Politics",
+    "route": "memory",
+    "id": "ai-cat-1b45b96b-240d-40c1-b55e-f504612b1d12",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S14",
+    "label": "Politics",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-841ebc49-9191-4b24-ae8e-cdfd7df226c3",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.8
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": true,
+    "feedbackStatus": "delivered",
+    "caseId": null,
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S15",
+    "label": "Finance",
+    "route": "memory",
+    "id": "ai-cat-9e3b7b14-5a9a-4a18-a340-29df23b82a8f",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S15",
+    "label": "Finance",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-4b82784f-eb21-434e-b8c6-e304339eaf35",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.8
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.05
+      }
+    ],
+    "delivered": true,
+    "feedbackStatus": "delivered",
+    "caseId": null,
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-08-S16",
+    "label": "Legal",
+    "route": "memory",
+    "id": "ai-cat-dccd932c-eae6-481b-b63f-83904da8dc8c",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-08-S16",
+    "label": "Legal",
+    "route": "private feedback",
+    "id": "ai-cat-feedback-c27ea8c9-1134-4ab8-8c0e-c0c55810cbd6",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "scores": [
+      {
+        "name": "Toxic",
+        "confidence": 0.05
+      },
+      {
+        "name": "Derogatory",
+        "confidence": 0.05
+      },
+      {
+        "name": "Violent",
+        "confidence": 0.05
+      },
+      {
+        "name": "Sexual",
+        "confidence": 0.05
+      },
+      {
+        "name": "Insult",
+        "confidence": 0.05
+      },
+      {
+        "name": "Profanity",
+        "confidence": 0.05
+      },
+      {
+        "name": "Death, Harm & Tragedy",
+        "confidence": 0.05
+      },
+      {
+        "name": "Firearms & Weapons",
+        "confidence": 0.05
+      },
+      {
+        "name": "Public Safety",
+        "confidence": 0.05
+      },
+      {
+        "name": "Health",
+        "confidence": 0.05
+      },
+      {
+        "name": "Religion & Belief",
+        "confidence": 0.05
+      },
+      {
+        "name": "Illicit Drugs",
+        "confidence": 0.05
+      },
+      {
+        "name": "War & Conflict",
+        "confidence": 0.05
+      },
+      {
+        "name": "Politics",
+        "confidence": 0.05
+      },
+      {
+        "name": "Finance",
+        "confidence": 0.05
+      },
+      {
+        "name": "Legal",
+        "confidence": 0.8
+      }
+    ],
+    "delivered": true,
+    "feedbackStatus": "delivered",
+    "caseId": null,
+    "method": "Complete isolated score fixture; injected production feedback verdict; not Google classification."
+  },
+  {
+    "step": "TP-GUEST-09-S01",
+    "label": "adult LIKELY",
+    "route": "memory",
+    "id": "ai-cat-bd64acfb-1ce5-4e75-bd8a-277755b34d1a",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "critical",
+      "categories": [
+        "Photo adult"
+      ]
+    },
+    "status": "critical",
+    "visibility": "restricted",
+    "caseId": "ai-cat-bd64acfb-1ce5-4e75-bd8a-277755b34d1a:1",
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-09-S01",
+    "label": "adult VERY_LIKELY",
+    "route": "memory",
+    "id": "ai-cat-962056e3-ab13-49b6-bffb-a7337e60547c",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "critical",
+      "categories": [
+        "Photo adult"
+      ]
+    },
+    "status": "critical",
+    "visibility": "restricted",
+    "caseId": "ai-cat-962056e3-ab13-49b6-bffb-a7337e60547c:1",
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-09-S02",
+    "label": "violence LIKELY",
+    "route": "memory",
+    "id": "ai-cat-5670de9c-c44a-4911-ba8f-257977fdda63",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "critical",
+      "categories": [
+        "Photo violence"
+      ]
+    },
+    "status": "critical",
+    "visibility": "restricted",
+    "caseId": "ai-cat-5670de9c-c44a-4911-ba8f-257977fdda63:1",
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-09-S02",
+    "label": "violence VERY_LIKELY",
+    "route": "memory",
+    "id": "ai-cat-cf0fe7a4-c15e-41ac-bbdf-717aa7fa7764",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "critical",
+      "categories": [
+        "Photo violence"
+      ]
+    },
+    "status": "critical",
+    "visibility": "restricted",
+    "caseId": "ai-cat-cf0fe7a4-c15e-41ac-bbdf-717aa7fa7764:1",
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-09-S03",
+    "label": "medical LIKELY",
+    "route": "memory",
+    "id": "ai-cat-c6c4eb2f-cd34-48a9-9096-12485a19337f",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-09-S03",
+    "label": "medical VERY_LIKELY",
+    "route": "memory",
+    "id": "ai-cat-457770a6-1a88-476c-8ee9-1e230d64c2c2",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-09-S04",
+    "label": "racy LIKELY",
+    "route": "memory",
+    "id": "ai-cat-8d05604f-4ebe-4b2c-b035-bbd43706f3ff",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-09-S04",
+    "label": "racy VERY_LIKELY",
+    "route": "memory",
+    "id": "ai-cat-91d199db-a1f8-4ff9-a713-fecc240c9585",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "standard"
+    },
+    "status": "standard",
+    "visibility": "hidden_pending_review",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-09-S05",
+    "label": "spoof LIKELY",
+    "route": "memory",
+    "id": "ai-cat-f59e443b-e992-4ac2-b8cf-81992809ce9a",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "clear"
+    },
+    "status": "published",
+    "visibility": "visible",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-09-S05",
+    "label": "spoof VERY_LIKELY",
+    "route": "memory",
+    "id": "ai-cat-d7a05459-c2cc-4162-97d0-cdb66d5bd285",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "clear"
+    },
+    "status": "published",
+    "visibility": "visible",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-09-S06",
+    "label": "VERY_UNLIKELY",
+    "route": "memory",
+    "id": "ai-cat-227d0faa-dc55-4d52-9b7f-574b117fd5dd",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "clear"
+    },
+    "status": "published",
+    "visibility": "visible",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  },
+  {
+    "step": "TP-GUEST-09-S06",
+    "label": "UNKNOWN",
+    "route": "memory",
+    "id": "ai-cat-d7b2e8b4-bb78-42b9-b682-46e201364476",
+    "propertyId": "ai-category-117d44e0-52b2-477f-9d9f-9b0c0aae8538",
+    "revision": 1,
+    "verdict": {
+      "outcome": "clear"
+    },
+    "status": "published",
+    "visibility": "visible",
+    "caseId": null,
+    "method": "Isolated production verdict functions with injected complete category scores; no real provider call; no actual photo classification."
+  }
+]

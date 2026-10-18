@@ -15,6 +15,8 @@
     { "fieldPath": "status", "order": "ASCENDING" }, { "fieldPath": "reviewDueAt", "order": "ASCENDING" }
   ] }],
   "fieldOverrides": [
+    { "collectionGroup": "authEmailRequests", "fieldPath": "expiresAt", "ttl": true, "indexes": [] },
+    { "collectionGroup": "authEmailLimits", "fieldPath": "expiresAt", "ttl": true, "indexes": [] },
     { "collectionGroup": "reportRateLimits", "fieldPath": "expiresAt", "ttl": true, "indexes": [] },
     { "collectionGroup": "reportWallLimits", "fieldPath": "expiresAt", "ttl": true, "indexes": [] },
     { "collectionGroup": "reportDuplicates", "fieldPath": "expiresAt", "ttl": true, "indexes": [] }

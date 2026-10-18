@@ -1,0 +1,2 @@
+{"event":"screening_daily_warning","day":"2026-10-17","attempts":75,"limit":100,"remaining":25,"timezone":"Australia/Sydney","severity":"WARNING","message":"DigiStayBook daily screening allowance is nearly used"}
+PASS: 2 concurrent attempts reserved capacity without overshoot; remaining slots filled to exactly 100 and further screening blocked.

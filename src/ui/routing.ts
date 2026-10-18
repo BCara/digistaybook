@@ -23,8 +23,14 @@ export type AppLocation = { pathname: string; hash: string; scroll?: { top: numb
 
 const listeners = new Set<() => void>();
 
+/** The page the build's prerender step is drawing, where there is no window to ask. */
+let serverPathname = "/";
+export function setServerPathname(pathname: string): void {
+  serverPathname = pathname;
+}
+
 function read(): AppLocation {
-  if (typeof window === "undefined") return { pathname: "/", hash: "" };
+  if (typeof window === "undefined") return { pathname: serverPathname, hash: "" };
   return { pathname: window.location.pathname, hash: window.location.hash };
 }
 

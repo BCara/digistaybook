@@ -1,0 +1,308 @@
+<!doctype html>
+<!-- GENERATED FILE: do not edit by hand; hand edits are lost on the next rebuild. To change a post, edit the
+     campaign's content.json and run build_marketing_plan.py next to this file. -->
+<html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marketing Plan</title>
+<style>
+
+:root{--paper:#f7f2e6;--card:#fffdf7;--ink:#2b2622;--soft:#6b5f53;--line:#e0d6c2;--green:#245f50}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 "Segoe UI",Arial,sans-serif}
+header{background:#173f37;color:#fffdf7;padding:28px 16px}header div{max-width:1430px;margin:0 auto}
+h1{font:34px/1.2 Georgia,serif;margin:4px 0}h2{font:26px/1.25 Georgia,serif;margin:38px 0 12px;scroll-margin-top:14px}h3{margin:18px 0 6px;font-size:17px}.wkh{scroll-margin-top:14px;margin-top:30px;font:21px/1.3 Georgia,serif}
+main{padding:8px 0 70px}.small{font-size:13px;color:var(--soft)}.muted{color:var(--soft)}.nowrap{white-space:nowrap}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:10px 0}
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px;max-width:1430px;margin:0 auto;padding:0 16px}main{min-width:0}
+.side{position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:18px 0 80px;font-size:14px}
+.side summary{display:none}.side ul{list-style:none;margin:0 0 14px;padding:0}.side li a{display:block;padding:4px 10px;border-left:3px solid transparent;border-radius:0 6px 6px 0;text-decoration:none;color:var(--ink);line-height:1.35}
+.side li a:hover{background:#efe8d8}.side li a.on{border-left-color:var(--green);background:#e3efe8;color:#173f37;font-weight:600}
+.sh{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--soft);margin:6px 10px 4px}
+.weeks li.past a{opacity:.55}.weeks b{color:var(--green);margin-right:4px}.tag{display:inline-block;background:#e2a93b;color:#2b2622;border-radius:4px;font-size:11px;font-weight:700;padding:0 5px;margin-left:4px}
+.warn{border-left:5px solid #b0493a}.ok{border-left:5px solid var(--green)}
+.badge{display:inline-block;color:#fff;border-radius:5px;padding:2px 9px;font-size:12px;font-weight:700;white-space:nowrap}
+.btn{display:inline-block;background:var(--green);color:#fff !important;text-decoration:none;padding:7px 14px;border-radius:6px;font-weight:600}
+.legend{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:8px 18px}
+.filters{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:6px 0 10px;font-size:14px}.filters select{padding:5px 8px;border:1px solid var(--line);border-radius:6px;font:inherit;background:#fff}
+table{width:100%;border-collapse:collapse;background:var(--card)}td,th{padding:7px 8px;border-top:1px solid var(--line);text-align:left;vertical-align:middle}th{background:#efe8d8;font-size:13px}
+tr.wk td{background:#e3efe8;color:#173f37;font-size:14px;padding:8px}tr.post:hover td{background:#faf6ec}tr.changed td{background:#fff3cd}
+select.st{font:600 13px "Segoe UI",Arial,sans-serif;color:#fff;border:0;border-radius:6px;padding:5px 6px;cursor:pointer;max-width:200px}select.st option{color:#000;background:#fff}
+.view{white-space:nowrap;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;scroll-margin-top:14px}.card:target{outline:3px solid #e2a93b}
+.card .head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.card h3{margin:2px 0}.when{font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.04em}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:16px;margin-top:10px}
+.imgs{display:flex;gap:6px;overflow-x:auto;align-items:flex-start;flex-wrap:wrap}.imgs img{height:200px;border-radius:6px;border:1px solid var(--line)}
+.label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--soft);margin-top:8px}
+.fact{background:#fff8e1;border:1px dashed #e7c873;border-radius:8px;padding:6px 10px;font-size:14px;margin:0 0 8px}.fact.muted{background:none}
+pre{white-space:pre-wrap;font:13px/1.5 "Segoe UI",Arial,sans-serif;background:#f3eee2;padding:10px;border-radius:8px;margin:4px 0}
+.tx{width:100%;min-height:140px;white-space:pre-wrap;font:13px/1.5 "Segoe UI",Arial,sans-serif;background:#f3eee2;padding:10px;border:1px solid transparent;border-radius:8px;margin:4px 0;resize:vertical;color:var(--ink)}
+.tx:hover{border-color:var(--line)}.tx:focus{background:#fff;border-color:var(--green);outline:none}.tx.edited{background:#fff8e1;border-color:#e7c873}
+.edit-hint{font-weight:400;text-transform:none;letter-spacing:0}.tx-bar{display:flex;gap:8px;align-items:center;justify-content:flex-end}.tx-reset{display:none;border:1px solid var(--line);background:#fff;border-radius:5px;padding:2px 8px;font:12px "Segoe UI",Arial,sans-serif;cursor:pointer}.tx.edited~.tx-bar .tx-reset{display:inline-block}
+.card.changed{border-color:#e7c873;box-shadow:0 0 0 2px #fff3cd}
+.cm{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:6px;font:inherit;margin-top:8px}
+.bar{position:sticky;bottom:0;background:#173f37;color:#fff;padding:10px 16px;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;z-index:5}
+.bar button{background:#e2a93b;border:0;border-radius:6px;padding:8px 14px;font-weight:700;cursor:pointer}
+a{color:var(--green);overflow-wrap:anywhere}pre,.box,.card{overflow-wrap:anywhere}header a{color:#fffdf7}
+@media(max-width:760px){.cols{grid-template-columns:1fr}.imgs img{height:150px}td:nth-child(4){display:none}h1{font-size:28px}td,th{padding:6px 5px}select.st{max-width:130px}}
+@media(max-width:900px){.layout{display:block}.side{position:static;max-height:none;padding:12px 0 0}.side summary{display:block;cursor:pointer;font-weight:700;padding:8px 10px;background:var(--card);border:1px solid var(--line);border-radius:8px}.side details[open] summary{margin-bottom:8px}}
+
+</style></head>
+<body>
+<header><div><div class="small" style="color:#cfe0d8;letter-spacing:.08em;text-transform:uppercase;font-weight:700">DigiStayBook · Marketing</div>
+<h1>Marketing plan</h1><div>The one page for all marketing: every post and its status, what needs you, the strategy and the campaigns. Updated by Claude · Friday 16 October 2026. Nothing is scheduled or posted without your approval.</div></div></header>
+<div class="layout">
+<aside class="side"><details id="toc" open><summary>Contents</summary><div class="sh">On this page</div><ul><li><a href="#strategy" title="Who we’re talking to, what we say and the rules.">Strategy</a></li><li><a href="#campaigns" title="Each campaign, its brief and its week pages.">Campaigns</a></li><li><a href="#changes" title="Changes since the last review.">What changed</a></li><li><a href="#needs" title="Things only you can do.">Needs you</a></li><li><a href="#posts" title="Every post with its status, and how to review one.">Posts</a></li><li><a href="#files" title="The folders on the NAS.">Where things are</a></li><li><a href="#details" title="Each post’s image and text, plus a comment box.">Post details</a></li></ul><div class="sh">Weeks</div><ul class="weeks"><li class="now"><a href="#wk1" title="Fri 16 Oct – Thu 22 Oct · Prelaunch"><b>Week 1</b> Meet DigiStayBook: what it is, why hosts need it, how it works <span class=tag>This week</span></a></li></ul><div class="sh">Campaign briefs</div><ul><li><a href="prelaunch-week-2026-10-16/PRELAUNCH_WEEK_1.html" target="_blank" title="Running · 16 – 22 Oct 2026">Prelaunch week 1</a></li></ul></details></aside>
+<main>
+<h2 id="strategy">Strategy</h2>
+<div class="box">
+<p><b>Where we are (October 2026).</b> DigiStayBook is built and running on its test address, but hasn’t launched. The Facebook Page (Digi Staybook) was created on 15 October with the logo, cover, bio and website link. There are no followers or customers yet.</p>
+<p><b>The job of this period is an audience, not revenue.</b> Before launch we want short-term rental hosts following the Page, and their own words about the questions guests ask and what they’d want from a digital guestbook. Those answers shape the launch messaging.</p>
+</div>
+
+<h3>What we track until launch</h3>
+<table><tr><th>Measure</th><th>Where it’s read</th><th>Target</th></tr>
+<tr><td>Page followers</td><td>Business Suite → Insights</td><td>Set after week 1, once there’s a baseline</td></tr>
+<tr><td>Comments from hosts</td><td>The posts that ask a question (Sat, Tue, Wed, Thu)</td><td>Read and noted weekly</td></tr>
+<tr><td>Reach per post</td><td>Business Suite → Content</td><td>Compare post types week to week</td></tr></table>
+<p class="small">No numbers are guessed in advance. The first week sets the baseline.</p>
+
+<h3>Constraints</h3>
+<ul>
+<li>Prelaunch: no prices, launch dates or sign-up links. The call to action is “follow the Page”.</li>
+<li>Real product screens and the real logo only. No AI-generated people, scenes or photos in post images.</li>
+<li>Seabreeze Cottage is a made-up demo property, and every post that shows it says so. No invented testimonials, customers or feedback.</li>
+<li>Claude drafts; you approve. Posts sit in Business Suite as drafts until you publish or schedule them.</li>
+</ul>
+
+<h3>Who we talk to</h3>
+<ul>
+<li><b>Short-term rental hosts</b> with one or a few properties, listing on Airbnb, Stayz or Booking.com, who answer the same guest questions every changeover.</li>
+<li>Hosts who already leave a paper guestbook or a house manual, and would like guests to actually use it.</li>
+</ul>
+
+<h3>What we say</h3>
+<p class="box"><i>One QR code on the counter opens your house guidance, your local favourites and a wall of guest memories. No app and no account for guests.</i></p>
+<ul>
+<li><b>Always:</b> no app to download and no guest sign-up; the host stays in control (safety checks, approval, hide or remove posts); label the demo as a demo.</li>
+<li><b>Never:</b> promise a launch date or price before it’s set; suggest it gets hosts better reviews; present demo messages as real guests.</li>
+</ul>
+
+<h3>Channels</h3>
+<table><tr><th>Channel</th><th>Role</th><th>Rhythm</th></tr>
+<tr><td>Facebook Page (Digi Staybook)</td><td>Build a following of hosts before launch</td><td>One feed post a day in week 1, then review</td></tr>
+<tr><td>Host Facebook groups</td><td>Where hosts already talk (later, with each group’s rules)</td><td>Not started</td></tr>
+<tr><td>Instagram</td><td>Not connected yet</td><td>Not started</td></tr></table>
+
+<h3>How the work runs</h3>
+<ol>
+<li><b>Drafting:</b> Claude writes each post, builds its image and saves it as a <b>draft</b> in Meta Business Suite, then sets its status here.</li>
+<li><b>Review:</b> you review on this page (status and “Comment for Claude” on each card → <b>Copy my review</b> → paste to Claude).</li>
+<li><b>Publishing:</b> you publish or schedule the draft on its day, or ask Claude to schedule it after your approval.</li>
+</ol>
+
+<h2 id="campaigns">Campaigns</h2>
+<p class="small">Each campaign has its own folder and week page. This page tracks all of them.</p>
+<div class="box"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><h3 style="margin:0">Prelaunch week 1</h3>
+<span class="badge" style="background:#245f50">Running</span></div><div class="small">16 – 22 Oct 2026 · folder <code>prelaunch-week-2026-10-16</code></div>
+<p>Seven Facebook feed posts introducing DigiStayBook: what it is, the questions every host knows, how it works, the guest wall, local tips, guest ease and host control, and a question for hosts. Each has its own image built from the logo and real screenshots of the demo.</p><p><a class="btn" href="prelaunch-week-2026-10-16/PRELAUNCH_WEEK_1.html" target="_blank">Open the week task page →</a></p></div>
+
+<h2 id="changes">What changed since the last review</h2><div class="box"><ul>
+<li><b>Facebook Page created</b> (15 Oct): Digi Staybook, category Software, with the bio, the website link, the logo as profile picture and the “story worth keeping” cover.</li>
+<li><b>Prelaunch week 1 drafted:</b> seven posts for 16–22 October were saved as drafts in Business Suite.</li>
+<li><b>Say hello posted</b> (16 Oct, 9:53 pm) by you, with reworded copy.</li>
+<li><b>The other six scheduled</b> (16 Oct) at their planned Sydney times: Sat 9:00 am, Sun 7:30 pm, Mon 12:30 pm, Tue 7:30 pm, Wed 7:30 pm, Thu 7:30 pm. Wednesday’s post had lost its image card; it was re-attached before scheduling.</li>
+<li><b>This page:</b> the DigiStayBook marketing hub, in the same layout as the DigiGuestbook plan.</li>
+</ul></div>
+
+<h2 id="needs">Needs you</h2>
+<div class="box warn"><b>Things only you can do</b><ul>
+<li>Delete the stray draft that starts “#ShortTermRental #HolidayRental…” in Business Suite, if you don’t need it (it may not show under the default date filter).</li>
+<li>Fix where the website link goes: <b>digistaybook.com</b> shows a GoDaddy page, not the app, and the Page links there.</li>
+<li>The cover image’s phone screen reads “DigiSook”. Replace the cover when you have a corrected version.</li>
+<li>Close the leftover Business Suite tab in Chrome (an unfinished post from 15 Oct) and choose discard.</li>
+</ul></div>
+
+<h2 id="posts">Posts</h2>
+<ul class="legend"><li><span class="badge" style="background:#8a8178">Planned</span> <span class="small">in the plan; nothing in Meta yet</span> <b>0</b></li><li><span class="badge" style="background:#b0493a">Manual review – changes needed</span> <span class="small">you reviewed it and want edits before it goes to Facebook</span> <b>0</b></li><li><span class="badge" style="background:#2f7d4f">Manual review – confirmed</span> <span class="small">you reviewed it; OK to schedule</span> <b>0</b></li><li><span class="badge" style="background:#b07d12">Drafted</span> <span class="small">saved as a draft in Business Suite</span> <b>0</b></li><li><span class="badge" style="background:#2f5fb0">Scheduled</span> <span class="small">set to go out at its date and time</span> <b>6</b></li><li><span class="badge" style="background:#245f50">Posted</span> <span class="small">live</span> <b>1</b></li><li><span class="badge" style="background:#6b6b6b">Skipped</span> <span class="small">not going out</span> <b>0</b></li></ul>
+<div class="box"><b>How to review a post</b><ul>
+<li>This week’s posts are all <b>scheduled</b> or <b>posted</b>. To change one, edit it under Scheduled in Business Suite before its time.</li>
+<li>Facebook drafts don’t keep alt text. It’s in each post’s details; add it when you publish.</li>
+<li>Captions that show the demo say it’s a made-up property. Keep that line if you edit them.</li>
+<li>All times are Sydney time.</li>
+</ul></div>
+<p class="small">One row per post. Set the <b>status</b> as you review (your changes turn yellow and are saved in this browser), add comments in the post’s details, then press <b>Copy my review</b> and paste it to Claude, who makes it official. <b>View ↓</b> jumps to the image and text.</p>
+<div class="filters"><label>Show <select id="f-when"><option value="upcoming" selected>From today</option><option value="week">Next 7 days</option><option value="all">All, including past</option></select></label>
+<label>Where <select id="f-plat"><option value="">Everywhere</option><option value="facebook">Facebook</option></select></label>
+<span class="small" id="shown"></span></div>
+<div style="overflow-x:auto"><table id="t"><tr><th>When</th><th>Post</th><th>Where</th><th>Type</th><th>Status</th><th></th></tr><tr class="wk" data-end="2026-10-22"><td colspan="6"><b>Prelaunch week 1</b> · Fri 16 – Thu 22 October 2026 · Meet DigiStayBook: what it is, why hosts need it, how it works <span class="small">· Prelaunch · <a href="prelaunch-week-2026-10-16/PRELAUNCH_WEEK_1.html" target="_blank">week task page</a></span></td></tr><tr class="post" data-date="2026-10-16" data-plat="facebook"><td class="nowrap">Fri 16 Oct<br><span class="small">7:30 pm</span></td><td><a href="#d-pl1-01-facebook">Say hello</a></td><td>Facebook</td><td class="small">Feed post</td><td><select class="st" data-key="pl1-01:facebook" data-orig="Posted" data-label="Say hello · Facebook · Fri 16 Oct"><option>Planned</option><option>Manual review – changes needed</option><option>Manual review – confirmed</option><option>Drafted</option><option>Scheduled</option><option selected>Posted</option><option>Skipped</option></select></td><td><a class="view" href="#d-pl1-01-facebook">View ↓</a></td></tr><tr class="post" data-date="2026-10-17" data-plat="facebook"><td class="nowrap">Sat 17 Oct<br><span class="small">9:00 am</span></td><td><a href="#d-pl1-02-facebook">The questions every host knows</a></td><td>Facebook</td><td class="small">Feed post</td><td><select class="st" data-key="pl1-02:facebook" data-orig="Scheduled" data-label="The questions every host knows · Facebook · Sat 17 Oct"><option>Planned</option><option>Manual review – changes needed</option><option>Manual review – confirmed</option><option>Drafted</option><option selected>Scheduled</option><option>Posted</option><option>Skipped</option></select></td><td><a class="view" href="#d-pl1-02-facebook">View ↓</a></td></tr><tr class="post" data-date="2026-10-18" data-plat="facebook"><td class="nowrap">Sun 18 Oct<br><span class="small">7:30 pm</span></td><td><a href="#d-pl1-03-facebook">How it works</a></td><td>Facebook</td><td class="small">Feed post</td><td><select class="st" data-key="pl1-03:facebook" data-orig="Scheduled" data-label="How it works · Facebook · Sun 18 Oct"><option>Planned</option><option>Manual review – changes needed</option><option>Manual review – confirmed</option><option>Drafted</option><option selected>Scheduled</option><option>Posted</option><option>Skipped</option></select></td><td><a class="view" href="#d-pl1-03-facebook">View ↓</a></td></tr><tr class="post" data-date="2026-10-19" data-plat="facebook"><td class="nowrap">Mon 19 Oct<br><span class="small">12:30 pm</span></td><td><a href="#d-pl1-04-facebook">Sneak peek: the guest wall</a></td><td>Facebook</td><td class="small">Feed post</td><td><select class="st" data-key="pl1-04:facebook" data-orig="Scheduled" data-label="Sneak peek: the guest wall · Facebook · Mon 19 Oct"><option>Planned</option><option>Manual review – changes needed</option><option>Manual review – confirmed</option><option>Drafted</option><option selected>Scheduled</option><option>Posted</option><option>Skipped</option></select></td><td><a class="view" href="#d-pl1-04-facebook">View ↓</a></td></tr><tr class="post" data-date="2026-10-20" data-plat="facebook"><td class="nowrap">Tue 20 Oct<br><span class="small">7:30 pm</span></td><td><a href="#d-pl1-05-facebook">Your local favourites</a></td><td>Facebook</td><td class="small">Feed post</td><td><select class="st" data-key="pl1-05:facebook" data-orig="Scheduled" data-label="Your local favourites · Facebook · Tue 20 Oct"><option>Planned</option><option>Manual review – changes needed</option><option>Manual review – confirmed</option><option>Drafted</option><option selected>Scheduled</option><option>Posted</option><option>Skipped</option></select></td><td><a class="view" href="#d-pl1-05-facebook">View ↓</a></td></tr><tr class="post" data-date="2026-10-21" data-plat="facebook"><td class="nowrap">Wed 21 Oct<br><span class="small">7:30 pm</span></td><td><a href="#d-pl1-06-facebook">Simple for guests, in your control</a></td><td>Facebook</td><td class="small">Feed post</td><td><select class="st" data-key="pl1-06:facebook" data-orig="Scheduled" data-label="Simple for guests, in your control · Facebook · Wed 21 Oct"><option>Planned</option><option>Manual review – changes needed</option><option>Manual review – confirmed</option><option>Drafted</option><option selected>Scheduled</option><option>Posted</option><option>Skipped</option></select></td><td><a class="view" href="#d-pl1-06-facebook">View ↓</a></td></tr><tr class="post" data-date="2026-10-22" data-plat="facebook"><td class="nowrap">Thu 22 Oct<br><span class="small">7:30 pm</span></td><td><a href="#d-pl1-07-facebook">Ask the hosts</a></td><td>Facebook</td><td class="small">Feed post</td><td><select class="st" data-key="pl1-07:facebook" data-orig="Scheduled" data-label="Ask the hosts · Facebook · Thu 22 Oct"><option>Planned</option><option>Manual review – changes needed</option><option>Manual review – confirmed</option><option>Drafted</option><option selected>Scheduled</option><option>Posted</option><option>Skipped</option></select></td><td><a class="view" href="#d-pl1-07-facebook">View ↓</a></td></tr></table></div>
+
+<h2 id="files">Where things are</h2><div style="overflow-x:auto"><table>
+<tr><td><code>MARKETING_PLAN.html</code></td><td>This page. The one place to look; Claude keeps it up to date.</td></tr>
+<tr><td><code>prelaunch-week-2026-10-16/</code></td><td>Prelaunch week 1: the week task page (PRELAUNCH_WEEK_1.html), images/, the source screenshots, content.json (the copy) and the scripts that build the images and pages.</td></tr>
+<tr><td><code>_reference/</code></td><td>The page styling and review script, shared with the DigiGuestbook plan.</td></tr>
+</table></div>
+
+<h2 id="details">Post details</h2>
+<p class="small">Image, text and notes for every post, in date order. <a href="#posts">↑ Back to the table</a></p>
+<h3 class="wkh" id="wk1" data-end="2026-10-22">Prelaunch week 1 · Fri 16 – Thu 22 October 2026</h3><article class="card" id="d-pl1-01-facebook">
+  <div class="head"><div><div class="when">Fri 16 Oct · 7:30 pm · Facebook · Feed post</div><h3>Say hello</h3>
+  <div class="small">Prelaunch · <a href="prelaunch-week-2026-10-16/PRELAUNCH_WEEK_1.html" target="_blank">Week 1 task page (downloads, copy buttons)</a></div></div>
+  <label class="small" style="text-align:right">Status<br><select class="st" data-key="pl1-01:facebook" data-orig="Posted" data-label="Say hello · Facebook · Fri 16 Oct"><option>Planned</option><option>Manual review – changes needed</option><option>Manual review – confirmed</option><option>Drafted</option><option>Scheduled</option><option selected>Posted</option><option>Skipped</option></select></label></div>
+  <div class="cols"><div class="imgs"><a href="prelaunch-week-2026-10-16/images/01-fri.jpg" target="_blank"><img loading="lazy" src="prelaunch-week-2026-10-16/images/01-fri.jpg" alt="DigiStayBook logo above the words &#x27;A guestbook your rental never had&#x27;, with three points: no app for guests, no guest accounts, made for short-term rental hosts."></a></div>
+  <div class="txt"><div class="label">Text · <span class="edit-hint">click to edit</span></div><textarea class="tx" data-key="pl1-01:facebook" data-label="Say hello · Facebook · Fri 16 Oct" spellcheck="true">Hello from DigiStayBook 👋
+
+We&#x27;re building a digital guestbook for short-term rental hosts.
+
+One QR code sits on the counter. Guests scan it with their phone camera to find your house guidance and your local favourites, and to leave a memory for the next people who stay.
+
+No app to download. No account to create.
+
+We&#x27;re in the final stretch before launch. Follow the Page to see how it works over the next week, and to hear first when we open the doors.
+
+#ShortTermRental #HolidayRental #AirbnbHost #DigitalGuestbook #DigiStayBook</textarea><div class="tx-bar small"><span class="tx-state"></span> <button type="button" class="tx-reset">Reset to original</button></div><p class="small">Goal: Tell people the Page exists and what&#x27;s coming, so early followers know what they&#x27;re following.</p><p class="small">Alt text (add when publishing): DigiStayBook logo above the words &#x27;A guestbook your rental never had&#x27;, with three points: no app for guests, no guest accounts, made for short-term rental hosts.</p>
+  <input class="cm" type="text" data-key="pl1-01:facebook" data-label="Say hello · Facebook · Fri 16 Oct" placeholder="Comment for Claude (optional)">
+  <p class="small"><a href="#posts">↑ Back to the table</a></p></div></div>
+</article><article class="card" id="d-pl1-02-facebook">
+  <div class="head"><div><div class="when">Sat 17 Oct · 9:00 am · Facebook · Feed post</div><h3>The questions every host knows</h3>
+  <div class="small">Prelaunch · <a href="prelaunch-week-2026-10-16/PRELAUNCH_WEEK_1.html" target="_blank">Week 1 task page (downloads, copy buttons)</a></div></div>
+  <label class="small" style="text-align:right">Status<br><select class="st" data-key="pl1-02:facebook" data-orig="Scheduled" data-label="The questions every host knows · Facebook · Sat 17 Oct"><option>Planned</option><option>Manual review – changes needed</option><option>Manual review – confirmed</option><option>Drafted</option><option selected>Scheduled</option><option>Posted</option><option>Skipped</option></select></label></div>
+  <div class="cols"><div class="imgs"><a href="prelaunch-week-2026-10-16/images/02-sat.jpg" target="_blank"><img loading="lazy" src="prelaunch-week-2026-10-16/images/02-sat.jpg" alt="A phone showing the DigiStayBook demo guest page with &#x27;Your stay essentials&#x27; buttons for Wi-Fi, Bins, Checkout and Heating."></a></div>
+  <div class="txt"><div class="label">Text · <span class="edit-hint">click to edit</span></div><textarea class="tx" data-key="pl1-02:facebook" data-label="The questions every host knows · Facebook · Sat 17 Oct" spellcheck="true">What&#x27;s the Wi-Fi password?
+Which bin goes out, and when?
+What time is checkout?
+How does the heating work?
+
+If you host, you&#x27;ve answered these more times than you can count, usually by message and usually late at night.
+
+With DigiStayBook you write the answers once. Guests scan the QR code in the house and find them in a single tap: Wi-Fi, bins, checkout, heating, whatever your place needs.
+
+The screenshot is from our demo property, Seabreeze Cottage.
+
+Hosts: which question do you get asked most? Tell us below 👇
+
+#ShortTermRental #HolidayLet #AirbnbHost #HostTips #DigiStayBook</textarea><div class="tx-bar small"><span class="tx-state"></span> <button type="button" class="tx-reset">Reset to original</button></div><p class="small">Goal: Name the problem hosts feel every changeover: the same questions, again and again.</p><p class="small">Alt text (add when publishing): A phone showing the DigiStayBook demo guest page with &#x27;Your stay essentials&#x27; buttons for Wi-Fi, Bins, Checkout and Heating.</p>
+  <input class="cm" type="text" data-key="pl1-02:facebook" data-label="The questions every host knows · Facebook · Sat 17 Oct" placeholder="Comment for Claude (optional)">
+  <p class="small"><a href="#posts">↑ Back to the table</a></p></div></div>
+</article><article class="card" id="d-pl1-03-facebook">
+  <div class="head"><div><div class="when">Sun 18 Oct · 7:30 pm · Facebook · Feed post</div><h3>How it works</h3>
+  <div class="small">Prelaunch · <a href="prelaunch-week-2026-10-16/PRELAUNCH_WEEK_1.html" target="_blank">Week 1 task page (downloads, copy buttons)</a></div></div>
+  <label class="small" style="text-align:right">Status<br><select class="st" data-key="pl1-03:facebook" data-orig="Scheduled" data-label="How it works · Facebook · Sun 18 Oct"><option>Planned</option><option>Manual review – changes needed</option><option>Manual review – confirmed</option><option>Drafted</option><option selected>Scheduled</option><option>Posted</option><option>Skipped</option></select></label></div>
+  <div class="cols"><div class="imgs"><a href="prelaunch-week-2026-10-16/images/03-sun.jpg" target="_blank"><img loading="lazy" src="prelaunch-week-2026-10-16/images/03-sun.jpg" alt="A printed DigiStayBook QR display for the demo property Seabreeze Cottage, next to three steps: put the QR display on the counter, guests scan it with their camera, they read your guidance and leave a memory."></a></div>
+  <div class="txt"><div class="label">Text · <span class="edit-hint">click to edit</span></div><textarea class="tx" data-key="pl1-03:facebook" data-label="How it works · Facebook · Sun 18 Oct" spellcheck="true">How DigiStayBook works, in three steps:
+
+1️⃣ You set up your property&#x27;s page once: welcome note, house guidance, local tips.
+2️⃣ You print the QR display and pop it on the kitchen counter.
+3️⃣ Guests scan it with their phone camera. They read everything they need, then leave a message or photo on your guest wall before they go.
+
+No app download and no sign-up for your guests. It opens straight in the browser.
+
+Launching soon. Follow along so you don&#x27;t miss it.
+
+#ShortTermRental #HolidayRental #AirbnbHost #QRCode #DigiStayBook</textarea><div class="tx-bar small"><span class="tx-state"></span> <button type="button" class="tx-reset">Reset to original</button></div><p class="small">Goal: Explain the product in three simple steps.</p><p class="small">Alt text (add when publishing): A printed DigiStayBook QR display for the demo property Seabreeze Cottage, next to three steps: put the QR display on the counter, guests scan it with their camera, they read your guidance and leave a memory.</p>
+  <input class="cm" type="text" data-key="pl1-03:facebook" data-label="How it works · Facebook · Sun 18 Oct" placeholder="Comment for Claude (optional)">
+  <p class="small"><a href="#posts">↑ Back to the table</a></p></div></div>
+</article><article class="card" id="d-pl1-04-facebook">
+  <div class="head"><div><div class="when">Mon 19 Oct · 12:30 pm · Facebook · Feed post</div><h3>Sneak peek: the guest wall</h3>
+  <div class="small">Prelaunch · <a href="prelaunch-week-2026-10-16/PRELAUNCH_WEEK_1.html" target="_blank">Week 1 task page (downloads, copy buttons)</a></div></div>
+  <label class="small" style="text-align:right">Status<br><select class="st" data-key="pl1-04:facebook" data-orig="Scheduled" data-label="Sneak peek: the guest wall · Facebook · Mon 19 Oct"><option>Planned</option><option>Manual review – changes needed</option><option>Manual review – confirmed</option><option>Drafted</option><option selected>Scheduled</option><option>Posted</option><option>Skipped</option></select></label></div>
+  <div class="cols"><div class="imgs"><a href="prelaunch-week-2026-10-16/images/04-mon.jpg" target="_blank"><img loading="lazy" src="prelaunch-week-2026-10-16/images/04-mon.jpg" alt="A phone showing the DigiStayBook demo guest wall with a coastal photo and a guest message about walking to the lighthouse every morning."></a></div>
+  <div class="txt"><div class="label">Text · <span class="edit-hint">click to edit</span></div><textarea class="tx" data-key="pl1-04:facebook" data-label="Sneak peek: the guest wall · Facebook · Mon 19 Oct" spellcheck="true">Remember the paper guestbook on the hall table? 📖
+
+The best ones were full of little stories: the walk everyone loved, the café worth the detour, the family who came back every summer.
+
+DigiStayBook brings that back for the way people travel now. Guests leave a message and a photo from their phone, and it joins your property&#x27;s guest wall for the next guests to read.
+
+This is a sneak peek from our demo property. The cottage and the messages are made up for the demo, but the wall is the real thing.
+
+#GuestBook #ShortTermRental #HolidayRental #AirbnbHost #DigiStayBook</textarea><div class="tx-bar small"><span class="tx-state"></span> <button type="button" class="tx-reset">Reset to original</button></div><p class="small">Goal: Show the emotional side: the memories guests leave behind.</p><p class="small">Alt text (add when publishing): A phone showing the DigiStayBook demo guest wall with a coastal photo and a guest message about walking to the lighthouse every morning.</p>
+  <input class="cm" type="text" data-key="pl1-04:facebook" data-label="Sneak peek: the guest wall · Facebook · Mon 19 Oct" placeholder="Comment for Claude (optional)">
+  <p class="small"><a href="#posts">↑ Back to the table</a></p></div></div>
+</article><article class="card" id="d-pl1-05-facebook">
+  <div class="head"><div><div class="when">Tue 20 Oct · 7:30 pm · Facebook · Feed post</div><h3>Your local favourites</h3>
+  <div class="small">Prelaunch · <a href="prelaunch-week-2026-10-16/PRELAUNCH_WEEK_1.html" target="_blank">Week 1 task page (downloads, copy buttons)</a></div></div>
+  <label class="small" style="text-align:right">Status<br><select class="st" data-key="pl1-05:facebook" data-orig="Scheduled" data-label="Your local favourites · Facebook · Tue 20 Oct"><option>Planned</option><option>Manual review – changes needed</option><option>Manual review – confirmed</option><option>Drafted</option><option selected>Scheduled</option><option>Posted</option><option>Skipped</option></select></label></div>
+  <div class="cols"><div class="imgs"><a href="prelaunch-week-2026-10-16/images/05-tue.jpg" target="_blank"><img loading="lazy" src="prelaunch-week-2026-10-16/images/05-tue.jpg" alt="A phone showing a tip from the demo hosts on the DigiStayBook guest page: &#x27;Our favourite: the bakery behind the lighthouse. Go before 9am or the pasties are gone.&#x27;"></a></div>
+  <div class="txt"><div class="label">Text · <span class="edit-hint">click to edit</span></div><textarea class="tx" data-key="pl1-05:facebook" data-label="Your local favourites · Facebook · Tue 20 Oct" spellcheck="true">The best part of staying somewhere new? The tips you&#x27;d never find on your own. 🥐
+
+The bakery behind the lighthouse. The beach that&#x27;s quiet at sunset. The pub with the open fire.
+
+You already know these places. DigiStayBook gives you somewhere to share them, right where your guests look first. Pin your favourites to the top of your property&#x27;s page and they&#x27;re there for every stay.
+
+The tip in the picture comes from our demo cottage.
+
+Hosts: what&#x27;s the one local spot you always recommend? 👇
+
+#LocalTips #ShortTermRental #HolidayRental #AirbnbHost #DigiStayBook</textarea><div class="tx-bar small"><span class="tx-state"></span> <button type="button" class="tx-reset">Reset to original</button></div><p class="small">Goal: Position the host as the local expert; the tips are part of the stay.</p><p class="small">Alt text (add when publishing): A phone showing a tip from the demo hosts on the DigiStayBook guest page: &#x27;Our favourite: the bakery behind the lighthouse. Go before 9am or the pasties are gone.&#x27;</p>
+  <input class="cm" type="text" data-key="pl1-05:facebook" data-label="Your local favourites · Facebook · Tue 20 Oct" placeholder="Comment for Claude (optional)">
+  <p class="small"><a href="#posts">↑ Back to the table</a></p></div></div>
+</article><article class="card" id="d-pl1-06-facebook">
+  <div class="head"><div><div class="when">Wed 21 Oct · 7:30 pm · Facebook · Feed post</div><h3>Simple for guests, in your control</h3>
+  <div class="small">Prelaunch · <a href="prelaunch-week-2026-10-16/PRELAUNCH_WEEK_1.html" target="_blank">Week 1 task page (downloads, copy buttons)</a></div></div>
+  <label class="small" style="text-align:right">Status<br><select class="st" data-key="pl1-06:facebook" data-orig="Scheduled" data-label="Simple for guests, in your control · Facebook · Wed 21 Oct"><option>Planned</option><option>Manual review – changes needed</option><option>Manual review – confirmed</option><option>Drafted</option><option selected>Scheduled</option><option>Posted</option><option>Skipped</option></select></label></div>
+  <div class="cols"><div class="imgs"><a href="prelaunch-week-2026-10-16/images/06-wed.jpg" target="_blank"><img loading="lazy" src="prelaunch-week-2026-10-16/images/06-wed.jpg" alt="Text card: &#x27;Easy for guests. Yours to control.&#x27; with four points: opens in the phone&#x27;s browser, no guest sign-up, turn on approval for new memories, hide or remove any post."></a></div>
+  <div class="txt"><div class="label">Text · <span class="edit-hint">click to edit</span></div><textarea class="tx" data-key="pl1-06:facebook" data-label="Simple for guests, in your control · Facebook · Wed 21 Oct" spellcheck="true">Two questions hosts often ask about digital guestbooks:
+
+&quot;My guests won&#x27;t download an app.&quot;
+They don&#x27;t have to. DigiStayBook opens in the phone&#x27;s browser straight from the QR code. No app, no account, no password.
+
+&quot;What if someone posts something I don&#x27;t want there?&quot;
+You&#x27;re in control. Every new memory goes through automatic safety checks, you can turn on approval so nothing appears until you say so, and you can hide or remove any post from your dashboard.
+
+What else would you want to know before using a digital guestbook? Ask away below.
+
+#ShortTermRental #HolidayRental #AirbnbHost #HostLife #DigiStayBook</textarea><div class="tx-bar small"><span class="tx-state"></span> <button type="button" class="tx-reset">Reset to original</button></div><p class="small">Goal: Answer the first objections: guests won&#x27;t download apps, and hosts worry about what gets posted.</p><p class="small">Alt text (add when publishing): Text card: &#x27;Easy for guests. Yours to control.&#x27; with four points: opens in the phone&#x27;s browser, no guest sign-up, turn on approval for new memories, hide or remove any post.</p>
+  <input class="cm" type="text" data-key="pl1-06:facebook" data-label="Simple for guests, in your control · Facebook · Wed 21 Oct" placeholder="Comment for Claude (optional)">
+  <p class="small"><a href="#posts">↑ Back to the table</a></p></div></div>
+</article><article class="card" id="d-pl1-07-facebook">
+  <div class="head"><div><div class="when">Thu 22 Oct · 7:30 pm · Facebook · Feed post</div><h3>Ask the hosts</h3>
+  <div class="small">Prelaunch · <a href="prelaunch-week-2026-10-16/PRELAUNCH_WEEK_1.html" target="_blank">Week 1 task page (downloads, copy buttons)</a></div></div>
+  <label class="small" style="text-align:right">Status<br><select class="st" data-key="pl1-07:facebook" data-orig="Scheduled" data-label="Ask the hosts · Facebook · Thu 22 Oct"><option>Planned</option><option>Manual review – changes needed</option><option>Manual review – confirmed</option><option>Drafted</option><option selected>Scheduled</option><option>Posted</option><option>Skipped</option></select></label></div>
+  <div class="cols"><div class="imgs"><a href="prelaunch-week-2026-10-16/images/07-thu.jpg" target="_blank"><img loading="lazy" src="prelaunch-week-2026-10-16/images/07-thu.jpg" alt="Text card asking hosts: &#x27;What do you wish every guest knew?&#x27; with example answers in speech bubbles: where to park, how the shower works, the beach worth the detour."></a></div>
+  <div class="txt"><div class="label">Text · <span class="edit-hint">click to edit</span></div><textarea class="tx" data-key="pl1-07:facebook" data-label="Ask the hosts · Facebook · Thu 22 Oct" spellcheck="true">A question for every host out there 🏡
+
+What&#x27;s the one thing you wish every guest knew before they walked through the door?
+
+How the shower works? Where to park? The beach that&#x27;s worth the extra ten minutes?
+
+We&#x27;re getting DigiStayBook ready for launch, and your answers help us shape the welcome page that guests see first.
+
+Drop yours in the comments, and follow the Page to be the first to try it.
+
+#ShortTermRental #HolidayRental #AirbnbHost #HostCommunity #DigiStayBook</textarea><div class="tx-bar small"><span class="tx-state"></span> <button type="button" class="tx-reset">Reset to original</button></div><p class="small">Goal: Start conversations and learn what hosts want before launch.</p><p class="small">Alt text (add when publishing): Text card asking hosts: &#x27;What do you wish every guest knew?&#x27; with example answers in speech bubbles: where to park, how the shower works, the beach worth the detour.</p>
+  <input class="cm" type="text" data-key="pl1-07:facebook" data-label="Ask the hosts · Facebook · Thu 22 Oct" placeholder="Comment for Claude (optional)">
+  <p class="small"><a href="#posts">↑ Back to the table</a></p></div></div>
+</article>
+</main>
+</div>
+<div class="bar"><span id="count">No changes yet</span><button id="copy">Copy my review</button><button id="clear" style="background:#fffdf7">Clear my changes</button></div>
+<script>
+
+const C={"Planned": "#8a8178", "Drafted": "#b07d12", "Manual review \u2013 changes needed": "#b0493a", "Manual review \u2013 confirmed": "#2f7d4f", "Scheduled": "#2f5fb0", "Posted": "#245f50", "Skipped": "#6b6b6b"}, TODAY=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10), WEEKEND=new Date(Date.now()-new Date().getTimezoneOffset()*6e4+6*864e5).toISOString().slice(0,10), KEY='dsb-plan-review';
+let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(x){}
+const paint=s=>{s.style.background=C[s.value]||'#888';const box=s.closest('tr')||s.closest('.card');if(box)box.classList.toggle('changed',s.value!==s.dataset.orig)};
+const has=v=>v&&(v.s||v.c||v.t!==undefined);const tidy=k=>{if(!has(saved[k]))delete saved[k]};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(x){};const n=Object.values(saved).filter(has).length;document.getElementById('count').textContent=n?n+' post'+(n>1?'s':'')+' with your changes':'No changes yet'};
+document.querySelectorAll('select.st').forEach(s=>{const k=s.dataset.key;if(saved[k]&&saved[k].s)s.value=saved[k].s;paint(s);
+ s.addEventListener('change',()=>{saved[k]={...saved[k],l:s.dataset.label,o:s.dataset.orig};if(s.value===s.dataset.orig)delete saved[k].s;else saved[k].s=s.value;tidy(k);
+  document.querySelectorAll('select.st').forEach(o=>{if(o.dataset.key===k){o.value=s.value;paint(o)}});save()})});
+document.querySelectorAll('input.cm').forEach(t=>{const k=t.dataset.key;t.value=(saved[k]&&saved[k].c)||'';
+ t.addEventListener('input',()=>{saved[k]={...saved[k],l:t.dataset.label,c:t.value};if(!t.value)delete saved[k].c;tidy(k);save()})});
+document.querySelectorAll('textarea.tx').forEach(t=>{const k=t.dataset.key,orig=t.value,card=t.closest('.card'),st=card.querySelector('.tx-state');
+ const grow=()=>{t.style.height='auto';t.style.height=(t.scrollHeight+4)+'px'};
+ const mark=()=>{const ed=t.value!==orig;t.classList.toggle('edited',ed);st.textContent=ed?'Edited (not yet sent to Claude)':'';card.classList.toggle('changed',ed||card.classList.contains('changed'))};
+ if(saved[k]&&saved[k].t!==undefined)t.value=saved[k].t;grow();mark();
+ t.addEventListener('input',()=>{saved[k]={...saved[k],l:t.dataset.label};if(t.value===orig)delete saved[k].t;else saved[k].t=t.value;tidy(k);grow();mark();save()});
+ card.querySelector('.tx-reset').addEventListener('click',()=>{t.value=orig;t.dispatchEvent(new Event('input'))})});
+function filter(){const w=document.getElementById('f-when').value,p=document.getElementById('f-plat').value;let n=0;
+ document.querySelectorAll('tr.post').forEach(r=>{const d=r.dataset.date;const ok=(w==='all'||(d>=TODAY&&(w==='upcoming'||d<=WEEKEND)))&&(!p||r.dataset.plat===p);r.style.display=ok?'':'none';if(ok)n++});
+ document.querySelectorAll('tr.wk').forEach(h=>{let x=h.nextElementSibling,any=false;while(x&&!x.classList.contains('wk')){if(x.style.display!=='none')any=true;x=x.nextElementSibling};h.style.display=any?'':'none'});
+ document.getElementById('shown').textContent=n+' posts shown'}
+document.getElementById('f-when').onchange=filter;document.getElementById('f-plat').onchange=filter;filter();
+document.getElementById('copy').onclick=async()=>{const lines=Object.entries(saved).filter(([k,v])=>has(v)).map(([k,v])=>`- ${v.l} [${k}]: ${v.s?(v.o||'?')+' → '+v.s:'status unchanged'}${v.c?' — '+v.c:''}${v.t!==undefined?'\n  NEW TEXT:\n'+v.t.split('\n').map(x=>'  | '+x).join('\n'):''}`);
+ const txt='My marketing review:\n'+(lines.join('\n')||'(no changes)');try{await navigator.clipboard.writeText(txt);alert('Copied. Paste it to Claude.')}catch(x){prompt('Copy this:',txt)}};
+document.getElementById('clear').onclick=()=>{if(confirm('Clear your status changes, comments and text edits in this browser?')){saved={};save();location.reload()}};save();
+const toc=document.getElementById('toc'),narrow=matchMedia('(max-width:900px)');const fit=()=>{toc.open=!narrow.matches};fit();narrow.addEventListener('change',fit);
+toc.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{if(narrow.matches)toc.open=false}));
+const links=[...toc.querySelectorAll('a[href^="#"]')],targets=links.map(a=>document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+const mark=()=>{let cur=null;for(const t of targets){if(t.getBoundingClientRect().top<120)cur=t};links.forEach(a=>a.classList.toggle('on',!!cur&&a.getAttribute('href')==='#'+cur.id))};
+addEventListener('scroll',mark,{passive:true});mark();
+
+</script></body></html>

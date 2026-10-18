@@ -123,8 +123,10 @@ it("draws the hosts' own notes as the wall draws them, each fixed the way they c
       { id: "bench", message: "The bench gets the sun.", style: "pinned", photo: null }
     ]
   };
-  call.mockResolvedValue({ data: { status: "open", property, posts: [], nextCursor: null } });
-  render(<LiveWallPage slug="real-cottage" />);
+  call.mockResolvedValue({ data: { status: "open", property: {
+    ...property, houseInformation: { heading: "", welcome: "", tip: "", facts: [] }
+  }, posts: [], nextCursor: null } });
+  render(<StayWallPage propertySlug="real-cottage" stayToken="Kx7tQ2mN4pR8sV1wY3zB5c" />);
   const notes = await screen.findByRole("complementary", { name: /More from Ana & Tom/i });
   expect(notes).toHaveTextContent("We lay the fire.");
   expect(notes).toHaveTextContent("The bench gets the sun.");
@@ -132,6 +134,16 @@ it("draws the hosts' own notes as the wall draws them, each fixed the way they c
   expect([...notes.querySelectorAll(".host-note")].map(note => note.getAttribute("data-note-style")))
     .toEqual(["bordered", "pinned"]);
   expect(screen.getByRole("img", { name: "A log fire" })).toHaveAttribute("src", "https://x.test/f.jpg");
+});
+it("keeps the hosts' own notes off the public wall, which is memories only", async () => {
+  const property = {
+    name: "Real cottage", welcome: "Welcome", hosts: "Ana & Tom", location: "Coast",
+    hostNotes: [{ id: "fire", message: "We lay the fire.", style: "bordered", photo: null }]
+  };
+  call.mockResolvedValue({ data: { status: "open", property, posts: [], nextCursor: null } });
+  render(<LiveWallPage slug="real-cottage" />);
+  await screen.findByRole("heading", { name: "Real cottage" });
+  expect(screen.queryByText("We lay the fire.")).not.toBeInTheDocument();
 });
 it("renders server content and loads the next page without duplicating memories", async () => {
   const property = { name: "Real cottage", welcome: "Welcome", hosts: "Host", location: "Coast", hostNotes: [] };

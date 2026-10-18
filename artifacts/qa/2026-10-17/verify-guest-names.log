@@ -1,0 +1,31 @@
+(node:54348) MetadataLookupWarning: received unexpected error = All promises were rejected code = ENETUNREACH, EAI_AGAIN
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"7a377e88d0b689a94021bf8a","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"published","screeningOutcome":"clear","screeningReference":"7a377e88d0b689a94021bf8a","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+{"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"5eb7453af2c409b84d53fd46","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"published","screeningOutcome":"clear","screeningReference":"5eb7453af2c409b84d53fd46","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+{"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"1e33d56da5153345d0ff6a5f","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"published","screeningOutcome":"clear","screeningReference":"1e33d56da5153345d0ff6a5f","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+{"providerOutcome":"clear","outcome":"standard","screeningStatus":"complete","contactDetailsOrLinkHold":true,"screeningReference":"9b593d8334d106c5e86fbaa8","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"standard","screeningOutcome":"standard","screeningReference":"9b593d8334d106c5e86fbaa8","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'published'
+- 'pending'
+
+    at file:///C:/Users/clbbe/Documents/Projects/DigiStayBook/tools/.ai-qa-verify-guest-names.mjs:66:12
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'published',
+  expected: 'pending',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.12.0

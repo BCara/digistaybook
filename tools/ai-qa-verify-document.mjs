@@ -1,0 +1,90 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {JSDOM,VirtualConsole} from 'jsdom';
+const dir='artifacts/qa/2026-10-17';
+const nas='//192.168.1.71/nas/projects/DigiStayBook/business-operations/DIGISTAYBOOK_TEST_PROCEDURES.html';
+const evidence=[];
+for(const [key,file] of [['nas',nas],['local','docs/handbook/DIGISTAYBOOK_TEST_PROCEDURES.html']]) {
+  const html=fs.readFileSync(file,'utf8'),original=new JSDOM(fs.readFileSync(`${dir}/${key}-before.html`,'utf8')).window.document;
+  const errors=[];const vc=new VirtualConsole();vc.on('jsdomError',error=>errors.push(error.message));
+  const draft={_selectedEnvironment:'local',_environmentRuns:{local:{'TP-PUB-01-S01':{desktopResult:'pass',mobileResult:'review',evidence:'Existing human evidence must survive',testDate:'2026-10-15'}},live:{'TP-PUB-01-S01':{desktopResult:'fail',evidence:'Existing live human result'}}}};
+  const dom=new JSDOM(html,{url:'http://127.0.0.1:15183/',runScripts:'dangerously',virtualConsole:vc,beforeParse(window){window.localStorage.setItem('dsb-testproc-v2',JSON.stringify(draft));window.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});window.HTMLElement.prototype.scrollIntoView=function(){};window.confirm=()=>false;}});
+  const doc=dom.window.document,rows=[...doc.querySelectorAll('tr[data-step-id]')];
+  assert.equal(rows.length,original.querySelectorAll('tr[data-step-id]').length);
+  assert.equal(doc.querySelectorAll('.ai-step-record').length,rows.length*2);
+  for(const row of rows){const old=original.getElementById(row.id);assert.equal(row.cells[1].textContent,old.cells[1].textContent);assert.equal(row.cells[2].textContent,old.cells[2].textContent);assert.equal(row.querySelectorAll('.ai-result-column .ai-step-record').length,2);assert.equal(row.querySelector('.step-evidence-cell .ai-step-record'),null);}
+  const seed=doc.querySelector('[data-step-id="TP-PUB-01-S01"]');
+  assert.equal(seed.querySelector('.step-desktop').value,'pass');
+  assert.equal(seed.querySelector('.step-mobile').value,'review');
+  assert.equal(seed.querySelector('.step-evidence').value,'Existing human evidence must survive');
+  assert.equal(seed.querySelector('.step-test-date').value,'2026-10-15');
+  assert.equal(doc.getElementById('testMethod'),null,'AI and human results must share one view');
+  assert.ok(doc.querySelector('table.idx .idxprogress-ai'));
+  assert.ok(doc.querySelector('table.idx .idxprogress'));
+  for(const id of ['checklist-help','before-start-guide','human-progress-detail','ai-run-summary'])assert.equal(doc.getElementById(id).open,false,`${id} starts collapsed`);
+  const selectors=[...doc.querySelectorAll('select')].map(x=>({id:x.id,values:[...x.options].map(o=>o.value)}));
+  const envSelect=selectors.find(x=>x.values.includes('local')&&x.values.includes('live'));
+  assert.ok(envSelect,'Environment selector missing');
+  const control=doc.getElementById(envSelect.id);control.value='live';control.dispatchEvent(new dom.window.Event('change',{bubbles:true}));
+  assert.equal(doc.documentElement.dataset.testEnvironment,'live');
+  assert.equal(seed.querySelector('.step-desktop').value,'fail');
+  assert.equal(seed.querySelector('.step-evidence').value,'Existing live human result');
+  assert.equal(doc.querySelectorAll('#ai-run-summary').length,1);
+  const ai=JSON.parse(doc.getElementById('ai-run-results').textContent);
+  const change=(el,value)=>{el.value=value;el.dispatchEvent(new dom.window.Event('change',{bubbles:true}));};
+  const joint=(metric,who)=>doc.querySelector(`#jointProgress [data-joint="${metric}"] [data-${who}]`).textContent;
+  function assertAiTotals(env) {
+    const c={pass:0,fail:0,partial:0,blocked:0,na:0};
+    for(const row of rows)c[ai.steps[row.dataset.stepId][env].status]++;
+    const complete=c.pass+c.fail,total=rows.length-c.na;
+    assert.equal(joint('complete','ai'),`${complete} / ${total}`);
+    assert.equal(joint('pass','ai'),String(c.pass));
+    assert.equal(joint('fail','ai'),String(c.fail));
+    assert.equal(joint('remaining','ai'),String(c.partial+c.blocked));
+    assert.equal(joint('review','ai'),String(c.partial));
+  }
+  assertAiTotals('live');
+  assert.equal(seed.querySelector('.step-desktop').value,'fail');
+  assert.equal(seed.querySelector('.step-evidence').value,'Existing live human result');
+  assert.equal(doc.querySelector('.checks-totals span').textContent,'Complete');
+  assert.equal(doc.getElementById('bReset').disabled,false);
+  assert.equal(joint('fail','human'),'1');
+  // Human edits update only the human totals; a single-device pass is incomplete.
+  change(seed.querySelector('.step-desktop'),'pass');
+  assertAiTotals('live');assert.equal(joint('pass','human'),'0');
+  change(seed.querySelector('.step-mobile'),'pass');
+  assert.equal(joint('pass','human'),'1');assertAiTotals('live');
+  // A human can disagree with a passing AI result without overwriting that evidence.
+  change(seed.querySelector('.step-desktop'),'fail');
+  assert.equal(joint('fail','human'),'1');
+  assert.equal(ai.steps['TP-PUB-01-S01'].live.status,'pass');
+  change(doc.getElementById('statusFilter'),'fail');
+  assert.ok(!doc.getElementById('TP-PUB-01').classList.contains('hidden'));
+  assert.ok(!doc.getElementById('TP-ACC-01').classList.contains('hidden'));
+  change(seed.querySelector('.step-desktop'),'pass');
+  change(control,'local');assertAiTotals('local');
+  assert.equal(seed.querySelector('.step-mobile').value,'review');
+  assert.equal(seed.querySelector('.step-evidence').value,'Existing human evidence must survive');
+  assert.equal(seed.querySelector('.step-test-date').value,'2026-10-15');
+  change(control,'live');
+  assert.equal(seed.querySelector('.step-desktop').value,'pass');
+  change(doc.getElementById('statusFilter'),'fail');
+  assert.ok(!doc.getElementById('TP-ACC-01').classList.contains('hidden'));
+  assert.ok(doc.getElementById('TP-PUB-01').classList.contains('hidden'));
+  assertAiTotals('live');
+  const persisted=JSON.parse(dom.window.localStorage.getItem('dsb-testproc-v2'));
+  assert.equal(persisted._environmentRuns.live['TP-PUB-01-S01'].desktopResult,'pass');
+  assert.equal(Object.keys(ai.steps).length,294);
+  assert.equal(ai.steps['TP-GUEST-03-S01'].local.status,'fail');
+  assert.equal(ai.steps['TP-GUEST-03-S01'].live.executed,false);
+  assert.equal(doc.querySelectorAll('#shared-test-results tr[data-run="AI-20261017"]').length,doc.querySelectorAll('details.test').length);
+  const beforeHistory=[...original.querySelectorAll('#shared-test-results tbody tr')].map(x=>x.outerHTML);
+  for(const old of beforeHistory)assert.ok(html.includes(old),'Previous shared result changed');
+  for(const a of doc.querySelectorAll('.ai-evidence a')) assert.ok(fs.existsSync(pathForLink(file,a.getAttribute('href'))),a.href);
+  assert.deepEqual(errors,[]);
+  evidence.push({file,steps:rows.length,aiRecords:rows.length*2,procedures:doc.querySelectorAll('details.test').length,previousRegisterRows:beforeHistory.length,checks:'PASS: unchanged instructions/expected results; simultaneous AI and human columns; dual summary and contents progress; correct environment totals; independent human edits/dates/notes; single-device incomplete; human disagreement leaves AI evidence unchanged; filters match AI or human failures; collapsed guidance; previous register history; evidence links; no script errors'});
+  dom.window.close();
+}
+function pathForLink(file,href){const parent=file.slice(0,file.lastIndexOf('/')+1);return parent+decodeURIComponent(href);}
+fs.writeFileSync(`${dir}/document-verification.json`,JSON.stringify(evidence,null,2));
+console.log(evidence);

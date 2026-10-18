@@ -1,0 +1,6 @@
+(node:69464) MetadataLookupWarning: received unexpected error = All promises were rejected code = ENETUNREACH, EAI_AGAIN
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"event":"operations_new_items","newCount":2,"queues":"1 safety cases, 1 alerts","kinds":"guest memory, screening failed","operationsUrl":"https://digistaybook.com/operations","recipient":"codebertcreations@gmail.com","severity":"WARNING","message":"DigiStayBook has new items for safety review"}
+{"event":"operations_new_items","newCount":1,"queues":"1 stuck photo deletions","kinds":"deletion held: safety review required","operationsUrl":"https://digistaybook.com/operations","recipient":"codebertcreations@gmail.com","severity":"WARNING","message":"DigiStayBook has new items for safety review"}
+{"event":"operations_new_items","newCount":1,"queues":"1 stuck photo deletions","kinds":"deletion needs attention: attempt limit","operationsUrl":"https://digistaybook.com/operations","recipient":"codebertcreations@gmail.com","severity":"WARNING","message":"DigiStayBook has new items for safety review"}
+PASS: new safety items are announced once, by count and kind only; duplicates and the existing backlog are not announced; stuck photo deletions are announced once per stuck state.

@@ -1,7 +1,6 @@
-import { HostNotes } from "../wall/HostNotes";
 import { MemoryWall } from "../wall/MemoryWall";
 import { LiveWallPage } from "./LiveWallPage";
-import { DEMO_SLUG, demoPosts, demoProperty, hostWallNotes, wallPhotos } from "../wall/demoWall";
+import { DEMO_SLUG, demoPosts, demoProperty } from "../wall/demoWall";
 import { memoriesHeading } from "../wall/memoryHeading";
 
 /**
@@ -66,18 +65,6 @@ export function GuestWallPage({
           </div>
         </div>
       </header>
-
-      {/* Whatever else the hosts want said, in their own voice and above the
-          memories rather than among them: none of them is one. */}
-      <HostNotes
-        notes={hostWallNotes.map((note) => ({
-          id: note.id,
-          message: note.message,
-          style: note.style,
-          photo: note.photo ? wallPhotos[note.photo] : undefined
-        }))}
-        author={property.hosts}
-      />
 
       <MemoryWall posts={demoPosts} heading={memoriesHeading(demoPosts.length)} />
 

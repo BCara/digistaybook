@@ -1,0 +1,29 @@
+{"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"96481bd45f4a5fa31988b374","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"published","screeningOutcome":"clear","screeningReference":"96481bd45f4a5fa31988b374","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+{"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"32b078c615c1c63685e70c1f","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"published","screeningOutcome":"clear","screeningReference":"32b078c615c1c63685e70c1f","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+{"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"39eb5c693b8484106b87225c","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"published","screeningOutcome":"clear","screeningReference":"39eb5c693b8484106b87225c","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+{"providerOutcome":"clear","outcome":"standard","screeningStatus":"complete","contactDetailsOrLinkHold":true,"screeningReference":"3c42e28bda437b9af6491886","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"standard","screeningOutcome":"standard","screeningReference":"3c42e28bda437b9af6491886","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'published'
+- 'pending'
+
+    at file:///C:/Users/clbbe/Documents/Projects/DigiStayBook/tools/.ai-qa-verify-guest-names.mjs:66:12
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'published',
+  expected: 'pending',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.12.0

@@ -63,18 +63,13 @@ describe("first UI slices", () => {
     const cover = screen.getByRole("img", { name: /granite front of Seabreeze Cottage/i });
     expect(cover).toHaveAttribute("src", "/wall/cover.webp");
 
-    // Every photograph on the wall carries real alt text, the hosts' own
-    // included. Not every note has one: a wall where they all did would not be
+    // Every photograph on the wall carries real alt text. Not every note has one: a wall where they all did would not be
     // a wall anybody had kept.
     // (the in-stay wall is covered separately below)
     expect(demoPosts.some((post) => post.photo)).toBe(true);
     for (const post of demoPosts.filter((entry) => entry.photo)) {
       const photo = wallPhotos[post.photo!];
       expect(screen.getByRole("img", { name: photo.alt })).toHaveAttribute("src", photo.src);
-    }
-    for (const note of hostWallNotes.filter((entry) => entry.photo)) {
-      const hostPhoto = wallPhotos[note.photo!];
-      expect(screen.getByRole("img", { name: hostPhoto.alt })).toHaveAttribute("src", hostPhoto.src);
     }
   });
 
@@ -89,32 +84,24 @@ describe("first UI slices", () => {
     }
   });
 
-  it("stands the hosts' own notes above the memories rather than among them", () => {
+  it("keeps the hosts' own notes to the in-stay wall, above the memories rather than among them", () => {
     // It is not a memory, and it is not counted as one: the heading counts
     // what guests left.
     const heading = `${demoPosts.length} memories left here`;
 
+    // The public wall is memories only.
     const { unmount } = render(<GuestWallPage propertySlug="demo-cottage" />);
-    const memories = screen.getByRole("region", { name: heading });
-    const onPublic = screen.getByRole("complementary", { name: /More from Ana & Tom/i });
-    for (const note of hostWallNotes) expect(onPublic).toHaveTextContent(note.message);
-    // Each is fixed to the wall the way its author chose, and the wall says
-    // which so the stylesheet can draw the difference.
-    expect([...onPublic.querySelectorAll(".host-note")].map((note) => note.getAttribute("data-note-style")))
-      .toEqual(hostWallNotes.map((note) => note.style));
-    // They say whose they are in words, once over the stack, and each signs
-    // with the hosts' names.
-    expect(onPublic).toHaveTextContent(/More from your hosts/i);
-    // Every note is signed, because each is read on its own.
-    expect(within(onPublic).getAllByText(demoProperty.hosts)).toHaveLength(hostWallNotes.length);
-    // Out of the memories entirely, and above them on the page.
-    expect(memories).not.toContainElement(onPublic);
-    expect(onPublic.compareDocumentPosition(memories)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(screen.queryByRole("complementary", { name: /More from Ana & Tom/i })).not.toBeInTheDocument();
+    expect(screen.queryByText(/More from your hosts/i)).not.toBeInTheDocument();
     unmount();
 
     render(<StayWallPage propertySlug="demo-cottage" />);
     const onStay = screen.getByRole("complementary", { name: /More from Ana & Tom/i });
     for (const note of hostWallNotes) expect(onStay).toHaveTextContent(note.message);
+    // Each is fixed to the wall the way its author chose, and every note is signed.
+    expect([...onStay.querySelectorAll(".host-note")].map((note) => note.getAttribute("data-note-style")))
+      .toEqual(hostWallNotes.map((note) => note.style));
+    expect(within(onStay).getAllByText(demoProperty.hosts)).toHaveLength(hostWallNotes.length);
     expect(screen.getByRole("region", { name: heading })).not.toContainElement(onStay);
   });
 

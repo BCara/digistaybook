@@ -139,7 +139,7 @@ export function PublicWallSettings({
           ) : (
             <div className="wall-copy">
               <p className="wall-copy-label">Share the link</p>
-              <p className="wall-copy-value"><code>{publicWallPath(property.slug)}</code></p>
+              <p className="wall-copy-value"><code>{publicWallUrl(origin, property.slug)}</code></p>
               <p className="field-hint">
                 This address is fixed to the property and will not change, but it is not being served yet: walls go
                 live once this property is on a running trial or a paid subscription.

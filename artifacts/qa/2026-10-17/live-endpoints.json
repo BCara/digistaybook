@@ -1,0 +1,22 @@
+[
+  {
+    "name": "health",
+    "status": 200,
+    "body": "{\"service\":\"digistaybook-functions\",\"status\":\"ok\"}"
+  },
+  {
+    "name": "listSafetyOperations",
+    "status": 401,
+    "body": "{\"error\":{\"message\":\"Unauthenticated\",\"status\":\"UNAUTHENTICATED\"}}"
+  },
+  {
+    "name": "readSafetyCase",
+    "status": 401,
+    "body": "{\"error\":{\"message\":\"Unauthenticated\",\"status\":\"UNAUTHENTICATED\"}}"
+  },
+  {
+    "name": "listHostGuestReview",
+    "status": 401,
+    "body": "{\"error\":{\"message\":\"Unauthenticated\",\"status\":\"UNAUTHENTICATED\"}}"
+  }
+]

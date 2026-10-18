@@ -1,0 +1,24 @@
+(node:76544) MetadataLookupWarning: received unexpected error = All promises were rejected code = ENETUNREACH, EAI_AGAIN
+(Use `node --trace-warnings ...` to show where the warning was created)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'a-page-093'
+- 'a-page-099'
+            ^
+
+    at file:///C:/Users/clbbe/Documents/Projects/DigiStayBook/tools/.ai-qa-verify-consent-retention.mjs:52:8
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'a-page-093',
+  expected: 'a-page-099',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.12.0

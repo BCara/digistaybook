@@ -1,6 +1,7 @@
 node_modules/
 functions/node_modules/
 dist/
+.prerender/
 functions/lib/
 .firebase/
 .local-test/

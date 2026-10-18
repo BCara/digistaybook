@@ -1,9 +1,10 @@
 import {
-  EmailAuthProvider, reauthenticateWithCredential, reload, sendEmailVerification,
+  EmailAuthProvider, reauthenticateWithCredential, reload,
   updatePassword, updateProfile, verifyBeforeUpdateEmail, type User
 } from "firebase/auth";
 import { getFirebaseAuth } from "../../lib/firebase";
 import { mfaChallenge } from "./reviewerMfa";
+import { requestAuthEmail } from "./authEmails";
 
 async function requireHost(user: User) {
   const auth = (await getFirebaseAuth())?.auth;
@@ -54,7 +55,7 @@ export async function refreshHostAccount(user: User) {
 
 export async function verifyHostEmail(user: User) {
   await requireHost(user);
-  await sendEmailVerification(user);
+  await requestAuthEmail("verifyEmail");
 }
 
 export function accountError(error: unknown): string {

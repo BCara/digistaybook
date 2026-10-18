@@ -1,0 +1,430 @@
+[
+  {
+    "id": "001",
+    "title": "A thoughtful welcome",
+    "text": "Welcome to DigiStayBook. One QR display gives your guests a place to find house guidance, discover your local favourites and leave memories from their stay. A thoughtful welcome can start with something simple. Explore: https://digistaybook.com",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0HrjpPu6af9MRimSMvzzRY9tyQTCj3w9w44dDsvvFWPzVKL4pBWvi8fXLoJcGzzNsl&id=61595061885990",
+    "evidence": "Public post detail with matching introductory text",
+    "verifiedAt": "2026-10-16T23:17:19.599Z"
+  },
+  {
+    "id": "002",
+    "title": "Think like a tired traveller",
+    "text": "Try reading your arrival instructions as if you've just stepped off a long flight. Is the entrance obvious? Is the key collection clear? A calm arrival starts with details guests can find quickly.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid034jsRTU4RqyEhj4AErNf2FGsn9tadnsGTpXJWEMjTj83DRybgsMKEDp3QuBzh9d95l&id=61595061885990",
+    "evidence": "Published toast, matching public timeline text and post detail",
+    "verifiedAt": "2026-10-16T23:18:24.376Z"
+  },
+  {
+    "id": "004",
+    "title": "Recommend one good breakfast",
+    "text": "A long list of cafes can leave guests with another decision to make. Start with one breakfast spot you know well and explain why you like it. Personal context makes a recommendation useful.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0rLWDpxADwviAXwcCk434dP86pYDximbBDcp5AWrCxiMEFPPymZAKaNCP9WcLGi8Zl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:20:32.568Z"
+  },
+  {
+    "id": "003",
+    "title": "The Wi-Fi test",
+    "text": "A useful Wi-Fi note needs both the network name and the password. Check the capital letters, test it on a phone and make the information easy to find. Small detail, welcome relief.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0SxSc7ByaYPBYgZiG6uNRCE7jfQxfjnB1uLgxdYanFSLpQCAHcBDLDzdFzT8BZyqNl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:20:33.567Z"
+  },
+  {
+    "id": "005",
+    "title": "A place for the suitcase",
+    "text": "Walk into your guest bedroom carrying a suitcase. Where would you open it? Somewhere practical to unpack can make a small room feel much easier to settle into.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0VgUB2T5TtnAkEjji1BN43QFR4KnBfC824jbFsn1a6uXA8qdAkBZzaWDNa1PZihm2l&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:21:13.222Z"
+  },
+  {
+    "id": "006",
+    "title": "A clear last morning",
+    "text": "Checkout instructions are easiest to follow when guests can see them before the last morning. Put the time, key return and essential final steps together in one short note.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid028ta44c2yF6YxY1csdZN47qLz24fytA43VZsiVPmdMcLNcUSTAc4XTkociudj23hul&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:21:18.797Z"
+  },
+  {
+    "id": "007",
+    "title": "More than a rating",
+    "text": "A guestbook can hold the small moments that don't fit into a star rating: a favourite walk, a family breakfast or a quiet evening on the deck. Those are the memories DigiStayBook is made for.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid025tP147bLeoGU2ufHHNj4zpycXnR5BXPRxRzJXNWoc3uAoTSQzyqyoi9oWrvmYrJkl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:21:24.186Z"
+  },
+  {
+    "id": "008",
+    "title": "Answer the next question",
+    "text": "Keep a note of the questions guests ask during each stay. If the same one comes up again, it's a good candidate for your house guidance. Let real questions shape the information you provide.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02jTKm6x6ubV2vAV2NB8RPKZFBukAqexhzD9rTqQz1xfzV4KzZxpgHJibvtHsBjjul&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:21:29.563Z"
+  },
+  {
+    "id": "009",
+    "title": "A visitor's version of your suburb",
+    "text": "You know your neighbourhood by habit. A visitor doesn't. The nearest breakfast option, a simple walking route and one local favourite can help guests feel oriented sooner.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02w3CbnZCCpEpRMvjBgYJT4WR7vjr7jkPL9AE7Nz4apHPbGyDKRVJgtuqWFUGZCJPNl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:21:35.388Z"
+  },
+  {
+    "id": "010",
+    "title": "The repeat question",
+    "text": "Hosts: what's the question you've answered so often you could type it with your eyes closed? Wi-Fi, parking, heating or something completely unexpected?",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02ke2tZDnwRpZ3ugz74eMdemApBRVcaLFzP3HWLmHwv58JkRWsAeZafqhjMViWcf4tl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:21:45.235Z"
+  },
+  {
+    "id": "011",
+    "title": "No guest app",
+    "text": "Guests already have enough to organise when they travel. DigiStayBook opens in a browser, with no guest app to download and no guest account to create. See the idea in action: https://digistaybook.com/wall/demo-cottage",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0ovc8TLLvhoXfYfT7a6jkoVR7Pjr2uQyjUhgw56PzxUoCqi6VyRpRP1FX46xAbxrLl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:21:51.467Z"
+  },
+  {
+    "id": "012",
+    "title": "Photograph the right entrance",
+    "text": "If your property has a side gate, shared driveway or entrance that doesn't face the street, a clear arrival photo can help. Show the route a first-time visitor will actually take.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0N4c5dh4RYnAfK3pZeFaEkgyKy9UkEwmHGo7TFi4wphMVz3j8ie724V9jqW5q8e5Cl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:21:57.168Z"
+  },
+  {
+    "id": "013",
+    "title": "Bin day in plain English",
+    "text": "Instead of writing only 'bins Tuesday', explain which bin, where it goes and when to bring it back. Instructions that feel obvious to a local can be a puzzle to a visitor.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid022Ui9cXAN9QuXDrmbJuFfSCTX7koXbfqp5MGrYggzGt1WtHsCVx9srjXSPKS6zMcNl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:22:02.936Z"
+  },
+  {
+    "id": "014",
+    "title": "The rainy-day recommendation",
+    "text": "Give guests an option for a wet afternoon as well as a sunny one. Think about something nearby that you would enjoy yourself, and remind visitors to check current opening times.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0ipRnrTs38FJndnHm6ngE9XkPwjQJ1vp69KmzekLoC5J4GK79nYbVGAuB5fjtK7Ayl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:22:08.600Z"
+  },
+  {
+    "id": "015",
+    "title": "Make charging easy",
+    "text": "Look at the room from the bed and sofa. Can a guest charge a phone without moving furniture? A clearly available power point is a practical part of a comfortable stay.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02YVJPKQVGfBWCxPzSXZ2R89r7rwX79MX9ZkEXj82YL3BVJNU6oawcaCecfaYGBghFl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:22:14.130Z"
+  },
+  {
+    "id": "016",
+    "title": "Keep the list proportionate",
+    "text": "Read your checkout list from the guest's perspective. Keep the essential steps easy to spot and explain anything unusual. A short, clear finish can leave a warmer final impression.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02pbvNo59dV33E4sS1R9LQPpGkubEEjbpDgcjVEyTDsf5wgs5k4hXT2qfw7VVJeeYTl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:22:19.809Z"
+  },
+  {
+    "id": "017",
+    "title": "Ask about a moment",
+    "text": "A gentle guestbook prompt can be as simple as 'What was your favourite moment here?' It gives people a starting point without turning their holiday into a questionnaire.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02jTzh4xbM41LhBVNJrpUCRg4gMaX7owstL6B5sEy7PxmbLuESSXYr4NZTGUNa1GyLl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:22:25.129Z"
+  },
+  {
+    "id": "018",
+    "title": "One source for the basics",
+    "text": "If checkout time appears in three different places, check that all three agree. Consistent information helps guests make plans and saves you from correcting mixed messages later.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02FBLDCHD8ACQBWWSsGShbzvtbn4qgVdAcbye7nqK1YjJNjFe6KuCW2awJ2q1jHqUJl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:22:35.630Z"
+  },
+  {
+    "id": "019",
+    "title": "Explain the local trip",
+    "text": "When recommending a neighbourhood outing, say how guests might get there and what to check before leaving. A useful local tip helps with the journey as well as the destination.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02chGywQCtUh1hn5ALvwfRBHmB9yB6AnbLjviH2HovVGgmhVLry2ChhorCX4DHJvECl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:22:41.112Z"
+  },
+  {
+    "id": "020",
+    "title": "Your smallest useful touch",
+    "text": "What's the smallest thing you've added to a holiday rental that guests have noticed? A reading lamp, luggage stand, labelled switch or something else? We'd love to hear the practical ideas.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid031uj96rhAWEpS9ZGFXGXPhiP6tjuFUroqkGCThs2LW9emWs98sQDruShD3QdM3Synl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:22:57.045Z"
+  },
+  {
+    "id": "021",
+    "title": "House guidance above the memories",
+    "text": "DigiStayBook brings practical house information and guest memories together. Your guidance sits above the guest wall, so visitors can find the essentials before browsing the notes and photos. Explore: https://digistaybook.com",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02wWiqgs2WbpyPAM8JkhWsHrA2kfAugHA4S9zcsYX4uzdcqsSGEMGopiAH4ATggtyPl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:23:13.106Z"
+  },
+  {
+    "id": "022",
+    "title": "Check the arrival light",
+    "text": "Visit your entrance after dark. Can you see the path, the door number and the key collection point? Your daytime arrival walkthrough may miss what an evening guest needs.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid04ubJuBfoB5UZ3Ay3ZabNTqfrAgojbpAfzq2DEF4qgYJqAsGGfZZMtSBRdKLYmDVAl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:23:28.843Z"
+  },
+  {
+    "id": "023",
+    "title": "The appliance quick start",
+    "text": "For an unfamiliar appliance, start with the few steps needed for normal use. Identify the relevant buttons and the usual setting. Keep the full manufacturer's instructions available for anything more detailed.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02KsGLNvVwoGGz4UBWfBgcyE4gmf1H3T4BUPqV6Lt8bwdHrCQzxKFtVQiLjqcS4rT8l&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:24:10.131Z"
+  },
+  {
+    "id": "024",
+    "title": "Say why you recommend it",
+    "text": "A recommendation becomes more useful with a reason. 'Good for an early breakfast' or 'a quiet place for a walk' tells guests more than a name alone. Specific beats a copied list.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0Hh8S9JKWobrS2e4DxgiDPT21SEVFyHxsNJFXC8aJUiGkW4b5wdX3CGsEodSRHVjpl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:24:25.953Z"
+  },
+  {
+    "id": "025",
+    "title": "Check the reading light",
+    "text": "A bright ceiling light and a useful reading light do different jobs. Try sitting where a guest might read in the evening and check whether the lighting feels comfortable there.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02hiDEJ5BPpCDobrxr7ndcaLEQkYaSv8Ub748HeALa9eZmT3s3swt6ERF47hMiQ7Rfl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:24:41.956Z"
+  },
+  {
+    "id": "026",
+    "title": "Key return without guesswork",
+    "text": "Describe exactly where keys should go at checkout. If a lockbox is involved, explain the final step clearly. The end of the stay shouldn't depend on a last-minute message.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02E3hPZiFg3j1sXmRY3JLA4kAjkcSSWbyWPxDusxqCTUTb9bVTqC6Rdg7Xo3C8oqJvl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:25:24.406Z"
+  },
+  {
+    "id": "027",
+    "title": "Make sharing optional",
+    "text": "A guestbook invitation should feel like an invitation. Some guests will love leaving a photo or note; others will prefer a quiet stay. Both deserve the same warm welcome.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0jheXPWqLXhwvECKeaCVnM16HiwkbA5H4hZkFQ3vV3GAe4ABfDzXkWr51XcfSmd4Vl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:26:41.540Z"
+  },
+  {
+    "id": "028",
+    "title": "A ten-minute information audit",
+    "text": "Before your next arrival, spend ten minutes checking the basics: access, Wi-Fi, heating, bins and checkout. Read the instructions against what is actually in the property today.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid04gABP2CR9LPyTDMFdcMvyyVwNxDLMxHi4wfNZ6ePaMTkNKdzTjZp42ELxH2u85iul&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:26:57.412Z"
+  },
+  {
+    "id": "029",
+    "title": "A recommendation for a short stay",
+    "text": "A guest with one free afternoon needs different ideas from someone staying a week. Offer a small, realistic outing as well as the longer day trip. Time is part of the recommendation.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02chvxoP6SCw6Bj4x5erptXLmtqZsxVPAZnjdUD9j9JDm5X8deoAaz1isebJt1cYqRl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:27:13.766Z"
+  },
+  {
+    "id": "030",
+    "title": "The first thing you check",
+    "text": "When you arrive at a holiday rental yourself, what do you look for first? The Wi-Fi, a cup of tea, somewhere to unpack or the nearest place to eat?",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid025G1k1ruVM6RHwHYwg3YUEpU5eseBev9MrE6ZSWv6MkuC3crMCPBaVH8cqQz26XYwl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:27:29.612Z"
+  },
+  {
+    "id": "031",
+    "title": "A QR code with a purpose",
+    "text": "A QR display is useful when guests know what it opens. DigiStayBook brings house guidance, local favourites and a guest wall into the browser. A short label beside the code can set that expectation.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid09uDYfRb1NKgiGVZQC7e8nbgx73iBNkQfMqVvGrpQqLwAsqFeerWsCy1tZmfjYW3il&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:27:53.084Z"
+  },
+  {
+    "id": "032",
+    "title": "The five-minute walkthrough",
+    "text": "Start outside your property and follow your own check-in instructions on your phone. Notice every place where you rely on memory. Those are the details a new guest may need explained.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02Zd3ZmQqbYBgUK7JridUmHZUyp3Q73wNErM3n7Zs3XqrQGThkRXNQtPjNJbfUHPCjl&id=61595061885990",
+    "evidence": "Matching public timeline and public post detail",
+    "verifiedAt": "2026-10-16T23:28:11.930Z"
+  },
+  {
+    "id": "033",
+    "title": "Label the surprising switch",
+    "text": "If a switch does something a guest wouldn't expect, a clear label can help. Think outdoor lights, extractor fans and unusual heating controls. Good guidance starts with the small points of confusion.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122109955935502062&id=61595061885990",
+    "contentId": "122109955935502062",
+    "evidence": "Business Suite published confirmation with ID, matching public post detail",
+    "verifiedAt": "2026-10-16T23:29:47.496Z"
+  },
+  {
+    "id": "034",
+    "title": "Include a nearby easy option",
+    "text": "Not every guest wants a big day out. Include something simple close to the property: a pleasant walk, an easy coffee stop or somewhere to sit outside. Useful can be wonderfully ordinary.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122109956463502062&id=61595061885990",
+    "contentId": "122109956463502062",
+    "evidence": "Business Suite published confirmation and matching public post detail",
+    "verifiedAt": "2026-10-16T23:30:10.039Z"
+  },
+  {
+    "id": "035",
+    "title": "Give the bedside table a job",
+    "text": "A bedside surface can hold a phone, a glass of water and a book. Check there is room for a guest's belongings alongside your decor. Practical space is part of feeling welcome.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122109956487502062&id=61595061885990",
+    "contentId": "122109956487502062",
+    "evidence": "Business Suite published confirmation and matching public post detail",
+    "verifiedAt": "2026-10-16T23:30:37.409Z"
+  },
+  {
+    "id": "036",
+    "title": "Explain rather than surprise",
+    "text": "If something at departure needs special care, tell guests early and explain it clearly. A surprise instruction on checkout morning is harder to plan around than a note available throughout the stay.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122109956643502062&id=61595061885990",
+    "contentId": "122109956643502062",
+    "evidence": "Business Suite published confirmation and matching public post detail",
+    "verifiedAt": "2026-10-16T23:30:43.768Z"
+  },
+  {
+    "id": "037",
+    "title": "A photo can tell a small story",
+    "text": "The most memorable guestbook photo doesn't need to be a perfect property photograph. It might be breakfast on the balcony or a favourite corner for reading. Encourage moments, with people's permission.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122109956697502062&id=61595061885990",
+    "contentId": "122109956697502062",
+    "evidence": "Business Suite published confirmation and matching public post detail",
+    "verifiedAt": "2026-10-16T23:30:50.788Z"
+  },
+  {
+    "id": "038",
+    "title": "Use guest language",
+    "text": "If guests call it 'the heater', make sure your instructions do too. Familiar words are easier to search for and understand than model numbers or the terminology from an installation manual.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122109956739502062&id=61595061885990",
+    "contentId": "122109956739502062",
+    "evidence": "Business Suite published confirmation and matching public post detail",
+    "verifiedAt": "2026-10-16T23:30:56.284Z"
+  },
+  {
+    "id": "039",
+    "title": "Help guests choose their own pace",
+    "text": "Some visitors want a full itinerary; others want one good walk and a slow breakfast. A small range of local ideas can welcome both without prescribing how a holiday should look.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122109956805502062&id=61595061885990",
+    "contentId": "122109956805502062",
+    "evidence": "Business Suite published confirmation and matching public post detail",
+    "verifiedAt": "2026-10-16T23:31:02.738Z"
+  },
+  {
+    "id": "040",
+    "title": "Your favourite local recommendation",
+    "text": "What's the local recommendation you're always happy to give a guest? It could be a bakery, a walking route or a quiet spot you think deserves more love.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122109956907502062&id=61595061885990",
+    "contentId": "122109956907502062",
+    "evidence": "Business Suite published confirmation and matching public post detail",
+    "verifiedAt": "2026-10-16T23:31:08.392Z"
+  },
+  {
+    "id": "041",
+    "title": "Guests can leave a note",
+    "text": "A short thank-you, a favourite discovery or a memory from the stay: DigiStayBook gives guests a place to leave their own words alongside your house guidance. Take a look: https://digistaybook.com/wall/demo-cottage",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122109956967502062&id=61595061885990",
+    "contentId": "122109956967502062",
+    "evidence": "Business Suite published confirmation and matching public post detail",
+    "verifiedAt": "2026-10-16T23:31:20.359Z"
+  },
+  {
+    "id": "042",
+    "title": "Say what happens next",
+    "text": "After guests collect the keys, what should they do next? A simple instruction about the door, parking or where to find the welcome information can help an unfamiliar arrival feel straightforward.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122109957033502062&id=61595061885990",
+    "contentId": "122109957033502062",
+    "evidence": "Business Suite published confirmation and matching public post detail",
+    "verifiedAt": "2026-10-16T23:31:26.985Z"
+  },
+  {
+    "id": "043",
+    "title": "Heating without a guessing game",
+    "text": "Write down how to turn the heating on, how to adjust it and anything a guest should avoid changing. Check your directions against the controls in the room, not just the appliance name.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122109957063502062&id=61595061885990",
+    "contentId": "122109957063502062",
+    "evidence": "Business Suite published confirmation and matching public post detail",
+    "verifiedAt": "2026-10-16T23:31:32.792Z"
+  },
+  {
+    "id": "044",
+    "title": "Keep your favourites current",
+    "text": "A recommendation is worth revisiting occasionally. Check that the business still exists and that the link works. For hours, bookings and availability, point guests to the business's current information.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122109957117502062&id=61595061885990",
+    "contentId": "122109957117502062",
+    "evidence": "Business Suite published confirmation and matching public post detail",
+    "verifiedAt": "2026-10-16T23:31:38.849Z"
+  },
+  {
+    "id": "045",
+    "title": "A welcome shelf, not a puzzle",
+    "text": "If you provide tea, coffee or other welcome items, make them easy to find and explain what guests are welcome to use. A thoughtful touch works best when nobody has to guess.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122109957147502062&id=61595061885990",
+    "contentId": "122109957147502062",
+    "evidence": "Business Suite published confirmation and matching public post detail",
+    "verifiedAt": "2026-10-16T23:31:44.836Z"
+  },
+  {
+    "id": "046",
+    "title": "Think about early departures",
+    "text": "Would your checkout instructions still work for someone leaving before sunrise? Check lighting, key return and any access steps. An early departure deserves the same clarity as a daytime one.",
+    "status": "published_verified",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122109957219502062&id=61595061885990",
+    "contentId": "122109957219502062",
+    "evidence": "Business Suite published confirmation and matching public post detail",
+    "verifiedAt": "2026-10-16T23:31:50.929Z"
+  }
+]

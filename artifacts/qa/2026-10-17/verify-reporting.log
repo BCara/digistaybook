@@ -1,0 +1,6 @@
+(node:42376) MetadataLookupWarning: received unexpected error = All promises were rejected code = ENETUNREACH, EAI_AGAIN
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"providerOutcome":"unavailable","outcome":"critical","screeningStatus":"incomplete","contactDetailsOrLinkHold":false,"screeningReference":"9b45f48514e2fa3b7e141330","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"critical","screeningOutcome":"critical","screeningReference":"9b45f48514e2fa3b7e141330","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+PASS: owner-only paged ZIP source, excluded records, actual photo bytes, hidden-photo denial and open safety-case publication guard.
+PASS: actual report hide/dedupe/cooldown, neutral acknowledgement, multiple-report restoration, ownership/MFA guards, incomplete-screening review hold and deadline escalation. No email delivery claimed.

@@ -1,0 +1,20 @@
+[
+  {
+    "kind": "resetPassword",
+    "httpStatus": 200,
+    "providerId": "01a14901-3767-74bb-bbe3-0d73ce91b9e8",
+    "recipient": "delivered@resend.dev",
+    "from": "DigiStayBook <noreply@digistaybook.com>",
+    "linkOrigin": "https://digistaybook.com",
+    "simulator": true
+  },
+  {
+    "kind": "verifyEmail",
+    "httpStatus": 200,
+    "providerId": "01a14901-38c6-7c4e-b9d2-705b4aecbca3",
+    "recipient": "delivered@resend.dev",
+    "from": "DigiStayBook <noreply@digistaybook.com>",
+    "linkOrigin": "https://digistaybook.com",
+    "simulator": true
+  }
+]

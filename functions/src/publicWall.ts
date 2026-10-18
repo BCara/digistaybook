@@ -84,7 +84,9 @@ export function publicProperty(data: Record<string, any>, view: "public" | "stay
   return {
     name: text(data.name, 60), location: text(profile.location, 200),
     welcome: text(profile.welcome), hosts: text(profile.hosts, 100), hostPhoto: photo(profile.hostPhoto),
-    hostNotes: hostNotes(profile), theme: text(profile.theme, 30), colour: text(profile.colour, 30), cover: photo(profile.cover), guestPrompt: text(profile.guestPrompt, 240),
+    /* The hosts' own notes speak to someone staying, like the house
+       information, so the public wall carries memories only. */
+    hostNotes: view === "stay" ? hostNotes(profile) : [], theme: text(profile.theme, 30), colour: text(profile.colour, 30), cover: photo(profile.cover), guestPrompt: text(profile.guestPrompt, 240),
     /* The house guidance is the in-stay wall's whole reason for existing
        (D-013), so reaching that wall is what earns it: the stay token is the
        gate, and `resolveWallView` has already turned a caller without one

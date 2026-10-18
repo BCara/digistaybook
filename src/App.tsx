@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { embeddedWallSlug, stayRoute } from "./domain/wallAddress";
+import { applySeo, pageSeo } from "./seo";
 import { AppShell } from "./ui/AppShell";
 import { useLinkNavigation, useLocation } from "./ui/routing";
 import { AuthProvider } from "./ui/auth/AuthProvider";
@@ -8,6 +10,7 @@ import { PricingPage } from "./ui/pages/PricingPage";
 import { GuestWallPage } from "./ui/pages/GuestWallPage";
 import { StayWallPage } from "./ui/pages/StayWallPage";
 import { HostSignInPage } from "./ui/pages/HostSignInPage";
+import { AccountActionPage } from "./ui/pages/AccountActionPage";
 import { HostAccountPage } from "./ui/pages/HostAccountPage";
 import { HostDashboardPage } from "./ui/pages/HostDashboardPage";
 import { HostModerationPage } from "./ui/pages/HostModerationPage";
@@ -26,6 +29,8 @@ import { NotFoundPage } from "./ui/pages/NotFoundPage";
 import { DEMO_SLUG } from "./ui/wall/demoWall";
 
 function resolvePage(pathname: string) {
+  if (pathname === "/reset-password") return <AccountActionPage kind="resetPassword" />;
+  if (pathname === "/verify-email") return <AccountActionPage kind="verifyEmail" />;
   if (pathname === "/") return <LandingPage />;
   if (pathname === "/pricing") return <PricingPage />;
   if (pathname.startsWith("/wall/")) return <GuestWallPage propertySlug={pathname.slice("/wall/".length) || "property"} />;
@@ -120,6 +125,7 @@ export function App() {
   // away and rebuilt.
   const location = useLocation();
   useLinkNavigation(location);
+  useEffect(() => applySeo(pageSeo(location.pathname)), [location.pathname]);
   // Handbook §6.3.1: a guest never enters host or acquisition navigation.
   // The two guest addresses are matched apart rather than by one pattern wide
   // enough for both: only the in-stay address carries a second segment, and a

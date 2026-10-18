@@ -22,7 +22,7 @@ import { navigate } from "../routing";
 import { CanvasLine, CanvasParagraph } from "../host/CanvasFields";
 import { HostNoteStylePicker } from "../host/HostNoteStylePicker";
 import { PropertyShell } from "../host/PropertyShell";
-import { stayWallPath } from "../../domain/wallAddress";
+import { publicWallPath, stayWallPath } from "../../domain/wallAddress";
 import { WallPreview } from "../host/WallPreview";
 import { memoriesHeading } from "../wall/memoryHeading";
 import { EssentialMark, essentialMarkName } from "../wall/EssentialMark";
@@ -880,15 +880,43 @@ export function HostWallDesignPage({
       )}
       aside={mobileEditor ? undefined : themePicker}
     >
-      {/* The page opens on the wall itself. A title, a lede and a line about
-          who can reach this wall used to stand here, and all three said what
-          the banner overhead, the nav beside it and the wall below already
-          say. The one control left is the phone, in the canvas's own corner.
+      {/* Each wall opens on its name and one sentence on what it is for, the
+          way every other page of the property does, so a Host who arrives
+          from the nav knows which of the two walls they are writing on.
 
           The two walls used to be a switch here too. They are two rows in the
           nav on the left instead: they are different walls, not two states of
           one screen, and a Host asks for one of them the way they ask for
           moderation or billing. */}
+      <header className="design-intro" hidden={mobilePreview}>
+        <div className="design-intro-head">
+          <h2>{view === "public" ? "Public wall" : "Guest wall"}</h2>
+          {/* The wall as a visitor or a guest gets it, one click from the page
+              that writes it. The guest wall opens with its token, or it would
+              answer with the public wall instead. */}
+          {property.slug && (
+            <a
+              className="btn btn-secondary btn-sm"
+              href={view === "public" ? publicWallPath(property.slug) : stayWallPath(property.slug, property.stayToken)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              View wall
+            </a>
+          )}
+        </div>
+        <p className="design-intro-what">
+          {view === "public"
+            ? "Memories only: no house rules, Wi-Fi or check-out details."
+            : "Memories plus your house info: welcome, Wi-Fi, house rules and check-out."}
+        </p>
+        <p>
+          {view === "public"
+            ? "The page anyone can visit before they book. Choose whether to show it, then share the link or add it to your website."
+            : "What guests see when they scan your QR code during their stay. Click any text on the wall to change it."}
+        </p>
+      </header>
+
       {/* On the public wall, what it is for and what to do with it stand
           above the wall itself: the decision to have one, then the link and
           the embed code that are the two ways of using it. */}
@@ -998,7 +1026,6 @@ export function HostWallDesignPage({
 
               {view === "public" ? (
                 <>
-                  {hostNoteCards}
                   <MemoryChrome
                     property={property}
                     counts={draft.counts}

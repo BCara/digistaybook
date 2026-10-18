@@ -97,19 +97,31 @@ export function GuestReviewPanel({ propertyId, feedbackOnly = false, settingsOnl
     finally { setBusy(false); }
   }
   return <>
-    {/* One slim bar: the switch already names the setting, so a heading and a
-        paragraph restating it only pushed the memories down the page. */}
-    {!feedbackOnly && result && <section className={`approval-settings${settingsOnly ? " approval-settings-compact" : ""}`} aria-label="Memory approval">
+    {!feedbackOnly && result && !settingsOnly && <section className="approval-settings approval-card" aria-label="Memory approval">
+      {/* On the moderation page the switch is a card of its own: the shield
+          names what it guards, and the line under the title says what it does. */}
       <label className="switch approval-switch">
-        <input type="checkbox" aria-describedby={settingsOnly || result.reviewContent ? "approval-settings-note" : undefined} checked={result.reviewContent === true} disabled={busy} onChange={event => void setReviewContent(event.target.checked)} />
+        <svg className="approval-card-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 3 4.5 5.8v5.6c0 4.6 3.1 8.2 7.5 9.6 4.4-1.4 7.5-5 7.5-9.6V5.8Z" />
+        </svg>
+        <span className="approval-card-text">
+          <span className="switch-label" id="approval-card-title">Approve new memories</span>
+          <span className="approval-card-note" id="approval-card-note">Review submissions before they appear on your wall.</span>
+        </span>
+        <input type="checkbox" aria-labelledby="approval-card-title" aria-describedby="approval-card-note" checked={result.reviewContent === true} disabled={busy} onChange={event => void setReviewContent(event.target.checked)} />
+        <span className="switch-track" aria-hidden="true"><span className="switch-knob" /></span>
+        <span className="approval-switch-state" aria-hidden="true">{result.reviewContent ? "On" : "Off"}</span>
+      </label>
+    </section>}
+    {!feedbackOnly && result && settingsOnly && <section className="approval-settings approval-settings-compact" aria-label="Memory approval">
+      <label className="switch approval-switch">
+        <input type="checkbox" aria-describedby="approval-settings-note" checked={result.reviewContent === true} disabled={busy} onChange={event => void setReviewContent(event.target.checked)} />
         <span className="switch-track" aria-hidden="true"><span className="switch-knob" /></span>
         <span className="switch-label">Require approval for new memories</span>
         <span className="approval-switch-state" aria-hidden="true">{result.reviewContent ? "On" : "Off"}</span>
       </label>
-      {(settingsOnly || result.reviewContent) && <p id="approval-settings-note" className="approval-settings-note">{settingsOnly
-        ? result.reviewContent ? "New memories wait for approval after safety checks." : "Clear memories publish automatically after safety checks."
-        : "Every new memory waits for you to approve it."}</p>}
-      {settingsOnly && <a className="text-link approval-settings-link" href={`/host/property/${propertyId}/moderation#new-memories`}>Review waiting memories</a>}
+      <p id="approval-settings-note" className="approval-settings-note">{result.reviewContent ? "New memories wait for approval after safety checks." : "Clear memories publish automatically after safety checks."}</p>
+      <a className="text-link approval-settings-link" href={`/host/property/${propertyId}/moderation#new-memories`}>Review waiting memories</a>
     </section>}
     {settingsOnly && result && notice && <p className="form-feedback" role="status">{notice}</p>}
     {!settingsOnly && !collapsed && <section id={feedbackOnly ? undefined : "new-memories"} className={`guest-review${feedbackOnly ? "" : " moderation-panel"}`} aria-label={feedbackOnly ? "Private feedback inbox" : "Guest safety review"}>

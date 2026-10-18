@@ -21,7 +21,7 @@ export const wallThemes: readonly WallTheme[] = [
     colourways: colourways("Olive", "Bordeaux", "Ink Blue") },
   { id: "seaside", name: "Playful", note: "Bold rounded type, an arched cover, outlined blocks and a bright band under the memories.",
     colourways: colourways("Cobalt Peach", "Lagoon", "Berry") },
-  { id: "journal", name: "Rustic Guest Journal", note: "Typewriter headings, a polaroid cover, taped notes and a ruled guidance sheet.",
+  { id: "journal", name: "Journal", note: "Typewriter headings, a polaroid cover, taped notes and a ruled guidance sheet.",
     colourways: colourways("Rust", "Forest", "Plum") }
 ];
 export const wallColourIds: readonly WallColourId[] = ["sand", "sage", "ocean"];

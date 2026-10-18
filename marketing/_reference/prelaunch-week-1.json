@@ -1,0 +1,192 @@
+{
+  "campaign": "Prelaunch week 1",
+  "dates": "Friday 16 to Thursday 22 October 2026",
+  "timezone": "Sydney time",
+  "pageUrl": "https://www.facebook.com/profile.php?id=61595061885990",
+  "posts": [
+    {
+      "id": "01",
+      "day": "Fri 16",
+      "date": "Friday 16 October",
+      "time": "7:30 pm",
+      "theme": "Say hello",
+      "goal": "Tell people the Page exists and what's coming, so early followers know what they're following.",
+      "image": {
+        "type": "card",
+        "eyebrow": "COMING SOON",
+        "headline": [
+          "A guestbook your",
+          "rental never had."
+        ],
+        "body": "One QR code on the counter. House guidance, local favourites and a wall of guest memories.",
+        "ticks": [
+          "No app for guests",
+          "No guest accounts",
+          "Made for short-term rental hosts"
+        ]
+      },
+      "alt": "DigiStayBook logo above the words 'A guestbook your rental never had', with three points: no app for guests, no guest accounts, made for short-term rental hosts.",
+      "caption": "Hello from DigiStayBook 👋\n\nWe're building a digital guestbook for short-term rental hosts.\n\nOne QR code sits on the counter. Guests scan it with their phone camera to find your house guidance and your local favourites, and to leave a memory for the next people who stay.\n\nNo app to download. No account to create.\n\nWe're in the final stretch before launch. Follow the Page to see how it works over the next week, and to hear first when we open the doors.\n\n#ShortTermRental #HolidayRental #AirbnbHost #DigitalGuestbook #DigiStayBook",
+      "status": "Posted"
+    },
+    {
+      "id": "02",
+      "day": "Sat 17",
+      "date": "Saturday 17 October",
+      "time": "9:00 am",
+      "theme": "The questions every host knows",
+      "goal": "Name the problem hosts feel every changeover: the same questions, again and again.",
+      "image": {
+        "type": "phone",
+        "eyebrow": "SOUND FAMILIAR?",
+        "headline": [
+          "What's the Wi-Fi?",
+          "Which bin goes out?"
+        ],
+        "body": "Answer once. Guests find it in one tap.",
+        "screenshot": "stay-essentials.jpg",
+        "crop": [
+          0,
+          880,
+          750,
+          1624
+        ],
+        "phoneWidth": 780
+      },
+      "alt": "A phone showing the DigiStayBook demo guest page with 'Your stay essentials' buttons for Wi-Fi, Bins, Checkout and Heating.",
+      "caption": "What's the Wi-Fi password?\nWhich bin goes out, and when?\nWhat time is checkout?\nHow does the heating work?\n\nIf you host, you've answered these more times than you can count, usually by message and usually late at night.\n\nWith DigiStayBook you write the answers once. Guests scan the QR code in the house and find them in a single tap: Wi-Fi, bins, checkout, heating, whatever your place needs.\n\nThe screenshot is from our demo property, Seabreeze Cottage.\n\nHosts: which question do you get asked most? Tell us below 👇\n\n#ShortTermRental #HolidayLet #AirbnbHost #HostTips #DigiStayBook",
+      "status": "Scheduled"
+    },
+    {
+      "id": "03",
+      "day": "Sun 18",
+      "date": "Sunday 18 October",
+      "time": "7:30 pm",
+      "theme": "How it works",
+      "goal": "Explain the product in three simple steps.",
+      "image": {
+        "type": "qr",
+        "eyebrow": "HOW IT WORKS",
+        "headline": [
+          "Three steps.",
+          "No app."
+        ],
+        "steps": [
+          "Put the QR display on the counter",
+          "Guests scan it with their camera",
+          "They read your guidance and leave a memory"
+        ],
+        "screenshot": "qr-card.png"
+      },
+      "alt": "A printed DigiStayBook QR display for the demo property Seabreeze Cottage, next to three steps: put the QR display on the counter, guests scan it with their camera, they read your guidance and leave a memory.",
+      "caption": "How DigiStayBook works, in three steps:\n\n1️⃣ You set up your property's page once: welcome note, house guidance, local tips.\n2️⃣ You print the QR display and pop it on the kitchen counter.\n3️⃣ Guests scan it with their phone camera. They read everything they need, then leave a message or photo on your guest wall before they go.\n\nNo app download and no sign-up for your guests. It opens straight in the browser.\n\nLaunching soon. Follow along so you don't miss it.\n\n#ShortTermRental #HolidayRental #AirbnbHost #QRCode #DigiStayBook",
+      "status": "Scheduled"
+    },
+    {
+      "id": "04",
+      "day": "Mon 19",
+      "date": "Monday 19 October",
+      "time": "12:30 pm",
+      "theme": "Sneak peek: the guest wall",
+      "goal": "Show the emotional side: the memories guests leave behind.",
+      "image": {
+        "type": "phone",
+        "eyebrow": "SNEAK PEEK",
+        "headline": [
+          "The memories",
+          "guests leave behind."
+        ],
+        "body": "Every stay adds to your property's wall.",
+        "screenshot": "wall-memory.jpg",
+        "crop": [
+          0,
+          560,
+          750,
+          1624
+        ]
+      },
+      "alt": "A phone showing the DigiStayBook demo guest wall with a coastal photo and a guest message about walking to the lighthouse every morning.",
+      "caption": "Remember the paper guestbook on the hall table? 📖\n\nThe best ones were full of little stories: the walk everyone loved, the café worth the detour, the family who came back every summer.\n\nDigiStayBook brings that back for the way people travel now. Guests leave a message and a photo from their phone, and it joins your property's guest wall for the next guests to read.\n\nThis is a sneak peek from our demo property. The cottage and the messages are made up for the demo, but the wall is the real thing.\n\n#GuestBook #ShortTermRental #HolidayRental #AirbnbHost #DigiStayBook",
+      "status": "Scheduled"
+    },
+    {
+      "id": "05",
+      "day": "Tue 20",
+      "date": "Tuesday 20 October",
+      "time": "7:30 pm",
+      "theme": "Your local favourites",
+      "goal": "Position the host as the local expert; the tips are part of the stay.",
+      "image": {
+        "type": "phone",
+        "eyebrow": "YOUR LOCAL KNOWLEDGE",
+        "headline": [
+          "The tips only",
+          "a host would know."
+        ],
+        "body": "Share your favourite places, right where guests look.",
+        "screenshot": "stay-essentials.jpg",
+        "crop": [
+          0,
+          520,
+          750,
+          1624
+        ]
+      },
+      "alt": "A phone showing a tip from the demo hosts on the DigiStayBook guest page: 'Our favourite: the bakery behind the lighthouse. Go before 9am or the pasties are gone.'",
+      "caption": "The best part of staying somewhere new? The tips you'd never find on your own. 🥐\n\nThe bakery behind the lighthouse. The beach that's quiet at sunset. The pub with the open fire.\n\nYou already know these places. DigiStayBook gives you somewhere to share them, right where your guests look first. Pin your favourites to the top of your property's page and they're there for every stay.\n\nThe tip in the picture comes from our demo cottage.\n\nHosts: what's the one local spot you always recommend? 👇\n\n#LocalTips #ShortTermRental #HolidayRental #AirbnbHost #DigiStayBook",
+      "status": "Scheduled"
+    },
+    {
+      "id": "06",
+      "day": "Wed 21",
+      "date": "Wednesday 21 October",
+      "time": "7:30 pm",
+      "theme": "Simple for guests, in your control",
+      "goal": "Answer the first objections: guests won't download apps, and hosts worry about what gets posted.",
+      "image": {
+        "type": "card",
+        "eyebrow": "BUILT FOR REAL STAYS",
+        "headline": [
+          "Easy for guests.",
+          "Yours to control."
+        ],
+        "body": "Guests scan and go. You decide what stays on your wall.",
+        "ticks": [
+          "Opens in the phone's browser",
+          "No guest sign-up",
+          "Turn on approval for new memories",
+          "Hide or remove any post"
+        ]
+      },
+      "alt": "Text card: 'Easy for guests. Yours to control.' with four points: opens in the phone's browser, no guest sign-up, turn on approval for new memories, hide or remove any post.",
+      "caption": "Two questions hosts often ask about digital guestbooks:\n\n\"My guests won't download an app.\"\nThey don't have to. DigiStayBook opens in the phone's browser straight from the QR code. No app, no account, no password.\n\n\"What if someone posts something I don't want there?\"\nYou're in control. Every new memory goes through automatic safety checks, you can turn on approval so nothing appears until you say so, and you can hide or remove any post from your dashboard.\n\nWhat else would you want to know before using a digital guestbook? Ask away below.\n\n#ShortTermRental #HolidayRental #AirbnbHost #HostLife #DigiStayBook",
+      "status": "Scheduled"
+    },
+    {
+      "id": "07",
+      "day": "Thu 22",
+      "date": "Thursday 22 October",
+      "time": "7:30 pm",
+      "theme": "Ask the hosts",
+      "goal": "Start conversations and learn what hosts want before launch.",
+      "image": {
+        "type": "card",
+        "eyebrow": "HOSTS, WE'RE ASKING YOU",
+        "headline": [
+          "What do you wish",
+          "every guest knew?"
+        ],
+        "body": "Tell us in the comments. We're building DigiStayBook around your answers.",
+        "ticks": [],
+        "bubbles": [
+          "Where to park",
+          "How the shower works",
+          "The beach worth the detour"
+        ]
+      },
+      "alt": "Text card asking hosts: 'What do you wish every guest knew?' with example answers in speech bubbles: where to park, how the shower works, the beach worth the detour.",
+      "caption": "A question for every host out there 🏡\n\nWhat's the one thing you wish every guest knew before they walked through the door?\n\nHow the shower works? Where to park? The beach that's worth the extra ten minutes?\n\nWe're getting DigiStayBook ready for launch, and your answers help us shape the welcome page that guests see first.\n\nDrop yours in the comments, and follow the Page to be the first to try it.\n\n#ShortTermRental #HolidayRental #AirbnbHost #HostCommunity #DigiStayBook",
+      "status": "Scheduled"
+    }
+  ]
+}

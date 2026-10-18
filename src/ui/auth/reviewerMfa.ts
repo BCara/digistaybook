@@ -1,10 +1,11 @@
 import {
   EmailAuthProvider, GoogleAuthProvider, TotpMultiFactorGenerator,
   getMultiFactorResolver, multiFactor, reauthenticateWithCredential,
-  reauthenticateWithPopup, reload, sendEmailVerification,
+  reauthenticateWithPopup, reload,
   type Auth, type MultiFactorError, type MultiFactorResolver, type TotpSecret, type User
 } from "firebase/auth";
 import { getFirebaseAuth } from "../../lib/firebase";
+import { requestAuthEmail } from "./authEmails";
 
 export type MfaChallenge = { resolver: MultiFactorResolver; factorUid: string; kind: "sign-in" | "reauthenticate" };
 export function mfaChallenge(auth: Auth, error: unknown, kind: MfaChallenge["kind"] = "sign-in"): MfaChallenge | null {
@@ -63,5 +64,7 @@ export async function enrollReviewer(user: User, secret: TotpSecret, code: strin
   await multiFactor(user).enroll(TotpMultiFactorGenerator.assertionForEnrollment(secret, code.trim()), "Safety Review authenticator");
 }
 export async function verifyReviewerEmail(user: User) {
-  await sendEmailVerification(user);
+  const account = await getFirebaseAuth();
+  if (!account?.auth.currentUser || account.auth.currentUser.uid !== user.uid || user.isAnonymous) throw new Error("Sign in again to verify your email.");
+  await requestAuthEmail("verifyEmail");
 }

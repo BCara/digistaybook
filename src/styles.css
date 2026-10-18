@@ -1776,8 +1776,11 @@ textarea { min-height: 132px; resize: vertical; }
 
 /* A property screen is a banner, a column of views and a working surface
    beside them — three things abreast, not a page of prose — so it is given
-   more of the window than the reading measure the marketing pages use. */
-.property-shell { display: grid; width: min(1240px, 100% - 2 * var(--gutter)); }
+   more of the window than the reading measure the marketing pages use. It
+   is the wall editor's width — the canvas with the phone beside it — on every
+   one of the property's screens, so moving between them never shifts the
+   frame. */
+.property-shell { display: grid; width: min(1664px, 100% - 2 * var(--gutter)); }
 
 .property-banner { padding-bottom: clamp(18px, 2.4vw, 26px); border-bottom: 1px solid var(--rule); }
 .property-banner .eyebrow { margin-bottom: clamp(14px, 2vw, 20px); }
@@ -2003,10 +2006,14 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
    and the thing they came to write; the paper moved to the column on the left
    and the rest was already said by the banner and the nav. What is left is the
    phone, kept in the canvas's own top corner. */
-.design-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px 20px; margin-bottom: 12px; }
-
-/* Reserve the preview space so toggling it never moves or resizes the editor. */
-.design-page { width: min(1664px, 100% - 2 * var(--gutter)); }
+/* It is laid on the same columns as the canvas and the phone below it, so the
+   button stands over the canvas's own right edge rather than out over the
+   empty column the phone opens into. */
+.design-controls {
+  display: grid; grid-template-columns: minmax(0, 1fr) clamp(300px, 27.5%, 390px);
+  gap: 10px clamp(20px, 2.6vw, 40px); margin-bottom: 12px;
+}
+.design-controls > * { justify-self: end; }
 
 .design-body { display: grid; }
 /* The phone opens down the right of the canvas rather than in front of it: a
@@ -2027,7 +2034,7 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 /* Under about a laptop there is no room for two walls abreast, and squeezing
    the canvas to make room is the wrong trade: the phone drops underneath. */
 @media (max-width: 1340px) {
-  .design-body { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+  .design-body, .design-controls { grid-template-columns: minmax(0, 1fr); justify-items: center; }
   .design-body.with-phone .design-phone { position: static; padding-top: 8px; }
 }
 .design-phone { display: grid; gap: 14px; width: min(390px, 100%); }
@@ -2371,10 +2378,15 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
    read twenty of them at twenty angles.
    ----------------------------------------------------------------------- */
 
-.moderation-page { max-width: 1080px; }
-.moderation-intro { margin-bottom: 24px; }
-.moderation-intro h2 { margin: 0; font-size: var(--step-2); }
-.moderation-intro p { margin: 8px 0 0; max-width: 64ch; font-size: var(--step--1); color: var(--text-muted); }
+/* The queue keeps the width it was drawn at, but the cap is on its column,
+   not the frame, so the banner and the nav stand where every other property
+   screen puts them. */
+.moderation-page .property-shell-main { max-width: 830px; }
+.moderation-intro, .design-intro { margin-bottom: 24px; }
+.moderation-intro h2, .design-intro h2 { margin: 0; font-size: var(--step-2); }
+.moderation-intro p, .design-intro p { margin: 8px 0 0; max-width: 64ch; font-size: var(--step--1); color: var(--text-muted); }
+.design-intro-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.design-intro p.design-intro-what { margin-top: 4px; font-weight: 600; color: var(--text); }
 .property-shell .approval-settings {
   display: grid; gap: 2px; margin-bottom: 20px; padding: 8px 16px 10px;
   background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--sage-700);

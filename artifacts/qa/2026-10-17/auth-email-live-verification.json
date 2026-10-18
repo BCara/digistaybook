@@ -1,0 +1,168 @@
+{
+  "verifiedAt": "2026-10-17T08:38:37.757Z",
+  "parity": [
+    {
+      "file": "assets/exportArchive-WsZe26HF.js",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "assets/hammered-card.svg",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "assets/harbour-marble.jpg",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "assets/harbour-marble.svg",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "assets/index-BO3Y_ZPA.css",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "assets/index-Dg7zf5Wy.js",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "assets/index.esm-B1AeX9fu.js",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "assets/index.esm-Cq1AKoko.js",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "assets/index.esm-CsBbLoF_.js",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "assets/index.esm-DBJwBeOW.js",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "assets/index.esm-XmpyUE8g.js",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "assets/logo-long-B5vI4r0p.png",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "assets/sage-floral-border.svg",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "assets/sage-floral-corner-bottom.svg",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "index.html",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "logo.jpg",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "wall/cover.webp",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "wall/memory-coast.webp",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "wall/memory-evening.webp",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "wall/memory-fire.webp",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "wall/memory-games.webp",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "wall/memory-garden.webp",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "wall/memory-table.webp",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "wall/memory-tide.webp",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "wall/memory-window.webp",
+      "status": 200,
+      "matches": true
+    }
+  ],
+  "routes": [
+    {
+      "path": "/reset-password",
+      "status": 200
+    },
+    {
+      "path": "/verify-email",
+      "status": 200
+    },
+    {
+      "path": "/host/sign-in",
+      "status": 200
+    }
+  ],
+  "functions": [
+    {
+      "name": "sendPasswordReset",
+      "state": "ACTIVE",
+      "revision": "sendpasswordreset-00001-nat",
+      "serviceAccount": "functions-runtime@digistaybook-cbert.iam.gserviceaccount.com"
+    },
+    {
+      "name": "sendAccountVerification",
+      "state": "ACTIVE",
+      "revision": "sendaccountverification-00001-luf",
+      "serviceAccount": "functions-runtime@digistaybook-cbert.iam.gserviceaccount.com"
+    }
+  ],
+  "ttl": [
+    {
+      "group": "authEmailRequests",
+      "state": "CREATING"
+    },
+    {
+      "group": "authEmailLimits",
+      "state": "CREATING"
+    }
+  ]
+}

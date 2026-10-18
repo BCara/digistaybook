@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import {
   actionCopy,
   actionsUnavailable,
@@ -23,6 +23,22 @@ import type { QueueState } from "./useModerationQueue";
  * how long is left on it, and what may be done about it.
  */
 
+/** Line marks drawn beside an action's words. Never the only label. */
+function Mark({ children, filled = false }: { children: ReactNode; filled?: boolean }) {
+  return (
+    <svg className={`queue-mark${filled ? " is-filled" : ""}`} viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+      {children}
+    </svg>
+  );
+}
+const star = <path d="m10 2.6 2.3 4.7 5.1.7-3.7 3.6.9 5.1L10 14.3l-4.6 2.4.9-5.1L2.6 8l5.1-.7Z" />;
+const actionMarks: Partial<Record<PostAction, ReactNode>> = {
+  pin: <Mark><path d="M7 2.8h6M8 2.8v5.4L5.4 11h9.2L12 8.2V2.8M10 11v6.2" /></Mark>,
+  unpin: <Mark>{star}</Mark>,
+  publish: <Mark><path d="M2.2 10S5 4.8 10 4.8s7.8 5.2 7.8 5.2-2.8 5.2-7.8 5.2S2.2 10 2.2 10Z" /><circle cx="10" cy="10" r="2.3" /></Mark>,
+  delete: <Mark><path d="M3.5 5.5h13M8 5.5V3.5h4v2M5.2 5.5l.8 11h8l.8-11" /></Mark>
+};
+
 /**
  * What a memory's state is, in a pill. A memory that is simply on the wall
  * gets none: its section already says so, and a pill on every row of a long
@@ -40,7 +56,12 @@ function StateLabel({ post }: { post: ModeratedPost }) {
   if (!label && !sla) return null;
   return (
     <p className="queue-state">
-      {label && <span className={`state-pill visibility-${post.visibility}${post.pinned ? " is-pinned" : ""}`}>{label}</span>}
+      {label && (
+        <span className={`state-pill visibility-${post.visibility}${post.pinned ? " is-pinned" : ""}`}>
+          {post.pinned && post.visibility === "visible" && <Mark filled>{star}</Mark>}
+          {label}
+        </span>
+      )}
       {sla && (
         // The deadline is shown even once it has passed, because "escalated
         // three days ago" is the thing a Host most needs to know and least
@@ -108,21 +129,22 @@ function ActionButtons({
       {lead && (
         <button
           type="button"
-          className={`btn btn-sm ${
-            actionCopy[lead].destructive ? "btn-destructive" : post.visibility === "visible" ? "btn-secondary" : "btn-primary"
-          }`}
+          className={`queue-lead${actionCopy[lead].destructive ? " is-destructive" : ""}`}
           // Only this memory's buttons go quiet while its own action is in
           // flight; the rest of the queue stays workable.
           disabled={busy}
           onClick={() => run(lead)}
         >
+          {actionMarks[lead]}
           {label(lead)}
         </button>
       )}
       {rest.length > 0 && (
         <details className="queue-more" ref={menu}>
-          <summary className="btn btn-sm btn-ghost" aria-label="More actions">
-            More <span aria-hidden="true">▾</span>
+          <summary className="queue-more-toggle" aria-label="More actions" title="More actions">
+            <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+              <circle cx="4" cy="10" r="1.5" /><circle cx="10" cy="10" r="1.5" /><circle cx="16" cy="10" r="1.5" />
+            </svg>
           </summary>
           <div className="queue-more-menu">
             {rest.map((action) => (
@@ -175,9 +197,8 @@ function QueueCard({ post, state }: { post: ModeratedPost; state: QueueState }) 
 
   return (
     <article className={`queue-note${post.visibility === "visible" && post.pinned ? " is-pinned" : ""}`}>
-      {/* A row, not a card: once a wall has a season of memories on it a Host
-          scans down a list, so the words sit on the left and what may be done
-          about them lines up on the right. */}
+      {/* The words sit on the left and what may be done about them lines up
+          on the right, so a long wall still scans as a list. */}
       <div className="queue-note-body">
         {post.photo && (
           <div className="note-photo">
@@ -206,7 +227,7 @@ function QueueCard({ post, state }: { post: ModeratedPost; state: QueueState }) 
             {author && <b>{author}</b>}
             {post.createdAt && (
               <time dateTime={post.createdAt}>
-                {post.stayedOn ? `Stayed ${post.stayedOn}` : `Posted ${formatDate(post.createdAt)}`}
+                {post.stayedOn ? `Stayed ${post.stayedOn}` : author ? formatDate(post.createdAt) : `Posted ${formatDate(post.createdAt)}`}
               </time>
             )}
           </span>
@@ -271,7 +292,14 @@ export function ModerationQueue({ posts, state }: { posts: ModeratedPost[]; stat
         return section.id === "removed" ? (
           <details className={`queue-section queue-${section.id}`} key={section.id}>
             <summary>
+              <svg className="queue-removed-mark" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                <path d="M3.5 5.5h13M8 5.5V3.5h4v2M5.2 5.5l.8 11h8l.8-11" />
+              </svg>
               <h3 id={`queue-${section.id}`}>{heading}</h3>
+              <span className="queue-removed-view" aria-hidden="true">
+                <span className="queue-removed-word" />
+                <svg viewBox="0 0 20 20" focusable="false"><path d="m8 5 5 5-5 5" /></svg>
+              </span>
             </summary>
             {body}
           </details>

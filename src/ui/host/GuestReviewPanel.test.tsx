@@ -24,7 +24,7 @@ it("persists the property review switch through the server and reflects the save
     ? { data: { posts: [], feedback: [], reviewContent: false } }
     : { data: { reviewContent: true } });
   render(<GuestReviewPanel propertyId="cottage" />);
-  const toggle = await screen.findByRole("checkbox", { name: "Require approval for new memories" });
+  const toggle = await screen.findByRole("checkbox", { name: "Approve new memories" });
   expect(toggle).not.toBeChecked();
   fireEvent.click(toggle);
   await waitFor(() => expect(callable).toHaveBeenCalledWith("setGuestReviewPolicy", { propertyId: "cottage", reviewContent: true }));

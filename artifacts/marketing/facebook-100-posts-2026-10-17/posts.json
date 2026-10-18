@@ -1,0 +1,702 @@
+[
+  {
+    "id": "001",
+    "category": "Product",
+    "title": "A thoughtful welcome",
+    "text": "Welcome to DigiStayBook. One QR display gives your guests a place to find house guidance, discover your local favourites and leave memories from their stay. A thoughtful welcome can start with something simple. Explore: https://digistaybook.com",
+    "status": "prepared"
+  },
+  {
+    "id": "002",
+    "category": "Arrival",
+    "title": "Think like a tired traveller",
+    "text": "Try reading your arrival instructions as if you've just stepped off a long flight. Is the entrance obvious? Is the key collection clear? A calm arrival starts with details guests can find quickly.",
+    "status": "prepared"
+  },
+  {
+    "id": "003",
+    "category": "House guidance",
+    "title": "The Wi-Fi test",
+    "text": "A useful Wi-Fi note needs both the network name and the password. Check the capital letters, test it on a phone and make the information easy to find. Small detail, welcome relief.",
+    "status": "prepared"
+  },
+  {
+    "id": "004",
+    "category": "Local tips",
+    "title": "Recommend one good breakfast",
+    "text": "A long list of cafes can leave guests with another decision to make. Start with one breakfast spot you know well and explain why you like it. Personal context makes a recommendation useful.",
+    "status": "prepared"
+  },
+  {
+    "id": "005",
+    "category": "Guest comfort",
+    "title": "A place for the suitcase",
+    "text": "Walk into your guest bedroom carrying a suitcase. Where would you open it? Somewhere practical to unpack can make a small room feel much easier to settle into.",
+    "status": "prepared"
+  },
+  {
+    "id": "006",
+    "category": "Checkout",
+    "title": "A clear last morning",
+    "text": "Checkout instructions are easiest to follow when guests can see them before the last morning. Put the time, key return and essential final steps together in one short note.",
+    "status": "prepared"
+  },
+  {
+    "id": "007",
+    "category": "Guest memories",
+    "title": "More than a rating",
+    "text": "A guestbook can hold the small moments that don't fit into a star rating: a favourite walk, a family breakfast or a quiet evening on the deck. Those are the memories DigiStayBook is made for.",
+    "status": "prepared"
+  },
+  {
+    "id": "008",
+    "category": "Host workflow",
+    "title": "Answer the next question",
+    "text": "Keep a note of the questions guests ask during each stay. If the same one comes up again, it's a good candidate for your house guidance. Let real questions shape the information you provide.",
+    "status": "prepared"
+  },
+  {
+    "id": "009",
+    "category": "Melbourne hosting",
+    "title": "A visitor's version of your suburb",
+    "text": "You know your neighbourhood by habit. A visitor doesn't. The nearest breakfast option, a simple walking route and one local favourite can help guests feel oriented sooner.",
+    "status": "prepared"
+  },
+  {
+    "id": "010",
+    "category": "Conversation",
+    "title": "The repeat question",
+    "text": "Hosts: what's the question you've answered so often you could type it with your eyes closed? Wi-Fi, parking, heating or something completely unexpected?",
+    "status": "prepared"
+  },
+  {
+    "id": "011",
+    "category": "Product",
+    "title": "No guest app",
+    "text": "Guests already have enough to organise when they travel. DigiStayBook opens in a browser, with no guest app to download and no guest account to create. See the idea in action: https://digistaybook.com/wall/demo-cottage",
+    "status": "prepared"
+  },
+  {
+    "id": "012",
+    "category": "Arrival",
+    "title": "Photograph the right entrance",
+    "text": "If your property has a side gate, shared driveway or entrance that doesn't face the street, a clear arrival photo can help. Show the route a first-time visitor will actually take.",
+    "status": "prepared"
+  },
+  {
+    "id": "013",
+    "category": "House guidance",
+    "title": "Bin day in plain English",
+    "text": "Instead of writing only 'bins Tuesday', explain which bin, where it goes and when to bring it back. Instructions that feel obvious to a local can be a puzzle to a visitor.",
+    "status": "prepared"
+  },
+  {
+    "id": "014",
+    "category": "Local tips",
+    "title": "The rainy-day recommendation",
+    "text": "Give guests an option for a wet afternoon as well as a sunny one. Think about something nearby that you would enjoy yourself, and remind visitors to check current opening times.",
+    "status": "prepared"
+  },
+  {
+    "id": "015",
+    "category": "Guest comfort",
+    "title": "Make charging easy",
+    "text": "Look at the room from the bed and sofa. Can a guest charge a phone without moving furniture? A clearly available power point is a practical part of a comfortable stay.",
+    "status": "prepared"
+  },
+  {
+    "id": "016",
+    "category": "Checkout",
+    "title": "Keep the list proportionate",
+    "text": "Read your checkout list from the guest's perspective. Keep the essential steps easy to spot and explain anything unusual. A short, clear finish can leave a warmer final impression.",
+    "status": "prepared"
+  },
+  {
+    "id": "017",
+    "category": "Guest memories",
+    "title": "Ask about a moment",
+    "text": "A gentle guestbook prompt can be as simple as 'What was your favourite moment here?' It gives people a starting point without turning their holiday into a questionnaire.",
+    "status": "prepared"
+  },
+  {
+    "id": "018",
+    "category": "Host workflow",
+    "title": "One source for the basics",
+    "text": "If checkout time appears in three different places, check that all three agree. Consistent information helps guests make plans and saves you from correcting mixed messages later.",
+    "status": "prepared"
+  },
+  {
+    "id": "019",
+    "category": "Melbourne hosting",
+    "title": "Explain the local trip",
+    "text": "When recommending a neighbourhood outing, say how guests might get there and what to check before leaving. A useful local tip helps with the journey as well as the destination.",
+    "status": "prepared"
+  },
+  {
+    "id": "020",
+    "category": "Conversation",
+    "title": "Your smallest useful touch",
+    "text": "What's the smallest thing you've added to a holiday rental that guests have noticed? A reading lamp, luggage stand, labelled switch or something else? We'd love to hear the practical ideas.",
+    "status": "prepared"
+  },
+  {
+    "id": "021",
+    "category": "Product",
+    "title": "House guidance above the memories",
+    "text": "DigiStayBook brings practical house information and guest memories together. Your guidance sits above the guest wall, so visitors can find the essentials before browsing the notes and photos. Explore: https://digistaybook.com",
+    "status": "prepared"
+  },
+  {
+    "id": "022",
+    "category": "Arrival",
+    "title": "Check the arrival light",
+    "text": "Visit your entrance after dark. Can you see the path, the door number and the key collection point? Your daytime arrival walkthrough may miss what an evening guest needs.",
+    "status": "prepared"
+  },
+  {
+    "id": "023",
+    "category": "House guidance",
+    "title": "The appliance quick start",
+    "text": "For an unfamiliar appliance, start with the few steps needed for normal use. Identify the relevant buttons and the usual setting. Keep the full manufacturer's instructions available for anything more detailed.",
+    "status": "prepared"
+  },
+  {
+    "id": "024",
+    "category": "Local tips",
+    "title": "Say why you recommend it",
+    "text": "A recommendation becomes more useful with a reason. 'Good for an early breakfast' or 'a quiet place for a walk' tells guests more than a name alone. Specific beats a copied list.",
+    "status": "prepared"
+  },
+  {
+    "id": "025",
+    "category": "Guest comfort",
+    "title": "Check the reading light",
+    "text": "A bright ceiling light and a useful reading light do different jobs. Try sitting where a guest might read in the evening and check whether the lighting feels comfortable there.",
+    "status": "prepared"
+  },
+  {
+    "id": "026",
+    "category": "Checkout",
+    "title": "Key return without guesswork",
+    "text": "Describe exactly where keys should go at checkout. If a lockbox is involved, explain the final step clearly. The end of the stay shouldn't depend on a last-minute message.",
+    "status": "prepared"
+  },
+  {
+    "id": "027",
+    "category": "Guest memories",
+    "title": "Make sharing optional",
+    "text": "A guestbook invitation should feel like an invitation. Some guests will love leaving a photo or note; others will prefer a quiet stay. Both deserve the same warm welcome.",
+    "status": "prepared"
+  },
+  {
+    "id": "028",
+    "category": "Host workflow",
+    "title": "A ten-minute information audit",
+    "text": "Before your next arrival, spend ten minutes checking the basics: access, Wi-Fi, heating, bins and checkout. Read the instructions against what is actually in the property today.",
+    "status": "prepared"
+  },
+  {
+    "id": "029",
+    "category": "Melbourne hosting",
+    "title": "A recommendation for a short stay",
+    "text": "A guest with one free afternoon needs different ideas from someone staying a week. Offer a small, realistic outing as well as the longer day trip. Time is part of the recommendation.",
+    "status": "prepared"
+  },
+  {
+    "id": "030",
+    "category": "Conversation",
+    "title": "The first thing you check",
+    "text": "When you arrive at a holiday rental yourself, what do you look for first? The Wi-Fi, a cup of tea, somewhere to unpack or the nearest place to eat?",
+    "status": "prepared"
+  },
+  {
+    "id": "031",
+    "category": "Product",
+    "title": "A QR code with a purpose",
+    "text": "A QR display is useful when guests know what it opens. DigiStayBook brings house guidance, local favourites and a guest wall into the browser. A short label beside the code can set that expectation.",
+    "status": "prepared"
+  },
+  {
+    "id": "032",
+    "category": "Arrival",
+    "title": "The five-minute walkthrough",
+    "text": "Start outside your property and follow your own check-in instructions on your phone. Notice every place where you rely on memory. Those are the details a new guest may need explained.",
+    "status": "prepared"
+  },
+  {
+    "id": "033",
+    "category": "House guidance",
+    "title": "Label the surprising switch",
+    "text": "If a switch does something a guest wouldn't expect, a clear label can help. Think outdoor lights, extractor fans and unusual heating controls. Good guidance starts with the small points of confusion.",
+    "status": "prepared"
+  },
+  {
+    "id": "034",
+    "category": "Local tips",
+    "title": "Include a nearby easy option",
+    "text": "Not every guest wants a big day out. Include something simple close to the property: a pleasant walk, an easy coffee stop or somewhere to sit outside. Useful can be wonderfully ordinary.",
+    "status": "prepared"
+  },
+  {
+    "id": "035",
+    "category": "Guest comfort",
+    "title": "Give the bedside table a job",
+    "text": "A bedside surface can hold a phone, a glass of water and a book. Check there is room for a guest's belongings alongside your decor. Practical space is part of feeling welcome.",
+    "status": "prepared"
+  },
+  {
+    "id": "036",
+    "category": "Checkout",
+    "title": "Explain rather than surprise",
+    "text": "If something at departure needs special care, tell guests early and explain it clearly. A surprise instruction on checkout morning is harder to plan around than a note available throughout the stay.",
+    "status": "prepared"
+  },
+  {
+    "id": "037",
+    "category": "Guest memories",
+    "title": "A photo can tell a small story",
+    "text": "The most memorable guestbook photo doesn't need to be a perfect property photograph. It might be breakfast on the balcony or a favourite corner for reading. Encourage moments, with people's permission.",
+    "status": "prepared"
+  },
+  {
+    "id": "038",
+    "category": "Host workflow",
+    "title": "Use guest language",
+    "text": "If guests call it 'the heater', make sure your instructions do too. Familiar words are easier to search for and understand than model numbers or the terminology from an installation manual.",
+    "status": "prepared"
+  },
+  {
+    "id": "039",
+    "category": "Melbourne hosting",
+    "title": "Help guests choose their own pace",
+    "text": "Some visitors want a full itinerary; others want one good walk and a slow breakfast. A small range of local ideas can welcome both without prescribing how a holiday should look.",
+    "status": "prepared"
+  },
+  {
+    "id": "040",
+    "category": "Conversation",
+    "title": "Your favourite local recommendation",
+    "text": "What's the local recommendation you're always happy to give a guest? It could be a bakery, a walking route or a quiet spot you think deserves more love.",
+    "status": "prepared"
+  },
+  {
+    "id": "041",
+    "category": "Product",
+    "title": "Guests can leave a note",
+    "text": "A short thank-you, a favourite discovery or a memory from the stay: DigiStayBook gives guests a place to leave their own words alongside your house guidance. Take a look: https://digistaybook.com/wall/demo-cottage",
+    "status": "prepared"
+  },
+  {
+    "id": "042",
+    "category": "Arrival",
+    "title": "Say what happens next",
+    "text": "After guests collect the keys, what should they do next? A simple instruction about the door, parking or where to find the welcome information can help an unfamiliar arrival feel straightforward.",
+    "status": "prepared"
+  },
+  {
+    "id": "043",
+    "category": "House guidance",
+    "title": "Heating without a guessing game",
+    "text": "Write down how to turn the heating on, how to adjust it and anything a guest should avoid changing. Check your directions against the controls in the room, not just the appliance name.",
+    "status": "prepared"
+  },
+  {
+    "id": "044",
+    "category": "Local tips",
+    "title": "Keep your favourites current",
+    "text": "A recommendation is worth revisiting occasionally. Check that the business still exists and that the link works. For hours, bookings and availability, point guests to the business's current information.",
+    "status": "prepared"
+  },
+  {
+    "id": "045",
+    "category": "Guest comfort",
+    "title": "A welcome shelf, not a puzzle",
+    "text": "If you provide tea, coffee or other welcome items, make them easy to find and explain what guests are welcome to use. A thoughtful touch works best when nobody has to guess.",
+    "status": "prepared"
+  },
+  {
+    "id": "046",
+    "category": "Checkout",
+    "title": "Think about early departures",
+    "text": "Would your checkout instructions still work for someone leaving before sunrise? Check lighting, key return and any access steps. An early departure deserves the same clarity as a daytime one.",
+    "status": "prepared"
+  },
+  {
+    "id": "047",
+    "category": "Guest memories",
+    "title": "Keep private details private",
+    "text": "Before sharing a guest memory more widely, check permission and look for private information in the picture or words. A lovely moment doesn't need a booking number, door code or someone's travel plans attached.",
+    "status": "prepared"
+  },
+  {
+    "id": "048",
+    "category": "Host workflow",
+    "title": "Check from a phone",
+    "text": "House guidance that looks neat on a laptop may feel long on a phone. Read it on the kind of screen guests will use. Put the most useful information where it is easy to spot.",
+    "status": "prepared"
+  },
+  {
+    "id": "049",
+    "category": "Melbourne hosting",
+    "title": "Give context to a day trip",
+    "text": "If you suggest a longer outing, help guests judge the time commitment. They can then decide whether it fits around their arrival, event or checkout plans. A recommendation should make planning easier.",
+    "status": "prepared"
+  },
+  {
+    "id": "050",
+    "category": "Conversation",
+    "title": "The unexpected guest question",
+    "text": "What's the most unexpected practical question a guest has asked you? Sometimes the question that surprises a host is exactly the one the next visitor will need answered too.",
+    "status": "prepared"
+  },
+  {
+    "id": "051",
+    "category": "Product",
+    "title": "Host curation matters",
+    "text": "DigiStayBook gives hosts tools to curate the guest wall, including pinning, hiding and deleting posts. A shared space for guest memories still needs a host's care and attention.",
+    "status": "prepared"
+  },
+  {
+    "id": "052",
+    "category": "Arrival",
+    "title": "Separate access from the extras",
+    "text": "Guests arriving with bags need the door instructions before the full neighbourhood guide. Put the information in the order they will use it. A welcome can unfold one useful step at a time.",
+    "status": "prepared"
+  },
+  {
+    "id": "053",
+    "category": "House guidance",
+    "title": "Parking deserves a clear note",
+    "text": "If you provide parking information, make the location and any property-specific instructions clear. Ask guests to check current signs and restrictions whenever they park elsewhere. Avoid leaving important details to assumption.",
+    "status": "prepared"
+  },
+  {
+    "id": "054",
+    "category": "Local tips",
+    "title": "Think about different budgets",
+    "text": "A useful local guide can include a simple picnic idea as well as a special meal. Give guests a few ways to enjoy the area without assuming everyone wants the same kind of spend.",
+    "status": "prepared"
+  },
+  {
+    "id": "055",
+    "category": "Guest comfort",
+    "title": "Room for real belongings",
+    "text": "Take a look at your shelves, hooks and benches. Is there space for a coat, a wash bag and a few personal things? A property can look styled and still leave room for the people staying in it.",
+    "status": "prepared"
+  },
+  {
+    "id": "056",
+    "category": "Checkout",
+    "title": "The final message can be warm",
+    "text": "A departure reminder can be clear and friendly at the same time. Put the practical steps first, thank guests for their stay and make it easy to ask about anything uncertain.",
+    "status": "prepared"
+  },
+  {
+    "id": "057",
+    "category": "Guest memories",
+    "title": "A guestbook is a different space",
+    "text": "Official booking-platform reviews and a guestbook serve different purposes. DigiStayBook is a place for stay memories and practical guidance. Guests can choose whether they also leave feedback on their booking platform.",
+    "status": "prepared"
+  },
+  {
+    "id": "058",
+    "category": "Host workflow",
+    "title": "Refresh one section at a time",
+    "text": "Updating your house information doesn't need to become a huge project. Pick one section, check it properly and move to the next. Small, regular improvements can keep the whole guide useful.",
+    "status": "prepared"
+  },
+  {
+    "id": "059",
+    "category": "Melbourne hosting",
+    "title": "Plan for different weather",
+    "text": "When guests ask for local ideas, offer an indoor option alongside the outdoor one. They can choose based on the day's conditions. A flexible suggestion is often more useful than a fixed itinerary.",
+    "status": "prepared"
+  },
+  {
+    "id": "060",
+    "category": "Conversation",
+    "title": "What makes a welcome feel personal?",
+    "text": "A handwritten line, a useful local tip, clear instructions or simply having everything where you expect it: what makes a holiday rental feel welcoming to you?",
+    "status": "prepared"
+  },
+  {
+    "id": "061",
+    "category": "Product",
+    "title": "One dashboard for your properties",
+    "text": "Managing more than one property means keeping each home's information straight. DigiStayBook brings properties into one host dashboard while giving each property its own QR kit and guest wall.",
+    "status": "prepared"
+  },
+  {
+    "id": "062",
+    "category": "Arrival",
+    "title": "Use landmarks carefully",
+    "text": "A landmark can help someone find an entrance, but check that it is still there and easy to recognise. Pair it with clear directions rather than relying on 'you'll know it when you see it'.",
+    "status": "prepared"
+  },
+  {
+    "id": "063",
+    "category": "House guidance",
+    "title": "Put the contact route in writing",
+    "text": "Make it clear how guests should contact the host for ordinary stay questions. Keep that route easy to find. A guestbook or house guide should complement the support you provide during the stay.",
+    "status": "prepared"
+  },
+  {
+    "id": "064",
+    "category": "Local tips",
+    "title": "Describe the walk",
+    "text": "If you recommend a walk, give guests a sense of its length, surface and any steps you know about. They can decide whether it suits them. 'Easy' can mean different things to different people.",
+    "status": "prepared"
+  },
+  {
+    "id": "065",
+    "category": "Guest comfort",
+    "title": "Practical hooks help",
+    "text": "A hook in the right place can be surprisingly useful: near the entrance, in a bedroom or beside the shower. Walk through the space imagining where a guest would naturally put things down.",
+    "status": "prepared"
+  },
+  {
+    "id": "066",
+    "category": "Checkout",
+    "title": "Check every version of the time",
+    "text": "If checkout time is in your listing, welcome message and house guide, make sure it matches. A quick consistency check is easier than resolving uncertainty on the morning someone leaves.",
+    "status": "prepared"
+  },
+  {
+    "id": "067",
+    "category": "Guest memories",
+    "title": "A prompt for the next visitor",
+    "text": "Try a guestbook prompt such as 'What would you recommend to the next person staying here?' It can turn a personal discovery into a useful idea for someone else's trip.",
+    "status": "prepared"
+  },
+  {
+    "id": "068",
+    "category": "Host workflow",
+    "title": "Make a change when the house changes",
+    "text": "New coffee machine? Different Wi-Fi details? A changed bin arrangement? Update the guest information at the same time. The guide is most useful when it reflects the property guests actually arrive at.",
+    "status": "prepared"
+  },
+  {
+    "id": "069",
+    "category": "Melbourne hosting",
+    "title": "Start with your own neighbourhood",
+    "text": "A visitor guide doesn't have to cover all of Melbourne. Your street, nearby shops and a few places you know personally can be a much more helpful starting point for someone new to the area.",
+    "status": "prepared"
+  },
+  {
+    "id": "070",
+    "category": "Conversation",
+    "title": "Paper, digital or both?",
+    "text": "How do you currently share house information with guests: a folder, a message, a digital guide or a mix? What works well, and what would you like to make easier?",
+    "status": "prepared"
+  },
+  {
+    "id": "071",
+    "category": "Product",
+    "title": "Guest photos, with screening",
+    "text": "Photos and messages submitted through DigiStayBook pass automated screening before publication, with flagged content waiting for host review. Moderation is part of looking after a guest wall. Product overview: https://digistaybook.com",
+    "status": "prepared"
+  },
+  {
+    "id": "072",
+    "category": "Arrival",
+    "title": "A good welcome is findable",
+    "text": "Even beautifully written information can't help if guests don't know where it is. Give the welcome information an obvious home and explain how to reach it. Finding the answer is part of the experience.",
+    "status": "prepared"
+  },
+  {
+    "id": "073",
+    "category": "House guidance",
+    "title": "Laundry instructions in a few steps",
+    "text": "If guests can use the laundry, explain the everyday cycle, where supplies are kept and how to dry things appropriately. A few practical lines can be more useful than an unexplained panel of symbols.",
+    "status": "prepared"
+  },
+  {
+    "id": "074",
+    "category": "Local tips",
+    "title": "Recommend for a reason, not a commission",
+    "text": "The most useful local recommendations start with the guest's needs. Explain what you personally like and disclose a commercial relationship if one is relevant. Trust is part of a good recommendation.",
+    "status": "prepared"
+  },
+  {
+    "id": "075",
+    "category": "Guest comfort",
+    "title": "Check the bathroom from a guest's view",
+    "text": "Is there somewhere for a wash bag? Can a towel hang properly? Is the light useful? The everyday routines of a stay deserve as much attention as the arrival photograph.",
+    "status": "prepared"
+  },
+  {
+    "id": "076",
+    "category": "Checkout",
+    "title": "Make the last step unmistakable",
+    "text": "After guests lock up, is there anything else they need to know? Put the final step plainly in your checkout note. A clear ending lets people leave with confidence.",
+    "status": "prepared"
+  },
+  {
+    "id": "077",
+    "category": "Guest memories",
+    "title": "The little moments count",
+    "text": "A slow breakfast, a board game, the first cup of coffee outside: not every guestbook memory has to be a big adventure. Sometimes the small moments say the most about a stay.",
+    "status": "prepared"
+  },
+  {
+    "id": "078",
+    "category": "Host workflow",
+    "title": "Read your longest paragraph",
+    "text": "Find the longest paragraph in your house guide. Could it become a short heading and three useful steps? Making information easier to scan can help guests find what they need while standing in the room.",
+    "status": "prepared"
+  },
+  {
+    "id": "079",
+    "category": "Melbourne hosting",
+    "title": "An event trip is still a stay",
+    "text": "Visitors coming for an event still need the everyday basics: arrival, breakfast, transport planning and checkout. Help with those first, then add the extra local ideas that make the trip feel personal.",
+    "status": "prepared"
+  },
+  {
+    "id": "080",
+    "category": "Conversation",
+    "title": "The best thing a guest has taught you",
+    "text": "Have guests ever shown you a better use for part of your property or recommended a local place you hadn't tried? Hosting can be a two-way exchange of useful discoveries.",
+    "status": "prepared"
+  },
+  {
+    "id": "081",
+    "category": "Product",
+    "title": "Try the guest view",
+    "text": "The easiest way to understand DigiStayBook is to look at a guest wall. Browse the demonstration property and see how house guidance and memories sit together. Demo: https://digistaybook.com/wall/demo-cottage",
+    "status": "prepared"
+  },
+  {
+    "id": "082",
+    "category": "Arrival",
+    "title": "Write for the first visit",
+    "text": "When checking arrival information, ask someone unfamiliar with the property to read it. Notice which words need explaining. A fresh pair of eyes can spot the details a host has stopped seeing.",
+    "status": "prepared"
+  },
+  {
+    "id": "083",
+    "category": "House guidance",
+    "title": "Explain the outdoor space",
+    "text": "If guests can use a courtyard, garden or balcony, explain any property-specific details they need. Keep shared areas and private areas clear. A short note can help people enjoy the space considerately.",
+    "status": "prepared"
+  },
+  {
+    "id": "084",
+    "category": "Local tips",
+    "title": "One option for a quiet morning",
+    "text": "Not every local recommendation needs a booking or a ticket. A pleasant route for a morning walk can be a useful addition to your guide. Explain where to start and what guests should check before setting off.",
+    "status": "prepared"
+  },
+  {
+    "id": "085",
+    "category": "Guest comfort",
+    "title": "Useful information is hospitality",
+    "text": "A guest shouldn't have to feel awkward about asking how something works. Clear house guidance is one way to make a place feel welcoming before a question is even asked.",
+    "status": "prepared"
+  },
+  {
+    "id": "086",
+    "category": "Checkout",
+    "title": "Keep the departure route clear",
+    "text": "During a changeover check, look at the route guests use to leave with bags. A clear path and straightforward instructions help the final few minutes feel as considered as the welcome.",
+    "status": "prepared"
+  },
+  {
+    "id": "087",
+    "category": "Guest memories",
+    "title": "A memory is not a marketing promise",
+    "text": "Every stay is different. A guest's lovely note is their own experience, not a guarantee of what the next person will feel. Share memories thoughtfully and keep their context intact.",
+    "status": "prepared"
+  },
+  {
+    "id": "088",
+    "category": "Host workflow",
+    "title": "Choose a clear QR location",
+    "text": "Place guest information where people can naturally find it, then test it from there. For a QR display, check the light, viewing distance and the short explanation beside it. Test on a phone before guests arrive.",
+    "status": "prepared"
+  },
+  {
+    "id": "089",
+    "category": "Melbourne hosting",
+    "title": "Local knowledge without overload",
+    "text": "Three useful recommendations with a sentence of context can be easier to use than thirty unexplained links. Start small, listen to guest questions and add detail where it helps.",
+    "status": "prepared"
+  },
+  {
+    "id": "090",
+    "category": "Conversation",
+    "title": "What would you tell a first-time host?",
+    "text": "If you could give a new holiday-rental host one practical tip about welcoming guests, what would it be? The everyday advice is often the most useful.",
+    "status": "prepared"
+  },
+  {
+    "id": "091",
+    "category": "Product",
+    "title": "House information can feel welcoming",
+    "text": "Wi-Fi details, checkout steps and local favourites don't have to feel like a list of warnings. DigiStayBook is built around making practical information part of a warmer guest experience. Explore: https://digistaybook.com",
+    "status": "prepared"
+  },
+  {
+    "id": "092",
+    "category": "Arrival",
+    "title": "The arrival message check",
+    "text": "Before sending arrival information, check the property name, dates and access details. Reusing a message is convenient; a quick final read helps make sure it fits this particular stay.",
+    "status": "prepared"
+  },
+  {
+    "id": "093",
+    "category": "House guidance",
+    "title": "Give the unusual detail a heading",
+    "text": "If your place has a quirk guests need to know about, give it a clear heading. Important information is easier to find when it isn't buried halfway through a general welcome paragraph.",
+    "status": "prepared"
+  },
+  {
+    "id": "094",
+    "category": "Local tips",
+    "title": "Your guide can grow with experience",
+    "text": "Start with the recommendations you can explain confidently. Add to them as you learn what guests enjoy and ask about. A local guide can be useful before it is extensive.",
+    "status": "prepared"
+  },
+  {
+    "id": "095",
+    "category": "Guest comfort",
+    "title": "A comfortable stay has practical roots",
+    "text": "A clear entrance, a useful light, somewhere for a bag and instructions that make sense: these details may be small individually, but together they help a guest settle in.",
+    "status": "prepared"
+  },
+  {
+    "id": "096",
+    "category": "Checkout",
+    "title": "Leave room for a thank-you",
+    "text": "Once the practical departure details are clear, a simple thank-you can finish the stay warmly. Hospitality doesn't need complicated wording. Clarity and kindness work well together.",
+    "status": "prepared"
+  },
+  {
+    "id": "097",
+    "category": "Guest memories",
+    "title": "A guestbook that stays with the home",
+    "text": "One of the lovely things about a guestbook is the connection between different stays. A favourite walk or a small discovery can become part of the home's story for the next visitor.",
+    "status": "prepared"
+  },
+  {
+    "id": "098",
+    "category": "Host workflow",
+    "title": "Build from the real stay",
+    "text": "The best guest information follows what happens in the property: arriving, settling in, using things, exploring and leaving. Organise your guidance around those moments and see where the gaps appear.",
+    "status": "prepared"
+  },
+  {
+    "id": "099",
+    "category": "Melbourne hosting",
+    "title": "A home base for exploring",
+    "text": "A holiday rental is both a place to stay and a starting point for discovering somewhere new. Clear house information helps with the first; thoughtful local tips can help with the second.",
+    "status": "prepared"
+  },
+  {
+    "id": "100",
+    "category": "Conversation",
+    "title": "Help shape DigiStayBook",
+    "text": "Hosts and holiday-rental owners: what would make your guest information easier to manage? We'd love to hear the everyday problems, the repeated questions and the small improvements that would help most. https://digistaybook.com",
+    "status": "prepared"
+  }
+]

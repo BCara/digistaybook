@@ -1,0 +1,231 @@
+/* -------------------------------------------------------------------------
+   Inbox & moderation
+
+   Drawn as a stack of quiet cards on the paper: the approval switch, the
+   caught-up line, then the wall's memories one card each. The memory's own
+   words are set in the display face, as a guest would read them; everything
+   the Host does about them is small sans on the right.
+
+   Scoped under .moderation-page so it wins over the older ledger rules in
+   styles.css without editing them.
+   ------------------------------------------------------------------------- */
+
+.moderation-page {
+  --mod-card-pad: clamp(16px, 2.6vw, 30px);
+  --mod-radius: 8px;
+}
+
+/* Inline line marks share one look. */
+.moderation-page svg:where(.moderation-intro svg, .moderation-clear svg, .moderation-refresh svg,
+  .approval-card-mark, .queue-mark, .queue-removed-mark, .queue-removed-view svg, .fine-print svg) {
+  fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ---- Title ---- */
+
+.moderation-page .moderation-intro {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px 24px;
+  margin-bottom: 26px;
+}
+.moderation-page .moderation-intro h2 {
+  margin: 0; font-family: var(--font-display); font-size: clamp(2rem, 4.4vw, 3rem);
+  font-weight: 600; line-height: 1.05; letter-spacing: -.02em;
+}
+.moderation-page .moderation-intro p {
+  margin: 8px 0 0; font-family: var(--font-display); font-size: var(--step-1); color: var(--text-muted);
+}
+.moderation-back {
+  display: inline-flex; align-items: center; gap: 8px; flex: none; margin-top: 6px;
+  color: var(--sage-700); font-size: var(--step--1); font-weight: 600; text-decoration: none;
+}
+.moderation-back:hover { text-decoration: underline; text-underline-offset: 3px; }
+.moderation-back svg { width: 18px; height: 18px; }
+
+/* ---- Approve new memories ---- */
+
+.moderation-page .approval-card {
+  display: block; margin-bottom: 22px; padding: 18px var(--mod-card-pad);
+  background: var(--surface-raised); border: 1px solid var(--rule); border-radius: var(--mod-radius);
+}
+.approval-card .approval-switch {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center;
+  gap: 4px 18px; width: 100%; min-height: 0; font-weight: 400;
+}
+.approval-card-mark { width: 38px; height: 38px; color: var(--sage-700); stroke-width: 1.5 !important; }
+.approval-card-text { display: grid; gap: 4px; min-width: 0; }
+.approval-card .switch-label { font-family: var(--font-display); font-size: var(--step-1); font-weight: 600; line-height: 1.2; }
+.approval-card-note { color: var(--text-muted); font-size: var(--step--1); line-height: 1.45; }
+.approval-card .switch-track { width: 64px; height: 36px; }
+.approval-card .switch-knob { top: 3px; left: 3px; width: 28px; height: 28px; }
+.approval-card .switch input:checked + .switch-track .switch-knob { transform: translateX(28px); }
+.approval-card .approval-switch-state { min-width: 2.2em; font-size: var(--step--1); font-weight: 600; color: var(--text); }
+@media (max-width: 560px) {
+  .approval-card .approval-switch { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .approval-card .approval-switch-state { display: none; }
+  .approval-card-mark { width: 30px; height: 30px; }
+}
+
+/* ---- All caught up ---- */
+
+.moderation-page .moderation-clear {
+  grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px 18px;
+  margin-bottom: 30px; padding: 18px var(--mod-card-pad);
+  background: var(--sage-050); border: 1px solid color-mix(in srgb, var(--sage-700) 18%, transparent);
+  border-radius: var(--mod-radius);
+}
+.moderation-page .moderation-clear-mark {
+  width: 40px; height: 40px; background: color-mix(in srgb, var(--sage-700) 18%, transparent); color: var(--sage-700);
+}
+.moderation-clear-mark svg { width: 20px; height: 20px; stroke-width: 2.2; }
+.moderation-page .moderation-clear p { display: grid; gap: 4px; font-size: var(--step--1); }
+.moderation-page .moderation-clear strong { font-family: var(--font-display); font-size: var(--step-1); font-weight: 600; line-height: 1.2; }
+.moderation-refresh {
+  display: inline-flex; align-items: center; gap: 10px; margin: 0; padding: 8px 4px;
+  background: none; border: 0; color: var(--sage-700); font: 600 var(--step--1) var(--font-sans); cursor: pointer;
+}
+.moderation-refresh:hover { text-decoration: underline; text-underline-offset: 3px; }
+.moderation-refresh svg { width: 22px; height: 22px; }
+@media (max-width: 560px) {
+  .moderation-page .moderation-clear .moderation-refresh { grid-column: 2; justify-self: start; padding-inline: 0; }
+}
+
+/* ---- Tabs ---- */
+
+.moderation-page .moderation-tabs { gap: 8px; margin-top: 8px; border-bottom-color: var(--rule); }
+.moderation-page .moderation-tabs button {
+  display: inline-flex; align-items: center; gap: 12px; padding: 12px 22px 14px;
+  font: 600 var(--step-1) var(--font-display); color: var(--text-muted);
+}
+.moderation-page .moderation-tabs button:first-child { padding-left: 22px; }
+.moderation-page .moderation-tabs button.active { color: var(--text); border-bottom: 3px solid var(--sage-700); }
+.moderation-page .moderation-tabs .queue-count { font-family: var(--font-sans); }
+@media (max-width: 560px) {
+  .moderation-page .moderation-tabs button,
+  .moderation-page .moderation-tabs button:first-child { gap: 8px; padding: 10px 12px 12px; font-size: var(--step-0); white-space: nowrap; }
+}
+
+/* ---- Sections ---- */
+
+.moderation-page .queue-count {
+  display: inline-grid; place-items: center; min-width: 2.1em; padding: 3px 10px;
+  border-radius: 8px; background: var(--bg-alt); color: var(--text);
+  font: 600 var(--step--1) var(--font-sans); letter-spacing: 0;
+}
+.moderation-page .moderation-wall { padding-top: 0; }
+.moderation-page .moderation-wall .queue-section { margin-top: 30px; }
+.moderation-page .moderation-wall .queue-section h3 {
+  align-items: center; gap: 14px; padding: 0; border: 0;
+  font: 500 var(--step-1) var(--font-display);
+}
+.moderation-page .moderation-wall .queue-blurb { margin: 10px 0 0; font-size: var(--step--1); }
+
+/* ---- Memory cards ---- */
+
+.moderation-page .moderation-wall .queue-grid {
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; margin-top: 22px;
+  background: none; border: 0; border-radius: 0; box-shadow: none;
+}
+.moderation-page .moderation-wall .queue-note {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px clamp(18px, 3vw, 32px); align-items: stretch;
+  padding: 26px var(--mod-card-pad) 18px;
+  background: var(--surface-raised); border: 1px solid var(--rule); border-radius: var(--mod-radius);
+  box-shadow: none;
+}
+.moderation-page .moderation-wall .queue-note:last-child { border-bottom: 1px solid var(--rule); }
+.moderation-page .moderation-wall .queue-note.is-pinned {
+  background: var(--sage-050); border-color: color-mix(in srgb, var(--sage-700) 22%, transparent);
+  box-shadow: inset 5px 0 0 var(--sage-700);
+}
+.moderation-page .queue-note .note-message {
+  margin: 0; font-family: var(--font-display); font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  line-height: 1.3; overflow-wrap: anywhere; white-space: pre-wrap;
+}
+.moderation-page .queue-note .note-sign {
+  min-height: 46px; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--rule-strong);
+}
+.moderation-page .queue-note .note-author b { font-size: var(--step-0); }
+.moderation-page .queue-note .note-author time { font-size: var(--step--1); letter-spacing: 0; }
+.moderation-page .queue-note .avatar { width: 46px; height: 46px; border-radius: 4px; font-size: .9rem; }
+
+/* The right-hand column: state on top, actions level with the signature. */
+.moderation-page .moderation-wall .queue-note-side {
+  display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 10px;
+  min-width: 0; text-align: right;
+}
+.moderation-page .moderation-wall .queue-note-side .queue-state { margin: -8px -10px auto 0; }
+.moderation-page .moderation-wall .queue-note-side .queue-actions { margin-top: auto; }
+.moderation-page .state-pill {
+  display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px;
+  border: 0; border-radius: 6px; font: 600 var(--step--1) var(--font-sans); letter-spacing: 0; text-transform: none;
+}
+.moderation-page .state-pill.is-pinned { background: color-mix(in srgb, var(--sage-700) 14%, transparent); color: var(--sage-700); }
+.moderation-page .state-pill.is-pinned::before { content: none; }
+.moderation-page .state-pill .queue-mark { width: 18px; height: 18px; }
+.queue-mark.is-filled { fill: currentColor; }
+
+.moderation-page .queue-actions { flex-wrap: nowrap; align-items: center; gap: 0; margin-top: 0; }
+.queue-lead {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 40px; margin: 0; padding: 6px 20px 6px 8px;
+  background: none; border: 0; border-radius: 6px; color: var(--text);
+  font: 600 var(--step--1) var(--font-sans); cursor: pointer; white-space: nowrap;
+}
+.queue-lead:hover { background: color-mix(in srgb, var(--text) 6%, transparent); }
+.queue-lead:disabled { opacity: .55; cursor: default; }
+.queue-lead.is-destructive { color: var(--accent-strong); }
+.queue-lead .queue-mark { width: 22px; height: 22px; }
+.queue-lead + .queue-more { margin-left: 4px; padding-left: 12px; border-left: 1px solid var(--rule-strong); }
+.queue-more-toggle {
+  display: grid; place-items: center; width: 40px; height: 36px; border-radius: 6px; color: var(--text);
+}
+.queue-more-toggle:hover, .queue-more[open] > .queue-more-toggle { background: color-mix(in srgb, var(--text) 6%, transparent); }
+.queue-more-toggle svg { width: 22px; height: 22px; fill: currentColor; stroke: none; }
+.queue-more-toggle:focus-visible { outline: 2px solid var(--focus, var(--accent-strong)); outline-offset: 2px; }
+
+.moderation-page .queue-hold, .moderation-page .queue-confirm, .moderation-page .field-hint { max-width: 340px; }
+
+@media (max-width: 680px) {
+  .moderation-page .moderation-wall .queue-note { grid-template-columns: minmax(0, 1fr); padding-top: 22px; }
+  .moderation-page .moderation-wall .queue-note-side { align-items: flex-start; text-align: left; }
+  .moderation-page .moderation-wall .queue-note.is-pinned .queue-state { position: absolute; top: 14px; right: 14px; margin: 0; }
+  .moderation-page .moderation-wall .queue-note.is-pinned .note-message { padding-right: 96px; }
+  .moderation-page .moderation-wall .queue-note-side .queue-state { margin: 0; }
+}
+
+/* ---- Recently deleted: one row that opens ---- */
+
+.moderation-page .moderation-wall details.queue-removed {
+  margin-top: 26px; background: var(--surface-raised); border: 1px solid var(--rule); border-radius: var(--mod-radius);
+}
+.moderation-page .moderation-wall details.queue-removed > summary {
+  display: flex; align-items: center; gap: 16px; padding: 14px var(--mod-card-pad);
+}
+.moderation-page .moderation-wall details.queue-removed > summary h3 {
+  flex: 1; gap: 14px; color: var(--text); font: 600 var(--step-0) var(--font-sans);
+}
+.moderation-page .moderation-wall details.queue-removed > summary h3::after { content: none; }
+.queue-removed-mark { width: 24px; height: 24px; flex: none; color: var(--text-muted); }
+.queue-removed-view { display: inline-flex; align-items: center; gap: 10px; color: var(--text-muted); font-size: var(--step--1); }
+.queue-removed-word::before { content: "View"; }
+.queue-removed[open] .queue-removed-word::before { content: "Hide"; }
+.queue-removed-view svg { width: 18px; height: 18px; transition: transform .15s ease; }
+.queue-removed[open] .queue-removed-view svg { transform: rotate(90deg); }
+.moderation-page .moderation-wall details.queue-removed > .queue-blurb,
+.moderation-page .moderation-wall details.queue-removed > .queue-grid { margin-inline: var(--mod-card-pad); }
+.moderation-page .moderation-wall details.queue-removed > .queue-blurb { margin-top: 0; }
+.moderation-page .moderation-wall details.queue-removed > .queue-grid { margin-bottom: var(--mod-card-pad); }
+
+/* ---- Inboxes above the tabs ---- */
+
+.moderation-page .moderation-panel { border-radius: var(--mod-radius); }
+
+/* ---- How moderation works ---- */
+
+.moderation-page details.fine-print { margin-top: 26px; padding-top: 0; border-top: 0; }
+.moderation-page details.fine-print summary {
+  display: inline-flex; align-items: center; gap: 10px; list-style: none;
+  color: var(--text-muted); font-size: var(--step--1);
+}
+.moderation-page details.fine-print summary::-webkit-details-marker { display: none; }
+.moderation-page details.fine-print summary svg { width: 22px; height: 22px; }
+.moderation-page details.fine-print summary:hover { color: var(--text); }

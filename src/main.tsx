@@ -1,5 +1,5 @@
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import { App } from "./App";
 import { preconnectFunctions } from "./lib/firebase";
 import "./styles.css";
@@ -29,8 +29,13 @@ window.addEventListener("load", () => setTimeout(() => sessionStorage.removeItem
 // the callable region while the page is still drawing.
 preconnectFunctions();
 
-createRoot(document.getElementById("root")!).render(
+// The marketing pages arrive prerendered (tools/prerender.mjs) and are
+// hydrated; every other address arrives as the empty shell and is drawn here.
+const root = document.getElementById("root")!;
+const app = (
   <StrictMode>
     <App />
   </StrictMode>
 );
+if (root.hasChildNodes()) hydrateRoot(root, app);
+else createRoot(root).render(app);

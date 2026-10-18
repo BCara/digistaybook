@@ -1,0 +1,4 @@
+(node:55212) MetadataLookupWarning: received unexpected error = All promises were rejected code = ENETUNREACH, EAI_AGAIN
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"event":"consent_deletion_reminder","day":"2026-10-05","dueCount":1,"records":"guestConsent/photo-proof (due 2026-10-04)","operationsUrl":"https://digistaybook.com/operations","recipient":"codebertcreations@gmail.com","severity":"WARNING","message":"DigiStayBook consent records need manual deletion review"}
+Consent reminders verified: due dates, holds, linked privacy requests, media completion, missing evidence, MFA/access, manual removal observation and pagination; no automatic consent deletion.

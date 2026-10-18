@@ -1,0 +1,31 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {JSDOM,VirtualConsole} from 'jsdom';
+const file='//192.168.1.71/nas/projects/DigiStayBook/marketing/MARKETING_PLAN.html';
+const html=fs.readFileSync(file,'utf8'),errors=[];
+const vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e.message));
+const dom=new JSDOM(html,{url:'http://127.0.0.1:15184/DigiStayBook/marketing/MARKETING_PLAN.html',runScripts:'dangerously',virtualConsole:vc,beforeParse(w){w.matchMedia=()=>({matches:false,addEventListener(){}});w.alert=()=>{};w.prompt=()=>{};}});
+const d=dom.window.document,data=JSON.parse(d.getElementById('marketing-content').textContent);
+assert.equal(data.posts.length,30);assert.equal(data.posts[0].date,'2026-10-23');assert.equal(data.posts.at(-1).date,'2026-11-21');
+assert.equal(d.querySelectorAll('tr.post').length,30);assert.equal(d.querySelectorAll('article.card').length,30);
+assert.equal(d.querySelectorAll('select.st').length,60);assert.equal(d.querySelectorAll('textarea.tx').length,30);
+for(let i=0;i<30;i++){const p=data.posts[i];assert.equal(p.date,new Date(Date.UTC(2026,9,23+i)).toISOString().slice(0,10));assert.ok(p.caption.length>100);assert.ok(p.story&&p.visual&&p.alt);if(['Reel','Carousel'].includes(p.format))assert.ok(p.frames.length>=4);}
+const ids=[...d.querySelectorAll('[id]')].map(e=>e.id);assert.equal(new Set(ids).size,ids.length,'Duplicate IDs');
+for(const el of d.querySelectorAll('a[href],img[src]')){const ref=el.getAttribute('href')||el.getAttribute('src');if(ref.startsWith('#'))assert.ok(d.getElementById(ref.slice(1)),ref);else if(!/^https?:/.test(ref))assert.ok(fs.existsSync(path.resolve(path.dirname(file),ref)),ref);}
+const statuses=d.querySelectorAll('select.st[data-key="m1-01"]');
+statuses[0].value='Manual review – changes needed';statuses[0].dispatchEvent(new dom.window.Event('change',{bubbles:true}));
+assert.equal(statuses[1].value,'Manual review – changes needed');
+assert.equal(d.querySelector('[data-count="Planned"]').textContent,'29');
+const caption=d.getElementById('caption-m1-01');caption.value='A locally edited caption for verification.';caption.dispatchEvent(new dom.window.Event('input',{bubbles:true}));
+const comment=d.getElementById('comment-m1-01');comment.value='Review note retained.';comment.dispatchEvent(new dom.window.Event('input',{bubbles:true}));
+const saved=JSON.parse(dom.window.localStorage.getItem('dsb-marketing-review-20261023'));assert.equal(saved['m1-01'].caption,caption.value);assert.equal(saved['m1-01'].comment,comment.value);
+const format=d.getElementById('f-format');format.value='Reel';format.dispatchEvent(new dom.window.Event('change',{bubbles:true}));
+assert.equal(d.querySelectorAll('tr.post:not([hidden])').length,5);assert.equal(d.querySelectorAll('article.card:not([hidden])').length,5);
+format.value='';format.dispatchEvent(new dom.window.Event('change',{bubbles:true}));
+const week=d.getElementById('f-week');week.value='5';week.dispatchEvent(new dom.window.Event('change',{bubbles:true}));assert.equal(d.querySelectorAll('tr.post:not([hidden])').length,2);
+assert.deepEqual(errors,[]);
+const legacy=JSON.parse(fs.readFileSync('marketing/_reference/prelaunch-week-1.json','utf8'));
+assert.equal(legacy.posts.length,7);assert.ok(d.getElementById('existing').textContent.includes('Scheduled'));assert.ok(d.getElementById('existing').textContent.includes('Posted'));
+const result={date:'2026-10-18',file,items:30,start:'2026-10-23',end:'2026-11-21',formats:{Feed:8,Reel:5,Carousel:4,Story:13},legacyRecords:7,checks:'PASS: consecutive dates; complete copy/Story/visual/alt briefs; reel and carousel outlines; unique IDs; all NAS asset/document links; status sync; live counts; caption/comment local persistence; format/week filters; no script errors. Verification edits only occurred in an isolated DOM, not the user browser or NAS source.'};
+fs.writeFileSync('artifacts/marketing/plan-2026-10-18/verification.json',JSON.stringify(result,null,2));console.log(result);dom.window.close();

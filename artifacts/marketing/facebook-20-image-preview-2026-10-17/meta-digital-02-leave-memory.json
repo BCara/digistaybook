@@ -1,0 +1,8 @@
+{
+  "id": "digital-02-leave-memory",
+  "prompt": "Use case: ads-marketing. Create one premium square Facebook marketing image for DigiStayBook, a DIGITAL guestbook for holiday rentals. Input image 1 is the authentic logo reference. Images 2 and 3 are actual DEMO product screenshots for phone display references. Use the real logo intact as a small clear footer signature. Logo letters Digi and Book must BOTH be identical charcoal #14181B; ONLY the middle word Stay is terracotta #B4472A. On dark backgrounds put logo on a warm cream plaque. Cream #F7F2E8, charcoal, terracotta brand palette. Large crisp legible typography, generous margins. No extra slogans, claims, review ratings, QR codes, app-store icons, physical guestbooks or notebooks. Do not add AI-content wording to the artwork. Preserve source provenance metadata. Candid close-up lifestyle photography of an adult guest using their smartphone on a sunlit cottage balcony, finger poised to add a photo to a digital guestbook. Show the supplied guest wall faithfully on the phone. Relaxed and human, cropped hands and shoulder, room for a headline. Exact headline \"Leave a little memory\". Small label \"Demo guest wall\". No printed book.",
+  "source": "C:\\Users\\clbbe\\.codex\\generated_images\\01a146cf-619a-7283-9394-75c60c9a8321\\exec-fd3c77c6-3b52-4529-9eb2-848c12b4bb72.png",
+  "destination": "C:/Users/clbbe/Documents/Projects/DigiStayBook/artifacts/marketing/facebook-20-image-preview-2026-10-17/digital-02-leave-memory.png",
+  "generator": "built-in image_gen",
+  "status": "preview_only"
+}

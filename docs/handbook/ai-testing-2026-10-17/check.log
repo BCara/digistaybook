@@ -1,0 +1,60 @@
+
+> digistaybook@0.1.0 check
+> npm run typecheck && npm run test && npm run build && npm run functions:build
+
+
+> digistaybook@0.1.0 typecheck
+> tsc --noEmit
+
+
+> digistaybook@0.1.0 test
+> vitest run --exclude "tests/**/*.rules.test.ts"
+
+
+ RUN  v4.1.10 C:/Users/clbbe/Documents/Projects/DigiStayBook
+
+Not implemented: navigation to another Document
+Not implemented: navigation to another Document
+Not implemented: navigation to another Document
+Not implemented: navigation to another Document
+Not implemented: navigation to another Document
+ ❯ src/domain/publicWall.test.ts (5 tests | 1 failed) 23ms
+     × serves the hosts' own notes, old shape or new, and never a note with nothing on it 12ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/domain/publicWall.test.ts > server public wall projection > serves the hosts' own notes, old shape or new, and never a note with nothing on it
+AssertionError: expected [] to deeply equal [ { id: 'fire', …(3) } ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "id": "fire",
+-     "message": "We lay the fire.",
+-     "photo": {
+-       "alt": "A fire",
+-       "url": "https://x.test/f.jpg",
+-     },
+-     "style": "pinned",
+-   },
+- ]
++ []
+
+ ❯ src/domain/publicWall.test.ts:20:30
+     18|       { id: "blank", message: "   " }
+     19|     ] } });
+     20|     expect(served.hostNotes).toEqual([
+       |                              ^
+     21|       { id: "fire", message: "We lay the fire.", style: "pinned", phot…
+     22|     ]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 71 passed | 1 skipped (73)
+      Tests  1 failed | 719 passed | 1 skipped (721)
+   Start at  09:25:54
+   Duration  31.90s (transform 29.43s, setup 63.79s, import 50.03s, tests 52.33s, environment 360.29s)
+

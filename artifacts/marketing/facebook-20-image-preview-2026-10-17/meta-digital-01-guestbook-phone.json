@@ -1,0 +1,8 @@
+{
+  "id": "digital-01-guestbook-phone",
+  "prompt": "Use case: ads-marketing. Create one premium square Facebook marketing image for DigiStayBook, a DIGITAL guestbook for holiday rentals. Input image 1 is the authentic logo reference. Images 2 and 3 are actual DEMO product screenshots for phone display references. Use the real logo intact as a small clear footer signature. Logo letters Digi and Book must BOTH be identical charcoal #14181B; ONLY the middle word Stay is terracotta #B4472A. On dark backgrounds put logo on a warm cream plaque. Cream #F7F2E8, charcoal, terracotta brand palette. Large crisp legible typography, generous margins. No extra slogans, claims, review ratings, QR codes, app-store icons, physical guestbooks or notebooks. Do not add AI-content wording to the artwork. Preserve source provenance metadata. A premium natural editorial photograph: a smartphone upright on a warm oak holiday-rental counter, showing the supplied digital guest wall with photos and guest notes. Ceramic mug and greenery softly out of focus, bright side light. Phone and actual digital memories are the main subject. Large readable headline \"A digital guestbook for your rental\". Small label \"Demo guest wall\" beside the phone. No physical guestbook.",
+  "source": "C:\\Users\\clbbe\\.codex\\generated_images\\01a146cf-619a-7283-9394-75c60c9a8321\\exec-88aa76ec-6a0c-48c1-9afc-daadb949f82b.png",
+  "destination": "C:/Users/clbbe/Documents/Projects/DigiStayBook/artifacts/marketing/facebook-20-image-preview-2026-10-17/digital-01-guestbook-phone.png",
+  "generator": "built-in image_gen",
+  "status": "preview_only"
+}

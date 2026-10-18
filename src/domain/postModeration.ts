@@ -194,7 +194,7 @@ export const actionCopy: Record<PostAction, ActionCopy> = {
     destructive: true
   },
   pin: {
-    label: "Pin to the top",
+    label: "Pin",
     hint: "Shows it first on your wall, marked as a host favourite.",
     confirm: null,
     done: "Pinned to the top of the wall.",
@@ -333,8 +333,8 @@ const SECTION_COPY: Record<QueueSectionId, { title: string; blurb: string }> = {
       "Hidden from guests. Publish one to put it back, or delete it for good."
   },
   wall: {
-    title: "On the wall",
-    blurb: "Pinned memories are shown first on your wall, highlighted as host favourites."
+    title: "On your wall",
+    blurb: "Pinned memories appear first as host favourites."
   },
   restricted: {
     title: "Held by DigiStayBook",

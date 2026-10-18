@@ -355,6 +355,19 @@ export async function savePropertyProfile(
   }
 }
 
+/** Switch the public wall on or off, writing that one field and nothing else. */
+export async function saveDisplayWallOff(propertyId: string, off: boolean): Promise<StoreOutcome<boolean>> {
+  const database = await firestore();
+  if (!database) return { status: "error", message: UNCONFIGURED };
+  try {
+    const { doc, serverTimestamp, updateDoc } = await import("firebase/firestore");
+    await withDeadline(updateDoc(doc(database, "properties", propertyId), { "profile.displayWallOff": off, updatedAt: serverTimestamp() }));
+    return { status: "ok", value: off };
+  } catch (error) {
+    return describeStoreError(error, "write");
+  }
+}
+
 /**
  * The slots themselves are named in `photoSlots`, which is where a page reads
  * them from too: what a slot is has nothing to do with Firestore, and every

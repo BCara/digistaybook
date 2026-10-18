@@ -11,6 +11,7 @@ vi.mock("../../lib/firebaseConfig", () => ({
 
 const loadProperty = vi.fn();
 const ensureStayToken = vi.fn();
+const saveDisplayWallOff = vi.fn();
 const callable = vi.fn();
 
 vi.mock("../../lib/firebase", () => ({ getFirebaseServices: async () => ({ functions: {} }) }));
@@ -18,7 +19,8 @@ vi.mock("firebase/functions", () => ({ httpsCallable: (_functions: unknown, name
 
 vi.mock("../host/propertyStore", () => ({
   loadProperty: (...args: unknown[]) => loadProperty(...args),
-  ensureStayToken: (...args: unknown[]) => ensureStayToken(...args)
+  ensureStayToken: (...args: unknown[]) => ensureStayToken(...args),
+  saveDisplayWallOff: (...args: unknown[]) => saveDisplayWallOff(...args)
 }));
 
 /** A guestbook token as the server mints them: 16 random bytes, base64url. */
@@ -56,6 +58,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   loadProperty.mockResolvedValue({ status: "ok", value: hostProperty() });
   ensureStayToken.mockResolvedValue({ status: "ok", value: TOKEN });
+  saveDisplayWallOff.mockImplementation(async (_id: string, off: boolean) => ({ status: "ok", value: off }));
   callable.mockImplementation(async (name: string) => name === "listHostGuestReview"
     ? { data: { posts: [], feedback: [], reviewContent: false } }
     : { data: { reviewContent: true } });
@@ -89,17 +92,33 @@ describe("walls and QR display", () => {
     expect(main().getByRole("link", { name: "Review billing" })).toHaveAttribute("href", "/host/property/prop-1/billing");
     expect(main().getByRole("button", { name: "Copy link to the guest wall" })).toBeEnabled();
     expect(main().getByRole("button", { name: "Copy link to the public wall" })).toBeEnabled();
-    expect(main().queryByRole("link", { name: "Open the public wall" })).not.toBeInTheDocument();
+    expect(main().getByRole("link", { name: "View the public wall" })).toHaveAttribute("href", "/wall/seabreeze-cottage");
   });
 
   it("explains a separately switched-off public wall while the in-stay wall remains live", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: { ...emptyProfile(), displayWallOff: true } }) });
     renderPage();
     expect(await screen.findByText(/Public wall is switched off\./)).toBeInTheDocument();
-    expect(main().getByRole("link", { name: "Open the guest wall" })).toBeInTheDocument();
-    expect(main().queryByRole("link", { name: "Open the public wall" })).not.toBeInTheDocument();
+    expect(main().getByRole("link", { name: "View the guest wall" })).toBeInTheDocument();
+    expect(main().getByRole("link", { name: "View the public wall" })).toBeInTheDocument();
+    expect(main().getByRole("switch", { name: "Public wall" })).not.toBeChecked();
     expect(main().getByRole("link", { name: "Configure the public wall" })).toHaveAttribute("href", "/host/property/prop-1/public");
     expect(document.querySelector(".qr-access-notice")).not.toBeInTheDocument();
+  });
+
+  it("switches the public wall off and on from its card", async () => {
+    renderPage();
+    await screen.findByRole("heading", { name: "Walls and QR display", level: 2 });
+    const toggle = main().getByRole("switch", { name: "Public wall" });
+    expect(toggle).toBeChecked();
+    fireEvent.click(toggle);
+    await waitFor(() => expect(toggle).not.toBeChecked());
+    expect(saveDisplayWallOff).toHaveBeenCalledWith("prop-1", true);
+    expect(within(main().getByRole("region", { name: "The public wall" })).getByText("Offline")).toBeInTheDocument();
+    saveDisplayWallOff.mockResolvedValueOnce({ status: "error", message: "Unavailable" });
+    fireEvent.click(toggle);
+    expect(await main().findByText("The public wall could not be switched. Try again.")).toBeInTheDocument();
+    expect(toggle).not.toBeChecked();
   });
 
   it("names both walls, their addresses, and the way into each", async () => {
@@ -108,11 +127,11 @@ describe("walls and QR display", () => {
 
     expect(main().getByText(`${window.location.origin}/wall/seabreeze-cottage`)).toBeInTheDocument();
     expect(main().getAllByText(`${window.location.origin}/stay/seabreeze-cottage/${TOKEN}`)[0]).toBeInTheDocument();
-    expect(main().getByRole("link", { name: "Open the public wall" })).toHaveAttribute(
+    expect(main().getByRole("link", { name: "View the public wall" })).toHaveAttribute(
       "href",
       "/wall/seabreeze-cottage"
     );
-    expect(main().getByRole("link", { name: "Open the guest wall" })).toHaveAttribute(
+    expect(main().getByRole("link", { name: "View the guest wall" })).toHaveAttribute(
       "href",
       `/stay/seabreeze-cottage/${TOKEN}`
     );
@@ -177,13 +196,13 @@ describe("walls and QR display", () => {
     await screen.findByRole("heading", { name: "Walls and QR display", level: 2 });
 
     expect(ensureStayToken).toHaveBeenCalledWith("prop-1");
-    expect(await main().findByRole("link", { name: "Open the guest wall" })).toHaveAttribute(
+    expect(await main().findByRole("link", { name: "View the guest wall" })).toHaveAttribute(
       "href",
       `/stay/seabreeze-cottage/${TOKEN}`
     );
   });
 
-  it("keeps an unpublished property's addresses in view without offering a way in", async () => {
+  it("keeps an unpublished property's addresses in view with a way to view each", async () => {
     loadProperty.mockResolvedValue({
       status: "ok",
       value: hostProperty({ lifecycle: "draft", mode: "sandbox" })
@@ -194,8 +213,8 @@ describe("walls and QR display", () => {
     // The address is still stated: it is fixed at creation, and a Host writing
     // towards publication should be able to see where the wall will be.
     expect(main().getByText(`${window.location.origin}/wall/seabreeze-cottage`)).toBeInTheDocument();
-    expect(main().queryByRole("link", { name: "Open the public wall" })).not.toBeInTheDocument();
-    expect(main().queryByRole("link", { name: "Open the guest wall" })).not.toBeInTheDocument();
+    expect(main().getByRole("link", { name: "View the public wall" })).toBeInTheDocument();
+    expect(main().getByRole("link", { name: "View the guest wall" })).toBeInTheDocument();
     expect(main().getByText("Not published yet")).toBeInTheDocument();
     expect(main().getByRole("link", { name: "Configure the guest wall" })).toBeInTheDocument();
     expect(main().getByRole("link", { name: "Configure the public wall" })).toBeInTheDocument();

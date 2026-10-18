@@ -7,7 +7,7 @@ import { useAuth } from "../auth/AuthProvider";
 import { PropertyShell } from "../host/PropertyShell";
 import { QrPlacard } from "../host/QrPlacard";
 import { GuestReviewPanel } from "../host/GuestReviewPanel";
-import { ensureStayToken, type HostProperty } from "../host/propertyStore";
+import { ensureStayToken, saveDisplayWallOff, type HostProperty } from "../host/propertyStore";
 import { useProperty } from "../host/useProperty";
 import { propertyBlock } from "../host/usePropertyDraft";
 import "./hostQr.css";
@@ -45,7 +45,7 @@ function Shell({ title, children }: { title: string; children: ReactNode }) {
  * than vanishing and leaving a Host to wonder whether they lost it.
  */
 function Wall({
-  title, address, live, href, configureHref, reason, showReason = false, children
+  title, address, live, href, configureHref, reason, showReason = false, control, children
 }: {
   title: string;
   address: string;
@@ -54,6 +54,8 @@ function Wall({
   configureHref: string;
   reason: ReturnType<typeof wallUnavailableReason>;
   showReason?: boolean;
+  /** A switch drawn under the description, for a wall a Host can turn off. */
+  control?: ReactNode;
   children: ReactNode;
 }) {
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
@@ -86,6 +88,7 @@ function Wall({
         </a>
       </div>
       <p className="qr-wall-description">{children}</p>
+      {control}
       <p className="wall-address"><code>{address}</code></p>
       {showReason && <p className="field-hint">{reason.title}. {reason.message}</p>}
       <div className="qr-wall-actions">
@@ -93,12 +96,39 @@ function Wall({
           {copyState === "copied" ? "Copied" : "Copy link"}
         </button>
         <span className="visually-hidden" role="status">{copyState === "copied" ? `${title} link copied.` : ""}</span>
-        {live && (
-          <a className="btn btn-secondary btn-sm" href={href}>Open {title.toLowerCase()}</a>
-        )}
+        <a className="btn btn-secondary btn-sm" href={href} aria-label={`View ${title.toLowerCase()}`}>View wall</a>
       </div>
       {copyState === "error" && <p className="field-hint" role="status">Could not copy. Select and copy the link above.</p>}
     </section>
+  );
+}
+
+/**
+ * The public wall's on/off decision, without a trip to the wall editor. Only
+ * this one field is written, so nothing else on the profile is touched.
+ */
+function PublicWallSwitch({ property, onSaved }: { property: HostProperty; onSaved: (off: boolean) => void }) {
+  const off = property.profile.displayWallOff === true;
+  const [saving, setSaving] = useState(false);
+  const [failed, setFailed] = useState(false);
+  async function change(nextOff: boolean) {
+    setSaving(true);
+    setFailed(false);
+    const result = await saveDisplayWallOff(property.id, nextOff);
+    setSaving(false);
+    if (result.status === "ok") onSaved(result.value);
+    else setFailed(true);
+  }
+  return (
+    <div className="qr-wall-switch">
+      <label className="switch">
+        <input type="checkbox" role="switch" checked={!off} disabled={saving} onChange={event => void change(!event.target.checked)} />
+        <span className="switch-track" aria-hidden="true"><span className="switch-knob" /></span>
+        <span className="switch-label">Public wall</span>
+        <span className="qr-wall-switch-state" aria-hidden="true">{off ? "Off" : "On"}</span>
+      </label>
+      {failed && <p className="field-hint" role="status">The public wall could not be switched. Try again.</p>}
+    </div>
   );
 }
 
@@ -179,7 +209,10 @@ export function HostQrPage({ propertyId }: { propertyId: string }) {
                   ? { status: "ready", property: { ...current.property, reviewContent } }
                   : current)} />
             </div>
-            <Wall reason={publicReason} showReason={live && property.profile.displayWallOff === true} title="The public wall" address={publicWallUrl(window.location.origin, property.slug)} live={live && !property.profile.displayWallOff} href={`/wall/${property.slug}`} configureHref={`/host/property/${property.id}/public`}>
+            <Wall reason={publicReason} showReason={live && property.profile.displayWallOff === true} title="The public wall" address={publicWallUrl(window.location.origin, property.slug)} live={live && !property.profile.displayWallOff} href={`/wall/${property.slug}`} configureHref={`/host/property/${property.id}/public`}
+              control={<PublicWallSwitch property={property} onSaved={displayWallOff => setLoad(current => current.status === "ready" && current.property.id === property.id
+                ? { status: "ready", property: { ...current.property, profile: { ...current.property.profile, displayWallOff } } }
+                : current)} />}>
               Share this link in your listing or guest messages.
             </Wall>
           </div>

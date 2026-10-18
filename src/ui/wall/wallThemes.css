@@ -471,7 +471,7 @@
 [data-wall-theme="seaside"][data-wall-theme] .wall-contribution-panel .btn-ghost { color: var(--wall-pop-ink); }
 [data-wall-theme="seaside"][data-wall-theme] .live-property-header { background: var(--wall-accent-soft); border: 0; border-radius: 30px; box-shadow: none; }
 
-/* ======================== Rustic Guest Journal ======================== */
+/* ======================== Journal ======================== */
 
 [data-wall-theme="journal"][data-wall-theme] .stay-wall { gap: 22px; }
 [data-wall-theme="journal"][data-wall-theme] .stay-wall .stay-card {
@@ -851,7 +851,7 @@
 [data-wall-theme="seaside"][data-wall-theme] .canvas-stay .stay-location { justify-content: center; }
 [data-wall-theme="seaside"][data-wall-theme] .canvas-stay .stay-location .canvas-field { flex: 0 1 24rem; }
 
-/* ---- Rustic Guest Journal: a polaroid, taped in ---- */
+/* ---- Journal: a polaroid, taped in ---- */
 [data-wall-theme="journal"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-photo,
 [data-wall-theme="journal"][data-wall-theme] .canvas-stay .stay-cover .canvas-cover-empty {
   aspect-ratio: 4 / 3;

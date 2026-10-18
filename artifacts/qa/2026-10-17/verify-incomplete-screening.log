@@ -1,0 +1,13 @@
+(node:71868) MetadataLookupWarning: received unexpected error = All promises were rejected code = ENETUNREACH, EAI_AGAIN
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"providerOutcome":"unavailable","outcome":"critical","screeningStatus":"incomplete","contactDetailsOrLinkHold":false,"screeningReference":"67d3be0f8ca0e52da65ec691","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"critical","screeningOutcome":"critical","screeningReference":"67d3be0f8ca0e52da65ec691","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+{"event":"screening_error","screeningReference":"d98ed5cdbd39d046c72aeb7d","reason":"provider_or_storage_error","outcome":"memory_safety_review","severity":"WARNING","message":"Guest screening did not complete"}
+{"providerOutcome":"unavailable","outcome":"critical","screeningStatus":"incomplete","contactDetailsOrLinkHold":false,"screeningReference":"d98ed5cdbd39d046c72aeb7d","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"critical","screeningOutcome":"critical","screeningReference":"d98ed5cdbd39d046c72aeb7d","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+{"event":"screening_error","screeningReference":"e850fac0ffe77924a8ff03c9","reason":"provider_or_storage_error","outcome":"memory_safety_review","severity":"WARNING","message":"Guest screening did not complete"}
+{"providerOutcome":"unavailable","outcome":"critical","screeningStatus":"incomplete","contactDetailsOrLinkHold":false,"screeningReference":"e850fac0ffe77924a8ff03c9","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"critical","screeningOutcome":"critical","screeningReference":"e850fac0ffe77924a8ff03c9","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+{"event":"screening_error","screeningReference":"a8a6774a326bc90328d98f61","reason":"provider_or_storage_error","outcome":"feedback_safety_review","severity":"WARNING","message":"Guest screening did not complete"}
+{"event":"screening_error","screeningReference":"97cb7845f3fe48bf311e19e3","reason":"provider_or_storage_error","outcome":"feedback_safety_review","severity":"WARNING","message":"Guest screening did not complete"}
+PASS: incomplete results, provider exceptions and allowance exhaustion create tagged restricted cases; no retry bypass; authorised memory/feedback release and host-access denial.

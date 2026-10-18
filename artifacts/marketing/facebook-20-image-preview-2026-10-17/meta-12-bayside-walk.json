@@ -1,0 +1,8 @@
+{
+  "id": "12-bayside-walk",
+  "prompt": "Edit Image 1 only at its existing small brand signature. Replace that signature with the authentic DigiStayBook logo supplied as Image 2. The exact word is DigiStayBook: Digi and Book must be the SAME dark charcoal #14181B, while ONLY Stay is terracotta #B4472A. Use the supplied logo intact with its small house/book symbol; a neat warm cream logo plaque behind it is fine for legibility on dark photos. Keep the headline, scene, framing, colours and every other detail of Image 1 unchanged. Do not recolour Book; do not make the whole name one colour. Preserve the existing image dimensions and the existing signature's general location.",
+  "source": "C:\\Users\\clbbe\\.codex\\generated_images\\01a146cf-619a-7283-9394-75c60c9a8321\\exec-c1ac2e9c-73d6-4bc6-9155-a165acdcbe81.png",
+  "destination": "C:/Users/clbbe/Documents/Projects/DigiStayBook/artifacts/marketing/facebook-20-image-preview-2026-10-17/12-bayside-walk.png",
+  "generator": "built-in image_gen",
+  "status": "preview_only"
+}

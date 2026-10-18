@@ -14,5 +14,7 @@ import { setGlobalOptions } from "firebase-functions/v2";
 //   roles/run.invoker                      Cloud Scheduler calling the workers
 //   roles/serviceusage.serviceUsageConsumer  Vision and Natural Language calls
 //   roles/logging.logWriter
+//   projects/digistaybook-cbert/roles/authEmailSender
+//     firebaseauth.users.get, firebaseauth.users.sendEmail (action links only)
 // A new Google API or Firebase service needs its role added here and granted.
 setGlobalOptions({ region: "australia-southeast1", serviceAccount: "functions-runtime@digistaybook-cbert.iam.gserviceaccount.com" });

@@ -15,9 +15,8 @@ type WallProperty = WallHeaderProperty;
 /**
  * The saved wall and draft phone preview render these same components.
  *
- * `hostNotes` is drawn by the caller and placed here because where it goes
- * depends on the wall: under the header on the public wall, and under the
- * essentials buttons on the in-stay wall.
+ * `hostNotes` is drawn by the caller and placed under the essentials buttons
+ * on the in-stay wall. The public wall is memories only, so it never shows them.
  */
 export function WallHeader({ property, view, preview = false, headingLevel = 1, hostNotes }: { property: WallHeaderProperty; view: "public" | "stay"; preview?: boolean; headingLevel?: number; hostNotes?: ReactNode }) {
   if (view === "stay") return <StayWallHeader property={property} preview={preview} headingLevel={headingLevel} hostNotes={hostNotes} />;
@@ -39,7 +38,7 @@ export function WallHeader({ property, view, preview = false, headingLevel = 1, 
                 : <span className="avatar avatar-lg tone-2" aria-hidden="true">{hostInitials(property.hosts)}</span>}
               {property.hosts && <b>{property.hosts}</b>}
             </div>}
-          </header>{hostNotes}</>;
+          </header></>;
 }
 
 /** Lines worth copying onto a phone keyboard: passwords and door codes. */

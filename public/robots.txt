@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /host
+Disallow: /operations
+Disallow: /stay/
+Disallow: /embed/
+Disallow: /reset-password
+Disallow: /verify-email
+Allow: /stay/demo-cottage
+
+Sitemap: https://digistaybook.com/sitemap.xml

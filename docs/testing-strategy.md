@@ -254,7 +254,7 @@ expected outcome for every step in this part, and is not repeated in each one.
 4. Header navigation shows exactly four links: How it works, Pricing (→ `/pricing`),
    See a live wall, Privacy & Safety — plus a "Host sign in" button.
 5. Footer shows three columns (brand blurb, Product, Support & legal) and a copyright
-   line ending **"Working implementation — not yet released."**
+   line reading **"© <year> DigiStayBook."**
 6. The pricing section is a *prompt*, not a second pricing page: the trial callout, the
    two rates and a "See everything included, and the billing terms" link to `/pricing`.
    The tax callout, the cancellation link and the feature checklist must **not** appear

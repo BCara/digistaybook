@@ -1,0 +1,18 @@
+[
+  {
+    file: '//192.168.1.71/nas/projects/DigiStayBook/business-operations/DIGISTAYBOOK_TEST_PROCEDURES.html',
+    steps: 294,
+    aiRecords: 588,
+    procedures: 54,
+    previousRegisterRows: 8,
+    checks: 'PASS: unchanged instructions/expected results; permanent AI records; existing Local/Live human results/dates/evidence; environment switching; embedded JSON; previous register history; evidence links; no script errors'
+  },
+  {
+    file: 'docs/handbook/DIGISTAYBOOK_TEST_PROCEDURES.html',
+    steps: 259,
+    aiRecords: 518,
+    procedures: 50,
+    previousRegisterRows: 8,
+    checks: 'PASS: unchanged instructions/expected results; permanent AI records; existing Local/Live human results/dates/evidence; environment switching; embedded JSON; previous register history; evidence links; no script errors'
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "01-digital-guestbook",
+    "title": "A guestbook. Made for memories.",
+    "facebookPostId": "122110135425502062",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122110135425502062&id=61595061885990",
+    "verifiedAt": "2026-10-17T08:40:19.058Z",
+    "evidence": "Meta Business Suite: Your post is published",
+    "aiLabelVisibleOnCheckedView": false,
+    "publicCaptionVerified": true,
+    "publicCheckedAt": "2026-10-17T08:48:26.529Z"
+  },
+  {
+    "id": "02-view-worth-sharing",
+    "title": "The view is worth sharing.",
+    "facebookPostId": "122110136325502062",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122110136325502062&id=61595061885990",
+    "verifiedAt": "2026-10-17T08:42:49.490Z",
+    "evidence": "Meta Business Suite: Your post is published",
+    "publicCaptionVerified": true,
+    "aiLabelVisibleOnCheckedView": false,
+    "publicCheckedAt": "2026-10-17T08:48:28.171Z"
+  },
+  {
+    "id": "03-photos-messages-memories",
+    "title": "Photos. Messages. Memories.",
+    "facebookPostId": "122110136571502062",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122110136571502062&id=61595061885990",
+    "verifiedAt": "2026-10-17T08:43:24.636Z",
+    "evidence": "Meta Business Suite: Your post is published",
+    "publicCaptionVerified": true,
+    "aiLabelVisibleOnCheckedView": false,
+    "publicCheckedAt": "2026-10-17T08:48:30.052Z"
+  },
+  {
+    "id": "04-little-moments",
+    "title": "The little moments count.",
+    "facebookPostId": "122110136865502062",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122110136865502062&id=61595061885990",
+    "verifiedAt": "2026-10-17T08:44:13.601Z",
+    "evidence": "Meta Business Suite: Your post is published",
+    "publicCaptionVerified": true,
+    "aiLabelVisibleOnCheckedView": false,
+    "publicCheckedAt": "2026-10-17T08:48:47.750Z"
+  },
+  {
+    "id": "05-few-taps",
+    "title": "A few taps. A lovely memory.",
+    "facebookPostId": "122110137261502062",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122110137261502062&id=61595061885990",
+    "verifiedAt": "2026-10-17T08:44:53.705Z",
+    "evidence": "Meta Business Suite: Your post is published",
+    "publicCaptionVerified": true,
+    "aiLabelVisibleOnCheckedView": false,
+    "publicCheckedAt": "2026-10-17T08:48:49.390Z"
+  },
+  {
+    "id": "06-add-to-story",
+    "title": "Let every stay add to the story.",
+    "facebookPostId": "122110137555502062",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122110137555502062&id=61595061885990",
+    "verifiedAt": "2026-10-17T08:45:29.367Z",
+    "evidence": "Meta Business Suite: Your post is published",
+    "publicCaptionVerified": true,
+    "aiLabelVisibleOnCheckedView": false,
+    "publicCheckedAt": "2026-10-17T08:48:51.210Z"
+  },
+  {
+    "id": "07-still-remembered",
+    "title": "Gone home. Still remembered.",
+    "facebookPostId": "122110137819502062",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122110137819502062&id=61595061885990",
+    "verifiedAt": "2026-10-17T08:46:05.701Z",
+    "evidence": "Meta Business Suite: Your post is published",
+    "publicCaptionVerified": true,
+    "aiLabelVisibleOnCheckedView": false,
+    "publicCheckedAt": "2026-10-17T08:48:53.028Z"
+  },
+  {
+    "id": "08-their-stories",
+    "title": "Your place. Their stories.",
+    "facebookPostId": "122110138023502062",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122110138023502062&id=61595061885990",
+    "verifiedAt": "2026-10-17T08:46:45.218Z",
+    "evidence": "Meta Business Suite: Your post is published",
+    "publicCaptionVerified": true,
+    "aiLabelVisibleOnCheckedView": false,
+    "publicCheckedAt": "2026-10-17T08:49:12.423Z"
+  },
+  {
+    "id": "09-place-for-memories",
+    "title": "More than a place to stay.",
+    "facebookPostId": "122110138245502062",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122110138245502062&id=61595061885990",
+    "verifiedAt": "2026-10-17T08:47:21.861Z",
+    "evidence": "Meta Business Suite: Your post is published",
+    "publicCaptionVerified": true,
+    "aiLabelVisibleOnCheckedView": false,
+    "publicCheckedAt": "2026-10-17T08:49:13.912Z"
+  },
+  {
+    "id": "10-favourite-moment",
+    "title": "What was your favourite moment?",
+    "facebookPostId": "122110138653502062",
+    "url": "https://www.facebook.com/permalink.php?story_fbid=122110138653502062&id=61595061885990",
+    "verifiedAt": "2026-10-17T08:47:59.859Z",
+    "evidence": "Meta Business Suite: Your post is published",
+    "publicCaptionVerified": true,
+    "aiLabelVisibleOnCheckedView": false,
+    "publicCheckedAt": "2026-10-17T08:49:15.872Z"
+  }
+]

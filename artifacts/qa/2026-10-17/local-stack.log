@@ -1,0 +1,674 @@
+i  emulators: Starting emulators: auth, functions, firestore, storage
+i  emulators: Detected demo project ID "demo-digistaybook", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 19150.
+i  functions: Watching "C:\Users\clbbe\Documents\Projects\DigiStayBook\.local-test-ai\functions" for Cloud Functions...
+!  functions: Your requested "node" version "22" doesn't match your global version "24". Using node@24 from host.
+i  functions: Loaded environment variables from .env.local.
+Serving at port 8980
+
++  functions: Loaded functions definitions from source: activationOptions, beginGuestContribution, cancelSubscription, changeGuestContribution, createActivationCheckout, createHostProperty, deleteHostProperty, deleteStoredMedia, ensureStayToken, escalatePrivacyDeadlines, finishGuestContribution, getPublicWall, guestMemoryPhoto, health, listGuestContributions, listHostExport, listHostGuestReview, listHostReports, listSafetyOperations, moderatePost, notifyConsentDeletionReview, notifyNewOperationsItems, notifyScreeningAllowance, readConsentDeletionReview, readGuestReviewPhoto, readHostExportPhoto, readSafetyCase, readSafetyCasePhoto, reportGuestMemory, reportPrivateFeedback, resolveContentReport, resolveSafetyCase, resumeSubscription, retryPendingScreening, reviewGuestContribution, setGuestReviewPolicy, stripeWebhook, submitPrivacyRequest, uploadGuestPhoto.
++  functions[australia-southeast1-activationOptions]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/activationOptions).
++  functions[australia-southeast1-beginGuestContribution]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/beginGuestContribution).
++  functions[australia-southeast1-cancelSubscription]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/cancelSubscription).
++  functions[australia-southeast1-changeGuestContribution]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/changeGuestContribution).
++  functions[australia-southeast1-createActivationCheckout]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/createActivationCheckout).
++  functions[australia-southeast1-createHostProperty]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/createHostProperty).
++  functions[australia-southeast1-deleteHostProperty]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/deleteHostProperty).
+i  functions[australia-southeast1-deleteStoredMedia]: function ignored because the pubsub emulator does not exist or is not running.
++  functions[australia-southeast1-ensureStayToken]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/ensureStayToken).
+i  functions[australia-southeast1-escalatePrivacyDeadlines]: function ignored because the pubsub emulator does not exist or is not running.
++  functions[australia-southeast1-finishGuestContribution]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/finishGuestContribution).
++  functions[australia-southeast1-getPublicWall]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/getPublicWall).
++  functions[australia-southeast1-guestMemoryPhoto]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/guestMemoryPhoto).
++  functions[australia-southeast1-health]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/health).
++  functions[australia-southeast1-listGuestContributions]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/listGuestContributions).
++  functions[australia-southeast1-listHostExport]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/listHostExport).
++  functions[australia-southeast1-listHostGuestReview]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/listHostGuestReview).
++  functions[australia-southeast1-listHostReports]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/listHostReports).
++  functions[australia-southeast1-listSafetyOperations]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/listSafetyOperations).
++  functions[australia-southeast1-moderatePost]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/moderatePost).
+i  functions[australia-southeast1-notifyConsentDeletionReview]: function ignored because the pubsub emulator does not exist or is not running.
+i  functions[australia-southeast1-notifyNewOperationsItems]: function ignored because the pubsub emulator does not exist or is not running.
+i  functions[australia-southeast1-notifyScreeningAllowance]: function ignored because the pubsub emulator does not exist or is not running.
++  functions[australia-southeast1-readConsentDeletionReview]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/readConsentDeletionReview).
++  functions[australia-southeast1-readGuestReviewPhoto]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/readGuestReviewPhoto).
++  functions[australia-southeast1-readHostExportPhoto]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/readHostExportPhoto).
++  functions[australia-southeast1-readSafetyCase]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/readSafetyCase).
++  functions[australia-southeast1-readSafetyCasePhoto]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/readSafetyCasePhoto).
++  functions[australia-southeast1-reportGuestMemory]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/reportGuestMemory).
++  functions[australia-southeast1-reportPrivateFeedback]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/reportPrivateFeedback).
++  functions[australia-southeast1-resolveContentReport]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/resolveContentReport).
++  functions[australia-southeast1-resolveSafetyCase]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/resolveSafetyCase).
++  functions[australia-southeast1-resumeSubscription]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/resumeSubscription).
+i  functions[australia-southeast1-retryPendingScreening]: function ignored because the pubsub emulator does not exist or is not running.
++  functions[australia-southeast1-reviewGuestContribution]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/reviewGuestContribution).
++  functions[australia-southeast1-setGuestReviewPolicy]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/setGuestReviewPolicy).
++  functions[australia-southeast1-stripeWebhook]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/stripeWebhook).
++  functions[australia-southeast1-submitPrivacyRequest]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/submitPrivacyRequest).
++  functions[australia-southeast1-uploadGuestPhoto]: http function initialized (http://127.0.0.1:15001/demo-digistaybook/australia-southeast1/uploadGuestPhoto).
+
+[90m┌─────────────────────────────────────────────────────────────┐[39m
+[90m│[39m ✔  All emulators ready! It is now safe to connect your app. [90m│[39m
+[90m│[39m i  View Emulator UI at http://127.0.0.1:14000/              [90m│[39m
+[90m└─────────────────────────────────────────────────────────────┘[39m
+
+[90m┌────────────────[39m[90m┬─────────────────[39m[90m┬──────────────────────────────────┐[39m
+[90m│[39m[33m Emulator       [39m[90m│[39m[33m Host:Port       [39m[90m│[39m[33m View in Emulator UI              [39m[90m│[39m
+[90m├────────────────[39m[90m┼─────────────────[39m[90m┼──────────────────────────────────┤[39m
+[90m│[39m Authentication [90m│[39m 127.0.0.1:19099 [90m│[39m http://127.0.0.1:14000/auth      [90m│[39m
+[90m├────────────────[39m[90m┼─────────────────[39m[90m┼──────────────────────────────────┤[39m
+[90m│[39m Functions      [90m│[39m 127.0.0.1:15001 [90m│[39m http://127.0.0.1:14000/functions [90m│[39m
+[90m├────────────────[39m[90m┼─────────────────[39m[90m┼──────────────────────────────────┤[39m
+[90m│[39m Firestore      [90m│[39m 127.0.0.1:18080 [90m│[39m http://127.0.0.1:14000/firestore [90m│[39m
+[90m├────────────────[39m[90m┼─────────────────[39m[90m┼──────────────────────────────────┤[39m
+[90m│[39m Storage        [90m│[39m 127.0.0.1:19199 [90m│[39m http://127.0.0.1:14000/storage   [90m│[39m
+[90m└────────────────[39m[90m┴─────────────────[39m[90m┴──────────────────────────────────┘[39m
+  Emulator Hub host: 127.0.0.1 port: 14400
+  Other reserved ports: 14500, 19150
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-health"
+i  functions: Finished "australia-southeast1-health" in 6.4549ms
+i  functions: Beginning execution of "australia-southeast1-health"
+i  functions: Finished "australia-southeast1-health" in 2.3809ms
+(node:27524) MetadataLookupWarning: received unexpected error = All promises were rejected code = ENETUNREACH, EAI_AGAIN
+(Use `node --trace-warnings ...` to show where the warning was created)
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 279.6725ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 474.22ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+>  {"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"9af5a737d522f5dfca83428e","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+>  {"finalStatus":"published","screeningOutcome":"clear","screeningReference":"9af5a737d522f5dfca83428e","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 499.5023ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 90.0602ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+>  {"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"95d41d49138bca70c330cb42","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+>  {"finalStatus":"published","screeningOutcome":"clear","screeningReference":"95d41d49138bca70c330cb42","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 232.1109ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 85.4127ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+>  {"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"ff2fcf35e76de720ecdb00d8","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+>  {"finalStatus":"published","screeningOutcome":"clear","screeningReference":"ff2fcf35e76de720ecdb00d8","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 281.615ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 74.1723ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+>  {"providerOutcome":"standard","outcome":"standard","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"1423243d9a943b15e6d6b4d7","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+>  {"finalStatus":"standard","screeningOutcome":"standard","screeningReference":"1423243d9a943b15e6d6b4d7","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 238.5398ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 105.3116ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 185.1937ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+>  {"providerOutcome":"critical","outcome":"critical","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"ca40394d7c397e44191d1eca","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+>  {"finalStatus":"critical","screeningOutcome":"critical","screeningReference":"ca40394d7c397e44191d1eca","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 212.9809ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 99.5748ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+>  {"providerOutcome":"unavailable","outcome":"critical","screeningStatus":"incomplete","contactDetailsOrLinkHold":false,"screeningReference":"f99f0ff65e071d2ab414f1fb","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+>  {"finalStatus":"critical","screeningOutcome":"critical","screeningReference":"f99f0ff65e071d2ab414f1fb","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 217.6075ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 79.3102ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 215.2027ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 107.0365ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 186.3957ms
+Seeded two hosts, operations reviewer, three properties and eight guest scenarios. Password: LocalTest-2026!
+9:27:59 am [vite] (client) Re-optimizing dependencies because vite config has changed
+
+  VITE v8.2.0   ai-qa   ready in 1063 ms
+
+  ➜  Local:   http://127.0.0.1:15181/
+
+TEST READY: http://127.0.0.1:15181/__test
+Ctrl+C saves and stops. Periodic save and local workers run every 30 seconds.
+9:28:01 am [vite] (client) [optimizer] scanning dependencies...
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 152.8507ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-listHostGuestReview"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listHostGuestReview" in 673.5374ms
+i  functions: Beginning execution of "australia-southeast1-listHostGuestReview"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listHostGuestReview" in 59.8988ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-listSafetyOperations"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listSafetyOperations" in 12.87ms
+i  functions: Beginning execution of "australia-southeast1-listSafetyOperations"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listSafetyOperations" in 314.4211ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-readSafetyCase"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-readSafetyCase" in 187.7546ms
+i  functions: Beginning execution of "australia-southeast1-readSafetyCase"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-readSafetyCase" in 65.731ms
+i  functions: Beginning execution of "australia-southeast1-readSafetyCase"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-readSafetyCase" in 59.898ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 116.9092ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 159.6118ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+>  {"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"4f7f20bfc43841eead4986c4","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+>  {"finalStatus":"published","screeningOutcome":"clear","screeningReference":"4f7f20bfc43841eead4986c4","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 286.096ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-guestMemoryPhoto"
+i  functions: Finished "australia-southeast1-guestMemoryPhoto" in 547.5606ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-changeGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-changeGuestContribution" in 1082.737ms
+i  functions: Beginning execution of "australia-southeast1-guestMemoryPhoto"
+i  functions: Finished "australia-southeast1-guestMemoryPhoto" in 111.0395ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 54.8662ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 58.4249ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 18.7885ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 53.5538ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 14.0746ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 29.8614ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 46.5918ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 26.8923ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 44.0369ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 49.4881ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 31.8783ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-moderatePost"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-moderatePost" in 194.6446ms
+i  functions: Beginning execution of "australia-southeast1-moderatePost"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-moderatePost" in 99.6358ms
+i  functions: Beginning execution of "australia-southeast1-moderatePost"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-moderatePost" in 53.2657ms
+i  functions: Beginning execution of "australia-southeast1-moderatePost"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-moderatePost" in 40.7415ms
+i  functions: Beginning execution of "australia-southeast1-moderatePost"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-moderatePost" in 56.2417ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 20.1595ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 18.9012ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 28.5927ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 1.721ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 1.5781ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 76.7301ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 66.0335ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 78.2382ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 17.1444ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 97.5722ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 36.7255ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 65.9482ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 36.6592ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 2.7034ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 171.9861ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 189.626ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 151.2714ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 166.462ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 153.3518ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 155.3554ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 123.2791ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 139.2811ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 121.5286ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 127.6782ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 28.5422ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 71.5205ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 15.0236ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+>  {"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"e351e6d1e9cfbae47fedee4e","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+>  {"finalStatus":"published","screeningOutcome":"clear","screeningReference":"e351e6d1e9cfbae47fedee4e","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 341.7276ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-createHostProperty"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Beginning execution of "australia-southeast1-createHostProperty"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-createHostProperty" in 2758.1ms
+i  functions: Finished "australia-southeast1-createHostProperty" in 3426.1096ms
+i  functions: Beginning execution of "australia-southeast1-createHostProperty"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-createHostProperty" in 49.0447ms
+i  functions: Beginning execution of "australia-southeast1-createHostProperty"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-createHostProperty" in 1.6215ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-listHostExport"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listHostExport" in 117.7998ms
+i  functions: Beginning execution of "australia-southeast1-listHostExport"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listHostExport" in 2.0063ms
+i  functions: Beginning execution of "australia-southeast1-listHostExport"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listHostExport" in 32.7371ms
+i  functions: Beginning execution of "australia-southeast1-listHostExport"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listHostExport" in 37.2667ms
+i  functions: Beginning execution of "australia-southeast1-listHostExport"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listHostExport" in 38.6706ms
+i  functions: Beginning execution of "australia-southeast1-listHostExport"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listHostExport" in 40.2074ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-readHostExportPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-readHostExportPhoto" in 132.5923ms
+i  functions: Beginning execution of "australia-southeast1-readHostExportPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-readHostExportPhoto" in 220.4889ms
+i  functions: Beginning execution of "australia-southeast1-readHostExportPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-readHostExportPhoto" in 71.2816ms
+i  functions: Beginning execution of "australia-southeast1-readHostExportPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-readHostExportPhoto" in 13.4646ms
+i  functions: Beginning execution of "australia-southeast1-readHostExportPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-readHostExportPhoto" in 1.4818ms
+i  functions: Beginning execution of "australia-southeast1-guestMemoryPhoto"
+i  functions: Finished "australia-southeast1-guestMemoryPhoto" in 67.7139ms
+i  functions: Beginning execution of "australia-southeast1-readHostExportPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-readHostExportPhoto" in 66.5888ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-reportGuestMemory"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-reportGuestMemory" in 454.7251ms
+i  functions: Beginning execution of "australia-southeast1-reportGuestMemory"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-reportGuestMemory" in 112.5741ms
+i  functions: Beginning execution of "australia-southeast1-reportGuestMemory"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-reportGuestMemory" in 163.506ms
+i  functions: Beginning execution of "australia-southeast1-reportGuestMemory"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-reportGuestMemory" in 113.3665ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-listHostReports"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listHostReports" in 255.3131ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-resolveContentReport"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-resolveContentReport" in 161.465ms
+i  functions: Beginning execution of "australia-southeast1-resolveContentReport"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-resolveContentReport" in 80.23ms
+i  functions: Beginning execution of "australia-southeast1-resolveContentReport"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-resolveContentReport" in 121.2842ms
+i  functions: Beginning execution of "australia-southeast1-resolveContentReport"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-resolveContentReport" in 62.3435ms
+i  functions: Beginning execution of "australia-southeast1-reportGuestMemory"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-reportGuestMemory" in 94.5209ms
+i  functions: Beginning execution of "australia-southeast1-reportGuestMemory"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-reportGuestMemory" in 91.6033ms
+i  functions: Beginning execution of "australia-southeast1-reportGuestMemory"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-reportGuestMemory" in 162.5348ms
+i  functions: Beginning execution of "australia-southeast1-listSafetyOperations"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listSafetyOperations" in 2.4697ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-submitPrivacyRequest"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-submitPrivacyRequest" in 141.9191ms
+i  functions: Beginning execution of "australia-southeast1-submitPrivacyRequest"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-submitPrivacyRequest" in 46.1054ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 64.628ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+>  {"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"3af2be039fabbce2082e0b9a","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+>  {"finalStatus":"published","screeningOutcome":"clear","screeningReference":"3af2be039fabbce2082e0b9a","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 191.9817ms
+i  functions: Beginning execution of "australia-southeast1-createHostProperty"
+i  functions: Finished "australia-southeast1-createHostProperty" in 2.1947ms
+i  functions: Beginning execution of "australia-southeast1-createHostProperty"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-createHostProperty" in 69.2445ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+i  functions: Loaded environment variables from .env.local.
+i  functions: Finished "australia-southeast1-getPublicWall" in 31.6068ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 72.4375ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+i  functions: Finished "australia-southeast1-getPublicWall" in 1.4049ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 47.7134ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+i  functions: Finished "australia-southeast1-getPublicWall" in 1.0813ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 47.3607ms
+i  functions: Beginning execution of "australia-southeast1-guestMemoryPhoto"
+i  functions: Finished "australia-southeast1-guestMemoryPhoto" in 77.5368ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-listGuestContributions"
+i  functions: Finished "australia-southeast1-listGuestContributions" in 4.3127ms
+i  functions: Beginning execution of "australia-southeast1-listGuestContributions"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Beginning execution of "australia-southeast1-listGuestContributions"
+i  functions: Finished "australia-southeast1-listGuestContributions" in 8.7416ms
+i  functions: Beginning execution of "australia-southeast1-listGuestContributions"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listGuestContributions" in 289.7456ms
+i  functions: Finished "australia-southeast1-listGuestContributions" in 260.4026ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 2.3959ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 1670.4483ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 2.9644ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+>  {"providerOutcome":"clear","outcome":"standard","screeningStatus":"complete","contactDetailsOrLinkHold":true,"screeningReference":"7e84eff7cd10d8fee11cb141","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+>  {"finalStatus":"standard","screeningOutcome":"standard","screeningReference":"7e84eff7cd10d8fee11cb141","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 530.7575ms
+i  functions: Beginning execution of "australia-southeast1-listGuestContributions"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listGuestContributions" in 89.1824ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+i  functions: Finished "australia-southeast1-getPublicWall" in 2.7838ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 1865.655ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 1.5477ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 78.9466ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 0.972ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+>  {"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"0223d8f332dac7d4d18bcd3a","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+>  {"finalStatus":"published","screeningOutcome":"clear","screeningReference":"0223d8f332dac7d4d18bcd3a","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 217.6228ms
+i  functions: Beginning execution of "australia-southeast1-listGuestContributions"
+i  functions: Finished "australia-southeast1-listGuestContributions" in 1.6181ms
+i  functions: Beginning execution of "australia-southeast1-listGuestContributions"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listGuestContributions" in 36.0983ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+i  functions: Finished "australia-southeast1-getPublicWall" in 0.9376ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 45.0148ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+i  functions: Finished "australia-southeast1-getPublicWall" in 1.2848ms
+i  functions: Beginning execution of "australia-southeast1-getPublicWall"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-getPublicWall" in 50.5674ms
+i  functions: Loaded environment variables from .env.local.
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-guestMemoryPhoto"
+i  functions: Finished "australia-southeast1-guestMemoryPhoto" in 80.7535ms
+i  functions: Beginning execution of "australia-southeast1-activationOptions"
+i  functions: Finished "australia-southeast1-activationOptions" in 2.0368ms
+i  functions: Beginning execution of "australia-southeast1-activationOptions"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Beginning execution of "australia-southeast1-activationOptions"
+i  functions: Finished "australia-southeast1-activationOptions" in 2.3648ms
+i  functions: Beginning execution of "australia-southeast1-activationOptions"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-activationOptions" in 117.3785ms
+i  functions: Finished "australia-southeast1-activationOptions" in 128.9441ms
+i  functions: Beginning execution of "australia-southeast1-health"
+i  functions: Finished "australia-southeast1-health" in 2.1473ms
+i  functions: Beginning execution of "australia-southeast1-health"
+i  functions: Finished "australia-southeast1-health" in 2.5848ms
+i  emulators: Received export request. Exporting data to C:\Users\clbbe\Documents\Projects\DigiStayBook\.local-test-ai\snapshots\1792189984651-5d306568-d4fa-410e-84d8-39793443c5a9.
++  emulators: Export complete.
+Saved local Test accounts, records and photos.
+i  functions: Beginning execution of "australia-southeast1-listGuestContributions"
+i  functions: Beginning execution of "australia-southeast1-listGuestContributions"
+i  functions: Finished "australia-southeast1-listGuestContributions" in 3.5527ms
+i  functions: Finished "australia-southeast1-listGuestContributions" in 2.3362ms
+i  functions: Beginning execution of "australia-southeast1-listGuestContributions"
+i  functions: Beginning execution of "australia-southeast1-listGuestContributions"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-listGuestContributions" in 72.1379ms
+i  functions: Finished "australia-southeast1-listGuestContributions" in 71.5959ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 19.1399ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 20.924ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 21.3011ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 1.8143ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 1.0287ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 85.5392ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 82.0568ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 72.2998ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 17.0302ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 71.5415ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 35.27ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 36.2891ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 49.4513ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 3.173ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 156.2792ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 123.5801ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 165.2382ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 125.1717ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 140.7182ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 146.2985ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 154.5988ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 158.3429ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 139.5512ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 134.1272ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 13.8691ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 67.1076ms
+i  functions: Beginning execution of "australia-southeast1-uploadGuestPhoto"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-uploadGuestPhoto" in 11.2656ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+>  {"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"e336e66c6e424bafd57618b2","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+>  {"finalStatus":"published","screeningOutcome":"clear","screeningReference":"e336e66c6e424bafd57618b2","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 357.8994ms
+i  functions: Beginning execution of "australia-southeast1-beginGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-beginGuestContribution" in 65.7857ms
+i  functions: Beginning execution of "australia-southeast1-finishGuestContribution"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+>  {"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"d70e90fa376d752ecfd0ff05","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+>  {"finalStatus":"published","screeningOutcome":"clear","screeningReference":"d70e90fa376d752ecfd0ff05","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+i  functions: Finished "australia-southeast1-finishGuestContribution" in 224.9752ms
+i  functions: Beginning execution of "australia-southeast1-health"
+i  functions: Finished "australia-southeast1-health" in 1.6618ms
+i  emulators: Received export request. Exporting data to C:\Users\clbbe\Documents\Projects\DigiStayBook\.local-test-ai\snapshots\1792190034491-52f685c4-9e84-4187-af72-ea0b2a2f17bf.
++  emulators: Export complete.
+Local emulators stopped unexpectedly (4294967295). Restoring Test will use the last completed save.
+Local Test cleanup failed: Command failed: powershell.exe -NoProfile -NonInteractive -Command 
+$identities = ConvertFrom-Json $env:LOCAL_TEST_PROCESS_IDENTITIES
+foreach ($identity in $identities | Sort-Object -Property pid -Unique) {
+  $target = Get-CimInstance Win32_Process -Filter ("ProcessId = " + [int]$identity.pid)
+  if ($target -and $target.CreationDate.ToUniversalTime().ToString('o') -eq $identity.created) {
+    Stop-Process -Id $target.ProcessId -Force -ErrorAction SilentlyContinue
+  }
+}
+
+

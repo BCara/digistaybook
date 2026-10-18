@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DigiStayBook Prelaunch Week</title>
+<style>
+:root {
+  --bg:#fefaf1; --surface:#ffffff; --ink:#1e252a; --muted:#6b6058; --line:#e8dcc8; --rust:#ba4e2e; --rust-soft:#f6e6dc; --ok:#245f50;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg:#12171a; --surface:#1b2226; --ink:#f5f1e8; --muted:#b3a99c; --line:#2e383d; --rust:#dd8465; --rust-soft:#2a201c; --ok:#7cc4ad; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg:#12171a; --surface:#1b2226; --ink:#f5f1e8; --muted:#b3a99c; --line:#2e383d; --rust:#dd8465; --rust-soft:#2a201c; --ok:#7cc4ad; color-scheme: dark; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.6 "Segoe UI", system-ui, -apple-system, sans-serif; }
+.wrap { max-width:980px; margin:0 auto; padding:32px 16px 80px; }
+h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; line-height:1.2; margin:0; }
+h1 { font-size:clamp(30px, 6vw, 44px); margin:6px 0 10px; }
+.eyebrow { color:var(--rust); font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:13px; margin:0; }
+.lede { color:var(--muted); max-width:62ch; margin:0 0 18px; }
+.note { background:var(--rust-soft); border-left:4px solid var(--rust); padding:12px 16px; border-radius:6px; margin:18px 0; }
+.note p { margin:4px 0; }
+.tabs { position:sticky; top:0; z-index:2; display:flex; gap:8px; overflow-x:auto; padding:12px 0; background:var(--bg); border-bottom:1px solid var(--line); margin-bottom:8px; }
+.tab { flex:0 0 auto; text-decoration:none; color:var(--ink); border:1px solid var(--line); background:var(--surface); border-radius:10px; padding:6px 14px; text-align:center; line-height:1.2; }
+.tab span { display:block; font-size:12px; color:var(--muted); }
+.tab b { font-size:18px; }
+.tab.done { border-color:var(--ok); }
+.tab.done span::after { content:" ✓"; color:var(--ok); }
+.day { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:24px; margin:24px 0; scroll-margin-top:90px; }
+.day-head h2 { font-size:28px; margin:6px 0; }
+.goal { color:var(--muted); margin:0 0 18px; }
+.day-body { display:grid; grid-template-columns: 260px 1fr; gap:24px; align-items:start; }
+.shot { margin:0; }
+.shot img { width:100%; height:auto; border-radius:10px; border:1px solid var(--line); display:block; }
+.shot figcaption { font-size:14px; margin-top:6px; }
+a { color:var(--rust); }
+.steps { list-style:none; counter-reset:s; padding:0; margin:0; }
+.steps li { counter-increment:s; position:relative; padding:0 0 18px 48px; }
+.steps li::before { content:counter(s); position:absolute; left:0; top:0; width:32px; height:32px; border-radius:50%; background:var(--rust); color:var(--bg); display:grid; place-items:center; font-weight:700; }
+.steps h3 { font-size:19px; margin:4px 0 6px; padding-right:90px; }
+.steps p { margin:0 0 8px; }
+.time { display:inline-block; font:600 13px "Segoe UI", sans-serif; background:var(--rust-soft); color:var(--rust); border-radius:20px; padding:2px 10px; margin-left:6px; vertical-align:middle; }
+.done { position:absolute; right:0; top:4px; font-size:14px; color:var(--muted); display:flex; gap:6px; align-items:center; cursor:pointer; }
+.done input { width:18px; height:18px; accent-color:var(--ok); }
+.btn { display:inline-block; font:600 14px "Segoe UI", sans-serif; background:var(--rust); color:var(--bg); border:1px solid var(--rust); border-radius:8px; padding:7px 14px; text-decoration:none; cursor:pointer; }
+.btn.ghost { background:transparent; color:var(--rust); }
+.copy { border-top:1px solid var(--line); margin-top:16px; padding-top:12px; }
+.copy summary { cursor:pointer; font-weight:600; }
+.copy .text { background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:4px 16px; margin:10px 0; white-space:normal; }
+.copy .text p { margin:10px 0; }
+footer { color:var(--muted); font-size:14px; border-top:1px solid var(--line); padding-top:16px; }
+@media (max-width: 680px) {
+  .day { padding:18px; }
+  .day-body { grid-template-columns: 1fr; }
+  .shot { max-width:320px; }
+  .steps h3 { padding-right:0; margin-top:28px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p><a href="../MARKETING_PLAN.html">← Marketing plan</a></p>
+  <p class="eyebrow">DigiStayBook · Prelaunch week 1</p>
+  <h1>Your prelaunch week on Facebook.</h1>
+  <p class="lede">Friday 16 to Thursday 22 October 2026. Seven posts introduce DigiStayBook before launch: what it is, the problem it solves, how it works, and questions that get hosts talking. All times are Sydney time.</p>
+  <div class="note">
+    <p><strong>Everything is already drafted.</strong> Each post below is saved as a draft on the <a href="https://www.facebook.com/profile.php?id=61595061885990" target="_blank" rel="noopener">Digi Staybook Page</a> with its image and caption. Nothing has been published.</p>
+    <p>Each day: open the draft, check it, publish or schedule it, then reply to comments. About ten minutes a day.</p>
+  </div>
+  <div class="note">
+    <p><strong>Prelaunch rules for this week.</strong> No prices, launch dates or sign-up links yet; the call to action is "follow the Page". Seabreeze Cottage is a made-up demo property, and the captions say so. The images use only the real logo and real screenshots of the product. Its photos are Unsplash images, which are licensed for commercial use.</p>
+  </div>
+  <nav class="tabs" aria-label="Days"><a class="tab" href="#d01"><span>Fri</span><b>16</b></a><a class="tab" href="#d02"><span>Sat</span><b>17</b></a><a class="tab" href="#d03"><span>Sun</span><b>18</b></a><a class="tab" href="#d04"><span>Mon</span><b>19</b></a><a class="tab" href="#d05"><span>Tue</span><b>20</b></a><a class="tab" href="#d06"><span>Wed</span><b>21</b></a><a class="tab" href="#d07"><span>Thu</span><b>22</b></a></nav>
+  
+<section class="day" id="d01">
+  <header class="day-head">
+    <p class="eyebrow">Day 1 · Friday 16 October</p>
+    <h2>Say hello</h2>
+    <p class="goal">Tell people the Page exists and what&#x27;s coming, so early followers know what they&#x27;re following.</p>
+  </header>
+  <div class="day-body">
+    <figure class="shot">
+      <a href="images/01-fri.jpg" target="_blank" rel="noopener"><img src="images/01-fri.jpg" alt="DigiStayBook logo above the words &#x27;A guestbook your rental never had&#x27;, with three points: no app for guests, no guest accounts, made for short-term rental hosts." loading="lazy" width="1080" height="1350"></a>
+      <figcaption><a href="images/01-fri.jpg" download>Download image · 1080 × 1350</a></figcaption>
+    </figure>
+    <ol class="steps">
+      <li>
+        <label class="done"><input type="checkbox" data-key="dsb-prelaunch-1-01-a"> Done</label>
+        <h3>Check the draft and publish <span class="time">7:30 pm</span></h3>
+        <p>The post is already saved as a draft on the Digi Staybook Page, with this image and caption. Open the Page's drafts in Meta Business Suite, read it through, then publish it at the time above or schedule it for then.</p>
+        <p class="links"><a class="btn" href="https://business.facebook.com/latest/posts/draft_posts/?asset_id=1378771845320763" target="_blank" rel="noopener">Open drafts</a></p>
+      </li>
+      <li>
+        <label class="done"><input type="checkbox" data-key="dsb-prelaunch-1-01-b"> Done</label>
+        <h3>Reply to comments</h3>
+        <p>Spend five minutes later that evening replying to anyone who comments. A short, friendly answer is enough. Mention that DigiStayBook is launching soon, and don't promise dates or prices yet.</p>
+        <p class="links"><a class="btn ghost" href="https://www.facebook.com/profile.php?id=61595061885990" target="_blank" rel="noopener">Open the Page</a></p>
+      </li>
+    </ol>
+  </div>
+  <details class="copy" open>
+    <summary>Caption</summary>
+    <div class="text" id="cap01"><p>Hello from DigiStayBook 👋</p><p>We&#x27;re building a digital guestbook for short-term rental hosts.</p><p>One QR code sits on the counter. Guests scan it with their phone camera to find your house guidance and your local favourites, and to leave a memory for the next people who stay.</p><p>No app to download. No account to create.</p><p>We&#x27;re in the final stretch before launch. Follow the Page to see how it works over the next week, and to hear first when we open the doors.</p><p>#ShortTermRental #HolidayRental #AirbnbHost #DigitalGuestbook #DigiStayBook</p></div>
+    <button type="button" class="btn ghost" data-copy="cap01">Copy caption</button>
+  </details>
+  <details class="copy">
+    <summary>Alt text</summary>
+    <div class="text" id="alt01"><p>DigiStayBook logo above the words &#x27;A guestbook your rental never had&#x27;, with three points: no app for guests, no guest accounts, made for short-term rental hosts.</p></div>
+    <button type="button" class="btn ghost" data-copy="alt01">Copy alt text</button>
+  </details>
+</section>
+<section class="day" id="d02">
+  <header class="day-head">
+    <p class="eyebrow">Day 2 · Saturday 17 October</p>
+    <h2>The questions every host knows</h2>
+    <p class="goal">Name the problem hosts feel every changeover: the same questions, again and again.</p>
+  </header>
+  <div class="day-body">
+    <figure class="shot">
+      <a href="images/02-sat.jpg" target="_blank" rel="noopener"><img src="images/02-sat.jpg" alt="A phone showing the DigiStayBook demo guest page with &#x27;Your stay essentials&#x27; buttons for Wi-Fi, Bins, Checkout and Heating." loading="lazy" width="1080" height="1350"></a>
+      <figcaption><a href="images/02-sat.jpg" download>Download image · 1080 × 1350</a></figcaption>
+    </figure>
+    <ol class="steps">
+      <li>
+        <label class="done"><input type="checkbox" data-key="dsb-prelaunch-1-02-a"> Done</label>
+        <h3>Check the draft and publish <span class="time">9:00 am</span></h3>
+        <p>The post is already saved as a draft on the Digi Staybook Page, with this image and caption. Open the Page's drafts in Meta Business Suite, read it through, then publish it at the time above or schedule it for then.</p>
+        <p class="links"><a class="btn" href="https://business.facebook.com/latest/posts/draft_posts/?asset_id=1378771845320763" target="_blank" rel="noopener">Open drafts</a></p>
+      </li>
+      <li>
+        <label class="done"><input type="checkbox" data-key="dsb-prelaunch-1-02-b"> Done</label>
+        <h3>Reply to comments</h3>
+        <p>Spend five minutes later that evening replying to anyone who comments. A short, friendly answer is enough. Mention that DigiStayBook is launching soon, and don't promise dates or prices yet.</p>
+        <p class="links"><a class="btn ghost" href="https://www.facebook.com/profile.php?id=61595061885990" target="_blank" rel="noopener">Open the Page</a></p>
+      </li>
+    </ol>
+  </div>
+  <details class="copy" open>
+    <summary>Caption</summary>
+    <div class="text" id="cap02"><p>What&#x27;s the Wi-Fi password?<br>Which bin goes out, and when?<br>What time is checkout?<br>How does the heating work?</p><p>If you host, you&#x27;ve answered these more times than you can count, usually by message and usually late at night.</p><p>With DigiStayBook you write the answers once. Guests scan the QR code in the house and find them in a single tap: Wi-Fi, bins, checkout, heating, whatever your place needs.</p><p>The screenshot is from our demo property, Seabreeze Cottage.</p><p>Hosts: which question do you get asked most? Tell us below 👇</p><p>#ShortTermRental #HolidayLet #AirbnbHost #HostTips #DigiStayBook</p></div>
+    <button type="button" class="btn ghost" data-copy="cap02">Copy caption</button>
+  </details>
+  <details class="copy">
+    <summary>Alt text</summary>
+    <div class="text" id="alt02"><p>A phone showing the DigiStayBook demo guest page with &#x27;Your stay essentials&#x27; buttons for Wi-Fi, Bins, Checkout and Heating.</p></div>
+    <button type="button" class="btn ghost" data-copy="alt02">Copy alt text</button>
+  </details>
+</section>
+<section class="day" id="d03">
+  <header class="day-head">
+    <p class="eyebrow">Day 3 · Sunday 18 October</p>
+    <h2>How it works</h2>
+    <p class="goal">Explain the product in three simple steps.</p>
+  </header>
+  <div class="day-body">
+    <figure class="shot">
+      <a href="images/03-sun.jpg" target="_blank" rel="noopener"><img src="images/03-sun.jpg" alt="A printed DigiStayBook QR display for the demo property Seabreeze Cottage, next to three steps: put the QR display on the counter, guests scan it with their camera, they read your guidance and leave a memory." loading="lazy" width="1080" height="1350"></a>
+      <figcaption><a href="images/03-sun.jpg" download>Download image · 1080 × 1350</a></figcaption>
+    </figure>
+    <ol class="steps">
+      <li>
+        <label class="done"><input type="checkbox" data-key="dsb-prelaunch-1-03-a"> Done</label>
+        <h3>Check the draft and publish <span class="time">7:30 pm</span></h3>
+        <p>The post is already saved as a draft on the Digi Staybook Page, with this image and caption. Open the Page's drafts in Meta Business Suite, read it through, then publish it at the time above or schedule it for then.</p>
+        <p class="links"><a class="btn" href="https://business.facebook.com/latest/posts/draft_posts/?asset_id=1378771845320763" target="_blank" rel="noopener">Open drafts</a></p>
+      </li>
+      <li>
+        <label class="done"><input type="checkbox" data-key="dsb-prelaunch-1-03-b"> Done</label>
+        <h3>Reply to comments</h3>
+        <p>Spend five minutes later that evening replying to anyone who comments. A short, friendly answer is enough. Mention that DigiStayBook is launching soon, and don't promise dates or prices yet.</p>
+        <p class="links"><a class="btn ghost" href="https://www.facebook.com/profile.php?id=61595061885990" target="_blank" rel="noopener">Open the Page</a></p>
+      </li>
+    </ol>
+  </div>
+  <details class="copy" open>
+    <summary>Caption</summary>
+    <div class="text" id="cap03"><p>How DigiStayBook works, in three steps:</p><p>1️⃣ You set up your property&#x27;s page once: welcome note, house guidance, local tips.<br>2️⃣ You print the QR display and pop it on the kitchen counter.<br>3️⃣ Guests scan it with their phone camera. They read everything they need, then leave a message or photo on your guest wall before they go.</p><p>No app download and no sign-up for your guests. It opens straight in the browser.</p><p>Launching soon. Follow along so you don&#x27;t miss it.</p><p>#ShortTermRental #HolidayRental #AirbnbHost #QRCode #DigiStayBook</p></div>
+    <button type="button" class="btn ghost" data-copy="cap03">Copy caption</button>
+  </details>
+  <details class="copy">
+    <summary>Alt text</summary>
+    <div class="text" id="alt03"><p>A printed DigiStayBook QR display for the demo property Seabreeze Cottage, next to three steps: put the QR display on the counter, guests scan it with their camera, they read your guidance and leave a memory.</p></div>
+    <button type="button" class="btn ghost" data-copy="alt03">Copy alt text</button>
+  </details>
+</section>
+<section class="day" id="d04">
+  <header class="day-head">
+    <p class="eyebrow">Day 4 · Monday 19 October</p>
+    <h2>Sneak peek: the guest wall</h2>
+    <p class="goal">Show the emotional side: the memories guests leave behind.</p>
+  </header>
+  <div class="day-body">
+    <figure class="shot">
+      <a href="images/04-mon.jpg" target="_blank" rel="noopener"><img src="images/04-mon.jpg" alt="A phone showing the DigiStayBook demo guest wall with a coastal photo and a guest message about walking to the lighthouse every morning." loading="lazy" width="1080" height="1350"></a>
+      <figcaption><a href="images/04-mon.jpg" download>Download image · 1080 × 1350</a></figcaption>
+    </figure>
+    <ol class="steps">
+      <li>
+        <label class="done"><input type="checkbox" data-key="dsb-prelaunch-1-04-a"> Done</label>
+        <h3>Check the draft and publish <span class="time">12:30 pm</span></h3>
+        <p>The post is already saved as a draft on the Digi Staybook Page, with this image and caption. Open the Page's drafts in Meta Business Suite, read it through, then publish it at the time above or schedule it for then.</p>
+        <p class="links"><a class="btn" href="https://business.facebook.com/latest/posts/draft_posts/?asset_id=1378771845320763" target="_blank" rel="noopener">Open drafts</a></p>
+      </li>
+      <li>
+        <label class="done"><input type="checkbox" data-key="dsb-prelaunch-1-04-b"> Done</label>
+        <h3>Reply to comments</h3>
+        <p>Spend five minutes later that evening replying to anyone who comments. A short, friendly answer is enough. Mention that DigiStayBook is launching soon, and don't promise dates or prices yet.</p>
+        <p class="links"><a class="btn ghost" href="https://www.facebook.com/profile.php?id=61595061885990" target="_blank" rel="noopener">Open the Page</a></p>
+      </li>
+    </ol>
+  </div>
+  <details class="copy" open>
+    <summary>Caption</summary>
+    <div class="text" id="cap04"><p>Remember the paper guestbook on the hall table? 📖</p><p>The best ones were full of little stories: the walk everyone loved, the café worth the detour, the family who came back every summer.</p><p>DigiStayBook brings that back for the way people travel now. Guests leave a message and a photo from their phone, and it joins your property&#x27;s guest wall for the next guests to read.</p><p>This is a sneak peek from our demo property. The cottage and the messages are made up for the demo, but the wall is the real thing.</p><p>#GuestBook #ShortTermRental #HolidayRental #AirbnbHost #DigiStayBook</p></div>
+    <button type="button" class="btn ghost" data-copy="cap04">Copy caption</button>
+  </details>
+  <details class="copy">
+    <summary>Alt text</summary>
+    <div class="text" id="alt04"><p>A phone showing the DigiStayBook demo guest wall with a coastal photo and a guest message about walking to the lighthouse every morning.</p></div>
+    <button type="button" class="btn ghost" data-copy="alt04">Copy alt text</button>
+  </details>
+</section>
+<section class="day" id="d05">
+  <header class="day-head">
+    <p class="eyebrow">Day 5 · Tuesday 20 October</p>
+    <h2>Your local favourites</h2>
+    <p class="goal">Position the host as the local expert; the tips are part of the stay.</p>
+  </header>
+  <div class="day-body">
+    <figure class="shot">
+      <a href="images/05-tue.jpg" target="_blank" rel="noopener"><img src="images/05-tue.jpg" alt="A phone showing a tip from the demo hosts on the DigiStayBook guest page: &#x27;Our favourite: the bakery behind the lighthouse. Go before 9am or the pasties are gone.&#x27;" loading="lazy" width="1080" height="1350"></a>
+      <figcaption><a href="images/05-tue.jpg" download>Download image · 1080 × 1350</a></figcaption>
+    </figure>
+    <ol class="steps">
+      <li>
+        <label class="done"><input type="checkbox" data-key="dsb-prelaunch-1-05-a"> Done</label>
+        <h3>Check the draft and publish <span class="time">7:30 pm</span></h3>
+        <p>The post is already saved as a draft on the Digi Staybook Page, with this image and caption. Open the Page's drafts in Meta Business Suite, read it through, then publish it at the time above or schedule it for then.</p>
+        <p class="links"><a class="btn" href="https://business.facebook.com/latest/posts/draft_posts/?asset_id=1378771845320763" target="_blank" rel="noopener">Open drafts</a></p>
+      </li>
+      <li>
+        <label class="done"><input type="checkbox" data-key="dsb-prelaunch-1-05-b"> Done</label>
+        <h3>Reply to comments</h3>
+        <p>Spend five minutes later that evening replying to anyone who comments. A short, friendly answer is enough. Mention that DigiStayBook is launching soon, and don't promise dates or prices yet.</p>
+        <p class="links"><a class="btn ghost" href="https://www.facebook.com/profile.php?id=61595061885990" target="_blank" rel="noopener">Open the Page</a></p>
+      </li>
+    </ol>
+  </div>
+  <details class="copy" open>
+    <summary>Caption</summary>
+    <div class="text" id="cap05"><p>The best part of staying somewhere new? The tips you&#x27;d never find on your own. 🥐</p><p>The bakery behind the lighthouse. The beach that&#x27;s quiet at sunset. The pub with the open fire.</p><p>You already know these places. DigiStayBook gives you somewhere to share them, right where your guests look first. Pin your favourites to the top of your property&#x27;s page and they&#x27;re there for every stay.</p><p>The tip in the picture comes from our demo cottage.</p><p>Hosts: what&#x27;s the one local spot you always recommend? 👇</p><p>#LocalTips #ShortTermRental #HolidayRental #AirbnbHost #DigiStayBook</p></div>
+    <button type="button" class="btn ghost" data-copy="cap05">Copy caption</button>
+  </details>
+  <details class="copy">
+    <summary>Alt text</summary>
+    <div class="text" id="alt05"><p>A phone showing a tip from the demo hosts on the DigiStayBook guest page: &#x27;Our favourite: the bakery behind the lighthouse. Go before 9am or the pasties are gone.&#x27;</p></div>
+    <button type="button" class="btn ghost" data-copy="alt05">Copy alt text</button>
+  </details>
+</section>
+<section class="day" id="d06">
+  <header class="day-head">
+    <p class="eyebrow">Day 6 · Wednesday 21 October</p>
+    <h2>Simple for guests, in your control</h2>
+    <p class="goal">Answer the first objections: guests won&#x27;t download apps, and hosts worry about what gets posted.</p>
+  </header>
+  <div class="day-body">
+    <figure class="shot">
+      <a href="images/06-wed.jpg" target="_blank" rel="noopener"><img src="images/06-wed.jpg" alt="Text card: &#x27;Easy for guests. Yours to control.&#x27; with four points: opens in the phone&#x27;s browser, no guest sign-up, turn on approval for new memories, hide or remove any post." loading="lazy" width="1080" height="1350"></a>
+      <figcaption><a href="images/06-wed.jpg" download>Download image · 1080 × 1350</a></figcaption>
+    </figure>
+    <ol class="steps">
+      <li>
+        <label class="done"><input type="checkbox" data-key="dsb-prelaunch-1-06-a"> Done</label>
+        <h3>Check the draft and publish <span class="time">7:30 pm</span></h3>
+        <p>The post is already saved as a draft on the Digi Staybook Page, with this image and caption. Open the Page's drafts in Meta Business Suite, read it through, then publish it at the time above or schedule it for then.</p>
+        <p class="links"><a class="btn" href="https://business.facebook.com/latest/posts/draft_posts/?asset_id=1378771845320763" target="_blank" rel="noopener">Open drafts</a></p>
+      </li>
+      <li>
+        <label class="done"><input type="checkbox" data-key="dsb-prelaunch-1-06-b"> Done</label>
+        <h3>Reply to comments</h3>
+        <p>Spend five minutes later that evening replying to anyone who comments. A short, friendly answer is enough. Mention that DigiStayBook is launching soon, and don't promise dates or prices yet.</p>
+        <p class="links"><a class="btn ghost" href="https://www.facebook.com/profile.php?id=61595061885990" target="_blank" rel="noopener">Open the Page</a></p>
+      </li>
+    </ol>
+  </div>
+  <details class="copy" open>
+    <summary>Caption</summary>
+    <div class="text" id="cap06"><p>Two questions hosts often ask about digital guestbooks:</p><p>&quot;My guests won&#x27;t download an app.&quot;<br>They don&#x27;t have to. DigiStayBook opens in the phone&#x27;s browser straight from the QR code. No app, no account, no password.</p><p>&quot;What if someone posts something I don&#x27;t want there?&quot;<br>You&#x27;re in control. Every new memory goes through automatic safety checks, you can turn on approval so nothing appears until you say so, and you can hide or remove any post from your dashboard.</p><p>What else would you want to know before using a digital guestbook? Ask away below.</p><p>#ShortTermRental #HolidayRental #AirbnbHost #HostLife #DigiStayBook</p></div>
+    <button type="button" class="btn ghost" data-copy="cap06">Copy caption</button>
+  </details>
+  <details class="copy">
+    <summary>Alt text</summary>
+    <div class="text" id="alt06"><p>Text card: &#x27;Easy for guests. Yours to control.&#x27; with four points: opens in the phone&#x27;s browser, no guest sign-up, turn on approval for new memories, hide or remove any post.</p></div>
+    <button type="button" class="btn ghost" data-copy="alt06">Copy alt text</button>
+  </details>
+</section>
+<section class="day" id="d07">
+  <header class="day-head">
+    <p class="eyebrow">Day 7 · Thursday 22 October</p>
+    <h2>Ask the hosts</h2>
+    <p class="goal">Start conversations and learn what hosts want before launch.</p>
+  </header>
+  <div class="day-body">
+    <figure class="shot">
+      <a href="images/07-thu.jpg" target="_blank" rel="noopener"><img src="images/07-thu.jpg" alt="Text card asking hosts: &#x27;What do you wish every guest knew?&#x27; with example answers in speech bubbles: where to park, how the shower works, the beach worth the detour." loading="lazy" width="1080" height="1350"></a>
+      <figcaption><a href="images/07-thu.jpg" download>Download image · 1080 × 1350</a></figcaption>
+    </figure>
+    <ol class="steps">
+      <li>
+        <label class="done"><input type="checkbox" data-key="dsb-prelaunch-1-07-a"> Done</label>
+        <h3>Check the draft and publish <span class="time">7:30 pm</span></h3>
+        <p>The post is already saved as a draft on the Digi Staybook Page, with this image and caption. Open the Page's drafts in Meta Business Suite, read it through, then publish it at the time above or schedule it for then.</p>
+        <p class="links"><a class="btn" href="https://business.facebook.com/latest/posts/draft_posts/?asset_id=1378771845320763" target="_blank" rel="noopener">Open drafts</a></p>
+      </li>
+      <li>
+        <label class="done"><input type="checkbox" data-key="dsb-prelaunch-1-07-b"> Done</label>
+        <h3>Reply to comments</h3>
+        <p>Spend five minutes later that evening replying to anyone who comments. A short, friendly answer is enough. Mention that DigiStayBook is launching soon, and don't promise dates or prices yet.</p>
+        <p class="links"><a class="btn ghost" href="https://www.facebook.com/profile.php?id=61595061885990" target="_blank" rel="noopener">Open the Page</a></p>
+      </li>
+    </ol>
+  </div>
+  <details class="copy" open>
+    <summary>Caption</summary>
+    <div class="text" id="cap07"><p>A question for every host out there 🏡</p><p>What&#x27;s the one thing you wish every guest knew before they walked through the door?</p><p>How the shower works? Where to park? The beach that&#x27;s worth the extra ten minutes?</p><p>We&#x27;re getting DigiStayBook ready for launch, and your answers help us shape the welcome page that guests see first.</p><p>Drop yours in the comments, and follow the Page to be the first to try it.</p><p>#ShortTermRental #HolidayRental #AirbnbHost #HostCommunity #DigiStayBook</p></div>
+    <button type="button" class="btn ghost" data-copy="cap07">Copy caption</button>
+  </details>
+  <details class="copy">
+    <summary>Alt text</summary>
+    <div class="text" id="alt07"><p>Text card asking hosts: &#x27;What do you wish every guest knew?&#x27; with example answers in speech bubbles: where to park, how the shower works, the beach worth the detour.</p></div>
+    <button type="button" class="btn ghost" data-copy="alt07">Copy alt text</button>
+  </details>
+</section>
+  <footer>
+    <p>Files: <code>images/</code> holds the seven post images; <code>content.json</code> holds the copy. To change a caption or image, edit <code>content.json</code> and run <code>build_images.py</code> and <code>build_plan.py</code>. Ticks are saved in this browser only, and ticking a box doesn't publish anything.</p>
+  </footer>
+</div>
+<script>
+(function () {
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function refreshTabs() {
+    document.querySelectorAll('.day').forEach(function (day) {
+      var boxes = day.querySelectorAll('input[type=checkbox]');
+      var all = Array.prototype.every.call(boxes, function (b) { return b.checked; });
+      var tab = document.querySelector('.tab[href="#' + day.id + '"]');
+      if (tab) tab.classList.toggle('done', all);
+    });
+  }
+  document.querySelectorAll('input[data-key]').forEach(function (b) {
+    b.checked = get(b.dataset.key) === '1';
+    b.addEventListener('change', function () { set(b.dataset.key, b.checked ? '1' : '0'); refreshTabs(); });
+  });
+  refreshTabs();
+  document.querySelectorAll('[data-copy]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var el = document.getElementById(btn.dataset.copy);
+      var text = Array.prototype.map.call(el.querySelectorAll('p'), function (p) { return p.innerText; }).join('\n\n');
+      var label = btn.textContent;
+      function ok() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = label; }, 1500); }
+      if (navigator.clipboard) navigator.clipboard.writeText(text).then(ok, function () {});
+    });
+  });
+})();
+</script>
+</body>
+</html>

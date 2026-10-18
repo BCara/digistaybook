@@ -291,11 +291,9 @@ describe("the guest view of a property", () => {
     // The wall a Host asks for is the route they are on, so there is no switch
     // on the page choosing between the two.
     expect(screen.queryByRole("tablist", { name: /which wall/i })).not.toBeInTheDocument();
-    // And nothing stands between the top of the screen and the wall: the page
-    // used to open on a title, a lede and a line about who reaches this wall,
-    // all of which the banner and the nav already said.
-    expect(screen.queryByRole("heading", { name: "Guest wall" })).not.toBeInTheDocument();
-    expect(screen.queryByText(/Type straight into it/i)).not.toBeInTheDocument();
+    // The page opens on the wall's name and one sentence on what it is for.
+    expect(screen.getByRole("heading", { name: "Guest wall", level: 2 })).toBeInTheDocument();
+    expect(screen.getByText(/scan your QR code during their stay/i)).toBeInTheDocument();
     expect(canvas().getByRole("img", { name: coverPhoto.alt })).toHaveAttribute("src", coverPhoto.url);
     expect(canvas().getByLabelText("Where the property is")).toHaveValue("St Anthony Head, Cornwall");
     expect(canvas().getByLabelText("Arrival note")).toHaveValue("The kettle is on the side.");
@@ -604,7 +602,7 @@ describe("the guest view of a property", () => {
     expect(phone.getByText("12 memories left here")).toBeInTheDocument();
   });
 
-  it("gives the hosts a panel of their own above the memories, on both walls", async () => {
+  it("gives the hosts a panel of their own above the memories, on the guest wall only", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
     renderPage();
     await waitFor(() => expect(canvas().getByLabelText("Property name")).toBeInTheDocument());
@@ -636,11 +634,10 @@ describe("the guest view of a property", () => {
     expect(phone.getByText("We lay the fire before every arrival.")).toBeInTheDocument();
     expect(phone.getAllByText("Ana & Tom").length).toBeGreaterThan(0);
 
-    // And it is the same card on the public wall, which is the other door on
-    // the same property.
+    // The public wall is memories only, so it offers no notes of their own.
     renderPublic();
     await waitFor(() => expect(publicCanvas().getByLabelText("Property name")).toBeInTheDocument());
-    expect(publicCanvas().getByRole("button", { name: "+ a note of your own" })).toBeInTheDocument();
+    expect(publicCanvas().queryByRole("button", { name: "+ a note of your own" })).not.toBeInTheDocument();
   });
 
   it("takes one of the hosts' panels off the wall again, words and all", async () => {

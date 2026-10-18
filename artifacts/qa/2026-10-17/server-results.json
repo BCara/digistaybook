@@ -1,0 +1,38 @@
+[
+  {
+    "check": "verify-public-wall",
+    "exit": 0
+  },
+  {
+    "check": "verify-guest-contribution",
+    "exit": 1
+  },
+  {
+    "check": "verify-storage-deletion",
+    "exit": 0
+  },
+  {
+    "check": "verify-reporting",
+    "exit": 0
+  },
+  {
+    "check": "verify-incomplete-screening",
+    "exit": 0
+  },
+  {
+    "check": "verify-consent-retention",
+    "exit": 1
+  },
+  {
+    "check": "verify-guest-names",
+    "exit": 1
+  },
+  {
+    "check": "verify-screening-budget",
+    "exit": 0
+  },
+  {
+    "check": "verify-operations-notify",
+    "exit": 0
+  }
+]

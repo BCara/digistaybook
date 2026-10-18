@@ -1,6 +1,7 @@
 import { getFirebaseAuth, getFirebaseServices } from "../../lib/firebase";
 import { forgetProperties } from "../host/propertyCache";
 import { mfaChallenge, type MfaChallenge } from "./reviewerMfa";
+import { requestAuthEmail } from "./authEmails";
 
 /**
  * A sign-in attempt ends in exactly one of three ways. `cancelled` is kept
@@ -194,8 +195,7 @@ export async function sendHostPasswordReset(email: string): Promise<SignInOutcom
   const services = await getFirebaseAuth();
   if (!services) return { status: "error", message: UNCONFIGURED };
   try {
-    const { sendPasswordResetEmail } = await import("firebase/auth");
-    await sendPasswordResetEmail(services.auth, email.trim());
+    await requestAuthEmail("resetPassword", email.trim());
     return { status: "success" };
   } catch (error) {
     return describeAuthError(error);

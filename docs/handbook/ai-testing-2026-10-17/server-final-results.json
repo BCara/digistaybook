@@ -1,0 +1,26 @@
+[
+  {
+    "check": "verify-guest-contribution",
+    "exit": 0
+  },
+  {
+    "check": "verify-guest-names",
+    "exit": 0
+  },
+  {
+    "check": "verify-public-wall",
+    "exit": 0
+  },
+  {
+    "check": "verify-storage-deletion",
+    "exit": 0
+  },
+  {
+    "check": "verify-reporting",
+    "exit": 0
+  },
+  {
+    "check": "verify-incomplete-screening",
+    "exit": 0
+  }
+]

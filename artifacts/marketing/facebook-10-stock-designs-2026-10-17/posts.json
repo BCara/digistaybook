@@ -1,0 +1,121 @@
+[
+  {
+    "id": "01-digital-guestbook",
+    "title": "A guestbook. Made for memories.",
+    "caption": "A guestbook is a little record of the people who have enjoyed your place. DigiStayBook brings that idea to your guests' phones, with photos and messages on a digital guest wall.\n\nReal product screenshot shown from our fictional demo property.\n\ndigistaybook.com",
+    "image": "images/01-digital-guestbook.png",
+    "assets": [
+      "wall-memory.jpg"
+    ],
+    "layout": "split editorial with real screen",
+    "status": "published",
+    "facebook_url": "https://www.facebook.com/permalink.php?story_fbid=122110135425502062&id=61595061885990"
+  },
+  {
+    "id": "02-view-worth-sharing",
+    "title": "The view is worth sharing.",
+    "caption": "Some holiday photos deserve more than a place in the camera roll. Invite guests to share a favourite view, a lovely walk or a little discovery in your digital guestbook.\n\ndigistaybook.com",
+    "image": "images/02-view-worth-sharing.png",
+    "assets": [
+      "memory-coast.webp"
+    ],
+    "layout": "full-width stock photo with cream panel",
+    "status": "published",
+    "facebook_url": "https://www.facebook.com/permalink.php?story_fbid=122110136325502062&id=61595061885990"
+  },
+  {
+    "id": "03-photos-messages-memories",
+    "title": "Photos. Messages. Memories.",
+    "caption": "A favourite photo. A few words about the weekend. A thank-you for the host.\n\nThe little things belong in a digital guestbook too.\n\ndigistaybook.com",
+    "image": "images/03-photos-messages-memories.png",
+    "assets": [],
+    "layout": "dark oversized typography",
+    "status": "published",
+    "facebook_url": "https://www.facebook.com/permalink.php?story_fbid=122110136571502062&id=61595061885990"
+  },
+  {
+    "id": "04-little-moments",
+    "title": "The little moments count.",
+    "caption": "A games night, a long chat, one more round before bed. Often it's the ordinary little moments that make a holiday.\n\nGive guests somewhere to leave their photos and stories with DigiStayBook.\n\ndigistaybook.com",
+    "image": "images/04-little-moments.png",
+    "assets": [
+      "memory-games.webp"
+    ],
+    "layout": "framed photo and serif heading",
+    "status": "published",
+    "facebook_url": "https://www.facebook.com/permalink.php?story_fbid=122110136865502062&id=61595061885990"
+  },
+  {
+    "id": "05-few-taps",
+    "title": "A few taps. A lovely memory.",
+    "caption": "Your digital guestbook is ready for little contributions: a photo, a message, a memory from the stay. Guests can open it in their phone browser, without downloading an app.\n\ndigistaybook.com",
+    "image": "images/05-few-taps.png",
+    "assets": [],
+    "layout": "numbered terracotta workflow poster",
+    "status": "published",
+    "facebook_url": "https://www.facebook.com/permalink.php?story_fbid=122110137261502062&id=61595061885990"
+  },
+  {
+    "id": "06-add-to-story",
+    "title": "Let every stay add to the story.",
+    "caption": "Your place means something different to every guest. Let those little stories build over time through photos and messages in your DigiStayBook digital guestbook.\n\ndigistaybook.com",
+    "image": "images/06-add-to-story.png",
+    "assets": [
+      "memory-garden.webp"
+    ],
+    "layout": "sage offset photograph with overlap",
+    "status": "published",
+    "facebook_url": "https://www.facebook.com/permalink.php?story_fbid=122110137555502062&id=61595061885990"
+  },
+  {
+    "id": "07-still-remembered",
+    "title": "Gone home. Still remembered.",
+    "caption": "The bags are packed and the keys are back. A photo and a few kind words can leave a little piece of the stay behind.\n\nMake room for those memories with a DigiStayBook digital guestbook.\n\ndigistaybook.com",
+    "image": "images/07-still-remembered.png",
+    "assets": [
+      "memory-tide.webp"
+    ],
+    "layout": "sunset photograph and dark panel",
+    "status": "published",
+    "facebook_url": "https://www.facebook.com/permalink.php?story_fbid=122110137819502062&id=61595061885990"
+  },
+  {
+    "id": "08-their-stories",
+    "title": "Your place. Their stories.",
+    "caption": "Show guests the story of your place and invite them to add their own little memory. DigiStayBook brings guest photos and messages together on a digital wall.\n\nReal product screenshots shown from our fictional demo property.\n\ndigistaybook.com",
+    "image": "images/08-their-stories.png",
+    "assets": [
+      "wall-top.jpg",
+      "wall-memory.jpg"
+    ],
+    "layout": "paired real product screens",
+    "status": "published",
+    "facebook_url": "https://www.facebook.com/permalink.php?story_fbid=122110138023502062&id=61595061885990"
+  },
+  {
+    "id": "09-place-for-memories",
+    "title": "More than a place to stay.",
+    "caption": "The light through a window. Dinner around the table. A quiet evening by the fire.\n\nDigiStayBook gives guests a place to share the moments that made your rental feel special.\n\ndigistaybook.com",
+    "image": "images/09-place-for-memories.png",
+    "assets": [
+      "memory-window.webp",
+      "memory-table.webp",
+      "memory-fire.webp"
+    ],
+    "layout": "three-photo mosaic and colour block",
+    "status": "published",
+    "facebook_url": "https://www.facebook.com/permalink.php?story_fbid=122110138245502062&id=61595061885990"
+  },
+  {
+    "id": "10-favourite-moment",
+    "title": "What was your favourite moment?",
+    "caption": "Try this little invitation at checkout: What was your favourite moment from your stay?\n\nA simple question can start a lovely digital guestbook entry.\n\ndigistaybook.com",
+    "image": "images/10-favourite-moment.png",
+    "assets": [
+      "memory-evening.webp"
+    ],
+    "layout": "editorial question and circular stock photograph",
+    "status": "published",
+    "facebook_url": "https://www.facebook.com/permalink.php?story_fbid=122110138653502062&id=61595061885990"
+  }
+]

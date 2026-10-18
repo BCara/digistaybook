@@ -1,0 +1,11 @@
+(node:74704) MetadataLookupWarning: received unexpected error = All promises were rejected code = ENETUNREACH, EAI_AGAIN
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"8a1238fc1bb90aba6995a557","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"published","screeningOutcome":"clear","screeningReference":"8a1238fc1bb90aba6995a557","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+{"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"ad4ab8ec5debdc0c9502f3a7","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"published","screeningOutcome":"clear","screeningReference":"ad4ab8ec5debdc0c9502f3a7","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+{"providerOutcome":"clear","outcome":"clear","screeningStatus":"complete","contactDetailsOrLinkHold":false,"screeningReference":"3426089a2bd2ffc5bec90a15","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"published","screeningOutcome":"clear","screeningReference":"3426089a2bd2ffc5bec90a15","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+{"providerOutcome":"clear","outcome":"standard","screeningStatus":"complete","contactDetailsOrLinkHold":true,"screeningReference":"23c0992dad95d459dd1a053b","event":"screening_memory_decision","severity":"INFO","message":"Guest screening diagnostic"}
+{"finalStatus":"standard","screeningOutcome":"standard","screeningReference":"23c0992dad95d459dd1a053b","event":"screening_final_state","severity":"INFO","message":"Guest screening diagnostic"}
+Guest name emulator checks passed: trim, optional/legacy names, validation, retries, screening, publication, owner listing, deletion and HTTP callable/public-wall round trips.

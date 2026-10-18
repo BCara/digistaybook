@@ -149,7 +149,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </div>
         <div className="footer-base">
-          <span>&copy; {new Date().getFullYear()} DigiStayBook. Working implementation &mdash; not yet released.</span>
+          <span>&copy; {new Date().getFullYear()} DigiStayBook.</span>
           <span>Guest stay support stays with your host or booking provider.</span>
         </div>
       </footer>

@@ -12,16 +12,18 @@ describe("server public wall projection", () => {
     expect(publicPost("p1", { message: "Hello", sessionId: "secret", consent: {}, hold: {}, photo: { url: "private" } }))
       .toEqual({ id: "p1", message: "Hello", displayName: "", createdAt: null, photoCount: 0 });
   });
-  it("serves the hosts' own notes, old shape or new, and never a note with nothing on it", () => {
-    const served = publicProperty({ profile: { hostNotes: [
+  it("serves the hosts' own notes on the in-stay wall, old shape or new, and never a note with nothing on it", () => {
+    const profile = { hostNotes: [
       { id: "fire", message: "We lay the fire.", style: "pinned", photo: { url: "https://x.test/f.jpg", alt: "A fire", path: "secret" } },
       { id: "blank", message: "   " }
-    ] } });
-    expect(served.hostNotes).toEqual([
+    ] };
+    expect(publicProperty({ profile }, "stay").hostNotes).toEqual([
       { id: "fire", message: "We lay the fire.", style: "pinned", photo: { url: "https://x.test/f.jpg", alt: "A fire" } }
     ]);
+    // The public wall carries memories only.
+    expect(publicProperty({ profile }).hostNotes).toEqual([]);
     // A property saved before there were several is served as one note.
-    expect(publicProperty({ profile: { hostNote: "We lay the fire." } }).hostNotes)
+    expect(publicProperty({ profile: { hostNote: "We lay the fire." } }, "stay").hostNotes)
       .toEqual([{ id: "note1", message: "We lay the fire.", style: "bordered", photo: null }]);
   });
 

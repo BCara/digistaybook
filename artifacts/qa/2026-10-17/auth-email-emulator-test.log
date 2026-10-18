@@ -1,0 +1,81 @@
+i  emulators: Starting emulators: auth, functions, firestore
+i  emulators: Detected demo project ID "demo-digistaybook", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+!  hub: emulator hub unable to start on port 4400, starting on 4401 instead.
+!  logging: Logging Emulator unable to start on port 4500, starting on 4501 instead.
+!  eventarc: Eventarc Emulator unable to start on port 9299, starting on 9300 instead.
+!  tasks: Cloud Tasks Emulator unable to start on port 9499, starting on 9500 instead.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 9151.
+i  functions: Watching "C:\Users\clbbe\Documents\Projects\DigiStayBook\functions" for Cloud Functions...
+!  functions: Your requested "node" version "22" doesn't match your global version "24". Using node@24 from host.
+i  functions: Loaded environment variables from .env.local.
+Serving at port 8532
+
++  functions: Loaded functions definitions from source: activationOptions, beginGuestContribution, cancelSubscription, changeGuestContribution, createActivationCheckout, createHostProperty, deleteHostProperty, deleteStoredMedia, ensureStayToken, escalatePrivacyDeadlines, finishGuestContribution, getPublicWall, guestMemoryPhoto, health, listGuestContributions, listHostExport, listHostGuestReview, listHostReports, listSafetyOperations, moderatePost, notifyConsentDeletionReview, notifyNewOperationsItems, notifyScreeningAllowance, readConsentDeletionReview, readGuestReviewPhoto, readHostExportPhoto, readSafetyCase, readSafetyCasePhoto, reportGuestMemory, reportPrivateFeedback, resolveContentReport, resolveSafetyCase, resumeSubscription, retryPendingScreening, reviewGuestContribution, sendAccountVerification, sendPasswordReset, setGuestReviewPolicy, stripeWebhook, submitPrivacyRequest, uploadGuestPhoto.
++  functions[australia-southeast1-activationOptions]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/activationOptions).
++  functions[australia-southeast1-beginGuestContribution]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/beginGuestContribution).
++  functions[australia-southeast1-cancelSubscription]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/cancelSubscription).
++  functions[australia-southeast1-changeGuestContribution]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/changeGuestContribution).
++  functions[australia-southeast1-createActivationCheckout]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/createActivationCheckout).
++  functions[australia-southeast1-createHostProperty]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/createHostProperty).
++  functions[australia-southeast1-deleteHostProperty]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/deleteHostProperty).
+i  functions[australia-southeast1-deleteStoredMedia]: function ignored because the pubsub emulator does not exist or is not running.
++  functions[australia-southeast1-ensureStayToken]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/ensureStayToken).
+i  functions[australia-southeast1-escalatePrivacyDeadlines]: function ignored because the pubsub emulator does not exist or is not running.
++  functions[australia-southeast1-finishGuestContribution]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/finishGuestContribution).
++  functions[australia-southeast1-getPublicWall]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/getPublicWall).
++  functions[australia-southeast1-guestMemoryPhoto]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/guestMemoryPhoto).
++  functions[australia-southeast1-health]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/health).
++  functions[australia-southeast1-listGuestContributions]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/listGuestContributions).
++  functions[australia-southeast1-listHostExport]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/listHostExport).
++  functions[australia-southeast1-listHostGuestReview]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/listHostGuestReview).
++  functions[australia-southeast1-listHostReports]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/listHostReports).
++  functions[australia-southeast1-listSafetyOperations]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/listSafetyOperations).
++  functions[australia-southeast1-moderatePost]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/moderatePost).
+i  functions[australia-southeast1-notifyConsentDeletionReview]: function ignored because the pubsub emulator does not exist or is not running.
+i  functions[australia-southeast1-notifyNewOperationsItems]: function ignored because the pubsub emulator does not exist or is not running.
+i  functions[australia-southeast1-notifyScreeningAllowance]: function ignored because the pubsub emulator does not exist or is not running.
++  functions[australia-southeast1-readConsentDeletionReview]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/readConsentDeletionReview).
++  functions[australia-southeast1-readGuestReviewPhoto]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/readGuestReviewPhoto).
++  functions[australia-southeast1-readHostExportPhoto]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/readHostExportPhoto).
++  functions[australia-southeast1-readSafetyCase]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/readSafetyCase).
++  functions[australia-southeast1-readSafetyCasePhoto]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/readSafetyCasePhoto).
++  functions[australia-southeast1-reportGuestMemory]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/reportGuestMemory).
++  functions[australia-southeast1-reportPrivateFeedback]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/reportPrivateFeedback).
++  functions[australia-southeast1-resolveContentReport]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/resolveContentReport).
++  functions[australia-southeast1-resolveSafetyCase]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/resolveSafetyCase).
++  functions[australia-southeast1-resumeSubscription]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/resumeSubscription).
+i  functions[australia-southeast1-retryPendingScreening]: function ignored because the pubsub emulator does not exist or is not running.
++  functions[australia-southeast1-reviewGuestContribution]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/reviewGuestContribution).
++  functions[australia-southeast1-sendAccountVerification]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/sendAccountVerification).
++  functions[australia-southeast1-sendPasswordReset]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/sendPasswordReset).
++  functions[australia-southeast1-setGuestReviewPolicy]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/setGuestReviewPolicy).
++  functions[australia-southeast1-stripeWebhook]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/stripeWebhook).
++  functions[australia-southeast1-submitPrivacyRequest]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/submitPrivacyRequest).
++  functions[australia-southeast1-uploadGuestPhoto]: http function initialized (http://127.0.0.1:15101/demo-digistaybook/australia-southeast1/uploadGuestPhoto).
+i  Running script: node tmp/auth-email-check/check.mjs
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-sendPasswordReset"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-sendPasswordReset" in 4893.4037ms
+(node:8092) MetadataLookupWarning: received unexpected error = All promises were rejected code = ENETUNREACH, EAI_AGAIN
+(Use `node --trace-warnings ...` to show where the warning was created)
+i  functions: Loaded environment variables from .env.local.
+i  functions: Beginning execution of "australia-southeast1-sendAccountVerification"
+>  {"verifications":{"app":"MISSING","auth":"MISSING"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-sendAccountVerification" in 34.8688ms
+i  functions: Beginning execution of "australia-southeast1-sendAccountVerification"
+>  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"}
+i  functions: Finished "australia-southeast1-sendAccountVerification" in 664.6159ms
+PASS: branded reset and verification links, Firebase code validation, password reset, deliberate email verification, unauthenticated denial and forged-recipient protection. No real email sent.
++  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  functions: Stopping Functions Emulator
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  auth: Stopping Authentication Emulator
+i  eventarc: Stopping Eventarc Emulator
+i  tasks: Stopping Cloud Tasks Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

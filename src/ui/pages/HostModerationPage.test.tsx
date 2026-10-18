@@ -107,14 +107,14 @@ describe("the moderation queue", () => {
 
     expect(await screen.findByRole("heading", { name: "Inbox & moderation", level: 2 })).toBeInTheDocument();
     expect(await screen.findByRole("heading", { name: /Privacy and takedown requests/ })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /On the wall/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /On your wall/ })).toBeInTheDocument();
     expect(screen.getByText("Please take the photo of my children down.")).toBeInTheDocument();
     expect(screen.getByText("Four days of sea air and we already want to come back.")).toBeInTheDocument();
   });
 
   it("switches between the wall's memories and the private feedback inbox", async () => {
     renderPage();
-    const memoriesTab = await screen.findByRole("tab", { name: "Your memories" });
+    const memoriesTab = await screen.findByRole("tab", { name: /^Memories/ });
     expect(memoriesTab).toHaveAttribute("aria-selected", "true");
     await screen.findByText("Four days of sea air and we already want to come back.");
 
@@ -139,9 +139,9 @@ describe("the moderation queue", () => {
   it("offers curation on a live memory and publication on a held one", async () => {
     renderPage();
 
-    await screen.findByRole("heading", { name: /On the wall/ });
+    await screen.findByRole("heading", { name: /On your wall/ });
     const live = within(cardFor("Four days of sea air and we already want to come back."));
-    expect(live.getByRole("button", { name: "Pin to the top" })).toBeInTheDocument();
+    expect(live.getByRole("button", { name: "Pin" })).toBeInTheDocument();
     expect(live.getByRole("button", { name: "Take off the wall" })).toBeInTheDocument();
 
     const held = within(cardFor("Please take the photo of my children down."));
@@ -153,7 +153,7 @@ describe("the moderation queue", () => {
     listWallPosts.mockResolvedValue({ status: "ok", value: [post({ pinned: true }), post({ id: "memory-4", message: "Lovely week." })] });
     renderPage();
 
-    await screen.findByRole("heading", { name: /On the wall/ });
+    await screen.findByRole("heading", { name: /On your wall/ });
     const pinned = cardFor("Four days of sea air and we already want to come back.");
     expect(pinned).toHaveClass("is-pinned");
     expect(within(pinned).getByText("Pinned")).toBeInTheDocument();
@@ -161,7 +161,7 @@ describe("the moderation queue", () => {
 
     const plain = cardFor("Lovely week.");
     expect(plain).not.toHaveClass("is-pinned");
-    expect(within(plain).getByText("More", { exact: false }).closest("details")).toContainElement(
+    expect(within(plain).getByLabelText("More actions").closest("details")).toContainElement(
       within(plain).getByRole("button", { name: "Delete" })
     );
   });
@@ -169,8 +169,8 @@ describe("the moderation queue", () => {
   it("sends a reversible action straight to the server", async () => {
     renderPage();
 
-    await screen.findByRole("heading", { name: /On the wall/ });
-    fireEvent.click(within(cardFor("Four days of sea air and we already want to come back.")).getByRole("button", { name: "Pin to the top" }));
+    await screen.findByRole("heading", { name: /On your wall/ });
+    fireEvent.click(within(cardFor("Four days of sea air and we already want to come back.")).getByRole("button", { name: "Pin" }));
 
     await waitFor(() =>
       expect(moderatePost).toHaveBeenCalledWith({
@@ -213,13 +213,13 @@ describe("the moderation queue", () => {
     moderatePost.mockResolvedValue({ status: "error", message: "The server refused that." });
     renderPage();
 
-    await screen.findByRole("heading", { name: /On the wall/ });
+    await screen.findByRole("heading", { name: /On your wall/ });
     const card = cardFor("Four days of sea air and we already want to come back.");
-    fireEvent.click(within(card).getByRole("button", { name: "Pin to the top" }));
+    fireEvent.click(within(card).getByRole("button", { name: "Pin" }));
 
     expect(await within(card).findByRole("alert")).toHaveTextContent("The server refused that.");
     // Still on the wall, and still offering the action that failed.
-    expect(within(card).getByRole("button", { name: "Pin to the top" })).toBeInTheDocument();
+    expect(within(card).getByRole("button", { name: "Pin" })).toBeInTheDocument();
   });
 
   it("offers nothing on a memory DigiStayBook has taken out of the Host's hands", async () => {
@@ -240,7 +240,7 @@ describe("the moderation queue", () => {
     renderPage();
 
     expect(await screen.findByText(/could not read this wall/i)).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: /On the wall/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: /On your wall/ })).not.toBeInTheDocument();
   });
 
   it("says plainly when a wall has nothing on it yet", async () => {
@@ -253,7 +253,7 @@ describe("the moderation queue", () => {
   it("asks before escalating, because an escalation cannot be taken back", async () => {
     renderPage();
 
-    await screen.findByRole("heading", { name: /On the wall/ });
+    await screen.findByRole("heading", { name: /On your wall/ });
     fireEvent.click(
       within(cardFor("Four days of sea air and we already want to come back.")).getByRole("button", {
         name: "Report to DigiStayBook"
@@ -270,7 +270,7 @@ describe("the moderation queue", () => {
     moderatePost.mockResolvedValue({ status: "ok", value: null });
     renderPage();
 
-    await screen.findByRole("heading", { name: /On the wall/ });
+    await screen.findByRole("heading", { name: /On your wall/ });
     fireEvent.click(
       within(cardFor("Four days of sea air and we already want to come back.")).getByRole("button", {
         name: "Take off the wall"

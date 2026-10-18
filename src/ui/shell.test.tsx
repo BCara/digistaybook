@@ -108,11 +108,10 @@ describe("shell and landing presentation", () => {
     expect(screen.queryByText(/your rental never had/i)).not.toBeInTheDocument();
   });
 
-  it("waits for session restoration before redirecting to the dashboard", () => {
+  it("shows the visitor page while the session restores, then redirects a host", () => {
     window.history.replaceState(null, "", "/");
     const { rerender } = render(<AuthContext.Provider value={{ status: "loading", user: null }}><LandingPage /></AuthContext.Provider>);
-    expect(screen.getByRole("status")).toHaveTextContent("Checking your session");
-    expect(screen.queryByText(/your rental never had/i)).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /your rental never had/i })).toBeInTheDocument();
     expect(window.location.pathname).toBe("/");
     rerender(<AuthContext.Provider value={hostSession}><LandingPage /></AuthContext.Provider>);
     expect(window.location.pathname).toBe("/host");
