@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-29",
+  "source": "NAS master served on localhost",
+  "newReels": [
+    {
+      "duration": 15,
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "duration": 15,
+      "width": 1080,
+      "height": 1920
+    }
+  ],
+  "checks": [
+    "Main hub and photo collection links",
+    "Actual playback progresses",
+    "Four seek positions per Reel including final frame",
+    "Caption copied to clipboard",
+    "ZIP download 7107969 bytes",
+    "390px review no overflow",
+    "All 3 earlier Reel files load metadata",
+    "FFmpeg full-file decode passed during encoding"
+  ]
+}

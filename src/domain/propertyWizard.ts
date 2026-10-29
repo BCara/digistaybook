@@ -79,7 +79,10 @@ const stepOfField: Record<WizardField, WizardStepId> = {
   stayHeading: "welcome",
   stayWelcome: "welcome",
   stayTip: "welcome",
-  facts: "essentials"
+  facts: "essentials",
+  // Not asked in the wizard; written on the wall editor. An existing property
+  // opened here with a broken link is sent to the last step, where it saves.
+  stayAgainLinks: "essentials"
 };
 
 export const stepOfProblem = (problem: WizardProblem): WizardStepId => stepOfField[problem.field];

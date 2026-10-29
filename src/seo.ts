@@ -31,10 +31,10 @@ const defaultDescription =
 const titled = (title: string) => `${title} | ${SITE_NAME}`;
 
 /** The pages listed in the sitemap, in the order they are listed. */
-export const indexedPaths = ["/", "/pricing", `/wall/${DEMO_SLUG}`, "/privacy-safety", "/terms", "/guest-terms", "/privacy"] as const;
+export const indexedPaths = ["/", "/pricing", `/stay/${DEMO_SLUG}`, `/wall/${DEMO_SLUG}`, "/contact", "/privacy-safety", "/terms", "/guest-terms", "/privacy"] as const;
 
-/** The indexed pages the build writes out as static HTML; the demo wall reads its data at runtime. */
-export const prerenderedPaths = indexedPaths.filter(path => !path.startsWith("/wall/"));
+/** Both demos use bundled example data, so every indexed page can ship as static HTML. */
+export const prerenderedPaths = indexedPaths;
 
 const pages: Record<(typeof indexedPaths)[number], Omit<PageSeo, "canonical">> = {
   "/": {
@@ -45,9 +45,17 @@ const pages: Record<(typeof indexedPaths)[number], Omit<PageSeo, "canonical">> =
     title: titled("Pricing"),
     description: "One price per property, billed monthly or annually, with a 28-day free trial. Every DigiStayBook plan includes the QR kit, guest wall, screening and moderation."
   },
-  [`/wall/${DEMO_SLUG}`]: {
+  [`/stay/${DEMO_SLUG}`]: {
     title: titled("Live guest wall demo"),
-    description: "See a DigiStayBook guest wall as guests meet it: house guidance and local favourites pinned to the top, and screened memories from past stays."
+    description: "See a DigiStayBook guest wall as guests meet it: house guidance and local favorites pinned to the top, and screened memories from past stays."
+  },
+  [`/wall/${DEMO_SLUG}`]: {
+    title: titled("Public page demo"),
+    description: "Explore a DigiStayBook public page: guest memories and photos that hosts can share or embed on their own website."
+  },
+  "/contact": {
+    title: titled("Contact us"),
+    description: "Contact DigiStayBook about your host account, billing or setting up your digital guestbook. We reply by email."
   },
   "/privacy-safety": {
     title: titled("Privacy & Safety requests"),

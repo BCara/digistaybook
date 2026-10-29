@@ -79,6 +79,29 @@ function hostNotes(profile: Record<string, any>) {
   })).filter((note: any) => note.message.trim() || note.photo);
 }
 
+/* The Host's own booking or guest-list links. A guest's phone is sent to
+   these, and the profile is written by the Host's own client, so the address
+   is checked again here rather than trusted: https, a dotted host name and no
+   credentials, as `readWebAddress` in src/domain/stayAgain.ts decides it. This
+   is a deliberate second copy, like the stay token pattern above. */
+function webAddress(value: unknown): string | null {
+  if (typeof value !== "string" || value.length > 300) return null;
+  try {
+    const address = new URL(value);
+    if (address.protocol !== "https:" || address.username || address.password) return null;
+    if (!/^[a-z0-9-]+(\.[a-z0-9-]+)+$/i.test(address.hostname)) return null;
+    return address.href.length > 300 ? null : address.href;
+  } catch {
+    return null;
+  }
+}
+function stayAgainLinks(profile: Record<string, any>) {
+  if (!Array.isArray(profile.stayAgainLinks)) return [];
+  return profile.stayAgainLinks.slice(0, 2)
+    .map((link: any) => ({ label: text(link?.label, 40).trim(), url: webAddress(link?.url) }))
+    .filter((link: { label: string; url: string | null }) => link.label && link.url);
+}
+
 export function publicProperty(data: Record<string, any>, view: "public" | "stay" = "public") {
   const profile = data.profile ?? {};
   return {
@@ -96,7 +119,8 @@ export function publicProperty(data: Record<string, any>, view: "public" | "stay
       heading: profile.stayNoteOff ? "" : text(profile.stayHeading, 80),
       welcome: profile.stayNoteOff ? "" : text(profile.stayWelcome),
       tip: profile.stayNoteOff ? "" : text(profile.stayTip, 240),
-      facts: profile.factsOff || !Array.isArray(profile.facts) ? [] : profile.facts.slice(0, 8).map((fact: any) => ({ term: text(fact?.term, 32), detail: text(fact?.detail, 60), note: text(fact?.note, 140) }))
+      facts: profile.factsOff || !Array.isArray(profile.facts) ? [] : profile.facts.slice(0, 8).map((fact: any) => ({ term: text(fact?.term, 32), detail: text(fact?.detail, 60), note: text(fact?.note, 140) })),
+      links: stayAgainLinks(profile)
     } : null
   };
 }

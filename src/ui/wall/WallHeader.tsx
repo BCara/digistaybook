@@ -1,5 +1,7 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { hostInitials } from "../../domain/propertyProfile";
+import { readWifiLine, type WifiLogin } from "../../domain/wifi";
+import { displayWebAddress, wallStayAgainLinks, type StayAgainLink } from "../../domain/stayAgain";
 import { EssentialMark, essentialMarkName, type EssentialMarkName } from "./EssentialMark";
 import "./stayWall.css";
 import "./wallThemes.css";
@@ -8,7 +10,9 @@ export type WallHeaderProperty = {
   name: string; location: string; welcome: string; hosts: string;
   cover?: { url: string; alt: string } | null;
   hostPhoto?: { url: string; alt: string } | null;
-  houseInformation?: { heading: string; welcome: string; tip: string; facts: { term: string; detail: string; note: string }[] } | null;
+  /* `links` is optional: a wall served by a build from before it existed has
+     none, and reads as a wall with nothing to book. */
+  houseInformation?: { heading: string; welcome: string; tip: string; facts: { term: string; detail: string; note: string }[]; links?: StayAgainLink[] } | null;
 };
 type WallProperty = WallHeaderProperty;
 
@@ -22,7 +26,7 @@ export function WallHeader({ property, view, preview = false, headingLevel = 1, 
   if (view === "stay") return <StayWallHeader property={property} preview={preview} headingLevel={headingLevel} hostNotes={hostNotes} />;
   return <><header className="live-property-header" data-no-header-photos={!property.cover && !property.hostPhoto ? "true" : undefined}>
             {property.cover
-              ? <img className="live-property-cover" src={property.cover.url} alt={property.cover.alt} />
+              ? <img className="live-property-cover" src={property.cover.url} alt={property.cover.alt} fetchPriority="high" />
               : preview && <p className="wall-ghost">No cover photo. Guests open straight onto your name.</p>}
             {property.location && <p>{property.location}</p>}
             <h1 aria-level={headingLevel}>{property.name}</h1>
@@ -73,13 +77,15 @@ export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes 
     ? <img className="avatar avatar-photo stay-portrait" src={property.hostPhoto.url} alt={property.hostPhoto.alt || "Your hosts"} />
     : hosts ? <span className="avatar tone-2 stay-portrait" aria-hidden="true">{hostInitials(hosts)}</span> : null;
   const quickLinks = facts.map(fact => ({ label: fact.term, mark: essentialMarkName(fact.term) }));
+  /* Checked again here, so a draft preview never offers a link that goes nowhere. */
+  const againLinks = wallStayAgainLinks(house?.links ?? []);
   /* A tapped essential opens over the page, growing out of its button. */
   const [opened, setOpened] = useState<{ index: number; from: DOMRect } | null>(null);
 
   return <div className="stay-wall">
     <header className="stay-cover" data-no-header-photos={!property.cover && !property.hostPhoto ? "true" : undefined}>
       {property.cover
-        ? <img className="wall-cover-photo" src={property.cover.url} alt={property.cover.alt} />
+        ? <img className="wall-cover-photo" src={property.cover.url} alt={property.cover.alt} fetchPriority="high" />
         : preview && <p className="wall-ghost">No cover photo. Guests open straight onto your name.</p>}
       <div className="stay-cover-titles">
         <h1 aria-level={headingLevel}>{property.name}</h1>
@@ -125,6 +131,8 @@ export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes 
     {facts.length === 0 && preview && <p className="wall-ghost">No house essentials. Wi-Fi, checkout and the bins go here.</p>}
 
     {hostNotes}
+
+    {againLinks.length > 0 && <StayAgainLinks id={`${baseId}-again`} links={againLinks} headingLevel={headingLevel + 1} />}
 
     {opened && facts[opened.index] && <StayFactSheet fact={facts[opened.index]} from={opened.from}
       headingLevel={headingLevel + 2} onClose={() => setOpened(null)} />}
@@ -191,8 +199,38 @@ export function StayEssentialLinks({ id, links, headingLevel, onOpen, heading, c
   </nav>;
 }
 
+/**
+ * The Host's own pages, for a guest who wants to come back: drawn as the same
+ * tiles as the essentials, so every theme dresses them, but as links that open
+ * the Host's site in a new tab rather than sheets over the page. The address
+ * is printed under the label, so a guest can see where a tap will take them.
+ * What the tiles say is the Host's; the heading and lede are deliberately
+ * plain, and offer nothing on the Host's behalf.
+ */
+export function StayAgainLinks({ id, links, headingLevel }: { id: string; links: readonly StayAgainLink[]; headingLevel: number }) {
+  return <nav className="stay-links stay-again" aria-labelledby={id}>
+    <h2 className="stay-section-title" id={id} aria-level={headingLevel}>Stay with us again</h2>
+    <p className="stay-section-lede">Planning a return trip? Here is where to find us.</p>
+    <ul>
+      {links.map((link, index) => <li key={index}>
+        <a className="stay-link" href={link.url} target="_blank" rel="noopener noreferrer nofollow">
+          <span className="stay-icon">
+            <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3.4 9.2 10 3.6l6.6 5.6M5.2 7.8v8.6h9.6V7.8M8.4 16.4v-4.6h3.2v4.6" /></svg>
+          </span>
+          <span className="stay-again-words">
+            <span className="stay-link-label">{link.label}</span>
+            <span className="stay-again-address">{displayWebAddress(link.url)}</span>
+          </span>
+          <svg className="stay-chevron" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M8 4.6h7.4V12M15 5 5.4 14.6" /></svg>
+        </a>
+      </li>)}
+    </ul>
+  </nav>;
+}
+
 function StayFact({ fact, headingLevel }: { fact: { term: string; detail: string; note: string }; headingLevel: number }) {
   const kind = essentialMarkName(fact.term);
+  const wifi = kind === "wifi" ? readWifiLine(fact.detail) : null;
   return <article className="stay-fact stay-card" data-fact={kind}>
     <div className="stay-fact-head">
       <span className="stay-icon"><EssentialMark term={fact.term} /></span>
@@ -200,10 +238,39 @@ function StayFact({ fact, headingLevel }: { fact: { term: string; detail: string
     </div>
     <div className="stay-fact-body">
       <p className="stay-fact-detail">{fact.detail}</p>
-      {copyable.has(kind) && <CopyButton text={fact.detail} label={fact.term} />}
+      {wifi
+        ? <WifiJoin login={wifi} />
+        : copyable.has(kind) && <CopyButton text={fact.detail} label={fact.term} />}
     </div>
     {fact.note.trim() && <p className="stay-fact-note">{fact.note}</p>}
   </article>;
+}
+
+/**
+ * The nearest a web page gets to joining the Wi-Fi for a guest: no browser
+ * lets a site open the phone's settings or pick a network, so one tap puts
+ * the password on the clipboard and the page says which network to choose.
+ * The steps stay up after the tap, because the guest reads them on the way
+ * to their settings.
+ */
+function WifiJoin({ login }: { login: WifiLogin }) {
+  const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
+  if (typeof navigator === "undefined" || !navigator.clipboard) return null;
+  const copy = () => { void navigator.clipboard.writeText(login.password).then(() => setState("copied"), () => setState("failed")); };
+  return <div className="stay-wifi-join">
+    <button type="button" className="btn btn-primary stay-wifi-copy" onClick={copy}>
+      {state === "copied"
+        ? <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="m4.6 10.4 3.6 3.6 7.2-8" /></svg>
+        : <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="7" y="7" width="9.6" height="9.6" rx="1.8" /><path d="M13 7V5.2c0-1-.8-1.8-1.8-1.8H5.2c-1 0-1.8.8-1.8 1.8v6c0 1 .8 1.8 1.8 1.8H7" /></svg>}
+      {state === "copied" ? "Password copied" : "Copy Wi-Fi password"}
+    </button>
+    <p className="stay-wifi-steps" role="status">
+      {state === "copied" && (login.network
+        ? <>Now open your phone's Wi-Fi settings, choose <b>{login.network}</b> and paste the password.</>
+        : <>Now open your phone's Wi-Fi settings, choose this house's network and paste the password.</>)}
+      {state === "failed" && <>Your phone would not copy it. The password is <b>{login.password}</b>.</>}
+    </p>
+  </div>;
 }
 
 /**

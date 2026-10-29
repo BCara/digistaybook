@@ -4,6 +4,7 @@ import { detectBillingCountry } from "./billingCountry";
 import {
   annualSaving,
   formatRate,
+  monthsFreeLabel,
   monthsFreeOnAnnual,
   posCurrencies,
   type PosCurrency
@@ -87,10 +88,7 @@ function planNote(plan: ActivationPlanOffer["plan"], currency: PosCurrency | nul
 }
 
 function savingBadge(currency: PosCurrency | null): string | null {
-  if (!currency) return null;
-  const months = monthsFreeOnAnnual(currency);
-  if (months === null) return null;
-  return `${months === 2 ? "Two" : String(months)} months free`;
+  return currency ? monthsFreeLabel(currency) : null;
 }
 
 export function ActivatePanel({ property }: { property: HostProperty }) {

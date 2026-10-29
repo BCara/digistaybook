@@ -1,0 +1,86 @@
+[
+  {
+    "name": "local-1.png",
+    "width": 1080,
+    "height": 1350,
+    "bytes": 1107417
+  },
+  {
+    "name": "local-2.png",
+    "width": 1080,
+    "height": 1350,
+    "bytes": 91667
+  },
+  {
+    "name": "local-3.png",
+    "width": 1080,
+    "height": 1350,
+    "bytes": 107775
+  },
+  {
+    "name": "asked-twice.png",
+    "width": 1080,
+    "height": 1350,
+    "bytes": 847217
+  },
+  {
+    "name": "qr-placement.png",
+    "width": 1080,
+    "height": 1350,
+    "bytes": 115026
+  },
+  {
+    "name": "rainy-day.png",
+    "width": 1080,
+    "height": 1350,
+    "bytes": 786036
+  },
+  {
+    "name": "guide-1.png",
+    "width": 1080,
+    "height": 1350,
+    "bytes": 91818
+  },
+  {
+    "name": "guide-2.png",
+    "width": 1080,
+    "height": 1350,
+    "bytes": 102277
+  },
+  {
+    "name": "guide-3.png",
+    "width": 1080,
+    "height": 1350,
+    "bytes": 102361
+  },
+  {
+    "name": "quiet-hours.png",
+    "width": 1080,
+    "height": 1350,
+    "bytes": 103608
+  },
+  {
+    "name": "two-pages.png",
+    "width": 1080,
+    "height": 1350,
+    "bytes": 544474
+  },
+  {
+    "name": "pin-qr.png",
+    "width": 1000,
+    "height": 1500,
+    "bytes": 112433
+  },
+  {
+    "name": "pin-pages.png",
+    "width": 1000,
+    "height": 1500,
+    "bytes": 110697
+  },
+  {
+    "name": "pin-setup.png",
+    "width": 1000,
+    "height": 1500,
+    "bytes": 101929
+  }
+]

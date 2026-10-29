@@ -1,0 +1,1844 @@
+{
+  "campaigns/home-2026-11-02": {
+    "title": "Control your own narrative",
+    "start": "2026-10-29",
+    "end": "2026-11-25",
+    "timezone": "Australia/Sydney",
+    "stage": "Week 1 written in full; weeks 2–4 in outline",
+    "news": "Internal context: Airbnb announced (about 20–21 Oct) that for bookings from 20 November 2026 hosts can't require bigger checkout tasks (stripping beds, washing and putting away dishes, laundry, taking rubbish outside). Small requests stay (plates in the sink, used towels gathered, sorting rubbish into indoor bins). Host fines are banned, and rules show more prominently on listings. Information isn't restricted: hosts can still tell guests anything about their home. Content only hints at the change (a light nod at most, never an explanation of the rule) and never names the platform, uses its logo or its coral colour, or misstates the rule.",
+    "weeks": [
+      {
+        "n": 1,
+        "theme": "Control your own narrative",
+        "question": "Do hosts respond to 'control your own narrative', and does it feel empowering rather than bitter?"
+      },
+      {
+        "n": 2,
+        "theme": "Humanise the host",
+        "question": "Which host stories make guests (and other hosts) care most?"
+      },
+      {
+        "n": 3,
+        "theme": "Everything guests need to know",
+        "question": "Do hosts get that sharing information (bin day, how things work) beats rules, and that DigiStayBook is where it lives?"
+      },
+      {
+        "n": 4,
+        "theme": "A home, not a hotel",
+        "question": "Around 20 November, does the guest-facing respect message get shared without backlash?"
+      }
+    ],
+    "posts": [
+      {
+        "day": 0,
+        "week": 1,
+        "platform": "Facebook",
+        "format": "Feed post",
+        "pillar": "Narrative · hosts",
+        "title": "Every home has a story. Tell yours.",
+        "hook": "There's a dent in the doorframe from my son's skateboard. That's not in any listing.",
+        "points": [
+          "Open on small, specific details of a real home, not on the rules",
+          "Only a light nod to the moment: hosts feel their say has been taken away",
+          "The turn: nobody can take your story; guests who know whose home it is look after it",
+          "DigiStayBook: your welcome, your home's story and everything guests need, behind one QR code"
+        ],
+        "visual": "Photo-led card: a real beach-cottage porch, with 'Every home has a story. Tell yours.' on a cream panel and the logo tag.",
+        "cta": "Hosts: what would you want every guest to know about you?",
+        "full": {
+          "caption": "There's a dent in the doorframe from my son's skateboard.\nThe lemon tree out the back was planted the year we bought the place. Help yourself.\nBin day is Tuesday, and the yellow lid is recycling.\n\nNone of that is in a listing. All of it is in a home.\n\nLately a lot of hosts have felt like their say has been taken away. Here's the part nobody can take: your story. Who you are, why this place matters, how it all works.\n\nGuests who know whose home they're in often treat it that way.\n\nControl your own narrative. DigiStayBook puts your welcome, your home's story and everything guests need behind one QR code on the bench.\n\nHosts: what's one thing you'd want every guest to know about your place? 👇",
+          "first_comment": "If you'd like to see what a guest sees when they scan: digistaybook.com/stay/demo-cottage",
+          "brief": [
+            "1080 × 1350 (4:5), made in Canva: \"DigiStayBook 29 Oct Facebook - Every home has a story\".",
+            "Real stock photo (Unsplash): a weatherboard beach cottage with its door open onto a timber deck.",
+            "Cream panel on the left: logo tag, \"Control your own narrative\" label, headline \"Every home has a story. Tell yours.\", digistaybook.com.",
+            "Alt text: \"A beach cottage with its door open onto a deck. Text: Every home has a story. Tell yours. DigiStayBook.\""
+          ],
+          "notes": [
+            "SCHEDULED in Meta Business Suite on the Digi Staybook Page for Wed 28 Oct, 7:30pm Sydney (brought forward a day from 29 Oct). No boost. Link not yet added: post it as the first comment once the post is live.",
+            "Reply to every host comment that evening; their answers feed the week 2 \"Humanise the host\" pieces.",
+            "If someone names the platform in comments, that's fine; our replies still don't."
+          ]
+        },
+        "assets": [
+          {
+            "file": "week1-assets/2026-10-29_facebook_every-home-has-a-story.png",
+            "label": "Facebook post"
+          },
+          {
+            "file": "https://www.canva.com/design/DAHZRLnzVM8/edit",
+            "label": "Edit in Canva"
+          }
+        ],
+        "note": "Scheduled for Wed 28 Oct, 7:30pm, on the Digi Staybook Page. The month plan's 28 Oct feed post (\"The question that belongs in your guide\") was never scheduled; move or skip it."
+      },
+      {
+        "day": 1,
+        "week": 1,
+        "platform": "TikTok",
+        "format": "Short video",
+        "pillar": "Narrative · hosts",
+        "title": "Turning over a new card",
+        "hook": "My old checkout card was all instructions. Here's what's on the other side now.",
+        "points": [
+          "Host flips a stiff old instruction card over, smiling, and writes on the back",
+          "New card: 'Hi, I'm Priya. We swapped the city for this farmhouse five years ago.'",
+          "Message: the most useful thing you can give guests is who you are and how the house works",
+          "Ends on the QR code: 'everything else is in here'"
+        ],
+        "visual": "Kitchen bench, an old laminated card, marker, phone propped up. Needs a host or the owner.",
+        "cta": "Duet with what your welcome says.",
+        "full": {
+          "script": [
+            {
+              "t": "0–2s",
+              "shot": "Close-up: an old laminated card on the kitchen bench, dense small print, headed CHECKOUT.",
+              "say": "Time for a new card.",
+              "text": "Same house. New welcome."
+            },
+            {
+              "t": "2–5s",
+              "shot": "Host flips it over to the blank side, smiling.",
+              "say": "",
+              "text": ""
+            },
+            {
+              "t": "5–12s",
+              "shot": "Host writes with a marker. We read it as they write: \"Hi, I'm Priya. We swapped the city for this farmhouse five years ago.\"",
+              "say": "Turns out the most useful thing on here was never the list. It's us.",
+              "text": ""
+            },
+            {
+              "t": "12–22s",
+              "shot": "Three quick cuts of more lines going on: \"Collection is Thursday. Yellow lid = recycling.\" / \"The wood heater takes ten minutes to get going.\" / \"Best pies: the bakery in town, before 10.\"",
+              "say": "Collection's Thursday. The wood heater takes ten minutes. The pies at the bakery sell out by ten. That's just the house.",
+              "text": ""
+            },
+            {
+              "t": "22–28s",
+              "shot": "Card goes up next to the QR stand. A hand scans it; the phone shows the welcome page opening.",
+              "say": "And everything else lives in here.",
+              "text": "Control your own narrative."
+            },
+            {
+              "t": "28–30s",
+              "shot": "End card.",
+              "say": "",
+              "text": "DigiStayBook · digistaybook.com"
+            }
+          ],
+          "caption": "New card, same house. Fewer instructions, more hello 👋 Stitch this with what your welcome says.\n\n#holidayhome #shorttermrental #holidayrental #hostingtips #welcomebook #guestexperience #selfcatering #hostlife",
+          "brief": [
+            "Vertical 9:16, 1080 × 1920, 25–30 seconds. Phone on a stand at bench height, natural light.",
+            "Props: an old laminated card with dense small print (not a printout of any app's screen), a thick marker, the DigiStayBook QR stand.",
+            "Tone: light and good-natured. A smile on the flip, not a sigh. No eye-rolls at guests.",
+            "Burn in captions for every spoken line. Original audio; if a trending sound is used, keep it low under the voice.",
+            "Demo phone screen: digistaybook.com/stay/demo-cottage, with \"Demo\" visible."
+          ],
+          "notes": [
+            "Post Fri 30 Oct, 6–8pm Sydney time.",
+            "Needs a host or the owner on camera; \"Priya\" and the farmhouse are placeholders for whoever films it.",
+            "Hashtags never include another platform's name or its programme names (e.g. no \"#superhost\")."
+          ]
+        },
+        "assets_note": "Not made: needs a real host on camera."
+      },
+      {
+        "day": 2,
+        "week": 1,
+        "platform": "Reddit",
+        "format": "Discussion post",
+        "pillar": "Community",
+        "title": "What's one thing in your welcome note that changed how guests treated your place?",
+        "hook": "A specific question hosts can answer from experience, from a clearly named founder account.",
+        "points": [
+          "Ask what's working: welcome notes, meeting guests, house stories, guestbooks",
+          "Keep it positive; don't argue the policy",
+          "Note the words hosts use; collect themes for weeks 2–3",
+          "Mention DigiStayBook only if asked, and say you're the builder"
+        ],
+        "visual": "Text post on purpose: host subreddits reward a real question, and a stock photo would read as an ad.",
+        "cta": "No link; quote only with permission.",
+        "note": "Naming the platform is fine in a Reddit discussion if hosts do; our own posts and comments still don't.",
+        "full": {
+          "post_title": "What's one thing in your welcome note that changed how guests treated your place?",
+          "caption": "I keep hearing that the small, specific lines do the most, like \"Every summer someone forgets their thongs under the deck. They're in the box by the door.\"\n\nHosts with one or two places especially: what's the line or habit that actually made a difference for you?\n\nThere's a lot of talk about checkout at the moment and I'm not here to add to it. I'm more interested in the part that's always been in our control.\n\nThings I've seen hosts try:\n\n- A welcome note that says who you are, not just the Wi-Fi password\n- Meeting guests on arrival, or a short video hello\n- Telling the story of the home (who painted the front door yellow, why there's an old fishing rod over the door)\n- Writing house info as information, e.g. \"collection is Monday, yellow lid is recycling\" rather than \"take the bins out\"\n- A guestbook, paper or digital, where past guests leave notes\n\nDoes any of it change how places are left? What would you add, and what's been a waste of time?\n\nDisclosure: I'm building a digital welcome book for hosts, so I'm genuinely trying to learn what hosts value. I'm not linking it here, but happy to answer if anyone asks.",
+          "replies": [
+            {
+              "when": "Someone shares what works",
+              "text": "That's a great one, thanks. Did you notice a difference straight away, or more over a season?"
+            },
+            {
+              "when": "Someone is angry about the policy",
+              "text": "Completely understand. It's your place and you want it looked after. Out of interest, is there anything you've found that still helps, even a little?"
+            },
+            {
+              "when": "Someone asks what you're building",
+              "text": "It's called DigiStayBook. A QR code in the house opens the host's welcome, the house info and a guestbook wall. I built it, so I'm biased; happy to hear what you'd want in one."
+            }
+          ],
+          "brief": [
+            "Text post. No images, no links. The specific question in the title is the hook."
+          ],
+          "notes": [
+            "Post Sat 31 Oct, morning Sydney time (US Friday evening).",
+            "Candidate communities: the main host subreddit and a general short-term rental one. Read each one's self-promotion rules first, and skip any that ban vendors.",
+            "Post from the founder's own account with real history. Reply to every useful comment within a few hours.",
+            "Keep a running list of the words hosts use and the ideas they share for weeks 2–3. Ask permission before quoting anyone."
+          ]
+        }
+      },
+      {
+        "day": 3,
+        "week": 1,
+        "platform": "Instagram",
+        "format": "Carousel",
+        "pillar": "Narrative · hosts",
+        "title": "Five things worth telling every guest",
+        "hook": "The best welcomes don't read like a rulebook.",
+        "points": [
+          "Slide 1: hook, with a light nod: none of them are rules",
+          "Slides 2–6: who you are; the story of the home; how things work (heating, hot water, the tricky lock); bin day and which bin is which; your local favourites",
+          "Each slide: information, never a demand",
+          "Final slide: 'Your welcome, in your words.' + logo"
+        ],
+        "visual": "Seven photo-led slides: a real home photo on each, with the text on a cream note card.",
+        "cta": "Save it for your next welcome rewrite.",
+        "full": {
+          "slides": [
+            {
+              "head": "Five things worth telling every guest.",
+              "body": "(None of them are rules.) →",
+              "alt": "Title slide: Five things worth telling every guest. None of them are rules."
+            },
+            {
+              "head": "1. Who you are",
+              "body": "\"Hi, we're Jo and Luke. We bought this cottage the year our twins were born.\"",
+              "small": "A name and a face change how a stay feels.",
+              "alt": "Who you are: an example host introduction written as a note."
+            },
+            {
+              "head": "2. The story of the home",
+              "body": "\"Grandpa built the bunk beds in 1978. The kids still fight over the top one.\"",
+              "small": "Stories make it a home, not a listing.",
+              "alt": "The story of the home: an example note about bunk beds Grandpa built."
+            },
+            {
+              "head": "3. How things work",
+              "body": "\"Hot water takes a minute. The sliding door sticks: lift and push. The aircon remote lives in the top drawer.\"",
+              "small": "Save guests the guesswork.",
+              "alt": "How things work: example notes about hot water, a sticky sliding door and the aircon remote."
+            },
+            {
+              "head": "4. Bin day, and which bin is which",
+              "body": "\"Collection is Monday morning. Yellow lid: recycling. Red lid: general rubbish.\"",
+              "small": "That's information, not a chore.",
+              "alt": "Bin day: an example note giving the collection day and which lid is which."
+            },
+            {
+              "head": "5. Your local favourites",
+              "body": "\"Best coffee: the van at the surf club, from 6am. Best sunset: the rocks at the north end of the beach.\"",
+              "small": "The things only a local knows.",
+              "alt": "Local favourites: example recommendations for coffee and a sunset spot."
+            },
+            {
+              "head": "Your welcome, in your words.",
+              "body": "Your welcome, in your words, behind one QR code.",
+              "small": "digistaybook.com",
+              "alt": "Closing slide: Your welcome, in your words. DigiStayBook."
+            }
+          ],
+          "caption": "The best welcomes don't read like a rulebook.\n\nSave this for the next time you rewrite your welcome:\n→ Who you are\n→ The story of the home\n→ How things work\n→ Bin day, and which bin is which\n→ Your local favourites\n\nAll of it written as information, not instructions. Guests who know whose home they're in often treat it like one.\n\nYour welcome, in your words.\n\n#holidayhome #shorttermrental #holidayrental #hostingtips #welcomebook #guestexperience #selfcatering #australiantravel",
+          "brief": [
+            "7 slides, 1080 × 1350, made in Canva: \"DigiStayBook guest welcome carousel\".",
+            "Each slide has its own real stock photo (Unsplash): kitchen, cottage, bunk beds, deck, wheelie bins, beach sunset, living room.",
+            "Text sits on a cream note card; numbers and small lines in sage; the logo appears as a small cream tag.",
+            "Use each slide's alt text in Instagram's accessibility setting."
+          ],
+          "notes": [
+            "Post Sun 1 Nov, 7–8pm Sydney time.",
+            "Reshare slide 1 to Stories with a \"Save this\" sticker the next morning."
+          ]
+        },
+        "assets": [
+          {
+            "file": "week1-assets/2026-11-01_instagram_carousel-1.png",
+            "label": "Slide 1"
+          },
+          {
+            "file": "week1-assets/2026-11-01_instagram_carousel-2.png",
+            "label": "Slide 2"
+          },
+          {
+            "file": "week1-assets/2026-11-01_instagram_carousel-3.png",
+            "label": "Slide 3"
+          },
+          {
+            "file": "week1-assets/2026-11-01_instagram_carousel-4.png",
+            "label": "Slide 4"
+          },
+          {
+            "file": "week1-assets/2026-11-01_instagram_carousel-5.png",
+            "label": "Slide 5"
+          },
+          {
+            "file": "week1-assets/2026-11-01_instagram_carousel-6.png",
+            "label": "Slide 6"
+          },
+          {
+            "file": "week1-assets/2026-11-01_instagram_carousel-7.png",
+            "label": "Slide 7"
+          },
+          {
+            "file": "https://www.canva.com/design/DAHZRDKVVMk/edit",
+            "label": "Edit in Canva"
+          }
+        ]
+      },
+      {
+        "day": 4,
+        "week": 1,
+        "platform": "Facebook groups",
+        "format": "Helpful reply",
+        "pillar": "Community",
+        "title": "Be the calm voice in host threads",
+        "hook": "Host groups are full of frustrated threads. Offer the constructive angle.",
+        "points": [
+          "Agree it's frustrating; don't pile on",
+          "Share the idea: guests respect hosts they know; tell your story and share the information",
+          "Practical tip: write 'collection is Wednesday, yellow lid is recycling', not 'take the bins out'",
+          "No pitch unless the group allows it"
+        ],
+        "visual": "A shareable checklist image, '5 things worth telling every guest', on a real photo of a sunlit table. Posted with the reply where the group allows images.",
+        "cta": "None. Help and listen.",
+        "full": {
+          "replies": [
+            {
+              "when": "A frustrated \"what do we do now?\" thread",
+              "text": "Totally get it. It's your place and you want it looked after. One thing that helps, whatever the platforms allow: tell guests who you are and how the house works. \"Collection is Wednesday, yellow lid is recycling\" isn't a rule, it's information, and most people are happy to help once they know whose home it is."
+            },
+            {
+              "when": "\"What should I put in my welcome?\"",
+              "text": "I'd keep it to five things: who you are (a name and a line about why you love the place), a bit of the home's story, how the tricky things work (hot water, the sticky door), bin day and which bin is which, and your favourite local spots. Write it like you'd tell a friend staying over, not like a list of rules."
+            },
+            {
+              "when": "Someone asks for tools or apps (only where the group allows it)",
+              "text": "Full disclosure, I built one, so I'm biased: DigiStayBook puts your welcome, the house info and a guestbook behind a QR code. Happy to answer questions, and plenty of hosts do just fine with a well-written printed folder too."
+            }
+          ],
+          "brief": [
+            "1080 × 1350, made in Canva: \"DigiStayBook 2 Nov groups - 5 things worth telling every guest\".",
+            "Real stock photo (Unsplash) of a mug on a wooden table by a window, behind a cream checklist card with sage ticks.",
+            "Only a small digistaybook.com at the bottom: it is a useful resource first, not an ad.",
+            "Alt text: \"A checklist titled 5 things worth telling every guest: who you are, the story of the home, how the tricky things work, bin day, your local favourites.\""
+          ],
+          "notes": [
+            "Mon 2 Nov, and then whenever a good thread comes up.",
+            "Attach the checklist image to the \"What should I put in my welcome?\" reply. Hosts save and share images far more than text.",
+            "Read each group's rules first. No links unless the group allows them.",
+            "Reword each reply for the thread; pasting the same text across groups gets flagged as spam.",
+            "Reply from a personal profile that says you're the founder. Don't name the platform in our replies, even if the thread does."
+          ]
+        },
+        "assets": [
+          {
+            "file": "week1-assets/2026-11-02_facebook-groups_checklist.png",
+            "label": "Checklist image"
+          },
+          {
+            "file": "https://www.canva.com/design/DAHZRgC44DU/edit",
+            "label": "Edit in Canva"
+          }
+        ]
+      },
+      {
+        "day": 5,
+        "week": 1,
+        "platform": "TikTok",
+        "format": "Short video",
+        "pillar": "Humanise · guests",
+        "title": "Hi, I'm your host",
+        "hook": "You've stayed in my house. You've never met me. Hi.",
+        "points": [
+          "Host introduces themselves to camera: name, why they bought the place, what they love about it",
+          "Shows the person behind the listing",
+          "Ends softly: 'Look after it for me? I'll look after you.'",
+          "Guest-facing: warm, not guilt-tripping"
+        ],
+        "visual": "Talking-head in the home. Needs a real host or the owner.",
+        "cta": "Follow for more hosts saying hello.",
+        "full": {
+          "script": [
+            {
+              "t": "0–3s",
+              "shot": "Host at the kitchen bench, looks up and waves.",
+              "say": "You've probably stayed in a house like mine. You've never met the owner. Hi, I'm Rosa.",
+              "text": "Hi, I'm your host 👋"
+            },
+            {
+              "t": "3–12s",
+              "shot": "B-roll walk-through: the veranda, the old fig tree, pencil height marks on the pantry door.",
+              "say": "This was Mum's place. She hosted here for thirty years, and now it's my turn. That fig tree is older than me, and those marks on the pantry door are three generations of kids.",
+              "text": ""
+            },
+            {
+              "t": "12–20s",
+              "shot": "The kettle, a hall cupboard of towels, the bins by the side gate.",
+              "say": "When you stay here, you're borrowing the place we love most. The kettle needs a firm click, collection's Monday morning, and the good towels are in the hall cupboard.",
+              "text": ""
+            },
+            {
+              "t": "20–27s",
+              "shot": "Back to camera, a soft smile.",
+              "say": "Look after it for me? I'll look after you.",
+              "text": "Meet the people behind the places you stay."
+            },
+            {
+              "t": "27–29s",
+              "shot": "End card, small.",
+              "say": "",
+              "text": "DigiStayBook"
+            }
+          ],
+          "caption": "You've stayed in houses like mine. Hi, I'm Rosa 👋\n\n#holidayhome #countryhouse #travelaustralia #weekendaway #meetthehost #homeawayfromhome",
+          "brief": [
+            "Vertical 9:16, 25–30 seconds. Talking head at the bench, B-roll shot on the same day in the same light.",
+            "Guest-facing: warm, not guilt-tripping. No mention of rules, chores or the product in the voiceover; the logo appears only on the end card.",
+            "Captions burned in. Original audio only."
+          ],
+          "notes": [
+            "Post Tue 3 Nov, 6–8pm Sydney time.",
+            "Needs a real host or the owner, with written consent to use the footage. \"Rosa\" and her story are placeholders for their own.",
+            "Don't show the street number or anything that identifies the property's address."
+          ]
+        },
+        "assets_note": "Not made: needs a real host on camera."
+      },
+      {
+        "day": 6,
+        "week": 1,
+        "platform": "Instagram",
+        "format": "Reel",
+        "pillar": "Narrative · hosts",
+        "title": "Your welcome, in your words",
+        "hook": "Control your own narrative from the moment they walk in.",
+        "points": [
+          "Guest scans the QR on the counter; the host's welcome opens in the host's own words",
+          "Then the essentials: Wi-Fi, heating, bin day, checkout time",
+          "Then the guest wall: memories from past guests",
+          "Demo labelled; cross-post to Facebook Reels and YouTube Shorts"
+        ],
+        "visual": "Screen recording of the real demo over home footage.",
+        "cta": "Follow for the next look inside.",
+        "full": {
+          "script": [
+            {
+              "t": "0–4s",
+              "shot": "Stock: sunlit kitchen and living room (Canva free library).",
+              "say": "",
+              "text": "Control your own narrative from the moment they walk in."
+            },
+            {
+              "t": "4–10s",
+              "shot": "Same room continues; phone shows the demo welcome from Ana & Tom.",
+              "say": "",
+              "text": "Your welcome, in your words."
+            },
+            {
+              "t": "10–16s",
+              "shot": "Stock: open-plan dining room; phone shows the Checkout essential (\"No need to strip the beds\").",
+              "say": "",
+              "text": "Everything they need, in one place."
+            },
+            {
+              "t": "16–22s",
+              "shot": "Dining room continues; phone shows the guest wall memories.",
+              "say": "",
+              "text": "And the memories past guests left behind."
+            },
+            {
+              "t": "22–25s",
+              "shot": "End card, dark, with the wordmark.",
+              "say": "",
+              "text": "Your welcome, in your words. · digistaybook.com"
+            }
+          ],
+          "caption": "One scan, and the first thing your guests hear is you.\n\nYour welcome in your own words. The Wi-Fi, the heating and bin day. Then the memories past guests left behind.\n\nThis is our demo cottage; yours tells your story.\n\n#holidayhome #shorttermrental #holidayrental #hostingtips #welcomebook #guestexperience #selfcatering",
+          "brief": [
+            "Vertical 9:16, 20–25 seconds. Phone screen recording of digistaybook.com/stay/demo-cottage, laid over slow footage of a real kitchen or deck.",
+            "Keep the \"Demo\" label visible. Record at full brightness with notifications off.",
+            "Text only, no voice. Soft instrumental from Instagram's licensed library.",
+            "Cross-post the same file to Facebook Reels and YouTube Shorts (title: \"Your welcome, in your words\")."
+          ],
+          "notes": [
+            "Post Wed 4 Nov, 7–8pm Sydney time.",
+            "Made: 25s MP4, no music. Add a soft instrumental from Instagram's library when posting.",
+            "Cross-post the same file to Facebook Reels and YouTube Shorts."
+          ]
+        },
+        "assets": [
+          {
+            "file": "week1-assets/2026-11-04_instagram_reel_your-welcome.mp4",
+            "label": "Reel, 25s"
+          },
+          {
+            "file": "https://www.canva.com/design/DAHZQ0UIDo8/edit",
+            "label": "Edit in Canva"
+          }
+        ]
+      },
+      {
+        "day": 7,
+        "week": 2,
+        "platform": "Facebook",
+        "format": "Feed post",
+        "pillar": "Humanise · hosts",
+        "title": "Guests don't trash homes. They trash listings.",
+        "hook": "People treat a listing like a hotel. They treat a person's home like a home.",
+        "points": [
+          "The idea: humanise yourself and the home stops being anonymous",
+          "Three ways: introduce yourself, tell the home's story, say thank you",
+          "Respect follows connection",
+          "DigiStayBook puts that in front of every guest on arrival"
+        ],
+        "visual": "Split card: a generic listing grid vs a handwritten 'Welcome to our place'.",
+        "cta": "Hosts: do you introduce yourself to guests?",
+        "note": "Headline is deliberately provocative; check it reads as pro-guest, not guest-blaming."
+      },
+      {
+        "day": 8,
+        "week": 2,
+        "platform": "TikTok",
+        "format": "Short video",
+        "pillar": "Humanise · guests",
+        "title": "Things in this house that have a story",
+        "hook": "This chair was my grandmother's.",
+        "points": [
+          "Host tells the story behind 2–3 objects",
+          "Guests look after what they understand",
+          "Control your own narrative: the house introduces itself",
+          "Mention: the stories can live in your DigiStayBook welcome"
+        ],
+        "visual": "Talking-head plus close-ups.",
+        "cta": "What's the story behind something in your rental?"
+      },
+      {
+        "day": 9,
+        "week": 2,
+        "platform": "Instagram",
+        "format": "Carousel",
+        "pillar": "Humanise · hosts",
+        "title": "Write a welcome that sounds like you",
+        "hook": "'Welcome to the property' vs 'Welcome to our place'.",
+        "points": [
+          "Before and after: a cold welcome rewritten warmly",
+          "Use your name, a little history, one thing you love nearby",
+          "Short is fine; personal is the point",
+          "Final slide: where it shows in DigiStayBook (demo, labelled)"
+        ],
+        "visual": "Before/after slides.",
+        "cta": "Share the first line of your welcome."
+      },
+      {
+        "day": 10,
+        "week": 2,
+        "platform": "Reddit",
+        "format": "Write-up",
+        "pillar": "Community",
+        "title": "What hosts told us about guests who look after the place",
+        "hook": "Write-up of the week 1 thread (anonymised, with permission).",
+        "points": [
+          "Pattern: guests who know the host behave like guests in a home",
+          "Examples of welcomes and stories that work",
+          "Disclose you build DigiStayBook; link only if the sub allows",
+          "Invite more stories"
+        ],
+        "visual": "One plain image (no logo): the five ideas hosts mentioned most, written as a simple handwritten-style list, plus the text write-up.",
+        "cta": "Share a story of a guest who got it right.",
+        "note": "Needs moderator approval in most host subreddits."
+      },
+      {
+        "day": 11,
+        "week": 2,
+        "platform": "Website / blog",
+        "format": "Article",
+        "pillar": "Narrative · hosts",
+        "title": "How to write a house guide guests actually read",
+        "hook": "SEO article for hosts rethinking their welcome.",
+        "points": [
+          "Light context only: hosts are rethinking what they ask of guests (no name, no rule explainer)",
+          "Control your own narrative: introduce yourself and your home",
+          "Share what guests need to know: bin days, how things work, why the neighbours matter",
+          "Let past guests set the tone: a guestbook or memory wall",
+          "DigiStayBook section at the end with a demo link"
+        ],
+        "visual": "Header image plus demo screenshots.",
+        "cta": "See the demo guest page."
+      },
+      {
+        "day": 12,
+        "week": 2,
+        "platform": "Pinterest",
+        "format": "Pins",
+        "pillar": "Information",
+        "title": "Holiday house welcome ideas",
+        "hook": "Evergreen pins: welcome wording, house-guide layout, a QR on the counter.",
+        "points": [
+          "3–5 pins linked to the blog article",
+          "Long-life traffic for low effort",
+          "No policy talk on pins (it dates quickly)",
+          "Brand style throughout"
+        ],
+        "visual": "Vertical pin graphics.",
+        "cta": "Read the guide on the blog."
+      },
+      {
+        "day": 13,
+        "week": 2,
+        "platform": "LinkedIn",
+        "format": "Post",
+        "pillar": "Founder",
+        "title": "Hosts can't control everything. They can control the welcome.",
+        "hook": "Founder note for property managers and the travel-tech audience.",
+        "points": [
+          "Hosts are being asked to expect less of guests; the welcome is what stays theirs",
+          "The remaining lever is connection: who the host is, how the home works",
+          "Why we built DigiStayBook around that",
+          "Invitation to property managers to talk"
+        ],
+        "visual": "A real photo of the founder at a holiday home, with the QR stand on the bench (not stock).",
+        "cta": "Message me if you manage several properties."
+      },
+      {
+        "day": 14,
+        "week": 3,
+        "platform": "Facebook",
+        "format": "Feed post",
+        "pillar": "Information",
+        "title": "Everything guests need to know",
+        "hook": "Collection is Thursday. That's not a rule. It's just how the street works.",
+        "points": [
+          "Information isn't a demand: bin day, which bin is which, how the heating works, where the beach towels live",
+          "Respectful guests act on good information",
+          "Many will treat it like the self-catering home it is",
+          "DigiStayBook: all of it, one scan away"
+        ],
+        "visual": "Card: 'Collection: Thursday. Yellow lid: recycling.' with the logo.",
+        "cta": "What's the one thing you wish every guest knew?"
+      },
+      {
+        "day": 15,
+        "week": 3,
+        "platform": "TikTok",
+        "format": "Short video",
+        "pillar": "Information",
+        "title": "Bossy vs friendly",
+        "hook": "'TAKE THE BINS OUT' vs 'Collection's Friday, if you're here for it.'",
+        "points": [
+          "Quick-fire pairs: a bossy instruction, then the friendly information version",
+          "Funny, fast, relatable for hosts",
+          "The point: the second one gets done more often",
+          "Ends on the QR scan"
+        ],
+        "visual": "Split screen: a laminated 'TAKE THE BINS OUT' sign vs a handwritten fridge note 'Collection's Friday, if you're here for it'. Host reacts on camera.",
+        "cta": "Follow for part two."
+      },
+      {
+        "day": 16,
+        "week": 3,
+        "platform": "Instagram",
+        "format": "Carousel",
+        "pillar": "Information",
+        "title": "The house guide guests actually read",
+        "hook": "Nobody reads a laminated folder. Everyone reads their phone.",
+        "points": [
+          "What to include: welcome, Wi-Fi, heating, hot water, bin day, checkout time, local favourites",
+          "Write each line as information, not instruction",
+          "Keep it short; put it where guests look",
+          "Final slide: DigiStayBook stay essentials (demo, labelled)"
+        ],
+        "visual": "Slides with real demo screens.",
+        "cta": "Save for your next update."
+      },
+      {
+        "day": 17,
+        "week": 3,
+        "platform": "Facebook groups",
+        "format": "Free resource",
+        "pillar": "Information",
+        "title": "Free: a house guide template, in your words",
+        "hook": "One-page template, offered where group rules allow.",
+        "points": [
+          "Sections: hello from your host, the home's story, how things work, bin day, checkout time, local favourites, thank-you",
+          "Written as information, never requirements",
+          "Image or PDF, no email gate; DigiStayBook in the footer only",
+          "Ask admins first"
+        ],
+        "visual": "One-page template design.",
+        "cta": "Copy whatever helps."
+      },
+      {
+        "day": 18,
+        "week": 3,
+        "platform": "Instagram",
+        "format": "Reel",
+        "pillar": "Respect · guests",
+        "title": "A home you're borrowing",
+        "hook": "It's not a hotel. It's someone's home you get to borrow.",
+        "points": [
+          "Guest-facing: enjoy it, it's your holiday",
+          "Borrowing a home means caring for it: the kitchen, the photos, the neighbours",
+          "No guilt; just respect",
+          "Cross-post to Facebook Reels and YouTube Shorts"
+        ],
+        "visual": "Home details: a family photo on a shelf, a well-used kitchen, a garden.",
+        "cta": "Share with someone travelling this summer."
+      },
+      {
+        "day": 19,
+        "week": 3,
+        "platform": "TikTok",
+        "format": "Short video",
+        "pillar": "Respect · guests",
+        "title": "Guests who left it better",
+        "hook": "Hosts, tell me about the most respectful guests you've had.",
+        "points": [
+          "Real host stories (with permission): fixed the gate, left flowers, wrote a lovely note",
+          "Nobody asked them to",
+          "Positive proof that respect is normal",
+          "No invented stories"
+        ],
+        "visual": "Real guest notes hosts send in (with permission): a thank-you card on the bench, flowers left in a jar. A host reads one aloud.",
+        "cta": "Comment your best guest story."
+      },
+      {
+        "day": 20,
+        "week": 3,
+        "platform": "Email",
+        "format": "Newsletter",
+        "pillar": "Narrative · hosts",
+        "title": "Interest list: control your own narrative",
+        "hook": "Short update to people who have opted in.",
+        "points": [
+          "The idea in three lines",
+          "Links to the blog article and the template",
+          "One product update",
+          "Ask: what would your welcome say?"
+        ],
+        "visual": "Simple branded email.",
+        "cta": "Reply and tell us.",
+        "note": "Only to people who opted in. Needs an email tool and list first."
+      },
+      {
+        "day": 21,
+        "week": 4,
+        "platform": "Facebook",
+        "format": "Feed post",
+        "pillar": "Respect · guests",
+        "title": "A home, not a hotel",
+        "hook": "Hotels have housekeeping. Homes have hosts.",
+        "points": [
+          "Even-handed: guests are on holiday and deserve a break",
+          "But a holiday home is self-catering: it runs on a bit of mutual care",
+          "Hosts share how the home works; guests look after it like a friend's place",
+          "DigiStayBook: the host's welcome and the guests' memories in one place"
+        ],
+        "visual": "Card: 'Hotels have housekeeping. Homes have hosts.'",
+        "cta": "What does a great guest do at your place?",
+        "note": "Lands the day after the change starts. Keep it warm; public opinion largely sides with guests on this."
+      },
+      {
+        "day": 22,
+        "week": 4,
+        "platform": "Instagram",
+        "format": "Story series",
+        "pillar": "Narrative · hosts",
+        "title": "Your home, your story",
+        "hook": "Four-frame Story for hosts.",
+        "points": [
+          "Frame 1: 'Same home. Your story.'",
+          "Frame 2: poll: 'Do your guests know who you are?'",
+          "Frame 3: question sticker: 'What's the story of your place?'",
+          "Frame 4: link sticker to the blog article"
+        ],
+        "visual": "Four branded Story frames.",
+        "cta": "Vote and reply."
+      },
+      {
+        "day": 23,
+        "week": 4,
+        "platform": "TikTok",
+        "format": "Short video",
+        "pillar": "Memories",
+        "title": "Reading old guestbook entries",
+        "hook": "Twenty years of guests in one book.",
+        "points": [
+          "A host reads lovely entries from a real paper guestbook (with permission)",
+          "Past guests tell new guests: this place is loved",
+          "Transition: what if the next guests could see these too?",
+          "Ends on the guest wall"
+        ],
+        "visual": "Close-ups of a paper guestbook, then the demo wall.",
+        "cta": "Does your rental have a guestbook?"
+      },
+      {
+        "day": 24,
+        "week": 4,
+        "platform": "Instagram",
+        "format": "Carousel",
+        "pillar": "Memories",
+        "title": "Let past guests tell your story",
+        "hook": "The best review of your home isn't a star rating.",
+        "points": [
+          "Memories from past guests show new guests that people love this home",
+          "Your wall, your approval: you choose what tells your home's story",
+          "Guests respect a home with a history",
+          "Demo labelled; no promise of less damage"
+        ],
+        "visual": "Demo guest wall screens.",
+        "cta": "Share with a host friend."
+      },
+      {
+        "day": 25,
+        "week": 4,
+        "platform": "YouTube Shorts",
+        "format": "Short video",
+        "pillar": "Product",
+        "title": "One scan: welcome, house info, memories",
+        "hook": "Repurposed walkthrough for search and Shorts.",
+        "points": [
+          "Scan the demo QR, read the welcome, open the essentials (bin day included), see the wall",
+          "Captioned for sound-off viewing",
+          "Title written for search ('digital house guide for holiday rental')",
+          "Reuse earlier footage"
+        ],
+        "visual": "Screen recording of the real demo.",
+        "cta": "Link to the demo in the description."
+      },
+      {
+        "day": 26,
+        "week": 4,
+        "platform": "Reddit",
+        "format": "Discussion post",
+        "pillar": "Community",
+        "title": "A few weeks on: have guests treated your place any differently?",
+        "hook": "Follow-up thread late in the month.",
+        "points": [
+          "Ask what hosts have noticed in recent stays",
+          "Share anonymised themes from the month",
+          "Listen for objections to a digital house guide",
+          "No link"
+        ],
+        "visual": "Text post (Reddit rewards real questions). Add a real photo only if a host shares a guest's thank-you note with permission.",
+        "cta": "Thank and reply."
+      },
+      {
+        "day": 27,
+        "week": 4,
+        "platform": "Facebook",
+        "format": "Feed post",
+        "pillar": "Respect · guests",
+        "title": "Thank you for looking after the homes you stay in",
+        "hook": "A thank-you to guests, not a lecture.",
+        "points": [
+          "Close on gratitude to respectful guests",
+          "Thank hosts for the stories they shared (named only with permission)",
+          "Restate the idea: control your own narrative; your welcome, in your words",
+          "Invite follows and questions"
+        ],
+        "visual": "Warm card: 'Treat it like a home.'",
+        "cta": "Tag someone who's a great guest."
+      }
+    ]
+  },
+  "campaigns/month-2026-10-23": {
+    "title": "A better welcome, one scan away",
+    "start": "2026-10-23",
+    "days": 30,
+    "timezone": "Australia/Sydney",
+    "created": "2026-10-18",
+    "stage": "Prelaunch",
+    "pageUrl": "https://www.facebook.com/profile.php?id=61595061885990",
+    "weeks": [
+      "Make the arrival easier",
+      "Put local knowledge to work",
+      "Give the property a memory",
+      "Show the host's side",
+      "Listen, then choose the next month"
+    ],
+    "posts": [
+      {
+        "title": "The arrival, in three taps",
+        "format": "Reel",
+        "pillar": "Guest ease",
+        "screen": "stay-essentials.jpg",
+        "caption": "Bags down. Phone out. The Wi-Fi answer is right there.\n\nDigiStayBook brings your welcome, house guidance and guest memories together behind one QR code. Guests open it in their phone's browser—no app download and no guest account.\n\nThis walkthrough uses our made-up demo property. We're getting ready for launch, and we'd love to know: what should a guest find first when they arrive at your place?\n\nFollow Digi Staybook for the next look inside.\n\n#DigiStayBook #HolidayRental #HostTips",
+        "story": "Frame 1: Bags down. What do you need first?\nFrame 2: Wi-Fi / Parking / Heating / A cup of tea?\nFrame 3: One scan opens the demo's house guidance. Follow for more.",
+        "visual": "12–15 second vertical recording of the real demo: start on the QR display, open the guest wall, tap Wi-Fi. Keep the QR labelled DEMO. Add captions and show no private host data.",
+        "frames": [
+          "0–3s · Bags down. Where's the Wi-Fi?",
+          "3–6s · Scan the demo QR display.",
+          "6–10s · Open Your stay essentials and tap Wi-Fi.",
+          "10–15s · Your welcome, in their browser. Follow Digi Staybook."
+        ],
+        "alt": "A real DigiStayBook demo screen recording moving from a QR display to the guest wall and Wi-Fi guidance."
+      },
+      {
+        "title": "Which answer comes first?",
+        "format": "Story",
+        "pillar": "Host listening",
+        "screen": "stay-essentials.jpg",
+        "caption": "Hosts: if you could put just one answer in front of arriving guests, what would it be?\n\nWi-Fi, parking, checkout—or something completely different? Reply and tell us. We're listening while we get DigiStayBook ready for launch.",
+        "story": "Frame 1: The question you answer every changeover?\nFrame 2: Use a question sticker: Tell us yours.\nFrame 3: Demo house guidance shown as an example—not a customer property.",
+        "visual": "Three 1080×1920 frames with the real essentials screen behind a readable cream panel. Use a question sticker only if available; otherwise invite a reply.",
+        "alt": "Story frames asking hosts which guest question they answer most often, with a labelled demo house-guidance screen."
+      },
+      {
+        "title": "The five lines worth writing first",
+        "format": "Carousel",
+        "pillar": "Useful house guidance",
+        "screen": "stay-essentials.jpg",
+        "caption": "Starting a house guide? Start with the answers guests need before they start exploring.\n\nWhere to park. How to connect. How to get comfortable. What goes in which bin. What to do at checkout.\n\nKeep each answer short, specific to your place and easy to find. Your welcome can still sound like you.\n\nDigiStayBook puts house guidance alongside your welcome and guest memories. Screens here are from our made-up demo cottage.\n\nSave this list for your next guide update, and follow our prelaunch progress.\n\n#DigiStayBook #HolidayLet #HostingTips",
+        "story": "Share slide 1, then ask: Which of these is missing from your guide?",
+        "visual": "Five 1080×1350 slides. Lead with a text checklist; use a real demo screen only on the final slide. Do not show actual door codes or network credentials.",
+        "frames": [
+          "Start with the first five answers",
+          "Parking + Wi-Fi: say exactly where and how",
+          "Heating + bins: the details that differ at your property",
+          "Checkout: a clear time and a short list",
+          "One place to find them. Demo shown. Follow Digi Staybook."
+        ],
+        "alt": "A five-slide house-guide checklist covering parking, Wi-Fi, heating, bins and checkout."
+      },
+      {
+        "title": "Write a welcome that sounds like you",
+        "format": "Feed",
+        "pillar": "A personal welcome",
+        "screen": "stay-welcome.jpg",
+        "caption": "A useful welcome can be warm, too.\n\nTry three things: a friendly hello, one thing that makes your property special, and where to find the practical answers.\n\nDigiStayBook gives your arrival note a place at the top of the guest wall, with house guidance nearby. The example shown is from our made-up demo property.\n\nWhat is the first sentence in your current welcome? We'd love to hear how you greet your guests.\n\nFollow the Page as we get ready for launch.\n\n#DigiStayBook #HolidayRental #GuestWelcome",
+        "story": "Show the demo welcome. Overlay: A useful welcome can still sound like you. Invite hosts to reply with their opening line.",
+        "visual": "1080×1350 real welcome-screen crop with headline 'A welcome in your own words' and a visible Demo property label.",
+        "alt": "The arrival note on a labelled DigiStayBook demo guest wall."
+      },
+      {
+        "title": "Guide, guestbook, or both?",
+        "format": "Story",
+        "pillar": "Host listening",
+        "screen": "wall-top.jpg",
+        "caption": "What's waiting for guests at your property today?\n\nA house manual, a paper guestbook, both, or something else? Tell us what works for you. We're building DigiStayBook for real stays and useful welcomes.",
+        "story": "Frame 1: What's on your counter?\nFrame 2: Poll or reply prompt: House guide / Guestbook / Both / Neither.\nFrame 3: Your answers help us choose what to show next.",
+        "visual": "Text-first Story with four clearly readable choices. A small demo-wall crop can sit below the question; avoid a fabricated kitchen scene.",
+        "alt": "A host poll asking whether they use a house guide, a guestbook, both or neither."
+      },
+      {
+        "title": "The question that belongs in your guide",
+        "format": "Feed",
+        "pillar": "Useful house guidance",
+        "screen": "stay-essentials.jpg",
+        "caption": "Before your next changeover, look at the last few questions guests asked you.\n\nIs there one answer that belongs in your house guidance? A parking detail, an appliance quirk, the bin day, or where the spare blankets live?\n\nDigiStayBook is being built to make that information easy to find after a scan. No app and no account for guests.\n\nThe screen shown is our demo. What would you add to yours?\n\n#DigiStayBook #HostLife #HolidayRental",
+        "story": "One small guide update: add the answer you sent twice last week. Reply with the topic, without sharing guest messages or personal details.",
+        "visual": "1080×1350 checklist card plus a real essentials-screen crop. Headline: 'Asked twice? Give the answer a home.'",
+        "alt": "A checklist prompt encouraging hosts to add a frequently asked question to their house guidance."
+      },
+      {
+        "title": "Week-one listening check",
+        "format": "Story",
+        "pillar": "Host listening",
+        "screen": "stay-welcome.jpg",
+        "caption": "This week's question for hosts: which arrival detail is hardest to explain by message?\n\nYou don't need to share a guest conversation—just tell us the topic. We'll use the answers to plan our next DigiStayBook walkthrough.",
+        "story": "Frame 1: Help choose our next walkthrough.\nFrame 2: Parking? Heating? Checkout? Something else?\nFrame 3: Reply with the topic. We'll read every response.",
+        "visual": "Simple question-led Story. If quoting a real response later, ask permission first; do not invent answers for this card.",
+        "alt": "A Story inviting hosts to choose the next product walkthrough topic."
+      },
+      {
+        "title": "Your local favourites, where guests look",
+        "format": "Reel",
+        "pillar": "Local knowledge",
+        "screen": "wall-fire.jpg",
+        "caption": "The little bakery. The quieter walk. The place you send friends when they visit.\n\nYour local knowledge is part of the welcome. DigiStayBook gives it a home on the guest wall, close to the practical house guidance.\n\nThis recording uses our made-up demo property and sample recommendations.\n\nHosts: what's the one kind of local tip you always include? Food, walks, wet-weather ideas—or something else?\n\nFollow for more prelaunch previews.\n\n#DigiStayBook #LocalTips #HolidayRental",
+        "story": "Reshare the reel. Add: Your local knowledge is part of the welcome. What type of tip should we show next?",
+        "visual": "12–15 second real demo capture. Scroll from the arrival note to a local recommendation. Do not insert stock reviews or imply the example business endorses DigiStayBook.",
+        "frames": [
+          "0–3s · The tip you'd give a friend",
+          "3–7s · Show a sample recommendation on the demo wall",
+          "7–11s · Your favourites, beside the house guidance",
+          "11–15s · What would you recommend? Follow Digi Staybook."
+        ],
+        "alt": "A real demo guest-wall recording showing a sample local recommendation."
+      },
+      {
+        "title": "Late arrival, clear instructions",
+        "format": "Story",
+        "pillar": "Useful house guidance",
+        "screen": "stay-welcome.jpg",
+        "caption": "Arriving after dark can make even a familiar instruction feel different.\n\nHosts: what helps your guests settle in when they arrive late? Keep access codes and private security details out of the comments.",
+        "story": "Frame 1: A late arrival at your place…\nFrame 2: What should guests find first once they're inside?\nFrame 3: Ask for a reply: Parking / Heating / Wi-Fi / Other.",
+        "visual": "31 October Story, focused on late arrivals rather than an invented Halloween offer. Use the real welcome screen and plain text; no spooky stock scene is required.",
+        "alt": "Text-led Story asking hosts what guidance helps guests after a late arrival."
+      },
+      {
+        "title": "Make a recommendation useful",
+        "format": "Carousel",
+        "pillar": "Local knowledge",
+        "screen": "wall-fire.jpg",
+        "caption": "A local recommendation is more helpful when guests know why you picked it.\n\nInstead of only naming a place, add what you like about it, who it might suit, and one practical detail you've checked.\n\nFor example: a good walk for a quiet morning, with a note about the route. Keep opening hours and access details up to date rather than treating your guide as finished forever.\n\nDigiStayBook's demo shows how a local note can sit in the welcome. Sample property shown.\n\nSave this for your next guide refresh.\n\n#DigiStayBook #LocalKnowledge #HostTips",
+        "story": "Share the checklist slide: Why you like it + who it's for + one checked practical detail.",
+        "visual": "Four 1080×1350 checklist slides. Use general examples, not unverifiable opening times or sponsored business claims.",
+        "frames": [
+          "A useful tip is more than a place name",
+          "Say why you recommend it",
+          "Add who it suits + a practical detail you've checked",
+          "Keep it current. Sample demo shown. Follow Digi Staybook."
+        ],
+        "alt": "A four-slide checklist explaining how hosts can write a useful local recommendation."
+      },
+      {
+        "title": "A guide for the guest who skims",
+        "format": "Feed",
+        "pillar": "Guest ease",
+        "screen": "stay-essentials.jpg",
+        "caption": "Some guests will read every word. Others will go straight to the answer they need.\n\nShort labels help: Wi-Fi. Parking. Heating. Checkout. Put the detail underneath, in plain language.\n\nThat's the approach behind the house-guidance buttons in DigiStayBook. The screen is from our made-up demo cottage.\n\nWhich label would your property need that isn't on that list?\n\nFollow Digi Staybook as we prepare for launch.\n\n#DigiStayBook #GuestExperience #HolidayRental",
+        "story": "Show the demo essentials. Add: Short label. Useful answer. What would the extra button at your place say?",
+        "visual": "1080×1350 essentials-screen crop with a short annotation pointing to the button labels. Avoid tiny text or a whole desktop dashboard.",
+        "alt": "The labelled house-guidance buttons on the DigiStayBook demo guest wall."
+      },
+      {
+        "title": "Your wet-weather recommendation",
+        "format": "Story",
+        "pillar": "Local knowledge",
+        "screen": "stay-welcome.jpg",
+        "caption": "If the weather changes, what local idea do you give guests?\n\nA café, a museum, a bookshop, or just your favourite way to spend a slow afternoon? Tell us the kind of tip you'd put in your guest welcome.",
+        "story": "Frame 1: The forecast changed.\nFrame 2: What's your go-to wet-weather tip?\nFrame 3: Invite replies. Do not label a recommendation as a customer testimonial.",
+        "visual": "Three text-led frames with the real logo. Use a product screen only as a clearly labelled background reference.",
+        "alt": "A Story asking hosts for the type of local recommendation they give on a wet day."
+      },
+      {
+        "title": "Your house info is for the stay",
+        "format": "Feed",
+        "pillar": "Host control",
+        "screen": "wall-top.jpg",
+        "caption": "A welcome for people staying with you is different from a wall you share publicly.\n\nDigiStayBook has an in-stay guest wall with your house guidance, and a separate public wall for sharing guest memories. You can switch off the public wall.\n\nThe screenshots in this series are from a made-up demo property. Never put private access codes in a public marketing image.\n\nHosts: which parts of a welcome would you keep just for guests during their stay?\n\n#DigiStayBook #HolidayRental #HostControl",
+        "story": "Two labels: During the stay / Public sharing. Ask: Which information belongs only in your guest welcome?",
+        "visual": "A two-column diagram using plain shapes: guest wall includes house guidance; public wall is separate. Use actual demo screens and mask the in-stay URL token in marketing artwork.",
+        "alt": "A diagram distinguishing the in-stay guest wall from the separate public memory wall."
+      },
+      {
+        "title": "Local tips: short or detailed?",
+        "format": "Story",
+        "pillar": "Host listening",
+        "screen": "wall-fire.jpg",
+        "caption": "When you recommend something nearby, do you write a quick favourite or a detailed local guide?\n\nTell us what feels useful for your guests. We're choosing the next DigiStayBook examples from host questions, not imaginary testimonials.",
+        "story": "Frame 1: Your local tip style?\nFrame 2: Quick favourite / Detailed guide.\nFrame 3: Reply with what guests actually ask you about.",
+        "visual": "Two readable option cards on the brand background. Do not imply poll results before the poll has run.",
+        "alt": "A poll asking whether hosts prefer short local tips or more detailed guides."
+      },
+      {
+        "title": "A memory, not another guest account",
+        "format": "Reel",
+        "pillar": "Guest memories",
+        "screen": "wall-memory.jpg",
+        "caption": "A note about the walk. A photo from the stay. A small memory for the next guests to find.\n\nDigiStayBook lets guests add messages and photos through their phone's browser. No guest account to create.\n\nThis is a demo walkthrough with sample content, not a real guest's review. We're still preparing for launch.\n\nWould you invite guests to leave a message, a photo, or either?\n\nFollow the Page to see more.\n\n#DigiStayBook #GuestMemories #HolidayRental",
+        "story": "Reshare the reel with: Message, photo, or either? Invite a reply rather than showing invented results.",
+        "visual": "15-second real demo capture. Show the memory wall and an empty add-memory form; use demo mode only and do not film a real guest's personal details.",
+        "frames": [
+          "0–3s · A little of their stay, left behind",
+          "3–7s · Show clearly labelled sample memories",
+          "7–11s · Open the demo add-memory form",
+          "11–15s · No guest account. Follow our prelaunch progress."
+        ],
+        "alt": "A real demo recording showing sample guest memories and the demo contribution form."
+      },
+      {
+        "title": "What would you invite guests to share?",
+        "format": "Story",
+        "pillar": "Host listening",
+        "screen": "wall-memory.jpg",
+        "caption": "If you left a guestbook prompt at your property, which would you choose?\n\nA favourite moment, a local recommendation, or a note for the next guests? Reply with your pick.",
+        "story": "Frame 1: Choose a guestbook prompt.\nFrame 2: Favourite moment / Local tip / Note for the next guest.\nFrame 3: Made-up demo property shown. Which feels most like your place?",
+        "visual": "Three prompt cards with a small demo-wall reference. Present every sentence as an example prompt, not a submitted guest message.",
+        "alt": "Three suggested guestbook prompts, clearly shown as examples."
+      },
+      {
+        "title": "Ask a question guests can answer",
+        "format": "Carousel",
+        "pillar": "Guest memories",
+        "screen": "wall-memory.jpg",
+        "caption": "A small prompt gives a blank guestbook page a starting point.\n\nWhat was your favourite moment? What would you recommend to the next guests? What did you discover nearby?\n\nDigiStayBook includes suggested writing prompts and a custom option, so the invitation can fit your property.\n\nThese are example prompts beside a made-up demo wall—not guest testimonials.\n\nSave a prompt you'd try, and follow the Page for more previews.\n\n#DigiStayBook #DigitalGuestbook #HostTips",
+        "story": "Share one prompt per frame. Final frame: Which would you put on your wall?",
+        "visual": "Four 1080×1350 slides using prompt text and the real demo wall. Keep examples labelled and avoid star ratings.",
+        "frames": [
+          "Give the blank page a starting point",
+          "What was your favourite moment?",
+          "What would you recommend to the next guests?",
+          "Or write your own prompt. Demo shown. Follow Digi Staybook."
+        ],
+        "alt": "A carousel of example writing prompts for a digital guestbook."
+      },
+      {
+        "title": "A guest memory is not a booking review",
+        "format": "Feed",
+        "pillar": "Clear expectations",
+        "screen": "wall-memory.jpg",
+        "caption": "The note in a guestbook has a different job from a review on a booking platform.\n\nDigiStayBook is a place for your house guidance and the memories guests choose to leave. It doesn't submit reviews to booking sites or promise better ratings.\n\nThe wall pictured is our made-up demo property, with sample content.\n\nWhat would make a guestbook feel at home in your property?\n\nFollow our prelaunch journey.\n\n#DigiStayBook #HolidayRental #DigitalGuestbook",
+        "story": "A guest memory ≠ a booking-platform review. Show a labelled demo memory, with no stars or ratings.",
+        "visual": "1080×1350 text card with a real demo-memory crop. No booking-site logos, star-rating graphics or revenue claims.",
+        "alt": "A labelled demo memory beside text explaining that a guestbook is separate from booking-platform reviews."
+      },
+      {
+        "title": "Where would your QR display live?",
+        "format": "Story",
+        "pillar": "Guest ease",
+        "screen": "qr-card.png",
+        "caption": "The kitchen counter? Beside the welcome folder? Somewhere guests naturally pause?\n\nWhere would a guestbook QR display make sense at your property? Tell us where you'd put it.",
+        "story": "Frame 1: One QR display. Where would yours go?\nFrame 2: Counter / Welcome folder / Somewhere else.\nFrame 3: Demo QR artwork shown—not a live customer link.",
+        "visual": "Use the real demo placard flat on the brand background, without inventing a property photograph. Label the QR as DEMO and test its destination before any publication.",
+        "alt": "The real demo QR placard with a question about where hosts would place it."
+      },
+      {
+        "title": "Your wall, your approval choice",
+        "format": "Feed",
+        "pillar": "Host control",
+        "screen": "wall-top.jpg",
+        "caption": "Want to check new memories before they appear?\n\nDigiStayBook includes an approval setting for new memories. Guest submissions also go through automated safety checks, and hosts can hide or remove memories from the wall.\n\nSafety checks are part of the process, not a guarantee that every issue will be caught. Restricted safety cases have a separate review route.\n\nThis is a product preview using a made-up demo property. What would you want explained about host approval?\n\n#DigiStayBook #HostControl #HolidayRental",
+        "story": "Ask: Would you prefer to review new memories first? Yes / Tell me more. Link no production queue or guest content.",
+        "visual": "Text-led diagram: submit → safety checks → host approval when enabled → wall. Use no fabricated moderation screenshot and no absolute safety promises.",
+        "alt": "A simple diagram explaining automated safety checks and optional host approval before a memory appears."
+      },
+      {
+        "title": "One useful question for the builder",
+        "format": "Story",
+        "pillar": "Host listening",
+        "screen": "stay-welcome.jpg",
+        "caption": "Ask us one practical question about DigiStayBook.\n\nIt might be about the guest's phone, what goes in the welcome, or how a host looks after the wall. We'll use real questions to choose the next previews.",
+        "story": "Frame 1: What would you ask before trying a digital guestbook?\nFrame 2: Question sticker or Reply here.\nFrame 3: We're preparing for launch; no launch date is promised.",
+        "visual": "Plain question card with logo and a small real product reference. Collect questions; do not create imaginary host quotes.",
+        "alt": "A question Story inviting practical questions about DigiStayBook."
+      },
+      {
+        "title": "From a draft welcome to a guest view",
+        "format": "Reel",
+        "pillar": "Host setup",
+        "screen": "stay-welcome.jpg",
+        "caption": "The guest view should feel simple. The host should have somewhere to shape it.\n\nDigiStayBook lets you prepare a welcome and house guidance in a private draft, then preview the wall before guests can use it.\n\nThis walkthrough shows our demo content. It isn't a promise that a property becomes live without completing activation.\n\nWhat would you write first: the welcome note or the practical essentials?\n\nFollow for the next prelaunch look.\n\n#DigiStayBook #HolidayRental #HostSetup",
+        "story": "Reshare the preview: Draft first. Guest view next. Ask which part hosts would set up first.",
+        "visual": "15-second real product recording using a dedicated test property. Capture the draft label and owner-only preview banner; crop identifiers, email addresses and in-stay tokens. Re-record if the current UI differs.",
+        "frames": [
+          "0–3s · Start with your welcome",
+          "3–7s · Show a private draft with synthetic content",
+          "7–11s · Open the owner preview and keep its banner visible",
+          "11–15s · See it before your guests do. Follow Digi Staybook."
+        ],
+        "alt": "A product walkthrough showing a private draft and its clearly marked owner-only guest-wall preview."
+      },
+      {
+        "title": "What would you update between stays?",
+        "format": "Story",
+        "pillar": "Useful house guidance",
+        "screen": "stay-essentials.jpg",
+        "caption": "A changed bin day. A new appliance. A local favourite that's closed for a break.\n\nWhat's the first detail you'd check when refreshing your guest welcome? Reply with one thing.",
+        "story": "Frame 1: A guide is worth checking between stays.\nFrame 2: What's changed at your place?\nFrame 3: Reply with a topic—not a real security code or guest detail.",
+        "visual": "Checklist Story using simple shapes, the real logo and an essentials-screen reference.",
+        "alt": "A Story checklist inviting hosts to review information that may have changed between stays."
+      },
+      {
+        "title": "Your next-changeover guide check",
+        "format": "Carousel",
+        "pillar": "Useful house guidance",
+        "screen": "stay-essentials.jpg",
+        "caption": "Five minutes for the guide before the next guests arrive.\n\nAre the directions clear? Does the Wi-Fi answer match the current network? Are appliance notes still right? Have local recommendations changed? Is checkout easy to understand?\n\nDigiStayBook gives those answers a place on the in-stay wall. The example is our made-up demo property.\n\nSave the checklist. Which line would you add for your place?\n\n#DigiStayBook #Changeover #HolidayRental",
+        "story": "Share the checklist. Add: A guide check belongs on the changeover list too. What did we miss?",
+        "visual": "Five 1080×1350 checklist slides. Do not include actual network passwords; use labelled examples. The final slide can show a real demo screen.",
+        "frames": [
+          "A quick guide check before the next stay",
+          "Arrival + Wi-Fi: current and clear?",
+          "Heating + appliances: still the right instructions?",
+          "Local tips + checkout: anything changed?",
+          "Save this list. Demo shown. Follow Digi Staybook."
+        ],
+        "alt": "A carousel checklist for checking a property's welcome information before the next stay."
+      },
+      {
+        "title": "House guidance and guest memories together",
+        "format": "Feed",
+        "pillar": "Positioning",
+        "screen": "wall-top.jpg",
+        "caption": "The practical bits and the personal bits can share a place.\n\nYour welcome. Your house guidance. Your local favourites. The memories guests choose to add.\n\nDigiStayBook brings them together on a guest wall opened from a QR display. Guests don't need an app or an account.\n\nThe screen shown is from our made-up demo cottage, not a customer property.\n\nWould you start with the house guide, the guestbook, or both? Follow our prelaunch progress.\n\n#DigiStayBook #DigitalGuestbook #HolidayRental",
+        "story": "Three labels over a real demo screen: Your welcome / House guidance / Guest memories. Ask: Which would you set up first?",
+        "visual": "1080×1350 overview of the real demo guest wall with three plain callouts. Keep the screen legible and the demo label visible.",
+        "alt": "The demo guest wall with callouts for the welcome, house guidance and guest memories."
+      },
+      {
+        "title": "What would stop you trying it?",
+        "format": "Story",
+        "pillar": "Host listening",
+        "screen": "stay-welcome.jpg",
+        "caption": "An honest question for hosts: what would you need to know before trying a digital guestbook?\n\nSetup, guest ease, moderation, the guide itself—or something we haven't mentioned? Reply with the question. We want to explain the product clearly before launch.",
+        "story": "Frame 1: Before you'd try it…\nFrame 2: What would you need to know?\nFrame 3: Question sticker or a simple Reply here prompt.",
+        "visual": "Text-led research Story. No countdown, discount or limited-place claim.",
+        "alt": "A host-listening Story asking what people would need to know before trying a digital guestbook."
+      },
+      {
+        "title": "Choose your next walkthrough",
+        "format": "Feed",
+        "pillar": "Host listening",
+        "screen": "wall-top.jpg",
+        "caption": "What should we show next?\n\nA. Writing the welcome\nB. Adding house guidance\nC. The guest's view\nD. Looking after new memories\n\nWe've spent this month sharing DigiStayBook previews. Your questions will help choose the next walkthrough.\n\nThe image is a made-up demo property. We're still preparing for launch, and we'll announce availability when it's ready.\n\nComment with a letter—or tell us the missing option.\n\n#DigiStayBook #HostCommunity #HolidayRental",
+        "story": "Reshare the four choices. Collect replies; don't display a winner until there are actual responses.",
+        "visual": "1080×1350 four-option card with real demo reference. Make each choice readable without opening the caption.",
+        "alt": "Four choices for the next DigiStayBook walkthrough: welcome, guidance, guest view and memory review."
+      },
+      {
+        "title": "What we heard, without making it up",
+        "format": "Story",
+        "pillar": "Host listening",
+        "screen": "stay-welcome.jpg",
+        "caption": "We're choosing the next DigiStayBook preview.\n\nIf you haven't shared a question yet, what would you like us to explain? A practical question is more useful to us than a guess about what hosts might want.",
+        "story": "Default: Ask one more question about the next walkthrough.\nOnly if real replies exist: summarise themes in your own words, without identifying people; obtain permission before quoting someone directly.\nNever invent a 'you asked' response.",
+        "visual": "A question card by default. Replace with a genuine response summary only after reviewing the actual replies.",
+        "alt": "A Story asking for one more practical question for the next product preview."
+      },
+      {
+        "title": "A better welcome, one scan away",
+        "format": "Reel",
+        "pillar": "Positioning",
+        "screen": "wall-top.jpg",
+        "caption": "A little more welcome. A little less hunting for the right answer. A place for the memories guests leave.\n\nThat's what we're building with DigiStayBook: one QR display opening your welcome, house guidance, local favourites and a guest memory wall in the phone's browser.\n\nThis recap uses a made-up demo property and sample content. No guest app and no guest account.\n\nFollow the Page for the next step in our prelaunch journey. Hosts: what should we focus on next?\n\n#DigiStayBook #HolidayRental #DigitalGuestbook",
+        "story": "Reshare the recap. Final frame: Follow for the next step. Ask what hosts want to see next—do not promise a launch date.",
+        "visual": "15-second recap made from genuine demo recordings. Use cuts between welcome, essentials and sample memories. Captions on; no invented customers, review stars or countdown.",
+        "frames": [
+          "0–4s · Your welcome",
+          "4–8s · Your house guidance and local favourites",
+          "8–12s · Sample guest memories, clearly labelled DEMO",
+          "12–15s · One QR display. Follow Digi Staybook."
+        ],
+        "alt": "A recap of real demo screens showing the welcome, house guidance and sample guest memories."
+      },
+      {
+        "title": "The next month starts with a question",
+        "format": "Story",
+        "pillar": "Host listening",
+        "screen": "stay-essentials.jpg",
+        "caption": "One last question for this month's DigiStayBook previews: which part would you like to try at your property?\n\nThe welcome, the house guidance, or the memory wall? Reply and tell us why. We'll use what we learn to plan the next month.",
+        "story": "Frame 1: What would you like to try?\nFrame 2: Welcome / House guidance / Memory wall.\nFrame 3: Follow the Page. Availability will be announced when ready.",
+        "visual": "Three simple option cards, with small real demo-screen references. Keep this prelaunch; no price or signup call to action.",
+        "alt": "A Story asking which part of DigiStayBook hosts would most like to try."
+      }
+    ]
+  },
+  "campaigns/respect-host-voice-2026-10-28": {
+    "campaign": {
+      "title": "A home with a host",
+      "line": "Let guests see the care. Give them a clear way to care for it.",
+      "created": "28 October 2026",
+      "start": "2026-11-02",
+      "audience": "Australian owner-hosts of one or a few cottages, cabins and holiday homes who care about the place and want their welcome to sound like them.",
+      "promise": "Your welcome, your house guidance and your own memory wall, in a browser guests can open from your property QR display.",
+      "rationale": "Lead with the person and the home, then offer useful wording, then show the product. Respect is the aim; clear guidance and a recognisable host are the mechanisms we can actually demonstrate.",
+      "conversion": "Primary action: explore the guest demo. Next action: create an account and add one property with a welcome note and one practical house essential. Do not make an unverified time-to-setup or outcome promise.",
+      "scope": "Original campaign developed from local product source and current local demo captures. No internet research, competitor documents or online marketing documents consulted. Suggested dates only; nothing is published or scheduled."
+    },
+    "weeks": [
+      {
+        "n": 1,
+        "dates": "2–8 November",
+        "theme": "See the person behind the place",
+        "objective": "Make hosts recognise the problem and show what a warmer, clearer welcome looks like.",
+        "cta": "Explore the guest demo",
+        "ideas": [
+          [
+            "Mon",
+            "The care guests do not see",
+            "Facebook photo essay + Pinterest welcome-note guide + Story",
+            "A genuine fireplace photograph; introduce the care behind preparing a welcoming home."
+          ],
+          [
+            "Tue",
+            "Same boundary. Better explanation.",
+            "Facebook 3-image sequence + Pinterest wording guide + Story",
+            "Rewrite one blunt instruction into a clear request with a reason. Part 1 of a two-piece sequence."
+          ],
+          [
+            "Wed",
+            "Where does that welcome live?",
+            "Facebook Reel + optional TikTok + Story",
+            "Real guest-demo walkthrough: welcome, essential, host note. Part 2 of the sequence."
+          ],
+          [
+            "Thu",
+            "Five things guests should not have to guess",
+            "Pinterest saveable checklist + Story poll",
+            "Useful arrival checklist; ask which item is often missed. No Facebook feed post."
+          ],
+          [
+            "Fri",
+            "What would you want guests to understand?",
+            "Facebook conversation card + Story",
+            "Listen to hosts. Ask about the home, without encouraging guest complaints."
+          ],
+          [
+            "Sat",
+            "A garden has a host too",
+            "Pinterest visual note + optional second vertical clip + Story",
+            "Use a specific garden-care example and show an alternative guest activity. No Facebook feed post."
+          ],
+          [
+            "Sun",
+            "Write your first welcome",
+            "Facebook worksheet + Pinterest prompt sheet + Story",
+            "Give hosts a small, concrete task and a demo link."
+          ]
+        ]
+      },
+      {
+        "n": 2,
+        "dates": "9–15 November",
+        "theme": "Make respect easy to act on",
+        "objective": "Turn the feeling into practical guidance guests can follow.",
+        "cta": "Choose one house instruction to improve",
+        "ideas": [
+          [
+            "Mon",
+            "The appliance with a personality",
+            "Facebook annotated object photo",
+            "One clear instruction, one reason, where the help lives. Use a different photo from week one."
+          ],
+          [
+            "Tue",
+            "A checkout guests can picture",
+            "Pinterest flowchart",
+            "Three steps, ordered by what happens before leaving; label as an example."
+          ],
+          [
+            "Wed",
+            "Find it before you need it",
+            "Short screen tutorial",
+            "Show a house essential opening in the actual demo. Tight crop; focus on one interaction."
+          ],
+          [
+            "Thu",
+            "The quiet-hours sentence",
+            "Facebook text post + Story slider",
+            "Be precise and neighbourly: actual times, location and the reason; no fear-based party footage."
+          ],
+          [
+            "Fri",
+            "Why the old timber matters",
+            "Close-up photo essay",
+            "A fictional writing example about caring for an old table; connect the instruction to the object."
+          ],
+          [
+            "Sat",
+            "Rainy-day hospitality",
+            "Pinterest local-tip list",
+            "A useful host-curated alternative; no invented local businesses or recommendations."
+          ],
+          [
+            "Sun",
+            "One-rule rewrite clinic",
+            "Facebook comment invitation",
+            "Invite hosts to share a non-sensitive instruction. Offer example rewrites in replies; do not invent submissions."
+          ]
+        ]
+      },
+      {
+        "n": 3,
+        "dates": "16–22 November",
+        "theme": "Tell the story in your own voice",
+        "objective": "Explain the host controls and show the difference between useful guidance, memories and feedback.",
+        "cta": "Explore the wall and decide what you would share",
+        "ideas": [
+          [
+            "Mon",
+            "Your home is more than listing facts",
+            "Facebook editorial collage",
+            "Objects and short host notes; demo examples clearly labelled."
+          ],
+          [
+            "Tue",
+            "Two pages, two purposes",
+            "Pinterest comparison graphic",
+            "In-stay guidance versus optional public memory page. Do not describe the in-stay link as an authenticated guest login."
+          ],
+          [
+            "Wed",
+            "Choose what appears on your wall",
+            "Host-control screen recording",
+            "Capture a demo/test property and require-approval setting before making this asset. No invented dashboard footage."
+          ],
+          [
+            "Thu",
+            "Memories and private feedback",
+            "Facebook FAQ + Story",
+            "Show the separate private-feedback route. Explain that booking-site reviews remain on the booking site."
+          ],
+          [
+            "Fri",
+            "The thing only you would recommend",
+            "Pinterest local-favourite template",
+            "Teach hosts to write the reason they like a place, not a generic top-ten list."
+          ],
+          [
+            "Sat",
+            "One detail, three host voices",
+            "Three-panel writing comparison",
+            "Cabin, coastal home, city flat; distinct tones, all explicitly illustrative."
+          ],
+          [
+            "Sun",
+            "Ask a host what is unclear",
+            "Facebook open questions",
+            "Collect actual questions for week four. No invented poll results or testimonials."
+          ]
+        ]
+      },
+      {
+        "n": 4,
+        "dates": "23–29 November",
+        "theme": "Put your welcome to work",
+        "objective": "Move interested hosts from saving content to trying the product with one property.",
+        "cta": "Create an account and write your first welcome",
+        "ideas": [
+          [
+            "Mon",
+            "Start with three sentences",
+            "Facebook writing exercise",
+            "A warm hello, one meaningful detail, one helpful instruction. New layout: handwritten-style worksheet."
+          ],
+          [
+            "Tue",
+            "Where would a guest notice it?",
+            "Pinterest QR-placement diagram",
+            "Counter or welcome folder; keep real access codes and property-specific links out of public content."
+          ],
+          [
+            "Wed",
+            "One property from the guest side",
+            "Full product demonstration",
+            "New recording showing a coherent example, not the week-one clip reposted."
+          ],
+          [
+            "Thu",
+            "Questions from the last three weeks",
+            "Facebook Q&A",
+            "Use real questions if available; otherwise label these as common product questions, not audience submissions."
+          ],
+          [
+            "Fri",
+            "What would you put in your first note?",
+            "Founder-to-camera invitation",
+            "Record the founder speaking; no synthetic customer endorsement."
+          ],
+          [
+            "Sat",
+            "Ready-to-welcome checklist",
+            "Pinterest setup checklist",
+            "Welcome, essential, host note, preview, QR placement; screenshot only tested steps."
+          ],
+          [
+            "Sun",
+            "A home with a host",
+            "Facebook invitation + Story",
+            "Invite a first-property setup. Recap what hosts can do; do not claim the campaign changed guest behaviour."
+          ]
+        ]
+      }
+    ],
+    "operations": {
+      "cadence": "Five Facebook feed posts (including one Reel), seven lightweight Stories, five Pinterest Pins, and two optional TikTok exports. Thursday and Saturday are Facebook feed rest days. Daily Stories are optional if capacity is tight.",
+      "channelRoles": [
+        [
+          "Facebook",
+          "Conversation and product understanding",
+          "Longer host-first captions, one multi-image writing lesson, one actual product Reel, one open question and one worksheet. Use the Page feed; no group posting or outreach is included."
+        ],
+        [
+          "Pinterest",
+          "Useful material worth saving",
+          "Searchable titles, vertical writing guides and checklists, each with its own destination. Treat the first month as a catalogue-building experiment; no instant traffic promise."
+        ],
+        [
+          "TikTok (optional)",
+          "Demonstrate one idea quickly",
+          "Two captioned 9:16 exports with different hooks. Account not yet established. No TikTok-specific performance claim or dependency in the main plan."
+        ]
+      ],
+      "timing": "Suggested test slots in Sydney time: Facebook feed 7:30 pm; Stories 8:00 am; Pinterest 8:30 pm. These are practical starting slots, not researched best times. Leave TikTok unscheduled until the account and profile destination are ready.",
+      "budget": "Organic-first. No paid spend, publishing, scheduling, outreach or account creation included.",
+      "measurement": "Maintain a simple dated log per creative: published URL, impressions/reach, useful host comments, saves, outbound clicks, and attributable account/property setup where tracking actually exists. Use UTM links; do not assume the full setup funnel is instrumented.",
+      "hypothesis": "Working creative hypothesis, not a forecast: host recognition earns attention; useful wording earns saves; real product demonstrations earn demo visits.",
+      "decision": "At the end of week one, choose the next two pieces using the strongest useful signal: real host questions, saves and demo clicks. Expand a useful topic into a new example and layout; do not clone the top-performing image. Low response is a reason to test the hook or destination, not proof that the product does not work.",
+      "outcome": "Desired month-end evidence: identifiable host needs, people exploring the demo, and hosts trying a first-property welcome. No claim that post engagement demonstrates more respectful guest behaviour."
+    },
+    "facebook": [
+      {
+        "id": "fb-01",
+        "day": 1,
+        "date": "Mon 2 Nov",
+        "format": "Photo-led feed post",
+        "title": "The care guests do not see",
+        "creative": "hero",
+        "files": [
+          "fb-01-care.png"
+        ],
+        "caption": "You know why that old table matters.\nWhy you planted those herbs.\nWhy the neighbours appreciate a quiet deck after dark.\n\nYour guests arrive without that backstory.\n\nA warm welcome can introduce the person behind the place, explain what matters and make the practical details easy to find.\n\nDigiStayBook gives your welcome, house guidance and host notes a place guests can open from your property QR display.\n\nYour welcome is a good place to begin.",
+        "link": "demo",
+        "cta": "Introduce the campaign; demo link in the first comment.",
+        "comment": "Here is the guest demo if you would like to see how a host’s welcome and house guidance sit together: {link}\nSeabreeze Cottage is a fictional demonstration property.",
+        "alt": "A log fire burning in a stone fireplace with armchairs nearby. Text: There is a person behind this place.",
+        "note": "Existing genuine stock photograph from the local product assets. Do not identify the scene as an actual customer property. The caption and first comment form one publishing unit.",
+        "destination": "https://digistaybook.com/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=home_with_a_host_w1&utm_content=fb-01",
+        "finalCaption": "You know why that old table matters.\nWhy you planted those herbs.\nWhy the neighbours appreciate a quiet deck after dark.\n\nYour guests arrive without that backstory.\n\nA warm welcome can introduce the person behind the place, explain what matters and make the practical details easy to find.\n\nDigiStayBook gives your welcome, house guidance and host notes a place guests can open from your property QR display.\n\nYour welcome is a good place to begin.",
+        "finalComment": "Here is the guest demo if you would like to see how a host’s welcome and house guidance sit together: https://digistaybook.com/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=home_with_a_host_w1&utm_content=fb-01\nSeabreeze Cottage is a fictional demonstration property."
+      },
+      {
+        "id": "fb-02",
+        "day": 2,
+        "date": "Tue 3 Nov",
+        "format": "Three-image sequence",
+        "title": "Same boundary. Better explanation.",
+        "creative": "rewrite",
+        "files": [
+          "fb-02-1.png",
+          "fb-02-2.png",
+          "fb-02-3.png"
+        ],
+        "caption": "A clear boundary can still sound welcoming.\n\nInstead of “DO NOT put hot pans on the table”, try:\n\n“Please use the cork mats for hot pans. This old timber table has been part of the home for years, and the mats help us keep it that way. They are in the top drawer.”\n\nThe request stays clear. Guests also know why it matters and what to do.\n\nA useful pattern: the request + the reason + the practical help.\n\nSave this for your next house-guide edit. Tomorrow we will show where a note like this can live in DigiStayBook.\n\nIllustrative wording: adapt it to your own home.",
+        "link": null,
+        "cta": "Save the wording pattern.",
+        "alt": "Three cards compare a blunt hot-pan instruction with a warmer, specific example and show the pattern: request, reason, practical help.",
+        "note": "Publish in order as a Facebook multi-image post. Do not rely on a specific carousel feature being available. This is a writing example, not a customer quote.",
+        "destination": null,
+        "finalCaption": "A clear boundary can still sound welcoming.\n\nInstead of “DO NOT put hot pans on the table”, try:\n\n“Please use the cork mats for hot pans. This old timber table has been part of the home for years, and the mats help us keep it that way. They are in the top drawer.”\n\nThe request stays clear. Guests also know why it matters and what to do.\n\nA useful pattern: the request + the reason + the practical help.\n\nSave this for your next house-guide edit. Tomorrow we will show where a note like this can live in DigiStayBook.\n\nIllustrative wording: adapt it to your own home."
+      },
+      {
+        "id": "fb-03",
+        "day": 3,
+        "date": "Wed 4 Nov",
+        "format": "20-second product Reel",
+        "title": "Where does that welcome live?",
+        "creative": "video1",
+        "files": [
+          "video-01-welcome.mp4"
+        ],
+        "caption": "Your welcome deserves more than a line at the end of a booking message.\n\nHere is the guest side of DigiStayBook: a welcome from the hosts, house essentials a tap away, and notes that explain the place in their own voice.\n\nThis is the fictional Seabreeze Cottage demo, shown in the actual product. Guests use a browser, with no guest account or app download.\n\nExplore the demo: {link}",
+        "link": "demo",
+        "cta": "Explore the guest demo.",
+        "alt": "Actual DigiStayBook demo captures show the arrival welcome, a heating instruction and the hosts’ own fireplace note.",
+        "note": "Burned-in captions; silent MP4 supplied. Optional voiceover is in the video script. No customer results claimed.",
+        "destination": "https://digistaybook.com/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=home_with_a_host_w1&utm_content=fb-03",
+        "finalCaption": "Your welcome deserves more than a line at the end of a booking message.\n\nHere is the guest side of DigiStayBook: a welcome from the hosts, house essentials a tap away, and notes that explain the place in their own voice.\n\nThis is the fictional Seabreeze Cottage demo, shown in the actual product. Guests use a browser, with no guest account or app download.\n\nExplore the demo: https://digistaybook.com/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=home_with_a_host_w1&utm_content=fb-03"
+      },
+      {
+        "id": "fb-04",
+        "day": 5,
+        "date": "Fri 6 Nov",
+        "format": "Conversation-led feed post",
+        "title": "What would you want guests to understand?",
+        "creative": "question",
+        "files": [
+          "fb-04-question.png"
+        ],
+        "caption": "Host question: what is one detail about your place that guests would treat differently if they knew its story?\n\nAn old table? A garden you planted? A neighbour who starts work early?\n\nWe are interested in the small explanations that make a home feel like somebody’s place.\n\nTell us the detail, and how you would explain it in a welcoming sentence. Please leave out addresses, access codes and guest names.",
+        "link": null,
+        "cta": "Invite a genuine host conversation; no sales link in the opening post.",
+        "alt": "Large type on a dark background asks: What is one thing you wish guests understood about your home?",
+        "note": "Reply to real comments in your own voice. Do not seed fake host replies. This is the week’s text-led visual; no stock photo.",
+        "destination": null,
+        "finalCaption": "Host question: what is one detail about your place that guests would treat differently if they knew its story?\n\nAn old table? A garden you planted? A neighbour who starts work early?\n\nWe are interested in the small explanations that make a home feel like somebody’s place.\n\nTell us the detail, and how you would explain it in a welcoming sentence. Please leave out addresses, access codes and guest names."
+      },
+      {
+        "id": "fb-05",
+        "day": 7,
+        "date": "Sun 8 Nov",
+        "format": "Saveable writing worksheet",
+        "title": "Your first welcome, in three lines",
+        "creative": "worksheet",
+        "files": [
+          "fb-05-worksheet.png"
+        ],
+        "caption": "Try this before you add another house rule.\n\nWrite three short lines:\n1. “Welcome to…” — the feeling you want guests to have.\n2. “One thing we love about this home…” — a detail only you could share.\n3. “Please help us look after…” — one clear request, with a reason.\n\nFor example:\n“Welcome to our little garden cottage. We planted the herb beds during our first winter here. Please snip a few leaves for dinner and leave the roots growing for the next guests.”\n\nThat is example copy, not a customer story. Keep the welcome brief, then put practical instructions in your house essentials and host notes.\n\nSee how the pieces fit together in DigiStayBook: {link}",
+        "link": "demo",
+        "cta": "Write three lines, then explore the demo.",
+        "alt": "A cream worksheet with three numbered prompts: a welcome, a personal detail and a clear care request.",
+        "note": "Give practical value before the product invitation. Do not promise fewer incidents, better reviews or guaranteed compliance.",
+        "destination": "https://digistaybook.com/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=home_with_a_host_w1&utm_content=fb-05",
+        "finalCaption": "Try this before you add another house rule.\n\nWrite three short lines:\n1. “Welcome to…” — the feeling you want guests to have.\n2. “One thing we love about this home…” — a detail only you could share.\n3. “Please help us look after…” — one clear request, with a reason.\n\nFor example:\n“Welcome to our little garden cottage. We planted the herb beds during our first winter here. Please snip a few leaves for dinner and leave the roots growing for the next guests.”\n\nThat is example copy, not a customer story. Keep the welcome brief, then put practical instructions in your house essentials and host notes.\n\nSee how the pieces fit together in DigiStayBook: https://digistaybook.com/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=home_with_a_host_w1&utm_content=fb-05"
+      }
+    ],
+    "pinterest": [
+      {
+        "id": "pin-01",
+        "day": 1,
+        "date": "Mon 2 Nov",
+        "title": "How to write a holiday-home welcome that sounds like you",
+        "creative": "welcome-pin",
+        "files": [
+          "pin-01-welcome.png"
+        ],
+        "description": "A useful holiday-home welcome starts with a warm hello, one detail only the host could share, and a clear place to find practical help. Use these three prompts to write a welcome that sounds like you. Explore the DigiStayBook guest demo to see a welcome, house essentials and host notes together. Fictional demo property.",
+        "board": "Holiday-home welcome ideas",
+        "alt": "Editorial pin with a cottage window photograph and three short welcome-writing prompts.",
+        "link": "demo",
+        "destination": "https://digistaybook.com/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=home_with_a_host_w1&utm_content=pin-01",
+        "finalCaption": "A useful holiday-home welcome starts with a warm hello, one detail only the host could share, and a clear place to find practical help. Use these three prompts to write a welcome that sounds like you. Explore the DigiStayBook guest demo to see a welcome, house essentials and host notes together. Fictional demo property."
+      },
+      {
+        "id": "pin-02",
+        "day": 2,
+        "date": "Tue 3 Nov",
+        "title": "A warmer way to write house rules: request, reason, help",
+        "creative": "rewrite-pin",
+        "files": [
+          "pin-02-wording.png"
+        ],
+        "description": "Keep the boundary clear and give guests the information to follow it. Try: the request + the reason + the practical help. This hot-pan example turns an all-caps instruction into a specific, welcoming house note. Adapt the wording to your own property. See how host notes appear in the DigiStayBook demo.",
+        "board": "House-guide wording",
+        "alt": "A vertical before-and-after writing guide about using cork mats on an old timber table.",
+        "link": "demo",
+        "destination": "https://digistaybook.com/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=home_with_a_host_w1&utm_content=pin-02",
+        "finalCaption": "Keep the boundary clear and give guests the information to follow it. Try: the request + the reason + the practical help. This hot-pan example turns an all-caps instruction into a specific, welcoming house note. Adapt the wording to your own property. See how host notes appear in the DigiStayBook demo."
+      },
+      {
+        "id": "pin-03",
+        "day": 4,
+        "date": "Thu 5 Nov",
+        "title": "Guest arrival checklist: 5 things nobody should have to guess",
+        "creative": "arrival-pin",
+        "files": [
+          "pin-03-arrival.png"
+        ],
+        "description": "Help holiday-home guests find the practical details: Wi-Fi, heating, rubbish and recycling, checkout, and where to find help. Keep each instruction short and specific to your property. Save this arrival checklist while you prepare your guest guide, then explore a DigiStayBook guest-side example.",
+        "board": "Holiday-home hosting checklists",
+        "alt": "Sage checklist with five arrival essentials, plus a real demo capture of the heating instruction.",
+        "link": "demo",
+        "destination": "https://digistaybook.com/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=home_with_a_host_w1&utm_content=pin-03",
+        "finalCaption": "Help holiday-home guests find the practical details: Wi-Fi, heating, rubbish and recycling, checkout, and where to find help. Keep each instruction short and specific to your property. Save this arrival checklist while you prepare your guest guide, then explore a DigiStayBook guest-side example."
+      },
+      {
+        "id": "pin-04",
+        "day": 6,
+        "date": "Sat 7 Nov",
+        "title": "A garden-care note guests can understand",
+        "creative": "garden-pin",
+        "files": [
+          "pin-04-garden.png"
+        ],
+        "description": "A clear care request can include something guests are welcome to enjoy. Example: “Please keep little feet on the path; new seedlings are growing in the beds. The lawn beside the deck is ready for games.” Adapt this illustrative wording to your own home and pair it with a host note. See an example guest welcome in DigiStayBook.",
+        "board": "Thoughtful holiday-home hosting",
+        "alt": "Full garden photograph with a short illustrative care note and an invitation to use the lawn for games.",
+        "link": "demo",
+        "destination": "https://digistaybook.com/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=home_with_a_host_w1&utm_content=pin-04",
+        "finalCaption": "A clear care request can include something guests are welcome to enjoy. Example: “Please keep little feet on the path; new seedlings are growing in the beds. The lawn beside the deck is ready for games.” Adapt this illustrative wording to your own home and pair it with a host note. See an example guest welcome in DigiStayBook."
+      },
+      {
+        "id": "pin-05",
+        "day": 7,
+        "date": "Sun 8 Nov",
+        "title": "Holiday-home welcome template: three lines to get started",
+        "creative": "worksheet-pin",
+        "files": [
+          "pin-05-template.png"
+        ],
+        "description": "Use this three-line holiday-home welcome template: welcome guests, share one personal detail, then give one clear care request with a reason. Keep detailed instructions in your house guide. Save the prompts and explore the DigiStayBook guest demo to see how your welcome and practical guidance can sit together.",
+        "board": "Holiday-home welcome ideas",
+        "alt": "A writing template laid out as three paper strips, with blank lines after each welcome prompt.",
+        "link": "demo",
+        "destination": "https://digistaybook.com/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=home_with_a_host_w1&utm_content=pin-05",
+        "finalCaption": "Use this three-line holiday-home welcome template: welcome guests, share one personal detail, then give one clear care request with a reason. Keep detailed instructions in your house guide. Save the prompts and explore the DigiStayBook guest demo to see how your welcome and practical guidance can sit together."
+      }
+    ],
+    "stories": [
+      {
+        "id": "story-01",
+        "day": 1,
+        "title": "The care behind the place",
+        "headline": "What is one thing\nyou wish guests\nunderstood?",
+        "body": "The person. The effort.\nThe little things that matter.",
+        "interaction": "Add a question sticker: “One thing about my place…”",
+        "file": "story-01.png",
+        "note": "Use the native question sticker at publishing; the exported image leaves room for it."
+      },
+      {
+        "id": "story-02",
+        "day": 2,
+        "title": "One useful sentence",
+        "headline": "The request.\nThe reason.\nThe practical help.",
+        "body": "A warmer way to make\na house instruction clear.",
+        "interaction": "Add a link sticker to the Facebook wording sequence, if available; otherwise point to today’s page post.",
+        "file": "story-02.png"
+      },
+      {
+        "id": "story-03",
+        "day": 3,
+        "title": "See the guest side",
+        "headline": "Your welcome,\non their phone.",
+        "body": "No guest account.\nNo app download.",
+        "interaction": "Add a native link sticker to the guest demo. This is a demo, not a customer property.",
+        "file": "story-03.png"
+      },
+      {
+        "id": "story-04",
+        "day": 4,
+        "title": "Arrival poll",
+        "headline": "Which detail\ngets missed?",
+        "body": "Heating instructions\nor checkout steps?",
+        "interaction": "Add a poll sticker: “Heating” / “Checkout”. This is a prompt; no results have been collected.",
+        "file": "story-04.png"
+      },
+      {
+        "id": "story-05",
+        "day": 5,
+        "title": "Listen to hosts",
+        "headline": "Tell us the story\nbehind one detail.",
+        "body": "An old table. A garden.\nA neighbour who starts early.",
+        "interaction": "Add a question sticker: “What would you explain?” Reply only to actual submissions.",
+        "file": "story-05.png"
+      },
+      {
+        "id": "story-06",
+        "day": 6,
+        "title": "A clear alternative",
+        "headline": "A care request\ncan include\na welcome.",
+        "body": "“Please stay on the path.\nThe lawn is ready for games.”",
+        "interaction": "No sticker needed. Footer labels this as illustrative wording to adapt to the home.",
+        "file": "story-06.png"
+      },
+      {
+        "id": "story-07",
+        "day": 7,
+        "title": "The three-line challenge",
+        "headline": "Write your welcome\nin three lines.",
+        "body": "A hello. A personal detail.\nOne clear care request.",
+        "interaction": "Add a link sticker to the guest demo after the writing prompt.",
+        "file": "story-07.png"
+      }
+    ],
+    "videos": [
+      {
+        "id": "video-01",
+        "day": 3,
+        "title": "Your welcome, in your own words",
+        "duration": 20,
+        "file": "video-01-welcome.mp4",
+        "hook": "Your guests see a booking. Help them meet the host.",
+        "scenes": [
+          {
+            "start": 0,
+            "end": 3,
+            "headline": "There is a host\nbehind this home.",
+            "sub": "A welcome in your own words.",
+            "image": "demo-arrival.png"
+          },
+          {
+            "start": 3,
+            "end": 8,
+            "headline": "Start with\nyour welcome.",
+            "sub": "Your voice, at the start of the stay.",
+            "image": "demo-arrival.png"
+          },
+          {
+            "start": 8,
+            "end": 13,
+            "headline": "Make the practical\nthings easy to find.",
+            "sub": "House essentials, a tap away.",
+            "image": "demo-heating.png"
+          },
+          {
+            "start": 13,
+            "end": 17,
+            "headline": "Explain the care\nbehind the place.",
+            "sub": "Your own host notes.",
+            "image": "demo-host-notes.png"
+          },
+          {
+            "start": 17,
+            "end": 20,
+            "headline": "See the guest demo.",
+            "sub": "digistaybook.com/stay/demo-cottage",
+            "image": "demo-arrival.png"
+          }
+        ],
+        "voiceover": "There is a host behind every home. Introduce yourself with a welcome in your own words. Keep the practical details easy to find. Add notes about the place you care for. Explore the DigiStayBook guest demo.",
+        "tiktok": "POV: you want guests to meet the person behind the holiday home. A welcome, practical house essentials and your own notes, in the guest’s browser. This is the fictional Seabreeze Cottage demo. Explore it at digistaybook.com/stay/demo-cottage. #HolidayHomeHost #HostingTips #DigiStayBook",
+        "cover": "Your welcome. Your words.",
+        "note": "Usable as a Facebook Reel now. TikTok is an optional export only; no account setup assumed. Put the destination in the profile only if that account supports it. Screen captures show the current local product, not a live customer property."
+      },
+      {
+        "id": "video-02",
+        "day": 6,
+        "title": "Two different things a guest might want to share",
+        "duration": 18,
+        "file": "video-02-memories-feedback.mp4",
+        "hook": "A lovely memory and a practical problem need different places.",
+        "scenes": [
+          {
+            "start": 0,
+            "end": 4,
+            "headline": "A lovely memory.\nA practical problem.",
+            "sub": "Two different things to share.",
+            "image": "demo-public-wall.png"
+          },
+          {
+            "start": 4,
+            "end": 9,
+            "headline": "Memories can become\npart of your wall.",
+            "sub": "Hosts can require approval before publication.",
+            "image": "demo-public-wall.png"
+          },
+          {
+            "start": 9,
+            "end": 14,
+            "headline": "Private feedback has\nits own place.",
+            "sub": "A separate feedback form for the host.",
+            "image": "demo-private-feedback.png"
+          },
+          {
+            "start": 14,
+            "end": 18,
+            "headline": "Your DigiStayBook wall.\nYour choices.",
+            "sub": "Booking-platform reviews stay on that platform.",
+            "image": "demo-host-notes.png"
+          }
+        ],
+        "voiceover": "A lovely memory and a practical problem are different things. DigiStayBook has a memory wall, with an option to require host approval, and a separate private-feedback form. You choose what appears on your DigiStayBook wall. Booking-platform reviews stay on that platform.",
+        "tiktok": "A memory for the wall and private feedback for the host have different places in DigiStayBook. Hosts can switch on approval for new memories. This demo shows the two guest-facing paths. Booking-platform reviews stay on that platform. #HolidayHomeHost #GuestExperience #DigiStayBook",
+        "cover": "Memories + private feedback",
+        "note": "Optional Saturday vertical post; it introduces next month’s control theme without promising control over outside reviews. Local demo/sample memories are labelled. Silent MP4; record the supplied voiceover if desired. No music licence needed for the supplied silent export."
+      }
+    ],
+    "replies": [
+      [
+        "“Does it stop guests damaging a home?”",
+        "No guest guide can guarantee that. DigiStayBook gives your welcome and practical instructions a clear place to live, so guests can understand how you would like the home looked after."
+      ],
+      [
+        "“Can I control my reviews?”",
+        "You control the welcome, guidance and memories shown on your DigiStayBook wall, including an option to approve new memories. Reviews on booking platforms stay on those platforms."
+      ],
+      [
+        "“Do guests need another app?”",
+        "No. Guests open DigiStayBook in their browser from the property QR display. They do not need a guest account."
+      ],
+      [
+        "“Can people leave private feedback?”",
+        "Yes. There is a separate private-feedback form for the host. It does not replace messages or reviews through the booking platform."
+      ],
+      [
+        "“Do I have to approve every memory?”",
+        "You can switch on approval for new memories. When it is off, clear memories can publish after safety checks."
+      ],
+      [
+        "A host shares a blunt house rule",
+        "Thanks for the example. You could try: “[clear request], because [true reason]. You will find [practical help] at [actual location].” Keep the boundary and make it easy to follow."
+      ],
+      [
+        "A host shares an upsetting guest incident",
+        "That sounds frustrating. Please avoid posting guest names or identifying details here. What one instruction would you want the next guest to find more easily?"
+      ],
+      [
+        "Someone asks for pricing",
+        "The current plans are shown on the DigiStayBook pricing page. Check the live page before quoting a price or trial offer. No price or limited offer is part of this campaign."
+      ]
+    ]
+  }
+}

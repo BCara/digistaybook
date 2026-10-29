@@ -90,7 +90,7 @@ export function formatRate(minorUnits: number, currency: PosCurrency): string {
 /**
  * How many months of the monthly rate the annual plan gives away.
  *
- * Derived rather than written down. "Two months free" was a hand-typed badge
+ * Derived rather than written down. "Two months free" was once a hand-typed badge
  * on the landing page, which is a promise about two numbers made in a third
  * place — the one arrangement guaranteed to go stale. A rate card whose annual
  * plan is not a whole number of months free says nothing rather than rounding.
@@ -147,8 +147,15 @@ export type PublishedPlan = {
   saving: string | null;
 };
 
-export function publishedPlans(currency: PosCurrency): PublishedPlan[] {
+const monthWords: Record<number, string> = { 1: "One", 2: "Two", 3: "Three", 4: "Four" };
+
+/** The annual badge, "Two months free", or null when the saving is not whole months. */
+export function monthsFreeLabel(currency: PosCurrency): string | null {
   const months = monthsFreeOnAnnual(currency);
+  return months === null ? null : `${monthWords[months] ?? String(months)} months free`;
+}
+
+export function publishedPlans(currency: PosCurrency): PublishedPlan[] {
   return [
     {
       plan: "monthly",
@@ -160,7 +167,7 @@ export function publishedPlans(currency: PosCurrency): PublishedPlan[] {
       plan: "annual",
       rate: formatRate(publishedRate("annual", currency), currency),
       period: "per year, per property",
-      saving: months === null ? null : `${months === 2 ? "Two" : String(months)} months free`
+      saving: monthsFreeLabel(currency)
     }
   ];
 }

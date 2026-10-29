@@ -1,0 +1,157 @@
+{
+  "files": [
+    {
+      "name": "fb-01-care.png",
+      "bytes": 1553856,
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "name": "fb-02-1.png",
+      "bytes": 110187,
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "name": "fb-02-2.png",
+      "bytes": 252954,
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "name": "fb-02-3.png",
+      "bytes": 98938,
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "name": "fb-04-question.png",
+      "bytes": 113002,
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "name": "fb-05-worksheet.png",
+      "bytes": 111153,
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "name": "pin-01-welcome.png",
+      "bytes": 705422,
+      "width": 1000,
+      "height": 1500
+    },
+    {
+      "name": "pin-02-wording.png",
+      "bytes": 129920,
+      "width": 1000,
+      "height": 1500
+    },
+    {
+      "name": "pin-03-arrival.png",
+      "bytes": 178532,
+      "width": 1000,
+      "height": 1500
+    },
+    {
+      "name": "pin-04-garden.png",
+      "bytes": 1187962,
+      "width": 1000,
+      "height": 1500
+    },
+    {
+      "name": "pin-05-template.png",
+      "bytes": 123833,
+      "width": 1000,
+      "height": 1500
+    },
+    {
+      "name": "story-01.png",
+      "bytes": 1457716,
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "name": "story-02.png",
+      "bytes": 109492,
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "name": "story-03.png",
+      "bytes": 532544,
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "name": "story-04.png",
+      "bytes": 91394,
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "name": "story-05.png",
+      "bytes": 96399,
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "name": "story-06.png",
+      "bytes": 1192475,
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "name": "story-07.png",
+      "bytes": 95287,
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "name": "video-01-welcome.mp4",
+      "bytes": 6825697
+    },
+    {
+      "name": "video-02-memories-feedback.mp4",
+      "bytes": 6136496
+    }
+  ],
+  "verification": {
+    "checked": "2026-10-28",
+    "imageExports": 18,
+    "videoExports": 2,
+    "dailyIdeas": 28,
+    "counts": {
+      "facebook": 5,
+      "pinterest": 5,
+      "stories": 7
+    },
+    "videoChecks": [
+      {
+        "file": "video-01-welcome.mp4",
+        "width": 1080,
+        "height": 1920,
+        "duration": 20.004367,
+        "error": null
+      },
+      {
+        "file": "video-02-memories-feedback.mp4",
+        "width": 1080,
+        "height": 1920,
+        "duration": 17.9989,
+        "error": null
+      }
+    ],
+    "desktopWidth": 1440,
+    "mobileWidth": 390,
+    "mobileOverflow": false,
+    "brokenImages": [],
+    "missingLocalFiles": [],
+    "pageErrors": [],
+    "failedLocalRequests": [],
+    "clippedText": [],
+    "filters": "passed",
+    "captionCopy": "passed"
+  }
+}

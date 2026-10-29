@@ -3,8 +3,9 @@ import { legalVersions } from "../../../../functions/src/legal";
 /*
  * The guest- and host-facing legal texts. The Terms and Privacy Policy are the
  * handbook's drafts (A.6, A.7, last updated 4 August 2026), carried word for
- * word except the marked additions and updates through 6 October 2026:
- * guest-facing terms, private feedback, Google screening and overseas processing.
+ * word except the marked additions and updates through 29 October 2026:
+ * guest-facing terms, private feedback, Google screening, overseas processing
+ * and the Host's own links on the in-stay wall.
  * None of it is approved. Counsel approves these exact versions (C-19), and
  * the approval is recorded in functions/src/legal.ts.
  */
@@ -15,7 +16,7 @@ export type LegalDocument = { title: string; version: string; lastUpdated: strin
 export const hostTerms: LegalDocument = {
   title: "Terms and Conditions",
   version: legalVersions.hostTerms,
-  lastUpdated: "4 August 2026",
+  lastUpdated: "29 October 2026",
   intro: ["These Terms and Conditions govern access to and use of the DigiStayBook website, dashboard and digital guestbook services (the “Service”). By creating an account, starting a free trial or using the Service, the Host agrees to be bound by them. Guests using a property’s guestbook are covered by the separate Guest Terms."],
   sections: [
     { heading: "1. Description of service", paragraphs: ["DigiStayBook provides a digital guestbook platform for short-term rental operators. The Service allows Hosts to generate property-specific QR codes enabling checking-in guests to upload photos and text to a digital wall. DigiStayBook is a business-to-business software provider: it does not manage properties, bookings or in-stay support, and does not facilitate host-to-guest direct messaging. DigiStayBook interacts with Guests only where needed to operate content controls and address privacy, personal-data or platform content-safety matters."] },
@@ -36,6 +37,11 @@ export const hostTerms: LegalDocument = {
     { heading: "4.5 Private guest feedback", added: true, paragraphs: [
       "Guests may send the Host private feedback, which is never published and cannot be replied to through the Service. It is checked automatically; feedback that appears to contain threats, sexual content or hate may be held for review by DigiStayBook’s safety team, which may release it to the Host or delete it. The Host may report any feedback message to the safety team, which removes it from the Host’s inbox pending review. Private feedback is not a support or messaging channel, and the Host must not use it as one."
     ] },
+    { heading: "4.6 Links to the Host’s own pages", added: true, paragraphs: [
+      "The Host may add links to their own web pages, such as a booking page or a guest-list sign-up, to the Guest Wall that their QR placard opens. The Host chooses each link and its wording. The linked pages are not part of the Service: DigiStayBook does not operate, review or endorse them, takes no part in any booking or arrangement made through them, and does not receive any information a Guest submits there.",
+      "The Host is solely responsible for the linked pages, any offer made on them and any personal information they collect. The Host must ensure that each link, its wording and any offer comply with applicable law and with the terms and policies of every booking platform on which the property is listed, including any restriction on encouraging guests to book outside that platform or on offering a discount for doing so.",
+      "DigiStayBook may remove or disable a link that appears unsafe, unlawful or misleading, or that is the subject of a complaint. The indemnity in clause 4.3 extends to claims arising from the Host’s links and the pages they open."
+    ] },
     { heading: "5. Acceptable use", paragraphs: [
       "The Service must not be used to promote illegal activity, violence or harassment; to distribute malware, viruses or spam; to infringe intellectual property or privacy rights; or to bypass, attack or disrupt the security and functionality of the Service. DigiStayBook may suspend or terminate an account immediately, without notice or refund, for a violation of these terms.",
       "To enforce these Terms and prevent abuse, DigiStayBook may use rate limits, duplicate-request controls, account or session restrictions, temporary access restrictions and short-lived pseudonymous abuse keys derived from limited security signals. Security records are access-controlled and retained only for the bounded period in the approved retention schedule. These controls do not create persistent cross-session identifiers.",
@@ -50,7 +56,8 @@ export const hostTerms: LegalDocument = {
   ],
   reviewNotes: [
     "Clause 7: the source draft promised “99.9% uptime”; it is removed because no availability target is set or measured (handbook 5.9). Confirm a measured target or that none is published.",
-    "Clause 4.5 is new and covers private feedback, which the 4 August draft predates."
+    "Clause 4.5 is new and covers private feedback, which the 4 August draft predates.",
+    "Clause 4.6 is new (29 October 2026) and covers the Host’s own booking and guest-list links on the in-stay wall (BOP A.8.4). Confirm: whether extending the 4.3 indemnity to linked pages is enforceable and proportionate; whether booking-platform rules on off-platform promotion (Airbnb’s Off-Platform Policy bans offering discounts to book off Airbnb and off-platform links in listings and messages, and says nothing on in-home materials) need stronger wording; and whether the Guest Terms or Privacy Policy should tell Guests that these links open the Host’s own site, where DigiStayBook’s policies do not apply."
   ]
 };
 
@@ -95,7 +102,7 @@ export const guestTerms: LegalDocument = {
 export const privacyPolicy: LegalDocument = {
   title: "Privacy Policy",
   version: legalVersions.privacy,
-  lastUpdated: "6 October 2026",
+  lastUpdated: "23 October 2026",
   intro: [],
   sections: [
     { heading: "1. Information collected", paragraphs: [
@@ -133,6 +140,10 @@ export const privacyPolicy: LegalDocument = {
       "Guest photos are stored in Sydney, Australia, in private Google Cloud Storage buckets. Photos undergo automated safety checks using Google Cloud Vision SafeSearch, configured to use its European Union service endpoint. The photo is sent overseas for that check; Sydney storage does not mean all processing stays in Australia.",
       "We use immediate-response photo checks. Google states that these checks process the image in memory without persisting it to disk, and that submitted content is not used to train or improve Cloud Vision models. Google temporarily logs some request metadata, such as the request time and size.",
       "Google processes service data under its Cloud Data Processing Addendum, including security, confidentiality and incident-notification commitments. Google and its contracted service providers may handle information in other countries under those terms. Our choice of the EU endpoint is not a guarantee that every aspect of Google's handling remains in the EU. Text screening is configured to use Google Cloud Natural Language’s Australia endpoint."
+    ] },
+    { heading: "4.2 Help guide and support messages", added: true, paragraphs: [
+      "The help guide uses built-in answers in your browser. It does not use an AI provider or send questions to an AI service. It cannot access your account or property records. Do not include passwords, door codes, payment details or other sensitive information.",
+      "Ordinary conversations remain in your browser session and are not saved in DigiStayBook’s chat database. If you choose Message us, we save your name (if supplied), email and message, together with recent chat only if you choose to include it. We send that support request through Resend to our support mailbox. Database support records expire after 180 days and are removed by a daily cleanup; email copies and provider records follow their respective retention policies. Pseudonymous request counters are retained briefly to prevent abuse."
     ] },
     { heading: "5. Data retention and deletion", paragraphs: ["Personal information is kept only as long as the approved retention schedule allows, then destroyed or de-identified, including controlled copies in archives and backups. Business records are kept for the period Australian tax law requires, and marketing consent records and unsubscribe requests are handled within the periods ACMA requires."] },
     { heading: "6. Cookies and tracking", paragraphs: ["Essential cookies maintain Host login sessions and platform security. No invasive tracking cookies are used for targeted third-party advertising."] },

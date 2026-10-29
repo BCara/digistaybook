@@ -6,7 +6,7 @@ export function NotFoundPage() {
       <p className="lede">The page you requested is unavailable. It may have moved, or the link may be incomplete.</p>
       <div className="actions">
         <a className="btn btn-primary" href="/">Return home</a>
-        <a className="btn btn-secondary" href="/wall/demo-cottage">See the guest demo</a>
+        <a className="btn btn-secondary" href="/stay/demo-cottage">See the guest demo</a>
       </div>
     </div>
   );

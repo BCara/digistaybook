@@ -1,0 +1,3 @@
+file '//192.168.1.71/nas/projects/DigiStayBook/marketing/campaigns/reels-people-2026-10-29/source/reel-01-local-live.mp4'
+file '//192.168.1.71/nas/projects/DigiStayBook/marketing/campaigns/reels-people-2026-10-29/source/reel-01-local-product.mp4'
+file '//192.168.1.71/nas/projects/DigiStayBook/marketing/campaigns/reels-people-2026-10-29/source/reel-01-local-end.mp4'

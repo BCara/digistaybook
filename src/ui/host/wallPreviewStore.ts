@@ -6,6 +6,7 @@ export type PreviewMemory = {
   message: string;
   displayName: string;
   photoCount?: number;
+  pinned?: boolean;
 };
 
 export type PreviewMemoriesPage = { posts: PreviewMemory[]; nextCursor: string | null };

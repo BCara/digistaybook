@@ -1,0 +1,59 @@
+/* House format for marketing hub pages. Same file in every project's marketing/builder/; house.py inlines it
+   after the page's own styles, with the project's brand tokens (--h-*) from house.json. */
+body.house{background:var(--h-paper);color:var(--h-ink);font:15px/1.55 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;margin:0}
+body.house h1,body.house h2,body.house h3{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;color:var(--h-ink);letter-spacing:-.01em}
+
+/* header band */
+body.house>header,body.house header#top{background:var(--h-head);color:var(--h-head-ink);padding:26px clamp(16px,4vw,40px) 22px;margin:0;border:0}
+body.house .house-head{max-width:1240px;margin:0 auto}
+body.house .house-kicker{font:700 12px/1.2 "Segoe UI",system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--h-head-soft)}
+body.house header h1{font-size:clamp(30px,4.2vw,44px);line-height:1.05;margin:6px 0 8px;color:var(--h-head-ink)}
+body.house .house-sub{margin:0;max-width:820px;color:var(--h-head-soft);font-size:15px}
+body.house .house-quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+body.house .house-quick a{color:var(--h-head-ink);text-decoration:none;border:1px solid var(--h-head-line);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600}
+body.house .house-quick a:hover{background:var(--h-head-line)}
+
+/* contents sidebar (DigiGuestbook .side, LazyAlbum nav.toc, DigiStayBook aside) */
+body.house aside.side,body.house nav.toc,body.house .layout>aside{font-size:14px}
+body.house aside.side summary,body.house nav.toc .toc-title,body.house .layout>aside summary,body.house #toc>summary{font:700 11px/1.2 "Segoe UI",system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--h-soft)}
+body.house aside.side a,body.house nav.toc a:not([aria-current]),body.house .layout>aside a{color:var(--h-ink);text-decoration:none;border-radius:6px}
+body.house aside.side a:hover,body.house nav.toc a:not([aria-current]):hover,body.house .layout>aside a:hover{background:var(--h-tint);color:var(--h-accent)}
+
+/* sections */
+body.house main h2{font-size:clamp(22px,2.6vw,28px);line-height:1.2;margin:34px 0 12px;padding-top:10px;border-top:2px solid var(--h-line);scroll-margin-top:72px}
+body.house main h2:first-child,body.house main section:first-child>h2:first-child{border-top:0}
+body.house main table{border-collapse:collapse;background:var(--h-card)}
+body.house .house-table{width:100%}
+body.house main th{background:var(--h-tint);color:var(--h-ink);text-align:left;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+body.house main th,body.house main td{border-bottom:1px solid var(--h-line);padding:8px 10px;vertical-align:top}
+body.house button,body.house .btn{font:600 13px/1.2 "Segoe UI",system-ui,sans-serif;border-radius:8px}
+
+/* where things are */
+body.house .house-files{margin:6px 0 18px}
+body.house .house-note{color:var(--h-soft);font-size:13px;margin:0 0 8px}
+body.house .house-table td:first-child{white-space:nowrap;width:1%}
+body.house .house-table code{font-size:12.5px}
+body.house .house-missing{color:var(--h-soft)}
+body.house .house-camps{margin:6px 0 0;padding-left:18px;columns:2 260px;font-size:13.5px}
+body.house .house-camps li{break-inside:avoid;margin:2px 0}
+
+/* review bar and footer */
+body.house .bar{background:var(--h-head);color:var(--h-head-ink);box-shadow:0 -2px 10px rgba(0,0,0,.15)}
+body.house .bar button{background:var(--h-card);color:var(--h-ink);border:1px solid var(--h-line);padding:7px 12px;margin-left:6px;cursor:pointer}
+body.house .bar button#copy{background:var(--h-accent-2);color:var(--h-ink);border-color:transparent}
+body.house .house-note code,body.house .house-foot code{overflow-wrap:anywhere;word-break:break-all}
+body.house .house-foot{margin:36px 0 90px;padding-top:12px;border-top:1px solid var(--h-line);color:var(--h-soft);font-size:12.5px}
+
+@media (max-width:760px){
+  body.house>header,body.house header#top{padding:18px 16px}
+  body.house .house-table td:first-child{white-space:normal}
+  body.house .house-camps{columns:1}
+  body.house main th,body.house main td{padding:6px 6px}
+  body.house main th{letter-spacing:0;text-transform:none;font-size:12.5px}
+  body.house .bar button{margin:4px 4px 0 0}
+}
+@media print{
+  body.house .bar,body.house .house-quick,body.house aside.side,body.house nav.toc,body.house .layout>aside{display:none!important}
+  body.house>header,body.house header#top{background:none;color:#000}
+  body.house header h1,body.house .house-kicker,body.house .house-sub{color:#000}
+}

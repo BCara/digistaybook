@@ -247,7 +247,7 @@
     {
       "id": "C-16",
       "title": "Set support hours, response target and queue cover",
-      "description": "Support route selected 5 October 2026: info@digistaybook.com via ImprovMX to codebertcreations@gmail.com; access limited to the owner and one other authorised person. Configure and verify under A-19. Response-time target, business-hours expectation and queue cover remain to be confirmed.\n\nNeeded for: Support page, acknowledgement copy",
+      "description": "Support route selected 5 October 2026: info@digistaybook.com forwarded to codebertcreations@gmail.com through Forward Email (changed from ImprovMX on 22 October 2026: the ImprovMX free plan allows only one domain); access limited to the owner and one other authorised person. Configure and verify under A-19. Response-time target, business-hours expectation and queue cover remain to be confirmed.\n\nNeeded for: Support page, acknowledgement copy",
       "owner": "",
       "status": "To do",
       "milestone": "launch",
@@ -802,7 +802,7 @@
     {
       "id": "A-19",
       "title": "Configure support email forwarding",
-      "description": "Configure planned support email routing: set up ImprovMX for digistaybook.com and forward info@digistaybook.com to codebertcreations@gmail.com, matching the DigiGuestbook arrangement. Configure the required domain/MX records and forwarding alias; send an external test email and verify receipt and the reply path. Record mailbox access limited to the owner and one other authorised person, and document support-mail retention/deletion and provider processing locations. Status: to do; planned arrangement approved by the owner on 5 October 2026.\n\nConsequence: The published support address cannot be relied on until configuration and receipt/reply tests pass.",
+      "description": "Configure planned support email routing: set up Forward Email (free plan) for digistaybook.com and forward info@digistaybook.com to codebertcreations@gmail.com. ImprovMX was the original choice, but its free plan allows only one domain, which DigiGuestbook already uses. In GoDaddy DNS, replace the ImprovMX MX records and SPF include with Forward Email's, and add the forwarding alias as an encrypted TXT record; send an external test email and verify receipt and the reply path (replying as info@ needs Forward Email's paid plan; until then replies come from the Gmail address). Record mailbox access limited to the owner and one other authorised person, and document support-mail retention/deletion and provider processing locations (Forward Email processes mail in the United States). Status: to do; planned arrangement approved by the owner on 5 October 2026, provider changed to Forward Email on 22 October 2026.\n\nConsequence: The published support address cannot be relied on until configuration and receipt/reply tests pass.",
       "owner": "",
       "status": "To do",
       "milestone": "launch",

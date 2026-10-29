@@ -5,9 +5,9 @@
 // against unapproved wording.
 
 export const legalVersions = {
-  hostTerms: "draft-2026-08-04",
+  hostTerms: "draft-2026-10-29",
   guestTerms: "draft-2026-10-06",
-  privacy: "draft-2026-10-06",
+  privacy: "draft-2026-10-23",
   consent: "handbook-5.3-draft-v4"
 } as const;
 

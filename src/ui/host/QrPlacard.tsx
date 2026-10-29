@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { qrCanvasSize, qrMatrix, qrPath } from "../../domain/qrCode";
+import { wifiQrPayload } from "../../domain/wifi";
 
 /**
  * The placard, drawn as the card it will be printed as.
@@ -15,7 +16,7 @@ import { qrCanvasSize, qrMatrix, qrPath } from "../../domain/qrCode";
  * inverted code is a code that will not read, and a printed card does not
  * have a dark mode.
  */
-export function QrPlacard({ name, url }: { name: string; url: string }) {
+export function QrPlacard({ name, url, wifi = null }: { name: string; url: string; wifi?: { network: string; password: string } | null }) {
   const matrix = useMemo(() => qrMatrix(url), [url]);
   const side = qrCanvasSize(matrix);
   // The address is printed under the code without its scheme: it is there for
@@ -39,8 +40,30 @@ export function QrPlacard({ name, url }: { name: string; url: string }) {
         </svg>
         <p className="placard-invite">Scan to read the house guidance and to leave a memory behind.</p>
         <p className="placard-address">{spoken}</p>
+        {wifi && <WifiCode {...wifi} />}
         <p className="placard-mark">DigiStayBook</p>
       </div>
     </figure>
+  );
+}
+
+/**
+ * The house Wi-Fi as the standard code a phone's camera offers to join. It is
+ * on the card rather than the wall because a guest cannot scan their own
+ * screen, and it is smaller than the wall's code because it is the second
+ * thing a guest scans, not the first.
+ */
+function WifiCode({ network, password }: { network: string; password: string }) {
+  const matrix = useMemo(() => qrMatrix(wifiQrPayload({ network, password })), [network, password]);
+  const side = qrCanvasSize(matrix);
+  return (
+    <div className="placard-wifi">
+      <svg className="placard-wifi-code" viewBox={`0 0 ${side} ${side}`} role="img"
+        aria-label={`QR code to join the Wi-Fi network ${network}`} shapeRendering="crispEdges">
+        <rect width={side} height={side} fill="#ffffff" />
+        <path d={qrPath(matrix)} fill="#14181b" />
+      </svg>
+      <p className="placard-wifi-text"><strong>Join the Wi-Fi</strong>Scan with your camera to connect to {network}</p>
+    </div>
   );
 }

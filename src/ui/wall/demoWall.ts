@@ -82,8 +82,8 @@ export const demoProperty: WallProperty = {
  * front of someone who is actually staying.
  */
 export const houseEssentials = [
-  { term: "Wi-Fi", detail: "SEABREEZE-5G", note: "Password is on the fridge magnet" },
-  { term: "Bins", detail: "Tuesday night", note: "Green bin, by the side gate" },
+  { term: "Wi-Fi", detail: "SEABREEZE-5G / sandcastle42", note: "The router is in the hall cupboard" },
+  { term: "Trash", detail: "Tuesday night", note: "Green can, by the side gate" },
   { term: "Checkout", detail: "10am", note: "Keys in the drawer. No need to strip the beds." },
   { term: "Heating", detail: "Dial in the hall", note: "It clunks for a minute, then settles" }
 ];
@@ -91,10 +91,9 @@ export const houseEssentials = [
 export const hostWelcome = {
   heading: "Welcome to the cottage",
   body: [
-    "The kettle is on the side and there is milk in the fridge. Everything you need for the week is below, and the sunset from the back deck is worth waiting for.",
-    "If something is not working, message us before you go hunting for it. We would rather fix it on day one than read about it later."
+    "The kettle is on the side and there is milk in the fridge. Everything you need for the week is below, and the sunset from the back deck is worth waiting for."
   ],
-  tip: "Our favourite: the bakery behind the lighthouse. Go before 9am or the pasties are gone."
+  tip: "Our favorite: the bakery behind the lighthouse. Go before 9am or the pasties are gone."
 };
 
 /**

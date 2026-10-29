@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { AuthContext, type AuthState } from "../auth/AuthProvider";
 import { HostWallDesignPage } from "./HostWallDesignPage";
-import { emptyProfile, type HostNote, type PropertyProfile } from "../../domain/propertyProfile";
+import { emptyProfile, normalizeProfile, type HostNote, type PropertyProfile } from "../../domain/propertyProfile";
 import type { HostProperty } from "../host/propertyStore";
 
 vi.mock("../../lib/firebaseConfig", () => ({
@@ -116,7 +116,7 @@ beforeEach(() => {
 });
 
 const canvas = (name = "Guest wall") => within(screen.getByRole("form", { name }));
-const publicCanvas = () => canvas("Public wall");
+const publicCanvas = () => canvas("Public page");
 const save = () => canvas().getByRole("button", { name: "Save changes" });
 const publicSave = () => publicCanvas().getByRole("button", { name: "Save changes" });
 
@@ -232,12 +232,12 @@ describe("switching the phone editor between Edit and Preview", () => {
     renderPublic();
     await screen.findByRole("button", { name: "Edit" });
     expect(screen.getByRole("region", { name: "This wall" })).toBeVisible();
-    fireEvent.change(publicCanvas().getByLabelText("A short welcome for the public wall"), { target: { value: "Thank you for staying with us." } });
+    fireEvent.change(publicCanvas().getByLabelText("A short welcome for the public page"), { target: { value: "Thank you for staying with us." } });
     fireEvent.click(screen.getByRole("button", { name: "Preview" }));
     expect(screen.queryByRole("region", { name: "This wall" })).not.toBeInTheDocument();
     expect(within(screen.getByRole("complementary", { name: "This wall on a phone" })).getByText("Thank you for staying with us.")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
-    expect(publicCanvas().getByLabelText("A short welcome for the public wall")).toHaveValue("Thank you for staying with us.");
+    expect(publicCanvas().getByLabelText("A short welcome for the public page")).toHaveValue("Thank you for staying with us.");
     expect(screen.getByRole("region", { name: "This wall" })).toBeVisible();
   });
 
@@ -335,7 +335,7 @@ describe("the guest view of a property", () => {
     renderPublic();
 
     await waitFor(() =>
-      expect(publicCanvas().getByLabelText("A short welcome for the public wall")).toHaveValue(
+      expect(publicCanvas().getByLabelText("A short welcome for the public page")).toHaveValue(
         "The wall our guests leave behind."
       )
     );
@@ -347,7 +347,7 @@ describe("the guest view of a property", () => {
 
     // And the nav says which wall this is, since the page no longer asks.
     const nav = within(screen.getByRole("navigation", { name: "This property" }));
-    expect(nav.getByText("Public wall", { selector: "span[aria-current]" })).toHaveAttribute("aria-current", "page");
+    expect(nav.getByText("Public page", { selector: "span[aria-current]" })).toHaveAttribute("aria-current", "page");
     expect(nav.getByRole("link", { name: "Guest wall" })).toHaveAttribute("href", "/host/property/prop-1");
   });
 
@@ -407,7 +407,7 @@ describe("the guest view of a property", () => {
     await waitFor(() => expect(publicCanvas().getByLabelText("Property name")).toBeInTheDocument());
 
     const panel = within(screen.getByRole("region", { name: "This wall" }));
-    expect(panel.getByRole("switch", { name: "Public wall" })).toBeChecked();
+    expect(panel.getByRole("switch", { name: "Public page" })).toBeChecked();
     expect(panel.getByText(/embed it on your own site/i)).toBeInTheDocument();
 
     fireEvent.click(panel.getByRole("button", { name: "Copy link" }));
@@ -429,21 +429,21 @@ describe("the guest view of a property", () => {
     await waitFor(() => expect(publicCanvas().getByLabelText("Property name")).toBeInTheDocument());
 
     const panel = () => within(screen.getByRole("region", { name: "This wall" }));
-    fireEvent.click(panel().getByRole("switch", { name: "Public wall" }));
+    fireEvent.click(panel().getByRole("switch", { name: "Public page" }));
 
-    expect(panel().getByRole("switch", { name: "Public wall" })).not.toBeChecked();
+    expect(panel().getByRole("switch", { name: "Public page" })).not.toBeChecked();
     // Nothing is offered that would currently reach anybody.
     expect(panel().queryByRole("button", { name: "Copy link" })).not.toBeInTheDocument();
     expect(panel().queryByRole("button", { name: "Copy embed code" })).not.toBeInTheDocument();
     expect(panel().getByText(/every word is kept/i)).toBeInTheDocument();
     // And the words really are still there, on the wall below.
-    expect(publicCanvas().getByLabelText("A short welcome for the public wall")).toHaveValue(
+    expect(publicCanvas().getByLabelText("A short welcome for the public page")).toHaveValue(
       "The wall our guests leave behind."
     );
 
     // The row stays in the nav, marked, because the switch back on is on it.
     const nav = within(screen.getByRole("navigation", { name: "This property" }));
-    expect(nav.getByText("Public wall", { selector: "span[aria-current]" })).toHaveAttribute("aria-current", "page");
+    expect(nav.getByText("Public page", { selector: "span[aria-current]" })).toHaveAttribute("aria-current", "page");
     expect(nav.getByText("Off")).toBeInTheDocument();
     // The banner stops offering a way into a wall nobody can reach.
     expect(screen.queryByRole("link", { name: "View guest wall" })).not.toBeInTheDocument();
@@ -458,7 +458,7 @@ describe("the guest view of a property", () => {
   it("keeps the switch off the in-stay wall, which is not the one being shared", async () => {
     renderPage();
     await waitFor(() => expect(canvas().getByLabelText("Property name")).toBeInTheDocument());
-    expect(screen.queryByRole("switch", { name: "Public wall" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("switch", { name: "Public page" })).not.toBeInTheDocument();
   });
 
   it("prints nothing on the phone but what a Host has written", async () => {
@@ -824,9 +824,9 @@ describe("the guest view of a property", () => {
     // The suggestion brings the whole line, answer included, so the line is on
     // the wall the moment it is picked and the Host corrects an answer rather
     // than filling an empty field that guests would never have seen.
-    expect(canvas().getByLabelText("Line 1: answer")).toHaveValue("SEABREEZE-5G");
+    expect(canvas().getByLabelText("Line 1: answer")).toHaveValue("SEABREEZE-5G / sandcastle42");
     expect(canvas().getByLabelText("Line 1: detail")).toHaveValue(
-      "Password is on the fridge magnet"
+      "The router is in the hall cupboard"
     );
     // A suggestion already on the wall is not offered twice.
     expect(canvas().queryByRole("button", { name: "+ Wi-Fi" })).not.toBeInTheDocument();
@@ -1116,11 +1116,11 @@ describe("the guest view of a property", () => {
 
     const nav = within(screen.getByRole("navigation", { name: "This property" }));
     expect(nav.getByText("Guest wall", { selector: "span[aria-current]" })).toHaveAttribute("aria-current", "page");
-    expect(nav.getByRole("link", { name: "Public wall" })).toHaveAttribute(
+    expect(nav.getByRole("link", { name: "Public page" })).toHaveAttribute(
       "href",
       "/host/property/prop-1/public"
     );
-    expect(nav.getByRole("link", { name: "Walls and QR display" })).toHaveAttribute(
+    expect(nav.getByRole("link", { name: "QR display and links" })).toHaveAttribute(
       "href",
       "/host/property/prop-1/qr"
     );
@@ -1172,3 +1172,33 @@ it('lets long property headings and addresses wrap while keeping stored values s
   }
 });
 
+
+describe("the hosts' stay-again links", () => {
+  it("adds a booking link from the suggestions and saves its full address", async () => {
+    renderPage();
+    await waitFor(() => expect(canvas().getByRole("heading", { name: "Stay with us again" })).toBeInTheDocument());
+    // The platforms' rules are said beside the fields.
+    expect(canvas().getByText(/does not allow offering a discount for booking outside Airbnb/)).toBeInTheDocument();
+
+    fireEvent.click(canvas().getByRole("button", { name: "+ Book your next stay with us" }));
+    expect(canvas().getByLabelText("Link 1: what it says")).toHaveValue("Book your next stay with us");
+    fireEvent.change(canvas().getByLabelText("Link 1: web address"), { target: { value: "seabreezecottage.com.au/book" } });
+
+    fireEvent.click(save());
+    await waitFor(() => expect(savePropertyProfile).toHaveBeenCalledTimes(1));
+    const [, saved] = savePropertyProfile.mock.calls[0] as [string, PropertyProfile];
+    // The store writes the profile through normalizeProfile, which stores the address in full.
+    expect(normalizeProfile(saved).stayAgainLinks).toEqual([{ label: "Book your next stay with us", url: "https://seabreezecottage.com.au/book" }]);
+  });
+
+  it("will not save a link a guest would tap and land nowhere", async () => {
+    renderPage();
+    await waitFor(() => expect(canvas().getByRole("heading", { name: "Stay with us again" })).toBeInTheDocument());
+    fireEvent.click(canvas().getByRole("button", { name: "+ Join our guest list" }));
+    fireEvent.change(canvas().getByLabelText("Link 1: web address"), { target: { value: "http://seabreeze.com.au/list" } });
+
+    fireEvent.click(save());
+    expect(await canvas().findByText("Use your page's secure address, starting https://.")).toBeInTheDocument();
+    expect(savePropertyProfile).not.toHaveBeenCalled();
+  });
+});

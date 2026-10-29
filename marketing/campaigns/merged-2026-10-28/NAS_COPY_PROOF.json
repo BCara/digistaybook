@@ -1,0 +1,292 @@
+{
+  "verified": "2026-10-28",
+  "revision": "Clickable post rows; removed Details column",
+  "destination": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing",
+  "filesExcludingThisProof": 56,
+  "bytes": 9182586,
+  "sha256Mismatches": [],
+  "backup": "_archive/2026-10-28-before-row-links",
+  "browserVerification": "MOBILE_VERIFICATION.json: Tailscale HTTPS, no Details column, whole-row tapping, keyboard links, independent status controls, video playback, return navigation and 360/390/430px layouts passed.",
+  "files": [
+    {
+      "file": "MARKETING_PLAN.html",
+      "bytes": 356295,
+      "sha256": "376464b5a5ec8d714efbc938ec792a18f3849d099d4e9957a2ecff3919a0cf3e"
+    },
+    {
+      "file": "MARKETING_PRODUCTION.html",
+      "bytes": 3755,
+      "sha256": "fcf37dde2e4943458e6be7d328f965ed450d1ca35874ff49e5cb8f810ad8e826"
+    },
+    {
+      "file": "MARKETING_STRATEGY.html",
+      "bytes": 8724,
+      "sha256": "d721a11057b3250900baac31fd7b7f2f74a14be15bc63aeed611807cef5b8583"
+    },
+    {
+      "file": "MARKETING_REFERENCE.html",
+      "bytes": 164653,
+      "sha256": "748f39593c8b4a065d939fd8adf2221d573dd640547b0a15a220447fb31ec77f"
+    },
+    {
+      "file": "builder/build_marketing_plan.py",
+      "bytes": 13178,
+      "sha256": "4a65af851f0ac75ac70822e59a8eca9e4fe7d96ce3374681890065fd004a5ea3"
+    },
+    {
+      "file": "builder/marketing-review.js",
+      "bytes": 9059,
+      "sha256": "125d3349b82f7d9023b51c6bc7e0f2b9afd4f74f535ffe242d8afbe039caa981"
+    },
+    {
+      "file": "HOW_TO_EDIT.md",
+      "bytes": 3842,
+      "sha256": "7ffeca723b62b2d1aabd3e51388d0d7c606cf1ebbd37f5eaabecb9586c12fe3b"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/artwork.html",
+      "bytes": 11389,
+      "sha256": "a3a9818dc121e472918c2e778fc06ac3c4b6e05ec33e19f8d724f135edb98c46"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/ARTWORK_MANIFEST.json",
+      "bytes": 1351,
+      "sha256": "5bd9c9eeb8eada9f486ff5b09d09ed26444ac8c8541e8e677de0bb590943881a"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/ARTWORK_PROVENANCE.json",
+      "bytes": 1270,
+      "sha256": "a5a274bb7b5a4e97f1b06c59f9db94a68c91c155b0393f7e596e0dceb62d931b"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/build_artwork.py",
+      "bytes": 10463,
+      "sha256": "30001f6b30d3551e6012b817babe5dd4c77d1a589d837b017917314719a2e615"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/build_info_pages.py",
+      "bytes": 4010,
+      "sha256": "abcd29d0249aa42de951362ae28cb212ac65226af1a2e10cdc8cccdc0dbb2885"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/CONTACT_SHEET.jpg",
+      "bytes": 281215,
+      "sha256": "bca59b3644f5d77458798409d278672a05fdf491681bcaafa812b970eca44c67"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/content.json",
+      "bytes": 208780,
+      "sha256": "98ef010b9277264e05b64c57726dd473839b15227422ea48f8d2f573f6656ba2"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/INFO_PAGES_VERIFICATION.json",
+      "bytes": 496,
+      "sha256": "49ae85e7d44e53afee339437419801d8600229aa3d7800ecdff64c58b4d5edf4"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/LIVE_DESTINATION_CHECK.json",
+      "bytes": 12512,
+      "sha256": "5f99c82216451210662d5bbff2deeedcf5723b5808791a1efe0e60deb5d07fb6"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/mobile-post-table.jpg",
+      "bytes": 75255,
+      "sha256": "d50d119d0a81c7c9de908be44598ff45360daea2f9a58e3b98dba35afce4bc39"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/mobile-summary.jpg",
+      "bytes": 73917,
+      "sha256": "573b5daaa9a03ccd631f2d5f1d2a690d9a728e86cd51ca3fd00ec03ce68d89ea"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/mobile-video.jpg",
+      "bytes": 59411,
+      "sha256": "9639483beb195ce1ceece9c51fa32d6ecc09cd2c53128ba79bde32a8aa491488"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/MOBILE_VERIFICATION.json",
+      "bytes": 690,
+      "sha256": "1dcacb7d88246b241bcaf390ebaf653a3020acc080ad31b80be4e696fd8b66d2"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/original-sources.json",
+      "bytes": 114767,
+      "sha256": "2a6dd678a475d17c0856518cc1580ea25d53b9bb21eeb204c1affd5444aaf3bc"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/phone-production-page.jpg",
+      "bytes": 77660,
+      "sha256": "735e2bd1498900b4d2cb84bc99f8c77771eae07e84bc22234468d2522fb04f25"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/plan-desktop.jpg",
+      "bytes": 130918,
+      "sha256": "25781d2a0bce4832a26587512dc508426ab1690ced4baf2c855baa9e5e8b2bc2"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/plan-mobile.jpg",
+      "bytes": 62577,
+      "sha256": "9cd78ecf3cba4bd789d63468faeb29768980b06d941234a2d1fc3e3e9e036ffc"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/plan.css",
+      "bytes": 11155,
+      "sha256": "8f1666f283deaad0022edd1ea3b72d95bb43e7c0afb1f70d9bb2f3286f835fa7"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/post-mobile.jpg",
+      "bytes": 57576,
+      "sha256": "e539882a591135e53b0999d5db730b26a348fee8a7d7b6d6a975fdb7b4e558ea"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/prepare_merge.py",
+      "bytes": 27057,
+      "sha256": "d313590bf0e3952ac875e7b89dd137c3aaad9174119e472bb8136c72e7815afe"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/preview.mjs",
+      "bytes": 1650,
+      "sha256": "a14034a5958e9798a26be50ebb9a1f23a44c73a29a882b9d1ffdee28e3d63b8e"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/render_artwork.mjs",
+      "bytes": 3080,
+      "sha256": "a345f58fa04833ff442a2ee6788bb74b58faa2c8e535720a563a2d22164c300a"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/review-sections.html",
+      "bytes": 9098,
+      "sha256": "8286c73ddc38aee0b88f11b08ce133ef2256c8960caa6dd951f4efa2ce661383"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/scorecard.csv",
+      "bytes": 8889,
+      "sha256": "1fd9f03c4c2ae11992eb5b9626674daf23709e28317d74eba0bc7f36af6eca9f"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/TRAFFIC_REVIEW.md",
+      "bytes": 4747,
+      "sha256": "fe60671bc8721c8768004f1e622d767f782607c071a6ec445ad3db3b3a9f5aea"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/VERIFICATION.json",
+      "bytes": 1027,
+      "sha256": "4d51fd65c232228387ea9da02d6091c8420b33cc250872e31487add495800f87"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/verify_info_pages.mjs",
+      "bytes": 4075,
+      "sha256": "9518053f99c6f77c4f365c0b935abe4b2410f1e542ff63b386a74a36abd632dc"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/verify_mobile.mjs",
+      "bytes": 5042,
+      "sha256": "c1597e12bbbfc4290359575b8f92530019970d3d779e66425bdabffb3b67b68e"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/verify_plan.mjs",
+      "bytes": 9357,
+      "sha256": "d2a0767bf73132aeabae8ff1e27f952285176845e1596dfbe918513bf9ccc9ad"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/assets/asked-twice.png",
+      "bytes": 847217,
+      "sha256": "4dfcaf7e9f1e6bdcc28723c13be2824ca1ef5dfcbe97ff96a5e348df6d85da4d"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/assets/guide-1.png",
+      "bytes": 91818,
+      "sha256": "df679d9fb736cb8d4c850b1f7bc57034a5db5cb99f0723f7d361e3ea870f1b14"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/assets/guide-2.png",
+      "bytes": 102277,
+      "sha256": "6cfe688ea51d5d614ddf186fd90bd5c300032e2095f0ceb79b3dde6535689d28"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/assets/guide-3.png",
+      "bytes": 102346,
+      "sha256": "f6ae9c15ad14e1507734dd3d0b2777226f109e573290701fd0e208b4861c13ee"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/assets/local-1.png",
+      "bytes": 1107273,
+      "sha256": "bc8b9be87d946a70234fd6a299f6f9515e53d08465ce79c082fffc128b0d11dd"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/assets/local-2.png",
+      "bytes": 91559,
+      "sha256": "3f3806f58cf771ada8280f770f71af7d0ea2b37ff8b0c73025a988fd20285bea"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/assets/local-3.png",
+      "bytes": 107631,
+      "sha256": "0da58aeab56bad1600a4eff6282deff3c906d22266b935a1c6d2dfa95c37a8a7"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/assets/pin-pages.png",
+      "bytes": 110697,
+      "sha256": "86a2357168db188c3453adc55d0db61072e0f9b78e5bc56c6b6ae282fb2fdca6"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/assets/pin-qr.png",
+      "bytes": 111765,
+      "sha256": "b945b9adf6a48b9a23418e18e9823d76f5f915c6ed2e86cfe667ae4798c93ed7"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/assets/pin-setup.png",
+      "bytes": 101929,
+      "sha256": "eacf82eb0d684d793b9d59c1298c090023a3968c126565330cb63e7c94a6acf0"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/assets/qr-placement.png",
+      "bytes": 115026,
+      "sha256": "4db94ab3b2131aefd2b39031066966de8498714944e214d6624f9d99c1a23f22"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/assets/quiet-hours.png",
+      "bytes": 104326,
+      "sha256": "f3b3375fa84dc40df3906adc530fe51ff8355ffd42e3438157a3d44e4594d384"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/assets/rainy-day.png",
+      "bytes": 786036,
+      "sha256": "92546d92a2fd44e7582e90902c8831e33c6f961cefff503bc5c47527354195c7"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/assets/two-pages.png",
+      "bytes": 544474,
+      "sha256": "a3db03aedb01e1fc1bf4574b87f4eadb57c66121ad35c41fe59fec642fbdc294"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/reference/coast.webp",
+      "bytes": 166044,
+      "sha256": "92aa7a97e6341ab09c39a0d9a69b66e17967bf5c911030d8bd20cd8e25dc16d5"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/reference/demo-arrival.png",
+      "bytes": 1170472,
+      "sha256": "782e7f99f3e35c47c1e7778fcf25fa13dd855fc45ad9438cb892dd9da2ad690d"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/reference/demo-public-wall.png",
+      "bytes": 1246129,
+      "sha256": "16b0773f2ef4320d40052e1caef617bf16ff440f06853738aa1658e108de8fcb"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/reference/logo.png",
+      "bytes": 213743,
+      "sha256": "2b6372f6d75f88df19cee3b7b7a2783349ec0bbfe586698d468b13428ffa97f6"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/reference/table.webp",
+      "bytes": 140936,
+      "sha256": "1e85ddd7c54d96975342b4ba7dfb8df2d72e36b529148f712821086143eaf2f5"
+    },
+    {
+      "file": "campaigns/merged-2026-10-28/reference/window.webp",
+      "bytes": 91948,
+      "sha256": "56f6252d1da09998d93885e55d5f52c025ee0b11bf964d276cc6b6ff38338b1d"
+    }
+  ]
+}

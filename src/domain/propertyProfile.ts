@@ -15,6 +15,7 @@
    ========================================================================= */
 
 import { defaultWallTheme, defaultWallColour, readWallTheme, readWallColour, type WallThemeId, type WallColourId } from "./wallTheme";
+import { normalizeStayAgainLinks, stayAgainLimits, stayAgainProblems, type StayAgainLink } from "./stayAgain";
 
 /** One line of house guidance: what it is, the answer, and the detail. */
 export type HouseFact = { term: string; detail: string; note: string };
@@ -185,6 +186,13 @@ export type PropertyProfile = {
    * Wi-Fi password twice.
    */
   factsOff: boolean;
+  /**
+   * In-stay only. The Host's own booking or guest-list pages, so a guest who
+   * wants to come back finds the Host rather than the platform. Empty is the
+   * ordinary state, so, like the hosts' notes, an absence needs no flag. See
+   * `stayAgain.ts`.
+   */
+  stayAgainLinks: StayAgainLink[];
   guestPrompt: string;
   /** Public. The photograph at the top of both walls. */
   cover: PropertyPhoto | null;
@@ -255,6 +263,7 @@ export const emptyProfile = (): PropertyProfile => ({
   hostNotes: [],
   facts: [],
   factsOff: false,
+  stayAgainLinks: [],
   guestPrompt: "",
   cover: null,
   avatar: null,
@@ -378,6 +387,12 @@ export function readProfile(value: unknown): PropertyProfile {
     // Only an explicit `true` turns the guidance off, so anything else — a
     // missing field, an older document, a corrupted one — leaves it on.
     factsOff: data.factsOff === true,
+    stayAgainLinks: Array.isArray(data.stayAgainLinks)
+      ? data.stayAgainLinks.slice(0, stayAgainLimits.linksMax).map((entry) => {
+          const link = (typeof entry === "object" && entry !== null ? entry : {}) as Record<string, unknown>;
+          return { label: text(link.label, stayAgainLimits.labelMax), url: text(link.url, stayAgainLimits.urlMax) };
+        })
+      : [],
     guestPrompt: text(data.guestPrompt, 240),
     cover: readPhoto(data.cover),
     avatar: readPhoto(data.avatar),
@@ -395,7 +410,8 @@ export type ProfileField =
   | "stayHeading"
   | "stayWelcome"
   | "stayTip"
-  | "facts";
+  | "facts"
+  | "stayAgainLinks";
 
 export type ProfileProblem = { field: ProfileField; index?: number; message: string };
 
@@ -445,6 +461,7 @@ export function normalizeProfile(profile: PropertyProfile): PropertyProfile {
         note: fact.note.trim().slice(0, profileLimits.factNoteMax)
       })),
     factsOff: profile.factsOff,
+    stayAgainLinks: normalizeStayAgainLinks(profile.stayAgainLinks),
     guestPrompt: profile.guestPrompt.trim().slice(0, 240),
     cover: profile.cover,
     avatar: profile.avatar,
@@ -459,10 +476,13 @@ export function normalizeProfile(profile: PropertyProfile): PropertyProfile {
  * what a guest would be left reading.
  */
 export function validateProfile(profile: PropertyProfile): ProfileProblem[] {
+  // A link a guest would tap and land nowhere is the same dangling line.
+  const links: ProfileProblem[] = stayAgainProblems(profile.stayAgainLinks)
+    .map(({ index, message }) => ({ field: "stayAgainLinks", index, message }));
   // Guidance that is off the wall is read by nobody, so a half-written line in
   // it cannot strand a Host on a page they are trying to leave. It is checked
   // again the moment they put the guidance back.
-  if (profile.factsOff) return [];
+  if (profile.factsOff) return links;
 
   const kept = profile.facts.filter((fact) => !factIsEmpty(fact));
   const problems: ProfileProblem[] = [];
@@ -484,7 +504,7 @@ export function validateProfile(profile: PropertyProfile): ProfileProblem[] {
     });
   }
 
-  return problems;
+  return [...problems, ...links];
 }
 
 /**
@@ -609,7 +629,9 @@ export function setupProgress(profile: PropertyProfile): { done: number; total: 
 export type FactSuggestion = { term: string; detail: string; note: string };
 
 export const factSuggestions: readonly FactSuggestion[] = [
-  { term: "Wi-Fi", detail: "SEABREEZE-5G", note: "Password is on the fridge magnet" },
+  // Network / password, the shape the wall's one-tap copy and the placard's
+  // Wi-Fi code read (domain/wifi.ts).
+  { term: "Wi-Fi", detail: "SEABREEZE-5G / sandcastle42", note: "The router is in the hall cupboard" },
   { term: "Checkout", detail: "10am", note: "Leave the key in the safe and pull the door to" },
   { term: "Bins", detail: "Thursday morning", note: "Green lid for recycling, black for the rest" },
   { term: "Heating", detail: "Dial in the hall", note: "It takes an hour to come through" },

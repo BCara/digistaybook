@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-18",
+  "file": "//192.168.1.71/nas/projects/DigiStayBook/marketing/MARKETING_PLAN.html",
+  "items": 30,
+  "start": "2026-10-23",
+  "end": "2026-11-21",
+  "formats": {
+    "Feed": 8,
+    "Reel": 5,
+    "Carousel": 4,
+    "Story": 13
+  },
+  "legacyRecords": 7,
+  "checks": "PASS: consecutive dates; complete copy/Story/visual/alt briefs; reel and carousel outlines; unique IDs; all NAS asset/document links; status sync; live counts; caption/comment local persistence; format/week filters; no script errors. Verification edits only occurred in an isolated DOM, not the user browser or NAS source."
+}

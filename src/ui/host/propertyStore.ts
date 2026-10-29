@@ -334,6 +334,7 @@ const PROFILE_FIELDS = [
   "hostNotes",
   "facts",
   "factsOff",
+  "stayAgainLinks",
   "guestPrompt"
 ] as const;
 

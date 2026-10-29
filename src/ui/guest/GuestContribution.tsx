@@ -22,7 +22,7 @@ async function base64(file: File) {
 export type ContributionMode = "memory" | "feedback";
 const OWN_FAILED = "Your previous memories could not be loaded. Use Refresh my memories to try again.";
 
-export function GuestContribution({ slug, stayToken = null, onChanged, mode: requestedMode, onModeChange, prompt = "" }: {
+export function GuestContribution({ slug, stayToken = null, onChanged, mode: requestedMode, onModeChange, prompt = "", demo = false }: {
   slug: string;
   /** The Host's question to guests, shown under the memory form's heading. */
   prompt?: string;
@@ -37,6 +37,8 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
   /** Which form is showing, when the page around it chooses; otherwise the form keeps its own. */
   mode?: ContributionMode;
   onModeChange?: (mode: ContributionMode) => void;
+  /** The demo wall: the same form, checked the same way, and nothing sent. */
+  demo?: boolean;
 }) {
   const [message, setMessage] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -66,10 +68,10 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
   useEffect(() => {
     let mounted = true;
     setOwn([]); setCursor(null); setOwnFailed(false);
-    void guestCall<OwnPage>(slug, "listGuestContributions", {}).then(result => { if (mounted) { setOwn(result.posts); setCursor(result.nextCursor ?? null); } })
+    if (!demo) void guestCall<OwnPage>(slug, "listGuestContributions", {}).then(result => { if (mounted) { setOwn(result.posts); setCursor(result.nextCursor ?? null); } })
       .catch(() => { if (mounted) { setOwnFailed(true); setNotice(OWN_FAILED); } });
     return () => { mounted = false; photoRef.current.forEach(photo => URL.revokeObjectURL(photo.preview)); };
-  }, [slug]);
+  }, [slug, demo]);
   async function refresh() {
     const result = await guestCall<OwnPage>(slug, "listGuestContributions", {});
     setOwn(result.posts); setCursor(result.nextCursor ?? null);
@@ -101,6 +103,12 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
     if (memory && !message.trim() && !photos.length) { setNotice("Add a message or at least one photo."); return; }
     if (!memory && !feedback.trim()) { setNotice("Write your feedback before sending it."); return; }
     if (memory && !consent) { setNotice("Please read and accept the consent before submitting."); return; }
+    if (demo) {
+      setNotice(memory
+        ? "This is the demo wall, so nothing was sent. On a real wall your memory goes for screening now."
+        : "This is the demo wall, so nothing was sent. On a real wall this goes privately to the hosts.");
+      return;
+    }
     setBusy(true); setNotice(memory ? "Preparing your memory…" : "Sending your feedback…"); setProgress(0);
     const current = attempt.current ?? { requestId: crypto.randomUUID(), uploaded: 0 };
     attempt.current = current;

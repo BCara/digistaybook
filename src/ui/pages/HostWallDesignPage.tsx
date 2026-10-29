@@ -13,6 +13,8 @@ import {
   type HouseFact,
   type PropertyProfile,
 } from "../../domain/propertyProfile";
+import { emptyStayAgainLink, stayAgainLimits, stayAgainSuggestions, type StayAgainLink } from "../../domain/stayAgain";
+import { isPostMvpFeatureEnabled } from "../../domain/featureFlags";
 import { useAuth } from "../auth/AuthProvider";
 import { CameraMark } from "../host/CameraMark";
 import { ActionDisclosure } from "../ActionDisclosure";
@@ -539,6 +541,98 @@ export function HostWallDesignPage({
     );
   }
 
+  /**
+   * The Host's own booking or guest-list pages, under their notes where the
+   * wall puts them. Plain fields rather than words typed onto the tile: what
+   * a Host is writing here is an address, and it is checked as one on save.
+   * The platforms' rules are said beside the fields, because the Host is the
+   * one who knows which platform their guests came from.
+   */
+  const setLink = (index: number, change: Partial<StayAgainLink>) =>
+    set("stayAgainLinks", profile.stayAgainLinks.map((link, position) => (position === index ? { ...link, ...change } : link)));
+  /* Save-time problems are numbered among the rows with something in them. */
+  const linkProblem = (index: number) => {
+    const link = profile.stayAgainLinks[index];
+    if (!link || (!link.label.trim() && !link.url.trim())) return undefined;
+    const kept = profile.stayAgainLinks.slice(0, index).filter((row) => row.label.trim() || row.url.trim()).length;
+    return draft.problems.profile.find((problem) => problem.field === "stayAgainLinks" && problem.index === kept)?.message;
+  };
+  const stayAgainCard = isPostMvpFeatureEnabled("directBookingLinks") && (
+    <div className="stay-wall canvas-stay-again">
+      <section className="stay-links stay-again" aria-labelledby="canvas-stay-again">
+        <h2 className="stay-section-title" id="canvas-stay-again" aria-level={3}>Stay with us again</h2>
+        <p className="field-hint">
+          Your own booking site, or a page where guests can join your list for a
+          future stay. Guests see them here, under your notes, and nowhere else.
+        </p>
+        {profile.stayAgainLinks.map((link, index) => (
+          <div className="stacked-form stay-card canvas-again-link" key={index}>
+            <label>Link {index + 1}: what it says
+              <input
+                value={link.label}
+                maxLength={stayAgainLimits.labelMax}
+                placeholder="Book your next stay with us"
+                disabled={draft.saving}
+                aria-invalid={linkProblem(index) ? true : undefined}
+                onChange={(event) => setLink(index, { label: event.target.value })}
+              />
+            </label>
+            <label>Link {index + 1}: web address
+              <input
+                type="text"
+                inputMode="url"
+                autoComplete="url"
+                spellCheck={false}
+                value={link.url}
+                maxLength={stayAgainLimits.urlMax}
+                placeholder="seabreezecottage.com.au/book"
+                disabled={draft.saving}
+                aria-invalid={linkProblem(index) ? true : undefined}
+                onChange={(event) => setLink(index, { url: event.target.value })}
+              />
+            </label>
+            {linkProblem(index) && <p className="form-feedback" role="alert">{linkProblem(index)}</p>}
+            <p>
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                disabled={draft.saving}
+                onClick={() => set("stayAgainLinks", profile.stayAgainLinks.filter((_, position) => position !== index))}
+              >
+                Remove link {index + 1}
+              </button>
+            </p>
+          </div>
+        ))}
+        {profile.stayAgainLinks.length < stayAgainLimits.linksMax && (
+          <p className="canvas-includes">
+            {stayAgainSuggestions
+              .filter((suggestion) => !profile.stayAgainLinks.some((link) => link.label.trim() === suggestion.label))
+              .map((suggestion) => (
+                <Include
+                  key={suggestion.label}
+                  label={suggestion.label}
+                  disabled={draft.saving}
+                  onClick={() => set("stayAgainLinks", [...profile.stayAgainLinks, { ...suggestion }])}
+                />
+              ))}
+            <Include
+              label="Custom link"
+              disabled={draft.saving}
+              onClick={() => set("stayAgainLinks", [...profile.stayAgainLinks, emptyStayAgainLink()])}
+            />
+          </p>
+        )}
+        <p className="field-hint canvas-again-rules">
+          Booking platforms have their own rules about pointing guests elsewhere.
+          Airbnb, for example, does not allow offering a discount for booking
+          outside Airbnb. Check the rules of the platforms you list on before you
+          add a link. What it says and what your page offers are up to you.
+        </p>
+      </section>
+    </div>
+  );
+
   const hostNoteCards = (
     <section className="host-notes canvas-note-panel" aria-label="Your own notes">
       {profile.hostNotes.length > 0 && (
@@ -890,7 +984,7 @@ export function HostWallDesignPage({
           moderation or billing. */}
       <header className="design-intro" hidden={mobilePreview}>
         <div className="design-intro-head">
-          <h2>{view === "public" ? "Public wall" : "Guest wall"}</h2>
+          <h2>{view === "public" ? "Public page" : "Guest wall"}</h2>
           {/* The wall as a visitor or a guest gets it, one click from the page
               that writes it. The guest wall opens with its token, or it would
               answer with the public wall instead. */}
@@ -954,7 +1048,7 @@ export function HostWallDesignPage({
           hidden={mobilePreview}
           onSubmit={draft.save}
           noValidate
-          aria-label={view === "public" ? "Public wall" : "Guest wall"}
+          aria-label={view === "public" ? "Public page" : "Guest wall"}
         >
           {/* The sheet is printed on the theme the property chose, so what a
             Host types into is the paper a guest will read it on. */}
@@ -978,7 +1072,7 @@ export function HostWallDesignPage({
                   <h1 className="canvas-name" aria-level={2}>{nameInput}</h1>
                   {nameFeedback}
                   <CanvasParagraph
-                    label="A short welcome for the public wall"
+                    label="A short welcome for the public page"
                     value={profile.welcome}
                     placeholder="We bought the cottage the year our youngest left home, and we have been putting it back together ever since."
                     maxLength={profileLimits.welcomeMax}
@@ -992,21 +1086,6 @@ export function HostWallDesignPage({
                     {portraitControl}
                     <span className="canvas-byline-text">
                       <b>{hosts}</b>
-                      {/* The wall writes the words and the Host writes only the
-                        year, so the sentence is split rather than asking them
-                        to type a line they cannot see the shape of. */}
-                      <span className="canvas-since-row">
-                        <span>Hosting here since</span>
-                        <CanvasLine
-                          label="Hosting here since"
-                          value={profile.hostSince}
-                          placeholder="2019"
-                          maxLength={profileLimits.hostSinceMax}
-                          disabled={draft.saving}
-                          className="canvas-since"
-                          onChange={(value) => set("hostSince", value)}
-                        />
-                      </span>
                     </span>
                   </div>
                 </header>
@@ -1357,6 +1436,8 @@ export function HostWallDesignPage({
 
                   {hostNoteCards}
 
+                  {stayAgainCard}
+
                   {/* The box a guest types into used to be drawn here, above the
                     notes, greyed and captioned as theirs. It said one thing —
                     that guests write on the wall itself — and the line under
@@ -1451,6 +1532,7 @@ export function HostWallDesignPage({
               view={view}
               slug={property.slug}
               stayToken={property.stayToken}
+              propertyId={property.id}
             />
           </aside>
         )}

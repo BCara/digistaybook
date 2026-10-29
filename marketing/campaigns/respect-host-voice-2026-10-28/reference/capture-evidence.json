@@ -1,0 +1,9 @@
+{
+  "captured": "2026-10-28",
+  "source": "current local product source via Vite, not production verification",
+  "routes": [
+    "/stay/demo-cottage",
+    "/wall/demo-cottage"
+  ],
+  "fictionalDemo": true
+}

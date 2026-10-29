@@ -87,6 +87,12 @@ export type PropertyWizardProps = {
   address?: ReactNode;
   /** What the button on the last step says when it is not working. */
   submitLabel: string;
+  /**
+   * Offered on every step before the last: commit now with whatever is filled
+   * in. Only the name is required, so a Host adding a property can name it and
+   * have a wall ready for guests, and fill the rest in later.
+   */
+  finishEarlyLabel?: string;
   /** What it says while it is working, or null when nothing is in flight. */
   busy: string | null;
   /** The message from a write that failed, which is the server's not ours. */
@@ -105,6 +111,7 @@ export function PropertyWizard({
   renderPhoto,
   address,
   submitLabel,
+  finishEarlyLabel,
   busy,
   failure,
   onSubmit,
@@ -674,6 +681,11 @@ export function PropertyWizard({
         <button type="submit" className="btn btn-primary" disabled={working}>
           {busy ?? (last ? submitLabel : "Next")}
         </button>
+        {finishEarlyLabel && !last && (
+          <button type="button" className="btn btn-secondary" disabled={working} onClick={submit}>
+            {finishEarlyLabel}
+          </button>
+        )}
         {position > 0 && (
           <button type="button" className="btn btn-secondary" disabled={working} onClick={() => go(position - 1)}>
             Back

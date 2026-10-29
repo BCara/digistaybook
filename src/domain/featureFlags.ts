@@ -2,7 +2,7 @@ export const postMvpFeatures = {
   affiliateReferralEngine: false,
   contextualWritingPrompts: false,
   dualCarouselTabletDisplay: false,
-  directBookingLinks: false,
+  directBookingLinks: true,
   clientAutoTranslation: false
 } as const;
 

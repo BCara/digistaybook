@@ -3,13 +3,23 @@ import { BrandLock, BrandMark } from "./Brand";
 import { useAuth } from "./auth/AuthProvider";
 import { signOutHost } from "./auth/hostAuth";
 import { navigate, useLocation } from "./routing";
+import { HelpWidget } from "./help/HelpWidget";
 
 /** Acquisition navigation: what a visitor without a host session needs. */
 const visitorLinks = [
   { href: "/#how-it-works", label: "How it works" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/wall/demo-cottage", label: "See a live wall" },
+  { href: "/stay/demo-cottage", label: "See what guests see" },
   { href: "/privacy-safety", label: "Privacy & Safety" }
+];
+
+/** Official DigiStayBook social profiles, shown at the foot of every page. */
+const socialLinks = [
+  {
+    href: "https://www.facebook.com/profile.php?id=61595061885990",
+    label: "Facebook",
+    icon: "M14 8.5V6.6c0-.8.2-1.3 1.4-1.3H17V2.2c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.3H8v3.4h2.6V22H14V11.9h2.7l.4-3.4H14z"
+  }
 ];
 
 /** The dashboard's create form, addressed so the header can jump straight to it. */
@@ -120,6 +130,16 @@ export function AppShell({ children }: { children: ReactNode }) {
               A digital guestbook for short-term rental hosts. Guests scan a QR display, read your house
               guidance and add a memory &mdash; no app, no account, no friction.
             </p>
+            <nav className="footer-social" aria-label="DigiStayBook on social media">
+              {socialLinks.map((link) => (
+                <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+                    <path d={link.icon} fill="currentColor" />
+                  </svg>
+                  <span>{link.label}</span>
+                </a>
+              ))}
+            </nav>
           </div>
           <div className="footer-col">
             <h2>Product</h2>
@@ -127,8 +147,8 @@ export function AppShell({ children }: { children: ReactNode }) {
               <a href="/#how-it-works">How it works</a>
               <a href="/#features">Features</a>
               <a href="/pricing">Pricing</a>
-              <a href="/wall/demo-cottage">Public wall demo</a>
               <a href="/stay/demo-cottage">Guest wall demo</a>
+              <a href="/wall/demo-cottage">Public page demo</a>
             </nav>
           </div>
           <div className="footer-col">
@@ -142,6 +162,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <a href="/host/sign-up">Create a host account</a>
                 </>
               )}
+              <a href="/contact">Contact us</a>
               <a href="/privacy-safety">Privacy &amp; Safety</a>
               <a href="/terms">Terms</a>
               <a href="/privacy">Privacy</a>
@@ -153,6 +174,8 @@ export function AppShell({ children }: { children: ReactNode }) {
           <span>Guest stay support stays with your host or booking provider.</span>
         </div>
       </footer>
+      {!/^\/(stay|wall|embed|operations)(\/|$)/.test(path) && <HelpWidget />}
     </div>
   );
 }
+

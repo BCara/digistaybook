@@ -1,0 +1,29 @@
+{
+  "checked": "2026-10-28",
+  "url": "https://superuser.tailc48a2e.ts.net:8443/MARKETING_PLAN.html",
+  "mobileWidths": [
+    360,
+    390,
+    430
+  ],
+  "cadenceSummary": true,
+  "fiveCampaignWeeks": true,
+  "firstTableIsPostOverview": true,
+  "weekFilter": "PASS",
+  "compactRowsMaxHeight": 70.59375,
+  "tableFitsScreen": true,
+  "postLinkOpensDetails": true,
+  "inlineVideo": {
+    "width": 332,
+    "height": 557.03125,
+    "played": true
+  },
+  "backToOverview": "PASS",
+  "backToTop": "PASS",
+  "backNavigationPausesVideo": true,
+  "wholeRowNavigation": true,
+  "noDetailsColumn": true,
+  "statusControlDoesNotNavigate": true,
+  "keyboardLinkNavigation": true,
+  "scriptErrors": []
+}

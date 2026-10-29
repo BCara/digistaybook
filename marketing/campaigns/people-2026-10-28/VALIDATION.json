@@ -1,0 +1,63 @@
+{
+  "prepared": "2026-10-29",
+  "exports": [
+    {
+      "name": "01-arrival.png",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 1593518
+    },
+    {
+      "name": "02-breakfast.png",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 1269944
+    },
+    {
+      "name": "03-local.png",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 1314967
+    },
+    {
+      "name": "04-rainy.png",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 985597
+    },
+    {
+      "name": "05-memory.png",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 681868
+    },
+    {
+      "name": "story-01.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 2491941
+    },
+    {
+      "name": "story-03.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 1132606
+    },
+    {
+      "name": "story-05.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 1347982
+    }
+  ],
+  "checks": [
+    "Eight images decoded and rendered",
+    "Artwork text inside frame and above footer",
+    "Feed and Story filters",
+    "Browser review persistence",
+    "Review page images loaded",
+    "390px mobile no horizontal overflow",
+    "Finished-media ZIP produced; original stock images excluded"
+  ],
+  "visualReview": "See CONTACT_SHEET.jpg and reference review screenshots"
+}

@@ -1,0 +1,185 @@
+{
+  "hashVerifiedFiles": [
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\CAPTIONS.md",
+      "bytes": 6843,
+      "file": "CAPTIONS.md",
+      "sha256": "93FC7EEB78678D2D1C2376311B5A2C0B6BA4B8357BC2DE7F670128E029A46E0E"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\CONTACT_SHEET.jpg",
+      "bytes": 329125,
+      "file": "CONTACT_SHEET.jpg",
+      "sha256": "3421D074A7705A8BB2591D66E14DE4D9A16CC4917AC24FEA8122F42B016E5FAC"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\content.json",
+      "bytes": 12069,
+      "file": "content.json",
+      "sha256": "6343CF987514BC9F018EE27C638E1C9547BC6755634DC1143949BF670C9ECB3E"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\DigiStayBook-people-content.zip",
+      "bytes": 11122619,
+      "file": "DigiStayBook-people-content.zip",
+      "sha256": "565120CA9079C9D5BA91C02169875D1DB4E30EFDA093C1A159D18BBFBB10A7B7"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\REVIEW.html",
+      "bytes": 18797,
+      "file": "REVIEW.html",
+      "sha256": "0196F167FD9BEADFC1EE7372EBBE7BCC2B91DAA2CC3034859BE5C15F6BB30868"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\SOURCES.md",
+      "bytes": 3533,
+      "file": "SOURCES.md",
+      "sha256": "799B0C30CB691A758AEB6B80A9F8FB648907336C90572D0209FEC06319E86671"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\VALIDATION.json",
+      "bytes": 1318,
+      "file": "VALIDATION.json",
+      "sha256": "B13474EEC2342CEBB923D705E7D906868A916B70AC07F399A1F24B8E246BF683"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\assets\\01-arrival.png",
+      "bytes": 1592949,
+      "file": "assets\\01-arrival.png",
+      "sha256": "0B368651366F07936EF57A6E422B64FA3AC21C6496F36FF04125A6340F4C1554"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\assets\\02-breakfast.png",
+      "bytes": 1269944,
+      "file": "assets\\02-breakfast.png",
+      "sha256": "8DE318BCA62B11EBBCAB910387CD2BC83AF5D56B6AECB4489BA04F473EF876B1"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\assets\\03-local.png",
+      "bytes": 1314967,
+      "file": "assets\\03-local.png",
+      "sha256": "0DE9F05ECB1C082449D711261D3ED5CC27D095F49DA5DBBA14A0CA92E33C3473"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\assets\\04-rainy.png",
+      "bytes": 985597,
+      "file": "assets\\04-rainy.png",
+      "sha256": "D4D8942157EAD6958B9F46F11B9526AEE14ABAF2319C9C873712E252475D5674"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\assets\\05-memory.png",
+      "bytes": 681868,
+      "file": "assets\\05-memory.png",
+      "sha256": "73F4A7CE9920CC30CC7E8F5610C502A6E32D070DB93673A0311E6C7E0DD63DB9"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\assets\\story-01.png",
+      "bytes": 2491941,
+      "file": "assets\\story-01.png",
+      "sha256": "68F5E0E7C89B46B6577A86DED64F54130AB81394DA74D92EC040C3AE49D8FC97"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\assets\\story-03.png",
+      "bytes": 1132692,
+      "file": "assets\\story-03.png",
+      "sha256": "2111020B32AC05D4471DC214DFBAFA6C80F1CA0689CF91EF7EF317908ADE1266"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\assets\\story-05.png",
+      "bytes": 1347982,
+      "file": "assets\\story-05.png",
+      "sha256": "7B24CF13EBAAF6BFB9BEA284500076407C7FC95D310908AF0D1CC032A02F8307"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\photos\\37876673.jpg",
+      "bytes": 172786,
+      "file": "photos\\37876673.jpg",
+      "sha256": "7A68B831C83387B83E2D0E638CD0441F47F0C9536353CEE8CA4EC0140A3F3593"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\photos\\6140376.jpg",
+      "bytes": 415331,
+      "file": "photos\\6140376.jpg",
+      "sha256": "9E610AB40F8633A6B68BA8E01CC471AF030C7216BA43F6E1D4737E4B7DB0069C"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\photos\\7155733.jpg",
+      "bytes": 354842,
+      "file": "photos\\7155733.jpg",
+      "sha256": "D5DD3FE72ED9A0ECBB07429EE739BA7CF9DBF2C200A3B6B82EE2B1B2EE81E328"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\photos\\7982837.jpg",
+      "bytes": 280297,
+      "file": "photos\\7982837.jpg",
+      "sha256": "B0ADAD7CCE5E4F818F496463B9990A3A6FB9DE632EB2901E9215C3A0631FE31C"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\photos\\8962200.jpg",
+      "bytes": 767438,
+      "file": "photos\\8962200.jpg",
+      "sha256": "ED5D3D6A207F2678292CB1F35E0F8C5760B2D80678300FE9778EC3FA1303AA23"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\reference\\demo-arrival.png",
+      "bytes": 1170472,
+      "file": "reference\\demo-arrival.png",
+      "sha256": "782E7F99F3E35C47C1E7778FCF25FA13DD855FC45AD9438CB892DD9DA2AD690D"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\reference\\demo-public-wall.png",
+      "bytes": 1246129,
+      "file": "reference\\demo-public-wall.png",
+      "sha256": "16B0773F2EF4320D40052E1CAEF617BF16FF440F06853738AA1658E108DE8FCB"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\reference\\logo.png",
+      "bytes": 108361,
+      "file": "reference\\logo.png",
+      "sha256": "3F81BF11EC8A7A0E926EFE13BB5B2660E94FD866D01082FEABF539F85E9026BB"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\reference\\photo-selection.jpg",
+      "bytes": 107559,
+      "file": "reference\\photo-selection.jpg",
+      "sha256": "74E28E958BC87E098BF19374B112C1E3830867AA765C3833F0EC6EDC5AE23FEE"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\reference\\review-desktop.jpg",
+      "bytes": 297247,
+      "file": "reference\\review-desktop.jpg",
+      "sha256": "C9A8C67C0EAFB65206E8C96855481A5B3984F4C7BBBE851D41793089091878CE"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\reference\\review-mobile.jpg",
+      "bytes": 56713,
+      "file": "reference\\review-mobile.jpg",
+      "sha256": "15FBC253F45B0A976CA680E16DB883FC9C0DB0C2337CB797B722925A9DB77226"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\source\\boards.html",
+      "bytes": 7813,
+      "file": "source\\boards.html",
+      "sha256": "CDD476ACC2E8C4931235F50C647BC4144111472760057E6AD7C9BD4C108E9E6B"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\source\\build.py",
+      "bytes": 20872,
+      "file": "source\\build.py",
+      "sha256": "D28484FCF0EC70CFEA897547B301FC02344B30DBE7357877C9D50B636F5C55DE"
+    },
+    {
+      "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28\\source\\render.mjs",
+      "bytes": 4965,
+      "file": "source\\render.mjs",
+      "sha256": "AB026C2CBF350D00574C431E069E9EFB4E82912E2218F1CC5D5EBFC067D1BDC3"
+    }
+  ],
+  "nasMaster": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\people-2026-10-28",
+  "date": "2026-10-29",
+  "hubFiles": [
+    "MARKETING_PLAN.html",
+    "build_marketing_plan.py"
+  ],
+  "archive": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\_archive\\2026-10-29-before-people-content"
+}

@@ -336,6 +336,7 @@ export function AddPropertyDialog({
         onDraft={setDraft}
         renderPhoto={renderPhoto}
         submitLabel="Create property"
+        finishEarlyLabel="Create now"
         busy={phase === "creating" ? "Creating property…" : phase === "uploading" ? "Uploading photographs…" : null}
         failure={failure}
         onSubmit={() => void create()}
@@ -416,7 +417,7 @@ export function PropertySettingsDialog({
             <p className="field-hint">
               Fixed when the property was created, because it is printed on your QR placard. Renaming the property
               does not change it.{" "}
-              <a className="text-link" href={`/host/property/${propertyId}/qr`}>Walls and QR display &rarr;</a>
+              <a className="text-link" href={`/host/property/${propertyId}/qr`}>QR display and links &rarr;</a>
             </p>
           </>
         }

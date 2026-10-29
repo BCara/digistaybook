@@ -27,6 +27,19 @@ describe("server public wall projection", () => {
       .toEqual([{ id: "note1", message: "We lay the fire.", style: "bordered", photo: null }]);
   });
 
+  it("serves the hosts' own booking links on the in-stay wall only, and only addresses a phone should open", () => {
+    const profile = { stayAgainLinks: [
+      { label: "Book your next stay", url: "https://seabreeze.com.au/book" },
+      { label: "Sneaky", url: "javascript:alert(1)" },
+      { label: "Third", url: "https://third.com.au" }
+    ] };
+    expect(publicProperty({ profile }, "stay").houseInformation?.links)
+      .toEqual([{ label: "Book your next stay", url: "https://seabreeze.com.au/book" }]);
+    expect(publicProperty({ profile: { stayAgainLinks: [{ label: "", url: "https://a.com.au" }, { label: "Old", url: "http://a.com.au" }] } }, "stay").houseInformation?.links)
+      .toEqual([]);
+    expect(publicProperty({ profile }).houseInformation).toBeNull();
+  });
+
   it("requires an open property and a future cancellation deadline", () => {
     expect(wallIsOpen({ mode: "live", lifecycle: "active" })).toBe(true);
     // `wallIsOpen` defaults to the in-stay wall, which a Host switching the
@@ -39,9 +52,9 @@ describe("server public wall projection", () => {
   });
   it("shares house information on the in-stay wall only, and respects hidden sections", () => {
     const profile = { stayHeading: "Welcome", stayWelcome: "Arrival note", facts: [{ term: "Checkout", detail: "10 am", note: "Leave keys", secret: "excluded" }], guestPrompt: "Your favourite memory?" };
-    expect(publicProperty({ profile }, "stay").houseInformation).toEqual({ heading: "Welcome", welcome: "Arrival note", tip: "", facts: [{ term: "Checkout", detail: "10 am", note: "Leave keys" }] });
+    expect(publicProperty({ profile }, "stay").houseInformation).toEqual({ heading: "Welcome", welcome: "Arrival note", tip: "", facts: [{ term: "Checkout", detail: "10 am", note: "Leave keys" }], links: [] });
     // The shared link is the public wall, and the public wall carries none of it.
     expect(publicProperty({ profile }).houseInformation).toBeNull();
-    expect(publicProperty({ profile: { ...profile, stayNoteOff: true, factsOff: true } }, "stay").houseInformation).toEqual({ heading: "", welcome: "", tip: "", facts: [] });
+    expect(publicProperty({ profile: { ...profile, stayNoteOff: true, factsOff: true } }, "stay").houseInformation).toEqual({ heading: "", welcome: "", tip: "", facts: [], links: [] });
   });
 });

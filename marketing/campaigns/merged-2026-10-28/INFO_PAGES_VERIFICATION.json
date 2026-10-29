@@ -1,0 +1,18 @@
+{
+  "checked": "2026-10-28",
+  "base": "https://superuser.tailc48a2e.ts.net:8443/",
+  "mainPageOnlySummaryCalendarAndPostDetails": true,
+  "supportPages": [
+    "MARKETING_PRODUCTION.html",
+    "MARKETING_STRATEGY.html",
+    "MARKETING_REFERENCE.html"
+  ],
+  "allLocalLinksAndAnchorsResolve": true,
+  "productionToPostLink": true,
+  "backToPlan": true,
+  "preservedBrowserReview": true,
+  "sourceRecords": 98,
+  "legacySectionLinkRedirect": true,
+  "mobileOverflow": false,
+  "scriptErrors": []
+}

@@ -1,0 +1,47 @@
+{
+  "purpose": "Marketing visual references, not finished new ads",
+  "assets": [
+    {
+      "file": "qr-card.png",
+      "sha256": "d72db1724c0e6ed605f1a996a521dc8d951bbcc983791f5138110599fdd55fe4",
+      "source": "//192.168.1.71/nas/projects/DigiStayBook/marketing/campaigns/prelaunch-week-2026-10-16/source/qr-card.png",
+      "description": "Existing real DigiStayBook demo/product capture from the earlier launch pack; no new image generation",
+      "copied": "2026-10-18"
+    },
+    {
+      "file": "stay-essentials.jpg",
+      "sha256": "b4f9a4bf09937379d631136821f43260c4c6aa0a013cfb8285c3eab872781935",
+      "source": "//192.168.1.71/nas/projects/DigiStayBook/marketing/campaigns/prelaunch-week-2026-10-16/source/stay-essentials.jpg",
+      "description": "Existing real DigiStayBook demo/product capture from the earlier launch pack; no new image generation",
+      "copied": "2026-10-18"
+    },
+    {
+      "file": "stay-welcome.jpg",
+      "sha256": "322df53b8eafaec7c4170ab2e60841c6cf9eaf5dbd3c3b51c7cf52024ce6136b",
+      "source": "//192.168.1.71/nas/projects/DigiStayBook/marketing/campaigns/prelaunch-week-2026-10-16/source/stay-welcome.jpg",
+      "description": "Existing real DigiStayBook demo/product capture from the earlier launch pack; no new image generation",
+      "copied": "2026-10-18"
+    },
+    {
+      "file": "wall-fire.jpg",
+      "sha256": "9bcc1cf6f4de2079f2f818c929ad791a78a91956e82e7e16a1d900fc4a35550c",
+      "source": "//192.168.1.71/nas/projects/DigiStayBook/marketing/campaigns/prelaunch-week-2026-10-16/source/wall-fire.jpg",
+      "description": "Existing real DigiStayBook demo/product capture from the earlier launch pack; no new image generation",
+      "copied": "2026-10-18"
+    },
+    {
+      "file": "wall-memory.jpg",
+      "sha256": "15cc1b3ebf7528f425d715955fd6a7c20b6aae750e50eb075815f11782566faf",
+      "source": "//192.168.1.71/nas/projects/DigiStayBook/marketing/campaigns/prelaunch-week-2026-10-16/source/wall-memory.jpg",
+      "description": "Existing real DigiStayBook demo/product capture from the earlier launch pack; no new image generation",
+      "copied": "2026-10-18"
+    },
+    {
+      "file": "wall-top.jpg",
+      "sha256": "daf4a7f9da9750dd16eba6488a822a7841c79ab031b0cae46420d9ae1ab93771",
+      "source": "//192.168.1.71/nas/projects/DigiStayBook/marketing/campaigns/prelaunch-week-2026-10-16/source/wall-top.jpg",
+      "description": "Existing real DigiStayBook demo/product capture from the earlier launch pack; no new image generation",
+      "copied": "2026-10-18"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { PricingPage } from "./PricingPage";
 import { AuthContext, type AuthState } from "../auth/AuthProvider";
@@ -30,27 +30,19 @@ describe("the pricing page", () => {
     expect(publishedRate("monthly", "usd")).toBe(1000);
   });
 
-  it("names which dollar, and lets a reader change it", () => {
-    renderPage();
-    expect(screen.getByText("US$10")).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("radio", { name: "AUD" }));
-    expect(screen.getByText("A$15")).toBeInTheDocument();
-    expect(screen.getByText("A$150")).toBeInTheDocument();
-    expect(screen.queryByText("US$10")).not.toBeInTheDocument();
-  });
-
-  it("opens in the currency the browser's own region implies", () => {
+  it("shows Australian dollars only, to a reader in Australia", () => {
     detectBillingCountry.mockReturnValue("AU");
     renderPage();
-    expect(screen.getByRole("radio", { name: "AUD" })).toBeChecked();
     expect(screen.getByText("A$15")).toBeInTheDocument();
+    expect(screen.queryByText("US$10")).not.toBeInTheDocument();
+    expect(screen.queryByRole("radio")).not.toBeInTheDocument();
   });
 
-  it("falls back to USD for a reader outside the countries we serve", () => {
+  it("shows US dollars to a reader outside the countries we serve", () => {
     detectBillingCountry.mockReturnValue(null);
     renderPage();
-    expect(screen.getByRole("radio", { name: "USD" })).toBeChecked();
+    expect(screen.getByText("US$10")).toBeInTheDocument();
+    expect(screen.queryByText("A$15")).not.toBeInTheDocument();
   });
 
   // The badge used to be hand-typed beside two hand-typed prices. It is now
@@ -59,8 +51,11 @@ describe("the pricing page", () => {
     renderPage();
     expect(screen.getByText("Two months free")).toBeInTheDocument();
     expect(screen.getByText(/That is US\$20 less than twelve months at the monthly rate\./)).toBeInTheDocument();
+  });
 
-    fireEvent.click(screen.getByRole("radio", { name: "AUD" }));
+  it("derives the Australian saving the same way", () => {
+    detectBillingCountry.mockReturnValue("AU");
+    renderPage();
     expect(screen.getByText(/That is A\$30 less than twelve months at the monthly rate\./)).toBeInTheDocument();
   });
 

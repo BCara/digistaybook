@@ -1,0 +1,42 @@
+{
+  "checked": "2026-10-28",
+  "root": "marketing",
+  "url": "http://127.0.0.1:15189/MARKETING_PLAN.html",
+  "activeItems": 38,
+  "main": 20,
+  "mainMediaExports": 15,
+  "newVideosNeeded": 5,
+  "sourceDecisions": 98,
+  "allLinksResolve": true,
+  "allAssetsExist": true,
+  "filters": "PASS",
+  "reviewMigrationAndHistory": "PASS",
+  "statusSync": "PASS",
+  "captionEditsInvalidateApproval": "PASS",
+  "persistence": "PASS",
+  "copyAndDownload": "PASS",
+  "mobileWidth": 390,
+  "mobileOverflow": false,
+  "hashNavigation": "PASS",
+  "brokenImages": [],
+  "videos": [
+    {
+      "width": 1080,
+      "height": 1920,
+      "duration": 25.002
+    },
+    {
+      "width": 1080,
+      "height": 1920,
+      "duration": 17.9989
+    },
+    {
+      "width": 1080,
+      "height": 1920,
+      "duration": 20.004367
+    }
+  ],
+  "scriptErrors": [],
+  "failedLocalResponses": [],
+  "notice": "Isolated browser verification only. No user browser reviews or external schedules changed."
+}

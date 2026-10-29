@@ -193,6 +193,24 @@ describe("adding a property", () => {
     expect(uploadPropertyPhoto).not.toHaveBeenCalled();
   });
 
+  it("creates from the first step with just a name, without walking the rest", async () => {
+    renderDialog();
+
+    type("Property name", "Seabreeze Cottage");
+    fireEvent.click(screen.getByRole("button", { name: "Create now" }));
+
+    await waitFor(() => expect(createProperty).toHaveBeenCalledTimes(1));
+    expect(screen.queryByRole("button", { name: "Create property" })).not.toBeInTheDocument();
+  });
+
+  it("will not create from the first step without a name", () => {
+    renderDialog();
+
+    fireEvent.click(screen.getByRole("button", { name: "Create now" }));
+
+    expect(createProperty).not.toHaveBeenCalled();
+  });
+
   it("refuses a guidance line that would reach a guest as a dangling label", async () => {
     renderDialog();
 

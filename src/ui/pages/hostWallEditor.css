@@ -41,6 +41,11 @@
 .design-page .canvas-sheet[data-wall-theme] .canvas-note-settings > summary { padding-inline: 8px; }
 .design-page .canvas-sheet[data-wall-theme] .canvas-note .canvas-omit { margin-top: 8px; }
 .design-page .canvas-sheet[data-wall-theme] .canvas-note-offer { margin-top: 16px; }
+/* The Host's own links: the wall's tile heading, then a plain form per link. */
+.design-page .canvas-sheet[data-wall-theme] .canvas-stay-again { margin: clamp(20px, 3vw, 28px) 0; }
+.design-page .canvas-sheet[data-wall-theme] .canvas-again-link { padding: 14px; margin: 10px 0 0; }
+.design-page .canvas-sheet[data-wall-theme] .canvas-again-link p { margin: 0; }
+.design-page .canvas-sheet[data-wall-theme] .canvas-again-rules { margin-top: 12px; }
 .design-page .canvas-sheet[data-wall-theme] .canvas-body::before { inset: 8px; }
 
 @media (max-width: 620px) {

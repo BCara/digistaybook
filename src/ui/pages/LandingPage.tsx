@@ -17,7 +17,7 @@ const steps = [
   },
   {
     title: "Guests scan on arrival",
-    body: "The wall opens in the browser. Wi-Fi, bin day and your local favourites are pinned to the top."
+    body: "The wall opens in the browser. Wi-Fi, trash day and your local favorites are pinned to the top."
   },
   {
     title: "Notes arrive, screened",
@@ -27,28 +27,16 @@ const steps = [
 
 const capabilities = [
   {
-    title: "A wall guests actually use",
-    body: "A mobile-first run of photos and notes from every stay. No account, no download, nothing in the way."
-  },
-  {
     title: "Your house manual, pinned",
-    body: "Wi-Fi, bin days, appliance quirks, checkout steps and recommendations sit above the wall, so the questions stop arriving."
+    body: "Wi-Fi, trash days, appliance quirks, checkout steps and recommendations sit above the wall, so the questions stop arriving."
   },
   {
-    title: "Screened before it publishes",
-    body: "Uploads land in private storage and pass image and text screening first. Severe cases never reach your inbox."
+    title: "A wall guests actually use",
+    body: "A mobile-first run of photos and notes from every stay, added from a browser tab in under a minute."
   },
   {
     title: "One dashboard, every property",
     body: "Curate, pin, hide and delete across all your properties, with clear active and unpaid states."
-  },
-  {
-    title: "QR kit per property",
-    body: "Print, download, email or copy the link. Live routing unlocks the moment a property is activated."
-  },
-  {
-    title: "Privacy designed in",
-    body: "Consent capture, self-service deletion, a report flag on every post, and a public Privacy & Safety route that does not depend on your inbox."
   }
 ];
 
@@ -75,8 +63,8 @@ function VisitorLandingPage() {
   const signUpLabel = "Create your account";
 
   // A price has to be in some currency, and with two dollar currencies on sale
-  // an unlabelled "$10" is not a price. The browser's own region opens the
-  // quote and /pricing is where it can be changed, so this page stays a prompt.
+  // an unlabelled "$10" is not a price. The visitor's own region picks it, the
+  // same way /pricing does: AUD in Australia, USD everywhere else.
   const detected = detectBillingCountry();
   const currency = detected ? currencyForCountry[detected] : "usd";
   const [monthly, annual] = publishedPlans(currency);
@@ -88,11 +76,11 @@ function VisitorLandingPage() {
           <div className="masthead-copy">
             <h1>The <em>guestbook</em> your rental never had.</h1>
             <p className="masthead-lede">
-              One QR display on the counter opens your house guidance, your local favourites, and every
+              One QR display on the counter opens your house guidance, your local favorites, and every
               note left by the people who stayed before them.
             </p>
             <div className="actions">
-              <a className="btn btn-primary" href="/wall/demo-cottage">See a live public wall</a>
+              <a className="btn btn-primary" href="/stay/demo-cottage">See what guests see</a>
               <a className="btn btn-secondary" href="/host/sign-in">Host sign in</a>
             </div>
             <ul className="masthead-facts">
@@ -126,13 +114,13 @@ function VisitorLandingPage() {
             <div className="device">
               <div className="device-screen">
                 <div className="device-top">
-                  <span>Public wall</span>
+                  <span>Guest wall</span>
                   <strong>Seabreeze Cottage</strong>
                 </div>
                 <div className="device-feed">
                   <article className="mini-post pinned">
                     <span className="mini-tag">Pinned by host</span>
-                    <p>Wi-Fi: SEABREEZE-5G &middot; Bins go out Tuesday night &middot; Sunset is best from the back deck.</p>
+                    <p>Wi-Fi: SEABREEZE-5G &middot; Trash goes out Tuesday night &middot; Sunset is best from the back deck.</p>
                   </article>
                   <article className="mini-post">
                     <img className="mini-photo" src="/wall/memory-coast.webp" alt="" width="880" height="660" />
@@ -283,8 +271,8 @@ function VisitorLandingPage() {
           <div className="closing-side">
             <p>Open the demo to see exactly what your guests see, then set up your first property.</p>
             <div className="actions">
-              <a className="btn btn-primary" href="/wall/demo-cottage">Open the public wall</a>
-              <a className="btn btn-secondary" href="/stay/demo-cottage">See the guest wall</a>
+              <a className="btn btn-primary" href="/stay/demo-cottage">See what guests see</a>
+              <a className="btn btn-secondary" href={signUpHref}>{signUpLabel}</a>
             </div>
           </div>
         </section>

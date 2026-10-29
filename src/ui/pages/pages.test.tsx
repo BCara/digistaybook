@@ -12,14 +12,14 @@ vi.mock("../../lib/firebaseConfig", () => ({ firebaseConfig: {}, firebaseConfigu
 describe("first UI slices", () => {
   it("keeps Guest contribution blocked until consent is provided", () => {
     render(<StayWallPage propertySlug="demo-cottage" />);
+    // The demo draws the served wall's own form, so it is checked the same way.
     fireEvent.click(screen.getByRole("button", { name: "Add to guestbook" }));
     fireEvent.change(screen.getByLabelText("Your message"), { target: { value: "A lovely stay" } });
-    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
-    expect(screen.getByRole("status")).toHaveTextContent(/accept the content consent/i);
+    fireEvent.click(screen.getByRole("button", { name: "Submit memory" }));
+    expect(screen.getByText(/accept the consent/i)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("checkbox"));
-    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
-    expect(screen.getByRole("status")).toHaveTextContent(/validated locally/i);
-    expect(screen.getByRole("status")).toHaveTextContent(/demo wall/i);
+    fireEvent.click(screen.getByRole("button", { name: "Submit memory" }));
+    expect(screen.getByText(/demo wall, so nothing was sent/i)).toBeInTheDocument();
   });
 
   it("drops our own furniture from the wall a Host embeds, and keeps the attribution", () => {
@@ -49,12 +49,13 @@ describe("first UI slices", () => {
 
   it("shows the same guest memories on both walls", () => {
     const { unmount } = render(<GuestWallPage propertySlug="demo-cottage" />);
-    const publicNotes = screen.getAllByText(/Stayed \w+ \d{4}/).length;
-    expect(publicNotes).toBeGreaterThan(1);
+    const notes = () => screen.getByRole("region", { name: "Guest memories" }).querySelectorAll(".note");
+    const publicNotes = notes().length;
+    expect(publicNotes).toBe(demoPosts.length);
     unmount();
 
     render(<StayWallPage propertySlug="demo-cottage" />);
-    expect(screen.getAllByText(/Stayed \w+ \d{4}/)).toHaveLength(publicNotes);
+    expect(notes()).toHaveLength(publicNotes);
   });
 
   it("gives every wall photo a described image rather than a decorative placeholder", () => {
@@ -87,7 +88,6 @@ describe("first UI slices", () => {
   it("keeps the hosts' own notes to the in-stay wall, above the memories rather than among them", () => {
     // It is not a memory, and it is not counted as one: the heading counts
     // what guests left.
-    const heading = `${demoPosts.length} memories left here`;
 
     // The public wall is memories only.
     const { unmount } = render(<GuestWallPage propertySlug="demo-cottage" />);
@@ -102,14 +102,16 @@ describe("first UI slices", () => {
     expect([...onStay.querySelectorAll(".host-note")].map((note) => note.getAttribute("data-note-style")))
       .toEqual(hostWallNotes.map((note) => note.style));
     expect(within(onStay).getAllByText(demoProperty.hosts)).toHaveLength(hostWallNotes.length);
-    expect(screen.getByRole("region", { name: heading })).not.toContainElement(onStay);
+    expect(screen.getByRole("heading", { name: `${demoPosts.length} memories left here` })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Guest memories" })).not.toContainElement(onStay);
   });
 
   it("provides discreet Guest Wall attribution back to the main landing page", () => {
     render(<GuestWallPage propertySlug="demo-cottage" />);
     const attribution = screen.getByRole("link", { name: /Powered by DigiStayBook/i });
     expect(attribution).toHaveAttribute("href", "/");
-    expect(screen.getByLabelText("About DigiStayBook")).toContainElement(attribution);
+    // The same footer the served wall ends on.
+    expect(attribution.closest(".wall-footer")).not.toBeNull();
   });
 
   it("fails the Host dashboard closed without Firebase configuration", () => {

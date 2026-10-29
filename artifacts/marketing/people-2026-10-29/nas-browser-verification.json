@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-29",
+  "source": "NAS master served on localhost",
+  "url": "http://127.0.0.1:15191/people-2026-10-28/REVIEW.html",
+  "checks": [
+    "Hub navigation",
+    "All eight cards and photos loaded",
+    "Feed filter",
+    "Actual caption clipboard copy",
+    "ZIP download 11122619 bytes",
+    "Review JSON export 8 items",
+    "390px mobile no overflow"
+  ]
+}

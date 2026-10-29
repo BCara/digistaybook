@@ -68,3 +68,18 @@ it("does not carry another property's memories or a late response into the previ
   await waitFor(() => expect(screen.queryByText("Loading memories…")).not.toBeInTheDocument());
   expect(screen.queryByText(memory.message)).not.toBeInTheDocument();
 });
+
+it("draws the guest wall's ending and the Host's favorite mark, as the served wall does", async () => {
+  load.mockResolvedValue({ status: "ok", value: { posts: [{ ...memory, pinned: true }], nextCursor: null } });
+  const { rerender } = render(<WallPreview {...props} profile={{ ...props.profile, guestPrompt: "What was the best bit?" }} view="stay" />);
+  const phone = within(screen.getByRole("group", { name: "On a phone" }));
+  expect(await phone.findByText("Host favorite")).toBeInTheDocument();
+  expect(phone.getByText("What was the best bit?")).toBeInTheDocument();
+  // Drawn as a guest meets it, but not something a Host can press.
+  expect(phone.getByText("Add to guestbook").closest("[inert]")).not.toBeNull();
+  expect(phone.getByText("Powered by DigiStayBook")).toBeInTheDocument();
+
+  // The public page takes no contributions, so its phone ends without one.
+  rerender(<WallPreview {...props} view="public" />);
+  expect(phone.queryByText("Add to guestbook")).not.toBeInTheDocument();
+});

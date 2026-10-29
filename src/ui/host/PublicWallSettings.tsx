@@ -74,7 +74,7 @@ function Copyable({
             guest sees is three steps for one look. This is the look. */}
         {href && (
           <a className="btn btn-secondary btn-sm" href={href} target="_blank" rel="noreferrer">
-            Open wall
+            Open page
           </a>
         )}
       </div>
@@ -118,12 +118,12 @@ export function PublicWallSettings({
             onChange={(event) => onChange(!event.target.checked)}
           />
           <span className="switch-track" aria-hidden="true"><span className="switch-knob" /></span>
-          <span className="switch-label">Public wall</span>
+          <span className="switch-label">Public page</span>
         </label>
         <p className="wall-share-say">
           {off
-            ? "This wall is off. Its address reaches nobody and nothing here is shared, but every word is kept for whenever you turn it back on. Your guest wall and the QR display are unaffected."
-            : "Share your memories anywhere with a single link. Drop it in your listing, email it to a guest who just checked out, or embed it on your own site. No house rules or checkout instructions here, just pure nostalgia."}
+            ? "This page is off. Its address reaches nobody and nothing here is shared, but every word is kept for whenever you turn it back on. Your guest wall and the QR display are unaffected."
+            : "Share your memories with a single link. Post it on your social pages, send it to guests who have stayed, or embed it on your own site. Booking platforms limit outside links in listings and messages, so check their rules before adding it there. No house rules or checkout instructions here, just pure nostalgia."}
         </p>
       </div>
 

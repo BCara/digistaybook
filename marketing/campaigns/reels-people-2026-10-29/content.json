@@ -1,0 +1,40 @@
+{
+  "prepared": "2026-10-29",
+  "duration": 15,
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "audio": "Silent master for native platform music",
+  "reels": [
+    {
+      "id": "reel-01-local",
+      "title": "The coffee worth walking for",
+      "clip": "8296444",
+      "author": "Mikhail Nilov",
+      "source": "https://www.pexels.com/video/dating-couple-having-coffee-8296444/",
+      "download": "https://videos.pexels.com/video-files/8296444/8296444-hd_1080_1920_25fps.mp4",
+      "hook": "The coffee worth<br>walking for.",
+      "second": "You know the spot.<br>Tell your guests.",
+      "line": "Your local knowledge. Their kind of morning.",
+      "product": "Put your local tips<br>in their welcome.",
+      "screen": "demo-arrival.png",
+      "end": "A little local knowledge.<br>A warmer welcome.",
+      "caption": "You know the coffee worth walking for. Your guests might not.\n\nShare your favorite local spots in your DigiStayBook welcome, alongside the practical house details.\n\nExplore the fictional guest demo: https://digistaybook.com/stay/demo-cottage?utm_source=instagram&utm_medium=organic_social&utm_campaign=people_reels_20261029&utm_content=local\n\nStock footage used for illustration."
+    },
+    {
+      "id": "reel-02-memory",
+      "title": "A vacation moment worth keeping",
+      "clip": "6317313",
+      "author": "Vanessa Garcia",
+      "source": "https://www.pexels.com/video/a-couple-on-vacation-taking-pictures-using-a-smartphone-6317313/",
+      "download": "https://videos.pexels.com/video-files/6317313/6317313-uhd_2160_3840_25fps.mp4",
+      "hook": "They’ll take<br>vacation photos.",
+      "second": "Give a memory<br>a home.",
+      "line": "Invite them to leave a photo and a little note.",
+      "product": "A guest wall for<br>memories of the stay.",
+      "screen": "demo-memories.png",
+      "end": "Their stay.<br>A little memory.",
+      "caption": "The view. The walk. The photo they’ll keep coming back to.\n\nInvite your guests to leave a photo and a little note on your property’s DigiStayBook guest wall. A simple way to share a memory of the stay.\n\nExplore the fictional guest demo: https://digistaybook.com/stay/demo-cottage?utm_source=instagram&utm_medium=organic_social&utm_campaign=people_reels_20261029&utm_content=memory\n\nStock footage used for illustration."
+    }
+  ]
+}

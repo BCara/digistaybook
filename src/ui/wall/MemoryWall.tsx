@@ -1,20 +1,11 @@
-import {
-  formatDate,
-  initials,
-  tiltIndex,
-  toneIndex,
-  wallPhotos,
-  type WallPost,
-} from "./demoWall";
+import { MemoryNote } from "./MemoryNote";
+import { wallPhotos, type WallPost } from "./demoWall";
 
 /**
- * The shared wall of guest memories.
+ * The demo walls' memories, drawn with the served wall's own note.
  *
- * Both wall routes render this. The public wall shows it alone; the in-stay
- * wall shows it under the host's welcome and house guidance.
- *
- * Only guests' memories are on it. The hosts' own note is not one — see
- * `HostNote`, which stands above this on both walls.
+ * Only guests' memories are on it. The hosts' own notes are not — see
+ * `HostNotes`, which stands above this on the guest wall.
  */
 export function MemoryWall({
   posts,
@@ -24,54 +15,33 @@ export function MemoryWall({
   heading: string;
 }) {
   return (
-    <section className="memory-wall" aria-labelledby="memory-wall-heading">
-      <h2 className="wall-heading" id="memory-wall-heading">
-        {heading}
-      </h2>
-      <div className="note-grid">
+    <>
+      <h2 className="wall-heading" id="wall-memories">{heading}</h2>
+      <section aria-label="Guest memories" className="note-grid">
         {posts.map((post, index) => {
-          const author = post.displayName?.trim() ?? "";
           const photo = post.photo ? wallPhotos[post.photo] : undefined;
           return (
-            <article
-              className={`note tilt-${tiltIndex(post.id)}`}
+            <MemoryNote
               key={post.id}
-            >
-              {photo && (
-                <div className="note-photo">
-                  <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    width={photo.width}
-                    height={photo.height}
-                    /* The first row is above the fold on most screens. */
-                    loading={index < 2 ? "eager" : "lazy"}
-                    decoding="async"
-                  />
-                </div>
-              )}
-              <p className="note-message">{post.message}</p>
-              <footer className="note-sign">
-                {author && <span
-                  className={`avatar tone-${toneIndex(author)}`}
-                  aria-hidden="true"
-                >
-                  {initials(author)}
-                </span>}
-                <span className="note-author">
-                  {author && <b>{author}</b>}
-                  <time
-                    dateTime={post.createdAt}
-                    title={`Posted ${formatDate(post.createdAt)}`}
-                  >
-                    Stayed {post.stayedOn}
-                  </time>
-                </span>
-              </footer>
-            </article>
+              id={post.id}
+              message={post.message}
+              displayName={post.displayName}
+              pinned={post.pinned}
+              photos={photo ? [
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  width={photo.width}
+                  height={photo.height}
+                  /* The first row is above the fold on most screens. */
+                  loading={index < 2 ? "eager" : "lazy"}
+                  decoding="async"
+                />
+              ] : []}
+            />
           );
         })}
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

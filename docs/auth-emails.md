@@ -51,6 +51,9 @@ Verified in Resend on 17 October 2026 after adding these records in GoDaddy:
 | CNAME | `send` | `send.forge.rmta.net` |
 
 The existing website, apex SPF and ImprovMX receiving records were retained.
+On 22 October 2026 receiving moved from ImprovMX (free plan limited to one
+domain) to Forward Email; the apex MX and SPF change belongs to task A-19 and
+does not touch the Resend records above, which use the `send` subdomain.
 Receiving through Resend and tracking metrics are not enabled. The abandoned
 Firebase default-mailer domain-verification request was cancelled: this flow
 uses Resend and does not depend on Firebase template customisation.

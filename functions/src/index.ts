@@ -1,5 +1,6 @@
 import "./runtimeOptions.js";
 export { sendPasswordReset, sendAccountVerification } from "./authEmails.js";
+export { helpContact, deleteExpiredHelp } from "./help.js";
 import { initializeApp } from "firebase-admin/app";
 import { FieldValue, getFirestore, Timestamp } from "firebase-admin/firestore";
 import { HttpsError, onCall, onRequest } from "firebase-functions/v2/https";

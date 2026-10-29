@@ -1,0 +1,247 @@
+{
+  "date": "2026-10-29",
+  "nasMaster": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing\\reels-people-2026-10-29",
+  "checks": "Every collection file SHA-256 matched; existing files checked before backup and copy; calendar unchanged except collection link",
+  "files": [
+    {
+      "file": "reels-people-2026-10-29\\CAPTIONS.md",
+      "bytes": 1117,
+      "sha256": "A435249384ED78B7F515C7A161AA39E09104C25D13F843654AC2F58064F302AD"
+    },
+    {
+      "file": "reels-people-2026-10-29\\CONTACT_SHEET.jpg",
+      "bytes": 198226,
+      "sha256": "BCEA2A04A4C9640F44CA96F5F8C62AD75D86BDE248C241DFBC319CE7CA88460B"
+    },
+    {
+      "file": "reels-people-2026-10-29\\content.json",
+      "bytes": 2352,
+      "sha256": "EBB08B4EEEB43C0846F5FDC987E04837631EE697701ABDA0A06A9256CC84E4CE"
+    },
+    {
+      "file": "reels-people-2026-10-29\\DigiStayBook-people-reels.zip",
+      "bytes": 7107969,
+      "sha256": "DEDA04D2C351984DA64C661D523AFB184315324734F6B31C6B9A8A3B4FBF4AF3"
+    },
+    {
+      "file": "reels-people-2026-10-29\\REVIEW.html",
+      "bytes": 6626,
+      "sha256": "2011B54AE436B13C631D1703EB43AC9321A519DC10D4DA49C6F488663B2550ED"
+    },
+    {
+      "file": "reels-people-2026-10-29\\SOURCES.md",
+      "bytes": 1516,
+      "sha256": "99F8CFC6A3F88BFC9531E4BC82034FE220EB09C0FD4C231CE2CC39369B9B53EA"
+    },
+    {
+      "file": "reels-people-2026-10-29\\assets\\reel-01-local-poster.jpg",
+      "bytes": 42970,
+      "sha256": "9D7B185BE876254593CB797626830A50A2A13E92311647D35AEAD1CE1C85666D"
+    },
+    {
+      "file": "reels-people-2026-10-29\\assets\\reel-01-local.mp4",
+      "bytes": 2625977,
+      "sha256": "4A522EF50939FB59DE8932257FCB4A2C86219DA012F90A7B34539D8652DCDE47"
+    },
+    {
+      "file": "reels-people-2026-10-29\\assets\\reel-02-memory-poster.jpg",
+      "bytes": 36600,
+      "sha256": "E3E813E57E741A7D328FCC9C3CACFA20DD271AF4D6DC1E54EDA35ED51AB94E05"
+    },
+    {
+      "file": "reels-people-2026-10-29\\assets\\reel-02-memory.mp4",
+      "bytes": 4440468,
+      "sha256": "4336B8B995B4A133ABB7D64FF7AF29FB34A9A9CC8D2E38675B61332398CED2D9"
+    },
+    {
+      "file": "reels-people-2026-10-29\\footage\\6317313.mp4",
+      "bytes": 21172023,
+      "sha256": "4EBDD9CD73563C4FCE03F165E85FD23E9DE3EBB3F1870EB95E83BE6724175128"
+    },
+    {
+      "file": "reels-people-2026-10-29\\footage\\8296444.mp4",
+      "bytes": 8749112,
+      "sha256": "C74AF96FFE5C01E2D2AC448077253463316EB7D1571F0E0DE413B8FD03291DC1"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\6317313.jpg",
+      "bytes": 66825,
+      "sha256": "2AD4FE047E30217D28970E92CBB0D8087E128F4AD715D3BE49796D8552EA0157"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\8296444.jpg",
+      "bytes": 50231,
+      "sha256": "13C2C38074DD669D463BF823D209957F57CB3E077CAE86A094C3C023B729C0A2"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\demo-arrival.png",
+      "bytes": 1170472,
+      "sha256": "782E7F99F3E35C47C1E7778FCF25FA13DD855FC45AD9438CB892DD9DA2AD690D"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\demo-memories.png",
+      "bytes": 892410,
+      "sha256": "A0EBF5A4C6B88F0055799DACA95BC76C8889E371B0F8434C9F28F87753674591"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\demo-public-wall.png",
+      "bytes": 1246129,
+      "sha256": "16B0773F2EF4320D40052E1CAEF617BF16FF440F06853738AA1658E108DE8FCB"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\logo.png",
+      "bytes": 108361,
+      "sha256": "3F81BF11EC8A7A0E926EFE13BB5B2660E94FD866D01082FEABF539F85E9026BB"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-01-local-end.png",
+      "bytes": 109670,
+      "sha256": "C2551275DD2228B4C9A391FC77BB512ABE5146CA5BC5346FEAB788B50A696688"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-01-local-overlay-1.png",
+      "bytes": 132770,
+      "sha256": "C51CCD31B07DCAC27FA67471BF9847FDFAB2F8E07B9D850388A61A2BE4728393"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-01-local-overlay-2.png",
+      "bytes": 159378,
+      "sha256": "63BD505417C354998AAEE5A7EE4D041E97C61155A4C3DEC0631331B66366A65A"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-01-local-product.png",
+      "bytes": 622777,
+      "sha256": "590762E75E9EE7B31BB9C81B361BF02D5C1B0347F377195F9DBEBA8598FDF3E0"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-01-local-qa-1.jpg",
+      "bytes": 24082,
+      "sha256": "BEB4C9279AFC3362E866981406DAE7A7D6ACEC526EE7135B3422B6F2599088F1"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-01-local-qa-13.jpg",
+      "bytes": 12335,
+      "sha256": "7AD725F76D18737EDCC393280EABB16E3E57CF0C2739AAC5B72C80C822A105BF"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-01-local-qa-14.8.jpg",
+      "bytes": 12327,
+      "sha256": "101C84F1306CC7A464A94F39DE6F1FA8F6A0180F705DDBACB8D1BEA52B7CAD77"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-01-local-qa-5.jpg",
+      "bytes": 25820,
+      "sha256": "0AC1D50452F878160FD008428FB9CCF0E77F077AE68A7AB949C4A826D850F7D8"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-01-local-qa-9.jpg",
+      "bytes": 21826,
+      "sha256": "7BE5DC9821F4E7F34CE733423418B27BA8D57F86F72064D177C60347CFC01961"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-02-memory-end.png",
+      "bytes": 92307,
+      "sha256": "B3E1D631F1E369B75F40FB8A9F2595F3C33647B1EE12A995B88EA0110FEE384D"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-02-memory-overlay-1.png",
+      "bytes": 131973,
+      "sha256": "4D5575E9E26BC9EEF3E110B3B4F5FA072AFCDC1C40D2090B462C2C7C11B54795"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-02-memory-overlay-2.png",
+      "bytes": 137572,
+      "sha256": "4D91E974AC2D3FA7C7427ECB595E5D35F4D5493B59FBA40AC013DA6CF3FB2F38"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-02-memory-product.png",
+      "bytes": 538809,
+      "sha256": "D41ACA6FD79F18CBD9CEEC8942F0B676184A54E8574C0D8832E8F77A62388873"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-02-memory-qa-1.jpg",
+      "bytes": 22688,
+      "sha256": "F0C59F9CCF5BB7F7ECA2290D95FE1C6A890A32CE92B3B2D54DA9E97CE893A98E"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-02-memory-qa-13.jpg",
+      "bytes": 11310,
+      "sha256": "79CDCF39FDC6F512C571DA901159B71A3D1F676CCDC2E0B54A791EE48E46D896"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-02-memory-qa-14.8.jpg",
+      "bytes": 11310,
+      "sha256": "79CDCF39FDC6F512C571DA901159B71A3D1F676CCDC2E0B54A791EE48E46D896"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-02-memory-qa-5.jpg",
+      "bytes": 24512,
+      "sha256": "560521AF3E0B9180E2276D5B0C5FDCDE4A341A4D98E891B678847D5ABBE748AB"
+    },
+    {
+      "file": "reels-people-2026-10-29\\reference\\reel-02-memory-qa-9.jpg",
+      "bytes": 21513,
+      "sha256": "AB411E04504C12339FA6E86419E76A0A1FC7631A7DE12FD6E43A1831A125966A"
+    },
+    {
+      "file": "reels-people-2026-10-29\\source\\boards.html",
+      "bytes": 4513,
+      "sha256": "5EF808CE70064B4E9B51755B69D32E509BD24D747DAE6C488A82A946A89E0DAF"
+    },
+    {
+      "file": "reels-people-2026-10-29\\source\\build.mjs",
+      "bytes": 7928,
+      "sha256": "F7E3D59A43803A5F9A49B69CBB8DC6B86D4F582F9DD57CCD5D959C06B24E7EA9"
+    },
+    {
+      "file": "reels-people-2026-10-29\\source\\encode.py",
+      "bytes": 1915,
+      "sha256": "AA8DF036FDA9519829832215A587F6C8E93CB22DA1F23D5CE6F482CFC54204DA"
+    },
+    {
+      "file": "reels-people-2026-10-29\\source\\reel-01-local-concat.txt",
+      "bytes": 359,
+      "sha256": "45F27545C44CF7B7733FAB217425B764C982DA0389DD06D68625BC00A807648F"
+    },
+    {
+      "file": "reels-people-2026-10-29\\source\\reel-01-local-end.mp4",
+      "bytes": 45343,
+      "sha256": "80CF78BC8FA855F40E461552D6B4195B1990EFEA1ADFD57E60096263CB8E8102"
+    },
+    {
+      "file": "reels-people-2026-10-29\\source\\reel-01-local-live.mp4",
+      "bytes": 2445658,
+      "sha256": "094A121FF091380CBCEDC60FB1A42494F8A7B5887BD693B640A5F581C71CE43E"
+    },
+    {
+      "file": "reels-people-2026-10-29\\source\\reel-01-local-product.mp4",
+      "bytes": 136602,
+      "sha256": "340662605AB3601954ABB2154FA699F6929AE196529B050EFC2B14A1FF109F74"
+    },
+    {
+      "file": "reels-people-2026-10-29\\source\\reel-02-memory-concat.txt",
+      "bytes": 362,
+      "sha256": "E723B9E428B35D83F6084040CEAC793CF7682B403AAE1152901905004E143425"
+    },
+    {
+      "file": "reels-people-2026-10-29\\source\\reel-02-memory-end.mp4",
+      "bytes": 37838,
+      "sha256": "350BC29D00B7A84807072A6288BA212FC3B7C8BEF234E6CEC244F3A42B044F2F"
+    },
+    {
+      "file": "reels-people-2026-10-29\\source\\reel-02-memory-live.mp4",
+      "bytes": 4278080,
+      "sha256": "80C02D611D3C3D280F1BFB02F04472979A9EF8A6EB5A73C991E06B44C424DC47"
+    },
+    {
+      "file": "reels-people-2026-10-29\\source\\reel-02-memory-product.mp4",
+      "bytes": 126176,
+      "sha256": "F901B1332EDD222EF0FEC5E35C946C44A1AC018557521B1D121C36AA17AC65C2"
+    },
+    {
+      "file": "reels-people-2026-10-29\\source\\review.py",
+      "bytes": 4632,
+      "sha256": "DE3851062CDE3C230A991C814BD6D9CB7346C887D38DDD36C02FF1603EEDE1C0"
+    }
+  ]
+}

@@ -42,7 +42,7 @@ describe("wall content projection", () => {
   });
 
   it("keeps the host's house-information visibility controls", () => {
-    expect(publicProperty({ ...data, profile: { ...data.profile, stayNoteOff: true, factsOff: true } }, "stay").houseInformation).toEqual({ heading: "", welcome: "", tip: "", facts: [] });
+    expect(publicProperty({ ...data, profile: { ...data.profile, stayNoteOff: true, factsOff: true } }, "stay").houseInformation).toEqual({ heading: "", welcome: "", tip: "", facts: [], links: [] });
   });
 });
 

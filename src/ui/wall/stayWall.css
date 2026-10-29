@@ -237,6 +237,17 @@
 [data-wall-theme] .stay-wall.canvas-stay-links { margin: 8px 0 clamp(20px, 3vw, 28px); }
 [data-wall-theme] .stay-wall .stay-links .stay-link[data-invalid] { border-color: var(--accent); border-style: dashed; }
 [data-wall-theme] .stay-wall.canvas-stay-links .field-hint { margin: 12px 0 4px; }
+
+/* The Host's own pages: the essentials' tiles, wider, because each carries
+   the address it opens under its label. */
+[data-wall-theme] .stay-wall .stay-again { margin-top: 18px; }
+[data-wall-theme] .stay-wall .stay-again ul { grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); }
+[data-wall-theme] .stay-wall .stay-again-words { display: grid; gap: 2px; flex: 1; min-width: 0; }
+[data-wall-theme] .stay-wall .stay-again-address {
+  font-size: .82rem;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
 [data-wall-theme] .stay-wall .canvas-essentials-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 10px 0 0; }
 [data-wall-theme] .stay-wall .canvas-essentials-actions .canvas-omit { opacity: 1; }
 
@@ -297,6 +308,23 @@
   color: var(--text-muted);
   cursor: pointer;
 }
+/* The Wi-Fi line's one-tap copy takes a row of its own under the line. */
+[data-wall-theme] .stay-wall .stay-fact-body:has(.stay-wifi-join) { flex-wrap: wrap; }
+[data-wall-theme] .stay-wall .stay-wifi-join { flex: 1 0 100%; display: grid; }
+[data-wall-theme] .stay-wall .stay-wifi-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  margin: 0;
+  font-size: 1rem;
+}
+[data-wall-theme] .stay-wall .stay-wifi-copy svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+[data-wall-theme] .stay-wall .stay-wifi-steps { margin: 0; font-size: .95rem; line-height: 1.45; }
+/* Kept in the page while empty, so the steps are announced when they arrive. */
+[data-wall-theme] .stay-wall .stay-wifi-steps:not(:empty) { margin-top: 8px; }
 [data-wall-theme] .stay-wall .stay-copy:hover { background: var(--wall-sheet, var(--surface-raised)); border-color: var(--wall-rule, var(--rule)); color: var(--text); }
 [data-wall-theme] .stay-wall .stay-copy svg {
   width: 20px;

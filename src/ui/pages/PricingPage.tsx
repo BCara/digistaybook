@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   annualSaving,
   countryNames,
@@ -6,7 +5,6 @@ import {
   currencyNames,
   formatRate,
   includedFeatures,
-  posCurrencies,
   publishedPlans,
   taxCallout,
   trialCallout,
@@ -27,24 +25,22 @@ import { detectBillingCountry } from "../host/billingCountry";
  * here is a hand-typed price, a hand-typed saving, or a rephrasing of the
  * trial and tax callouts the plan fixes word for word.
  *
- * The currency is chosen, not assumed. §4.1 quotes a Host in their own
- * point-of-sale currency, and with two dollar currencies on sale a visitor who
- * cannot tell which dollar they are reading has not been told the price. The
- * browser's own guess opens the page and a control beside the rates overrules
- * it — the same arrangement, and the same reasoning, as the activation screen.
+ * One currency, the visitor's own. §4.1 quotes a Host in their own
+ * point-of-sale currency, so the page shows only that one rather than a
+ * switch between two dollars: AUD for a visitor in Australia, USD for everyone
+ * else. Every rate still names its dollar (A$, US$), and the activation screen
+ * asks the billing country before anything is charged.
  */
 export function PricingPage() {
   const { status } = useAuth();
   const signedIn = status === "host";
 
-  // A guess, never an answer: `detectBillingCountry` returns null for anywhere
-  // outside the two countries we serve, and this page is read by people who are
-  // not yet Hosts. USD is the currency the offer is quoted in when we do not
-  // know, which is what the fine print below the rates says.
-  const [currency, setCurrency] = useState<PosCurrency>(() => {
-    const country = detectBillingCountry();
-    return country ? currencyForCountry[country] : "usd";
-  });
+  // One currency, the visitor's own: AUD in Australia and USD everywhere else.
+  // `detectBillingCountry` returns null outside the two countries we serve, so
+  // USD is also what anyone we cannot place reads, as the fine print says.
+  // Checkout asks the billing country again, so this is never the last word.
+  const detected = detectBillingCountry();
+  const currency: PosCurrency = detected ? currencyForCountry[detected] : "usd";
 
   const [monthly, annual] = publishedPlans(currency);
   const saving = formatRate(annualSaving(currency), currency);
@@ -59,30 +55,12 @@ export function PricingPage() {
       <section id="pricing" aria-labelledby="pricing-heading">
         <div className="section-head">
           <p className="eyebrow">Pricing</p>
-          <h1 id="pricing-heading">One price per property. Everything included, either way.</h1>
+          <h1 id="pricing-heading">One price per property. Everything included.</h1>
           <p className="lede">
             There is no feature tier to decode. Monthly and annual buy the same complete platform; the only
             difference is how often you are billed and what it costs you over a year.
           </p>
         </div>
-
-        <fieldset className="currency-switch">
-          <legend>Show prices in</legend>
-          <div className="currency-options">
-            {posCurrencies.map((option) => (
-              <label key={option} className={option === currency ? "selected" : undefined}>
-                <input
-                  type="radio"
-                  name="pricing-currency"
-                  value={option}
-                  checked={option === currency}
-                  onChange={() => setCurrency(option)}
-                />
-                <span>{option.toUpperCase()}</span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
 
         <div className="trial-callout">
           <strong>{trialDays}-day free trial on your first property.</strong>
@@ -129,7 +107,7 @@ export function PricingPage() {
           <p>{taxCallout}</p>
           <p>
             Cancel anytime before your next billing cycle &mdash;{" "}
-            <a className="text-link" href="/terms">read the Cancellation &amp; Billing Policy</a>. Cancelling
+            <a className="text-link" href="/terms">read the Cancellation &amp; Billing Policy</a>. Canceling
             keeps your wall and QR display working until the end of the period you have paid for.
           </p>
         </div>
@@ -143,7 +121,7 @@ export function PricingPage() {
             without paying. Only the live guest link and the printable QR kit wait for activation.
           </p>
           <div className="actions">
-            <a className="btn btn-primary" href="/wall/demo-cottage">Open the public wall</a>
+            <a className="btn btn-primary" href="/stay/demo-cottage">See what guests see</a>
             {signedIn ? (
               <a className="btn btn-secondary" href="/host">Go to your dashboard</a>
             ) : (

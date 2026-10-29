@@ -1,0 +1,164 @@
+[
+  {
+    "id": "fb-01",
+    "file": "assets/fb-01-care.png",
+    "width": 1080,
+    "height": 1350
+  },
+  {
+    "id": "fb-02-1",
+    "file": "assets/fb-02-1.png",
+    "width": 1080,
+    "height": 1350
+  },
+  {
+    "id": "fb-02-2",
+    "file": "assets/fb-02-2.png",
+    "width": 1080,
+    "height": 1350
+  },
+  {
+    "id": "fb-02-3",
+    "file": "assets/fb-02-3.png",
+    "width": 1080,
+    "height": 1350
+  },
+  {
+    "id": "fb-04",
+    "file": "assets/fb-04-question.png",
+    "width": 1080,
+    "height": 1350
+  },
+  {
+    "id": "fb-05",
+    "file": "assets/fb-05-worksheet.png",
+    "width": 1080,
+    "height": 1350
+  },
+  {
+    "id": "pin-01",
+    "file": "assets/pin-01-welcome.png",
+    "width": 1000,
+    "height": 1500
+  },
+  {
+    "id": "pin-02",
+    "file": "assets/pin-02-wording.png",
+    "width": 1000,
+    "height": 1500
+  },
+  {
+    "id": "pin-03",
+    "file": "assets/pin-03-arrival.png",
+    "width": 1000,
+    "height": 1500
+  },
+  {
+    "id": "pin-04",
+    "file": "assets/pin-04-garden.png",
+    "width": 1000,
+    "height": 1500
+  },
+  {
+    "id": "pin-05",
+    "file": "assets/pin-05-template.png",
+    "width": 1000,
+    "height": 1500
+  },
+  {
+    "id": "story-01",
+    "file": "assets/story-01.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "story-02",
+    "file": "assets/story-02.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "story-03",
+    "file": "assets/story-03.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "story-04",
+    "file": "assets/story-04.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "story-05",
+    "file": "assets/story-05.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "story-06",
+    "file": "assets/story-06.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "story-07",
+    "file": "assets/story-07.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "video-01-frame-1",
+    "file": "reference/video-01-frame-1.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "video-01-frame-2",
+    "file": "reference/video-01-frame-2.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "video-01-frame-3",
+    "file": "reference/video-01-frame-3.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "video-01-frame-4",
+    "file": "reference/video-01-frame-4.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "video-01-frame-5",
+    "file": "reference/video-01-frame-5.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "video-02-frame-1",
+    "file": "reference/video-02-frame-1.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "video-02-frame-2",
+    "file": "reference/video-02-frame-2.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "video-02-frame-3",
+    "file": "reference/video-02-frame-3.png",
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "id": "video-02-frame-4",
+    "file": "reference/video-02-frame-4.png",
+    "width": 1080,
+    "height": 1920
+  }
+]

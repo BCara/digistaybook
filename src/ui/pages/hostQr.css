@@ -52,3 +52,15 @@
 .qr-wall-switch .switch { width: 100%; }
 .qr-wall-switch .switch-label { font-size: .9rem; }
 .qr-wall-switch-state { margin-left: auto; color: var(--text-muted); font-size: .8rem; font-weight: 650; }
+
+/* The house Wi-Fi code on the placard: second to the wall's, so smaller, and
+   on the same paper and ink. */
+.placard-wifi {
+  display: flex; align-items: center; gap: 14px;
+  margin: 16px 0 0; padding-top: 14px; border-top: 1px solid rgba(20, 24, 27, .12);
+  text-align: left;
+}
+.placard-wifi-code { flex: none; display: block; width: 104px; height: auto; }
+.placard-wifi-text { margin: 0; font-size: var(--step--1); line-height: 1.45; color: #33404a; overflow-wrap: anywhere; }
+.placard-wifi-text strong { display: block; color: #14181b; }
+.qr-wifi-hint { margin: 10px 0 0; }

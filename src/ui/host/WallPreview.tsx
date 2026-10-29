@@ -10,6 +10,7 @@ import { WallHeader } from "../wall/WallHeader";
 import { HostNotes } from "../wall/HostNotes";
 import type { WallCounts } from "./propertyStore";
 import { PreviewMemories } from "./PreviewMemories";
+import { WallContributionPrompt, WallFooter } from "../wall/MemoryNote";
 
 /**
  * The property dashboard's centre of gravity: the wall being edited.
@@ -27,13 +28,14 @@ import { PreviewMemories } from "./PreviewMemories";
 
 export type WallView = "public" | "stay";
 
-export function WallPreview({ name, profile, counts = null, view: fixed, slug, stayToken = null }: {
+export function WallPreview({ name, profile, counts = null, view: fixed, slug, stayToken = null, propertyId }: {
   name: string;
   profile: PropertyProfile;
   counts?: WallCounts | { error: string } | null;
   view?: WallView;
   slug?: string | null;
   stayToken?: string | null;
+  propertyId?: string;
 }) {
   const [chosen, setChosen] = useState<WallView>("public");
   const previewId = useId();
@@ -46,7 +48,8 @@ export function WallPreview({ name, profile, counts = null, view: fixed, slug, s
       heading: profile.stayNoteOff ? "" : profile.stayHeading,
       welcome: profile.stayNoteOff ? "" : profile.stayWelcome,
       tip: profile.stayNoteOff ? "" : profile.stayTip,
-      facts: profile.factsOff ? [] : profile.facts
+      facts: profile.factsOff ? [] : profile.facts,
+      links: profile.stayAgainLinks
     }
   };
   return <div className="wall-preview">
@@ -54,7 +57,7 @@ export function WallPreview({ name, profile, counts = null, view: fixed, slug, s
       {(["public", "stay"] as const).map(option => <button key={option} type="button" role="tab"
         id={`${previewId}-${option}`} aria-selected={view === option} aria-controls={previewId}
         className={view === option ? "active" : undefined} onClick={() => setChosen(option)}>
-        {option === "public" ? "Public wall" : "After the QR scan"}
+        {option === "public" ? "Public page" : "Guest wall"}
       </button>)}
     </div>}
     <div className="phone">
@@ -70,9 +73,13 @@ export function WallPreview({ name, profile, counts = null, view: fixed, slug, s
           <div className="wall-memories">
             <h2 className="wall-heading">{memories}</h2>
             {slug
-              ? <PreviewMemories key={`${slug}/${view}/${stayToken ?? ""}`} slug={slug} view={view} token={stayToken} />
+              ? <PreviewMemories key={`${slug}/${view}/${stayToken ?? ""}`} slug={slug} view={view} token={stayToken} propertyId={propertyId} />
               : counts !== null && !("error" in counts) && counts.visible === 0 && <p className="field-hint">No memories yet.</p>}
+            {/* The guest wall ends on the way to add to it, so the phone does
+                too, with the Host's own prompt in it. */}
+            {view === "stay" && <WallContributionPrompt prompt={profile.guestPrompt} inert />}
           </div>
+          <WallFooter />
         </div>
       </div>
     </div>

@@ -2,6 +2,8 @@ import { wallUnavailableReason } from "../../domain/wallAvailability";
 import { useEffect, useState, type ReactNode } from "react";
 import { canDownloadQrKit, isPubliclyReadable } from "../../domain/property";
 import { stayWallUrl } from "../../domain/qrCode";
+import { readWifiLine } from "../../domain/wifi";
+import { essentialMarkName } from "../wall/EssentialMark";
 import { publicWallUrl, stayWallPath } from "../../domain/wallAddress";
 import { useAuth } from "../auth/AuthProvider";
 import { PropertyShell } from "../host/PropertyShell";
@@ -124,10 +126,10 @@ function PublicWallSwitch({ property, onSaved }: { property: HostProperty; onSav
       <label className="switch">
         <input type="checkbox" role="switch" checked={!off} disabled={saving} onChange={event => void change(!event.target.checked)} />
         <span className="switch-track" aria-hidden="true"><span className="switch-knob" /></span>
-        <span className="switch-label">Public wall</span>
+        <span className="switch-label">Public page</span>
         <span className="qr-wall-switch-state" aria-hidden="true">{off ? "Off" : "On"}</span>
       </label>
-      {failed && <p className="field-hint" role="status">The public wall could not be switched. Try again.</p>}
+      {failed && <p className="field-hint" role="status">The public page could not be switched. Try again.</p>}
     </div>
   );
 }
@@ -186,12 +188,19 @@ export function HostQrPage({ propertyId }: { propertyId: string }) {
   // the Host is standing on: a preview showing a production URL from a local
   // build would be a code that scans to the wrong place.
   const stayUrl = stayWallUrl(window.location.origin, property.slug, property.stayToken);
+  // The house Wi-Fi joins the card when its line names a network and a
+  // password; a line that does not is pointed out, since the fix is a few
+  // keystrokes in the essentials.
+  const wifiLine = property.profile.factsOff ? undefined
+    : property.profile.facts.find(fact => essentialMarkName(fact.term) === "wifi" && fact.detail.trim());
+  const wifiLogin = wifiLine ? readWifiLine(wifiLine.detail) : null;
+  const wifi = wifiLogin?.network ? { network: wifiLogin.network, password: wifiLogin.password } : null;
 
   return (
     <PropertyShell property={property} current="qr" className="qr-page">
       <div className="qr-page-layout">
         <div className="qr-page-walls">
-          <h2>Walls and QR display</h2>
+          <h2>QR display and links</h2>
           <p className="lede">Your guest links and printable QR code.</p>
           {!live && (
             <div className="qr-access-notice">
@@ -209,11 +218,11 @@ export function HostQrPage({ propertyId }: { propertyId: string }) {
                   ? { status: "ready", property: { ...current.property, reviewContent } }
                   : current)} />
             </div>
-            <Wall reason={publicReason} showReason={live && property.profile.displayWallOff === true} title="The public wall" address={publicWallUrl(window.location.origin, property.slug)} live={live && !property.profile.displayWallOff} href={`/wall/${property.slug}`} configureHref={`/host/property/${property.id}/public`}
+            <Wall reason={publicReason} showReason={live && property.profile.displayWallOff === true} title="The public page" address={publicWallUrl(window.location.origin, property.slug)} live={live && !property.profile.displayWallOff} href={`/wall/${property.slug}`} configureHref={`/host/property/${property.id}/public`}
               control={<PublicWallSwitch property={property} onSaved={displayWallOff => setLoad(current => current.status === "ready" && current.property.id === property.id
                 ? { status: "ready", property: { ...current.property, profile: { ...current.property.profile, displayWallOff } } }
                 : current)} />}>
-              Share this link in your listing or guest messages.
+              Share this link on your own website or social pages. Booking platforms limit outside links in listings and messages, so check their rules first.
             </Wall>
           </div>
         </div>
@@ -221,7 +230,12 @@ export function HostQrPage({ propertyId }: { propertyId: string }) {
         <div className="qr-page-kit">
           <h3>QR display</h3>
 
-          <QrPlacard name={property.name} url={stayUrl} />
+          <QrPlacard name={property.name} url={stayUrl} wifi={wifi} />
+          {wifiLine && !wifi && (
+            <p className="field-hint qr-wifi-hint">
+              To add a code that joins your Wi-Fi, write your {wifiLine.term} line as network / password, such as <code>Seabreeze / sandcastle42</code>.
+            </p>
+          )}
 
           <div className="qr-guest-link">
             <strong>Guest link</strong>

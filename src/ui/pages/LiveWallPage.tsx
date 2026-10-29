@@ -13,6 +13,7 @@ import { HostNotes } from "../wall/HostNotes";
 import { WallHeader } from "../wall/WallHeader";
 import { memoriesHeading } from "../wall/memoryHeading";
 import { WallSkeleton } from "../wall/WallSkeleton";
+import { MemoryNote, WallContributionPrompt, WallFooter } from "../wall/MemoryNote";
 import "../guest/guest.css";
 
 // "preview" is the same wall, served to the account that owns it while it is
@@ -20,7 +21,7 @@ import "../guest/guest.css";
 // can say why it is closed and what opens it.
 type Wall = { status: "open" | "preview"; owner?: WallOwner; contributionsEnabled?: boolean; property: { name: string; location: string; welcome: string; hosts: string; hostNotes?: { id: string; message: string; style?: string; photo?: { url: string; alt: string } | null }[];
   theme?: string; colour?: string; guestPrompt?: string; hostPhoto?: { url: string; alt: string } | null;
-  cover?: { url: string; alt: string } | null; houseInformation?: { heading: string; welcome: string; tip: string; facts: { term: string; detail: string; note: string }[] } | null };
+  cover?: { url: string; alt: string } | null; houseInformation?: { heading: string; welcome: string; tip: string; facts: { term: string; detail: string; note: string }[]; links?: { label: string; url: string }[] } | null };
   posts: { id: string; message: string; displayName: string; photoCount?: number; pinned?: boolean }[]; nextCursor: string | null };
 
 const LOADING = "Loading this guestbook…";
@@ -149,28 +150,19 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
       <div className="wall-memories">
       <h2 className="wall-heading" id={MEMORIES_ID}>{memoriesHeading(wall.nextCursor ? null : wall.posts.length)}</h2>
       <section aria-label="Guest memories" className="note-grid">
-        {wall.posts.map(post => <article className={`note${post.pinned ? " note-pinned" : ""}`} key={post.id}>
-          {post.pinned && <p className="note-pinned-label">Host favourite</p>}
-          {Array.from({ length: post.photoCount ?? 0 }, (_, index) => <MemoryPhoto key={index} postId={post.id} index={index} ownerPropertyId={preview?.owner?.propertyId} sessionUid={auth.user?.uid} />)}
-          <p>{post.message}</p>{post.displayName?.trim() && <p>{post.displayName}</p>}<ReportMemory slug={slug} postId={post.id} /></article>)}
+        {wall.posts.map(post => <MemoryNote key={post.id} id={post.id} message={post.message} displayName={post.displayName} pinned={post.pinned}
+          photos={Array.from({ length: post.photoCount ?? 0 }, (_, index) => <MemoryPhoto postId={post.id} index={index} ownerPropertyId={preview?.owner?.propertyId} sessionUid={auth.user?.uid} />)}>
+          <ReportMemory slug={slug} postId={post.id} />
+        </MemoryNote>)}
         {!wall.posts.length && <p className="field-hint">No memories yet.</p>}
       </section>
       {wall.nextCursor && <button className="btn btn-secondary" disabled={busy} onClick={() => void more()}>{busy ? "Loading…" : "Load more memories"}</button>}
       {served === "stay" && (wall.contributionsEnabled ? <div className="wall-contribution-action">
         {contributing
           ? <button className="btn btn-primary" aria-expanded aria-controls="wall-contribution" onClick={() => setContributing(false)}>Back to wall</button>
-          // A guest with a complaint should not have to guess that it lives
-          // behind the guestbook, so the private route is offered by name.
           // They close the memories rather than float over the page: this is
           // a web page, not an app with a tab bar.
-          : <div className="wall-contribution-choices wall-contribution-panel">
-            <p className="wall-contribution-lede">{wall.property.guestPrompt?.trim() || "Leave a memory from your stay."}</p>
-            <button className="btn btn-primary" aria-expanded={false} aria-controls="wall-contribution" onClick={() => openContribution("memory")}>
-              Add to guestbook
-              <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><path d="m8 5 5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </button>
-            <button className="btn btn-ghost" aria-expanded={false} aria-controls="wall-contribution" onClick={() => openContribution("feedback")}>Private feedback</button>
-          </div>}
+          : <WallContributionPrompt prompt={wall.property.guestPrompt} onMemory={() => openContribution("memory")} onFeedback={() => openContribution("feedback")} />}
         <div id="wall-contribution" hidden={!contributing}>
         {formOpened && <GuestContribution key={slug} slug={slug} stayToken={stayToken} prompt={wall.property.guestPrompt} mode={contributionMode} onModeChange={setContributionMode} onChanged={() => {
         void readWall(slug, view, stayToken, Boolean(auth.user)).then(result => { if (result.status !== "unavailable") setWall(result); else { setWall(null); setUnavailable({ ...result, sessionUid: auth.user?.uid }); setStatus(""); } })
@@ -187,15 +179,7 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
       </p>)}
       </div>
     </>}
-    {/* The two links every wall carries, wherever the page got to: the wall,
-        the closed notice and the failure all end here. They are the only
-        chrome on a guest's page, so they sit under a rule and stay quiet. */}
-    <footer className="wall-footer">
-      <p><a href="/privacy-safety">Privacy &amp; Safety</a></p>
-      <p className="wall-footer-brand">
-        <a href="/" aria-label="Create a digital guestbook for your property with DigiStayBook">Powered by DigiStayBook</a>
-      </p>
-    </footer>
+    <WallFooter />
   </main>;
 }
 

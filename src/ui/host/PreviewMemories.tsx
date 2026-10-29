@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
-import { guestPhotoUrl } from "../../lib/guestSession";
+import { useAuth } from "../auth/AuthProvider";
+import { MemoryNote } from "../wall/MemoryNote";
+import { MemoryPhoto } from "../wall/MemoryPhoto";
 import { loadPreviewMemories, type PreviewMemoriesPage } from "./wallPreviewStore";
 import type { WallView } from "./WallPreview";
 
-export function PreviewMemories({ slug, view, token }: {
+export function PreviewMemories({ slug, view, token, propertyId }: {
   slug: string;
   view: WallView;
   token: string | null;
+  /** The owner's own property: a wall that is not open yet serves its photos only to them. */
+  propertyId?: string;
 }) {
+  const auth = useAuth();
   const [page, setPage] = useState<PreviewMemoriesPage | null>(null);
   const [cursor, setCursor] = useState<string | undefined>();
   const [attempt, setAttempt] = useState(0);
@@ -34,11 +39,8 @@ export function PreviewMemories({ slug, view, token }: {
 
   return <section aria-label="Guest memories">
     <div className="note-grid">
-      {page?.posts.map(post => <article className="note" key={post.id}>
-        {Array.from({ length: post.photoCount ?? 0 }, (_, index) => <img key={index} src={guestPhotoUrl(post.id, index)} alt={`Guest memory photo ${index + 1}`} loading="lazy" />)}
-        <p>{post.message}</p>
-        {post.displayName?.trim() && <p>{post.displayName}</p>}
-      </article>)}
+      {page?.posts.map(post => <MemoryNote key={post.id} id={post.id} message={post.message} displayName={post.displayName} pinned={post.pinned}
+        photos={Array.from({ length: post.photoCount ?? 0 }, (_, index) => <MemoryPhoto postId={post.id} index={index} ownerPropertyId={propertyId} sessionUid={auth.user?.uid} />)} />)}
       {page && !page.posts.length && <p className="field-hint">No memories yet.</p>}
     </div>
     {busy && <p className="field-hint" role="status">Loading memories…</p>}

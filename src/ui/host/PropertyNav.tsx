@@ -97,8 +97,8 @@ export function PropertyNav({
   const base = `/host/property/${propertyId}`;
   const sections: { key: NavSection; label: string; href: string }[] = [
     { key: "design", label: "Guest wall", href: base },
-    { key: "public", label: "Public wall", href: `${base}/public` },
-    { key: "qr", label: "Walls and QR display", href: `${base}/qr` },
+    { key: "public", label: "Public page", href: `${base}/public` },
+    { key: "qr", label: "QR display and links", href: `${base}/qr` },
     { key: "moderation", label: "Inbox & moderation", href: `${base}/moderation` },
     { key: "export", label: "Export guestbook", href: `${base}/export` },
     { key: "billing", label: draft ? "Publish" : "Billing", href: `${base}/billing` }

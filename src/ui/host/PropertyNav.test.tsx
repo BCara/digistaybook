@@ -8,7 +8,7 @@ describe('property page navigation', () => {
     expect(panel.querySelector('summary')).toHaveTextContent('Property menu');
     panel.open = true;
     expect(screen.getByRole('link', { name: 'Inbox & moderation' })).toHaveAttribute('aria-current', 'page');
-    const link = screen.getByRole('link', { name: 'Walls and QR display' });
+    const link = screen.getByRole('link', { name: 'QR display and links' });
     expect(link).toHaveAttribute('href', '/host/property/cottage/qr');
     fireEvent.click(link);
     expect(panel.open).toBe(false);

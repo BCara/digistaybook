@@ -1,0 +1,28 @@
+.ds-help { position: fixed; right: max(20px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); z-index: 90; font-family: var(--font-sans); color: var(--text); }
+.ds-help-launcher { display: block; margin-left: auto; padding: 13px 19px; color: var(--text-inverse); background: var(--ink-900); border: 1px solid var(--rule-strong); border-radius: 6px; cursor: pointer; box-shadow: 0 4px 20px #0002; font-weight: 650; }
+.ds-help-panel { width: min(390px, calc(100vw - 32px)); max-height: calc(100dvh - 108px); display: flex; flex-direction: column; background: var(--surface-raised); border: 1px solid var(--rule-strong); border-radius: 10px; box-shadow: 0 12px 50px #0003; overflow: hidden; margin-bottom: 12px; }
+.ds-help-head { display: flex; align-items: center; gap: 10px; padding: 17px; border-bottom: 1px solid var(--rule); background: var(--surface); }
+.ds-help-head .brand-mark { width: 86px; height: auto; flex-shrink: 0; object-fit: contain; }
+.ds-help-head > div { flex: 1; min-width: 0; }
+.ds-help-head strong { font-size: 14px; display: block; line-height: 1.4; }
+.ds-help-head small { display: block; font-size: 11px; line-height: 1.5; color: var(--text-muted); }
+.ds-help-head > button { margin-left: auto; padding: 4px 10px; background: transparent; color: var(--text); border: 0; font-size: 25px; cursor: pointer; }
+.ds-help-messages { overflow-y: auto; overscroll-behavior: contain; min-height: 180px; max-height: 340px; padding: 16px; }
+.ds-help-message { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.6; padding: 11px 13px; margin: 0 25px 12px 0; border-radius: 6px; background: var(--surface); border: 1px solid var(--rule); }
+.ds-help-message.user { margin-left: 25px; margin-right: 0; background: var(--accent-soft); }
+.ds-help-suggestions { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.ds-help-suggestions button { text-align: left; border: 1px solid var(--rule-strong); border-radius: 5px; background: var(--surface-raised); padding: 8px 11px; color: var(--text); cursor: pointer; font-size: 13px; }
+.ds-help-input { display: flex; gap: 8px; padding: 12px 16px 4px; border-top: 1px solid var(--rule); }
+.ds-help-input input { min-width: 0; flex: 1; }
+.ds-help input:not([type=checkbox]), .ds-help textarea { width: 100%; padding: 10px; font: inherit; font-size: 16px; border: 1px solid var(--rule-strong); background: var(--surface-raised); color: var(--text); border-radius: 4px; }
+.ds-help-contact { background: var(--surface); border: 0; border-top: 1px solid var(--rule); color: var(--text); padding: 13px 16px; font-size: 12px; cursor: pointer; }
+.ds-help-note { font-size: 11px; line-height: 1.5; color: var(--text-muted); padding: 0 16px; margin: 8px 0 12px; }
+.ds-help-form { overflow-y: auto; overscroll-behavior: contain; padding: 18px; font-size: 13px; line-height: 1.6; }
+.ds-help-form > p:first-child { margin-top: 0; }
+.ds-help-form label { display: grid; gap: 5px; margin-bottom: 12px; }
+.ds-help-form .ds-help-check { display: flex; align-items: center; gap: 9px; }
+.ds-help-form .ds-help-note { padding: 0; }
+.ds-help-actions { display: flex; gap: 8px; justify-content: space-between; }
+.ds-help-error { font-size: 13px; padding: 8px 16px; color: var(--accent-strong); }
+.ds-help button:disabled { opacity: .6; cursor: wait; }
+@media (max-width: 480px) { .ds-help { right: 16px; bottom: max(12px, env(safe-area-inset-bottom)); } .ds-help-panel { max-height: calc(100dvh - 90px); } }

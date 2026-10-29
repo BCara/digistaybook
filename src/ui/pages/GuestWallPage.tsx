@@ -2,6 +2,9 @@ import { MemoryWall } from "../wall/MemoryWall";
 import { LiveWallPage } from "./LiveWallPage";
 import { DEMO_SLUG, demoPosts, demoProperty } from "../wall/demoWall";
 import { memoriesHeading } from "../wall/memoryHeading";
+import { WallHeader } from "../wall/WallHeader";
+import { WallFooter } from "../wall/MemoryNote";
+import { readWallColour, readWallTheme } from "../../domain/wallTheme";
 
 /**
  * The public wall: the link a host shares or embeds on their own site.
@@ -27,58 +30,37 @@ export function GuestWallPage({
   const property = demoProperty;
   if (propertySlug !== DEMO_SLUG) return <LiveWallPage key={propertySlug} slug={propertySlug} view="public" />;
 
+  // The demo can be printed on any theme (`?theme=journal&colour=sage`), so
+  // the four can be compared on the same words and photographs.
+  const search = typeof window === "undefined" ? null : new URLSearchParams(window.location.search);
+
   return (
-    <div className={embedded ? "page wall-page wall-embed" : "page wall-page"} data-wall-theme="linen" data-wall-colour="sand">
+    <div className={embedded ? "page wall-page wall-embed" : "page wall-page"} data-wall-view="public"
+      data-wall-theme={readWallTheme(search?.get("theme"))} data-wall-colour={readWallColour(search?.get("colour"))}>
       {isDemo && (
         <p className="demo-ribbon">
           <span className="demo-ribbon-tag">Demo</span>
-          A public wall, ready to share or embed on your own site.
+          The public page: memories only, ready to share or embed on your own site.
           <a href={`/stay/${DEMO_SLUG}`}>See what guests see &rarr;</a>
         </p>
       )}
 
-      <header className="wall-cover">
-        <img
-          className="wall-cover-photo"
-          src={property.cover.src}
-          alt={property.cover.alt}
-          width={property.cover.width}
-          height={property.cover.height}
-          fetchPriority="high"
-        />
-        <div className="wall-cover-body">
-          <div className="wall-monogram" aria-hidden="true">{property.monogram}</div>
-          <p className="eyebrow">The wall at</p>
-          <h1>{property.name}</h1>
-          <p className="wall-location">{property.location}</p>
-          <p className="wall-welcome">{property.welcome}</p>
-          <div className="host-byline">
-            {property.hostPhoto ? (
-              <img className="avatar avatar-lg avatar-photo" src={property.hostPhoto.src} alt={property.hostPhoto.alt} />
-            ) : property.hostInitials ? (
-              <span className="avatar avatar-lg tone-2" aria-hidden="true">{property.hostInitials}</span>
-            ) : null}
-            <span>
-              <b>{property.hosts}</b>
-              <small>{property.hostSince}</small>
-            </span>
-          </div>
-        </div>
-      </header>
+      {/* The served public page's own header, notes and footer, fed from the
+          demo's data, so the demo is the page and not a lookalike of it. */}
+      <WallHeader view="public" property={{
+        name: property.name,
+        location: property.location,
+        welcome: property.welcome,
+        hosts: property.hosts,
+        cover: { url: property.cover.src, alt: property.cover.alt },
+        hostPhoto: property.hostPhoto ? { url: property.hostPhoto.src, alt: property.hostPhoto.alt } : null
+      }} />
 
-      <MemoryWall posts={demoPosts} heading={memoriesHeading(demoPosts.length)} />
+      <div className="wall-memories">
+        <MemoryWall posts={demoPosts} heading={memoriesHeading(demoPosts.length)} />
+      </div>
 
-      <aside className="wall-invite" aria-label="Staying here soon">
-        <h2>Staying here soon?</h2>
-        <p>
-          Your hosts&rsquo; welcome notes, the Wi-Fi and everything else you need are on the wall you reach by
-          scanning the QR display when you arrive. That is also where you add your own memory.
-        </p>
-      </aside>
-
-      <aside className="guest-wall-powered-by" aria-label="About DigiStayBook">
-        <p>Loved your stay? <a href="/">Powered by DigiStayBook &mdash; Create a digital guestbook for your property.</a></p>
-      </aside>
+      <WallFooter />
     </div>
   );
 }

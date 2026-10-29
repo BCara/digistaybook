@@ -6,9 +6,9 @@
 // .prerender/) into its own document with its own head, plus dist/404.html,
 // dist/sitemap.xml. firebase.json serves app routes from app.html and
 // anything it does not know as 404.html with a real 404 status.
-import { readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
 
 const dist = resolve("dist");
 const entry = pathToFileURL(resolve(".prerender/prerender.js")).href;
@@ -36,7 +36,11 @@ function documentFor(path) {
 }
 
 const fileFor = path => (path === "/" ? "index.html" : `${path.slice(1)}.html`);
-for (const path of prerenderedPaths) await writeFile(resolve(dist, fileFor(path)), documentFor(path));
+for (const path of prerenderedPaths) {
+  const file = resolve(dist, fileFor(path));
+  await mkdir(dirname(file), { recursive: true });
+  await writeFile(file, documentFor(path));
+}
 await writeFile(resolve(dist, "404.html"), documentFor("/404"));
 
 const today = new Date().toISOString().slice(0, 10);

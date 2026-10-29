@@ -1,0 +1,32 @@
+{
+  "created": "2026-10-28",
+  "method": "Ordinary HTML/CSS composition and browser rendering; no generated photography.",
+  "photo_sources": "Existing public/wall/memory-coast.webp, memory-table.webp and memory-window.webp; credits in docs/demo-photo-credits.md. Licence websites not independently rechecked in this run.",
+  "demo_sources": "Current local campaign captures from respect-host-voice-2026-10-28; fictional demonstration, not real customer usage.",
+  "files": [
+    {
+      "file": "coast.webp",
+      "sha256": "92aa7a97e6341ab09c39a0d9a69b66e17967bf5c911030d8bd20cd8e25dc16d5"
+    },
+    {
+      "file": "demo-arrival.png",
+      "sha256": "782e7f99f3e35c47c1e7778fcf25fa13dd855fc45ad9438cb892dd9da2ad690d"
+    },
+    {
+      "file": "demo-public-wall.png",
+      "sha256": "16b0773f2ef4320d40052e1caef617bf16ff440f06853738aa1658e108de8fcb"
+    },
+    {
+      "file": "logo.png",
+      "sha256": "2b6372f6d75f88df19cee3b7b7a2783349ec0bbfe586698d468b13428ffa97f6"
+    },
+    {
+      "file": "table.webp",
+      "sha256": "1e85ddd7c54d96975342b4ba7dfb8df2d72e36b529148f712821086143eaf2f5"
+    },
+    {
+      "file": "window.webp",
+      "sha256": "56f6252d1da09998d93885e55d5f52c025ee0b11bf964d276cc6b6ff38338b1d"
+    }
+  ]
+}
