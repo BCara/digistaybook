@@ -13,7 +13,7 @@ import { PropertyShell } from "./PropertyShell";
 import { WallPreview } from "./WallPreview";
 import { WallThemePicker } from "./WallThemePicker";
 import { HostNoteStylePicker } from "./HostNoteStylePicker";
-import { PhotoField } from "./PhotoField";
+import { PhotoDropTarget, PhotoField } from "./PhotoField";
 import { HostNotes } from "../wall/HostNotes";
 import { NoteLinks, StayAgainLinks } from "../wall/WallHeader";
 import { withPhotoInSlot } from "./photoSlots";
@@ -195,17 +195,25 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
   }
   function photo(slot: "cover" | "hostPhoto", label: string) {
     const current = photos[slot] === null ? null : profile[slot];
+    const shown = previews[slot] || current?.url;
+    const controlId = `${id}-${slot}`;
+    const choose = () => (document.getElementById(controlId) as HTMLInputElement | null)?.click();
     return <div className="phone-section-photo">
-      {(previews[slot] || current) && <img src={previews[slot] || current!.url} alt={label} />}
-      <label>{label}<input type="file" accept={profileLimits.photoTypes.join(",")} disabled={busy} onChange={e => {
+      <label htmlFor={controlId}>{label}</label>
+      {shown ? <img src={shown} alt={label} /> : <PhotoDropTarget label={label} disabled={busy} onChoose={choose} />}
+      {/* Hidden because a bare file input cannot be styled; the frame and buttons drive it. */}
+      <input id={controlId} className="visually-hidden" type="file" accept={profileLimits.photoTypes.join(",")} disabled={busy} onChange={e => {
         const file = e.target.files?.[0]; e.target.value = "";
         if (!file) return;
         const problem = validatePhotoFile(file); setFailure(problem);
         if (!problem) setPhotos(previous => ({ ...previous, [slot]: file }));
-      }} /></label>
+      }} />
       <p className="field-hint">{slot === "cover" ? "Show off the property's best feature: the beach nearby, the fireplace, the open-plan kitchen. Landscape works best." : "Optional. A friendly one of you, or a favorite corner of the property."} JPEG, PNG or WebP. Large photos are resized for you.</p>
       {photos[slot] && <p className="field-hint">{photos[slot].name} · Ready to save</p>}
-      {(current || photos[slot]) && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => setPhotos(previous => ({ ...previous, [slot]: null }))}>Remove {slot === "cover" ? "cover" : "welcome"} photo</button>}
+      {shown && <div className="actions">
+        <button type="button" className="btn btn-secondary btn-sm" disabled={busy} onClick={choose}>Replace photo</button>
+        <button type="button" className="btn btn-ghost btn-sm" disabled={busy} onClick={() => setPhotos(previous => ({ ...previous, [slot]: null }))}>Remove {slot === "cover" ? "cover" : "welcome"} photo</button>
+      </div>}
       {photos[slot] === null && <p className="field-hint">Photo will be removed when you save.</p>}
     </div>;
   }
