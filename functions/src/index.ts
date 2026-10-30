@@ -12,6 +12,7 @@ export { retryPendingScreening } from "./screeningRetry.js";
 export { notifyScreeningAllowance } from "./screeningBudget.js";
 export { notifyConsentDeletionReview, readConsentDeletionReview } from "./consentRetention.js";
 export { notifyNewOperationsItems } from "./operationsNotify.js";
+export { getHostNotificationSettings, saveHostNotificationSettings, sendHostNotifications } from "./hostNotifications.js";
 export { createHostProperty, deleteHostProperty, ensureStayToken } from "./propertyCreation.js";
 export { listHostExport, readHostExportPhoto } from "./hostExport.js";
 export { reportGuestMemory, submitPrivacyRequest, listHostReports, resolveContentReport, listSafetyOperations, readSafetyCase, readSafetyCasePhoto, resolveSafetyCase, escalatePrivacyDeadlines } from "./reporting.js";

@@ -41,7 +41,15 @@ function PropertyCard({ property, now, onDelete }: {
   const photo = property.profile.avatar ?? property.profile.cover;
 
   async function remove() {
-    if (!window.confirm(`Delete ${property.name}? This cannot be undone.`)) return;
+    // A draft has nothing to lose but its words; a live property has guests'
+    // memories, a printed QR code and a subscription, and the question names
+    // all three so nothing about deleting it is a surprise afterwards.
+    const question = draft
+      ? `Delete ${property.name}? This draft and everything written on it will be removed. This cannot be undone.`
+      : `Delete ${property.name}?\n\nIts guest wall, public page and QR code stop working straight away, and guests' memories go with it. `
+        + `Export the guestbook first if you want to keep them.\n\nIts subscription is cancelled now, so you will not be charged again. `
+        + `Time already paid for is not refunded.\n\nThis cannot be undone.`;
+    if (!window.confirm(question)) return;
     const { deleteProperty } = await import("../host/propertyStore");
     const result = await deleteProperty(property.id);
     if (result.status === "ok") onDelete(property.id);

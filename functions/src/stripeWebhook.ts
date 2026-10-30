@@ -267,7 +267,9 @@ async function commit(
       next["billing.renewalInterval"] = renewal.interval;
     }
 
-    if (lifecycle) {
+    // A Host who deleted the property ended its subscription with it; the
+    // events that follow record the billing but must not bring the wall back.
+    if (lifecycle && property.get("lifecycle") !== "deleted") {
       next.lifecycle = lifecycle;
       // BOP §4.2: the live routing URL and the QR kit unlock here and nowhere
       // else. `mode` is not reverted on suspension — lifecycle decides whether

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { AuthenticatorChallenge } from "../auth/AuthenticatorChallenge";
+import { HostEmailSettings } from "../host/HostEmailSettings";
 import { passwordMinimumLength, sendHostPasswordReset } from "../auth/hostAuth";
 import {
   accountError, changeHostPassword, confirmHostPassword, refreshHostAccount,
@@ -138,6 +139,8 @@ export function HostAccountPage() {
         setNotice({ tone: "success", message: "Account details refreshed." });
       })}>Refresh account details</button>
     </section>
+
+    <HostEmailSettings signInEmail={host.email} />
 
     <section className="account-section" aria-labelledby="account-password">
       <h2 id="account-password">Password</h2>

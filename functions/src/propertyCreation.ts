@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import { FieldValue, getFirestore } from "firebase-admin/firestore";
 import { HttpsError, onCall } from "firebase-functions/v2/https";
+import { stripe, stripeSecrets } from "./stripeConfig.js";
 
 /**
  * The secret half of a guestbook link: 16 random bytes, which is the whole of
@@ -94,7 +95,10 @@ export const ensureStayToken = onCall({ region: "australia-southeast1", maxInsta
   return { stayToken };
 });
 
-export const deleteHostProperty = onCall({ region: "australia-southeast1", maxInstances: 5, enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true" }, async request => {
+/** Subscription states Stripe will still bill; anything else has nothing left to stop. */
+const BILLABLE = ["trialing", "active", "past_due", "unpaid", "incomplete"];
+
+export const deleteHostProperty = onCall({ region: "australia-southeast1", maxInstances: 5, enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true", secrets: stripeSecrets }, async request => {
   if (!request.auth || request.auth.token.firebase?.sign_in_provider === "anonymous") throw new HttpsError("permission-denied", "Sign in with your host account.");
   const ownerUid = request.auth.uid;
   const propertyId = request.data?.propertyId;
@@ -102,6 +106,29 @@ export const deleteHostProperty = onCall({ region: "australia-southeast1", maxIn
 
   const db = getFirestore();
   const propertyRef = db.collection("properties").doc(propertyId);
+  const before = await propertyRef.get();
+  if (!before.exists || before.get("lifecycle") === "deleted") throw new HttpsError("not-found", "Property not found.");
+  if (before.get("ownerUid") !== ownerUid) throw new HttpsError("permission-denied", "This property is not yours.");
+
+  // A deleted property has no wall left to pay for, so its subscription ends
+  // with it — first, so a Stripe failure leaves the property exactly as it was
+  // rather than gone from the dashboard and still billing. Ended now rather
+  // than at period end: the wall is going now, and a later webhook must not
+  // find a running subscription to bring it back with.
+  const subscriptionId = before.get("billing.stripeSubscriptionId");
+  let cancelled: string | null = null;
+  if (typeof subscriptionId === "string" && subscriptionId) {
+    try {
+      const subscription = await stripe().subscriptions.retrieve(subscriptionId);
+      if (BILLABLE.includes(subscription.status)) {
+        await stripe().subscriptions.cancel(subscriptionId, { invoice_now: false, prorate: false });
+        cancelled = subscriptionId;
+      }
+    } catch (error) {
+      if (error instanceof HttpsError) throw error;
+      throw new HttpsError("unavailable", "We could not reach our payment provider to end this property's subscription, so nothing has been deleted. Try again in a moment.");
+    }
+  }
 
   await db.runTransaction(async tx => {
     const property = await tx.get(propertyRef);
@@ -110,9 +137,13 @@ export const deleteHostProperty = onCall({ region: "australia-southeast1", maxIn
 
     tx.update(propertyRef, {
       lifecycle: "deleted",
+      ...(cancelled ? { "billing.status": "canceled", "billing.cancelAtPeriodEnd": false } : {}),
       updatedAt: FieldValue.serverTimestamp()
+    });
+    if (cancelled) tx.set(propertyRef.collection("billingActions").doc(), {
+      ownerUid, action: "cancel_on_delete", stripeSubscriptionId: cancelled, at: FieldValue.serverTimestamp()
     });
   });
 
-  return { success: true };
+  return { success: true, subscriptionCancelled: cancelled !== null };
 });

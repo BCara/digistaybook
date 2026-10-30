@@ -17,16 +17,20 @@ async function owner(request: CallableRequest) {
 function available(data: any) {
   return data?.visibility === "visible" && !data.safetyRestricted && !data.safetyCaseOpen && !data.openReportCount;
 }
+// Memories looked at per part. Each part is built in the Host's browser, which
+// also stops a part early once its photographs pass a size budget, so this is
+// the ceiling on a text-only part rather than the usual size of one.
+export const EXPORT_PART_MEMORIES = 25;
 export const listHostExport = onCall(options, async request => {
   const property = await owner(request);
-  let query = property.ref.collection("posts").orderBy(FieldPath.documentId()).limit(4);
+  let query = property.ref.collection("posts").orderBy(FieldPath.documentId()).limit(EXPORT_PART_MEMORIES + 1);
   if (request.data.cursor) query = query.startAfter(id(request.data.cursor));
-  const page = await query.get(), selected = page.docs.slice(0, 3);
+  const page = await query.get(), selected = page.docs.slice(0, EXPORT_PART_MEMORIES);
   const posts = selected.filter(doc => available(doc.data())).map(doc => ({ ...publicPost(doc.id, doc.data()),
     // Legacy external photographs cannot safely be fetched by the export server.
     unsupportedPhotos: !!doc.get("photo") || !!doc.get("photos")?.length }));
   return { name: String(property.get("name") ?? "Guestbook").slice(0, 60), posts,
-    nextCursor: page.size > 3 ? selected.at(-1)!.id : null };
+    nextCursor: page.size > EXPORT_PART_MEMORIES ? selected.at(-1)!.id : null };
 });
 export const readHostExportPhoto = onCall(options, async request => {
   const property = await owner(request), postId = id(request.data?.postId), index = request.data?.index;

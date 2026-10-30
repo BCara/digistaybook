@@ -274,6 +274,7 @@ export const resolveSafetyCase = onCall({ ...options, secrets: [] }, async reque
     } else if (action === "release") {
       if (!property.exists) throw new HttpsError("failed-precondition", "This property no longer exists, so the message can only be deleted.");
       tx.set(property.ref.collection("privateFeedback").doc(data.feedbackId), { message: data.message, createdAt: data.feedbackCreatedAt ?? stamp(), releasedAt: stamp() });
+      tx.set(db.doc(`notificationOutbox/feedback-${data.feedbackId}`), { kind: "private_feedback", propertyId: data.propertyId, feedbackId: data.feedbackId, status: "pending", createdAt: stamp() });
     }
     const status = action === "release" ? "released" : "deleted";
     tx.update(ref, { status, message: FieldValue.delete(), photos: FieldValue.delete(), resolvedAt: stamp(), resolvedBy: actor });

@@ -228,7 +228,10 @@ export async function deliverFeedback(id: string, screener: FeedbackScreener = s
     if (result.verdict === "critical") tx.set(feedbackCaseRef(id), { kind: "private_feedback", source: incompleteReason ? "incomplete_screening" : "automated_screening", categories: result.categories,
       ...(incompleteReason ? { screeningStatus: "incomplete", screeningIncompleteReason: incompleteReason } : {}),
       propertyId: data.propertyId, feedbackId: id, message: data.feedback, feedbackCreatedAt: data.createdAt, status: "open", createdAt: stamp(), reviewDueAt: feedbackReviewDue() });
-    else tx.set(db().doc(`properties/${data.propertyId}/privateFeedback/${id}`), { message: data.feedback, createdAt: data.createdAt });
+    else {
+      tx.set(db().doc(`properties/${data.propertyId}/privateFeedback/${id}`), { message: data.feedback, createdAt: data.createdAt });
+      tx.set(db().doc(`notificationOutbox/feedback-${id}`), { kind: "private_feedback", propertyId: data.propertyId, feedbackId: id, status: "pending", createdAt: stamp() });
+    }
     tx.update(ref, { feedback: "", feedbackStatus: result.verdict === "critical" ? "held" : "delivered",
       screeningFeedbackPending: FieldValue.delete(), screeningBudgetWaiting: FieldValue.delete(), updatedAt: stamp() });
   });
@@ -292,6 +295,15 @@ export async function processGuestSubmission(id: string, screener: Screener = sc
     if (status === "standard") tx.set(db().doc(`notificationOutbox/memory-held-${id}-${data.revision}`), {
       kind: "memory_held_for_host_review", propertyId: data.propertyId, postId: id, revision: data.revision,
       status: "pending", createdAt: stamp()
+    });
+    // The Host hears about a memory that went straight on the wall, and about
+    // one held for the safety team, which would otherwise vanish from their
+    // view without a word. Counts only: the email never carries the memory.
+    if (status === "published") tx.set(db().doc(`notificationOutbox/memory-published-${id}-${data.revision}`), {
+      kind: "memory_published", propertyId: data.propertyId, postId: id, revision: data.revision, status: "pending", createdAt: stamp()
+    });
+    if (status === "critical" || status === "reject") tx.set(db().doc(`notificationOutbox/memory-safety-${id}-${data.revision}`), {
+      kind: "memory_with_safety_team", propertyId: data.propertyId, postId: id, revision: data.revision, status: "pending", createdAt: stamp()
     });
     return status;
   });
