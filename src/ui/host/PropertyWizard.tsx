@@ -53,19 +53,23 @@ export function photoCopy(
   slot: PhotoSlot,
   position?: number
 ): { label: string; hint?: string; recommended: boolean } {
-  // Only the dashboard photo is merely optional: every other one is on the
-  // wall a guest sees, and a wall looks its best the first time with them.
+  // The cover is the one a wall really wants: it is the first thing a guest
+  // sees. The welcome photo is a nice touch, and initials stand in without it.
   if (slot === "avatar") {
     return { label: "Main photo", hint: "For your dashboard only. Guests never see it.", recommended: false };
   }
   if (slot === "cover") {
-    return { label: "Cover photo", hint: "Across the top of both walls. Wide works best.", recommended: true };
+    return {
+      label: "Cover photo",
+      hint: "Show off the property's best feature: the beach nearby, the fireplace, the open-plan kitchen. Across the top of both walls, so wide works best.",
+      recommended: true
+    };
   }
   if (slot === "hostPhoto") {
     return {
-      label: "Your photograph",
-      hint: "Beside your names on every note. Without one, your initials.",
-      recommended: true
+      label: "Welcome photo",
+      hint: "Optional. A friendly one of you, or a favorite corner of the property. Beside your names on every note. Without one, your initials.",
+      recommended: false
     };
   }
   return { label: "Photograph", recommended: true };

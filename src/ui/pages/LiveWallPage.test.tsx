@@ -339,7 +339,8 @@ describe("what a preview says about a wall that is mostly empty", () => {
     const gaps = screen.getByRole("region", { name: /things left before this reads like a wall/ });
     expect(within(gaps).getAllByRole("link").map(link => link.textContent))
       .toEqual(["Add a cover photo", "Write an arrival note", "Add the essentials"]);
-    expect(screen.getByText(/No cover photo/)).toBeInTheDocument();
+    // The standard cover stands in, so the band is never blank.
+    expect(document.querySelector(".wall-cover-photo")).toHaveAttribute("src", "/wall/default-cover.webp");
     expect(screen.getByText(/No arrival note/)).toBeInTheDocument();
     expect(screen.getByText(/No house essentials/)).toBeInTheDocument();
   });

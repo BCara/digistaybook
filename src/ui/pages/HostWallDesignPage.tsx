@@ -5,7 +5,8 @@ import {
   emptyHostNote,
   exampleNote,
   factExample,
-  hostInitials,
+  defaultCover,
+  markInitials,
   profileLimits,
   validatePhotoFile,
   unusedFactSuggestions,
@@ -324,7 +325,7 @@ export function HostWallDesignPage({
         current.setProfile(withPhotoInSlot(current.profile, "hostPhoto", outcome.value));
       }
     } catch {
-      setPortraitError("Your photograph could not upload. Please try again.");
+      setPortraitError("Your welcome photo could not upload. Please try again.");
     } finally {
       setPortraitBusy(false);
     }
@@ -802,12 +803,13 @@ export function HostWallDesignPage({
                   alt={profile.cover.alt}
                 />
               ) : (
-                <span className="canvas-cover-empty">
-                  <CameraMark />
-                  <b>The photograph across the top of both walls</b>A wide one
-                  of the property works best. It is the first thing a guest
-                  sees.
-                </span>
+                /* The standard cover the guest wall shows until one is
+                   uploaded, with the offer to replace it on top. */
+                <img
+                  className="canvas-cover-photo"
+                  src={defaultCover.url}
+                  alt="Standard cover photo"
+                />
               )}
               {(!profile.cover || coverBusy) && <span
                 className="btn btn-secondary btn-sm canvas-cover-action"
@@ -859,8 +861,8 @@ export function HostWallDesignPage({
           className="canvas-portrait"
           aria-label={
             profile.hostPhoto
-              ? "Change your photograph"
-              : "Add your photograph"
+              ? "Change the welcome photo"
+              : "Add a welcome photo"
           }
           disabled={portraitBusy}
           onClick={() => photoInput.current?.click()}
@@ -873,14 +875,9 @@ export function HostWallDesignPage({
             />
           ) : (
             <span className="canvas-portrait-mark stay-portrait" aria-hidden="true">
-              {/* Initials stand for a Host who has typed their names; with
-                nothing to draw, the square says what it wants — a
-                photograph — rather than asking a question back. */}
-              {profile.hosts ? (
-                hostInitials(profile.hosts)
-              ) : (
-                <CameraMark />
-              )}
+              {/* The guest wall's own stand-in: the hosts' initials, or the
+                property's when no names are written. */}
+              {markInitials(profile.hosts, draft.name)}
             </span>
           )}
           <span
@@ -888,8 +885,8 @@ export function HostWallDesignPage({
             role={portraitBusy ? "status" : undefined}
           >
             {portraitBusy ? (portraitProgress >= 1 ? "Saving photo…" : portraitProgress > 0 ? `Uploading ${Math.round(portraitProgress * 100)}%…` : "Uploading…") : profile.hostPhoto
-              ? "Change your photograph"
-              : "Add your photograph"}
+              ? "Change the welcome photo"
+              : "Add a welcome photo"}
           </span>
         </button>
         <input
@@ -897,7 +894,7 @@ export function HostWallDesignPage({
           className="visually-hidden"
           type="file"
           accept={profileLimits.photoTypes.join(",")}
-          aria-label="Your photograph: choose an image file"
+          aria-label="Welcome photo: choose an image file"
           disabled={portraitBusy}
           onChange={(event) => {
             const file = event.target.files?.[0];
@@ -991,7 +988,7 @@ export function HostWallDesignPage({
       id: "wall-section-cover",
       title: "Cover photo",
       state: profile.cover ? "done" : "todo",
-      detail: profile.cover ? "Added" : "Add a wide photo of the property",
+      detail: profile.cover ? "Added" : "Show off the property's best feature",
     },
     {
       id: "wall-section-name",
@@ -1001,9 +998,10 @@ export function HostWallDesignPage({
     },
     {
       id: "wall-section-welcome",
-      title: "Your photo",
-      state: profile.hostPhoto ? "done" : "todo",
-      detail: profile.hostPhoto ? "Added" : "Add a photo so guests know who you are",
+      title: "Welcome photo",
+      optional: true,
+      state: profile.hostPhoto ? "done" : "optional",
+      detail: profile.hostPhoto ? "Added" : "One of you, or a favorite corner of the property",
     },
     {
       id: "wall-section-welcome",

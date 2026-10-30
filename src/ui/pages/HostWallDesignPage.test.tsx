@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { AuthContext, type AuthState } from "../auth/AuthProvider";
 import { HostWallDesignPage } from "./HostWallDesignPage";
-import { emptyProfile, normalizeProfile, type HostNote, type PropertyProfile } from "../../domain/propertyProfile";
+import { defaultCover, emptyProfile, exampleNote, normalizeProfile, type HostNote, type PropertyProfile } from "../../domain/propertyProfile";
 import type { HostProperty } from "../host/propertyStore";
 
 vi.mock("../../lib/firebaseConfig", () => ({
@@ -150,7 +150,7 @@ describe("switching the phone editor between Edit and Preview", () => {
     const rows = () => within(screen.getByRole("navigation", { name: "Guest wall sections" }));
     await screen.findByRole("navigation", { name: "Guest wall sections" });
     expect(rows().getAllByRole("button").every(button => button.dataset.state === "todo")).toBe(true);
-    for (const section of [/Property details/, /Welcome & hosts/, /Wi-Fi and essentials/, /More notes/, /Your links/, /Look & feel/]) {
+    for (const section of [/Property details/, /Welcome & hosts/, /Wi-Fi and essentials/, /More notes/, /Stay with us again/, /Look & feel/]) {
       fireEvent.click(rows().getByRole("button", { name: section }));
       fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Save changes" }));
       await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
@@ -158,7 +158,7 @@ describe("switching the phone editor between Edit and Preview", () => {
     }
     const stored = normalizeProfile(savePropertyProfile.mock.calls.at(-1)![1]);
     expect(stored.reviewedSections).toEqual(["property", "welcome", "essentials", "notes", "links", "style"]);
-    expect(stored.location).toBe(""); expect(stored.stayWelcome).toBe(""); expect(stored.facts).toEqual([]);
+    expect(stored.location).toBe(""); expect(stored.stayWelcome).toBe(exampleNote.welcome); expect(stored.facts).toEqual([]);
     page.unmount();
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: stored }) });
     renderPage();
@@ -196,12 +196,12 @@ describe("switching the phone editor between Edit and Preview", () => {
     const sections = within(await screen.findByRole("navigation", { name: "Guest wall sections" }));
     expect(screen.queryByRole("button", { name: "Edit details" })).not.toBeInTheDocument();
     expect(sections.getByRole("button", { name: /Property details/ })).toHaveAttribute("data-state", "todo");
-    expect(sections.queryByRole("button", { name: /Your photo/ })).not.toBeInTheDocument();
+    expect(sections.queryByRole("button", { name: /Welcome photo/ })).not.toBeInTheDocument();
     expect(sections.queryByRole("button", { name: /^Cover photo/ })).not.toBeInTheDocument();
-    expect(sections.getByRole("button", { name: /Your links/ })).toBeInTheDocument();
+    expect(sections.getByRole("button", { name: /Stay with us again/ })).toBeInTheDocument();
     fireEvent.click(sections.getByRole("button", { name: /Welcome & hosts/ }));
     expect(screen.getByRole("dialog", { name: "Welcome & hosts" })).toBeVisible();
-    expect(within(screen.getByRole("dialog")).getByLabelText("Host photo")).toBeInTheDocument();
+    expect(within(screen.getByRole("dialog")).getByLabelText("Welcome photo")).toBeInTheDocument();
     expect(screen.getByLabelText("Welcome message")).toHaveValue(filledProfile.stayWelcome);
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
     fireEvent.click(screen.getByRole("button", { name: "See guest view" }));
@@ -219,7 +219,7 @@ describe("switching the phone editor between Edit and Preview", () => {
     fireEvent.change(screen.getByLabelText("Your names"), { target: { value: "Ana & Tom" } });
     fireEvent.change(screen.getByLabelText("Welcome message"), { target: { value: "Welcome to the cottage." } });
     const photo = new File(["photo"], "hosts.jpg", { type: "image/jpeg" });
-    fireEvent.change(screen.getByLabelText("Host photo"), { target: { files: [photo] } });
+    fireEvent.change(screen.getByLabelText("Welcome photo"), { target: { files: [photo] } });
     fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     expect(within(screen.getByRole("navigation", { name: "Guest wall sections" })).getByRole("button", { name: /Welcome & hosts/ })).toHaveAttribute("data-state", "done");
@@ -270,7 +270,7 @@ describe("switching the phone editor between Edit and Preview", () => {
     renderPage();
     await editWall();
     fireEvent.click(await screen.findByRole("button", { name: "Add links" }));
-    const form = within(screen.getByRole("dialog", { name: "Your links" }));
+    const form = within(screen.getByRole("dialog", { name: "Stay with us again" }));
     fireEvent.click(form.getByRole("button", { name: "+ Book direct" }));
     fireEvent.click(form.getByRole("button", { name: "Save changes" }));
     expect(await form.findAllByText(/Add the web address/)).not.toHaveLength(0);
@@ -296,7 +296,7 @@ describe("switching the phone editor between Edit and Preview", () => {
     renderPage();
     await editWall();
     fireEvent.click(await screen.findByRole("button", { name: "Add links" }));
-    const form = within(screen.getByRole("dialog", { name: "Your links" }));
+    const form = within(screen.getByRole("dialog", { name: "Stay with us again" }));
     fireEvent.click(form.getByRole("button", { name: "+ Book direct" }));
     fireEvent.change(form.getByLabelText("Web address"), { target: { value: "https://seaview.example/book" } });
     fireEvent.click(form.getByRole("button", { name: "Save changes" }));
@@ -312,7 +312,7 @@ describe("switching the phone editor between Edit and Preview", () => {
     await editWall();
     fireEvent.click(await screen.findByRole("button", { name: "Sections" }));
     const sections = within(screen.getByRole("navigation", { name: "Guest wall sections" }));
-    expect(sections.getByRole("button", { name: /Your links/ })).toBeInTheDocument();
+    expect(sections.getByRole("button", { name: /Stay with us again/ })).toBeInTheDocument();
     fireEvent.click(sections.getByRole("button", { name: /Look & feel/ }));
     const form = within(screen.getByRole("dialog", { name: "Look & feel" }));
     fireEvent.click(form.getByRole("button", { name: /Warm Linen/ }));
@@ -500,15 +500,17 @@ describe("the guest view of a property", () => {
     renderPage();
 
     await waitFor(() => expect(canvas().getByLabelText("Property name")).toBeInTheDocument());
-    expect(canvas().getByText(/The photograph across the top of both walls/i)).toBeInTheDocument();
+    // No cover yet: the standard one stands in, with the offer to replace it.
+    expect(canvas().getByRole("img", { name: "Standard cover photo" })).toHaveAttribute("src", defaultCover.url);
     expect(canvas().getByLabelText("Where the property is")).toHaveAttribute(
       "placeholder",
       "10 Street Name, Town, Postcode"
     );
-    // The note is on the wall from the start, empty, saying what a guest would
-    // be reading there. A Host with nothing to say takes it off; they are not
-    // asked to ask for it.
-    expect(canvas().getByLabelText("Arrival note")).toHaveValue("");
+    // The note is on the wall from the start, with the example written in. A
+    // Host with nothing to say takes it off; they are not asked to ask for it.
+    expect(canvas().getByLabelText("Arrival heading")).toHaveValue(exampleNote.heading);
+    expect(canvas().getByLabelText("Arrival note")).toHaveValue(exampleNote.welcome);
+    expect(save()).toBeDisabled();
     expect(canvas().queryByRole("button", { name: "+ a note from your hosts" })).not.toBeInTheDocument();
     expect(canvas().getByRole("button", { name: "Leave the whole note out" })).toBeInTheDocument();
   });
@@ -955,6 +957,7 @@ describe("the guest view of a property", () => {
   });
 
   it("renames the property from the title a guest reads", async () => {
+    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
     renderPage();
     await waitFor(() => expect(canvas().getByLabelText("Property name")).toBeInTheDocument());
 
@@ -988,48 +991,46 @@ describe("the guest view of a property", () => {
     expect(savePropertyProfile).not.toHaveBeenCalled();
   });
 
-  it("makes the whole photograph area the control, and marks an empty one with a camera", async () => {
+  it("makes the whole photograph area the control, with stand-ins until photos are added", async () => {
     renderPage();
     await waitFor(() => expect(canvas().getByLabelText("Property name")).toBeInTheDocument());
 
     // The pill is painted inside the button rather than sitting beside it, so
     // the copy a Host reads and the area they aim at are one control.
     const cover = canvas().getByRole("button", { name: "Add a cover photo" });
-    expect(cover.querySelector(".canvas-cover-empty")).toBeTruthy();
+    expect(cover.querySelector("img")).toHaveAttribute("src", defaultCover.url);
 
-    const portrait = canvas().getByRole("button", { name: "Add your photograph" });
-    expect(portrait.querySelector(".canvas-portrait-mark")).toBeTruthy();
-    // An empty frame asks for a photograph rather than asking a question.
-    expect(portrait.textContent).not.toContain("?");
-    expect(portrait.querySelector(".canvas-portrait-mark .camera-mark")).toBeTruthy();
+    // No names written: the property's initials stand in for the photo.
+    const portrait = canvas().getByRole("button", { name: "Add a welcome photo" });
+    expect(portrait.querySelector(".canvas-portrait-mark")).toHaveTextContent("SC");
 
     const openPicker = vi.spyOn(HTMLInputElement.prototype, "click");
     fireEvent.click(portrait);
     expect(openPicker).toHaveBeenCalledTimes(1);
     expect(openPicker.mock.instances[0]).toBe(
-      screen.getByLabelText("Your photograph: choose an image file")
+      screen.getByLabelText("Welcome photo: choose an image file")
     );
     openPicker.mockRestore();
-    expect(screen.queryByRole("dialog", { name: "Your photograph" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("dialog", { name: "Welcome photo" })).not.toBeInTheDocument();
     const file = new File(["binary"], "portrait.jpg", { type: "image/jpeg" });
-    fireEvent.change(screen.getByLabelText("Your photograph: choose an image file"), { target: { files: [file] } });
+    fireEvent.change(screen.getByLabelText("Welcome photo: choose an image file"), { target: { files: [file] } });
     await waitFor(() => expect(uploadPropertyPhoto).toHaveBeenCalledWith("prop-1", "hostPhoto", file, expect.any(Function)));
-    await waitFor(() => expect(canvas().getByRole("button", { name: "Change your photograph" })).toBeEnabled());
-    expect(screen.queryByRole("dialog", { name: "Your photograph" })).not.toBeInTheDocument();
+    await waitFor(() => expect(canvas().getByRole("button", { name: "Change the welcome photo" })).toBeEnabled());
+    expect(screen.queryByRole("dialog", { name: "Welcome photo" })).not.toBeInTheDocument();
   });
 
   it("shows one compact upload status and makes a failed portrait upload retryable", async () => {
     let finish!: (value: unknown) => void;
     uploadPropertyPhoto.mockImplementation(() => new Promise(resolve => { finish = resolve; }));
     renderPage();
-    const input = await screen.findByLabelText("Your photograph: choose an image file");
+    const input = await screen.findByLabelText("Welcome photo: choose an image file");
     fireEvent.change(input, { target: { files: [new File(["photo"], "portrait.jpg", { type: "image/jpeg" })] } });
     expect(screen.getByText("Uploading…")).toHaveAttribute("role", "status");
     expect(screen.queryByText(/Uploading photograph|0%/)).not.toBeInTheDocument();
-    expect(canvas().getByRole("button", { name: "Add your photograph" })).toBeDisabled();
+    expect(canvas().getByRole("button", { name: "Add a welcome photo" })).toBeDisabled();
     finish({ status: "error", message: "Photo storage is unavailable." });
     expect(await screen.findByRole("alert")).toHaveTextContent("Photo storage is unavailable.");
-    expect(canvas().getByRole("button", { name: "Add your photograph" })).toBeEnabled();
+    expect(canvas().getByRole("button", { name: "Add a welcome photo" })).toBeEnabled();
   });
 
   it("uploads the cover from the photograph itself", async () => {

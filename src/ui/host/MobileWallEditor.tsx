@@ -2,7 +2,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } f
 import { createPortal } from "react-dom";
 import { propertyIdentityLimits, validatePropertyName } from "../../domain/property";
 import {
-  emptyFact, emptyHostNote, hostInitials, profileLimits, validatePhotoFile, validateProfile,
+  emptyFact, emptyHostNote, defaultCover, markInitials, profileLimits, validatePhotoFile, validateProfile,
   writtenHostNotes, type PropertyProfile,
 } from "../../domain/propertyProfile";
 import { emptyStayAgainLink, stayAgainLimits, stayAgainProblems, wallStayAgainLinks } from "../../domain/stayAgain";
@@ -25,7 +25,7 @@ type Section = SetupSection;
 type SectionRow = { id: Section; title?: string; detail: string; state: "done" | "todo" };
 const titles: Record<Section, string> = {
   property: "Property details", welcome: "Welcome & hosts",
-  essentials: "Wi-Fi & essentials", notes: "More from your hosts", links: "Your links", style: "Look & feel",
+  essentials: "Wi-Fi & essentials", notes: "More from your hosts", links: "Stay with us again", style: "Look & feel",
 };
 
 function EditSection({ title, action, onEdit, children }: { title: string; action: string; onEdit: () => void; children: ReactNode }) {
@@ -90,14 +90,14 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
       <WallPreview name={draft.name} profile={profile} counts={draft.counts} view="stay" slug={property.slug} stayToken={property.stayToken} propertyId={property.id} />
     </section> : <div className="phone-wall-surface" data-wall-theme={profile.theme} data-wall-colour={profile.colour}>
       <section className="phone-wall-section phone-wall-property">
-        {profile.cover && <div className="phone-wall-cover"><img src={profile.cover.url} alt={profile.cover.alt || "Your property"} /></div>}
+        <div className="phone-wall-cover">{profile.cover ? <img src={profile.cover.url} alt={profile.cover.alt || "Your property"} /> : <img src={defaultCover.url} alt="Standard cover photo" />}</div>
         <div className="phone-wall-section-head"><h3>Property details</h3><button type="button" className="btn btn-ghost" onClick={() => edit("property")}>Edit details</button></div>
         <div className="phone-wall-property-words"><h3>{draft.name}</h3>{profile.location && <p>{profile.location}</p>}</div>
       </section>
       <EditSection title="Your welcome" action="Edit welcome" onEdit={() => edit("welcome")}>
         <div className="phone-wall-welcome">
           <div className="phone-wall-hosts">
-            {profile.hostPhoto ? <img src={profile.hostPhoto.url} alt={profile.hostPhoto.alt || "Your hosts"} /> : <span className="phone-wall-initials" aria-hidden="true">{hostInitials(profile.hosts) || "+"}</span>}
+            {profile.hostPhoto ? <img src={profile.hostPhoto.url} alt={profile.hostPhoto.alt || "Your hosts"} /> : <span className="phone-wall-initials" aria-hidden="true">{markInitials(profile.hosts, draft.name)}</span>}
             <div><h3>{!profile.stayNoteOff && profile.stayHeading || "Your welcome"}</h3><p>{profile.hosts || "Add your names"}</p></div>
           </div>
           {profile.stayNoteOff ? <p className="field-hint">Your welcome note is hidden.</p> : <>
@@ -112,7 +112,7 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
       <EditSection title="More from your hosts" action="Edit notes" onEdit={() => edit("notes")}>
         <div className="phone-wall-summary">{writtenHostNotes(profile).length ? <HostNotes author={profile.hosts || "your hosts"} notes={writtenHostNotes(profile).map(note => ({ id: note.id, message: note.message, style: note.style, photo: note.photo ? { src: note.photo.url, alt: note.photo.alt } : undefined }))} /> : "Optional notes, recommendations or a personal touch."}</div>
       </EditSection>
-      {linksEnabled && <EditSection title="Your links" action={links.length ? "Edit links" : "Add links"} onEdit={() => edit("links")}>
+      {linksEnabled && <EditSection title="Stay with us again" action={links.length ? "Edit links" : "Add links"} onEdit={() => edit("links")}>
         <div className="phone-wall-summary stay-wall">{links.length ? <StayAgainLinks id="phone-wall-links" links={links} headingLevel={4} /> : <p>Help guests book another stay or join your mailing list.</p>}</div>
       </EditSection>}
     </div>}
@@ -184,9 +184,9 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
         const problem = validatePhotoFile(file); setFailure(problem);
         if (!problem) setPhotos(previous => ({ ...previous, [slot]: file }));
       }} /></label>
-      <p className="field-hint">{slot === "cover" ? "A landscape photo of your property." : "A photo of you, so guests know who is welcoming them."} JPEG, PNG or WebP. Large photos are resized for you.</p>
+      <p className="field-hint">{slot === "cover" ? "Show off the property's best feature: the beach nearby, the fireplace, the open-plan kitchen. Landscape works best." : "Optional. A friendly one of you, or a favorite corner of the property."} JPEG, PNG or WebP. Large photos are resized for you.</p>
       {photos[slot] && <p className="field-hint">{photos[slot].name} · Ready to save</p>}
-      {(current || photos[slot]) && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => setPhotos(previous => ({ ...previous, [slot]: null }))}>Remove {slot === "cover" ? "cover" : "host"} photo</button>}
+      {(current || photos[slot]) && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => setPhotos(previous => ({ ...previous, [slot]: null }))}>Remove {slot === "cover" ? "cover" : "welcome"} photo</button>}
       {photos[slot] === null && <p className="field-hint">Photo will be removed when you save.</p>}
     </div>;
   }
@@ -233,7 +233,7 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
           {text("stayWelcome", "Welcome message", profileLimits.stayWelcomeMax, true)}
           {text("stayTip", "A little tip", profileLimits.stayTipMax, true)}
           <label className="phone-section-check"><input type="checkbox" checked={!profile.stayNoteOff} disabled={busy} onChange={e => set("stayNoteOff", !e.target.checked)} />Show the welcome note</label>
-          {photo("hostPhoto", "Host photo")}
+          {photo("hostPhoto", "Welcome photo")}
         </>}
         {section === "essentials" && <>
           <p className="field-hint">Add the details guests need during their stay.</p>

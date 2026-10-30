@@ -6,6 +6,7 @@ import {
   emptyProfile,
   sameProfileText,
   validateProfile,
+  withExampleNote,
   type HostNote,
   type PropertyProfile
 } from "../../domain/propertyProfile";
@@ -157,9 +158,11 @@ export type PropertyDraft = {
 export function usePropertyDraft(propertyId: string): PropertyDraft {
   // The draft starts as what was read, seeded in the same render the property
   // lands in: a Host must never see the wall arrive empty and fill in after.
+  // A property with no arrival note opens with the example written in, as a
+  // new property does, for the Host to save, change or turn off.
   const [load, setLoad] = useProperty(propertyId, (property) => {
     setName(property.name);
-    setDraft(property.profile);
+    setDraft(withExampleNote(property.profile));
   });
   const [counts, setCounts] = useState<WallCounts | { error: string } | null>(null);
 
@@ -172,7 +175,10 @@ export function usePropertyDraft(propertyId: string): PropertyDraft {
   // callback above: the fields a Host is editing must never arrive after the
   // property they belong to.
   const [name, setName] = useState(() => recallProperty(propertyId)?.name ?? "");
-  const [draft, setDraft] = useState<PropertyProfile>(() => recallProperty(propertyId)?.profile ?? emptyProfile());
+  const [draft, setDraft] = useState<PropertyProfile>(() => {
+    const recalled = recallProperty(propertyId)?.profile;
+    return recalled ? withExampleNote(recalled) : emptyProfile();
+  });
   const [problems, setProblems] = useState<EditorProblems>(NO_PROBLEMS);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -191,7 +197,9 @@ export function usePropertyDraft(propertyId: string): PropertyDraft {
   }, [load.status, load.status === "ready" ? load.property.id : null]);
 
   const property = load.status === "ready" ? load.property : null;
-  const dirty = property !== null && (name !== property.name || !sameProfileText(draft, property.profile));
+  // The example note written in on opening is not a change of the Host's, so
+  // it does not count as unsaved work; it is stored with their next save.
+  const dirty = property !== null && (name !== property.name || !sameProfileText(draft, withExampleNote(property.profile)));
 
   /**
    * A photograph is written to the property as it uploads, so when one arrives

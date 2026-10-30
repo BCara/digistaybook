@@ -1,5 +1,5 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
-import { hostInitials } from "../../domain/propertyProfile";
+import { defaultCover, markInitials } from "../../domain/propertyProfile";
 import { readWifiLine, type WifiLogin } from "../../domain/wifi";
 import { displayWebAddress, wallStayAgainLinks, type StayAgainLink } from "../../domain/stayAgain";
 import { EssentialMark, essentialMarkName, type EssentialMarkName } from "./EssentialMark";
@@ -24,24 +24,23 @@ type WallProperty = WallHeaderProperty;
  */
 export function WallHeader({ property, view, preview = false, headingLevel = 1, hostNotes }: { property: WallHeaderProperty; view: "public" | "stay"; preview?: boolean; headingLevel?: number; hostNotes?: ReactNode }) {
   if (view === "stay") return <StayWallHeader property={property} preview={preview} headingLevel={headingLevel} hostNotes={hostNotes} />;
-  return <><header className="live-property-header" data-no-header-photos={!property.cover && !property.hostPhoto ? "true" : undefined}>
-            {property.cover
-              ? <img className="live-property-cover" src={property.cover.url} alt={property.cover.alt} fetchPriority="high" />
-              : preview && <p className="wall-ghost">No cover photo. Guests open straight onto your name.</p>}
+  /* A wall without its own cover shows the standard one, never a blank band. */
+  const cover = property.cover ?? defaultCover;
+  return <><header className="live-property-header">
+            <img className="live-property-cover" src={cover.url} alt={cover.alt} fetchPriority="high" />
             {property.location && <p>{property.location}</p>}
             <h1 aria-level={headingLevel}>{property.name}</h1>
             {/* No welcome line: the public page is built from the guest wall
                 and has nothing written for it alone, so there is one wall to
                 write and nothing to keep in step. */}
             {/* Initials stand in for a portrait that was never uploaded: the
-                hosts' names are the byline, and a property with names and no
-                photograph was losing the byline along with the picture. */}
-            {(property.hostPhoto || property.hosts) && <div className="host-byline">
+                hosts', or the property's when no names are written. */}
+            <div className="host-byline">
               {property.hostPhoto
                 ? <img className="avatar avatar-lg avatar-photo" src={property.hostPhoto.url} alt={property.hostPhoto.alt || "Your hosts"} />
-                : <span className="avatar avatar-lg tone-2" aria-hidden="true">{hostInitials(property.hosts)}</span>}
+                : <span className="avatar avatar-lg tone-2" aria-hidden="true">{markInitials(property.hosts, property.name)}</span>}
               {property.hosts && <b>{property.hosts}</b>}
-            </div>}
+            </div>
           </header></>;
 }
 
@@ -75,7 +74,8 @@ export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes 
   const note = Boolean(house) && (paragraphs.length > 0 || tip !== "" || heading !== "" || hosts !== "");
   const mark = property.hostPhoto
     ? <img className="avatar avatar-photo stay-portrait" src={property.hostPhoto.url} alt={property.hostPhoto.alt || "Your hosts"} />
-    : hosts ? <span className="avatar tone-2 stay-portrait" aria-hidden="true">{hostInitials(hosts)}</span> : null;
+    : <span className="avatar tone-2 stay-portrait" aria-hidden="true">{markInitials(hosts, property.name)}</span>;
+  const cover = property.cover ?? defaultCover;
   const quickLinks = facts.map(fact => ({ label: fact.term, mark: essentialMarkName(fact.term) }));
   /* Checked again here, so a draft preview never offers a link that goes nowhere. */
   const againLinks = wallStayAgainLinks(house?.links ?? []);
@@ -83,10 +83,8 @@ export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes 
   const [opened, setOpened] = useState<{ index: number; from: DOMRect } | null>(null);
 
   return <div className="stay-wall">
-    <header className="stay-cover" data-no-header-photos={!property.cover && !property.hostPhoto ? "true" : undefined}>
-      {property.cover
-        ? <img className="wall-cover-photo" src={property.cover.url} alt={property.cover.alt} fetchPriority="high" />
-        : preview && <p className="wall-ghost">No cover photo. Guests open straight onto your name.</p>}
+    <header className="stay-cover">
+      <img className="wall-cover-photo" src={cover.url} alt={cover.alt} fetchPriority="high" />
       <div className="stay-cover-titles">
         <h1 aria-level={headingLevel}>{property.name}</h1>
         {location && <span className="stay-location">
@@ -108,7 +106,7 @@ export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes 
     </section>}
     {/* No note, but someone still hosts here: a guest should know whose house
         this is before the Host has written a word for it. */}
-    {!note && mark && <section className="stay-welcome-plain stay-card" aria-label="Your hosts">
+    {!note && (property.hostPhoto || hosts) && <section className="stay-welcome-plain stay-card" aria-label="Your hosts">
       {mark}
       {hosts && <p className="stay-hosts"><span className="stay-eyebrow">Your hosts,</span> <b>{hosts}</b></p>}
     </section>}

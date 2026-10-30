@@ -286,8 +286,9 @@ export const emptyProfile = (): PropertyProfile => ({
  * A wall with nothing written on it is the hardest thing to start, and a blank
  * first wall looks unfinished. So "Add a property" fills the heading and note
  * in with this — plain, true of nearly every property — and the Host changes
- * or removes it. The wall editor still shows it as a placeholder, for an
- * existing property whose note was cleared on purpose.
+ * or removes it. A property opened in the wall editor with neither line
+ * written gets the same (`withExampleNote`), so older properties are not
+ * blank either.
  *
  * It points a guest at the essentials, never at the Host's inbox: the wall is
  * there so a guest can answer their own question, and a note that invites a
@@ -300,6 +301,16 @@ export const exampleNote = {
     "Before you go, we would appreciate it if you would add a memory to the wall."
   ].join("\n\n")
 } as const;
+
+/**
+ * The profile with the example arrival note written in, when the note is on
+ * and neither its heading nor its words are. A Host who wants no note turns
+ * the whole note off, which is stored, so it is never put back under them.
+ */
+export function withExampleNote(profile: PropertyProfile): PropertyProfile {
+  if (profile.stayNoteOff || profile.stayHeading.trim() || profile.stayWelcome.trim()) return profile;
+  return { ...profile, stayHeading: exampleNote.heading, stayWelcome: exampleNote.welcome };
+}
 
 /* ------------------------------- Reading -------------------------------- */
 
@@ -666,11 +677,7 @@ export const factSuggestions: readonly FactSuggestion[] = [
   { term: "Bins", detail: "Thursday morning", note: "Green lid for recycling, black for the rest" },
   { term: "Heating", detail: "Dial in the hall", note: "It takes an hour to come through" },
   { term: "Hot water", detail: "On all day", note: "The shower runs hot after a minute" },
-  { term: "Parking", detail: "Two cars, on the gravel", note: "Please leave the lane clear" },
-  // A report, not a conversation: the wall's one route to the Host is the
-  // private feedback at its foot (ui/wall/MemoryNote.tsx), which Hosts read
-  // but cannot reply to, so the line names that and invites nothing more.
-  { term: "If something breaks", detail: "Please report it", note: "Use Private feedback at the bottom of this page so we can put it right" }
+  { term: "Parking", detail: "Two cars, on the gravel", note: "Please leave the lane clear" }
 ];
 
 /** The suggestions a property has not used yet, matched on the label. */
@@ -699,3 +706,17 @@ export function hostInitials(hosts: string): string {
     .map((word) => word[0]?.toUpperCase() ?? "");
   return letters.slice(0, 2).join("") || "•";
 }
+
+/**
+ * The initials in place of a welcome photo: the hosts', or the property's
+ * when no names are written, so the mark is never empty.
+ */
+export const markInitials = (hosts: string, propertyName: string): string =>
+  hostInitials(hosts.trim() || propertyName);
+
+/**
+ * The cover a wall shows until the Host uploads one: a laid table, welcoming
+ * without passing for anyone's house. No alt text, because it shows nothing
+ * about the property.
+ */
+export const defaultCover = { url: "/wall/default-cover.webp", alt: "" } as const;
