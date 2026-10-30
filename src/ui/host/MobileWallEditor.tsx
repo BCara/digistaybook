@@ -2,7 +2,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } f
 import { createPortal } from "react-dom";
 import { propertyIdentityLimits, validatePropertyName } from "../../domain/property";
 import {
-  emptyFact, emptyHostNote, defaultCover, exampleNote, markInitials, profileLimits, validatePhotoFile, validateProfile,
+  emptyFact, emptyHostNote, defaultCover, exampleNote, guestPromptSamples, markInitials, profileLimits, validatePhotoFile, validateProfile,
   writtenHostNotes, type PropertyProfile,
 } from "../../domain/propertyProfile";
 import { emptyStayAgainLink, noteLinkLimits, stayAgainLimits, stayAgainProblems, wallStayAgainLinks, type StayAgainLink } from "../../domain/stayAgain";
@@ -12,7 +12,6 @@ import { setupSectionIds, type SetupSection } from "../../domain/setupSections";
 import { PropertyShell } from "./PropertyShell";
 import { WallPreview } from "./WallPreview";
 import { WallThemePicker } from "./WallThemePicker";
-import { HostNoteStylePicker } from "./HostNoteStylePicker";
 import { PhotoDropTarget, PhotoField } from "./PhotoField";
 import { HostNotes } from "../wall/HostNotes";
 import { NoteLinks, StayAgainLinks } from "../wall/WallHeader";
@@ -68,8 +67,8 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
   }, []);
   const sections: SectionRow[] = [
     { id: "property", detail: [draft.name, profile.location].filter(Boolean).join(" · ") || "Name, address and cover photo", state: reviewedState("property") },
-    { id: "welcome", detail: profile.stayNoteOff ? "Welcome hidden · Your names and host photo" : profile.stayWelcome.trim() || "Your names, welcome note and host photo", state: reviewedState("welcome") },
-    { id: "essentials", title: "Wi-Fi and essentials", detail: profile.factsOff ? "Hidden from the wall" : profile.facts.map(f => f.term).filter(Boolean).join(", ") || "Wi-Fi, check-out, parking", state: reviewedState("essentials") },
+    { id: "welcome", detail: !profile.stayNoteOff && profile.stayWelcome.trim() || "Your names, welcome note and host photo", state: reviewedState("welcome") },
+    { id: "essentials", title: "Wi-Fi and essentials", detail: !profile.factsOff && profile.facts.map(f => f.term).filter(Boolean).join(", ") || "Wi-Fi, check-out, parking", state: reviewedState("essentials") },
     { id: "notes", title: "More notes", detail: [writtenHostNotes(profile).length && `${writtenHostNotes(profile).length} notes from your hosts`, usefulLinks.length && `${usefulLinks.length} ${usefulLinks.length === 1 ? "link" : "links"}`].filter(Boolean).join(" · ") || "Anything else you want guests to know, and useful links", state: reviewedState("notes") },
     ...(linksEnabled ? [{ id: "links" as const, detail: links.length ? links.map(link => link.label).join(" · ") : "Book direct or join your mailing list", state: reviewedState("links") }] : []),
     { id: "style", detail: `${wallTheme(profile.theme).name}, ${wallColourName(profile.theme, profile.colour)}`, state: reviewedState("style") },
@@ -102,14 +101,14 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
             {profile.hostPhoto ? <img src={profile.hostPhoto.url} alt={profile.hostPhoto.alt || "Your hosts"} /> : <span className="phone-wall-initials" aria-hidden="true">{markInitials(profile.hosts, draft.name)}</span>}
             <div><h3>{!profile.stayNoteOff && profile.stayHeading || "Your welcome"}</h3><p>{profile.hosts || "Add your names"}</p></div>
           </div>
-          {profile.stayNoteOff ? <p className="field-hint">Your welcome note is hidden.</p> : <>
+          {profile.stayNoteOff ? <p className="phone-wall-message">Write a personal welcome for arriving guests.</p> : <>
             <p className="phone-wall-message">{profile.stayWelcome || "Write a personal welcome for arriving guests."}</p>
             {profile.stayTip && <p className="phone-wall-tip">{profile.stayTip}</p>}
           </>}
         </div>
       </EditSection>
       <EditSection title="Wi-Fi & essentials" action="Edit essentials" onEdit={() => edit("essentials")}>
-        <div className="phone-wall-summary">{profile.factsOff ? "Hidden from the wall" : profile.facts.filter(f => f.term.trim()).map(f => f.term).join(" · ") || "Add Wi-Fi, check-out, parking and house information."}</div>
+        <div className="phone-wall-summary">{!profile.factsOff && profile.facts.filter(f => f.term.trim()).map(f => f.term).join(" · ") || "Add Wi-Fi, check-out, parking and house information."}</div>
       </EditSection>
       <EditSection title="More from your hosts" action="Edit notes" onEdit={() => edit("notes")}>
         <div className="phone-wall-summary">{writtenHostNotes(profile).length ? <HostNotes author={profile.hosts || "your hosts"} notes={writtenHostNotes(profile).map(note => ({ id: note.id, message: note.message, style: note.style, photo: note.photo ? { src: note.photo.url, alt: note.photo.alt } : undefined }))} /> : "Optional notes, recommendations or a personal touch."}
@@ -135,6 +134,19 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
     </footer>
     {editing && <SectionForm key={editing} section={editing} property={property} draft={draft} onClose={close} onSaved={() => { setNotice("Saved · Your guest wall is up to date"); close(); }} />}
   </PropertyShell>;
+}
+
+/**
+ * There are no show/hide switches on the phone: a part is on the wall when it
+ * has something in it. The stored flags follow the content, which also brings
+ * back anything an earlier switch had hidden.
+ */
+function shownAsFilled(profile: PropertyProfile): PropertyProfile {
+  return {
+    ...profile,
+    factsOff: !profile.facts.some(fact => fact.term.trim() || fact.detail.trim() || fact.note.trim()),
+    stayNoteOff: !profile.stayHeading.trim() && !profile.stayWelcome.trim()
+  };
 }
 
 function SectionForm({ section, property, draft, onClose, onSaved }: { section: Section; property: HostProperty; draft: PropertyDraft; onClose: () => void; onSaved: () => void }) {
@@ -171,10 +183,18 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
   useEffect(() => { if (attempted && draft.problems.failure) setFailure(draft.problems.failure); }, [attempted, draft.problems.failure]);
 
   function set<K extends keyof PropertyProfile>(key: K, value: PropertyProfile[K]) { setProfile(previous => ({ ...previous, [key]: value })); }
-  const issues = attempted ? [...validatePropertyName(name).map(p => p.message), ...validateProfile(profile).filter(p => !(section === "links" && p.field === "stayAgainLinks") && !(section === "notes" && p.field === "noteLinks")).map(p => p.message)] : [];
+  const issues = attempted ? [...validatePropertyName(name).map(p => p.message), ...validateProfile(shownAsFilled(profile)).filter(p => !(section === "links" && p.field === "stayAgainLinks") && !(section === "notes" && p.field === "noteLinks")).map(p => p.message)] : [];
   const linkIssues = attempted ? stayAgainProblems(profile.stayAgainLinks) : [];
   const noteLinkIssues = attempted ? stayAgainProblems(profile.noteLinks, { max: noteLinkLimits.linksMax, example: "Our favourite walks" }) : [];
   /** One link's fields; the two lists differ only in where they are kept and what they suggest. */
+  // One bin for everything a section can take away, at the right of the
+  // thing's name (on an item's border, beside its legend), rather than a
+  // full-width button that read as one more thing to fill in.
+  function removeButton(label: string, onClick: () => void) {
+    return <button type="button" className="phone-section-remove" aria-label={label} title={label} disabled={busy} onClick={onClick}>
+      <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3.5 5.5h13M8 5.5V3.8h4v1.7M5.2 5.5l.8 10.7h8l.8-10.7M8.4 8.6v4.8M11.6 8.6v4.8" /></svg>
+    </button>;
+  }
   function linkFields(key: "stayAgainLinks" | "noteLinks", issues: { index: number; message: string }[], placeholder: string) {
     const rows: StayAgainLink[] = profile[key];
     const setRow = (index: number, change: Partial<StayAgainLink>) => set(key, rows.map((row, i) => i === index ? { ...row, ...change } : row));
@@ -186,13 +206,13 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
         <label>Button text<input value={link.label} maxLength={stayAgainLimits.labelMax} placeholder={placeholder} disabled={busy} onChange={e => setRow(index, { label: e.target.value })} /></label>
         <label>Web address<input type="text" inputMode="url" autoComplete="url" autoCapitalize="none" spellCheck={false} value={link.url} maxLength={stayAgainLimits.urlMax} placeholder="yourwebsite.com/book" disabled={busy} aria-invalid={problem ? true : undefined} aria-describedby={problem ? problemId : undefined} onChange={e => setRow(index, { url: e.target.value })} /></label>
         {problem && <p id={problemId} className="form-feedback" role="alert">{problem}</p>}
-        <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => set(key, rows.filter((_, i) => i !== index))}>Remove link {index + 1}</button>
+        {removeButton(`Remove link ${index + 1}`, () => set(key, rows.filter((_, i) => i !== index)))}
       </fieldset>;
     });
   }
   function text(key: "location" | "hosts" | "stayHeading" | "stayWelcome" | "stayTip" | "guestPrompt", label: string, max: number, multiline = false, placeholder?: string) {
     const controlId = `${id}-${key}`;
-    return <label htmlFor={controlId}>{label}{multiline
+    return <label htmlFor={controlId}><span className="phone-field-name">{label}</span>{multiline
       ? <textarea id={controlId} value={profile[key]} maxLength={max} rows={key === "stayWelcome" ? 5 : 3} placeholder={placeholder} disabled={busy} onChange={e => set(key, e.target.value)} />
       : <input id={controlId} value={profile[key]} maxLength={max} placeholder={placeholder} disabled={busy} onChange={e => set(key, e.target.value)} />}</label>;
   }
@@ -208,11 +228,11 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
     }}>+ Add {noun}</button>;
     return <div className="phone-section-line">
       {text(key, label, max, multiline, placeholder)}
-      <button type="button" className="btn btn-ghost btn-sm" disabled={busy} onClick={() => {
+      {removeButton(`Remove ${noun}`, () => {
         setOpenLines(was => { const next = new Set(was); next.delete(key); return next; });
         set(key, "");
         if (other && !profile[other].trim() && !openLines.has(other)) set("stayNoteOff", true);
-      }}>Remove {noun}</button>
+      })}
     </div>;
   }
   function photo(slot: "cover" | "hostPhoto", label: string) {
@@ -232,9 +252,9 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
       }} />
       {slot === "cover" && <p className="field-hint">Show off the property's best feature: the beach nearby, the fireplace, the open-plan kitchen. Landscape works best.</p>}
       {photos[slot] && <p className="field-hint">{photos[slot].name} · Ready to save</p>}
+      {shown && removeButton(`Remove ${slot === "cover" ? "cover" : "welcome"} photo`, () => setPhotos(previous => ({ ...previous, [slot]: null })))}
       {shown && <div className="actions">
         <button type="button" className="btn btn-secondary btn-sm" disabled={busy} onClick={choose}>Replace photo</button>
-        <button type="button" className="btn btn-ghost btn-sm" disabled={busy} onClick={() => setPhotos(previous => ({ ...previous, [slot]: null }))}>Remove {slot === "cover" ? "cover" : "welcome"} photo</button>
       </div>}
       {photos[slot] === null && <p className="field-hint">Photo will be removed when you save.</p>}
     </div>;
@@ -242,9 +262,9 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
   async function save() {
     if (inFlight.current) return;
     setAttempted(true); setFailure(null);
-    if (validatePropertyName(name).length || validateProfile(profile).length) return;
+    if (validatePropertyName(name).length || validateProfile(shownAsFilled(profile)).length) return;
     inFlight.current = true; setBusy(true);
-    let next = { ...profile, reviewedSections: setupSectionIds.filter(id => id === section || profile.reviewedSections.includes(id)) };
+    let next = { ...shownAsFilled(profile), reviewedSections: setupSectionIds.filter(id => id === section || profile.reviewedSections.includes(id)) };
     try {
       for (const slot of ["cover", "hostPhoto"] as const) {
         const chosen = photos[slot];
@@ -280,29 +300,26 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
           <p className="field-hint">Everything here is recommended, nothing is required. Fill in what suits you.</p>
           {optionalText("hosts", "Your names", "your names", profileLimits.hostsMax, false, "Ana & Tom")}
           {photo("hostPhoto", "Welcome photo")}
-          <label className="phone-section-check"><input type="checkbox" checked={!profile.stayNoteOff} disabled={busy} onChange={e => set("stayNoteOff", !e.target.checked)} />Show the welcome note</label>
           {optionalText("stayHeading", "Welcome heading", "a heading", profileLimits.stayHeadingMax, false, exampleNote.heading)}
           {optionalText("stayWelcome", "Welcome message", "a welcome message", profileLimits.stayWelcomeMax, true, exampleNote.welcome)}
           {optionalText("stayTip", "A little tip", "a little tip", profileLimits.stayTipMax, true, "The bakery behind the lighthouse. Go before 9am.")}
         </>}
         {section === "essentials" && <>
           <p className="field-hint">Add the details guests need during their stay.</p>
-          <label className="phone-section-check"><input type="checkbox" checked={!profile.factsOff} disabled={busy} onChange={e => set("factsOff", !e.target.checked)} />Show essentials on the guest wall</label>
           {profile.facts.map((fact, index) => <fieldset key={index} className="phone-section-item"><legend>Essential {index + 1}</legend>
             {([['term', 'Name', profileLimits.factTermMax], ['detail', 'Details', profileLimits.factDetailMax], ['note', 'Extra information (optional)', profileLimits.factNoteMax]] as const).map(([key, label, max]) => <label key={key}>{label}<input value={fact[key]} maxLength={max} disabled={busy} onChange={e => set("facts", profile.facts.map((row, i) => i === index ? { ...row, [key]: e.target.value } : row))} /></label>)}
-            <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => set("facts", profile.facts.filter((_, i) => i !== index))}>Remove essential {index + 1}</button>
+            {removeButton(`Remove essential ${index + 1}`, () => set("facts", profile.facts.filter((_, i) => i !== index)))}
           </fieldset>)}
           {profile.facts.length < profileLimits.factsMax && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => set("facts", [...profile.facts, emptyFact()])}>Add an essential</button>}
         </>}
         {section === "notes" && <>
           {profile.hostNotes.map((note, index) => <fieldset key={note.id} className="phone-section-item"><legend>Note {index + 1}</legend>
             <label>Message<textarea value={note.message} rows={4} maxLength={profileLimits.hostNoteMax} disabled={busy} onChange={e => set("hostNotes", profile.hostNotes.map(row => row.id === note.id ? { ...row, message: e.target.value } : row))} /></label>
-            <HostNoteStylePicker name={`phone-note-${note.id}`} theme={profile.theme} colour={profile.colour} value={note.style} disabled={busy} onChange={style => set("hostNotes", profile.hostNotes.map(row => row.id === note.id ? { ...row, style } : row))} />
-            <details><summary>Note photo</summary><PhotoField propertyId={property.id} slot={`hostNote:${note.id}`} photo={note.photo} label={`Note ${index + 1} photo`} hint="Note photos are saved separately when you choose Save photograph." onChange={value => {
+            <PhotoField propertyId={property.id} slot={`hostNote:${note.id}`} photo={note.photo} label="Photo (optional)" onChange={value => {
               setProfile(previous => withPhotoInSlot(previous, `hostNote:${note.id}`, value));
               latest.current.setProfile(withPhotoInSlot(latest.current.profile, `hostNote:${note.id}`, value));
-            }} /></details>
-            <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => set("hostNotes", profile.hostNotes.filter(row => row.id !== note.id))}>Remove note {index + 1}</button>
+            }} />
+            {removeButton(`Remove note ${index + 1}`, () => set("hostNotes", profile.hostNotes.filter(row => row.id !== note.id)))}
           </fieldset>)}
           {profile.hostNotes.length < profileLimits.hostNotesMax && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => set("hostNotes", [...profile.hostNotes, emptyHostNote()])}>Add a note</button>}
           <h3 className="phone-section-subhead">Useful links</h3>
@@ -310,16 +327,19 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
           {linkFields("noteLinks", noteLinkIssues, "Our favourite walks")}
           {profile.noteLinks.length < noteLinkLimits.linksMax && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => set("noteLinks", [...profile.noteLinks, emptyStayAgainLink()])}>Add a link</button>}
           {text("guestPrompt", "Guestbook prompt", 240, true)}
+          <div className="phone-prompt-samples" role="group" aria-label="Sample guestbook prompts">
+            {guestPromptSamples.map(sample => <button type="button" className="btn btn-secondary" key={sample} aria-pressed={profile.guestPrompt.trim() === sample} disabled={busy} onClick={() => set("guestPrompt", sample)}>{sample}</button>)}
+          </div>
         </>}
         {section === "links" && <>
-          <p className="field-hint">Add up to two links so guests can book another stay or join your mailing list. Guests open your website; mailing-list sign-ups happen there.</p>
+          <p className="field-hint">Add up to two links so guests can book another stay or join your mailing list.</p>
           {linkFields("stayAgainLinks", linkIssues, "Book direct")}
           {profile.stayAgainLinks.length < stayAgainLimits.linksMax && <div className="phone-section-add-links">
             {["Book direct", "Join our mailing list"].filter(label => !profile.stayAgainLinks.some(link => link.label === label)).map(label => <button type="button" className="btn btn-secondary" key={label} disabled={busy} onClick={() => set("stayAgainLinks", [...profile.stayAgainLinks, { label, url: "" }])}>+ {label}</button>)}
           </div>}
-          <p className="field-hint">Links appear under your notes on the guest wall. Check your booking platform’s rules before adding links. Other useful links go in More notes.</p>
+          <p className="field-hint">Check your booking platform’s rules before adding links. Other useful links go in More notes.</p>
         </>}
-        {section === "style" && <WallThemePicker value={profile.theme} colour={profile.colour} disabled={busy} onChange={value => set("theme", value)} onColourChange={value => set("colour", value)} />}
+        {section === "style" && <WallThemePicker gallery value={profile.theme} colour={profile.colour} disabled={busy} onChange={value => set("theme", value)} onColourChange={value => set("colour", value)} />}
         {issues.length > 0 && <div className="form-feedback" role="alert">{Array.from(new Set(issues)).map(issue => <p key={issue}>{issue}</p>)}</div>}
         {failure && <p className="form-feedback" role="alert">{failure}</p>}
       </div>

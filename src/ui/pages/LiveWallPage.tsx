@@ -13,7 +13,7 @@ import { HostNotes } from "../wall/HostNotes";
 import { WallHeader } from "../wall/WallHeader";
 import { memoriesHeading } from "../wall/memoryHeading";
 import { WallSkeleton } from "../wall/WallSkeleton";
-import { MemoryNote, WallContributionPrompt, WallFooter } from "../wall/MemoryNote";
+import { GuestbookShortcut, MemoryNote, WallContributionPrompt, WallFooter } from "../wall/MemoryNote";
 import "../guest/guest.css";
 
 // "preview" is the same wall, served to the account that owns it while it is
@@ -55,6 +55,8 @@ export function LiveWallPage({ slug, view = "public", stayToken = null, embedded
   const [contributing, setContributing] = useState(false);
   const [contributionMode, setContributionMode] = useState<ContributionMode>("memory");
   const [formOpened, setFormOpened] = useState(false);
+  // What this guest just sent, said on the wall: a held memory is not on it yet.
+  const [received, setReceived] = useState<"published" | "pending" | null>(null);
   // An owner previewing a closed wall can switch to what a guest gets instead.
   const [guestView, setGuestView] = useState(false);
   useEffect(() => {
@@ -64,6 +66,7 @@ export function LiveWallPage({ slug, view = "public", stayToken = null, embedded
     setUnavailable(null);
     setContributing(false);
     setFormOpened(false);
+    setReceived(null);
     setGuestView(false);
     setStatus(LOADING);
     const timer = setTimeout(() => { if (current) { current = false; setStatus("The guestbook took too long to respond. Please try again."); } }, 15000);
@@ -94,6 +97,14 @@ export function LiveWallPage({ slug, view = "public", stayToken = null, embedded
     setFormOpened(true);
     setContributing(true);
     requestAnimationFrame(() => document.getElementById("wall-contribution")?.scrollIntoView?.({ behavior: "smooth", block: "start" }));
+  }
+
+  // Sent: back to the wall, at the memories, where the line above them says
+  // what happened to it.
+  function contributionSent(status: "published" | "pending") {
+    setContributing(false);
+    setReceived(status);
+    requestAnimationFrame(() => document.getElementById(MEMORIES_ID)?.scrollIntoView?.({ behavior: "smooth", block: "start" }));
   }
 
   /* Which wall actually came back, which is not always the one that was
@@ -144,7 +155,10 @@ export function LiveWallPage({ slug, view = "public", stayToken = null, embedded
           right one. So the stay wall leads with the name and the place.
           `StayWallHeader` below is the same arrangement the canvas and
           the phone preview draw, so a Host is looking at one wall twice. */}
-      {!embedded && <WallHeader property={wall.property} view={served} preview={Boolean(preview)} hostNotes={<HostNotes
+      {!embedded && <WallHeader property={wall.property} view={served} preview={Boolean(preview)}
+        guestbookShortcut={served === "stay" && wall.contributionsEnabled && !contributing
+          ? <GuestbookShortcut onMemory={() => openContribution("memory")} /> : undefined}
+        hostNotes={<HostNotes
         id={HOST_NOTES_ID}
         author={wall.property.hosts || "your hosts"}
         notes={(wall.property.hostNotes ?? []).map(note => ({
@@ -155,6 +169,9 @@ export function LiveWallPage({ slug, view = "public", stayToken = null, embedded
           theme can set them on their own band of paper. */}
       <div className="wall-memories">
       <h2 className="wall-heading" id={MEMORIES_ID}>{memoriesHeading(wall.nextCursor ? null : wall.posts.length)}</h2>
+      {received && <p className="wall-received" role="status">{received === "published"
+        ? "Thank you. Your memory is now on the wall."
+        : "Thank you. Your memory has been received and will appear here once it has been checked."}</p>}
       <section aria-label="Guest memories" className="note-grid">
         {wall.posts.map(post => <MemoryNote key={post.id} id={post.id} message={post.message} displayName={post.displayName} pinned={post.pinned}
           photos={Array.from({ length: post.photoCount ?? 0 }, (_, index) => <MemoryPhoto postId={post.id} index={index} ownerPropertyId={preview?.owner?.propertyId} sessionUid={auth.user?.uid} />)}>
@@ -170,7 +187,7 @@ export function LiveWallPage({ slug, view = "public", stayToken = null, embedded
           // a web page, not an app with a tab bar.
           : <WallContributionPrompt prompt={wall.property.guestPrompt} onMemory={() => openContribution("memory")} onFeedback={() => openContribution("feedback")} />}
         <div id="wall-contribution" hidden={!contributing}>
-        {formOpened && <GuestContribution key={slug} slug={slug} stayToken={stayToken} prompt={wall.property.guestPrompt} mode={contributionMode} onModeChange={setContributionMode} onChanged={() => {
+        {formOpened && <GuestContribution key={slug} slug={slug} stayToken={stayToken} prompt={wall.property.guestPrompt} mode={contributionMode} onModeChange={setContributionMode} onSubmitted={contributionSent} onChanged={() => {
         void readWall(slug, view, stayToken, Boolean(auth.user)).then(result => { if (result.status !== "unavailable") setWall(result); else { setWall(null); setUnavailable({ ...result, sessionUid: auth.user?.uid }); setStatus(""); } })
           .catch(() => setStatus("The wall could not refresh. Your saved memory is still in Your memories below."));
       }} />}

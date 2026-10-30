@@ -111,8 +111,16 @@ export const listHostReports = onCall({ ...options, secrets: [] }, async request
     if (typeof cursor !== "string" || !/^[A-Za-z0-9_-]{1,512}$/.test(cursor)) throw new HttpsError("invalid-argument", "Invalid page reference.");
     query = query.startAfter(cursor);
   }
-  const page = await query.get(), docs = page.docs.slice(0, 25);
-  return { reports: docs.map(doc => ({ id: doc.id, postId: doc.get("postId"), reason: doc.get("reason"), reviewDueAt: doc.get("reviewDueAt").toDate().toISOString() })), nextCursor: page.size > 25 ? docs.at(-1)!.id : null };
+  // How many of this property's memories the safety team is holding, as a
+  // number and nothing more: the memories stay out of the Host's reach (the
+  // rules refuse them), but an inbox reading "All caught up" while a guest was
+  // told theirs is waiting left the Host with no way to know it exists.
+  // Counted once, on the first page.
+  const [page, held] = await Promise.all([query.get(),
+    request.data?.cursor ? null : db.collection(`properties/${propertyId}/posts`).where("visibility", "==", "restricted").count().get()]);
+  const docs = page.docs.slice(0, 25);
+  return { reports: docs.map(doc => ({ id: doc.id, postId: doc.get("postId"), reason: doc.get("reason"), reviewDueAt: doc.get("reviewDueAt").toDate().toISOString() })), nextCursor: page.size > 25 ? docs.at(-1)!.id : null,
+    ...(held ? { heldBySafety: held.data().count } : {}) };
 });
 
 export const resolveContentReport = onCall({ ...options, secrets: [] }, async request => {

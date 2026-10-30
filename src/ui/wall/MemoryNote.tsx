@@ -73,6 +73,22 @@ export function WallContributionPrompt({ prompt, onMemory, onFeedback, inert = f
 }
 
 /**
+ * The guestbook offered again near the top of the in-stay wall. It sits in the
+ * page like the essentials around it rather than floating over them, and opens
+ * the same form the closing panel does.
+ */
+export function GuestbookShortcut({ onMemory }: { onMemory: () => void }) {
+  return (
+    <aside className="stay-guestbook-shortcut stay-card" aria-label="The guestbook">
+      <p>Enjoying your stay? Leave a memory for the guestbook.</p>
+      <button type="button" className="btn btn-secondary btn-sm" aria-expanded={false} aria-controls="wall-contribution" onClick={onMemory}>
+        Add to guestbook
+      </button>
+    </aside>
+  );
+}
+
+/**
  * The two links every wall carries, wherever the page got to: the wall, the
  * closed notice and the failure all end here. They are the only chrome on a
  * guest's page, so they sit under a rule and stay quiet.

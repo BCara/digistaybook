@@ -45,15 +45,18 @@ const capabilities = [
 
 export function LandingPage() {
   const { status } = useAuth();
+  // The footer's "How it works" and "Features" are sections of this page, and
+  // a Host who follows one asked for the section, not their dashboard.
+  const section = typeof window !== "undefined" && window.location.hash.length > 1;
   useEffect(() => {
-    if (status === "host") navigate("/host", { replace: true });
-  }, [status]);
+    if (status === "host" && !section) navigate("/host", { replace: true });
+  }, [status, section]);
 
   // While the session restores, the page is the one almost every reader of it
   // will get: the visitor landing page. It is also what the build prerenders,
   // so a crawler and a first paint both see the content rather than a status
   // line. A Host is moved to the dashboard the moment the session says so.
-  if (status === "host") return null;
+  if (status === "host" && !section) return null;
   if (status === "error") return <div className="page">
     <p role="alert">Your session couldn't load. Check your connection and try again.</p>
     <button className="btn btn-primary" onClick={() => window.location.reload()}>Try again</button>

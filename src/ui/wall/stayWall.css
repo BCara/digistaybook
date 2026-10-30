@@ -455,6 +455,21 @@
 }
 .wall-contribution-panel .btn-ghost { flex: none; min-height: 44px; margin: 0; padding-inline: 6px; font-size: .9rem; white-space: nowrap; }
 
+/* The same way in, offered under the essentials so a guest need not read to
+   the end of a long wall to find it. */
+[data-wall-theme] .stay-wall .stay-guestbook-shortcut { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 14px; padding: 14px 16px; }
+.stay-guestbook-shortcut p { flex: 1 1 12rem; margin: 0; line-height: 1.45; }
+.stay-guestbook-shortcut .btn { flex: none; min-height: 44px; margin: 0; }
+/* What the guest just sent, said where they land after sending it. */
+.wall-received {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  background: var(--wall-sheet, var(--surface-raised));
+  border: 1px solid var(--wall-rule, var(--rule));
+  border-radius: var(--wall-note-radius, 12px);
+  line-height: 1.5;
+}
+
 /* ---- On a desktop ----
    Laid out for a phone, the page scaled up with the column: at the full
    940px the cover alone stood over 400px tall, and the welcome, the tip and

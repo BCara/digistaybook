@@ -22,8 +22,8 @@ type WallProperty = WallHeaderProperty;
  * `hostNotes` is drawn by the caller and placed under the essentials buttons
  * on the in-stay wall. The public wall is memories only, so it never shows them.
  */
-export function WallHeader({ property, view, preview = false, headingLevel = 1, hostNotes }: { property: WallHeaderProperty; view: "public" | "stay"; preview?: boolean; headingLevel?: number; hostNotes?: ReactNode }) {
-  if (view === "stay") return <StayWallHeader property={property} preview={preview} headingLevel={headingLevel} hostNotes={hostNotes} />;
+export function WallHeader({ property, view, preview = false, headingLevel = 1, hostNotes, guestbookShortcut }: { property: WallHeaderProperty; view: "public" | "stay"; preview?: boolean; headingLevel?: number; hostNotes?: ReactNode; guestbookShortcut?: ReactNode }) {
+  if (view === "stay") return <StayWallHeader property={property} preview={preview} headingLevel={headingLevel} hostNotes={hostNotes} guestbookShortcut={guestbookShortcut} />;
   /* A wall without its own cover shows the standard one, never a blank band. */
   const cover = property.cover ?? defaultCover;
   return <><header className="live-property-header">
@@ -57,8 +57,11 @@ const anchorSafe = (id: string): string => id.replace(/[^a-zA-Z0-9_-]/g, "");
  * drawn, on every theme: a tapped one opens over the page, so a guest never
  * scrolls to find the Wi-Fi. The guestbook button ends the page.
  */
-export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes }: {
+export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes, guestbookShortcut }: {
   property: WallProperty; preview: boolean; headingLevel?: number; hostNotes?: ReactNode;
+  /* A way to the guestbook ahead of the hosts' notes: on a full wall the
+     button that ends the page is several screens down. */
+  guestbookShortcut?: ReactNode;
 }) {
   const baseId = `stay${anchorSafe(useId())}`;
   const essentialsId = `${baseId}-essentials`;
@@ -128,6 +131,8 @@ export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes 
       onOpen={(index, from) => setOpened({ index, from })} />}
 
     {facts.length === 0 && preview && <p className="wall-ghost">No house essentials. Wi-Fi, checkout and the bins go here.</p>}
+
+    {guestbookShortcut}
 
     {hostNotes}
 

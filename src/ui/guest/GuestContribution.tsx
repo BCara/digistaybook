@@ -24,7 +24,7 @@ export type ContributionMode = "memory" | "feedback";
 const megabytes = (bytes: number) => Math.round(bytes / (1024 * 1024));
 const OWN_FAILED = "Your previous memories could not be loaded. Use Refresh my memories to try again.";
 
-export function GuestContribution({ slug, stayToken = null, onChanged, mode: requestedMode, onModeChange, prompt = "", demo = false }: {
+export function GuestContribution({ slug, stayToken = null, onChanged, onSubmitted, mode: requestedMode, onModeChange, prompt = "", demo = false }: {
   slug: string;
   /** The Host's question to guests, shown under the memory form's heading. */
   prompt?: string;
@@ -36,6 +36,12 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
    */
   stayToken?: string | null;
   onChanged: () => void;
+  /**
+   * A memory has been sent and the guest is done with the form: at once when
+   * it went straight on the wall, or when they close the "Memory received"
+   * note when it is held. The page around the form takes them back to the wall.
+   */
+  onSubmitted?: (status: "published" | "pending") => void;
   /** Which form is showing, when the page around it chooses; otherwise the form keeps its own. */
   mode?: ContributionMode;
   onModeChange?: (mode: ContributionMode) => void;
@@ -135,6 +141,7 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
       else setFeedback("");
       attempt.current = null;
       await refresh(); onChanged();
+      if (memory && result.status === "published") onSubmitted?.("published");
     } catch (error) { setNotice(explain(error)); }
     finally { setBusy(false); }
   }
@@ -149,7 +156,7 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
   }
   const locked = busy || attempt.current !== null;
   return <section className="guest-contribution" aria-labelledby="guest-contribution-heading">
-    <dialog className="guest-pending-dialog" ref={confirmationDialog} aria-labelledby="guest-pending-heading" onClose={() => setConfirmation("")}>
+    <dialog className="guest-pending-dialog" ref={confirmationDialog} aria-labelledby="guest-pending-heading" onClose={() => { setConfirmation(""); if (mode === "memory") onSubmitted?.("pending"); }}>
       <h2 id="guest-pending-heading">Memory received</h2><p>{confirmation}</p>
       <button type="button" onClick={() => confirmationDialog.current?.close()}>Back to the guestbook</button>
     </dialog>

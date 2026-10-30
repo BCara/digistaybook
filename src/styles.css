@@ -1201,8 +1201,9 @@ textarea { min-height: 132px; resize: vertical; }
 }
 .property-card .btn { justify-self: start; }
 /* What the "Draft" pill above it means, said once, directly over the control
-   that ends it. Only a draft card carries this line. */
+   that ends it. A card that needs attention says why in the same place. */
 .property-card-state { margin: 0; color: var(--text-muted); font-size: var(--step--1); }
+.property-card-attention { color: var(--text); }
 /* Cards in a row are as tall as the tallest one, and a draft carries a line of
    explanation the others do not. The controls are held at the foot of the card
    so a Host reading across the grid finds "Manage" on the same line on every
@@ -3563,6 +3564,23 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 .theme-option input:focus-visible + span, .colour-option input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 3px; }
 .theme-option input:hover:not(:disabled) + span, .colour-option input:hover:not(:disabled) + span { border-color: var(--text-muted); }
 .theme-option input:disabled + span, .colour-option input:disabled + span { opacity: .55; }
+
+/* Phone sheet: every theme in view as a row with its description, and each
+   colourway named under its dot, so the sheet is filled with the choice itself. */
+.wall-appearance-gallery { display: grid; gap: 22px; }
+.wall-appearance-gallery .theme-picker legend { margin-bottom: 10px; font-size: .8rem; }
+.wall-appearance-gallery .theme-options { grid-template-columns: 1fr; grid-auto-rows: auto; gap: 10px; margin-top: 0; }
+.wall-appearance-gallery .theme-option > span { grid-template-columns: 96px 1fr; grid-template-rows: auto 1fr; justify-items: start; align-items: start; column-gap: 14px; row-gap: 3px; padding: 10px 14px 10px 10px; border-radius: 14px; }
+.wall-appearance-gallery .theme-swatch { grid-row: 1 / 3; width: 96px; height: 72px; gap: 6px; }
+.wall-appearance-gallery .theme-swatch-title { font-size: 24px; }
+.wall-appearance-gallery .theme-swatch-note { height: 18px; }
+.wall-appearance-gallery .theme-option-name { padding-top: 4px; font-size: .95rem; text-align: left; }
+.wall-appearance-gallery .theme-option-note { font-size: .78rem; line-height: 1.35; color: var(--text-muted); }
+.wall-appearance-gallery .theme-option input:checked + span { background: var(--bg); }
+.wall-appearance-gallery .colour-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.wall-appearance-gallery .colour-option > span { width: auto; height: auto; gap: 8px; padding: 14px 6px 10px; border-radius: 14px; }
+.wall-appearance-gallery .colour-option i { width: 36px; height: 36px; border-width: 6px; }
+.colour-option-name { font-size: .78rem; font-weight: 600; line-height: 1.25; text-align: center; color: var(--text); }
 
 /* Keep the wall in view while editing on a phone. */
 @media (max-width: 1340px) {

@@ -4,6 +4,7 @@ import {
   emptyFact,
   emptyHostNote,
   exampleNote,
+  guestPromptSamples,
   factExample,
   defaultCover,
   markInitials,
@@ -94,11 +95,7 @@ type TextField = "stayHeading" | "stayWelcome" | "stayTip";
  * field is a prompt they wrote themselves, which is what puts the box to
  * write it in on the page.
  */
-const promptPresets = [
-  "",
-  "What was your favourite memory of this stay?",
-  "What would you recommend to the next guests?",
-];
+const promptPresets: readonly string[] = ["", ...guestPromptSamples];
 
 /**
  * The control that takes one line, or the whole note, off the wall. It is

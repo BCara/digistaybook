@@ -252,6 +252,8 @@
 }
 .inbox-draft p { margin: 4px 0 0; color: var(--text-muted); font-size: var(--step--1); }
 .inbox-drafts-note { margin: 0 0 18px; color: var(--text-muted); font-size: var(--step--1); }
+/* Memories the safety team holds: counted for the Host, never shown to them. */
+.inbox-safety-held { margin: 0 0 18px; padding: 12px 16px; border: 1px solid var(--rule); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); font-size: var(--step--1); line-height: 1.5; }
 .moderation-page .moderation-tabs .queue-count[data-attention="true"] { background: var(--accent-soft); color: var(--accent-strong); }
 .inbox-page .moderation-wall { margin-top: 18px; }
 

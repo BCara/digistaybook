@@ -5,7 +5,8 @@ import { StayWallPage } from "./StayWallPage";
 const call = vi.fn();
 const auth = vi.hoisted(() => ({ status: "signed-out", user: null as null | { uid: string } }));
 vi.mock("../auth/AuthProvider", () => ({ useAuth: () => auth }));
-vi.mock("../guest/GuestContribution", () => ({ GuestContribution: ({ mode }: { mode?: string }) => <div>Guest contribution form{mode === "feedback" ? " (feedback)" : ""}</div> }));
+vi.mock("../guest/GuestContribution", () => ({ GuestContribution: ({ mode, onSubmitted }: { mode?: string; onSubmitted?: (status: "published" | "pending") => void }) => <div>Guest contribution form{mode === "feedback" ? " (feedback)" : ""}
+  <button type="button" onClick={() => onSubmitted?.("pending")}>Close memory received</button></div> }));
 // Which Firebase app asked is the point of the split below, so the mocks are
 // told apart rather than both answering `{}`.
 const asked = vi.hoisted(() => ({ app: "" }));
@@ -93,11 +94,11 @@ it.each(["public", "stay"] as const)("opens the %s route with its own content an
     expect(screen.queryByText("Welcome")).not.toBeInTheDocument();
     expect(screen.getByText("Welcome inside")).toBeInTheDocument();
     expect(screen.queryByText("Guest contribution form")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Add to guestbook" }));
+    fireEvent.click(screen.getAllByRole("button", { name: "Add to guestbook" }).at(-1)!);
     expect(screen.getByText("Guest contribution form")).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Back to wall" }));
     expect(screen.getByText("Guest contribution form")).not.toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "Add to guestbook" }));
+    fireEvent.click(screen.getAllByRole("button", { name: "Add to guestbook" }).at(-1)!);
     expect(screen.getByText("Guest contribution form")).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Back to wall" }));
     // Private feedback is offered by name and opens the form on that choice.
@@ -376,4 +377,20 @@ describe("what a preview says about a wall that is mostly empty", () => {
     expect(screen.queryByRole("region", { name: /things left/ })).not.toBeInTheDocument();
     expect(screen.getByRole("img", { name: "The cottage" })).toBeInTheDocument();
   });
+});
+
+it("offers the guestbook under the essentials, and says on the wall that a held memory was received", async () => {
+  call.mockResolvedValue({ data: { status: "open", contributionsEnabled: true, property: {
+    name: "Real cottage", welcome: "", hosts: "Ana", location: "",
+    houseInformation: { heading: "", welcome: "", tip: "", facts: [{ term: "Wi-Fi", detail: "Net / pass", note: "" }] }
+  }, posts: [], nextCursor: null } });
+  render(<LiveWallPage slug="real-cottage" view="stay" stayToken="Token" />);
+  const shortcut = await screen.findByRole("complementary", { name: "The guestbook" });
+  fireEvent.click(within(shortcut).getByRole("button", { name: "Add to guestbook" }));
+  expect(screen.getByText("Guest contribution form")).toBeInTheDocument();
+  // While the form is open, the shortcut has nothing to offer.
+  expect(screen.queryByRole("complementary", { name: "The guestbook" })).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Close memory received" }));
+  expect(screen.getByRole("status")).toHaveTextContent(/memory has been received and will appear here once it has been checked/);
+  expect(screen.getByRole("complementary", { name: "The guestbook" })).toBeInTheDocument();
 });

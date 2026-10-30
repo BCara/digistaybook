@@ -33,7 +33,10 @@ function PropertyCard({ property, now, onDelete }: {
   // the number up there and the marks down here can never disagree. A card
   // that needs something takes an accent rule along its top edge: the mark
   // sits on the thing that needs the work rather than in a panel elsewhere.
-  const needsAttention = attentionItems([property], now).length > 0;
+  // The rule alone said only that something was wrong. A draft's line below
+  // already says what; every other item says it here, with its own link.
+  const attention = attentionItems([property], now);
+  const needsAttention = attention.length > 0;
   // The avatar is the property's own small photograph, the one the Host area
   // identifies it by. A property whose Host has only set a cover is still
   // recognisable by it, so the cover stands in rather than the card showing
@@ -122,7 +125,13 @@ function PropertyCard({ property, now, onDelete }: {
           without this the one control every card has would sit at a different
           height on each of them. */}
       <div className="property-card-foot">
-        {draft && <p className="property-card-state">{lifecycleSummaries.draft}</p>}
+        {draft
+          ? <p className="property-card-state">{lifecycleSummaries.draft}</p>
+          : attention.map((item) => (
+              <p key={item.text} className="property-card-state property-card-attention">
+                {item.text} <a className="text-link" href={item.href}>{item.action}</a>
+              </p>
+            ))}
         <div className="actions">
           <a className="btn btn-secondary btn-sm" href={`/host/property/${property.id}`}>
             Manage

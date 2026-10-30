@@ -37,6 +37,17 @@ describe("host route boundary", () => {
     expect(screen.queryByText("Sign in to continue")).not.toBeInTheDocument();
   });
 
+  it("sends a signed-in host from the home page to the dashboard, but not from one of its sections", () => {
+    window.history.replaceState(null, "", "/");
+    const { unmount } = render(<AuthContext.Provider value={{ status: "host", user: null }}><LandingPage /></AuthContext.Provider>);
+    expect(window.location.pathname).toBe("/host");
+    unmount();
+    window.history.replaceState(null, "", "/#how-it-works");
+    render(<AuthContext.Provider value={{ status: "host", user: null }}><LandingPage /></AuthContext.Provider>);
+    expect(window.location.pathname).toBe("/");
+    expect(screen.getByRole("heading", { name: /your rental never had/i })).toBeInTheDocument();
+  });
+
   it("returns home when an open dashboard session signs out", () => {
     window.history.replaceState(null, "", "/host");
     const { rerender } = renderGuard({ status: "host", user: null });

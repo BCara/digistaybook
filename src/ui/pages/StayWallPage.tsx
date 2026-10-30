@@ -2,7 +2,7 @@ import { useState } from "react";
 import { HostNotes } from "../wall/HostNotes";
 import { WallHeader } from "../wall/WallHeader";
 import { MemoryWall } from "../wall/MemoryWall";
-import { WallContributionPrompt, WallFooter } from "../wall/MemoryNote";
+import { GuestbookShortcut, WallContributionPrompt, WallFooter } from "../wall/MemoryNote";
 import { GuestContribution, type ContributionMode } from "../guest/GuestContribution";
 import { LiveWallPage } from "./LiveWallPage";
 import { DEMO_SLUG, demoPosts, demoProperty, houseEssentials, hostWallNotes, hostWelcome, wallPhotos } from "../wall/demoWall";
@@ -57,6 +57,7 @@ export function StayWallPage({ propertySlug = "property", stayToken = null }: { 
           hostPhoto: property.hostPhoto ? { url: property.hostPhoto.src, alt: property.hostPhoto.alt } : null,
           houseInformation: { heading: hostWelcome.heading, welcome: hostWelcome.body.join("\n"), tip: hostWelcome.tip, facts: houseEssentials }
         }}
+        guestbookShortcut={contributing ? undefined : <GuestbookShortcut onMemory={() => open("memory")} />}
         hostNotes={<HostNotes
           id="wall-host-notes"
           notes={hostWallNotes.map((note) => ({

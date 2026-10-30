@@ -94,13 +94,13 @@ function column(table: HTMLElement, label: string): string[] {
   return [...table.querySelectorAll(`tbody td[data-label="${label}"]`)].map((cell) => cell.textContent ?? "");
 }
 
-type Inbox = { posts?: unknown[]; feedback?: unknown[]; reports?: unknown[]; reviewContent?: boolean };
+type Inbox = { posts?: unknown[]; feedback?: unknown[]; reports?: unknown[]; reviewContent?: boolean; heldBySafety?: number };
 let inboxes: Record<string, Inbox> = {};
 
 function routeHostCall(name: string, data: { propertyId?: string }) {
   const inbox = inboxes[data.propertyId ?? ""] ?? {};
   if (name === "listHostGuestReview") return { posts: inbox.posts ?? [], feedback: inbox.feedback ?? [], reviewContent: inbox.reviewContent ?? false, reviewCursor: null, feedbackCursor: null };
-  if (name === "listHostReports") return { reports: inbox.reports ?? [], nextCursor: null };
+  if (name === "listHostReports") return { reports: inbox.reports ?? [], nextCursor: null, ...(inbox.heldBySafety === undefined ? {} : { heldBySafety: inbox.heldBySafety }) };
   if (name === "setGuestReviewPolicy") return { reviewContent: (data as { reviewContent: boolean }).reviewContent };
   return {};
 }
@@ -118,6 +118,22 @@ beforeEach(() => {
     status: "ok",
     value: post({ id: postId, visibility: action === "delete" ? "deleted" : "visible", message: "" })
   }));
+});
+
+describe("memories the safety team is holding", () => {
+  it("counts them in the inbox without listing them, and says nothing when there are none", async () => {
+    inboxes = { "prop-1": { heldBySafety: 1 } };
+    const { unmount } = renderPage();
+    expect(await screen.findByText(/1 memory is being checked by the DigiStayBook safety team/)).toBeInTheDocument();
+    // Nothing waits on the Host, so the inbox is still clear.
+    expect(screen.getByText("All caught up")).toBeInTheDocument();
+    unmount();
+
+    inboxes = { "prop-1": { heldBySafety: 0 } };
+    renderPage();
+    await screen.findByText("All caught up");
+    expect(screen.queryByText(/safety team\./)).not.toBeInTheDocument();
+  });
 });
 
 describe("the memories table", () => {

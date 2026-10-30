@@ -32,7 +32,7 @@ type ReviewPage = {
   reviewCursor?: string | null;
   feedbackCursor?: string | null;
 };
-type ReportPage = { reports: ReportItem[]; nextCursor: string | null };
+type ReportPage = { reports: ReportItem[]; nextCursor: string | null; heldBySafety?: number };
 
 type Pile = {
   review: ReviewItem[];
@@ -42,6 +42,8 @@ type Pile = {
   reports: ReportItem[];
   reportsCursor: string | null;
   reviewContent: boolean;
+  /** Memories the safety team is holding: counted by the server, never listed. */
+  heldBySafety: number;
 };
 
 export type InboxRow =
@@ -55,6 +57,11 @@ export type GuestInbox = {
   /** Reports first, soonest deadline first; then memories waiting, newest first. */
   rows: InboxRow[];
   feedback: FeedbackRow[];
+  /**
+   * Memories on these properties that the safety team is holding. A number
+   * only: the Host never reads them, but should know they are not lost.
+   */
+  heldBySafety: number;
   /** Properties whose inbox could not be read. */
   failures: HostProperty[];
   reviewContent: (propertyId: string) => boolean | undefined;
@@ -87,7 +94,8 @@ async function readPile(propertyId: string): Promise<Pile> {
     feedbackCursor: review.feedbackCursor ?? null,
     reports: reports.reports,
     reportsCursor: reports.nextCursor,
-    reviewContent: review.reviewContent === true
+    reviewContent: review.reviewContent === true,
+    heldBySafety: reports.heldBySafety ?? 0
   };
 }
 
@@ -230,10 +238,12 @@ export function useGuestInbox(properties: HostProperty[], refreshSignal = 0): Gu
   const approvals: InboxRow[] = [];
   const feedback: FeedbackRow[] = [];
   const failures: HostProperty[] = [];
+  let heldBySafety = 0;
   for (const property of properties) {
     const pile = piles[property.id];
     if (pile === "failed") failures.push(property);
     if (!pile || pile === "failed") continue;
+    heldBySafety += pile.heldBySafety;
     for (const item of pile.reports) reports.push({ kind: "report", key: `report/${property.id}/${item.id}`, property, item });
     for (const item of pile.review) approvals.push({ kind: "approval", key: `approval/${property.id}/${item.id}`, property, item });
     for (const item of pile.feedback) feedback.push({ key: `feedback/${property.id}/${item.id}`, property, item });
@@ -249,6 +259,7 @@ export function useGuestInbox(properties: HostProperty[], refreshSignal = 0): Gu
     ready: properties.every((property) => piles[property.id]),
     rows: [...reports, ...approvals],
     feedback,
+    heldBySafety,
     failures,
     reviewContent: (propertyId) => {
       const pile = piles[propertyId];

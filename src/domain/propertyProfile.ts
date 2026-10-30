@@ -215,6 +215,16 @@ export type PropertyProfile = {
   hostPhoto: PropertyPhoto | null;
 };
 
+/**
+ * Guestbook prompts a Host can pick instead of writing their own. Empty is
+ * also allowed: the wall then asks in its own plain words.
+ */
+export const guestPromptSamples = [
+  "What was your favourite memory of this stay?",
+  "What would you recommend to the next guests?",
+  "Who did you travel with, and what did you get up to?",
+] as const;
+
 export const profileLimits = {
   locationMax: 80,
   welcomeMax: 400,

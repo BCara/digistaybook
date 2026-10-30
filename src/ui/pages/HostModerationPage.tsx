@@ -321,6 +321,12 @@ export function HostModerationPage() {
 
           {tab === "inbox" && <section className="moderation-wall" aria-label="Inbox">
             {!inbox.ready && <p className="lede" role="status">Reading your inbox…</p>}
+            {/* Never listed, only counted: a guest whose memory was held was
+                told it is waiting, and the Host should know it is not lost. */}
+            {inbox.ready && inbox.heldBySafety > 0 && <p className="inbox-safety-held">
+              {inbox.heldBySafety === 1 ? "1 memory is" : `${inbox.heldBySafety} memories are`} being checked by the DigiStayBook safety team.
+              {" "}There is nothing you need to do. If the team clears {inbox.heldBySafety === 1 ? "it, it comes" : "one, it comes"} back here for your approval.
+            </p>}
             {inbox.ready && inbox.rows.length === 0 && (
               <div className="moderation-clear" role="status">
                 <span className="moderation-clear-mark" aria-hidden="true">

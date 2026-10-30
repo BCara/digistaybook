@@ -315,6 +315,22 @@ describe("switching the phone editor between Edit and Preview", () => {
     expect(preview.getByRole("link", { name: /Our favourite walks/ })).toHaveAttribute("href", "https://walks.example/coast");
   });
 
+  it("fills the guestbook prompt from a chosen sample", async () => {
+    renderPage();
+    await editWall();
+    fireEvent.click(await screen.findByRole("button", { name: "Edit notes" }));
+    const form = within(screen.getByRole("dialog", { name: "More from your hosts" }));
+    const sample = form.getByRole("button", { name: "What would you recommend to the next guests?" });
+    expect(sample).toHaveAttribute("aria-pressed", "false");
+    fireEvent.click(sample);
+    expect(form.getByLabelText("Guestbook prompt")).toHaveValue("What would you recommend to the next guests?");
+    expect(sample).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(form.getByRole("button", { name: "Save changes" }));
+    await waitFor(() => expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({
+      guestPrompt: "What would you recommend to the next guests?",
+    })));
+  });
+
   it("keeps failed saves open with the entered links ready to retry", async () => {
     savePropertyProfile.mockResolvedValueOnce({ status: "error", message: "Connection lost. Try again." });
     renderPage();
@@ -339,7 +355,9 @@ describe("switching the phone editor between Edit and Preview", () => {
     expect(sections.getByRole("button", { name: /Stay with us again/ })).toBeInTheDocument();
     fireEvent.click(sections.getByRole("button", { name: /Look & feel/ }));
     const form = within(screen.getByRole("dialog", { name: "Look & feel" }));
-    fireEvent.click(form.getByRole("button", { name: /Warm Linen/ }));
+    // The phone sheet shows every theme at once; there is nothing to open.
+    expect(form.queryByRole("button", { name: /Warm Linen/ })).not.toBeInTheDocument();
+    expect(form.getByRole("radio", { name: "Warm Linen" })).toBeChecked();
     fireEvent.click(form.getByRole("radio", { name: "Playful" }));
     fireEvent.click(form.getByRole("radio", { name: "Berry" }));
     fireEvent.click(form.getByRole("button", { name: "Save changes" }));

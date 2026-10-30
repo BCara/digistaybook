@@ -13,7 +13,7 @@ describe("first UI slices", () => {
   it("keeps Guest contribution blocked until consent is provided", () => {
     render(<StayWallPage propertySlug="demo-cottage" />);
     // The demo draws the served wall's own form, so it is checked the same way.
-    fireEvent.click(screen.getByRole("button", { name: "Add to guestbook" }));
+    fireEvent.click(screen.getAllByRole("button", { name: "Add to guestbook" }).at(-1)!);
     fireEvent.change(screen.getByLabelText("Your message"), { target: { value: "A lovely stay" } });
     fireEvent.click(screen.getByRole("button", { name: "Submit memory" }));
     expect(screen.getByText(/accept the consent/i)).toBeInTheDocument();

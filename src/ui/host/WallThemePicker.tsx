@@ -8,11 +8,13 @@ function ThemeSwatch({ theme, colour }: { theme: WallThemeId; colour: WallColour
   </span>;
 }
 
-export function WallThemePicker({ value, colour, disabled, compact = false, onChange, onColourChange }: {
+export function WallThemePicker({ value, colour, disabled, compact = false, gallery = false, onChange, onColourChange }: {
   value: WallThemeId;
   colour: WallColourId;
   disabled?: boolean;
   compact?: boolean;
+  /** The phone sheet has the screen to itself, so every theme shows at once with its description. */
+  gallery?: boolean;
   onChange: (theme: WallThemeId) => void;
   onColourChange: (colour: WallColourId) => void;
 }) {
@@ -41,22 +43,23 @@ export function WallThemePicker({ value, colour, disabled, compact = false, onCh
   const current = wallTheme(value);
   const currentColour = current.colourways.find(option => option.id === colour) ?? current.colourways[0]!;
 
-  return <div className="wall-appearance-picker" ref={picker}>
+  return <div className={gallery ? "wall-appearance-picker wall-appearance-gallery" : "wall-appearance-picker"} ref={picker}>
     <fieldset className="theme-picker">
       <legend>Wall theme</legend>
-      <button type="button" className="theme-current" ref={toggle} title={current.name} aria-expanded={open} aria-controls="wall-theme-options"
+      {!gallery && <button type="button" className="theme-current" ref={toggle} title={current.name} aria-expanded={open} aria-controls="wall-theme-options"
         disabled={disabled} onClick={() => setOpen(was => !was)}>
         <ThemeSwatch theme={value} colour={colour} />
         <span className="theme-current-name">{current.name}</span>
         <span className="theme-current-action">{open ? "Close" : "Change"}</span>
-      </button>
-      <div className="theme-options" id="wall-theme-options" hidden={!open}>
-        {wallThemes.map(theme => <label className="theme-option" key={theme.id} title={theme.note}>
+      </button>}
+      <div className="theme-options" id="wall-theme-options" hidden={!gallery && !open}>
+        {wallThemes.map(theme => <label className="theme-option" key={theme.id} title={gallery ? undefined : theme.note}>
           <input type="radio" name="wall-theme" value={theme.id} checked={value === theme.id}
-            disabled={disabled} onChange={() => { onChange(theme.id); setOpen(false); }} />
+            aria-label={theme.name} disabled={disabled} onChange={() => { onChange(theme.id); setOpen(false); }} />
           <span>
             <ThemeSwatch theme={theme.id} colour={colour} />
             <span className="theme-option-name">{theme.name}</span>
+            {gallery && <span className="theme-option-note">{theme.note}</span>}
           </span>
         </label>)}
       </div>
@@ -64,12 +67,13 @@ export function WallThemePicker({ value, colour, disabled, compact = false, onCh
     {/* Each theme names its own three colourways; the choice is kept by
         position, so switching theme keeps the first, second or third. */}
     <fieldset className="theme-picker colour-picker">
-      <legend>Colourway <span className="colour-current">· {currentColour.name}</span></legend>
+      <legend>Colourway {!gallery && <span className="colour-current">· {currentColour.name}</span>}</legend>
       <div className="colour-options">
         {current.colourways.map(option => <label className="colour-option" key={option.id} title={option.name}>
           <input type="radio" name="wall-colour" value={option.id} checked={colour === option.id}
             aria-label={option.name} disabled={disabled} onChange={() => onColourChange(option.id)} />
-          <span><i data-wall-theme={value} data-wall-colour={option.id} aria-hidden="true" /></span>
+          <span><i data-wall-theme={value} data-wall-colour={option.id} aria-hidden="true" />
+            {gallery && <b className="colour-option-name">{option.name}</b>}</span>
         </label>)}
       </div>
     </fieldset>

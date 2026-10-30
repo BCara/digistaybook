@@ -69,7 +69,9 @@ await call("reportGuestMemory", { ...request, requestId: randomUUID() }); // Sem
 assert.equal((await db.doc(`properties/${propertyId}/posts/post-0`).get()).get("openReportCount"), 1);
 await call("reportGuestMemory", { ...request, requestId: randomUUID() }, other);
 assert.equal((await db.doc(`properties/${propertyId}/posts/post-0`).get()).get("openReportCount"), 2);
-const reports = (await call("listHostReports", { propertyId }, host)).reports;
+const firstReports = await call("listHostReports", { propertyId }, host), reports = firstReports.reports;
+// Safety-held memories reach the Host as a count only.
+assert.equal(typeof firstReports.heldBySafety, "number");
 assert.equal(reports.length, 2);
 await call("resolveContentReport", { reportId: reports[0].id, action: "dismiss" }, stranger, 403);
 await call("resolveContentReport", { reportId: reports[0].id, action: "dismiss" }, host);
