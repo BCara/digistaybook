@@ -25,6 +25,8 @@
 .sign-maker-form .field-hint { margin: 0; }
 .sign-maker-error { color: var(--accent-strong); }
 .sign-photo-field { display: grid; gap: 10px; }
+.sign-photo-choose { display: flex; align-items: center; gap: 12px; }
+.sign-photo-choose img { width: 56px; height: 56px; object-fit: cover; border-radius: var(--radius-xs); }
 
 /* The style dropdown: the chosen style as one row, the rest in a panel that
    opens over the form below it. */

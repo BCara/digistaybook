@@ -2,7 +2,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } f
 import { createPortal } from "react-dom";
 import { propertyIdentityLimits, validatePropertyName } from "../../domain/property";
 import {
-  emptyFact, emptyHostNote, defaultCover, markInitials, profileLimits, validatePhotoFile, validateProfile,
+  emptyFact, emptyHostNote, defaultCover, exampleNote, markInitials, profileLimits, validatePhotoFile, validateProfile,
   writtenHostNotes, type PropertyProfile,
 } from "../../domain/propertyProfile";
 import { emptyStayAgainLink, noteLinkLimits, stayAgainLimits, stayAgainProblems, wallStayAgainLinks, type StayAgainLink } from "../../domain/stayAgain";
@@ -23,6 +23,7 @@ import "./mobileWallEditor.css";
 
 type Section = SetupSection;
 type SectionRow = { id: Section; title?: string; detail: string; state: "done" | "todo" };
+type WelcomeLine = "hosts" | "stayHeading" | "stayWelcome" | "stayTip";
 const titles: Record<Section, string> = {
   property: "Property details", welcome: "Welcome & hosts",
   essentials: "Wi-Fi & essentials", notes: "More from your hosts", links: "Stay with us again", style: "Look & feel",
@@ -123,13 +124,14 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
       {mode === "sections" && <p className="phone-wall-status" role="status">{draft.dirty ? "You have unsaved changes" : notice || "Everything here is saved."}</p>}
       {draft.dirty && <button type="button" className="btn btn-primary" disabled={draft.saving} onClick={() => void draft.save()}>{draft.saving ? "Saving…" : "Save pending changes"}</button>}
       {draft.problems.failure && <p className="form-feedback" role="alert">{draft.problems.failure}</p>}
-      <div>{mode === "sections" ? <>
-        <button type="button" className="btn btn-secondary" onClick={() => { previewFrom.current = "sections"; setMode("preview"); }}>See guest view</button>
-        <button type="button" className="btn btn-primary" onClick={() => setMode("wall")}>Edit the wall</button>
-      </> : <>
-        <button type="button" className="btn btn-secondary" onClick={() => setMode(mode === "wall" ? "sections" : previewFrom.current)}>{mode === "wall" ? "Sections" : previewFrom.current === "sections" ? "Back to sections" : "Back to editor"}</button>
-        {mode !== "preview" && <button type="button" className="btn btn-primary" onClick={() => { previewFrom.current = "wall"; setMode("preview"); }}>View as guest</button>}
-      </>}</div>
+      {/* The way between the two editors always on the left, the guest view
+          always on the right, so the buttons never trade places under a thumb. */}
+      <div>{(() => {
+        const next = mode === "sections" ? "wall" : mode === "wall" ? "sections" : previewFrom.current;
+        return <button type="button" className="btn btn-secondary" onClick={() => setMode(next)}>{next === "wall" ? "Edit the wall" : "Sections"}</button>;
+      })()}
+        {mode !== "preview" && <button type="button" className="btn btn-primary" onClick={() => { previewFrom.current = mode as "sections" | "wall"; setMode("preview"); }}>See guest view</button>}
+      </div>
     </footer>
     {editing && <SectionForm key={editing} section={editing} property={property} draft={draft} onClose={close} onSaved={() => { setNotice("Saved · Your guest wall is up to date"); close(); }} />}
   </PropertyShell>;
@@ -147,6 +149,7 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
   const [progress, setProgress] = useState<string | null>(null);
   const [attempted, setAttempted] = useState(false);
   const [failure, setFailure] = useState<string | null>(null);
+  const [openLines, setOpenLines] = useState<ReadonlySet<WelcomeLine>>(new Set());
   const inFlight = useRef(false);
 
   useEffect(() => {
@@ -187,11 +190,30 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
       </fieldset>;
     });
   }
-  function text(key: "location" | "hosts" | "stayHeading" | "stayWelcome" | "stayTip" | "guestPrompt", label: string, max: number, multiline = false) {
+  function text(key: "location" | "hosts" | "stayHeading" | "stayWelcome" | "stayTip" | "guestPrompt", label: string, max: number, multiline = false, placeholder?: string) {
     const controlId = `${id}-${key}`;
     return <label htmlFor={controlId}>{label}{multiline
-      ? <textarea id={controlId} value={profile[key]} maxLength={max} rows={key === "stayWelcome" ? 5 : 3} disabled={busy} onChange={e => set(key, e.target.value)} />
-      : <input id={controlId} value={profile[key]} maxLength={max} disabled={busy} onChange={e => set(key, e.target.value)} />}</label>;
+      ? <textarea id={controlId} value={profile[key]} maxLength={max} rows={key === "stayWelcome" ? 5 : 3} placeholder={placeholder} disabled={busy} onChange={e => set(key, e.target.value)} />
+      : <input id={controlId} value={profile[key]} maxLength={max} placeholder={placeholder} disabled={busy} onChange={e => set(key, e.target.value)} />}</label>;
+  }
+  // A welcome line with nothing in it is offered rather than laid out empty, as
+  // the wizard does, so none of them reads as a box that has to be filled.
+  // A note with neither heading nor message is turned off rather than stored
+  // blank, or `withExampleNote` would write the example back in next time.
+  function optionalText(key: WelcomeLine, label: string, noun: string, max: number, multiline: boolean, placeholder: string) {
+    const other = key === "stayHeading" ? "stayWelcome" : key === "stayWelcome" ? "stayHeading" : null;
+    if (!profile[key].trim() && !openLines.has(key)) return <button type="button" className="btn btn-secondary btn-sm phone-section-add" disabled={busy} onClick={() => {
+      setOpenLines(was => new Set([...was, key]));
+      if (other) set("stayNoteOff", false);
+    }}>+ Add {noun}</button>;
+    return <div className="phone-section-line">
+      {text(key, label, max, multiline, placeholder)}
+      <button type="button" className="btn btn-ghost btn-sm" disabled={busy} onClick={() => {
+        setOpenLines(was => { const next = new Set(was); next.delete(key); return next; });
+        set(key, "");
+        if (other && !profile[other].trim() && !openLines.has(other)) set("stayNoteOff", true);
+      }}>Remove {noun}</button>
+    </div>;
   }
   function photo(slot: "cover" | "hostPhoto", label: string) {
     const current = photos[slot] === null ? null : profile[slot];
@@ -208,7 +230,7 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
         const problem = validatePhotoFile(file); setFailure(problem);
         if (!problem) setPhotos(previous => ({ ...previous, [slot]: file }));
       }} />
-      <p className="field-hint">{slot === "cover" ? "Show off the property's best feature: the beach nearby, the fireplace, the open-plan kitchen. Landscape works best." : "Optional. A friendly one of you, or a favorite corner of the property."} JPEG, PNG or WebP. Large photos are resized for you.</p>
+      {slot === "cover" && <p className="field-hint">Show off the property's best feature: the beach nearby, the fireplace, the open-plan kitchen. Landscape works best.</p>}
       {photos[slot] && <p className="field-hint">{photos[slot].name} · Ready to save</p>}
       {shown && <div className="actions">
         <button type="button" className="btn btn-secondary btn-sm" disabled={busy} onClick={choose}>Replace photo</button>
@@ -255,12 +277,13 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
           {photo("cover", "Cover photo")}
         </>}
         {section === "welcome" && <>
-          {text("stayHeading", "Welcome heading", profileLimits.stayHeadingMax)}
-          {text("hosts", "Your names", profileLimits.hostsMax)}
-          {text("stayWelcome", "Welcome message", profileLimits.stayWelcomeMax, true)}
-          {text("stayTip", "A little tip", profileLimits.stayTipMax, true)}
-          <label className="phone-section-check"><input type="checkbox" checked={!profile.stayNoteOff} disabled={busy} onChange={e => set("stayNoteOff", !e.target.checked)} />Show the welcome note</label>
+          <p className="field-hint">Everything here is recommended, nothing is required. Fill in what suits you.</p>
+          {optionalText("hosts", "Your names", "your names", profileLimits.hostsMax, false, "Ana & Tom")}
           {photo("hostPhoto", "Welcome photo")}
+          <label className="phone-section-check"><input type="checkbox" checked={!profile.stayNoteOff} disabled={busy} onChange={e => set("stayNoteOff", !e.target.checked)} />Show the welcome note</label>
+          {optionalText("stayHeading", "Welcome heading", "a heading", profileLimits.stayHeadingMax, false, exampleNote.heading)}
+          {optionalText("stayWelcome", "Welcome message", "a welcome message", profileLimits.stayWelcomeMax, true, exampleNote.welcome)}
+          {optionalText("stayTip", "A little tip", "a little tip", profileLimits.stayTipMax, true, "The bakery behind the lighthouse. Go before 9am.")}
         </>}
         {section === "essentials" && <>
           <p className="field-hint">Add the details guests need during their stay.</p>

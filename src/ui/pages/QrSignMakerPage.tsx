@@ -37,6 +37,7 @@ export function QrSignMakerPage() {
   const [network, setNetwork] = useState("SEABREEZE-5G");
   const [password, setPassword] = useState("sandcastle42");
   const [photo, setPhoto] = useState<string | null>(null);
+  const photoInput = useRef<HTMLInputElement>(null);
   const [printing, setPrinting] = useState(false);
 
   const checkedLink = signLink(linkInput);
@@ -129,9 +130,17 @@ export function QrSignMakerPage() {
             {style.photo && (
               <div className="sign-photo-field">
                 <label htmlFor="sign-photo">Photo</label>
-                <input id="sign-photo" type="file" accept="image/*" onChange={event => {
+                <div className="sign-photo-choose">
+                  {photo && <img src={photo} alt="" />}
+                  <button type="button" className="btn btn-secondary btn-sm" onClick={() => photoInput.current?.click()}>
+                    {photo ? "Change photo" : "Choose your photo"}
+                  </button>
+                </div>
+                {/* Hidden because a bare file input cannot be styled; the button drives it. */}
+                <input ref={photoInput} id="sign-photo" className="visually-hidden" type="file" accept="image/*" onChange={event => {
                   const file = event.target.files?.[0];
-                  setPhoto(file ? URL.createObjectURL(file) : null);
+                  event.target.value = "";
+                  if (file) setPhoto(URL.createObjectURL(file));
                 }} />
                 <p className="field-hint">
                   Use a photo of your place, at least 1500 pixels wide for a sharp print. It stays on your device.

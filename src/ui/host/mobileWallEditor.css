@@ -74,6 +74,10 @@ body:has(.phone-wall-dock) .ds-help { display: none; }
 .phone-section-fields .field-hint { margin: 0; }
 .phone-section-fields .phone-section-check { display: flex; align-items: center; gap: 10px; min-height: 44px; }
 .phone-section-check input { width: 20px; height: 20px; }
+.phone-section-line { display: grid; gap: 4px; justify-items: start; }
+.phone-section-line > label { justify-self: stretch; }
+.phone-section-line > .btn { padding-left: 0; padding-right: 0; }
+.phone-section-add { align-self: flex-start; }
 .phone-section-item { min-width: 0; display: grid; gap: 16px; border: 1px solid var(--rule); padding: 18px 14px; border-radius: 12px; }
 .phone-section-item legend { padding: 0 6px; font-weight: 600; }
 .phone-section-item summary { min-height: 44px; display: flex; align-items: center; }

@@ -206,7 +206,7 @@ describe("switching the phone editor between Edit and Preview", () => {
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
     fireEvent.click(screen.getByRole("button", { name: "See guest view" }));
     expect(screen.getByRole("region", { name: "Guest preview" })).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "Back to sections" }));
+    fireEvent.click(screen.getByRole("button", { name: "Sections" }));
     expect(screen.getByRole("navigation", { name: "Guest wall sections" })).toBeVisible();
     expect(savePropertyProfile).not.toHaveBeenCalled();
   });
@@ -216,6 +216,7 @@ describe("switching the phone editor between Edit and Preview", () => {
     const sections = within(await screen.findByRole("navigation", { name: "Guest wall sections" }));
     expect(sections.getByRole("button", { name: /Welcome & hosts/ })).toHaveAttribute("data-state", "todo");
     fireEvent.click(sections.getByRole("button", { name: /Welcome & hosts/ }));
+    fireEvent.click(screen.getByRole("button", { name: "+ Add your names" }));
     fireEvent.change(screen.getByLabelText("Your names"), { target: { value: "Ana & Tom" } });
     fireEvent.change(screen.getByLabelText("Welcome message"), { target: { value: "Welcome to the cottage." } });
     const photo = new File(["photo"], "hosts.jpg", { type: "image/jpeg" });
@@ -244,11 +245,11 @@ describe("switching the phone editor between Edit and Preview", () => {
     expect(savePropertyName).toHaveBeenCalledWith("prop-1", "Our beach cottage");
     expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ location: "12 Beach Road", stayWelcome: filledProfile.stayWelcome }));
     expect(screen.getByRole("status")).toHaveTextContent("up to date");
-    fireEvent.click(screen.getByRole("button", { name: "View as guest" }));
+    fireEvent.click(screen.getByRole("button", { name: "See guest view" }));
     const preview = within(screen.getByRole("region", { name: "Guest preview" }));
     expect(preview.getByRole("heading", { name: "Our beach cottage" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Edit details" })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Back to editor" }));
+    fireEvent.click(screen.getByRole("button", { name: "Edit the wall" }));
     expect(screen.getByRole("button", { name: "Edit details" })).toBeVisible();
   });
 
@@ -285,7 +286,7 @@ describe("switching the phone editor between Edit and Preview", () => {
       { label: "Book direct", url: "seaview.example/book" },
       { label: "Join our mailing list", url: "https://seaview.example/newsletter" },
     ] }));
-    fireEvent.click(screen.getByRole("button", { name: "View as guest" }));
+    fireEvent.click(screen.getByRole("button", { name: "See guest view" }));
     const preview = within(screen.getByRole("region", { name: "Guest preview" }));
     expect(preview.getByRole("link", { name: /Book direct/ })).toHaveAttribute("href", "https://seaview.example/book");
     expect(preview.getByRole("link", { name: /Join our mailing list/ })).toHaveAttribute("href", "https://seaview.example/newsletter");
@@ -308,7 +309,7 @@ describe("switching the phone editor between Edit and Preview", () => {
       noteLinks: [{ label: "Our favourite walks", url: "walks.example/coast" }],
       stayAgainLinks: [],
     }));
-    fireEvent.click(screen.getByRole("button", { name: "View as guest" }));
+    fireEvent.click(screen.getByRole("button", { name: "See guest view" }));
     const preview = within(screen.getByRole("region", { name: "Guest preview" }));
     expect(preview.getByRole("navigation", { name: "Useful links" })).toBeInTheDocument();
     expect(preview.getByRole("link", { name: /Our favourite walks/ })).toHaveAttribute("href", "https://walks.example/coast");
@@ -381,7 +382,7 @@ describe("switching the phone editor between Edit and Preview", () => {
     renderPage();
     await editWall();
     await screen.findByRole("button", { name: "Edit details" });
-    fireEvent.click(screen.getByRole("button", { name: "View as guest" }));
+    fireEvent.click(screen.getByRole("button", { name: "See guest view" }));
     act(() => resize(1440));
     expect(screen.getByRole("form", { name: "Guest wall" })).toBeVisible();
     expect(screen.getByRole("complementary", { name: "This wall on a phone" })).toBeVisible();
