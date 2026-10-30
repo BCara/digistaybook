@@ -3,7 +3,11 @@ import type { HostProperty } from "./propertyStore";
 import { detectBillingCountry } from "./billingCountry";
 import {
   annualSaving,
+  billingCountries,
+  countryName,
+  currencyCoverage,
   formatRate,
+  isBillingCountry,
   monthsFreeLabel,
   monthsFreeOnAnnual,
   posCurrencies,
@@ -51,10 +55,10 @@ import {
  * only point at which §6.3.4 requires it to be read.
  */
 
-const COUNTRIES: { code: BillingCountry; name: string }[] = [
-  { code: "AU", name: "Australia" },
-  { code: "US", name: "United States" }
-];
+/** Alphabetical by name, so a Host finds their own country rather than scanning codes. */
+const COUNTRIES: { code: BillingCountry; name: string }[] = billingCountries
+  .map((code) => ({ code, name: countryName(code) }))
+  .sort((a, b) => a.name.localeCompare(b.name));
 
 const PLAN_NAMES: Record<ActivationPlanOffer["plan"], string> = {
   monthly: "Monthly",
@@ -210,20 +214,22 @@ export function ActivatePanel({ property }: { property: HostProperty }) {
         <fieldset className="activate-countries">
           <legend>Where will you be billed?</legend>
           <p className="field-hint">
-            This sets your currency. DigiStayBook currently serves Australia and the United States.
+            This sets your currency. {currencyCoverage}.
           </p>
-          {COUNTRIES.map((option) => (
-            <label key={option.code} className="check-row">
-              <input
-                type="radio"
-                name="billing-country"
-                value={option.code}
-                checked={country === option.code}
-                onChange={() => setCountry(option.code)}
-              />
-              {option.name}
-            </label>
-          ))}
+          {/* A list, not a row of radios: every country can buy. */}
+          <select
+            aria-label="Billing country"
+            value={country ?? ""}
+            onChange={(event) => {
+              const chosen = event.target.value;
+              if (isBillingCountry(chosen)) setCountry(chosen);
+            }}
+          >
+            {country === null && <option value="" disabled>Choose your country</option>}
+            {COUNTRIES.map((option) => (
+              <option key={option.code} value={option.code}>{option.name}</option>
+            ))}
+          </select>
         </fieldset>
       ) : (
         <p className="activate-country field-hint">

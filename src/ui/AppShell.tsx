@@ -27,6 +27,14 @@ const socialLinks = [
   }
 ];
 
+/** Where a signed-in Host works. A property's own pages belong to the dashboard. */
+const hostLinks = [
+  { href: "/host", label: "Dashboard", matches: (path: string) => path === "/host" || path.startsWith("/host/property") },
+  { href: "/host/inbox", label: "Inbox", matches: (path: string) => path === "/host/inbox" },
+  { href: "/host/billing", label: "Billing", matches: (path: string) => path === "/host/billing" },
+  { href: "/host/account", label: "Account", matches: (path: string) => path === "/host/account" }
+];
+
 /** The dashboard's create form, addressed so the header can jump straight to it. */
 const ADD_PROPERTY = "/host#add-property";
 
@@ -97,14 +105,21 @@ export function AppShell({ children }: { children: ReactNode }) {
           {signedIn ? (
             // The account name separates destinations from session controls.
             <nav className="header-account" aria-label="Primary navigation">
-              <a className="btn btn-primary btn-sm" href="/host">Dashboard</a>
-              <a className="btn btn-secondary btn-sm" href="/host/billing">Billing</a>
-              <a className="btn btn-secondary btn-sm" href="/host/account" aria-current={path === "/host/account" ? "page" : undefined}>Account</a>
-              <a className="btn btn-secondary btn-sm" href={ADD_PROPERTY}>Add property</a>
+              <div className="site-nav">
+                {hostLinks.map((link) => {
+                  const current = link.matches(path);
+                  return (
+                    <a key={link.href} href={link.href} className={current ? "active" : undefined} aria-current={current ? "page" : undefined}>
+                      {link.label}
+                    </a>
+                  );
+                })}
+              </div>
+              <a className="btn btn-primary btn-sm" href={ADD_PROPERTY}>Add property</a>
               <span className="header-account-name" title={user?.email ?? undefined}>{accountName}</span>
               <button
                 type="button"
-                className="btn btn-secondary btn-sm"
+                className="header-sign-out"
                 onClick={() => {
                   void handleSignOut();
                 }}

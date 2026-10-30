@@ -47,7 +47,7 @@ export function PreviewBanner({
           <ActionIcon action="view" />
           <span>{guestView ? "Back to your preview" : "Guest's view"}</span>
         </button>
-        <a className="btn btn-secondary btn-sm" href={`${base}${view === "public" ? "/public" : ""}`}><ActionIcon action="edit" /><span>Edit this wall</span></a>
+        <a className="btn btn-secondary btn-sm" href={base}><ActionIcon action="edit" /><span>Edit this wall</span></a>
         <a className="btn btn-primary btn-sm" href={`${base}/${reason.section}`}><ActionIcon action="next" /><span>{reason.action}</span></a>
       </div>
     </aside>

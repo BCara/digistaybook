@@ -6,6 +6,13 @@ import "./help.css";
 const greeting: HelpMessage = { role: "assistant", text: "Hi! I’m DigiStayBook’s help guide. Ask me about setting up your guestbook, QR codes or guest memories." };
 const suggestions = ["How do I get started?", "Do guests need an app?", "How much does it cost?"];
 const newId = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, "0")).join("");
+const openEvent = "ds-help-open";
+
+/** A finger-sized "?" for a sticky action bar. On a phone it stands in for the
+    floating launcher, which would otherwise sit on top of the bar's buttons. */
+export function HelpBarButton() {
+  return <button type="button" className="btn btn-secondary ds-help-bar" aria-label="Questions? Ask us" aria-haspopup="dialog" aria-controls="digistaybook-help" onClick={e => window.dispatchEvent(new CustomEvent<HTMLElement>(openEvent, { detail: e.currentTarget }))}>?</button>;
+}
 
 export function HelpWidget() {
   const [open, setOpen] = useState(false);
@@ -21,7 +28,25 @@ export function HelpWidget() {
   const panel = useRef<HTMLElement>(null);
   const list = useRef<HTMLDivElement>(null);
   const question = useRef<HTMLInputElement>(null);
-  const close = () => { setOpen(false); launcher.current?.focus(); };
+  const opener = useRef<HTMLElement | null>(null);
+  const close = () => { setOpen(false); (opener.current?.isConnected ? opener.current : launcher.current)?.focus(); opener.current = null; };
+
+  // On a phone the launcher waits for the site footer, so it never covers the
+  // page while someone is reading or filling it in. No footer, no waiting.
+  const [atFooter, setAtFooter] = useState(true);
+  useEffect(() => {
+    const footer = document.querySelector(".site-footer");
+    if (!footer || typeof IntersectionObserver !== "function") return;
+    const observer = new IntersectionObserver(([entry]) => setAtFooter(entry.isIntersecting));
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const openFrom =(e: Event) => { opener.current = (e as CustomEvent<HTMLElement>).detail; setOpen(true); };
+    window.addEventListener(openEvent, openFrom);
+    return () => window.removeEventListener(openEvent, openFrom);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -59,7 +84,7 @@ export function HelpWidget() {
     finally { setBusy(false); }
   }
 
-  return <aside className="ds-help" aria-label="DigiStayBook help">
+  return <aside className={`ds-help${atFooter || open ? "" : " ds-help-waiting"}`} aria-label="DigiStayBook help">
     {open && <section ref={panel} className="ds-help-panel" id="digistaybook-help" role="dialog" aria-labelledby="ds-help-title">
       <header className="ds-help-head"><BrandMark height={24} /><div><strong id="ds-help-title">{view === "chat" ? "DigiStayBook help" : "Message us"}</strong><small>{view === "chat" ? "Quick answers · Email support" : "Product support by email"}</small></div><button type="button" onClick={close} aria-label="Close help">×</button></header>
       {view === "chat" && <>
@@ -85,6 +110,6 @@ export function HelpWidget() {
       </form>}
       {view === "sent" && <div className="ds-help-form" role="status"><h2>Thanks for your message.</h2><p>{import.meta.env.VITE_USE_FIREBASE_EMULATORS === "true" ? "Local preview: your message was saved locally. No email was sent." : "Your message has been sent to support. We’ll reply to the email address you supplied."}</p><button className="btn btn-secondary" onClick={() => changeView("chat")}>Back to chat</button></div>}
     </section>}
-    <button ref={launcher} type="button" className="ds-help-launcher" aria-expanded={open} aria-controls="digistaybook-help" onClick={() => open ? close() : setOpen(true)}>{open ? "Close help ×" : "Questions? Ask us"}</button>
+    <button ref={launcher} type="button" className="ds-help-launcher" aria-expanded={open} aria-controls="digistaybook-help" onClick={() => open ? close() : setOpen(true)}><span className="ds-help-short" aria-hidden="true">{open ? "Close" : "Ask us"}</span><span className="ds-help-label">{open ? "Close help ×" : "Questions? Ask us"}</span></button>
   </aside>;
 }

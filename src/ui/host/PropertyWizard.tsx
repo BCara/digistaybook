@@ -11,6 +11,7 @@ import {
   type HouseFact,
   type PropertyProfile
 } from "../../domain/propertyProfile";
+import { HelpBarButton } from "../help/HelpWidget";
 import { HostNoteStylePicker } from "./HostNoteStylePicker";
 import { hostNoteSlot, type PhotoSlot } from "./photoSlots";
 import {
@@ -369,7 +370,7 @@ export function PropertyWizard({
           </p>
 
           <label htmlFor="wizard-location">
-            Where the property is<span className="label-optional">Recommended</span>
+            Where the property is
           </label>
           <input
             id="wizard-location"
@@ -388,7 +389,7 @@ export function PropertyWizard({
           <section className="wizard-photos" aria-labelledby="wizard-photos-heading">
             <h4 id="wizard-photos-heading">Photographs</h4>
             <p className="field-hint">
-              JPEG, PNG or WebP, up to {Math.round(profileLimits.photoBytesMax / (1024 * 1024))}MB.
+              JPEG, PNG or WebP. Large photos are resized for you.
             </p>
             <div className="photo-grid">
               {renderPhoto("avatar")}
@@ -634,7 +635,7 @@ export function PropertyWizard({
 
                   <div className="wizard-note-words">
                     <label htmlFor={`wizard-host-note-${note.id}`}>
-                      Your note<span className="label-optional">Recommended</span>
+                      Your note
                     </label>
                     <textarea
                       id={`wizard-host-note-${note.id}`}
@@ -705,6 +706,7 @@ export function PropertyWizard({
         <button type="button" className="btn btn-ghost wizard-nav-cancel" disabled={working} onClick={onCancel}>
           Cancel
         </button>
+        <HelpBarButton />
       </footer>
     </form>
   );

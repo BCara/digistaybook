@@ -1,0 +1,30 @@
+{
+  "Commit": "a57a6707af81ce8d48458fa844060fed0ec9e765",
+  "BaseCommit": "aa5916d5e1e3693c61624d1e6addb6a0d16b8020",
+  "PreviousLive": "e0d3d052f5a66383",
+  "LiveVersion": "projects/digistaybook-cbert/sites/digistaybook-cbert/versions/a7e045df766154aa",
+  "Released": "2026-10-30T06:54:00.802Z",
+  "PreviewVersion": "projects/digistaybook-cbert/sites/digistaybook-cbert/versions/a7e045df766154aa",
+  "EditorTests": 61,
+  "Typecheck": "passed",
+  "ProductionBuild": "passed",
+  "HostingOnly": true,
+  "SignedInPhoneCheck": "Local Test only",
+  "Artifacts": [
+    {
+      "Path": "/app.html",
+      "SHA256": "A79F1B3B46EDC051A66B008F295124498B9AB9AB7D37589800D4E6734C86B4E0",
+      "ExactMatch": true
+    },
+    {
+      "Path": "/assets/index-plHDoJ8x.js",
+      "SHA256": "5164AA6B21633D2C6918B3B8A0DEC48B4BCE09458FC0F718E050DB85EB5434A4",
+      "ExactMatch": true
+    },
+    {
+      "Path": "/assets/index-Bb3tF-4j.css",
+      "SHA256": "ECBC7D0790AA65AD5B2379BD74F8ED1E36E8F9EFC6FCA2CDC4CEECFCFFA745DC",
+      "ExactMatch": true
+    }
+  ]
+}

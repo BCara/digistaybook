@@ -59,7 +59,7 @@ const pages: Record<(typeof indexedPaths)[number], Omit<PageSeo, "canonical">> =
   },
   "/contact": {
     title: titled("Contact us"),
-    description: "Contact DigiStayBook about your host account, billing or setting up your digital guestbook. We reply by email."
+    description: "Contact DigiStayBook about your host account, billing, setting up your digital guestbook, or custom options for hotels, resorts and larger portfolios. We reply by email."
   },
   "/privacy-safety": {
     title: titled("Privacy & Safety requests"),

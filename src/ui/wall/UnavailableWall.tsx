@@ -14,7 +14,7 @@ export function UnavailableWall({ result, view }: { result: Unavailable; view: "
       <p>You’re signed in as this property’s owner.</p>
       <div className="actions">
         <a className="btn btn-primary" href={`${base}/${reason.section}`}>{reason.action}</a>
-        <a className="btn btn-secondary" href={`${base}${view === "public" ? "/public" : ""}`}>Edit this wall</a>
+        <a className="btn btn-secondary" href={base}>Edit this wall</a>
       </div>
     </> : <>
       {/* A guest is holding a placard or a link that led nowhere. Nothing here

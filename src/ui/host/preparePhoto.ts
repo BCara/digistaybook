@@ -1,7 +1,7 @@
 /**
  * What leaves the device when a Host chooses a photograph.
  *
- * A phone takes a 4000px, 3–8MB picture; no wall ever draws one wider than
+ * A phone takes a 4000px picture of 3MB or well over 10MB; no wall ever draws one wider than
  * about 1200px, so uploading the original spends thirty seconds of a Host's
  * time sending bytes that are thrown away on arrival. The file is redrawn at
  * the size it will actually be seen at before it is sent, which is nearly all

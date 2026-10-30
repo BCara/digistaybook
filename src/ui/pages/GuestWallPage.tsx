@@ -21,14 +21,15 @@ export function GuestWallPage({
   /**
    * True on `/embed/wall/{slug}`, the rendering a Host puts in an iframe on
    * their own site. The wall is the same wall; what goes is everything that
-   * only makes sense on our site — the demo ribbon here, and the site header
-   * and footer, which the embedded route never draws in the first place.
+   * only makes sense on our site — the demo ribbon, the property's own header
+   * (the Host's site already says whose house it is), and the site header and
+   * footer, which the embedded route never draws in the first place.
    */
   embedded?: boolean;
 }) {
   const isDemo = propertySlug === DEMO_SLUG && !embedded;
   const property = demoProperty;
-  if (propertySlug !== DEMO_SLUG) return <LiveWallPage key={propertySlug} slug={propertySlug} view="public" />;
+  if (propertySlug !== DEMO_SLUG) return <LiveWallPage key={propertySlug} slug={propertySlug} view="public" embedded={embedded} />;
 
   // The demo can be printed on any theme (`?theme=journal&colour=sage`), so
   // the four can be compared on the same words and photographs.
@@ -47,14 +48,14 @@ export function GuestWallPage({
 
       {/* The served public page's own header, notes and footer, fed from the
           demo's data, so the demo is the page and not a lookalike of it. */}
-      <WallHeader view="public" property={{
+      {!embedded && <WallHeader view="public" property={{
         name: property.name,
         location: property.location,
         welcome: property.welcome,
         hosts: property.hosts,
         cover: { url: property.cover.src, alt: property.cover.alt },
         hostPhoto: property.hostPhoto ? { url: property.hostPhoto.src, alt: property.hostPhoto.alt } : null
-      }} />
+      }} />}
 
       <div className="wall-memories">
         <MemoryWall posts={demoPosts} heading={memoriesHeading(demoPosts.length)} />

@@ -72,6 +72,20 @@
         "digistaybook-cbert"
       ],
       "port": 5000
+    },
+    {
+      "name": "web-emulator-5184",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "vite",
+        "--host",
+        "--mode",
+        "emulator",
+        "--port",
+        "5184",
+        "--strictPort"
+      ],
+      "port": 5184
     }
   ]
 }

@@ -6,6 +6,7 @@ import {
   emptyProfile,
   normalizeProfile,
   readProfile,
+  validatePreparedPhoto,
   type HostNote,
   type PropertyPhoto,
   type PropertyProfile
@@ -335,6 +336,7 @@ const PROFILE_FIELDS = [
   "facts",
   "factsOff",
   "stayAgainLinks",
+  "reviewedSections",
   "guestPrompt"
 ] as const;
 
@@ -423,6 +425,8 @@ export async function uploadPropertyPhoto(
       import("firebase/storage"),
       preparePhoto(file)
     ]);
+    const tooLarge = validatePreparedPhoto(prepared.blob);
+    if (tooLarge) return { status: "error", message: tooLarge };
 
     const extension = EXTENSIONS[prepared.contentType] ?? "img";
     // The slot names the object so a bucket listing reads as the wall does.

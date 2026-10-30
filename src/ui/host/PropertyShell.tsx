@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import {
-  hasDisplayWall,
   profileLimits,
   validatePhotoFile,
   type PropertyPhoto,
@@ -95,8 +94,6 @@ export function PropertyShell({
 
   const avatar = uploaded ?? shown.avatar;
   const location = shown.location.trim();
-  // The property's navigation marks whether its public wall is switched off.
-  const wallOn = hasDisplayWall(shown);
   const draft = property.lifecycle === "draft";
 
   /**
@@ -191,7 +188,7 @@ export function PropertyShell({
                       {settingsMark}
                     </a>
                   )}
-                  <PropertyNav mobile propertyId={property.id} current={current} publicWallOff={!wallOn} draft={draft} />
+                  <PropertyNav mobile propertyId={property.id} current={current} draft={draft} />
                 </div>
               </div>
               {location ? <p className="banner-location">{location}</p> : null}
@@ -225,7 +222,7 @@ export function PropertyShell({
       {toolbar}
       <div className="property-shell-body">
         <div className="property-side">
-          <PropertyNav propertyId={property.id} current={current} publicWallOff={!wallOn} draft={draft} />
+          <PropertyNav propertyId={property.id} current={current} draft={draft} />
           {aside && <div className="property-side-tools">{aside}</div>}
         </div>
         <div className="property-shell-main">{children}</div>

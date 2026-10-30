@@ -85,7 +85,7 @@ describe("walls and QR display", () => {
   it("states ended access once while keeping both links available to copy", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ lifecycle: "dormant" }) });
     renderPage();
-    await screen.findByRole("heading", { name: "QR display and links", level: 2 });
+    await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
     expect(main().getAllByText("Guest access has ended")).toHaveLength(1);
     expect(main().getAllByText("The service period is over. Billing has your options.")).toHaveLength(1);
     expect(main().getAllByText("Offline")).toHaveLength(2);
@@ -102,19 +102,19 @@ describe("walls and QR display", () => {
     expect(main().getByRole("link", { name: "View the guest wall" })).toBeInTheDocument();
     expect(main().getByRole("link", { name: "View the public page" })).toBeInTheDocument();
     expect(main().getByRole("switch", { name: "Public page" })).not.toBeChecked();
-    expect(main().getByRole("link", { name: "Configure the public page" })).toHaveAttribute("href", "/host/property/prop-1/public");
+    expect(main().queryByRole("link", { name: "Configure the public page" })).not.toBeInTheDocument();
     expect(document.querySelector(".qr-access-notice")).not.toBeInTheDocument();
   });
 
   it("switches the public wall off and on from its card", async () => {
     renderPage();
-    await screen.findByRole("heading", { name: "QR display and links", level: 2 });
+    await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
     const toggle = main().getByRole("switch", { name: "Public page" });
     expect(toggle).toBeChecked();
     fireEvent.click(toggle);
     await waitFor(() => expect(toggle).not.toBeChecked());
     expect(saveDisplayWallOff).toHaveBeenCalledWith("prop-1", true);
-    expect(within(main().getByRole("region", { name: "The public page" })).getByText("Offline")).toBeInTheDocument();
+    expect(within(main().getByRole("region", { name: "Share your memories" })).getByText("Offline")).toBeInTheDocument();
     saveDisplayWallOff.mockResolvedValueOnce({ status: "error", message: "Unavailable" });
     fireEvent.click(toggle);
     expect(await main().findByText("The public page could not be switched. Try again.")).toBeInTheDocument();
@@ -123,7 +123,7 @@ describe("walls and QR display", () => {
 
   it("names both walls, their addresses, and the way into each", async () => {
     renderPage();
-    await screen.findByRole("heading", { name: "QR display and links", level: 2 });
+    await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
 
     expect(main().getByText(`${window.location.origin}/wall/seabreeze-cottage`)).toBeInTheDocument();
     expect(main().getAllByText(`${window.location.origin}/stay/seabreeze-cottage/${TOKEN}`)[0]).toBeInTheDocument();
@@ -136,7 +136,10 @@ describe("walls and QR display", () => {
       `/stay/seabreeze-cottage/${TOKEN}`
     );
     expect(main().getByRole("link", { name: "Configure the guest wall" })).toHaveAttribute("href", "/host/property/prop-1");
-    expect(main().getByRole("link", { name: "Configure the public page" })).toHaveAttribute("href", "/host/property/prop-1/public");
+    expect(main().queryByRole("link", { name: "Configure the public page" })).not.toBeInTheDocument();
+    // The public page is shared from here, memories and all, onto a Host's own site.
+    expect(main().getByText("Put your memories on your own website")).toBeInTheDocument();
+    expect(main().getByRole("button", { name: "Copy embed code" })).toBeInTheDocument();
     const guestLink = document.querySelector(".qr-page-kit .qr-guest-link a");
     expect(guestLink).toHaveAttribute("href", `${window.location.origin}/stay/seabreeze-cottage/${TOKEN}`);
     // The link a Host already has is the link they keep: nothing is minted
@@ -148,7 +151,7 @@ describe("walls and QR display", () => {
     fireEvent.click(approval);
     await waitFor(() => expect(approval).toBeChecked());
     expect(callable).toHaveBeenCalledWith("setGuestReviewPolicy", { propertyId: "prop-1", reviewContent: true });
-    expect(main().getByRole("link", { name: "Review waiting memories" })).toHaveAttribute("href", "/host/property/prop-1/moderation#new-memories");
+    expect(main().getByRole("link", { name: "Review waiting memories" })).toHaveAttribute("href", "/host/inbox?property=prop-1");
     expect(main().queryByRole("heading", { name: "New memories" })).not.toBeInTheDocument();
   });
 
@@ -156,7 +159,7 @@ describe("walls and QR display", () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ reviewContent }) });
     callable.mockImplementation(() => new Promise(() => {}));
     renderPage();
-    await screen.findByRole("heading", { name: "QR display and links", level: 2 });
+    await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
     const approval = main().getByRole("checkbox", { name: "Require approval for new memories" });
     expect(approval).toHaveProperty("checked", reviewContent === true);
     expect(approval).toBeEnabled();
@@ -193,7 +196,7 @@ describe("walls and QR display", () => {
   it("mints a guestbook token for a property that has none", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ stayToken: null }) });
     renderPage();
-    await screen.findByRole("heading", { name: "QR display and links", level: 2 });
+    await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
 
     expect(ensureStayToken).toHaveBeenCalledWith("prop-1");
     expect(await main().findByRole("link", { name: "View the guest wall" })).toHaveAttribute(
@@ -208,7 +211,7 @@ describe("walls and QR display", () => {
       value: hostProperty({ lifecycle: "draft", mode: "sandbox" })
     });
     renderPage();
-    await screen.findByRole("heading", { name: "QR display and links", level: 2 });
+    await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
 
     // The address is still stated: it is fixed at creation, and a Host writing
     // towards publication should be able to see where the wall will be.
@@ -217,7 +220,6 @@ describe("walls and QR display", () => {
     expect(main().getByRole("link", { name: "View the guest wall" })).toBeInTheDocument();
     expect(main().getByText("Not published yet")).toBeInTheDocument();
     expect(main().getByRole("link", { name: "Configure the guest wall" })).toBeInTheDocument();
-    expect(main().getByRole("link", { name: "Configure the public page" })).toBeInTheDocument();
   });
 
   it("locks printing until the subscription is running, and says so either way", async () => {
@@ -243,7 +245,7 @@ describe("walls and QR display", () => {
       value: hostProperty({ lifecycle: "draft", mode: "sandbox" })
     });
     renderPage();
-    await screen.findByRole("heading", { name: "QR display and links", level: 2 });
+    await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
 
     const address = `${window.location.host}/stay/seabreeze-cottage/${TOKEN}`;
     expect(main().getByRole("img", { name: `QR code for ${address}` })).toBeInTheDocument();
@@ -257,24 +259,27 @@ describe("walls and QR display", () => {
   it("adds a code that joins the house Wi-Fi when the line names network and password", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: { ...emptyProfile(), facts: [{ term: "Wi-Fi", detail: "cottage-guest / seaside42", note: "" }] } }) });
     renderPage();
-    await screen.findByRole("heading", { name: "QR display and links", level: 2 });
+    await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
 
     expect(main().getByRole("img", { name: "QR code to join the Wi-Fi network cottage-guest" })).toBeInTheDocument();
     expect(main().queryByText(/write your Wi-Fi line as network \/ password/)).not.toBeInTheDocument();
+    // The code is a shortcut, not the only way in: the password stays written down.
+    expect(main().getByText(/Keep the Wi-Fi password written somewhere guests can read it too/)).toBeInTheDocument();
   });
 
   it("says how to get a Wi-Fi code when the line gives only a network", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: { ...emptyProfile(), facts: [{ term: "Wi-Fi", detail: "SEABREEZE-5G", note: "" }] } }) });
     renderPage();
-    await screen.findByRole("heading", { name: "QR display and links", level: 2 });
+    await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
 
     expect(main().queryByRole("img", { name: /join the Wi-Fi/ })).not.toBeInTheDocument();
     expect(main().getByText(/write your Wi-Fi line as network \/ password/)).toBeInTheDocument();
+    expect(main().queryByText(/Keep the Wi-Fi password written somewhere/)).not.toBeInTheDocument();
   });
 
   it("stops saying a scan reaches nobody once the wall is served", async () => {
     renderPage();
-    await screen.findByRole("heading", { name: "QR display and links", level: 2 });
+    await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
 
     expect(main().getByRole("img", { name: /^QR code for/ })).toBeInTheDocument();
     expect(main().queryByText(/This QR code leads to an offline wall/i)).not.toBeInTheDocument();
@@ -282,14 +287,11 @@ describe("walls and QR display", () => {
 
   it("stands in the property's nav as the screen you are on", async () => {
     renderPage();
-    await screen.findByRole("heading", { name: "QR display and links", level: 2 });
+    await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
 
-    expect(nav().getByText("QR display and links", { selector: "[aria-current]" })).toHaveAttribute("aria-current", "page");
+    expect(nav().getByText("QR code and sharing", { selector: "[aria-current]" })).toHaveAttribute("aria-current", "page");
     expect(nav().getByRole("link", { name: "Guest wall" })).toHaveAttribute("href", "/host/property/prop-1");
-    expect(nav().getByRole("link", { name: "Inbox & moderation" })).toHaveAttribute(
-      "href",
-      "/host/property/prop-1/moderation"
-    );
+    expect(nav().queryByRole("link", { name: "Inbox & moderation" })).not.toBeInTheDocument();
     expect(nav().getByRole("link", { name: "Billing" })).toHaveAttribute("href", "/host/property/prop-1/billing");
   });
 
@@ -298,13 +300,13 @@ describe("walls and QR display", () => {
   // banner and the nav they had just clicked in.
   it("opens a property it has already read without blanking the screen", async () => {
     const { unmount } = renderPage();
-    await screen.findByRole("heading", { name: "QR display and links", level: 2 });
+    await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
     unmount();
 
     renderPage();
     // Deliberately not awaited: the property is on the screen in the first
     // render, and the second read runs behind it.
-    expect(screen.getByRole("heading", { name: "QR display and links", level: 2 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "QR code and sharing", level: 2 })).toBeInTheDocument();
     expect(screen.queryByText("Fetching this property.")).not.toBeInTheDocument();
 
     await act(async () => {});
@@ -313,14 +315,14 @@ describe("walls and QR display", () => {
 
   it("keeps a property on the screen when a later read of it fails", async () => {
     const { unmount } = renderPage();
-    await screen.findByRole("heading", { name: "QR display and links", level: 2 });
+    await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
     unmount();
 
     loadProperty.mockResolvedValue({ status: "error", message: "You do not have access to that property." });
     renderPage();
     await act(async () => {});
 
-    expect(screen.getByRole("heading", { name: "QR display and links", level: 2 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "QR code and sharing", level: 2 })).toBeInTheDocument();
     expect(screen.queryByText("You do not have access to that property.")).not.toBeInTheDocument();
   });
 

@@ -27,7 +27,7 @@
   display: flex; align-items: flex-start; justify-content: space-between; gap: 12px 24px;
   margin-bottom: 26px;
 }
-.moderation-page .moderation-intro h2 {
+.moderation-page .moderation-intro :is(h1, h2) {
   margin: 0; font-family: var(--font-display); font-size: clamp(2rem, 4.4vw, 3rem);
   font-weight: 600; line-height: 1.05; letter-spacing: -.02em;
 }
@@ -229,3 +229,107 @@
 .moderation-page details.fine-print summary::-webkit-details-marker { display: none; }
 .moderation-page details.fine-print summary svg { width: 22px; height: 22px; }
 .moderation-page details.fine-print summary:hover { color: var(--text); }
+
+/* ---- Every property, one page ----
+   The inbox stands beside the dashboard rather than inside a property. Each
+   tab is a table: a row per item, the property a column while the table
+   mixes properties. On a phone a row stacks into a small card, each value
+   under its column's name. */
+
+.page.inbox-page { width: min(1120px, 100% - 2 * var(--gutter)); }
+.inbox-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; margin: 0 0 18px; }
+.inbox-filter {
+  display: flex; align-items: center; gap: 10px; flex: 0 1 420px;
+  font-size: var(--step--1); font-weight: 600; color: var(--text-muted);
+}
+.inbox-filter select { min-width: 0; flex: 1; }
+.inbox-approval { font-size: var(--step--1); font-weight: 600; }
+.inbox-unpublished { margin-bottom: 18px; }
+.inbox-draft {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px 18px; flex-wrap: wrap;
+  margin-bottom: 12px; padding: 14px var(--mod-card-pad); background: var(--surface);
+  border: 1px dashed var(--rule-strong); border-radius: var(--mod-radius);
+}
+.inbox-draft p { margin: 4px 0 0; color: var(--text-muted); font-size: var(--step--1); }
+.inbox-drafts-note { margin: 0 0 18px; color: var(--text-muted); font-size: var(--step--1); }
+.moderation-page .moderation-tabs .queue-count[data-attention="true"] { background: var(--accent-soft); color: var(--accent-strong); }
+.inbox-page .moderation-wall { margin-top: 18px; }
+
+.inbox-table {
+  width: 100%; border-collapse: collapse; background: var(--surface-raised);
+  border: 1px solid var(--rule); border-radius: var(--mod-radius); overflow: hidden;
+  font-size: var(--step--1);
+}
+.inbox-table th {
+  padding: 10px 14px; text-align: left; vertical-align: bottom; background: var(--bg-alt);
+  color: var(--text-muted); font-size: var(--step--2); font-weight: 650; letter-spacing: .04em; text-transform: uppercase;
+  border-bottom: 1px solid var(--rule);
+}
+.inbox-table td { padding: 12px 14px; vertical-align: top; border-bottom: 1px solid var(--rule); }
+.inbox-table tbody tr:last-child td { border-bottom: 0; }
+.inbox-table tbody tr:hover { background: color-mix(in srgb, var(--bg-alt) 55%, transparent); }
+.inbox-table .cell-property { font-weight: 650; white-space: nowrap; }
+.inbox-table .cell-from { white-space: nowrap; }
+.inbox-table .cell-message { width: 44%; line-height: 1.5; overflow-wrap: anywhere; }
+.inbox-table .cell-date { white-space: nowrap; color: var(--text-muted); }
+.inbox-table .cell-status .queue-hold { margin: 6px 0 0; color: var(--text-muted); font-size: var(--step--2); line-height: 1.4; }
+.inbox-table .cell-status .queue-state { margin: 0; }
+.inbox-table .cell-actions { text-align: right; white-space: nowrap; }
+.inbox-table .cell-actions .queue-actions { justify-content: flex-end; }
+.inbox-table .cell-actions .queue-result, .inbox-table .cell-actions .field-hint { white-space: normal; text-align: left; margin: 8px 0 0; }
+.inbox-table .cell-actions .queue-confirm { white-space: normal; text-align: left; }
+.cell-quiet { color: var(--text-muted); }
+.cell-thumb { float: left; width: 44px; height: 44px; margin: 2px 10px 4px 0; object-fit: cover; border-radius: 4px; }
+.cell-link {
+  display: block; margin-top: 6px; padding: 0; background: none; border: 0; cursor: pointer;
+  color: var(--sage-700); font: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px;
+}
+.cell-photos { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.cell-photos img { width: 72px; height: 72px; object-fit: cover; border-radius: 4px; }
+.row-actions { display: inline-flex; flex-wrap: nowrap; justify-content: flex-end; gap: 6px; }
+.inbox-table .state-pill { white-space: nowrap; }
+.inbox-table .state-pill.is-attention { background: var(--accent-soft); color: var(--accent-strong); }
+.memory-row.is-pinned .cell-message { font-weight: 600; }
+
+/* Sorting and narrowing the memories. */
+.memory-controls {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 0 0 14px;
+  font-size: var(--step--1);
+}
+.memory-controls label { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-muted); }
+.memory-controls-count { margin: 0 0 0 auto; color: var(--text-muted); }
+.memory-sort-select { display: none !important; }
+@media (max-width: 760px) { .memory-sort-select { display: flex !important; } }
+.sort-header {
+  display: inline-flex; align-items: center; gap: 6px; padding: 0; background: none; border: 0; cursor: pointer;
+  color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit;
+}
+.sort-header:hover, .sort-header.is-active { color: var(--text); }
+.sort-mark { font-size: .7em; opacity: .55; letter-spacing: 0; }
+.sort-header.is-active .sort-mark { opacity: 1; }
+.inbox-page .queue-removed { margin-top: 22px; }
+.inbox-page .queue-removed .inbox-table { margin-top: 12px; }
+
+@media (max-width: 760px) {
+  .inbox-table, .inbox-table tbody, .inbox-table tr, .inbox-table td { display: block; width: 100%; }
+  .inbox-table { background: transparent; border: 0; }
+  .inbox-table thead { display: block; position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .inbox-table tbody tr {
+    margin-bottom: 12px; padding: 6px 14px; background: var(--surface-raised);
+    border: 1px solid var(--rule); border-radius: var(--mod-radius);
+  }
+  .inbox-table td { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px; padding: 8px 0; min-width: 0; }
+  .inbox-table td::before {
+    content: attr(data-label); color: var(--text-muted);
+    font-size: var(--step--2); font-weight: 650; letter-spacing: .04em; text-transform: uppercase;
+  }
+  .inbox-table .cell-message { width: auto; }
+  .inbox-table .cell-actions { text-align: left; white-space: normal; }
+  .inbox-table .cell-actions .queue-actions, .row-actions { justify-content: flex-start; flex-wrap: wrap; }
+  .inbox-table .cell-property, .inbox-table .cell-from { white-space: normal; }
+  /* Three tabs outgrow a phone; the strip scrolls on its own, not the page. */
+  /* width: 0 with min-width: 100% keeps the strip from sizing the page. */
+  .inbox-page .moderation-tabs { overflow-x: auto; scrollbar-width: none; width: 0; min-width: 100%; }
+  .inbox-page .moderation-tabs button { flex: none; padding-inline: 10px; }
+  .inbox-page .moderation-tabs button:first-child { padding-left: 4px; }
+}

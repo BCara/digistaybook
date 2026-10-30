@@ -25,4 +25,18 @@
 .ds-help-actions { display: flex; gap: 8px; justify-content: space-between; }
 .ds-help-error { font-size: 13px; padding: 8px 16px; color: var(--accent-strong); }
 .ds-help button:disabled { opacity: .6; cursor: wait; }
-@media (max-width: 480px) { .ds-help { right: 16px; bottom: max(12px, env(safe-area-inset-bottom)); } .ds-help-panel { max-height: calc(100dvh - 90px); } }
+.ds-help-short { display: none; }
+.ds-help-bar { display: none; }
+/* On a phone the launcher shortens to "Ask us". Where a sticky action bar
+   carries its own "?" (HelpBarButton), the launcher steps aside so it never
+   sits on top of Next, Save or Send. */
+@media (max-width: 480px) {
+  .ds-help { right: 16px; bottom: max(18px, env(safe-area-inset-bottom)); }
+  .ds-help-panel { max-height: calc(100dvh - 90px); }
+  .ds-help-launcher { padding: 15px 14px; border-radius: var(--radius-sm); font-size: var(--step--1); box-shadow: 0 2px 10px #0002; color: var(--surface-inverse); background: var(--text-inverse); border-color: transparent; transition: opacity .2s ease, transform .2s ease, visibility .2s; }
+  .ds-help-waiting .ds-help-launcher { opacity: 0; transform: translateY(12px); visibility: hidden; }
+  .ds-help-short { display: inline; }
+  .ds-help-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  body:has(.ds-help-bar) .ds-help-launcher { display: none; }
+  body .ds-help-bar { display: inline-flex; flex: none; width: 48px; min-height: 48px; margin-left: auto; padding: 0; font-size: 1.25rem; }
+}

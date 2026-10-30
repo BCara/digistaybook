@@ -1,4 +1,18 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  dateRangeLabels,
+  defaultMemoryFilter,
+  defaultMemorySort,
+  filterMemories,
+  nextSort,
+  sortMemories,
+  statusFilterLabels,
+  type DateRange,
+  type MemoryFilter,
+  type MemorySort,
+  type MemorySortKey,
+  type StatusFilter
+} from "../../domain/memoryTable";
 import {
   actionCopy,
   actionsUnavailable,
@@ -6,12 +20,13 @@ import {
   holdSla,
   holdSummary,
   primaryAction,
-  queueSections,
   type ModeratedPost,
   type PostAction
 } from "../../domain/postModeration";
-import { formatDate, initials, toneIndex } from "../wall/demoWall";
+import { formatDate } from "../wall/demoWall";
 import type { QueueState } from "./useModerationQueue";
+import type { FeedEntry } from "./useInboxFeed";
+import type { HostProperty } from "./propertyStore";
 
 /**
  * The wall, as the Host who owns it works through it.
@@ -44,10 +59,14 @@ const actionMarks: Partial<Record<PostAction, ReactNode>> = {
  * gets none: its section already says so, and a pill on every row of a long
  * wall is a label repeated until no one reads it.
  */
-function StateLabel({ post }: { post: ModeratedPost }) {
+function StateLabel({ post, always = false }: {
+  post: ModeratedPost;
+  /** In a table every row has a status column, so a plain live memory says so too. */
+  always?: boolean;
+}) {
   const sla = holdSla(post);
   const label =
-    post.visibility === "visible" ? (post.pinned ? "Pinned" : null) :
+    post.visibility === "visible" ? (post.pinned ? "Pinned" : always ? "On the wall" : null) :
     post.visibility === "hidden_pending_review" ? "Hidden, waiting on you" :
     post.visibility === "hidden_by_host" ? "Off the wall" :
     post.visibility === "restricted" ? "Held by DigiStayBook" :
@@ -187,7 +206,13 @@ function ConfirmPanel({ post, state, action }: { post: ModeratedPost; state: Que
   );
 }
 
-function QueueCard({ post, state }: { post: ModeratedPost; state: QueueState }) {
+/** One memory as a row: who, what, when, where it stands, what can be done. */
+function MemoryRow({ post, property, state, showProperty }: {
+  post: ModeratedPost;
+  property: HostProperty;
+  state: QueueState;
+  showProperty: boolean;
+}) {
   const author = post.displayName?.trim() ?? "";
   const actions = availableActions(post);
   const blocked = actionsUnavailable(post);
@@ -196,50 +221,31 @@ function QueueCard({ post, state }: { post: ModeratedPost; state: QueueState }) 
   const result = state.result?.postId === post.id ? state.result : null;
 
   return (
-    <article className={`queue-note${post.visibility === "visible" && post.pinned ? " is-pinned" : ""}`}>
-      {/* The words sit on the left and what may be done about them lines up
-          on the right, so a long wall still scans as a list. */}
-      <div className="queue-note-body">
+    <tr className={`memory-row${post.visibility === "visible" && post.pinned ? " is-pinned" : ""}`}>
+      {showProperty && <td className="cell-property" data-label="Property">{property.name}</td>}
+      <td className="cell-from" data-label="From">{author || <span className="cell-quiet">Guest</span>}</td>
+      <td className="cell-message" data-label="Memory">
         {post.photo && (
-          <div className="note-photo">
-            <img
-              src={post.photo.url}
-              alt={post.photo.alt || (author ? `Photograph left by ${author}` : "Guest memory photo")}
-              width={post.photo.width || undefined}
-              height={post.photo.height || undefined}
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
+          <img
+            className="cell-thumb"
+            src={post.photo.url}
+            alt={post.photo.alt || (author ? `Photograph left by ${author}` : "Guest memory photo")}
+            loading="lazy"
+            decoding="async"
+          />
         )}
-
-        {/* A deleted memory has had its words removed by the server, so the card
-            says what it is rather than rendering an empty paragraph. */}
-        {post.message ? (
-          <p className="note-message">{post.message}</p>
-        ) : (
-          <p className="note-message note-empty">This memory&rsquo;s words have been removed.</p>
-        )}
-
-        <footer className="note-sign">
-          {author && <span className={`avatar tone-${toneIndex(author)}`} aria-hidden="true">{initials(author)}</span>}
-          <span className="note-author">
-            {author && <b>{author}</b>}
-            {post.createdAt && (
-              <time dateTime={post.createdAt}>
-                {post.stayedOn ? `Stayed ${post.stayedOn}` : author ? formatDate(post.createdAt) : `Posted ${formatDate(post.createdAt)}`}
-              </time>
-            )}
-          </span>
-        </footer>
-      </div>
-
-      <div className="queue-note-side">
-        <StateLabel post={post} />
+        {post.message ? <span>{post.message}</span> : <span className="cell-quiet">This memory&rsquo;s words have been removed.</span>}
+      </td>
+      <td className="cell-date" data-label="Posted">
+        {post.createdAt ? <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time> : <span className="cell-quiet">&mdash;</span>}
+      </td>
+      <td className="cell-status" data-label="Status">
+        <StateLabel post={post} always />
         {post.requiresScreenedReview && !blocked ? (
-          <p className="queue-hold">Waiting on safety checks. <a className="text-link" href="#new-memories">Review it in New memories</a>.</p>
+          <p className="queue-hold">Waiting in your Inbox.</p>
         ) : hold && <p className="queue-hold">{hold}</p>}
-
+      </td>
+      <td className="cell-actions" data-label="Actions">
         {blocked ? (
           <p className="field-hint">{blocked}</p>
         ) : confirming ? (
@@ -247,69 +253,172 @@ function QueueCard({ post, state }: { post: ModeratedPost; state: QueueState }) 
         ) : (
           <ActionButtons post={post} state={state} actions={actions} />
         )}
-
         {result && (
           <p className={`queue-result${result.failed ? " queue-result-failed" : ""}`} role={result.failed ? "alert" : "status"}>
             {result.message}
           </p>
         )}
-      </div>
-    </article>
+      </td>
+    </tr>
   );
 }
 
-export function ModerationQueue({ posts, state }: { posts: ModeratedPost[]; state: QueueState }) {
-  const sections = queueSections(posts);
+type SortableKey = Exclude<MemorySortKey, "default">;
 
-  if (sections.length === 0) {
+/** A column heading that sorts the table, and says which way it is sorted. */
+function SortHeader({ label, column, sort, onSort }: {
+  label: string;
+  column: SortableKey;
+  sort?: MemorySort;
+  onSort?: (column: SortableKey) => void;
+}) {
+  if (!sort || !onSort) return <th scope="col">{label}</th>;
+  const active = sort.key === column;
+  return (
+    <th scope="col" aria-sort={active ? (sort.direction === "asc" ? "ascending" : "descending") : undefined}>
+      <button type="button" className={`sort-header${active ? " is-active" : ""}`} onClick={() => onSort(column)}>
+        {label}
+        <span className="sort-mark" aria-hidden="true">{active ? (sort.direction === "asc" ? "▲" : "▼") : "▴▾"}</span>
+      </button>
+    </th>
+  );
+}
+
+function MemoryRows({ entries, stateFor, showProperty, label, sort, onSort }: {
+  entries: FeedEntry[];
+  stateFor: (property: HostProperty) => QueueState;
+  showProperty: boolean;
+  label: string;
+  sort?: MemorySort;
+  onSort?: (column: SortableKey) => void;
+}) {
+  return (
+    <table className="inbox-table memory-table" aria-label={label}>
+      <thead>
+        <tr>
+          {showProperty && <SortHeader label="Property" column="property" sort={sort} onSort={onSort} />}
+          <SortHeader label="From" column="from" sort={sort} onSort={onSort} />
+          <th scope="col">Memory</th>
+          <SortHeader label="Posted" column="posted" sort={sort} onSort={onSort} />
+          <SortHeader label="Status" column="status" sort={sort} onSort={onSort} />
+          <th scope="col"><span className="visually-hidden">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        {entries.map(({ post, property }) => (
+          <MemoryRow key={`${property.id}/${post.id}`} post={post} property={property} state={stateFor(property)} showProperty={showProperty} />
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+/**
+ * Memories from one wall or several, one row each.
+ *
+ * By default pinned memories lead, then the rest of the wall, then those taken
+ * off it, each group newest first (see domain/memoryTable). Any column with a
+ * sort control can take over the order, the filters narrow it by date and
+ * state, and "Pinned first" puts the default back. Deleted memories have
+ * nothing left to act on, so they fold away underneath.
+ */
+export function MemoryTable({ entries, deleted, stateFor, showProperty }: {
+  entries: FeedEntry[];
+  deleted: FeedEntry[];
+  stateFor: (property: HostProperty) => QueueState;
+  showProperty: boolean;
+}) {
+  const [sort, setSort] = useState<MemorySort>(defaultMemorySort);
+  const [filter, setFilter] = useState<MemoryFilter>(defaultMemoryFilter);
+
+  if (entries.length === 0 && deleted.length === 0) {
     return (
       <div className="queue-empty">
-        <strong>Nothing on this wall yet.</strong>
+        <strong>No memories yet.</strong>
       </div>
     );
   }
 
+  const rows = entries.map((entry) => ({ ...entry, propertyName: entry.property.name }));
+  const shown = sortMemories(filterMemories(rows, filter), sort);
+  const filtered = filter.range !== "all" || filter.status !== "all";
+
   return (
     <>
-      {sections.map((section) => {
-        const heading = (
-          <>
-            {section.title} <span className="queue-count">{section.posts.length}</span>
-          </>
-        );
-        const body = (
-          <>
-            <p className="queue-blurb">{section.blurb}</p>
-            <div className="queue-grid">
-              {section.posts.map((post) => (
-                <QueueCard key={post.id} post={post} state={state} />
-              ))}
-            </div>
-          </>
-        );
-        // Deleted memories have nothing left to act on, so they are folded
-        // away rather than given the same weight as the live wall.
-        return section.id === "removed" ? (
-          <details className={`queue-section queue-${section.id}`} key={section.id}>
-            <summary>
-              <svg className="queue-removed-mark" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-                <path d="M3.5 5.5h13M8 5.5V3.5h4v2M5.2 5.5l.8 11h8l.8-11" />
-              </svg>
-              <h3 id={`queue-${section.id}`}>{heading}</h3>
-              <span className="queue-removed-view" aria-hidden="true">
-                <span className="queue-removed-word" />
-                <svg viewBox="0 0 20 20" focusable="false"><path d="m8 5 5 5-5 5" /></svg>
-              </span>
-            </summary>
-            {body}
-          </details>
-        ) : (
-          <section className={`queue-section queue-${section.id}`} key={section.id} aria-labelledby={`queue-${section.id}`}>
-            <h3 id={`queue-${section.id}`}>{heading}</h3>
-            {body}
-          </section>
-        );
-      })}
+      {entries.length > 0 && (
+        <div className="memory-controls">
+          <label>
+            <span>Status</span>
+            <select value={filter.status} onChange={(event) => setFilter({ ...filter, status: event.target.value as StatusFilter })}>
+              {(Object.keys(statusFilterLabels) as StatusFilter[]).map((key) => <option key={key} value={key}>{statusFilterLabels[key]}</option>)}
+            </select>
+          </label>
+          <label>
+            <span>Posted</span>
+            <select value={filter.range} onChange={(event) => setFilter({ ...filter, range: event.target.value as DateRange })}>
+              {(Object.keys(dateRangeLabels) as DateRange[]).map((key) => <option key={key} value={key}>{dateRangeLabels[key]}</option>)}
+            </select>
+          </label>
+          {/* Phones draw rows as cards without column headings, so the sort
+              is offered here instead; wider screens sort from the headings. */}
+          <label className="memory-sort-select">
+            <span>Sort by</span>
+            <select
+              value={`${sort.key}:${sort.direction}`}
+              onChange={(event) => {
+                const [key, direction] = event.target.value.split(":") as [MemorySortKey, MemorySort["direction"]];
+                setSort({ key, direction });
+              }}
+            >
+              <option value="default:asc">Pinned first</option>
+              <option value="posted:desc">Newest first</option>
+              <option value="posted:asc">Oldest first</option>
+              <option value="status:asc">Status</option>
+              <option value="from:asc">From (A to Z)</option>
+              {showProperty && <option value="property:asc">Property (A to Z)</option>}
+              {/* Keeps the select honest after a heading set a direction not listed above. */}
+              {!["default:asc", "posted:desc", "posted:asc", "status:asc", "from:asc", "property:asc"].includes(`${sort.key}:${sort.direction}`) && (
+                <option value={`${sort.key}:${sort.direction}`}>Custom</option>
+              )}
+            </select>
+          </label>
+          {filtered && <button type="button" className="btn btn-sm btn-secondary" onClick={() => setFilter(defaultMemoryFilter)}>Clear filters</button>}
+          {sort.key !== "default" && (
+            <button type="button" className="btn btn-sm btn-secondary" onClick={() => setSort(defaultMemorySort)}>Pinned first</button>
+          )}
+          <p className="memory-controls-count" role="status">
+            {shown.length === entries.length ? `${entries.length} ${entries.length === 1 ? "memory" : "memories"}` : `${shown.length} of ${entries.length} memories`}
+          </p>
+        </div>
+      )}
+      {entries.length > 0 && shown.length === 0 && (
+        <div className="queue-empty"><strong>No memories match these filters.</strong></div>
+      )}
+      {shown.length > 0 && (
+        <MemoryRows
+          entries={shown}
+          stateFor={stateFor}
+          showProperty={showProperty}
+          label="Memories"
+          sort={sort}
+          onSort={(column) => setSort((current) => nextSort(current, column))}
+        />
+      )}
+      {deleted.length > 0 && (
+        <details className="queue-section queue-removed">
+          <summary>
+            <svg className="queue-removed-mark" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+              <path d="M3.5 5.5h13M8 5.5V3.5h4v2M5.2 5.5l.8 11h8l.8-11" />
+            </svg>
+            <h3>Recently deleted <span className="queue-count">{deleted.length}</span></h3>
+            <span className="queue-removed-view" aria-hidden="true">
+              <span className="queue-removed-word" />
+              <svg viewBox="0 0 20 20" focusable="false"><path d="m8 5 5 5-5 5" /></svg>
+            </span>
+          </summary>
+          <MemoryRows entries={deleted} stateFor={stateFor} showProperty={showProperty} label="Recently deleted memories" />
+        </details>
+      )}
     </>
   );
 }

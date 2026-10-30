@@ -21,11 +21,51 @@ export const billingPolicy = {
      paragraph that happened to be rendered. */
   version: "handbook-6.3.4-v2",
 
-  /** Supported point-of-sale currencies, keyed by the launch allowlist (ST-D4). */
-  currencyFor: { AU: "aud", US: "usd" } as Record<string, string>,
+  /**
+   * The countries with a price of their own (D-028). Every other country is
+   * billed in `baseCurrency`. The euro rows are the euro area, not the EU.
+   * `src/domain/pricing.ts` holds the same map; `pricing.test.ts` compares them.
+   */
+  currencyFor: {
+    AU: "aud",
+    NZ: "nzd",
+    GB: "gbp",
+    CA: "cad",
+    AT: "eur", BE: "eur", BG: "eur", CY: "eur", DE: "eur", EE: "eur", ES: "eur",
+    FI: "eur", FR: "eur", GR: "eur", HR: "eur", IE: "eur", IT: "eur", LT: "eur",
+    LU: "eur", LV: "eur", MT: "eur", NL: "eur", PT: "eur", SI: "eur", SK: "eur"
+  } as Record<string, string>,
+
+  /** USD, the base the ladder is converted from, for every other country. */
+  baseCurrency: "usd",
 
   plans: ["monthly", "annual"] as const
 } as const;
+
+/** The currency a billing country is charged in. */
+export function currencyForCountry(country: string): string {
+  return billingPolicy.currencyFor[country] ?? billingPolicy.baseCurrency;
+}
+
+/**
+ * Every country a Host can be billed in (D-028): ISO 3166-1 alpha-2, less the
+ * uninhabited territories and the countries Stripe cannot take payments from.
+ * `src/domain/pricing.ts` holds the same list; `pricing.test.ts` compares them.
+ */
+export const billingCountries: readonly string[] = [
+  "AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AR", "AS", "AT", "AU", "AW", "AX", "AZ", "BA", "BB", "BD", "BE", "BF",
+  "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BW", "BY", "BZ", "CA", "CC", "CD", "CF", "CG",
+  "CH", "CI", "CK", "CL", "CM", "CN", "CO", "CR", "CV", "CW", "CX", "CY", "CZ", "DE", "DJ", "DK", "DM", "DO", "DZ", "EC",
+  "EE", "EG", "EH", "ER", "ES", "ET", "FI", "FJ", "FK", "FM", "FO", "FR", "GA", "GB", "GD", "GE", "GF", "GG", "GH", "GI",
+  "GL", "GM", "GN", "GP", "GQ", "GR", "GT", "GU", "GW", "GY", "HK", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IM", "IN",
+  "IQ", "IS", "IT", "JE", "JM", "JO", "JP", "KE", "KG", "KH", "KI", "KM", "KN", "KR", "KW", "KY", "KZ", "LA", "LB", "LC",
+  "LI", "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MA", "MC", "MD", "ME", "MF", "MG", "MH", "MK", "ML", "MM", "MN", "MO",
+  "MP", "MQ", "MR", "MS", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NC", "NE", "NF", "NG", "NI", "NL", "NO", "NP",
+  "NR", "NU", "NZ", "OM", "PA", "PE", "PF", "PG", "PH", "PK", "PL", "PM", "PN", "PR", "PS", "PT", "PW", "PY", "QA", "RE",
+  "RO", "RS", "RU", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SH", "SI", "SJ", "SK", "SL", "SM", "SN", "SO", "SR", "SS",
+  "ST", "SV", "SX", "SZ", "TC", "TD", "TG", "TH", "TJ", "TK", "TL", "TM", "TN", "TO", "TR", "TT", "TV", "TW", "TZ", "UA",
+  "UG", "US", "UY", "UZ", "VA", "VC", "VE", "VG", "VI", "VN", "VU", "WF", "WS", "YE", "YT", "ZA", "ZM", "ZW"
+];
 
 export type Plan = (typeof billingPolicy.plans)[number];
 
@@ -36,7 +76,9 @@ export function isPlan(value: unknown): value is Plan {
 /* --------------------------- The published rate card ----------------------
    The amounts `/pricing` shows a visitor, in minor units, per point-of-sale
    currency. ST-D1, signed off 8 September 2026: monthly A$15 / US$10, annual
-   A$150 / US$100.
+   A$150 / US$100. The currency ladder of 30 October 2026 (D-027, D-028) adds
+   £8 / £80, €9 / €90, NZ$18 / NZ$180 and CA$14 / CA$140: US$10 converted at
+   RBA rates and rounded, annual still ten times monthly.
 
    This table is not what a Host is charged — the Stripe catalogue is, and
    `stripeActivation.quote()` reads it from there. It is what the business has
@@ -51,6 +93,10 @@ export function isPlan(value: unknown): value is Plan {
 
 export const publishedRates: Record<string, Record<Plan, number>> = {
   aud: { monthly: 1500, annual: 15000 },
+  nzd: { monthly: 1800, annual: 18000 },
+  gbp: { monthly: 800, annual: 8000 },
+  eur: { monthly: 900, annual: 9000 },
+  cad: { monthly: 1400, annual: 14000 },
   usd: { monthly: 1000, annual: 10000 }
 };
 
@@ -76,13 +122,13 @@ export function publishedRate(plan: Plan, currency: string): number | null {
    evidence, and it must not change because a Cloud Function was redeployed on a
    newer runtime.                                                           */
 
-const symbolFor: Record<string, string> = { aud: "A$", usd: "US$" };
+const symbolFor: Record<string, string> = { aud: "A$", nzd: "NZ$", gbp: "£", eur: "€", cad: "CA$", usd: "US$" };
 
 const months = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"];
 
-/** Day-first for Australia, month-first for the United States. */
-const dayFirst: Record<string, boolean> = { aud: true, usd: false };
+/** Month-first for the US and Canadian dollars, day-first for the rest of the ladder. */
+const dayFirst: Record<string, boolean> = { aud: true, nzd: true, gbp: true, eur: true, cad: false, usd: false };
 
 /** A price as a Host reads it, from the minor units Stripe holds. */
 export function formatPrice(minorUnits: number, currency: string): string {

@@ -2,6 +2,7 @@ import {
   acknowledgement,
   billingPolicy,
   chargedTodayDisclosure,
+  currencyForCountry,
   discountedAmount,
   discountedChargedTodayDisclosure,
   discountedPriceDisclosure,
@@ -30,8 +31,12 @@ describe("formatPrice", () => {
   it("distinguishes the two launch currencies", () =>
     expect(formatPrice(1500, "aud")).not.toBe(formatPrice(1500, "usd")));
   it("groups thousands", () => expect(formatPrice(150000, "aud")).toBe("A$1,500.00"));
+  it("names the pound and the euro", () => {
+    expect(formatPrice(800, "gbp")).toBe("£8.00");
+    expect(formatPrice(9000, "eur")).toBe("€90.00");
+  });
   it("refuses a currency it has no symbol for", () =>
-    expect(() => formatPrice(1000, "gbp")).toThrow(/No price symbol/));
+    expect(() => formatPrice(1000, "sek")).toThrow(/No price symbol/));
 });
 
 describe("formatDate", () => {
@@ -99,12 +104,25 @@ describe("plan validation", () => {
 });
 
 describe("currency routing", () => {
-  it("maps each launch market to its point-of-sale currency", () => {
-    expect(billingPolicy.currencyFor.AU).toBe("aud");
-    expect(billingPolicy.currencyFor.US).toBe("usd");
+  it("bills each country with its own price in that currency, and the rest in USD", () => {
+    expect(currencyForCountry("AU")).toBe("aud");
+    expect(currencyForCountry("NZ")).toBe("nzd");
+    expect(currencyForCountry("CA")).toBe("cad");
+    expect(currencyForCountry("US")).toBe("usd");
+    expect(currencyForCountry("JP")).toBe("usd");
+    expect(currencyForCountry("SE")).toBe("usd");
   });
-  it("has no currency for a market that is not sold to", () =>
-    expect(billingPolicy.currencyFor.GB).toBeUndefined());
+  it("bills the UK in pounds and the euro area in euros", () => {
+    expect(billingPolicy.currencyFor.GB).toBe("gbp");
+    expect(billingPolicy.currencyFor.DE).toBe("eur");
+    expect(billingPolicy.currencyFor.IE).toBe("eur");
+  });
+  // The EU is not the euro area: Sweden and Poland have no price of their own.
+  it("has no price of its own for a country off the ladder", () => {
+    expect(billingPolicy.currencyFor.SE).toBeUndefined();
+    expect(billingPolicy.currencyFor.PL).toBeUndefined();
+    expect(billingPolicy.currencyFor.CH).toBeUndefined();
+  });
 });
 
 /* ---------------------------------------------------------------------------

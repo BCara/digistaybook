@@ -12,6 +12,7 @@ import {
   setupSteps,
   unusedFactSuggestions,
   validatePhotoFile,
+  validatePreparedPhoto,
   validateProfile,
   welcomeParagraphs,
   writtenHostNotes,
@@ -33,6 +34,13 @@ const photo = {
 };
 
 describe("reading a stored profile", () => {
+  it("persists only recognised section review choices, separately from whether fields are filled", () => {
+    const stored = normalizeProfile({ ...emptyProfile(), reviewedSections: ["welcome", "notes", "style"] });
+    expect(readProfile(stored).reviewedSections).toEqual(["welcome", "notes", "style"]);
+    expect(stored.stayWelcome).toBe("");
+    expect(readProfile({ reviewedSections: ["style", "style", "billing", 1, "links"] }).reviewedSections).toEqual(["links", "style"]);
+    expect(sameProfileText(emptyProfile(), stored)).toBe(false);
+  });
   it("returns an empty profile for a property that has never been set up", () => {
     expect(readProfile(undefined)).toEqual(emptyProfile());
     expect(readProfile("not a map")).toEqual(emptyProfile());
@@ -316,8 +324,22 @@ describe("validating a photograph before it is uploaded", () => {
     expect(validatePhotoFile({ type: "application/pdf", size: 1024 })).toMatch(/JPEG, PNG or WebP/);
   });
 
+  it("accepts a phone photo over the upload limit, because it is shrunk before it is sent", () => {
+    expect(validatePhotoFile({ type: "image/jpeg", size: 12 * 1024 * 1024 })).toBeNull();
+  });
+
   it("refuses an image too large to load on a phone", () => {
-    expect(validatePhotoFile({ type: "image/jpeg", size: profileLimits.photoBytesMax + 1 })).toMatch(/8MB/);
+    expect(validatePhotoFile({ type: "image/jpeg", size: profileLimits.photoChosenBytesMax + 1 })).toMatch(/40MB/);
+  });
+});
+
+describe("validating what is about to be uploaded", () => {
+  it("passes anything within the limit Storage enforces", () => {
+    expect(validatePreparedPhoto({ size: profileLimits.photoBytesMax })).toBeNull();
+  });
+
+  it("refuses a photo the device could not shrink below it", () => {
+    expect(validatePreparedPhoto({ size: profileLimits.photoBytesMax + 1 })).toMatch(/8MB/);
   });
 });
 

@@ -3,12 +3,14 @@ import { PropertyNav } from './PropertyNav';
 
 describe('property page navigation', () => {
   it('offers mobile page links and closes after choosing one', () => {
-    const { container } = render(<PropertyNav mobile propertyId="cottage" current="moderation" draft />);
+    const { container } = render(<PropertyNav mobile propertyId="cottage" current="export" draft />);
     const panel = container.querySelector('details')!;
     expect(panel.querySelector('summary')).toHaveTextContent('Property menu');
     panel.open = true;
-    expect(screen.getByRole('link', { name: 'Inbox & moderation' })).toHaveAttribute('aria-current', 'page');
-    const link = screen.getByRole('link', { name: 'QR display and links' });
+    expect(screen.getByRole('link', { name: 'Export guestbook' })).toHaveAttribute('aria-current', 'page');
+    // The inbox covers every property, so it is reached from the header instead.
+    expect(screen.queryByRole('link', { name: 'Inbox & moderation' })).not.toBeInTheDocument();
+    const link = screen.getByRole('link', { name: 'QR code and sharing' });
     expect(link).toHaveAttribute('href', '/host/property/cottage/qr');
     fireEvent.click(link);
     expect(panel.open).toBe(false);

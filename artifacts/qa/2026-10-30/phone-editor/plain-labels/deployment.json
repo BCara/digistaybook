@@ -1,0 +1,31 @@
+{
+  "commit": "011858501a2f7c52b02c521d9b53ff4da29bf8cd",
+  "version": "projects/digistaybook-cbert/sites/digistaybook-cbert/versions/bc0d326aca55d07e",
+  "releaseTime": "2026-10-30T07:22:33.461Z",
+  "testsPassed": 81,
+  "typecheck": "passed",
+  "build": "passed",
+  "scope": "Hosting only",
+  "browser": "Local 390px checklist and welcome form; screenshot evidence",
+  "authenticatedProduction": "Not tested",
+  "assets": [
+    {
+      "path": "/app.html",
+      "expected": "25FBB119405BBCBB45A2A4185143AF989A1C145F43874C39BFCCF31A5658C540",
+      "actual": "25FBB119405BBCBB45A2A4185143AF989A1C145F43874C39BFCCF31A5658C540",
+      "matches": true
+    },
+    {
+      "path": "/assets/index-BysBMMsx.js",
+      "expected": "97C60D4F8D949581C05E1C85997F283232FB8639A4FAC31AAAC7812FEBB03129",
+      "actual": "97C60D4F8D949581C05E1C85997F283232FB8639A4FAC31AAAC7812FEBB03129",
+      "matches": true
+    },
+    {
+      "path": "/assets/index-CztuXq60.css",
+      "expected": "57FA9D940DA8C4EFBA88278366D7FCA6630B41BAAD7F9AC413CB02FAE6EA2C75",
+      "actual": "57FA9D940DA8C4EFBA88278366D7FCA6630B41BAAD7F9AC413CB02FAE6EA2C75",
+      "matches": true
+    }
+  ]
+}

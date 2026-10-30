@@ -129,20 +129,32 @@ describe("shell and landing presentation", () => {
     expect(
       screen.getAllByText(/may encourage guests to share more positive feedback on their official booking platform/i)
     ).not.toHaveLength(0);
-    expect(screen.getByText(/never asks guests for a rating/i)).toBeInTheDocument();
+    expect(screen.getByText(/helpful information that booking platforms may restrict/i)).toBeInTheDocument();
     expect(screen.getByText(/Create your account and add your first property to activate your 28-day free trial\./i)).toBeInTheDocument();
   });
 
+  // The tax message is advertised, so it is the one term on both pages, and
+  // the starred headline never appears without the approved wording beside it.
+  it("advertises the tax message with its small print attached", () => {
+    renderShell({ status: "signed-out", user: null }, <LandingPage />);
+    expect(screen.getByRole("link", { name: /Could be tax deductible/i })).toHaveAttribute("href", "#tax");
+    expect(screen.getByRole("heading", { name: /Could be tax deductible/i })).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "DigiStayBook may be deductible as a business expense. Eligibility depends on your circumstances and business use; seek tax advice."
+      )
+    ).toBeInTheDocument();
+  });
+
   // BOP §6.3.3 wants "a concise pricing prompt" here and §6.3.4 wants the terms
-  // on a page of their own. The tax callout, the cancellation link and the
-  // unified checklist moved to /pricing, and this holds them there: two pages
-  // both reciting the billing terms is how the two versions start to differ.
+  // on a page of their own. The cancellation link and the unified checklist
+  // live on /pricing, and this holds them there: two pages both reciting the
+  // billing terms is how the two versions start to differ.
   it("sends the reader to /pricing for the terms rather than reciting them", () => {
     renderShell({ status: "signed-out", user: null }, <LandingPage />);
     expect(
       screen.getByRole("link", { name: /See everything included, and the billing terms/i })
     ).toHaveAttribute("href", "/pricing");
-    expect(screen.queryByText(/may be deductible as a business expense/i)).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /Cancellation & Billing Policy/i })).not.toBeInTheDocument();
   });
 });

@@ -42,6 +42,23 @@ it.each(["public", "stay"] as const)("applies the saved theme and colour on the 
   expect(document.querySelector(".wall-page")).toHaveAttribute("data-wall-colour", "ocean");
 });
 
+it("shows only the memories inside a Host's own website, and the whole page at the shared link", async () => {
+  call.mockResolvedValue({ data: { status: "open", property: { name: "Real cottage", welcome: "Come in", hosts: "Ana", location: "Coast" }, posts: [
+    { id: "named", message: "Lovely stay", displayName: "Mia & Sam" }
+  ], nextCursor: null } });
+  const { unmount } = render(<GuestWallPage propertySlug="real-cottage" embedded />);
+  expect(await screen.findByText("Lovely stay")).toBeInTheDocument();
+  // The Host's site already says whose house this is.
+  expect(screen.queryByRole("heading", { name: "Real cottage" })).not.toBeInTheDocument();
+  expect(document.querySelector(".wall-page")).toHaveClass("wall-embed");
+  unmount();
+
+  render(<GuestWallPage propertySlug="real-cottage" />);
+  expect(await screen.findByRole("heading", { name: "Real cottage" })).toBeInTheDocument();
+  // No welcome of its own: the public page is made from the guest wall.
+  expect(screen.queryByText("Come in")).not.toBeInTheDocument();
+});
+
 it("reads a guest's wall through the app that carries no attestation", async () => {
   call.mockResolvedValue({ data: { status: "open", property: { name: "Real cottage", welcome: "", hosts: "", location: "" }, posts: [], nextCursor: null } });
   render(<LiveWallPage slug="real-cottage" />);
@@ -193,9 +210,9 @@ it("draws the public wall when the server served one, whatever route asked", asy
   }, posts: [], nextCursor: null } });
   render(<StayWallPage propertySlug="cottage" />);
   await screen.findByRole("heading", { name: "Cottage" });
-  // The public welcome, which the in-stay wall never shows, and no half-drawn
+  // No welcome — the public page has none of its own — and no half-drawn
   // note left standing with nothing in it but the hosts' signature.
-  expect(screen.getByText("Welcome")).toBeInTheDocument();
+  expect(screen.queryByText("Welcome")).not.toBeInTheDocument();
   expect(screen.queryByRole("region", { name: "A note from your hosts" })).not.toBeInTheDocument();
   expect(document.querySelector(".stay-welcome")).not.toBeInTheDocument();
   expect(document.querySelector(".essentials")).not.toBeInTheDocument();
@@ -331,8 +348,9 @@ describe("what a preview says about a wall that is mostly empty", () => {
     call.mockResolvedValue({ data: bare });
     render(<LiveWallPage slug="cottage" view="public" />);
     await screen.findByRole("heading", { name: "sdssds" });
-    // The public wall carries no house guidance, so it is never missing any.
-    expect(screen.getByRole("region", { name: "2 things left before this reads like a wall" })).toBeInTheDocument();
+    // The public wall carries no house guidance and no words of its own, so
+    // all it can miss is the cover.
+    expect(screen.getByRole("region", { name: "One thing left before this reads like a wall" })).toBeInTheDocument();
     expect(screen.queryByText(/No house essentials/)).not.toBeInTheDocument();
   });
 

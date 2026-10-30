@@ -45,6 +45,10 @@ export function DashboardOverview({ properties, now = Date.now() }: { properties
               from the answer. */}
           <span className="dashboard-alert">{alerts.length} need{alerts.length === 1 ? "s" : ""} attention</span>
         </>}
+        {/* Guests' memories, reports and feedback for every property in one
+            place, so it is reached from the account rather than a card. */}
+        <span aria-hidden="true" className="dashboard-sep">·</span>
+        <a className="text-link" href="/host/inbox">Inbox &amp; moderation &rarr;</a>
       </p>
       <p className="dashboard-next">
         {next

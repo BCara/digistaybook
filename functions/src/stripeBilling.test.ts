@@ -52,9 +52,19 @@ describe("countryIsPermitted", () => {
     expect(countryIsPermitted("us")).toBe(true);
     expect(countryIsPermitted(" au ")).toBe(true);
   });
-  it("refuses everything else, including the markets dropped at launch", () => {
-    expect(countryIsPermitted("GB")).toBe(false);
-    expect(countryIsPermitted("DE")).toBe(false);
+  // D-028: worldwide. A country without its own price pays in USD, not nothing.
+  it("permits every country Stripe can take payments from", () => {
+    expect(countryIsPermitted("GB")).toBe(true);
+    expect(countryIsPermitted("de")).toBe(true);
+    expect(countryIsPermitted("SE")).toBe(true);
+    expect(countryIsPermitted("JP")).toBe(true);
+    expect(countryIsPermitted("BR")).toBe(true);
+  });
+  it("refuses anything that is not a country we can bill", () => {
+    expect(countryIsPermitted("IR")).toBe(false);
+    expect(countryIsPermitted("KP")).toBe(false);
+    expect(countryIsPermitted("ZZ")).toBe(false);
+    expect(countryIsPermitted("AUS")).toBe(false);
     expect(countryIsPermitted("")).toBe(false);
     expect(countryIsPermitted(undefined)).toBe(false);
     expect(countryIsPermitted(null)).toBe(false);

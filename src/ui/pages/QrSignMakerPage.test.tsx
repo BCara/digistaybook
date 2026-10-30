@@ -69,6 +69,13 @@ describe("QR sign maker", () => {
     expect(within(preview()).queryByText("Join the Wi-Fi")).not.toBeInTheDocument();
   });
 
+  it("tells the visitor to keep the password written down as well as in the code", () => {
+    render(<QrSignMakerPage />);
+    expect(screen.getByText(/Keep the password written somewhere guests can read it too/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("checkbox", { name: "Add a Wi-Fi code" }));
+    expect(screen.queryByText(/Keep the password written somewhere/)).not.toBeInTheDocument();
+  });
+
   it("asks for a photo only on the photo styles", () => {
     render(<QrSignMakerPage />);
     expect(screen.queryByLabelText("Photo")).not.toBeInTheDocument();

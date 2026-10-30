@@ -30,9 +30,9 @@ export function WallHeader({ property, view, preview = false, headingLevel = 1, 
               : preview && <p className="wall-ghost">No cover photo. Guests open straight onto your name.</p>}
             {property.location && <p>{property.location}</p>}
             <h1 aria-level={headingLevel}>{property.name}</h1>
-            {property.welcome
-              ? <p>{property.welcome}</p>
-              : preview && <p className="wall-ghost">No welcome note. This is the first thing a guest reads.</p>}
+            {/* No welcome line: the public page is built from the guest wall
+                and has nothing written for it alone, so there is one wall to
+                write and nothing to keep in step. */}
             {/* Initials stand in for a portrait that was never uploaded: the
                 hosts' names are the byline, and a property with names and no
                 photograph was losing the byline along with the picture. */}

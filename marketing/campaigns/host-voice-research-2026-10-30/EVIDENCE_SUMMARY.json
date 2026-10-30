@@ -1,0 +1,17 @@
+{
+  "observed_sydney_date": "2026-10-30",
+  "posts": [
+    "https://www.facebook.com/groups/3215918995319204/posts/4704145236496565/",
+    "https://www.facebook.com/groups/3215918995319204/posts/4704617023116053/",
+    "https://www.facebook.com/groups/3215918995319204/posts/4709083382669417/",
+    "https://www.facebook.com/groups/3215918995319204/posts/4709885825922506/",
+    "https://www.facebook.com/groups/3215918995319204/posts/4710325212545234/",
+    "https://www.facebook.com/groups/545990332638815/posts/2273297609908070/"
+  ],
+  "distinct_visible_comment_ids": 12,
+  "groups": 2,
+  "method": "Convenience sample from Recent activity and Most relevant feeds; displayed comment previews; not a frequency study",
+  "claude_conversation": "https://claude.ai/chat/dd50092a-343d-4b10-905e-d5446f55b353",
+  "calendar_items_unchanged": 38,
+  "browser_recovery_error": "encode latest capture frame failed: window crop is outside captured monitor; repeated after window recovery; further Facebook sampling stopped"
+}

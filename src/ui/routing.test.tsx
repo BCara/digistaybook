@@ -35,26 +35,11 @@ beforeEach(() => {
 });
 
 describe("client-side routing", () => {
-  it("keeps the scroll position when switching between a property's wall editors", () => {
-    window.history.replaceState(null, "", "/host/property/cottage");
-    vi.spyOn(window, "scrollY", "get").mockReturnValue(280);
-    vi.spyOn(window, "scrollX", "get").mockReturnValue(0);
-    render(<Harness />);
-
-    act(() => navigate("/host/property/cottage/public"));
-    expect(at()).toBe("/host/property/cottage/public");
-    expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 280, left: 0, behavior: "instant" });
-
-    act(() => navigate("/host/property/cottage"));
-    expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 280, left: 0, behavior: "instant" });
-    expect(document.activeElement).toBe(screen.getByRole("main"));
-  });
-
   it("still starts at the top when leaving the wall editor or changing properties", () => {
     window.history.replaceState(null, "", "/host/property/cottage");
     render(<Harness />);
 
-    for (const href of ["/host/property/another/public", "/host/property/another/moderation", "/wall/another"]) {
+    for (const href of ["/host/property/another", "/host/property/another/moderation", "/wall/another"]) {
       vi.mocked(window.scrollTo).mockClear();
       act(() => navigate(href));
       expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, left: 0, behavior: "instant" });

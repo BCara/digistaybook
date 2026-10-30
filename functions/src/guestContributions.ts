@@ -352,6 +352,10 @@ export const changeGuestContribution = onCall(options, async request => {
   return { status: action === "delete" ? "deleted" : "pending" };
 });
 
+/** When the inbox shows an item arriving; null for a record written before it carried a date. */
+const isoDate = (value: unknown) =>
+  value && typeof (value as Timestamp).toDate === "function" ? (value as Timestamp).toDate().toISOString() : null;
+
 export const listHostGuestReview = onCall(options, async request => {
   const owner = uid(request, false), propertyId = validId(request.data?.propertyId);
   const property = await db().doc(`properties/${propertyId}`).get();
@@ -364,8 +368,9 @@ export const listHostGuestReview = onCall(options, async request => {
     id: doc.id, revision: doc.get("revision"), status: doc.get("status"),
     message: doc.get("status") === "standard" ? doc.get("message") : "Awaiting safety screening",
     displayName: doc.get("status") === "standard" ? doc.get("displayName") ?? "" : "",
-    photoCount: doc.get("status") === "standard" ? doc.get("photoCount") : 0
-  })), feedback: feedback.docs.map(doc => ({ id: doc.id, message: doc.get("message") })) };
+    photoCount: doc.get("status") === "standard" ? doc.get("photoCount") : 0,
+    createdAt: isoDate(doc.get("createdAt"))
+  })), feedback: feedback.docs.map(doc => ({ id: doc.id, message: doc.get("message"), createdAt: isoDate(doc.get("createdAt")) })) };
 });
 
 export const setGuestReviewPolicy = onCall(options, async request => {

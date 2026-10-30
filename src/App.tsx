@@ -62,18 +62,27 @@ function resolvePage(pathname: string) {
         <HostBillingOverviewPage />
       </RequireHost>
     );
+  // The inbox covers every property at once, so like billing it sits beside the
+  // dashboard rather than inside a property.
+  if (pathname === "/host/inbox")
+    return (
+      <RequireHost>
+        <HostModerationPage />
+      </RequireHost>
+    );
   if (pathname.startsWith("/host/property/")) {
     // A property is the wall laid out as a guest meets it — which is the
     // property's own address, because it is where a Host does the work — plus
-    // the public wall behind the shared link, the walls it is served on,
-    // moderation, which is a different job from writing the wall, billing,
-    // which decides whether any of it is served at all, and the settings,
-    // which change what the property is rather than what its walls say.
+    // the walls it is served on and how they are shared,
+    // billing, which decides whether any of it is served at all, and the
+    // settings, which change what the property is rather than what its walls say.
     const [propertyId, section] = pathname.slice("/host/property/".length).split("/");
     if (propertyId && section === "export") return <RequireHost><HostExportPage key={propertyId} propertyId={propertyId} /></RequireHost>;
-    // Private feedback is a tab on the moderation page now; an old link lands on it.
-    if (propertyId && section === "feedback") {
-      window.location.replace(`/host/property/${propertyId}/moderation#feedback`);
+    // Moderation and private feedback moved to the account-level inbox; an old
+    // link lands on it narrowed to the property it named.
+    if (propertyId && (section === "moderation" || section === "feedback")) {
+      const hash = section === "feedback" ? "#feedback" : window.location.hash;
+      window.location.replace(`/host/inbox?property=${encodeURIComponent(propertyId)}${hash}`);
       return null;
     }
     if (propertyId && !section)
@@ -82,12 +91,12 @@ function resolvePage(pathname: string) {
           <HostWallDesignPage propertyId={propertyId} />
         </RequireHost>
       );
-    if (propertyId && section === "public")
-      return (
-        <RequireHost>
-          <HostWallDesignPage propertyId={propertyId} view="public" />
-        </RequireHost>
-      );
+    // The public page has no editor of its own: it is built from the guest
+    // wall, and its switch, link and embed code are on the sharing page.
+    if (propertyId && section === "public") {
+      window.location.replace(`/host/property/${encodeURIComponent(propertyId)}/qr`);
+      return null;
+    }
     if (propertyId && section === "settings")
       return (
         <RequireHost>
@@ -98,12 +107,6 @@ function resolvePage(pathname: string) {
       return (
         <RequireHost>
           <HostQrPage propertyId={propertyId} />
-        </RequireHost>
-      );
-    if (propertyId && section === "moderation")
-      return (
-        <RequireHost>
-          <HostModerationPage key={propertyId} propertyId={propertyId} />
         </RequireHost>
       );
     if (propertyId && section === "billing")

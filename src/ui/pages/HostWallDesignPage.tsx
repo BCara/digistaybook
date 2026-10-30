@@ -24,14 +24,13 @@ import { navigate } from "../routing";
 import { CanvasLine, CanvasParagraph } from "../host/CanvasFields";
 import { HostNoteStylePicker } from "../host/HostNoteStylePicker";
 import { PropertyShell } from "../host/PropertyShell";
-import { publicWallPath, stayWallPath } from "../../domain/wallAddress";
+import { stayWallPath } from "../../domain/wallAddress";
 import { WallPreview } from "../host/WallPreview";
 import { memoriesHeading } from "../wall/memoryHeading";
 import { EssentialMark, essentialMarkName } from "../wall/EssentialMark";
 import { StayEssentialLinks } from "../wall/WallHeader";
 import { WallThemePicker } from "../host/WallThemePicker";
 import { wallTheme } from "../../domain/wallTheme";
-import { PublicWallSettings } from "../host/PublicWallSettings";
 import type { HostProperty, WallCounts } from "../host/propertyStore";
 import { uploadPropertyPhoto } from "../host/propertyStore";
 import {
@@ -42,18 +41,18 @@ import {
   type PhotoSlot,
 } from "../host/photoSlots";
 import { propertyBlock, usePropertyDraft } from "../host/usePropertyDraft";
+import { MobileWallEditor } from "../host/MobileWallEditor";
 import "./hostWallEditor.css";
 
 /**
  * A wall of the property, laid out as the guest meets it, and written into
  * directly.
  *
- * Both of a property's walls are this page, told by `view` which one it is:
- * the wall behind the QR display lives at the property's own address, and the
- * public wall behind the shared link is a row of its own in the nav on the
- * left. They were one screen with a switch across the top, which asked a Host
- * to hold two walls in one place when the column beside them was already the
- * thing that answers "which wall".
+ * This is the guest wall, the one behind the QR display, at the property's own
+ * address. The public page used to be a second view of this page with its own
+ * header to write, and a Host changing the cover there was changing it here
+ * without being told. It is built from this wall now and shared from the QR
+ * page, so there is one wall to write.
  *
  * The page *is* the wall, at the size
  * a Host is actually sitting at: every line a guest reads is the field that
@@ -72,8 +71,6 @@ import "./hostWallEditor.css";
  * the one thing there that is real, because it is the one thing there that is
  * theirs to write.
  */
-
-type View = "public" | "stay";
 
 /** What a phone shows: the list of the wall's parts, the wall to edit, or the guest's view. */
 type MobileMode = "sections" | "edit" | "preview";
@@ -221,7 +218,7 @@ function MemoryChrome({
         {invitation}{" "}
         <a
           className="text-link"
-          href={`/host/property/${property.id}/moderation`}
+          href={`/host/inbox?property=${property.id}`}
         >
           Moderate what guests leave &rarr;
         </a>
@@ -232,11 +229,9 @@ function MemoryChrome({
 
 export function HostWallDesignPage({
   propertyId,
-  view = "stay",
   settings = false,
 }: {
   propertyId: string;
-  view?: View;
   /**
    * Whether the settings window stands open over this wall. Settings is not a
    * screen of its own any more: it is this screen with the property's own
@@ -363,18 +358,18 @@ export function HostWallDesignPage({
   const phoneBelow = useMediaQuery(PHONE_BELOW_QUERY);
   const showPhone = phoneWanted || phoneBelow;
   const mobileEditor = useMediaQuery(MOBILE_EDITOR_QUERY);
+  const [mobileFormOpen, setMobileFormOpen] = useState(false);
   // On a phone the guest wall opens on a list of its parts, so a Host sees
   // what is done and what is left before they are dropped into the wall
-  // itself. The public wall is one header card and has no list to give.
-  const hasSections = view === "stay";
-  const [mobileMode, setMobileMode] = useState<MobileMode>(hasSections ? "sections" : "edit");
+  // itself.
+  const [mobileMode, setMobileMode] = useState<MobileMode>("sections");
   const modeSwitch = useRef<HTMLDivElement>(null);
   const modeScroll = useRef<Partial<Record<MobileMode, number>>>({});
   const modeChanged = useRef(false);
   // The part of the wall a tapped row of the list should land on.
   const pendingSection = useRef<string | null>(null);
   const mobilePreview = mobileEditor && mobileMode === "preview";
-  const mobileSections = mobileEditor && hasSections && mobileMode === "sections";
+  const mobileSections = mobileEditor && mobileMode === "sections";
   const editDock = useRef<HTMLDivElement>(null);
   const [styleOpen, setStyleOpen] = useState(false);
 
@@ -459,6 +454,10 @@ export function HostWallDesignPage({
   const property = (draft.load as { status: "ready"; property: HostProperty })
     .property;
   const profile = draft.profile;
+  const requestedSetup = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("setup") === "1";
+  if ((mobileEditor || mobileFormOpen || requestedSetup) && !settings) {
+    return <MobileWallEditor property={property} draft={draft} onEditingChange={setMobileFormOpen} />;
+  }
   // Which note the open photograph dialog belongs to, numbered the way the
   // cards on the wall are numbered, so the window says which one it changes.
 
@@ -798,12 +797,12 @@ export function HostWallDesignPage({
             >
               {profile.cover ? (
                 <img
-                  className={view === "public" ? "canvas-cover-photo live-property-cover" : "canvas-cover-photo"}
+                  className="canvas-cover-photo"
                   src={profile.cover.url}
                   alt={profile.cover.alt}
                 />
               ) : (
-                <span className={view === "public" ? "canvas-cover-empty live-property-cover" : "canvas-cover-empty"}>
+                <span className="canvas-cover-empty">
                   <CameraMark />
                   <b>The photograph across the top of both walls</b>A wide one
                   of the property works best. It is the first thing a guest
@@ -1115,18 +1114,16 @@ export function HostWallDesignPage({
     // page behind a row of swatches.
     <PropertyShell
       property={property}
-      current={settings ? "settings" : view === "public" ? "public" : "design"}
+      current={settings ? "settings" : "design"}
       name={draft.name}
       profile={profile}
       onChangeAvatar={(photo) => draft.setProfile(withPhotoInSlot(draft.profile, "avatar", photo))}
       className={`design-page${showPhone ? " has-phone" : ""}${mobilePreview ? " is-mobile-preview" : ""}${mobileSections ? " is-mobile-sections" : ""}`}
       toolbar={mobileEditor && (
         <div className="mobile-wall-switch" ref={modeSwitch} role="group" aria-label="Wall editor mode"
-          data-modes={hasSections ? 3 : 2}>
-          {hasSections && (
-            <button type="button" aria-pressed={mobileMode === "sections"}
-              onClick={() => changeMobileMode("sections")}>Overview</button>
-          )}
+          data-modes={3}>
+          <button type="button" aria-pressed={mobileMode === "sections"}
+            onClick={() => changeMobileMode("sections")}>Overview</button>
           <button type="button" aria-pressed={mobileMode === "edit"} aria-controls="wall-edit-panel"
             onClick={() => changeMobileMode("edit")}>Edit</button>
           <button type="button" aria-pressed={mobileMode === "preview"} aria-controls="wall-preview-panel"
@@ -1147,23 +1144,23 @@ export function HostWallDesignPage({
 
       {/* On a phone the guest wall's intro gives way to one line on how the
           page works; the list of parts has already said what the wall is. */}
-      {mobileEditor && hasSections && mobileMode === "edit" && (
+      {mobileEditor && mobileMode === "edit" && (
         <p className="mobile-edit-hint">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h4L19 9l-4-4L4 16v4Z" /></svg>
           Tap anything with a dotted outline to change it.
         </p>
       )}
 
-      <header className="design-intro" hidden={mobilePreview || (mobileEditor && hasSections)}>
+      <header className="design-intro" hidden={mobilePreview || mobileEditor}>
         <div className="design-intro-head">
-          <h2>{view === "public" ? "Public page" : "Guest wall"}</h2>
+          <h2>Guest wall</h2>
           {/* The wall as a visitor or a guest gets it, one click from the page
               that writes it. The guest wall opens with its token, or it would
               answer with the public wall instead. */}
           {property.slug && (
             <a
               className="btn btn-secondary btn-sm"
-              href={view === "public" ? publicWallPath(property.slug) : stayWallPath(property.slug, property.stayToken)}
+              href={stayWallPath(property.slug, property.stayToken)}
               target="_blank"
               rel="noreferrer"
             >
@@ -1172,30 +1169,16 @@ export function HostWallDesignPage({
           )}
         </div>
         <p className="design-intro-what">
-          {view === "public"
-            ? "Memories only: no house rules, Wi-Fi or check-out details."
-            : "Memories plus your house info: welcome, Wi-Fi, house rules and check-out."}
+          Memories plus your house info: welcome, Wi-Fi, house rules and check-out.
         </p>
         <p>
-          {view === "public"
-            ? "The page anyone can visit before they book. Choose whether to show it, then share the link or add it to your website."
-            : "What guests see when they scan your QR code during their stay. Click any text on the wall to change it."}
+          What guests see when they scan your QR code during their stay. Click any text on the wall to change it.
+          {/* The public page is made from this wall, so the one place a Host
+              learns that is the one place they write it. */}
+          {" "}Your cover, name and photo also head your public page, which you share from{" "}
+          <a href={`/host/property/${property.id}/qr`}>QR code and sharing</a>.
         </p>
       </header>
-
-      {/* On the public wall, what it is for and what to do with it stand
-          above the wall itself: the decision to have one, then the link and
-          the embed code that are the two ways of using it. */}
-      {view === "public" && (
-        <div hidden={mobilePreview}>
-          <PublicWallSettings
-            property={property}
-            off={profile.displayWallOff}
-            disabled={draft.saving}
-            onChange={(off) => set("displayWallOff", off)}
-          />
-        </div>
-      )}
 
       {!phoneBelow && (
         <div className="design-controls">
@@ -1220,7 +1203,7 @@ export function HostWallDesignPage({
           hidden={mobilePreview || mobileSections}
           onSubmit={draft.save}
           noValidate
-          aria-label={view === "public" ? "Public page" : "Guest wall"}
+          aria-label="Guest wall"
         >
           {/* The sheet is printed on the theme the property chose, so what a
             Host types into is the paper a guest will read it on. */}
@@ -1235,470 +1218,433 @@ export function HostWallDesignPage({
               stands for: the public wall's one header card, or the in-stay
               wall's cover, hosts' card, tip and essentials. Only the fields
               and their controls are the canvas's own. */}
-            <div className={view === "public" ? "canvas-body canvas-public" : "canvas-body stay-wall canvas-stay"}>
-              {view === "public" ? (
-                <header className="live-property-header canvas-public-header"
-                  data-no-header-photos={!profile.cover && !profile.hostPhoto ? "true" : undefined}>
-                  {coverControl}
-                  <div className="canvas-public-location">{locationInput}</div>
+            <div className="canvas-body stay-wall canvas-stay">
+              <header className="stay-cover canvas-stay-cover" id="wall-section-cover">
+                {coverControl}
+                <div className="stay-cover-titles canvas-stay-titles" id="wall-section-name">
                   <h1 className="canvas-name" aria-level={2}>{nameInput}</h1>
                   {nameFeedback}
-                  <CanvasParagraph
-                    label="A short welcome for the public page"
-                    value={profile.welcome}
-                    placeholder="We bought the cottage the year our youngest left home, and we have been putting it back together ever since."
-                    maxLength={profileLimits.welcomeMax}
-                    disabled={draft.saving}
-                    className="canvas-welcome"
-                    onChange={(value) => set("welcome", value)}
-                  />
-                  {/* The byline is where the public wall shows the hosts'
-                    photograph, so it is where the canvas changes it. */}
-                  <div className="host-byline canvas-byline">
+                  <div className="stay-location">
+                    <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 18s5.6-5.4 5.6-9.6a5.6 5.6 0 0 0-11.2 0C4.4 12.6 10 18 10 18Z" /><circle cx="10" cy="8.4" r="2" /></svg>
+                    {locationInput}
+                  </div>
+                </div>
+              </header>
+
+              <>
+                {/* The hosts' card, as the guest's wall draws it: the
+                  photograph beside the heading and the names, the note under
+                  them. With the note off, the card still says whose house
+                  this is, and the offer to put the note back stands in it. */}
+                {!profile.stayNoteOff ? (
+                  <section className="stay-welcome stay-card canvas-welcome-card" id="wall-section-welcome" aria-label="A note from your hosts">
                     {portraitControl}
-                    <span className="canvas-byline-text">
-                      <b>{hosts}</b>
-                    </span>
-                  </div>
-                </header>
-              ) : (
-                <header className="stay-cover canvas-stay-cover" id="wall-section-cover">
-                  {coverControl}
-                  <div className="stay-cover-titles canvas-stay-titles" id="wall-section-name">
-                    <h1 className="canvas-name" aria-level={2}>{nameInput}</h1>
-                    {nameFeedback}
-                    <div className="stay-location">
-                      <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 18s5.6-5.4 5.6-9.6a5.6 5.6 0 0 0-11.2 0C4.4 12.6 10 18 10 18Z" /><circle cx="10" cy="8.4" r="2" /></svg>
-                      {locationInput}
-                    </div>
-                  </div>
-                </header>
-              )}
-
-              {view === "public" ? (
-                <>
-                  <MemoryChrome
-                    property={property}
-                    counts={draft.counts}
-                    invitation="Everything else here is a guest's. Nobody can add to this wall from the public link."
-                  />
-                </>
-              ) : (
-                <>
-                  {/* The hosts' card, as the guest's wall draws it: the
-                    photograph beside the heading and the names, the note under
-                    them. With the note off, the card still says whose house
-                    this is, and the offer to put the note back stands in it. */}
-                  {!profile.stayNoteOff ? (
-                    <section className="stay-welcome stay-card canvas-welcome-card" id="wall-section-welcome" aria-label="A note from your hosts">
-                      {portraitControl}
-                      <div className="stay-welcome-words">
-                        <div className="canvas-eyebrow canvas-eyebrow-omit">
-                          A note from your hosts
-                          {/* A phone has no room for a remove button beside
-                            every line, so the note's lines are taken off from
-                            one menu at its head instead. */}
-                          {mobileEditor ? (
-                            <ActionDisclosure
-                              className="canvas-section-menu"
-                              title="Options for the note from your hosts"
-                              label={<>
-                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="5" cy="12" r="1.8" /><circle cx="12" cy="12" r="1.8" /><circle cx="19" cy="12" r="1.8" /></svg>
-                                <span className="visually-hidden">Options for the note from your hosts</span>
-                              </>}
-                            >
-                              <div className="cover-menu-actions">
-                                {shows("stayHeading") && (
-                                  <button type="button" disabled={draft.saving} onClick={() => omit("stayHeading")}>Hide the heading</button>
-                                )}
-                                {(profile.hosts.trim() || signing) && (
-                                  <button type="button" disabled={draft.saving} onClick={() => { set("hosts", ""); setSigning(false); }}>Hide your names</button>
-                                )}
-                                {shows("stayWelcome") && (
-                                  <button type="button" disabled={draft.saving} onClick={() => omit("stayWelcome")}>Hide the arrival note</button>
-                                )}
-                                {shows("stayTip") && (
-                                  <button type="button" disabled={draft.saving} onClick={() => omit("stayTip")}>Hide the local tip</button>
-                                )}
-                                <button type="button" disabled={draft.saving} onClick={omitStayNote}>Hide the whole note</button>
-                              </div>
-                            </ActionDisclosure>
-                          ) : (
-                            <Omit
-                              label="Leave the whole note out"
-                              iconOnly
-                              disabled={draft.saving}
-                              onClick={omitStayNote}
-                            />
-                          )}
-                        </div>
-
-                        {shows("stayHeading") && (
-                          <div className="canvas-optional canvas-heading-edit">
-                            <h2 className="canvas-heading" aria-level={3}>
-                              <CanvasParagraph
-                                label="Arrival heading"
-                                value={profile.stayHeading}
-                                placeholder={exampleNote.heading}
-                                maxLength={profileLimits.stayHeadingMax}
-                                disabled={draft.saving}
-                                onChange={(value) => set("stayHeading", value.replace(/[\r\n]+/g, " "))}
-                              />
-                            </h2>
-                            <Omit
-                              label="Leave the heading out"
-                              iconOnly
-                              disabled={draft.saving}
-                              onClick={() => omit("stayHeading")}
-                            />
-                          </div>
-                        )}
-
-                        {(profile.hosts.trim() || signing) && (
-                          <div className="canvas-optional">
-                            <p className="stay-hosts"><span className="stay-eyebrow">Your hosts,</span> <b>{hosts}</b></p>
-                            <Omit
-                              label="Leave your names out"
-                              iconOnly
-                              disabled={draft.saving}
-                              onClick={() => {
-                                set("hosts", "");
-                                setSigning(false);
-                              }}
-                            />
-                          </div>
+                    <div className="stay-welcome-words">
+                      <div className="canvas-eyebrow canvas-eyebrow-omit">
+                        A note from your hosts
+                        {/* A phone has no room for a remove button beside
+                          every line, so the note's lines are taken off from
+                          one menu at its head instead. */}
+                        {mobileEditor ? (
+                          <ActionDisclosure
+                            className="canvas-section-menu"
+                            title="Options for the note from your hosts"
+                            label={<>
+                              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="5" cy="12" r="1.8" /><circle cx="12" cy="12" r="1.8" /><circle cx="19" cy="12" r="1.8" /></svg>
+                              <span className="visually-hidden">Options for the note from your hosts</span>
+                            </>}
+                          >
+                            <div className="cover-menu-actions">
+                              {shows("stayHeading") && (
+                                <button type="button" disabled={draft.saving} onClick={() => omit("stayHeading")}>Hide the heading</button>
+                              )}
+                              {(profile.hosts.trim() || signing) && (
+                                <button type="button" disabled={draft.saving} onClick={() => { set("hosts", ""); setSigning(false); }}>Hide your names</button>
+                              )}
+                              {shows("stayWelcome") && (
+                                <button type="button" disabled={draft.saving} onClick={() => omit("stayWelcome")}>Hide the arrival note</button>
+                              )}
+                              {shows("stayTip") && (
+                                <button type="button" disabled={draft.saving} onClick={() => omit("stayTip")}>Hide the local tip</button>
+                              )}
+                              <button type="button" disabled={draft.saving} onClick={omitStayNote}>Hide the whole note</button>
+                            </div>
+                          </ActionDisclosure>
+                        ) : (
+                          <Omit
+                            label="Leave the whole note out"
+                            iconOnly
+                            disabled={draft.saving}
+                            onClick={omitStayNote}
+                          />
                         )}
                       </div>
 
-                      {shows("stayWelcome") && (
-                        <div className="stay-welcome-body canvas-optional">
-                          <CanvasParagraph
-                            label="Arrival note"
-                            value={profile.stayWelcome}
-                            placeholder={exampleNote.welcome}
-                            maxLength={profileLimits.stayWelcomeMax}
-                            disabled={draft.saving}
-                            className="canvas-stay-note"
-                            onChange={(value) => set("stayWelcome", value)}
-                          />
+                      {shows("stayHeading") && (
+                        <div className="canvas-optional canvas-heading-edit">
+                          <h2 className="canvas-heading" aria-level={3}>
+                            <CanvasParagraph
+                              label="Arrival heading"
+                              value={profile.stayHeading}
+                              placeholder={exampleNote.heading}
+                              maxLength={profileLimits.stayHeadingMax}
+                              disabled={draft.saving}
+                              onChange={(value) => set("stayHeading", value.replace(/[\r\n]+/g, " "))}
+                            />
+                          </h2>
                           <Omit
-                            label="Leave the arrival note out"
+                            label="Leave the heading out"
                             iconOnly
                             disabled={draft.saving}
-                            onClick={() => omit("stayWelcome")}
+                            onClick={() => omit("stayHeading")}
                           />
                         </div>
                       )}
 
-                      {(!shows("stayHeading") ||
-                        !shows("stayWelcome") ||
-                        !shows("stayTip") ||
-                        !(profile.hosts.trim() || signing)) && (
-                        <p className="canvas-includes">
-                          {!shows("stayHeading") && (
-                            <Include
-                              label="a heading"
-                              disabled={draft.saving}
-                              onClick={() => open("stayHeading")}
-                            />
-                          )}
-                          {!shows("stayWelcome") && (
-                            <Include
-                              label="an arrival note"
-                              disabled={draft.saving}
-                              onClick={() => open("stayWelcome")}
-                            />
-                          )}
-                          {!shows("stayTip") && (
-                            <Include
-                              label="a local recommendation"
-                              disabled={draft.saving}
-                              onClick={() => open("stayTip")}
-                            />
-                          )}
-                          {!(profile.hosts.trim() || signing) && (
-                            <Include
-                              label="your names"
-                              disabled={draft.saving}
-                              onClick={() => setSigning(true)}
-                            />
-                          )}
-                        </p>
-                      )}
-                    </section>
-                  ) : (
-                    <section className="stay-welcome-plain stay-card canvas-welcome-card" id="wall-section-welcome" aria-label="Your hosts">
-                      {portraitControl}
-                      <p className="canvas-includes">
-                        <Include
-                          label="a note from your hosts"
-                          disabled={draft.saving}
-                          onClick={includeStayNote}
-                        />
-                      </p>
-                    </section>
-                  )}
-
-                  {/* Part of the hosts' welcome on the wall, so it stands with
-                    it here too, ahead of the essentials. */}
-                  {!profile.stayNoteOff && shows("stayTip") && (
-                    <aside className="stay-tip-card stay-card" aria-label="A tip from your hosts">
-                      <span className="stay-icon stay-icon-quiet">
-                        <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M7.6 14.4h4.8M8.2 17h3.6M10 2.6a5 5 0 0 0-2.9 9.1c.4.3.5.7.5 1.2v.5h4.8v-.5c0-.5.2-.9.5-1.2A5 5 0 0 0 10 2.6Z" /></svg>
-                      </span>
-                      <div>
-                        <p className="stay-eyebrow">A little tip from your hosts</p>
+                      {(profile.hosts.trim() || signing) && (
                         <div className="canvas-optional">
-                          <CanvasParagraph
-                            label="One local recommendation"
-                            value={profile.stayTip}
-                            placeholder="The bakery behind the lighthouse. Go before 9am."
-                            maxLength={profileLimits.stayTipMax}
-                            disabled={draft.saving}
-                            className="canvas-tip stay-tip-text"
-                            onChange={(value) => set("stayTip", value.replace(/[\r\n]+/g, " "))}
-                          />
+                          <p className="stay-hosts"><span className="stay-eyebrow">Your hosts,</span> <b>{hosts}</b></p>
                           <Omit
-                            label="Leave the recommendation out"
+                            label="Leave your names out"
                             iconOnly
                             disabled={draft.saving}
-                            onClick={() => omit("stayTip")}
+                            onClick={() => {
+                              set("hosts", "");
+                              setSigning(false);
+                            }}
                           />
                         </div>
-                      </div>
-                    </aside>
-                  )}
+                      )}
+                    </div>
 
-                  {/* The essentials sit where the guest's wall puts them, as
-                    the same row of buttons, on every theme. A tapped one opens
-                    that line's editor over the page, as the guest's wall opens
-                    the line itself. A line still missing its label or answer
-                    gets a button too, so the Host can get back to it. They are
-                    on the wall unless a Host says otherwise; the lines are kept
-                    when the section goes, so putting it back does not cost them
-                    the Wi-Fi password twice. */}
-                  {profile.factsOff ? (
-                    <p className="canvas-includes canvas-includes-lead" id="wall-section-essentials">
+                    {shows("stayWelcome") && (
+                      <div className="stay-welcome-body canvas-optional">
+                        <CanvasParagraph
+                          label="Arrival note"
+                          value={profile.stayWelcome}
+                          placeholder={exampleNote.welcome}
+                          maxLength={profileLimits.stayWelcomeMax}
+                          disabled={draft.saving}
+                          className="canvas-stay-note"
+                          onChange={(value) => set("stayWelcome", value)}
+                        />
+                        <Omit
+                          label="Leave the arrival note out"
+                          iconOnly
+                          disabled={draft.saving}
+                          onClick={() => omit("stayWelcome")}
+                        />
+                      </div>
+                    )}
+
+                    {(!shows("stayHeading") ||
+                      !shows("stayWelcome") ||
+                      !shows("stayTip") ||
+                      !(profile.hosts.trim() || signing)) && (
+                      <p className="canvas-includes">
+                        {!shows("stayHeading") && (
+                          <Include
+                            label="a heading"
+                            disabled={draft.saving}
+                            onClick={() => open("stayHeading")}
+                          />
+                        )}
+                        {!shows("stayWelcome") && (
+                          <Include
+                            label="an arrival note"
+                            disabled={draft.saving}
+                            onClick={() => open("stayWelcome")}
+                          />
+                        )}
+                        {!shows("stayTip") && (
+                          <Include
+                            label="a local recommendation"
+                            disabled={draft.saving}
+                            onClick={() => open("stayTip")}
+                          />
+                        )}
+                        {!(profile.hosts.trim() || signing) && (
+                          <Include
+                            label="your names"
+                            disabled={draft.saving}
+                            onClick={() => setSigning(true)}
+                          />
+                        )}
+                      </p>
+                    )}
+                  </section>
+                ) : (
+                  <section className="stay-welcome-plain stay-card canvas-welcome-card" id="wall-section-welcome" aria-label="Your hosts">
+                    {portraitControl}
+                    <p className="canvas-includes">
                       <Include
-                        label="the essentials"
+                        label="a note from your hosts"
                         disabled={draft.saving}
-                        onClick={() => set("factsOff", false)}
+                        onClick={includeStayNote}
                       />
                     </p>
-                  ) : (
-                    <div className="stay-wall canvas-stay-links" id="wall-section-essentials">
-                      <StayEssentialLinks
-                        id="canvas-stay-essentials"
-                        headingLevel={3}
-                        links={profile.facts.map((fact, index) => ({
-                          label: fact.term.trim() || `Line ${index + 1}`,
-                          mark: essentialMarkName(fact.term),
-                          invalid: Boolean(factProblem(index)),
-                        }))}
-                        onOpen={(index, from) => setOpenFact({ index, from })}
-                      >
-                        <p className="field-hint">
-                          Wi-Fi, bins, heating, checkout &mdash; the questions you
-                          answer every week. Tap one to change it. Up to{" "}
-                          {profileLimits.factsMax} lines, and only ever on this wall.
-                        </p>
-                        {/* Suggestions rather than rows written into every new
-                          property: nothing is here until a Host picks it. What a
-                          pick brings is the whole line (label, answer and
-                          detail), not a label with the answer left as an
-                          example. The pick opens at once, which is what makes
-                          correcting the example the obvious next move. */}
-                        {profile.facts.length < profileLimits.factsMax && (
-                          <p className="canvas-includes">
-                            {unusedFactSuggestions(profile.facts)
-                              .slice(
-                                0,
-                                profileLimits.factsMax - profile.facts.length,
-                              )
-                              .map((suggestion) => (
-                                <Include
-                                  key={suggestion.term}
-                                  label={suggestion.term}
-                                  disabled={draft.saving}
-                                  onClick={() => addFact({ ...suggestion })}
-                                />
-                              ))}
-                            {/* The same offer, for a line none of the
-                              suggestions cover: it starts empty, so the Host
-                              types the label as well as the answer. */}
-                            <Include
-                              label="Custom"
-                              disabled={draft.saving}
-                              onClick={() => addFact(emptyFact())}
-                            />
-                          </p>
-                        )}
-                        <p className="canvas-essentials-actions">
-                          <button
-                            type="button"
-                            className="btn btn-secondary btn-sm"
-                            onClick={() => addFact(emptyFact())}
-                            disabled={
-                              draft.saving ||
-                              profile.facts.length >= profileLimits.factsMax
-                            }
-                          >
-                            Add a line
-                          </button>
-                          <Omit
-                            label="Leave the essentials out"
+                  </section>
+                )}
+
+                {/* Part of the hosts' welcome on the wall, so it stands with
+                  it here too, ahead of the essentials. */}
+                {!profile.stayNoteOff && shows("stayTip") && (
+                  <aside className="stay-tip-card stay-card" aria-label="A tip from your hosts">
+                    <span className="stay-icon stay-icon-quiet">
+                      <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M7.6 14.4h4.8M8.2 17h3.6M10 2.6a5 5 0 0 0-2.9 9.1c.4.3.5.7.5 1.2v.5h4.8v-.5c0-.5.2-.9.5-1.2A5 5 0 0 0 10 2.6Z" /></svg>
+                    </span>
+                    <div>
+                      <p className="stay-eyebrow">A little tip from your hosts</p>
+                      <div className="canvas-optional">
+                        <CanvasParagraph
+                          label="One local recommendation"
+                          value={profile.stayTip}
+                          placeholder="The bakery behind the lighthouse. Go before 9am."
+                          maxLength={profileLimits.stayTipMax}
+                          disabled={draft.saving}
+                          className="canvas-tip stay-tip-text"
+                          onChange={(value) => set("stayTip", value.replace(/[\r\n]+/g, " "))}
+                        />
+                        <Omit
+                          label="Leave the recommendation out"
+                          iconOnly
+                          disabled={draft.saving}
+                          onClick={() => omit("stayTip")}
+                        />
+                      </div>
+                    </div>
+                  </aside>
+                )}
+
+                {/* The essentials sit where the guest's wall puts them, as
+                  the same row of buttons, on every theme. A tapped one opens
+                  that line's editor over the page, as the guest's wall opens
+                  the line itself. A line still missing its label or answer
+                  gets a button too, so the Host can get back to it. They are
+                  on the wall unless a Host says otherwise; the lines are kept
+                  when the section goes, so putting it back does not cost them
+                  the Wi-Fi password twice. */}
+                {profile.factsOff ? (
+                  <p className="canvas-includes canvas-includes-lead" id="wall-section-essentials">
+                    <Include
+                      label="the essentials"
+                      disabled={draft.saving}
+                      onClick={() => set("factsOff", false)}
+                    />
+                  </p>
+                ) : (
+                  <div className="stay-wall canvas-stay-links" id="wall-section-essentials">
+                    <StayEssentialLinks
+                      id="canvas-stay-essentials"
+                      headingLevel={3}
+                      links={profile.facts.map((fact, index) => ({
+                        label: fact.term.trim() || `Line ${index + 1}`,
+                        mark: essentialMarkName(fact.term),
+                        invalid: Boolean(factProblem(index)),
+                      }))}
+                      onOpen={(index, from) => setOpenFact({ index, from })}
+                    >
+                      <p className="field-hint">
+                        Wi-Fi, bins, heating, checkout &mdash; the questions you
+                        answer every week. Tap one to change it. Up to{" "}
+                        {profileLimits.factsMax} lines, and only ever on this wall.
+                      </p>
+                      {/* Suggestions rather than rows written into every new
+                        property: nothing is here until a Host picks it. What a
+                        pick brings is the whole line (label, answer and
+                        detail), not a label with the answer left as an
+                        example. The pick opens at once, which is what makes
+                        correcting the example the obvious next move. */}
+                      {profile.facts.length < profileLimits.factsMax && (
+                        <p className="canvas-includes">
+                          {unusedFactSuggestions(profile.facts)
+                            .slice(
+                              0,
+                              profileLimits.factsMax - profile.facts.length,
+                            )
+                            .map((suggestion) => (
+                              <Include
+                                key={suggestion.term}
+                                label={suggestion.term}
+                                disabled={draft.saving}
+                                onClick={() => addFact({ ...suggestion })}
+                              />
+                            ))}
+                          {/* The same offer, for a line none of the
+                            suggestions cover: it starts empty, so the Host
+                            types the label as well as the answer. */}
+                          <Include
+                            label="Custom"
                             disabled={draft.saving}
-                            onClick={() => { setOpenFact(null); set("factsOff", true); }}
+                            onClick={() => addFact(emptyFact())}
                           />
                         </p>
-                      </StayEssentialLinks>
-                      {/* Every line's editor is drawn, closed, so its fields
-                        stay part of the form; only the tapped one opens. */}
-                      {profile.facts.map((fact, index) => (
-                        <EssentialSheet
-                          key={index}
-                          label={fact.term.trim() || `Line ${index + 1}`}
-                          open={openFact?.index === index}
-                          from={openFact?.index === index ? openFact.from : null}
-                          onClose={() => setOpenFact(null)}
+                      )}
+                      <p className="canvas-essentials-actions">
+                        <button
+                          type="button"
+                          className="btn btn-secondary btn-sm"
+                          onClick={() => addFact(emptyFact())}
+                          disabled={
+                            draft.saving ||
+                            profile.facts.length >= profileLimits.factsMax
+                          }
                         >
-                          <article className="stay-fact stay-card canvas-essential" id={`canvas-essential-${index}`}>
-                            <div className="stay-fact-head">
-                              <span className="stay-icon">
-                                <EssentialMark
-                                  term={fact.term}
-                                  className="essential-mark canvas-essential-mark"
-                                />
-                              </span>
-                              <h3 aria-level={4}>
-                                <CanvasLine
-                                  label={`Line ${index + 1}: label`}
-                                  value={fact.term}
-                                  placeholder="Wi-Fi"
-                                  maxLength={profileLimits.factTermMax}
-                                  disabled={draft.saving}
-                                  invalid={factProblem(index) ? true : undefined}
-                                  onChange={(value) =>
-                                    setFact(index, "term", value)
-                                  }
-                                />
-                              </h3>
-                            </div>
-                            <div className="stay-fact-body">
-                              <CanvasParagraph
-                                label={`Line ${index + 1}: answer`}
-                                value={fact.detail}
-                                placeholder={factExample(fact.term).detail}
-                                maxLength={profileLimits.factDetailMax}
+                          Add a line
+                        </button>
+                        <Omit
+                          label="Leave the essentials out"
+                          disabled={draft.saving}
+                          onClick={() => { setOpenFact(null); set("factsOff", true); }}
+                        />
+                      </p>
+                    </StayEssentialLinks>
+                    {/* Every line's editor is drawn, closed, so its fields
+                      stay part of the form; only the tapped one opens. */}
+                    {profile.facts.map((fact, index) => (
+                      <EssentialSheet
+                        key={index}
+                        label={fact.term.trim() || `Line ${index + 1}`}
+                        open={openFact?.index === index}
+                        from={openFact?.index === index ? openFact.from : null}
+                        onClose={() => setOpenFact(null)}
+                      >
+                        <article className="stay-fact stay-card canvas-essential" id={`canvas-essential-${index}`}>
+                          <div className="stay-fact-head">
+                            <span className="stay-icon">
+                              <EssentialMark
+                                term={fact.term}
+                                className="essential-mark canvas-essential-mark"
+                              />
+                            </span>
+                            <h3 aria-level={4}>
+                              <CanvasLine
+                                label={`Line ${index + 1}: label`}
+                                value={fact.term}
+                                placeholder="Wi-Fi"
+                                maxLength={profileLimits.factTermMax}
                                 disabled={draft.saving}
                                 invalid={factProblem(index) ? true : undefined}
-                                className="canvas-essential-detail stay-fact-detail"
                                 onChange={(value) =>
-                                  setFact(index, "detail", value)
+                                  setFact(index, "term", value)
                                 }
                               />
-                            </div>
+                            </h3>
+                          </div>
+                          <div className="stay-fact-body">
                             <CanvasParagraph
-                              label={`Line ${index + 1}: detail`}
-                              value={fact.note}
-                              placeholder={factExample(fact.term).note}
-                              maxLength={profileLimits.factNoteMax}
+                              label={`Line ${index + 1}: answer`}
+                              value={fact.detail}
+                              placeholder={factExample(fact.term).detail}
+                              maxLength={profileLimits.factDetailMax}
                               disabled={draft.saving}
-                              className="canvas-essential-note stay-fact-note"
+                              invalid={factProblem(index) ? true : undefined}
+                              className="canvas-essential-detail stay-fact-detail"
                               onChange={(value) =>
-                                setFact(index, "note", value)
+                                setFact(index, "detail", value)
                               }
                             />
-                            {factProblem(index) && (
-                              <p className="form-feedback" role="alert">
-                                {factProblem(index)}
-                              </p>
-                            )}
-                            <button
-                              type="button"
-                              className="btn btn-ghost btn-sm"
-                              onClick={() => {
-                                setOpenFact(null);
-                                set(
-                                  "facts",
-                                  profile.facts.filter(
-                                    (_, position) => position !== index,
-                                  ),
-                                );
-                              }}
-                              disabled={draft.saving}
-                            >
-                              Remove {fact.term.trim() || `line ${index + 1}`}
-                            </button>
-                          </article>
-                        </EssentialSheet>
-                      ))}
-                    </div>
-                  )}
+                          </div>
+                          <CanvasParagraph
+                            label={`Line ${index + 1}: detail`}
+                            value={fact.note}
+                            placeholder={factExample(fact.term).note}
+                            maxLength={profileLimits.factNoteMax}
+                            disabled={draft.saving}
+                            className="canvas-essential-note stay-fact-note"
+                            onChange={(value) =>
+                              setFact(index, "note", value)
+                            }
+                          />
+                          {factProblem(index) && (
+                            <p className="form-feedback" role="alert">
+                              {factProblem(index)}
+                            </p>
+                          )}
+                          <button
+                            type="button"
+                            className="btn btn-ghost btn-sm"
+                            onClick={() => {
+                              setOpenFact(null);
+                              set(
+                                "facts",
+                                profile.facts.filter(
+                                  (_, position) => position !== index,
+                                ),
+                              );
+                            }}
+                            disabled={draft.saving}
+                          >
+                            Remove {fact.term.trim() || `line ${index + 1}`}
+                          </button>
+                        </article>
+                      </EssentialSheet>
+                    ))}
+                  </div>
+                )}
 
-                  {hostNoteCards}
+                {hostNoteCards}
 
-                  {stayAgainCard}
+                {stayAgainCard}
 
-                  {/* The box a guest types into used to be drawn here, above the
-                    notes, greyed and captioned as theirs. It said one thing —
-                    that guests write on the wall itself — and the line under
-                    the notes says it in words, with the wall itself a click
-                    away. What stands here now is the Host's own card, in the
-                    grid, because that is where it will be read. It is drawn
-                    above the essentials now, where the wall reads it. */}
-                  <MemoryChrome
-                    property={property}
-                    counts={draft.counts}
-                    invitation="Everything else on this wall is written by guests, on the wall itself, and waits here before it appears."
-                  >
-                    <div className="stacked-form">
-                      <label>Writing prompt for guests
-                        <select
-                          value={ownPrompt ? "custom" : profile.guestPrompt}
-                          disabled={draft.saving}
-                          onChange={event => {
-                            const choice = event.target.value;
-                            setWritingPrompt(choice === "custom");
-                            set("guestPrompt", choice === "custom" ? "Share a memory from your stay." : choice);
-                          }}
-                        >
-                          <option value="">No suggested prompt</option>
-                          <option>What was your favourite memory of this stay?</option>
-                          <option>What would you recommend to the next guests?</option>
-                          <option value="custom">Custom prompt</option>
-                        </select>
-                      </label>
-                      {/* The box to type in belongs to the Host who is writing
-                        their own prompt. For the offered ones it only said back
-                        what the list above it already says. */}
-                      {ownPrompt && (
-                        <label>Your prompt
-                          <input value={profile.guestPrompt} maxLength={240} disabled={draft.saving} onChange={event => set("guestPrompt", event.target.value)} />
-                        </label>
-                      )}
-                    </div>
-                  </MemoryChrome>
-                  {property.slug && (
-                    <GuestOnly>
-                      <a
-                        className="text-link"
-                        /* With the token on it: the in-stay wall answers
-                           with the arrival note and the essentials only to
-                           the address printed on the placard, so a tokenless
-                           link opens the public wall and this Host is left
-                           looking for the words they just wrote. */
-                        href={stayWallPath(property.slug, property.stayToken)}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label="Open the guest wall as guests see it"
+                {/* The box a guest types into used to be drawn here, above the
+                  notes, greyed and captioned as theirs. It said one thing —
+                  that guests write on the wall itself — and the line under
+                  the notes says it in words, with the wall itself a click
+                  away. What stands here now is the Host's own card, in the
+                  grid, because that is where it will be read. It is drawn
+                  above the essentials now, where the wall reads it. */}
+                <MemoryChrome
+                  property={property}
+                  counts={draft.counts}
+                  invitation="Everything else on this wall is written by guests, on the wall itself, and waits here before it appears."
+                >
+                  <div className="stacked-form">
+                    <label>Writing prompt for guests
+                      <select
+                        value={ownPrompt ? "custom" : profile.guestPrompt}
+                        disabled={draft.saving}
+                        onChange={event => {
+                          const choice = event.target.value;
+                          setWritingPrompt(choice === "custom");
+                          set("guestPrompt", choice === "custom" ? "Share a memory from your stay." : choice);
+                        }}
                       >
-                        Open this wall as guests see it &rarr;
-                      </a>
-                    </GuestOnly>
-                  )}
-                </>
-              )}
+                        <option value="">No suggested prompt</option>
+                        <option>What was your favourite memory of this stay?</option>
+                        <option>What would you recommend to the next guests?</option>
+                        <option value="custom">Custom prompt</option>
+                      </select>
+                    </label>
+                    {/* The box to type in belongs to the Host who is writing
+                      their own prompt. For the offered ones it only said back
+                      what the list above it already says. */}
+                    {ownPrompt && (
+                      <label>Your prompt
+                        <input value={profile.guestPrompt} maxLength={240} disabled={draft.saving} onChange={event => set("guestPrompt", event.target.value)} />
+                      </label>
+                    )}
+                  </div>
+                </MemoryChrome>
+                {property.slug && (
+                  <GuestOnly>
+                    <a
+                      className="text-link"
+                      /* With the token on it: the in-stay wall answers
+                         with the arrival note and the essentials only to
+                         the address printed on the placard, so a tokenless
+                         link opens the public wall and this Host is left
+                         looking for the words they just wrote. */
+                      href={stayWallPath(property.slug, property.stayToken)}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="Open the guest wall as guests see it"
+                    >
+                      Open this wall as guests see it &rarr;
+                    </a>
+                  </GuestOnly>
+                )}
+              </>
             </div>
           </div>
 
@@ -1750,7 +1696,7 @@ export function HostWallDesignPage({
               name={draft.name.trim() || property.name}
               profile={profile}
               counts={draft.counts}
-              view={view}
+              view="stay"
               slug={property.slug}
               stayToken={property.stayToken}
               propertyId={property.id}

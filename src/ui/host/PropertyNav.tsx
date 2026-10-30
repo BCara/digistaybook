@@ -16,10 +16,11 @@ import { ActionDisclosure } from "../ActionDisclosure";
  * not a step in a sequence, and a standing column says that where a strip
  * under the title read as a set of tabs on the page below it.
  *
- * The two walls are two rows rather than a switch on one screen. They are
- * different walls with different content — one carries the house guidance and
- * the guests’ half, the other is the link anyone can open — and a Host asks
- * for one or the other, which is what this column is already for.
+ * There is one wall to write. The public page used to be a row of its own
+ * with its own editor, and a Host changing the cover or the name on either
+ * was changing both without being told. It is built from the guest wall now,
+ * and what a Host does with it — switch it on, copy the link, embed the
+ * memories — is sharing, so it lives with the QR code and the guest link.
  *
  * There used to be a further entry — a list of collapsed forms at the property's
  * own address — which edited exactly the fields the property view already
@@ -27,10 +28,13 @@ import { ActionDisclosure } from "../ActionDisclosure";
  * nav was already pointing at. The property view is the property's home now,
  * and walls and QR display, the one thing that list held on its own, is a
  * route rather than a disclosure inside it.
+ *
+ * Inbox and moderation is not a row: it covers every property at once, so it
+ * lives beside the dashboard (`/host/inbox`) and is reached from the header.
  */
 
 /** A row in this column: one of the ways of looking at the property. */
-export type NavSection = "design" | "public" | "qr" | "moderation" | "billing" | "export";
+export type NavSection = "design" | "qr" | "billing" | "export";
 
 /**
  * Where in the property a screen is standing. Settings is one of these and is
@@ -53,11 +57,7 @@ export type PropertySection = NavSection | "settings";
 const marks: Record<NavSection, ReactElement> = {
   export: <path d="M10 2v11m-4-4 4 4 4-4M3 14v4h14v-4" />,
   design: <path d="m12.6 3.4 4 4L7.2 16.8H3.2v-4Zm-1.5 1.5 4 4" />,
-  public: (
-    <path d="M10 2.8a7.2 7.2 0 1 0 0 14.4 7.2 7.2 0 0 0 0-14.4Zm-7.2 7.2h14.4M10 2.8c1.9 2 2.9 4.5 2.9 7.2s-1 5.2-2.9 7.2c-1.9-2-2.9-4.5-2.9-7.2s1-5.2 2.9-7.2Z" />
-  ),
   qr: <path d="M3.2 3.2h4.6v4.6H3.2Zm9 0h4.6v4.6h-4.6Zm-9 9h4.6v4.6H3.2Zm9 0h1.8m3 0h-1.2m-3.6 3.4h1.8m1.8 0h1.8" />,
-  moderation: <path d="M10 2.8 16 4.9v4.7c0 3.4-2.4 5.9-6 7.1-3.6-1.2-6-3.7-6-7.1V4.9Zm-2.4 6.9 1.9 1.9 3.4-3.6" />,
   billing: <path d="M5 2.8h5.8L15 6.9v10.3H5Zm5.8 0v4.1H15M7.6 10.6h4.8m-4.8 3h4.8" />
 };
 
@@ -72,19 +72,12 @@ function Mark({ section }: { section: NavSection }) {
 export function PropertyNav({
   propertyId,
   current,
-  publicWallOff,
   draft,
   mobile = false
 }: {
   propertyId: string;
   mobile?: boolean;
   current: PropertySection;
-  /**
-   * Whether this property's public wall is switched off. The row stays either
-   * way and says so: the switch that turns it back on is on that page, and a
-   * row that vanished would take its own way back with it.
-   */
-  publicWallOff?: boolean;
   /**
    * Whether this property has never been taken live. The billing row is the
    * door to activation, and on a draft it is the *only* door, so while there
@@ -97,16 +90,10 @@ export function PropertyNav({
   const base = `/host/property/${propertyId}`;
   const sections: { key: NavSection; label: string; href: string }[] = [
     { key: "design", label: "Guest wall", href: base },
-    { key: "public", label: "Public page", href: `${base}/public` },
-    { key: "qr", label: "QR display and links", href: `${base}/qr` },
-    { key: "moderation", label: "Inbox & moderation", href: `${base}/moderation` },
+    { key: "qr", label: "QR code and sharing", href: `${base}/qr` },
     { key: "export", label: "Export guestbook", href: `${base}/export` },
     { key: "billing", label: draft ? "Publish" : "Billing", href: `${base}/billing` }
   ];
-
-  /** A quiet word beside a row whose thing is currently switched off. */
-  const tag = (key: NavSection) =>
-    key === "public" && publicWallOff ? <span className="nav-tag">Off</span> : null;
 
   if (mobile) return (
     <nav className="property-mobile-nav" aria-label="Property pages">
@@ -121,7 +108,7 @@ export function PropertyNav({
         <ul>{sections.map(section => (
           <li key={section.key}>
             <a className="nav-item" href={section.href} aria-current={section.key === current ? "page" : undefined}>
-              <Mark section={section.key} />{section.label}{tag(section.key)}
+              <Mark section={section.key} />{section.label}
             </a>
           </li>
         ))}</ul>
@@ -141,13 +128,11 @@ export function PropertyNav({
               <span className="nav-item view-current" aria-current="page">
                 <Mark section={section.key} />
                 {section.label}
-                {tag(section.key)}
               </span>
             ) : (
               <a className="nav-item" href={section.href}>
                 <Mark section={section.key} />
                 {section.label}
-                {tag(section.key)}
               </a>
             )}
           </li>

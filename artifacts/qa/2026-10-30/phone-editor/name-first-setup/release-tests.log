@@ -1,0 +1,18 @@
+
+> digistaybook@0.1.0 test
+> vitest run --exclude "tests/**/*.rules.test.ts"
+
+
+ RUN  v4.1.10 C:/Users/clbbe/.codex/worktrees/phone-editor-release/DigiStayBook
+
+Not implemented: navigation to another Document
+Not implemented: navigation to another Document
+Not implemented: navigation to another Document
+Not implemented: navigation to another Document
+Not implemented: navigation to another Document
+
+ Test Files  82 passed | 1 skipped (83)
+      Tests  801 passed | 1 skipped (802)
+   Start at  18:10:23
+   Duration  81.92s (transform 40.34s, setup 144.10s, import 105.53s, tests 66.58s, environment 1026.39s)
+

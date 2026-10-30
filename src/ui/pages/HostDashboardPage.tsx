@@ -200,7 +200,7 @@ export function HostDashboardPage() {
     rememberProperty(property);
     setAdded({ id: property.id, name: property.name, photoWarning });
     closeWizard();
-    if (uid) void refresh(uid);
+    navigate(`/host/property/${property.id}?setup=1`);
   }
 
   if (!firebaseConfigured) {
@@ -304,8 +304,7 @@ export function HostDashboardPage() {
           <div className="empty-state">
             <p><b>No properties yet.</b></p>
             <p>
-              Three short steps: what the property is, what it says to a guest, and the lines you answer every
-              week. It starts private, so you can see the whole wall before any guest reaches it.
+              Start with a property name, then review your sections at your own pace. It stays private until you publish it.
             </p>
             {!adding && (
               <div className="actions">

@@ -148,7 +148,7 @@ export function PhotoField({ propertyId, slot, photo, label, hint, onChange }: P
       )}
 
       <p className="field-hint">
-        JPEG, PNG or WebP, up to {Math.round(profileLimits.photoBytesMax / (1024 * 1024))}MB.
+        JPEG, PNG or WebP. Large photos are resized for you.
       </p>
 
       {busy === "uploading" && (

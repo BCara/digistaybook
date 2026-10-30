@@ -277,9 +277,9 @@ describe("property billing", () => {
 
     const nav = within(screen.getByRole("navigation", { name: "This property" }));
     expect(nav.getByText("Billing", { selector: "span[aria-current]" })).toHaveAttribute("aria-current", "page");
-    expect(nav.getByRole("link", { name: "Inbox & moderation" })).toHaveAttribute(
+    expect(nav.getByRole("link", { name: "Export guestbook" })).toHaveAttribute(
       "href",
-      "/host/property/prop-1/moderation"
+      "/host/property/prop-1/export"
     );
   });
 
@@ -319,7 +319,7 @@ describe("activating a draft property", () => {
     // The Host is told where they are billed rather than asked, and the quote
     // is already on its way.
     expect(await screen.findByText(/Billed in Australia/)).toBeInTheDocument();
-    expect(screen.queryByRole("radio", { name: "Australia" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("combobox", { name: "Billing country" })).not.toBeInTheDocument();
     expect(await screen.findByText(/28 days free/)).toBeInTheDocument();
     // The plans are a comparison, so both prices and the annual saving are on
     // screen before either is chosen, and the terms are not.
@@ -363,11 +363,15 @@ describe("activating a draft property", () => {
 
     // A wrong guess would price the acknowledgement in the wrong currency, so
     // nothing is quoted until the Host answers.
-    expect(await screen.findByRole("radio", { name: "Australia" })).toBeInTheDocument();
+    const picker = await screen.findByRole("combobox", { name: "Billing country" });
+    expect(picker).toHaveValue("");
+    expect(screen.getByRole("option", { name: "Australia" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "United Kingdom" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Germany" })).toBeInTheDocument();
     expect(loadActivationOffer).not.toHaveBeenCalled();
 
-    fireEvent.click(screen.getByRole("radio", { name: "United States" }));
-    await waitFor(() => expect(loadActivationOffer).toHaveBeenCalledWith("prop-1", "US"));
+    fireEvent.change(picker, { target: { value: "GB" } });
+    await waitFor(() => expect(loadActivationOffer).toHaveBeenCalledWith("prop-1", "GB"));
   });
 
   it("surfaces the server's reason when checkout is refused", async () => {
@@ -380,7 +384,7 @@ describe("activating a draft property", () => {
     renderPage();
 
     fireEvent.click(await screen.findByRole("button", { name: "Not right?" }));
-    fireEvent.click(await screen.findByRole("radio", { name: "United States" }));
+    fireEvent.change(await screen.findByRole("combobox", { name: "Billing country" }), { target: { value: "US" } });
     await waitFor(() => expect(loadActivationOffer).toHaveBeenLastCalledWith("prop-1", "US"));
     fireEvent.click(await screen.findByRole("radio", { name: /A\$150\.00 per year/ }));
     fireEvent.click(await screen.findByRole("checkbox"));
@@ -499,7 +503,7 @@ describe("applying a promotion code", () => {
     await screen.findByText(/Code LAUNCH100 applied/);
 
     fireEvent.click(screen.getByRole("button", { name: "Not right?" }));
-    fireEvent.click(await screen.findByRole("radio", { name: "United States" }));
+    fireEvent.change(await screen.findByRole("combobox", { name: "Billing country" }), { target: { value: "US" } });
 
     await waitFor(() => expect(loadActivationOffer).toHaveBeenLastCalledWith("prop-1", "US"));
     expect(screen.queryByText(/Code LAUNCH100 applied/)).not.toBeInTheDocument();

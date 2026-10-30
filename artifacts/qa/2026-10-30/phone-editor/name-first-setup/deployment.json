@@ -1,0 +1,33 @@
+{
+  "commit": "9aa6c5390a0e853262a966dbedbfa68525c84edd",
+  "liveVersion": "projects/digistaybook-cbert/sites/digistaybook-cbert/versions/3441c25c0722d022",
+  "previewVersion": "projects/digistaybook-cbert/sites/digistaybook-cbert/versions/3441c25c0722d022",
+  "releaseTime": "2026-10-30T07:15:08.394Z",
+  "testsPassed": 801,
+  "testsSkipped": 1,
+  "productionBuild": "passed",
+  "localTypecheck": "passed",
+  "localFixture": "http://127.0.0.1:5181/host/property/4gFTQrC6jDeCgLwAgA6b?setup=1",
+  "scope": "Hosting only",
+  "authenticatedProductionFlow": "not tested",
+  "assetChecks": [
+    {
+      "path": "/app.html",
+      "expected": "83AE4246FD870F62172D1DEFF1FC4DD8E52F733C17DA2C54D0F77C5D3AED4A9F",
+      "actual": "83AE4246FD870F62172D1DEFF1FC4DD8E52F733C17DA2C54D0F77C5D3AED4A9F",
+      "matches": true
+    },
+    {
+      "path": "/assets/index-CK-xxlLx.js",
+      "expected": "2448456243916C9F42868D3C31C028D21A0637F4CCE0AF5BF9FB44366AAD9ADD",
+      "actual": "2448456243916C9F42868D3C31C028D21A0637F4CCE0AF5BF9FB44366AAD9ADD",
+      "matches": true
+    },
+    {
+      "path": "/assets/index-CztuXq60.css",
+      "expected": "57FA9D940DA8C4EFBA88278366D7FCA6630B41BAAD7F9AC413CB02FAE6EA2C75",
+      "actual": "57FA9D940DA8C4EFBA88278366D7FCA6630B41BAAD7F9AC413CB02FAE6EA2C75",
+      "matches": true
+    }
+  ]
+}

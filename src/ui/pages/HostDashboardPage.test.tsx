@@ -61,26 +61,12 @@ beforeEach(() => {
 
 const openWizard = () => fireEvent.click(screen.getByRole("button", { name: "Add property" }));
 const nameField = () => screen.getByLabelText("Property name");
-const next = () => fireEvent.click(screen.getByRole("button", { name: "Next" }));
-
-/** Walk the wizard end to end, answering only what a test cares about. */
-function addProperty(name: string, answers: { location?: string; hosts?: string } = {}) {
+const next = () => fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+function addProperty(name: string) {
   openWizard();
   fireEvent.change(nameField(), { target: { value: name } });
-  if (answers.location) {
-    fireEvent.change(screen.getByLabelText(/Where the property is/), { target: { value: answers.location } });
-  }
   next();
-  if (answers.hosts) {
-    // The names are offered on the note rather than laid out empty, the same
-    // way the property view offers them.
-    fireEvent.click(screen.getByRole("button", { name: "+ your names" }));
-    fireEvent.change(screen.getByLabelText("Your names"), { target: { value: answers.hosts } });
-  }
-  next();
-  fireEvent.click(screen.getByRole("button", { name: "Create property" }));
 }
-
 describe("host dashboard", () => {
   it("shows the known list immediately while refreshing it in the background", async () => {
     rememberOwnedProperties("host-a", [hostProperty()]);
@@ -159,7 +145,7 @@ describe("host dashboard", () => {
     openWizard();
     // It opens as a window over the dashboard rather than a panel within it.
     expect(screen.getByRole("dialog", { name: "Add a property" })).toBeInTheDocument();
-    expect(screen.getByText("Step 1 of 3")).toBeInTheDocument();
+    expect(screen.getAllByRole("textbox")).toHaveLength(1);
   });
 
   it("opens the wizard for the header link, which is a fragment on this page", async () => {
@@ -190,21 +176,16 @@ describe("host dashboard", () => {
     renderDashboard();
     await screen.findByText(/No properties yet/i);
 
-    addProperty("Seabreeze Cottage", { location: "Porthleven, Cornwall", hosts: "Ana & Tom" });
+    addProperty("Seabreeze Cottage");
 
     await waitFor(() => expect(createProperty).toHaveBeenCalledTimes(1));
     // The address is generated, so the test pins its shape rather than its tail.
     expect(createProperty).toHaveBeenCalledWith("host-a", {
       name: "Seabreeze Cottage",
       slug: expect.stringMatching(/^seabreeze-cottage-[a-z0-9]{4}$/),
-      profile: expect.objectContaining({ location: "Porthleven, Cornwall", hosts: "Ana & Tom" })
+      profile: emptyProfile()
     });
-    expect(await screen.findByText(/Seabreeze Cottage was added/i)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Open Seabreeze Cottage/ })).toHaveAttribute(
-      "href",
-      "/host/property/prop-1"
-    );
-    expect(listOwnedProperties).toHaveBeenCalledTimes(2);
+    await waitFor(() => expect(window.location.pathname + window.location.search).toBe("/host/property/prop-1?setup=1"));
     // The wizard closes behind the property it made.
     expect(screen.queryByLabelText("Property name")).not.toBeInTheDocument();
   });
@@ -243,7 +224,7 @@ describe("host dashboard", () => {
 
     expect(await screen.findByText("You do not have access to that property.")).toBeInTheDocument();
     // The wizard stays open on the answers, so nothing typed is lost.
-    expect(screen.getByRole("button", { name: "Create property" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Continue" })).toBeInTheDocument();
     expect(listOwnedProperties).toHaveBeenCalledTimes(1);
   });
 

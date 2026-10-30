@@ -287,11 +287,16 @@ button:disabled, .btn:disabled { cursor: not-allowed; opacity: .45; }
 
 .nav-toggle { display: none; }
 
-/* Signed-in header: where you work, then who you are and the way out.
-   The two destinations sit together as buttons and the account rule divides
-   them from the session controls. */
-.header-account { display: flex; align-items: center; gap: 10px; min-width: 0; }
+/* Signed-in header: the same quiet links as the visitor header, one action
+   that earns a button, then who you are and the way out behind a rule. */
+.header-account { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); min-width: 0; }
 .header-account > .btn { flex-shrink: 0; white-space: nowrap; }
+.header-sign-out {
+  flex-shrink: 0; margin-left: calc(-1 * clamp(4px, 1.6vw, 20px));
+  padding: 4px 0; border: 0; background: none; cursor: pointer;
+  font: inherit; font-size: .98rem; font-weight: 500; color: var(--text-muted);
+}
+.header-sign-out:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
 .account-section { padding: 28px 0; border-bottom: 1px solid var(--rule); }
 .account-section h2 { margin-top: 0; }
 .account-section .stacked-form { margin-top: 18px; }
@@ -367,6 +372,10 @@ button:disabled, .btn:disabled { cursor: not-allowed; opacity: .45; }
   font-size: var(--step--1); color: var(--text-muted);
 }
 .masthead-facts li + li::before { content: "·"; margin-right: 18px; color: var(--rule-strong); }
+/* The tax line under the facts, starred to its small print beside the rates. */
+.masthead-tax { margin: 10px 0 0; font-size: var(--step--1); color: var(--text-muted); }
+.masthead-tax a { font-weight: 600; color: var(--accent-strong); text-decoration: none; }
+.masthead-tax a:hover { text-decoration: underline; }
 
 /* ---- The guestbook page ---- */
 
@@ -590,6 +599,26 @@ button:disabled, .btn:disabled { cursor: not-allowed; opacity: .45; }
   --tick: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.6l3 3L13 4.6' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   -webkit-mask: var(--tick) center/15px no-repeat;
   mask: var(--tick) center/15px no-repeat;
+}
+/* A shelf-ticket stamp beside a starred headline: the tax message read as an
+   advert, with the approved wording as its footnote rather than a line lost
+   in the fine print. */
+.tax-callout {
+  display: flex; align-items: flex-start; gap: clamp(14px, 2.5vw, 24px);
+  margin-top: clamp(24px, 3vw, 34px); padding: clamp(18px, 2.5vw, 26px);
+  border: 1px solid var(--rule-strong); background: var(--surface);
+}
+.tax-stamp {
+  flex: none; margin: 0; padding: 8px 10px; border: 2px solid var(--accent-strong);
+  font-size: var(--step--2); font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  line-height: 1.2; color: var(--accent-strong); transform: rotate(-4deg);
+}
+.tax-callout h3 { margin: 0 0 6px; font-family: var(--font-display); font-size: var(--step-1); font-weight: 600; }
+.tax-callout sup, .masthead-tax sup { font-size: .6em; }
+.tax-callout p { margin: 0; color: var(--text-muted); font-size: var(--step--1); line-height: 1.6; }
+.tax-callout .tax-small-print { margin-top: 10px; font-size: var(--step--2); }
+@media (max-width: 560px) {
+  .tax-callout { flex-direction: column; }
 }
 .fine-print {
   display: grid; gap: 10px; margin-top: clamp(28px, 4vw, 40px); padding-top: 20px;
@@ -1096,6 +1125,13 @@ textarea { min-height: 132px; resize: vertical; }
 .password-toggle:disabled { color: var(--text-muted); cursor: not-allowed; }
 .check-row { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; font-weight: 400; font-size: .99rem; line-height: 1.55; color: var(--text-muted); }
 .check-row input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); }
+/* Contact: the enquiry for hotels and larger portfolios, set apart from the
+   two notices above it that send people elsewhere. */
+.contact-custom { margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--rule); }
+.contact-custom h2 { margin: 0 0 10px; font-size: var(--step-2); }
+.contact-custom p { margin: 0 0 16px; color: var(--text-muted); }
+.contact-topic { display: grid; gap: 10px; margin: 0; padding: 0; border: 0; }
+.contact-topic legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: .99rem; }
 .form-feedback { margin: 0; padding: 12px 15px; background: var(--bg-alt); border-left: 2px solid var(--accent); color: var(--text-muted); font-size: .99rem; }
 
 .notice { border-left: 2px solid var(--accent); }
@@ -2766,6 +2802,8 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
     max-width: none; margin-left: 0; padding: 11px 12px; color: var(--text);
     border-left: 0; border-bottom: 1px solid var(--rule);
   }
+  .header-account .header-account-name { order: 1; margin-top: 8px; border-top: 1px solid var(--rule); }
+  .header-sign-out { order: 2; display: block; margin-left: 0; padding: 11px 12px; text-align: left; color: var(--text); }
 }
 
 /* ---------------------- One property, on a phone -----------------------

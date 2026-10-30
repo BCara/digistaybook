@@ -16,6 +16,7 @@
 
 import { defaultWallTheme, defaultWallColour, readWallTheme, readWallColour, type WallThemeId, type WallColourId } from "./wallTheme";
 import { normalizeStayAgainLinks, stayAgainLimits, stayAgainProblems, type StayAgainLink } from "./stayAgain";
+import { readReviewedSections, type SetupSection } from "./setupSections";
 
 /** One line of house guidance: what it is, the answer, and the detail. */
 export type HouseFact = { term: string; detail: string; note: string };
@@ -193,6 +194,8 @@ export type PropertyProfile = {
    * `stayAgain.ts`.
    */
   stayAgainLinks: StayAgainLink[];
+  /** Owner-only review choices, excluded from the guest wall projection. */
+  reviewedSections: SetupSection[];
   guestPrompt: string;
   /** Public. The photograph at the top of both walls. */
   cover: PropertyPhoto | null;
@@ -228,7 +231,13 @@ export const profileLimits = {
   factDetailMax: 60,
   factNoteMax: 140,
   altMax: 120,
+  // What may be sent to Storage, and what storage.rules enforces. A photo is
+  // shrunk on the device before it is sent, so this almost never bites.
   photoBytesMax: 8 * 1024 * 1024,
+  // What a Host may choose. Far above any phone camera, so a Host is never
+  // asked to resize a photo the app is about to resize for them; it only
+  // stops a phone being asked to decode something enormous.
+  photoChosenBytesMax: 40 * 1024 * 1024,
   photoTypes: ["image/jpeg", "image/png", "image/webp"] as const
 } as const;
 
@@ -264,6 +273,7 @@ export const emptyProfile = (): PropertyProfile => ({
   facts: [],
   factsOff: false,
   stayAgainLinks: [],
+  reviewedSections: [],
   guestPrompt: "",
   cover: null,
   avatar: null,
@@ -278,12 +288,16 @@ export const emptyProfile = (): PropertyProfile => ({
  * in with this — plain, true of nearly every property — and the Host changes
  * or removes it. The wall editor still shows it as a placeholder, for an
  * existing property whose note was cleared on purpose.
+ *
+ * It points a guest at the essentials, never at the Host's inbox: the wall is
+ * there so a guest can answer their own question, and a note that invites a
+ * message hands the Host back the admin the wall was meant to take away.
  */
 export const exampleNote = {
   heading: "Welcome, make yourself at home",
   welcome: [
-    "We are glad you found the place. Everything you need should be to hand, we have added some essential information below but if you get stuck feel free to message.",
-    "Before you go, we would appreciate if you would add a memory to the wall."
+    "We are glad you found the place. Everything you need should be to hand, and the essentials, from the Wi-Fi to checkout, are just below.",
+    "Before you go, we would appreciate it if you would add a memory to the wall."
   ].join("\n\n")
 } as const;
 
@@ -391,6 +405,7 @@ export function readProfile(value: unknown): PropertyProfile {
         })
       : [],
     guestPrompt: text(data.guestPrompt, 240),
+    reviewedSections: readReviewedSections(data.reviewedSections),
     cover: readPhoto(data.cover),
     avatar: readPhoto(data.avatar),
     hostPhoto: readPhoto(data.hostPhoto)
@@ -460,6 +475,7 @@ export function normalizeProfile(profile: PropertyProfile): PropertyProfile {
     factsOff: profile.factsOff,
     stayAgainLinks: normalizeStayAgainLinks(profile.stayAgainLinks),
     guestPrompt: profile.guestPrompt.trim().slice(0, 240),
+    reviewedSections: readReviewedSections(profile.reviewedSections),
     cover: profile.cover,
     avatar: profile.avatar,
     hostPhoto: profile.hostPhoto
@@ -530,13 +546,30 @@ export function sameProfileText(a: PropertyProfile, b: PropertyProfile): boolean
   return words(a) === words(b);
 }
 
-/** Only images, and only ones a phone can actually load. */
+const megabytes = (bytes: number) => Math.round(bytes / (1024 * 1024));
+
+/**
+ * Only images, and only ones a phone can actually load. The upload limit is
+ * not checked here: the chosen file is shrunk before it is sent, so its size
+ * on the device says little about what Storage will receive.
+ */
 export function validatePhotoFile(file: { type: string; size: number }): string | null {
   if (!(profileLimits.photoTypes as readonly string[]).includes(file.type)) {
     return "Choose a JPEG, PNG or WebP image.";
   }
-  if (file.size > profileLimits.photoBytesMax) {
-    return `That image is larger than ${Math.round(profileLimits.photoBytesMax / (1024 * 1024))}MB. Choose a smaller one.`;
+  if (file.size > profileLimits.photoChosenBytesMax) {
+    return `That image is larger than ${megabytes(profileLimits.photoChosenBytesMax)}MB. Choose a smaller one.`;
+  }
+  return null;
+}
+
+/**
+ * The upload limit, checked against what is actually being sent. Only a
+ * browser that could not shrink the photo ever reaches it.
+ */
+export function validatePreparedPhoto(prepared: { size: number }): string | null {
+  if (prepared.size > profileLimits.photoBytesMax) {
+    return `This device couldn't make that photo smaller, and it's over ${megabytes(profileLimits.photoBytesMax)}MB. Choose a smaller one.`;
   }
   return null;
 }
@@ -634,7 +667,10 @@ export const factSuggestions: readonly FactSuggestion[] = [
   { term: "Heating", detail: "Dial in the hall", note: "It takes an hour to come through" },
   { term: "Hot water", detail: "On all day", note: "The shower runs hot after a minute" },
   { term: "Parking", detail: "Two cars, on the gravel", note: "Please leave the lane clear" },
-  { term: "If something breaks", detail: "Message us first", note: "We would rather fix it than have you go without" }
+  // A report, not a conversation: the wall's one route to the Host is the
+  // private feedback at its foot (ui/wall/MemoryNote.tsx), which Hosts read
+  // but cannot reply to, so the line names that and invites nothing more.
+  { term: "If something breaks", detail: "Please report it", note: "Use Private feedback at the bottom of this page so we can put it right" }
 ];
 
 /** The suggestions a property has not used yet, matched on the label. */

@@ -1,0 +1,17 @@
+[
+  {
+    "Path": "/app.html",
+    "ExactMatch": true,
+    "SHA256": "17677DA4B150C6E3160E3D0A133DBD465EA2D0FB887AC6239F4A85DD06988E9C"
+  },
+  {
+    "Path": "/assets/index-BFDLWlFr.js",
+    "ExactMatch": true,
+    "SHA256": "C0B583D11330A160BA3717435A3C360196F2F4547A63B4A9EA49A6A8B9E26157"
+  },
+  {
+    "Path": "/assets/index-DO4N3wd2.css",
+    "ExactMatch": true,
+    "SHA256": "EAF10E784FAC56E8E5C6B638BBBBC9F992031FAA910381BDAF56D0F60C14ED29"
+  }
+]

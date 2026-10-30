@@ -37,7 +37,7 @@ describe("renewalPrice", () => {
       { renewalAmount: null },
       { renewalAmount: -1500 },
       { renewalAmount: 15.5 },
-      { renewalCurrency: "gbp" },
+      { renewalCurrency: "sek" },
       { renewalCurrency: null },
       { renewalInterval: "week" },
       { renewalInterval: null }

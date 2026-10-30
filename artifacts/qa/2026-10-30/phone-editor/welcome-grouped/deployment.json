@@ -1,0 +1,29 @@
+{
+  "Commit": "f490b495ab6d0deb0f3c638a15eb8289857faf7c",
+  "PreviousVersion": "a7e045df766154aa",
+  "LiveVersion": "projects/digistaybook-cbert/sites/digistaybook-cbert/versions/246af47f6056b45b",
+  "Released": "2026-10-30T07:00:58.545Z",
+  "PreviewVersion": "projects/digistaybook-cbert/sites/digistaybook-cbert/versions/246af47f6056b45b",
+  "EditorTests": 61,
+  "Typecheck": "passed",
+  "ProductionBuild": "passed",
+  "HostingOnly": true,
+  "PhoneCheck": "Local Test: one combined section and form; cancel returns to checklist",
+  "Artifacts": [
+    {
+      "Path": "/app.html",
+      "SHA256": "10FEEBC56D08181129F686EC92F4082F33F9BDA3BB325BDD8A408FC13B18DC5D",
+      "Match": true
+    },
+    {
+      "Path": "/assets/index-BrclNWvc.js",
+      "SHA256": "40129219A0440D879C56C55DD160F21CCD88DAD6ECAE26EB8C8E1D41FEF86B72",
+      "Match": true
+    },
+    {
+      "Path": "/assets/index-Bb3tF-4j.css",
+      "SHA256": "ECBC7D0790AA65AD5B2379BD74F8ED1E36E8F9EFC6FCA2CDC4CEECFCFFA745DC",
+      "Match": true
+    }
+  ]
+}

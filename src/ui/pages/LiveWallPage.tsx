@@ -28,9 +28,16 @@ const LOADING = "Loading this guestbook…";
 const HOST_NOTES_ID = "wall-host-notes";
 const MEMORIES_ID = "wall-memories";
 
-export function LiveWallPage({ slug, view = "public", stayToken = null }: {
+export function LiveWallPage({ slug, view = "public", stayToken = null, embedded = false }: {
   slug: string;
   view?: "public" | "stay";
+  /**
+   * In an iframe on a Host's own website: the memories alone. Their site
+   * already says whose house this is, so our cover, name and byline would be
+   * a second header inside theirs. The preview bar and its list of gaps go
+   * too — they are for the Host on our site, not for their visitors.
+   */
+  embedded?: boolean;
   /**
    * The secret segment of the guestbook link. It is carried rather than
    * checked here: the server decides which wall a caller is reading, so a
@@ -103,9 +110,9 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
   // stands down and the closed notice takes its place, exactly as served.
   const asGuest = Boolean(preview && guestView);
 
-  return <main className="page wall-page" data-wall-theme={readWallTheme(wall?.property.theme)} data-wall-colour={readWallColour(wall?.property.colour, wall?.property.theme)} data-wall-view={served} data-wall-preview={preview ? "true" : undefined}>
-    {preview?.owner && <PreviewBanner owner={preview.owner} view={served} guestView={guestView} onGuestView={setGuestView} />}
-    {preview?.owner && !asGuest && <PreviewGaps property={preview.property} view={served} propertyId={preview.owner.propertyId} />}
+  return <main className={embedded ? "page wall-page wall-embed" : "page wall-page"} data-wall-theme={readWallTheme(wall?.property.theme)} data-wall-colour={readWallColour(wall?.property.colour, wall?.property.theme)} data-wall-view={served} data-wall-preview={preview ? "true" : undefined}>
+    {preview?.owner && !embedded && <PreviewBanner owner={preview.owner} view={served} guestView={guestView} onGuestView={setGuestView} />}
+    {preview?.owner && !asGuest && !embedded && <PreviewGaps property={preview.property} view={served} propertyId={preview.owner.propertyId} />}
     {asGuest && <UnavailableWall result={{ status: "unavailable" }} view={view} />}
     {unavailable && <UnavailableWall result={auth.status === "host" && unavailable.sessionUid === auth.user?.uid ? unavailable : { status: "unavailable" }} view={view} />}
     {/* Nothing arrived at all: not a closed wall, but a wall we could not
@@ -134,17 +141,16 @@ export function LiveWallPage({ slug, view = "public", stayToken = null }: {
           reader arrives at them differently: a stranger following a shared
           link is being introduced to the property, and a guest who has just
           scanned the placard in the hallway is checking they scanned the
-          right one. So the stay wall leads with the name and the place, and
-          the public welcome — the line written for that stranger — is not on
-          it. `StayWallHeader` below is the same arrangement the canvas and
+          right one. So the stay wall leads with the name and the place.
+          `StayWallHeader` below is the same arrangement the canvas and
           the phone preview draw, so a Host is looking at one wall twice. */}
-      <WallHeader property={wall.property} view={served} preview={Boolean(preview)} hostNotes={<HostNotes
+      {!embedded && <WallHeader property={wall.property} view={served} preview={Boolean(preview)} hostNotes={<HostNotes
         id={HOST_NOTES_ID}
         author={wall.property.hosts || "your hosts"}
         notes={(wall.property.hostNotes ?? []).map(note => ({
           id: note.id, message: note.message, style: readHostNoteStyle(note.style),
           photo: note.photo ? { src: note.photo.url, alt: note.photo.alt } : undefined
-        }))} />} />
+        }))} />} />}
       {/* The memories and the way to add one end the page together, so a
           theme can set them on their own band of paper. */}
       <div className="wall-memories">

@@ -8,9 +8,11 @@
    same string built the same way.
 
    The embed is a route of its own rather than a flag on the wall, because an
-   embedded wall is a different page: no site header, no site footer, and no
-   demo ribbon, since inside someone else's website those are our furniture in
-   their room. What it keeps is the attribution link (D-010) — inside a Host's
+   embedded wall is a different page: the memories alone, with no site header,
+   no site footer, no demo ribbon and no cover-and-name header, since inside a
+   Host's own website those are our furniture in their room — their page
+   already says whose house it is. The shared link keeps the full page for a
+   visitor arriving from social media, who has no such page around it. What it keeps is the attribution link (D-010) — inside a Host's
    own site that link is the whole point of the embed.
    ========================================================================= */
 

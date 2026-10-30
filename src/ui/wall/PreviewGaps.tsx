@@ -19,11 +19,9 @@ export type WallGapSource = {
 };
 
 /**
- * The two walls open with different words, so they are missing different
- * words. `welcome` is the line a stranger reads on the shared wall and is
- * never on the in-stay wall; what greets a guest there is the arrival note.
- * Asking a Host to write a welcome to fix a blank in-stay wall would send
- * them to the wrong field.
+ * What a wall is missing. The public page is built from the guest wall and
+ * has no words of its own, so all it can lack is the cover; the guest wall
+ * can also lack its arrival note and essentials.
  */
 export function wallGaps(property: WallGapSource, view: "stay" | "public") {
   const house = property.houseInformation;
@@ -33,8 +31,6 @@ export function wallGaps(property: WallGapSource, view: "stay" | "public") {
   if (view === "stay") {
     if (!note) gaps.push({ key: "note", label: "Write an arrival note" });
     if (!house?.facts.length) gaps.push({ key: "facts", label: "Add the essentials" });
-  } else if (!property.welcome.trim()) {
-    gaps.push({ key: "welcome", label: "Write a welcome" });
   }
   return gaps;
 }

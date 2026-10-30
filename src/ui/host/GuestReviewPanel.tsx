@@ -121,7 +121,7 @@ export function GuestReviewPanel({ propertyId, feedbackOnly = false, settingsOnl
         <span className="approval-switch-state" aria-hidden="true">{result.reviewContent ? "On" : "Off"}</span>
       </label>
       <p id="approval-settings-note" className="approval-settings-note">{result.reviewContent ? "New memories wait for approval after safety checks." : "Clear memories publish automatically after safety checks."}</p>
-      <a className="text-link approval-settings-link" href={`/host/property/${propertyId}/moderation#new-memories`}>Review waiting memories</a>
+      <a className="text-link approval-settings-link" href={`/host/inbox?property=${propertyId}`}>Review waiting memories</a>
     </section>}
     {settingsOnly && result && notice && <p className="form-feedback" role="status">{notice}</p>}
     {!settingsOnly && !collapsed && <section id={feedbackOnly ? undefined : "new-memories"} className={`guest-review${feedbackOnly ? "" : " moderation-panel"}`} aria-label={feedbackOnly ? "Private feedback inbox" : "Guest safety review"}>

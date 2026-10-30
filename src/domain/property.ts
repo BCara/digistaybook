@@ -27,7 +27,15 @@ export const isPubliclyReadable = (property: PropertySummary, now = Date.now()) 
   property.mode === "live" && (["trialing", "active", "grace_period"].includes(property.lifecycle)
     || (property.lifecycle === "cancelled_pending_end" && Date.parse(property.serviceEndsAt ?? "") > now));
 
-export const canDownloadQrKit = (property: PropertySummary, now = Date.now()) => isPubliclyReadable(property, now);
+/**
+ * Whether a property has an inbox to moderate. Guests can only write on a
+ * wall that has been published, so a draft has nothing in it yet; a wall that
+ * has since gone offline still holds what guests left while it was live.
+ */
+export const hasGuestInbox = (property: PropertySummary) =>
+  property.lifecycle !== "draft" && property.lifecycle !== "deleted";
+
+export const canDownloadQrKit =(property: PropertySummary, now = Date.now()) => isPubliclyReadable(property, now);
 
 /* --------------------------- Property identity ---------------------------
    A Host names a property; the wall address is derived from that name and is

@@ -1,4 +1,4 @@
-import type { BillingCountry } from "./billingStore";
+import { isBillingCountry, type BillingCountry } from "../../domain/pricing";
 
 /**
  * Where a Host is probably billed, so they are not asked.
@@ -7,13 +7,12 @@ import type { BillingCountry } from "./billingStore";
  * currency every quoted price and every acknowledgement sentence is written
  * in. What changes here is only *who says it first* — this guess opens the
  * offer, and the Host can overrule it on the same screen before anything is
- * priced against it. The server still refuses a country it does not serve, and
- * `createActivationCheckout` still records the country actually submitted.
+ * priced against it. The server still refuses a code that is not a country,
+ * and `createActivationCheckout` still records the country actually submitted.
  *
- * A guess, never an answer: anything outside the two countries DigiStayBook
- * serves returns null, and the Host is asked in the old way. Guessing "AU"
- * for a Host in Berlin would show them a price in the wrong currency and ask
- * them to tick a box against it.
+ * A guess, never an answer: a browser that names no country returns null, and
+ * the Host is asked in the old way. Guessing "AU" for a Host in Berlin would
+ * show them a price in the wrong currency and ask them to tick a box against it.
  */
 
 /**
@@ -83,7 +82,7 @@ function regionOf(tag: string): string | null {
 }
 
 function supported(region: string | null): BillingCountry | null {
-  return region === "AU" || region === "US" ? region : null;
+  return isBillingCountry(region) ? region : null;
 }
 
 /**
@@ -122,8 +121,76 @@ const US_ZONES = new Set([
   "Pacific/Honolulu"
 ]);
 
+/**
+ * The other countries with a price of their own, zone by zone, so a Host in one
+ * of them is quoted in their own currency without being asked. Listed rather
+ * than matched on `Europe/` or `America/`: Stockholm and Zurich are in Europe
+ * but are not the euro area, and Toronto is not the United States. A zone not
+ * listed falls through to the browser's language, then to asking.
+ */
+const PRICED_ZONES: Record<string, BillingCountry> = {
+  "Pacific/Auckland": "NZ",
+  "Pacific/Chatham": "NZ",
+  "America/Toronto": "CA",
+  "America/Vancouver": "CA",
+  "America/Edmonton": "CA",
+  "America/Winnipeg": "CA",
+  "America/Regina": "CA",
+  "America/Swift_Current": "CA",
+  "America/Halifax": "CA",
+  "America/Glace_Bay": "CA",
+  "America/Moncton": "CA",
+  "America/Goose_Bay": "CA",
+  "America/St_Johns": "CA",
+  "America/Whitehorse": "CA",
+  "America/Dawson": "CA",
+  "America/Dawson_Creek": "CA",
+  "America/Fort_Nelson": "CA",
+  "America/Creston": "CA",
+  "America/Yellowknife": "CA",
+  "America/Inuvik": "CA",
+  "America/Cambridge_Bay": "CA",
+  "America/Rankin_Inlet": "CA",
+  "America/Resolute": "CA",
+  "America/Iqaluit": "CA",
+  "America/Atikokan": "CA",
+  "America/Blanc-Sablon": "CA",
+  "Europe/London": "GB",
+  "Europe/Belfast": "GB",
+  "Europe/Vienna": "AT",
+  "Europe/Brussels": "BE",
+  "Europe/Sofia": "BG",
+  "Asia/Nicosia": "CY",
+  "Asia/Famagusta": "CY",
+  "Europe/Nicosia": "CY",
+  "Europe/Berlin": "DE",
+  "Europe/Busingen": "DE",
+  "Europe/Tallinn": "EE",
+  "Europe/Madrid": "ES",
+  "Africa/Ceuta": "ES",
+  "Atlantic/Canary": "ES",
+  "Europe/Helsinki": "FI",
+  "Europe/Mariehamn": "FI",
+  "Europe/Paris": "FR",
+  "Europe/Athens": "GR",
+  "Europe/Zagreb": "HR",
+  "Europe/Dublin": "IE",
+  "Europe/Rome": "IT",
+  "Europe/Vilnius": "LT",
+  "Europe/Luxembourg": "LU",
+  "Europe/Riga": "LV",
+  "Europe/Malta": "MT",
+  "Europe/Amsterdam": "NL",
+  "Europe/Lisbon": "PT",
+  "Atlantic/Madeira": "PT",
+  "Atlantic/Azores": "PT",
+  "Europe/Ljubljana": "SI",
+  "Europe/Bratislava": "SK"
+};
+
 function countryForTimeZone(timeZone: string | undefined): BillingCountry | null {
   if (!timeZone) return null;
   if (timeZone.startsWith("Australia/")) return "AU";
-  return US_ZONES.has(timeZone) ? "US" : null;
+  if (US_ZONES.has(timeZone)) return "US";
+  return PRICED_ZONES[timeZone] ?? null;
 }

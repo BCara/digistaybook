@@ -1,0 +1,40 @@
+{
+  "Date": "2026-10-30",
+  "BaseCommit": "35eeab1825d2682c5d3bf0c499b8bb96408f3869",
+  "Commit": "aa5916d5e1e3693c61624d1e6addb6a0d16b8020",
+  "PreviousLiveVersion": "9d11a2532300ff4d",
+  "LiveVersion": "projects/digistaybook-cbert/sites/digistaybook-cbert/versions/e0d3d052f5a66383",
+  "LiveReleaseTime": "2026-10-30T06:40:41.645Z",
+  "PreviewVersion": "projects/digistaybook-cbert/sites/digistaybook-cbert/versions/e0d3d052f5a66383",
+  "LiveUrl": "https://digistaybook-cbert.web.app",
+  "PreviewUrl": "https://digistaybook-cbert--phone-editor-3tb5brbp.web.app",
+  "TestsPassed": 804,
+  "TestsSkipped": 1,
+  "Typecheck": "passed",
+  "Build": "passed",
+  "HostingOnly": true,
+  "Artifacts": [
+    {
+      "Path": "/app.html",
+      "SHA256": "17677DA4B150C6E3160E3D0A133DBD465EA2D0FB887AC6239F4A85DD06988E9C",
+      "ExactMatch": true
+    },
+    {
+      "Path": "/assets/index-BFDLWlFr.js",
+      "SHA256": "C0B583D11330A160BA3717435A3C360196F2F4547A63B4A9EA49A6A8B9E26157",
+      "ExactMatch": true
+    },
+    {
+      "Path": "/assets/index-DO4N3wd2.css",
+      "SHA256": "EAF10E784FAC56E8E5C6B638BBBBC9F992031FAA910381BDAF56D0F60C14ED29",
+      "ExactMatch": true
+    }
+  ],
+  "Scope": [
+    "src/ui/host/MobileWallEditor.tsx",
+    "src/ui/host/mobileWallEditor.css",
+    "src/ui/host/usePropertyDraft.ts",
+    "src/ui/pages/HostWallDesignPage.tsx",
+    "src/ui/pages/HostWallDesignPage.test.tsx"
+  ]
+}

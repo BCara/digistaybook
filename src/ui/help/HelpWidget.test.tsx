@@ -1,5 +1,5 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { HelpWidget } from "./HelpWidget";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { HelpBarButton, HelpWidget } from "./HelpWidget";
 import { recentHelp } from "./helpApi";
 const call = vi.hoisted(() => vi.fn());
 vi.mock("./helpApi", async original => ({ ...await original<typeof import("./helpApi")>(), callHelp: call }));
@@ -17,6 +17,25 @@ it("answers suggestions, preserves chat on close and restores launcher focus", a
   expect(screen.getByRole("button", { name: "Questions? Ask us" })).toHaveFocus();
   fireEvent.click(screen.getByRole("button", { name: "Questions? Ask us" }));
   expect(screen.getByText("Guests use their browser.")).toBeInTheDocument();
+});
+it("opens from an action bar's ? and returns focus to it", () => {
+  render(<><HelpWidget /><footer><HelpBarButton /></footer></>);
+  const bar = screen.getAllByRole("button", { name: "Questions? Ask us" }).find(b => b.closest("footer"))!;
+  fireEvent.click(bar);
+  expect(screen.getByRole("dialog")).toBeInTheDocument();
+  fireEvent.keyDown(document, { key: "Escape" });
+  expect(bar).toHaveFocus();
+});
+it("keeps the launcher back until the site footer is in view", () => {
+  let seen: (entries: { isIntersecting: boolean }[]) => void = () => {};
+  vi.stubGlobal("IntersectionObserver", class { constructor(cb: typeof seen) { seen = cb; } observe() {} disconnect() {} });
+  const { container } = render(<><footer className="site-footer" /><HelpWidget /></>);
+  const aside = container.querySelector(".ds-help")!;
+  act(() => seen([{ isIntersecting: false }]));
+  expect(aside).toHaveClass("ds-help-waiting");
+  act(() => seen([{ isIntersecting: true }]));
+  expect(aside).not.toHaveClass("ds-help-waiting");
+  vi.unstubAllGlobals();
 });
 it("restores failed questions so retry does not duplicate the user turn", async () => {
   call.mockRejectedValueOnce(new Error("Our helper is busy."));

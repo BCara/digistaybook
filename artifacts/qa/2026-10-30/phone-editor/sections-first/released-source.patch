@@ -1,0 +1,270 @@
+diff --git a/src/ui/host/MobileWallEditor.tsx b/src/ui/host/MobileWallEditor.tsx
+index c7bdc0a..c9abe25 100644
+--- a/src/ui/host/MobileWallEditor.tsx
++++ b/src/ui/host/MobileWallEditor.tsx
+@@ -7,6 +7,7 @@ import {
+ } from "../../domain/propertyProfile";
+ import { emptyStayAgainLink, stayAgainLimits, stayAgainProblems, wallStayAgainLinks } from "../../domain/stayAgain";
+ import { isPostMvpFeatureEnabled } from "../../domain/featureFlags";
++import { wallColourName, wallTheme } from "../../domain/wallTheme";
+ import { PropertyShell } from "./PropertyShell";
+ import { WallPreview } from "./WallPreview";
+ import { WallThemePicker } from "./WallThemePicker";
+@@ -19,9 +20,10 @@ import { removePropertyPhoto, uploadPropertyPhoto, type HostProperty } from "./p
+ import type { PropertyDraft } from "./usePropertyDraft";
+ import "./mobileWallEditor.css";
+ 
+-type Section = "property" | "welcome" | "essentials" | "notes" | "links" | "style";
++type Section = "property" | "portrait" | "welcome" | "essentials" | "notes" | "links" | "style";
++type SectionRow = { id: Section; title?: string; detail: string; state: "done" | "todo" | "off" | "optional"; optional?: boolean };
+ const titles: Record<Section, string> = {
+-  property: "Property details", welcome: "Welcome & hosts",
++  property: "Property details", portrait: "Your photo", welcome: "Welcome & hosts",
+   essentials: "Wi-Fi & essentials", notes: "More from your hosts", links: "Your links", style: "Look & feel",
+ };
+ 
+@@ -32,9 +34,10 @@ function EditSection({ title, action, onEdit, children }: { title: string; actio
+   </section>;
+ }
+ 
+-/** A phone opens on the wall. Each labelled action edits and saves one focused form. */
++/** Manage opens on the sections checklist; the wall and guest preview remain one tap away. */
+ export function MobileWallEditor({ property, draft, onEditingChange }: { property: HostProperty; draft: PropertyDraft; onEditingChange: (editing: boolean) => void }) {
+-  const [mode, setMode] = useState<"wall" | "sections" | "preview">("wall");
++  const [mode, setMode] = useState<"wall" | "sections" | "preview">("sections");
++  const previewFrom = useRef<"wall" | "sections">("sections");
+   const [editing, setEditing] = useState<Section | null>(null);
+   const [notice, setNotice] = useState("");
+   const opener = useRef<HTMLElement | null>(null);
+@@ -54,24 +57,26 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
+     observer?.observe(footer);
+     return () => observer?.disconnect();
+   }, []);
+-  const sections: { id: Section; detail: string }[] = [
+-    { id: "property", detail: [draft.name, profile.location].filter(Boolean).join(" · ") },
+-    { id: "welcome", detail: profile.hosts || "Your welcome, names and optional host photo" },
+-    { id: "essentials", detail: profile.factsOff ? "Hidden from the wall" : profile.facts.map(f => f.term).filter(Boolean).join(", ") || "Wi-Fi, check-out, parking" },
+-    { id: "notes", detail: `${writtenHostNotes(profile).length} notes · Optional` },
+-    ...(linksEnabled ? [{ id: "links" as const, detail: links.length ? links.map(link => link.label).join(" · ") : "Book direct, mailing list or another useful link" }] : []),
+-    { id: "style", detail: "Theme and colours · Optional" },
++  const sections: SectionRow[] = [
++    { id: "property", detail: [draft.name, profile.location].filter(Boolean).join(" · ") || "Name, address and optional cover photo", state: draft.name.trim() && profile.location.trim() ? "done" : "todo" },
++    { id: "portrait", detail: profile.hostPhoto ? "Your host photo is added" : "Add a photo so guests know who you are", state: profile.hostPhoto ? "done" : "optional", optional: true },
++    { id: "welcome", title: "Welcome note", detail: profile.stayNoteOff ? "Hidden from the wall" : profile.stayWelcome.trim() || "Say hello to guests who have just arrived", state: profile.stayNoteOff ? "off" : profile.stayWelcome.trim() ? "done" : "todo" },
++    { id: "essentials", title: "Wi-Fi and essentials", detail: profile.factsOff ? "Hidden from the wall" : profile.facts.map(f => f.term).filter(Boolean).join(", ") || "Wi-Fi, check-out, parking", state: profile.factsOff ? "off" : profile.facts.some(f => f.term.trim() && f.detail.trim()) ? "done" : "todo" },
++    { id: "notes", title: "More notes", detail: writtenHostNotes(profile).length ? `${writtenHostNotes(profile).length} notes from your hosts` : "Anything else you want guests to know", state: writtenHostNotes(profile).length ? "done" : "optional", optional: true },
++    ...(linksEnabled ? [{ id: "links" as const, detail: links.length ? links.map(link => link.label).join(" · ") : "Book direct, mailing list or another useful link", state: links.length ? "done" as const : "optional" as const, optional: true }] : []),
++    { id: "style", detail: `${wallTheme(profile.theme).name}, ${wallColourName(profile.theme, profile.colour)}`, state: "optional", optional: true },
+   ];
+   return <PropertyShell property={property} current="design" name={draft.name} profile={profile} className="phone-wall-page">
+-    <header className="phone-wall-heading">
++    <header className="phone-wall-heading" hidden={mode === "sections"}>
+       <div><h2>{mode === "preview" ? "Guest preview" : mode === "sections" ? "Your sections" : "Guest wall"}</h2>
+         <p className="phone-wall-status" role="status">{draft.dirty ? "You have unsaved changes" : notice || "All changes saved"}</p></div>
+       {mode !== "preview" && <button type="button" className="btn btn-ghost" onClick={() => edit("style")}>Look & feel</button>}
+     </header>
+ 
+     {mode === "sections" ? <nav aria-label="Guest wall sections" className="phone-wall-sections">
+-      {sections.map(section => <button key={section.id} type="button" onClick={() => edit(section.id)}>
+-        <span><b>{titles[section.id]}</b><small>{section.detail}</small></span><span aria-hidden="true">›</span>
++      {sections.map((section, index) => <button key={section.id} type="button" data-state={section.state} onClick={() => edit(section.id)}>
++        <span className="phone-section-mark" role="img" aria-label={section.state === "done" ? "Complete" : section.state === "todo" ? "Needs details" : section.state === "off" ? "Hidden" : "Optional"}>{section.state === "done" ? "✓" : section.state === "off" ? "−" : index + 1}</span>
++        <span className="phone-section-words"><b>{section.title || titles[section.id]}{section.optional && <span className="phone-section-optional"> · optional</span>}</b><small>{section.detail}</small></span><span className="phone-section-chevron" aria-hidden="true">›</span>
+       </button>)}
+     </nav> : mode === "preview" ? <section className="phone-wall-guest" aria-label="Guest preview">
+       <WallPreview name={draft.name} profile={profile} counts={draft.counts} view="stay" slug={property.slug} stayToken={property.stayToken} propertyId={property.id} />
+@@ -105,10 +110,16 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
+     </div>}
+ 
+     <footer className="phone-wall-dock" ref={dock}>
++      {mode === "sections" && <p className="phone-wall-status" role="status">{draft.dirty ? "You have unsaved changes" : notice || "Everything here is saved."}</p>}
+       {draft.dirty && <button type="button" className="btn btn-primary" disabled={draft.saving} onClick={() => void draft.save()}>{draft.saving ? "Saving…" : "Save pending changes"}</button>}
+       {draft.problems.failure && <p className="form-feedback" role="alert">{draft.problems.failure}</p>}
+-      <div><button type="button" className="btn btn-secondary" onClick={() => setMode(mode === "wall" ? "sections" : "wall")}>{mode === "wall" ? "Sections" : mode === "preview" ? "Back to editor" : "See your wall"}</button>
+-        {mode !== "preview" && <button type="button" className="btn btn-primary" onClick={() => setMode("preview")}>View as guest</button>}</div>
++      <div>{mode === "sections" ? <>
++        <button type="button" className="btn btn-secondary" onClick={() => { previewFrom.current = "sections"; setMode("preview"); }}>See guest view</button>
++        <button type="button" className="btn btn-primary" onClick={() => setMode("wall")}>Edit the wall</button>
++      </> : <>
++        <button type="button" className="btn btn-secondary" onClick={() => setMode(mode === "wall" ? "sections" : previewFrom.current)}>{mode === "wall" ? "Sections" : previewFrom.current === "sections" ? "Back to sections" : "Back to editor"}</button>
++        {mode !== "preview" && <button type="button" className="btn btn-primary" onClick={() => { previewFrom.current = "wall"; setMode("preview"); }}>View as guest</button>}
++      </>}</div>
+     </footer>
+     {editing && <SectionForm key={editing} section={editing} property={property} draft={draft} onClose={close} onSaved={() => { setNotice("Saved · Your guest wall is up to date"); close(); }} />}
+   </PropertyShell>;
+@@ -208,13 +219,13 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section:
+           {text("location", "Address", profileLimits.locationMax)}<p className="field-hint">Shown underneath your property name.</p>
+           {photo("cover", "Cover photo")}
+         </>}
++        {section === "portrait" && photo("hostPhoto", "Host photo (optional)")}
+         {section === "welcome" && <>
+           {text("stayHeading", "Welcome heading", profileLimits.stayHeadingMax)}
+           {text("hosts", "Your names", profileLimits.hostsMax)}
+           {text("stayWelcome", "Welcome message", profileLimits.stayWelcomeMax, true)}
+           {text("stayTip", "A little tip (optional)", profileLimits.stayTipMax, true)}
+           <label className="phone-section-check"><input type="checkbox" checked={!profile.stayNoteOff} disabled={busy} onChange={e => set("stayNoteOff", !e.target.checked)} />Show the welcome note</label>
+-          {photo("hostPhoto", "Host photo (optional)")}
+         </>}
+         {section === "essentials" && <>
+           <p className="field-hint">Add the details guests need during their stay.</p>
+diff --git a/src/ui/host/mobileWallEditor.css b/src/ui/host/mobileWallEditor.css
+index bfb8df6..6d45663 100644
+--- a/src/ui/host/mobileWallEditor.css
++++ b/src/ui/host/mobileWallEditor.css
+@@ -1,4 +1,5 @@
+-/* Preview-led phone editor. The guest wall keeps its theme; controls use the host app's chrome. */
++/* Checklist first on a phone; the wall and its focused section forms share the saved profile. */
++.phone-wall-heading[hidden] { display: none; }
+ .phone-wall-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 18px 0; }
+ .phone-wall-heading h2 { margin: 0; font-family: var(--font-display); font-size: 1.65rem; }
+ .phone-wall-status { font-size: .8125rem; color: var(--text-muted); margin: 6px 0 0; }
+@@ -26,10 +27,23 @@
+ .phone-wall-summary > p:first-child { margin-top: 0; }
+ .phone-wall-summary .stay-again { margin: 0; }
+ .phone-wall-summary .stay-again .stay-section-title { display: none; }
+-.phone-wall-sections { display: grid; padding-bottom: 20px; }
+-.phone-wall-sections > button { display: flex; width: 100%; text-align: left; justify-content: space-between; border: 0; border-bottom: 1px solid var(--rule); background: transparent; color: var(--text); border-radius: 0; padding: 18px 8px; gap: 16px; min-height: 78px; }
+-.phone-wall-sections b { display: block; font-weight: 600; }
+-.phone-wall-sections small { display: block; font-size: .8125rem; color: var(--text-muted); margin-top: 4px; overflow-wrap: anywhere; }
++.phone-wall-sections { display: grid; grid-template-columns: minmax(0, 1fr); margin: 4px 0 20px; border: 1px solid var(--rule); border-radius: 16px; overflow: hidden; background: var(--surface-raised); }
++.phone-wall-sections > button { display: flex; width: 100%; min-width: 0; box-sizing: border-box; text-align: left; align-items: center; border: 0; background: transparent; color: var(--text); border-radius: 0; padding: 12px 14px; gap: 13px; min-height: 72px; }
++.phone-wall-sections > button + button { border-top: 1px solid var(--rule); }
++.phone-wall-sections > button:hover { background: var(--bg-alt); }
++.phone-wall-sections > button:focus-visible { outline-offset: -3px; }
++.phone-section-mark { display: grid; place-content: center; flex: none; width: 32px; height: 32px; box-sizing: border-box; border-radius: 50%; font-size: 1rem; font-weight: 600; }
++.phone-wall-sections [data-state="done"] .phone-section-mark { background: var(--sage-050); color: var(--sage-700); }
++.phone-wall-sections [data-state="todo"] { background: color-mix(in srgb, var(--accent-soft) 55%, transparent); }
++.phone-wall-sections [data-state="todo"] .phone-section-mark { border: 2px solid var(--accent); color: var(--accent-strong); }
++.phone-wall-sections [data-state="todo"] small { color: var(--accent-strong); }
++.phone-wall-sections [data-state="optional"] .phone-section-mark { border: 2px dashed var(--rule-strong); color: var(--text-muted); }
++.phone-wall-sections [data-state="off"] .phone-section-mark { background: var(--bg-alt); color: var(--text-muted); }
++.phone-section-words { flex: 1; min-width: 0; }
++.phone-section-optional { font-weight: 400; color: var(--text-muted); }
++.phone-section-chevron { flex: none; color: var(--text-muted); font-size: 1.5rem; }
++.phone-wall-sections b { display: block; font-size: 1rem; font-weight: 600; }
++.phone-wall-sections small { display: block; font-size: .875rem; font-weight: 400; color: var(--text-muted); margin-top: 4px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+ .phone-wall-dock { position: fixed; bottom: 0; left: 0; right: 0; z-index: 16; display: grid; gap: 8px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--rule); background: var(--bg); }
+ .phone-wall-dock > div { display: flex; gap: 10px; }
+ .phone-wall-dock .btn { flex: 1; min-height: 48px; }
+diff --git a/src/ui/pages/HostWallDesignPage.test.tsx b/src/ui/pages/HostWallDesignPage.test.tsx
+index 0eed4d3..030dab8 100644
+--- a/src/ui/pages/HostWallDesignPage.test.tsx
++++ b/src/ui/pages/HostWallDesignPage.test.tsx
+@@ -152,9 +152,51 @@ describe("switching the phone editor between Edit and Preview", () => {
+   });
+   afterEach(() => vi.unstubAllGlobals());
+ 
+-  it("opens on the wall and saves a focused section once", async () => {
++  async function editWall() {
++    fireEvent.click(await screen.findByRole("button", { name: "Edit the wall" }));
++  }
++
++  it("opens Manage on the checklist and returns there after section editing or guest preview", async () => {
++    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
++    renderPage();
++    const sections = within(await screen.findByRole("navigation", { name: "Guest wall sections" }));
++    expect(screen.queryByRole("button", { name: "Edit details" })).not.toBeInTheDocument();
++    expect(sections.getByRole("button", { name: /Property details/ })).toHaveAttribute("data-state", "done");
++    expect(sections.getByRole("button", { name: /Your photo/ })).toHaveAttribute("data-state", "optional");
++    expect(sections.queryByRole("button", { name: /^Cover photo/ })).not.toBeInTheDocument();
++    expect(sections.getByRole("button", { name: /Your links/ })).toBeInTheDocument();
++    fireEvent.click(sections.getByRole("button", { name: /Your photo/ }));
++    const photoForm = within(screen.getByRole("dialog", { name: "Your photo" }));
++    expect(photoForm.getByLabelText("Host photo (optional)")).toBeInTheDocument();
++    expect(photoForm.queryByLabelText("Welcome message")).not.toBeInTheDocument();
++    fireEvent.click(photoForm.getByRole("button", { name: "Cancel" }));
++    fireEvent.click(sections.getByRole("button", { name: /Welcome note/ }));
++    expect(screen.getByRole("dialog", { name: "Welcome & hosts" })).toBeVisible();
++    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
++    fireEvent.click(screen.getByRole("button", { name: "See guest view" }));
++    expect(screen.getByRole("region", { name: "Guest preview" })).toBeVisible();
++    fireEvent.click(screen.getByRole("button", { name: "Back to sections" }));
++    expect(screen.getByRole("navigation", { name: "Guest wall sections" })).toBeVisible();
++    expect(savePropertyProfile).not.toHaveBeenCalled();
++  });
++
++  it("saves from the checklist without switching to the wall and updates the section status", async () => {
++    renderPage();
++    const sections = within(await screen.findByRole("navigation", { name: "Guest wall sections" }));
++    expect(sections.getByRole("button", { name: /Welcome note/ })).toHaveAttribute("data-state", "todo");
++    fireEvent.click(sections.getByRole("button", { name: /Welcome note/ }));
++    fireEvent.change(screen.getByLabelText("Welcome message"), { target: { value: "Welcome to the cottage." } });
++    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
++    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
++    expect(within(screen.getByRole("navigation", { name: "Guest wall sections" })).getByRole("button", { name: /Welcome note/ })).toHaveAttribute("data-state", "done");
++    expect(screen.queryByRole("button", { name: "Edit details" })).not.toBeInTheDocument();
++    expect(savePropertyProfile).toHaveBeenCalledTimes(1);
++  });
++
++  it("saves a focused wall section once", async () => {
+     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
+     renderPage();
++    await editWall();
+     fireEvent.click(await screen.findByRole("button", { name: "Edit details" }));
+     const form = within(screen.getByRole("dialog", { name: "Property details" }));
+     fireEvent.change(form.getByLabelText("Property name"), { target: { value: "Our beach cottage" } });
+@@ -177,6 +219,7 @@ describe("switching the phone editor between Edit and Preview", () => {
+   it("cancels a section without changing the wall or writing anything", async () => {
+     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
+     renderPage();
++    await editWall();
+     fireEvent.click(await screen.findByRole("button", { name: "Edit welcome" }));
+     const form = within(screen.getByRole("dialog", { name: "Welcome & hosts" }));
+     fireEvent.change(form.getByLabelText("Welcome message"), { target: { value: "Discard this change" } });
+@@ -189,6 +232,7 @@ describe("switching the phone editor between Edit and Preview", () => {
+ 
+   it("validates links, saves booking and mailing-list destinations, and previews both", async () => {
+     renderPage();
++    await editWall();
+     fireEvent.click(await screen.findByRole("button", { name: "Add links" }));
+     const form = within(screen.getByRole("dialog", { name: "Your links" }));
+     fireEvent.click(form.getByRole("button", { name: "+ Book direct" }));
+@@ -214,6 +258,7 @@ describe("switching the phone editor between Edit and Preview", () => {
+   it("keeps failed saves open with the entered links ready to retry", async () => {
+     savePropertyProfile.mockResolvedValueOnce({ status: "error", message: "Connection lost. Try again." });
+     renderPage();
++    await editWall();
+     fireEvent.click(await screen.findByRole("button", { name: "Add links" }));
+     const form = within(screen.getByRole("dialog", { name: "Your links" }));
+     fireEvent.click(form.getByRole("button", { name: "+ Book direct" }));
+@@ -228,6 +273,7 @@ describe("switching the phone editor between Edit and Preview", () => {
+   it("opens a focused form from Sections and saves the look without a second save", async () => {
+     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
+     renderPage();
++    await editWall();
+     fireEvent.click(await screen.findByRole("button", { name: "Sections" }));
+     const sections = within(screen.getByRole("navigation", { name: "Guest wall sections" }));
+     expect(sections.getByRole("button", { name: /Your links/ })).toBeInTheDocument();
+@@ -242,6 +288,7 @@ describe("switching the phone editor between Edit and Preview", () => {
+   });
+   it("uploads a selected cover only on save and retains it after the form closes", async () => {
+     renderPage();
++    await editWall();
+     fireEvent.click(await screen.findByRole("button", { name: "Edit details" }));
+     const file = new File(["photo"], "cottage.jpg", { type: "image/jpeg" });
+     fireEvent.change(screen.getByLabelText("Cover photo", { selector: "input" }), { target: { files: [file] } });
+@@ -260,6 +307,7 @@ describe("switching the phone editor between Edit and Preview", () => {
+   it("can retry a save after an unexpected connection rejection", async () => {
+     savePropertyProfile.mockRejectedValueOnce(new Error("network disconnected"));
+     renderPage();
++    await editWall();
+     fireEvent.click(await screen.findByRole("button", { name: "Edit welcome" }));
+     fireEvent.change(screen.getByLabelText("Welcome message"), { target: { value: "The beach is a short walk away." } });
+     fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+@@ -286,6 +334,7 @@ describe("switching the phone editor between Edit and Preview", () => {
+ 
+   it("returns to the desktop canvas when resized from the phone editor", async () => {
+     renderPage();
++    await editWall();
+     await screen.findByRole("button", { name: "Edit details" });
+     fireEvent.click(screen.getByRole("button", { name: "View as guest" }));
+     act(() => resize(1440));
+@@ -293,7 +342,7 @@ describe("switching the phone editor between Edit and Preview", () => {
+     expect(screen.getByRole("complementary", { name: "This wall on a phone" })).toBeVisible();
+     expect(document.querySelector(".phone-wall-dock")).not.toBeInTheDocument();
+     act(() => resize(393));
+-    expect(screen.getByRole("button", { name: "Edit details" })).toBeVisible();
++    expect(screen.getByRole("navigation", { name: "Guest wall sections" })).toBeVisible();
+     expect(screen.queryByRole("form", { name: "Guest wall" })).not.toBeInTheDocument();
+   });
+ });

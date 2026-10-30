@@ -1,0 +1,13 @@
+
+> digistaybook@0.1.0 test
+> vitest run --exclude "tests/**/*.rules.test.ts" src/ui/pages/HostWallDesignPage.test.tsx
+
+
+ RUN  v4.1.10 C:/Users/clbbe/.codex/worktrees/phone-editor-release/DigiStayBook
+
+
+ Test Files  1 passed (1)
+      Tests  61 passed (61)
+   Start at  17:59:15
+   Duration  8.47s (transform 505ms, setup 314ms, import 593ms, tests 5.51s, environment 1.72s)
+

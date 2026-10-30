@@ -150,6 +150,8 @@ export type PropertyDraft = {
    * nothing when the settings window's own button did.
    */
   save: (event?: FormEvent<HTMLFormElement>) => Promise<void>;
+  /** Commit a focused section's local form without first changing the wall draft. */
+  saveValues: (values: { name: string; profile: PropertyProfile }) => Promise<boolean>;
 };
 
 export function usePropertyDraft(propertyId: string): PropertyDraft {
@@ -232,52 +234,71 @@ export function usePropertyDraft(propertyId: string): PropertyDraft {
 
   async function save(event?: FormEvent<HTMLFormElement>) {
     event?.preventDefault();
-    if (saving || !property) return;
+    await saveValues({ name, profile: draft });
+  }
+
+  async function saveValues(values: { name: string; profile: PropertyProfile }): Promise<boolean> {
+    if (saving || !property) return false;
+    const name = values.name;
+    const draft = values.profile;
     setSaved(false);
 
     const identity = name === property.name ? [] : validatePropertyName(name);
     const profileProblems = validateProfile(draft);
     setProblems({ identity, profile: profileProblems, failure: null });
-    if (identity.length > 0 || profileProblems.length > 0) return;
+    if (identity.length > 0 || profileProblems.length > 0) return false;
 
     setSaving(true);
-    let next = property;
+    // Photos are persisted separately. A focused form can finish its upload
+    // and save its text in the same turn, before React renders the new photo.
+    let next = { ...property, profile: {
+      ...property.profile, cover: draft.cover, hostPhoto: draft.hostPhoto,
+      avatar: draft.avatar, hostNotes: mergeNotePhotos(property.profile, draft),
+    } };
 
-    if (name !== property.name) {
-      const outcome = await savePropertyName(property.id, name);
-      if (outcome.status === "error") {
-        setSaving(false);
-        setProblems({ ...NO_PROBLEMS, failure: outcome.message });
-        return;
+    try {
+      if (name !== property.name) {
+        const outcome = await savePropertyName(property.id, name);
+        if (outcome.status === "error") {
+          setSaving(false);
+          setProblems({ ...NO_PROBLEMS, failure: outcome.message });
+          return false;
+        }
+        next = { ...next, name: outcome.value.name };
+        setName(outcome.value.name);
       }
-      next = { ...next, name: outcome.value.name };
-      setName(outcome.value.name);
-    }
 
-    if (!sameProfileText(draft, property.profile)) {
-      const outcome = await savePropertyProfile(property.id, draft);
-      if (outcome.status === "error") {
-        setSaving(false);
-        // A rename that already landed is kept, so the page does not report a
-        // change it made as still pending.
-        setLoad({ status: "ready", property: next });
-        setProblems({ ...NO_PROBLEMS, failure: outcome.message });
-        return;
+      if (!sameProfileText(draft, property.profile)) {
+        const outcome = await savePropertyProfile(property.id, draft);
+        if (outcome.status === "error") {
+          setSaving(false);
+          // A rename that already landed is kept, so the page does not report a
+          // change it made as still pending.
+          setLoad({ status: "ready", property: next });
+          setProblems({ ...NO_PROBLEMS, failure: outcome.message });
+          return false;
+        }
+        // What comes back is what was written: trimmed, with blank rows dropped.
+        const stored = {
+          ...outcome.value,
+          cover: draft.cover,
+          hostPhoto: draft.hostPhoto
+        };
+        next = { ...next, profile: stored };
+        setDraft(stored);
       }
-      // What comes back is what was written: trimmed, with blank rows dropped.
-      const stored = {
-        ...outcome.value,
-        cover: draft.cover,
-        hostPhoto: draft.hostPhoto
-      };
-      next = { ...next, profile: stored };
-      setDraft(stored);
-    }
 
-    setSaving(false);
-    setLoad({ status: "ready", property: next });
-    setProblems(NO_PROBLEMS);
-    setSaved(true);
+      setSaving(false);
+      setLoad({ status: "ready", property: next });
+      setProblems(NO_PROBLEMS);
+      setSaved(true);
+      return true;
+    } catch {
+      setSaving(false);
+      setLoad({ status: "ready", property: next });
+      setProblems({ ...NO_PROBLEMS, failure: "Your changes could not be saved. Check your connection and try again." });
+      return false;
+    }
   }
 
   return {
@@ -294,6 +315,7 @@ export function usePropertyDraft(propertyId: string): PropertyDraft {
       setName(value);
     },
     setProfile,
-    save
+    save,
+    saveValues
   };
 }

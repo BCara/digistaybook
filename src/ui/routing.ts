@@ -128,9 +128,9 @@ export function useLinkNavigation(location: AppLocation): void {
     const previous = settled.current;
     settled.current = here;
 
-    // These are two views of the same mounted editor. Keep the property's
-    // navigation in place when switching, including with Back and Forward.
-    const wallEditor = /^\/host\/property\/([^/]+)(?:\/public)?$/;
+    // Moving within the same mounted editor (a jump to one of its parts)
+    // keeps the property's navigation in place, including with Back and Forward.
+    const wallEditor = /^\/host\/property\/([^/]+)$/;
     const previousProperty = wallEditor.exec(previous)?.[1];
     const currentProperty = wallEditor.exec(here)?.[1];
     const sameEditor = previousProperty !== undefined && previousProperty === currentProperty;

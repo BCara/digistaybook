@@ -1,0 +1,1126 @@
+diff --git a/src/domain/propertyProfile.test.ts b/src/domain/propertyProfile.test.ts
+index 35242ff..441f150 100644
+--- a/src/domain/propertyProfile.test.ts
++++ b/src/domain/propertyProfile.test.ts
+@@ -33,6 +33,13 @@ const photo = {
+ };
+ 
+ describe("reading a stored profile", () => {
++  it("persists only recognised section review choices, separately from whether fields are filled", () => {
++    const stored = normalizeProfile({ ...emptyProfile(), reviewedSections: ["welcome", "notes", "style"] });
++    expect(readProfile(stored).reviewedSections).toEqual(["welcome", "notes", "style"]);
++    expect(stored.stayWelcome).toBe("");
++    expect(readProfile({ reviewedSections: ["style", "style", "billing", 1, "links"] }).reviewedSections).toEqual(["links", "style"]);
++    expect(sameProfileText(emptyProfile(), stored)).toBe(false);
++  });
+   it("returns an empty profile for a property that has never been set up", () => {
+     expect(readProfile(undefined)).toEqual(emptyProfile());
+     expect(readProfile("not a map")).toEqual(emptyProfile());
+diff --git a/src/domain/propertyProfile.ts b/src/domain/propertyProfile.ts
+index fea4d1a..b48c274 100644
+--- a/src/domain/propertyProfile.ts
++++ b/src/domain/propertyProfile.ts
+@@ -16,6 +16,7 @@
+ 
+ import { defaultWallTheme, defaultWallColour, readWallTheme, readWallColour, type WallThemeId, type WallColourId } from "./wallTheme";
+ import { normalizeStayAgainLinks, stayAgainLimits, stayAgainProblems, type StayAgainLink } from "./stayAgain";
++import { readReviewedSections, type SetupSection } from "./setupSections";
+ 
+ /** One line of house guidance: what it is, the answer, and the detail. */
+ export type HouseFact = { term: string; detail: string; note: string };
+@@ -193,6 +194,8 @@ export type PropertyProfile = {
+    * `stayAgain.ts`.
+    */
+   stayAgainLinks: StayAgainLink[];
++  /** Owner-only review choices, excluded from the guest wall projection. */
++  reviewedSections: SetupSection[];
+   guestPrompt: string;
+   /** Public. The photograph at the top of both walls. */
+   cover: PropertyPhoto | null;
+@@ -264,6 +267,7 @@ export const emptyProfile = (): PropertyProfile => ({
+   facts: [],
+   factsOff: false,
+   stayAgainLinks: [],
++  reviewedSections: [],
+   guestPrompt: "",
+   cover: null,
+   avatar: null,
+@@ -394,6 +398,7 @@ export function readProfile(value: unknown): PropertyProfile {
+         })
+       : [],
+     guestPrompt: text(data.guestPrompt, 240),
++    reviewedSections: readReviewedSections(data.reviewedSections),
+     cover: readPhoto(data.cover),
+     avatar: readPhoto(data.avatar),
+     hostPhoto: readPhoto(data.hostPhoto)
+@@ -463,6 +468,7 @@ export function normalizeProfile(profile: PropertyProfile): PropertyProfile {
+     factsOff: profile.factsOff,
+     stayAgainLinks: normalizeStayAgainLinks(profile.stayAgainLinks),
+     guestPrompt: profile.guestPrompt.trim().slice(0, 240),
++    reviewedSections: readReviewedSections(profile.reviewedSections),
+     cover: profile.cover,
+     avatar: profile.avatar,
+     hostPhoto: profile.hostPhoto
+diff --git a/src/domain/publicWall.test.ts b/src/domain/publicWall.test.ts
+index e4530d5..7b11f7f 100644
+--- a/src/domain/publicWall.test.ts
++++ b/src/domain/publicWall.test.ts
+@@ -7,7 +7,7 @@ describe("server public wall projection", () => {
+     expect(publicProperty({ profile: { hostPhoto: { url: "javascript:alert(1)" } } }).hostPhoto).toBeNull();
+   });
+   it("never forwards billing, house secrets, consent or moderation internals", () => {
+-    expect(publicProperty({ name: "Cottage", billing: { secret: "billing" }, profile: { welcome: "Welcome", facts: [{ detail: "wifi-password" }] } }))
++    expect(publicProperty({ name: "Cottage", billing: { secret: "billing" }, profile: { welcome: "Welcome", reviewedSections: ["welcome"], facts: [{ detail: "wifi-password" }] } }))
+       .toEqual({ name: "Cottage", location: "", welcome: "Welcome", hosts: "", hostPhoto: null, hostNotes: [], theme: "", colour: "", cover: null, guestPrompt: "", houseInformation: null });
+     expect(publicPost("p1", { message: "Hello", sessionId: "secret", consent: {}, hold: {}, photo: { url: "private" } }))
+       .toEqual({ id: "p1", message: "Hello", displayName: "", createdAt: null, photoCount: 0 });
+diff --git a/src/domain/setupSections.ts b/src/domain/setupSections.ts
+new file mode 100644
+index 0000000..2e47617
+--- /dev/null
++++ b/src/domain/setupSections.ts
+@@ -0,0 +1,7 @@
++/** Owner-only checklist state. A saved blank section is still a reviewed section. */
++export const setupSectionIds = ["property", "welcome", "essentials", "notes", "links", "style"] as const;
++export type SetupSection = typeof setupSectionIds[number];
++
++export function readReviewedSections(value: unknown): SetupSection[] {
++  return Array.isArray(value) ? setupSectionIds.filter(id => value.includes(id)) : [];
++}
+diff --git a/src/ui/host/MobileWallEditor.tsx b/src/ui/host/MobileWallEditor.tsx
+index ad0bdb2..0e889f0 100644
+--- a/src/ui/host/MobileWallEditor.tsx
++++ b/src/ui/host/MobileWallEditor.tsx
+@@ -8,6 +8,7 @@ import {
+ import { emptyStayAgainLink, stayAgainLimits, stayAgainProblems, wallStayAgainLinks } from "../../domain/stayAgain";
+ import { isPostMvpFeatureEnabled } from "../../domain/featureFlags";
+ import { wallColourName, wallTheme } from "../../domain/wallTheme";
++import { setupSectionIds, type SetupSection } from "../../domain/setupSections";
+ import { PropertyShell } from "./PropertyShell";
+ import { WallPreview } from "./WallPreview";
+ import { WallThemePicker } from "./WallThemePicker";
+@@ -20,7 +21,7 @@ import { removePropertyPhoto, uploadPropertyPhoto, type HostProperty } from "./p
+ import type { PropertyDraft } from "./usePropertyDraft";
+ import "./mobileWallEditor.css";
+ 
+-type Section = "property" | "welcome" | "essentials" | "notes" | "links" | "style";
++type Section = SetupSection;
+ type SectionRow = { id: Section; title?: string; detail: string; state: "done" | "todo" | "off" | "optional"; optional?: boolean };
+ const titles: Record<Section, string> = {
+   property: "Property details", welcome: "Welcome & hosts",
+@@ -45,6 +46,12 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
+   const profile = draft.profile;
+   const linksEnabled = isPostMvpFeatureEnabled("directBookingLinks");
+   const links = wallStayAgainLinks(profile.stayAgainLinks);
++  const problems = validateProfile(profile);
++  function reviewedState(section: Section): "done" | "todo" {
++    const invalid = section === "property" ? validatePropertyName(draft.name).length > 0
++      : problems.some(problem => section === "essentials" ? problem.field === "facts" : section === "links" && problem.field === "stayAgainLinks");
++    return !invalid && profile.reviewedSections.includes(section) ? "done" : "todo";
++  }
+   function edit(section: Section) { opener.current = document.activeElement as HTMLElement; setEditing(section); onEditingChange(true); }
+   function close() { setEditing(null); onEditingChange(false); requestAnimationFrame(() => opener.current?.focus()); }
+   useLayoutEffect(() => {
+@@ -58,12 +65,12 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
+     return () => observer?.disconnect();
+   }, []);
+   const sections: SectionRow[] = [
+-    { id: "property", detail: [draft.name, profile.location].filter(Boolean).join(" · ") || "Name, address and optional cover photo", state: draft.name.trim() && profile.location.trim() ? "done" : "todo" },
+-    { id: "welcome", detail: profile.stayNoteOff ? "Welcome hidden · Your names and optional photo" : profile.stayWelcome.trim() || "Your names, welcome note and optional host photo", state: profile.stayNoteOff ? "off" : profile.stayWelcome.trim() ? "done" : "todo" },
+-    { id: "essentials", title: "Wi-Fi and essentials", detail: profile.factsOff ? "Hidden from the wall" : profile.facts.map(f => f.term).filter(Boolean).join(", ") || "Wi-Fi, check-out, parking", state: profile.factsOff ? "off" : profile.facts.some(f => f.term.trim() && f.detail.trim()) ? "done" : "todo" },
+-    { id: "notes", title: "More notes", detail: writtenHostNotes(profile).length ? `${writtenHostNotes(profile).length} notes from your hosts` : "Anything else you want guests to know", state: writtenHostNotes(profile).length ? "done" : "optional", optional: true },
+-    ...(linksEnabled ? [{ id: "links" as const, detail: links.length ? links.map(link => link.label).join(" · ") : "Book direct, mailing list or another useful link", state: links.length ? "done" as const : "optional" as const, optional: true }] : []),
+-    { id: "style", detail: `${wallTheme(profile.theme).name}, ${wallColourName(profile.theme, profile.colour)}`, state: "optional", optional: true },
++    { id: "property", detail: [draft.name, profile.location].filter(Boolean).join(" · ") || "Name, address and optional cover photo", state: reviewedState("property") },
++    { id: "welcome", detail: profile.stayNoteOff ? "Welcome hidden · Your names and optional photo" : profile.stayWelcome.trim() || "Your names, welcome note and optional host photo", state: reviewedState("welcome") },
++    { id: "essentials", title: "Wi-Fi and essentials", detail: profile.factsOff ? "Hidden from the wall" : profile.facts.map(f => f.term).filter(Boolean).join(", ") || "Wi-Fi, check-out, parking", state: reviewedState("essentials") },
++    { id: "notes", title: "More notes", detail: writtenHostNotes(profile).length ? `${writtenHostNotes(profile).length} notes from your hosts` : "Anything else you want guests to know", state: reviewedState("notes"), optional: true },
++    ...(linksEnabled ? [{ id: "links" as const, detail: links.length ? links.map(link => link.label).join(" · ") : "Book direct, mailing list or another useful link", state: reviewedState("links"), optional: true }] : []),
++    { id: "style", detail: `${wallTheme(profile.theme).name}, ${wallColourName(profile.theme, profile.colour)}`, state: reviewedState("style"), optional: true },
+   ];
+   return <PropertyShell property={property} current="design" name={draft.name} profile={profile} className="phone-wall-page">
+     <header className="phone-wall-heading" hidden={mode === "sections"}>
+@@ -72,12 +79,14 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
+       {mode !== "preview" && <button type="button" className="btn btn-ghost" onClick={() => edit("style")}>Look & feel</button>}
+     </header>
+ 
+-    {mode === "sections" ? <nav aria-label="Guest wall sections" className="phone-wall-sections">
++    {mode === "sections" ? <>
++      <p className="phone-wall-review-hint">Open each section and save when you’re happy. Recommended details can be left blank.</p>
++      <nav aria-label="Guest wall sections" className="phone-wall-sections">
+       {sections.map((section, index) => <button key={section.id} type="button" data-state={section.state} onClick={() => edit(section.id)}>
+-        <span className="phone-section-mark" role="img" aria-label={section.state === "done" ? "Complete" : section.state === "todo" ? "Needs details" : section.state === "off" ? "Hidden" : "Optional"}>{section.state === "done" ? "✓" : section.state === "off" ? "−" : index + 1}</span>
++        <span className="phone-section-mark" role="img" aria-label={section.state === "done" ? "Reviewed and saved" : "Not reviewed"}>{section.state === "done" ? "✓" : index + 1}</span>
+         <span className="phone-section-words"><b>{section.title || titles[section.id]}{section.optional && <span className="phone-section-optional"> · optional</span>}</b><small>{section.detail}</small></span><span className="phone-section-chevron" aria-hidden="true">›</span>
+       </button>)}
+-    </nav> : mode === "preview" ? <section className="phone-wall-guest" aria-label="Guest preview">
++    </nav></> : mode === "preview" ? <section className="phone-wall-guest" aria-label="Guest preview">
+       <WallPreview name={draft.name} profile={profile} counts={draft.counts} view="stay" slug={property.slug} stayToken={property.stayToken} propertyId={property.id} />
+     </section> : <div className="phone-wall-surface" data-wall-theme={profile.theme} data-wall-colour={profile.colour}>
+       <section className="phone-wall-section phone-wall-property">
+@@ -186,7 +195,7 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section:
+     setAttempted(true); setFailure(null);
+     if (validatePropertyName(name).length || validateProfile(profile).length) return;
+     inFlight.current = true; setBusy(true);
+-    let next = profile;
++    let next = { ...profile, reviewedSections: setupSectionIds.filter(id => id === section || profile.reviewedSections.includes(id)) };
+     try {
+       for (const slot of ["cover", "hostPhoto"] as const) {
+         const chosen = photos[slot];
+diff --git a/src/ui/host/PropertyDialog.test.tsx b/src/ui/host/PropertyDialog.test.tsx
+index c5fba87..a76fb80 100644
+--- a/src/ui/host/PropertyDialog.test.tsx
++++ b/src/ui/host/PropertyDialog.test.tsx
+@@ -1,5 +1,5 @@
+ import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+-import { emptyProfile, exampleNote } from "../../domain/propertyProfile";
++import { emptyProfile } from "../../domain/propertyProfile";
+ import { AddPropertyDialog } from "./PropertyDialog";
+ import type { HostProperty } from "./propertyStore";
+ 
+@@ -25,344 +25,63 @@ const created: HostProperty = {
+   profile: emptyProfile()
+ };
+ 
+-const photo = (slot: string) => ({
+-  path: `properties/prop-1/media/${slot}-1.jpg`,
+-  url: `https://example.test/${slot}.jpg`,
+-  alt: "",
+-  width: 1500,
+-  height: 660
+-});
+-
+-const onCreated = vi.fn();
+-const onCancel = vi.fn();
+-
+-function renderDialog(takenSlugs: string[] = []) {
+-  return render(
+-    <AddPropertyDialog ownerUid="host-a" takenSlugs={takenSlugs} onCancel={onCancel} onCreated={onCreated} />
+-  );
++const onCreated = vi.fn(), onCancel = vi.fn();
++function renderDialog(ownerUid: string | null = "host-a") {
++  return render(<AddPropertyDialog ownerUid={ownerUid} takenSlugs={[]} onCancel={onCancel} onCreated={onCreated} />);
+ }
+-
+-const next = () => fireEvent.click(screen.getByRole("button", { name: "Next" }));
+-const back = () => fireEvent.click(screen.getByRole("button", { name: "Back" }));
+-const create = () => fireEvent.click(screen.getByRole("button", { name: "Create property" }));
+-
+-const type = (label: string | RegExp, value: string) =>
+-  fireEvent.change(screen.getByLabelText(label), { target: { value } });
+-
+-/** A JPEG small enough to pass the size check; its bytes are never read. */
+-const imageFile = (name = "cottage.jpg", type = "image/jpeg") => new File(["binary"], name, { type });
+-
+-const choosePhoto = (label: string, file = imageFile()) =>
+-  fireEvent.change(screen.getByLabelText(`${label}: choose an image file`), { target: { files: [file] } });
+-
+-/** Put a line the note does not start with on the step, the way a host does. */
+-const include = (label: string) => fireEvent.click(screen.getByRole("button", { name: `+ ${label}` }));
+-
+-/** Walk to the end, answering only what a test cares about. */
+-function walk(name: string, answers: { location?: string; hosts?: string; tip?: string } = {}) {
+-  type("Property name", name);
+-  if (answers.location) type(/Where the property is/, answers.location);
+-  next();
+-  if (answers.tip) {
+-    include("a local recommendation");
+-    type("One local recommendation", answers.tip);
+-  }
+-  if (answers.hosts) {
+-    include("your names");
+-    type("Your names", answers.hosts);
+-  }
+-  next();
+-}
+-
++const enterName = (value: string) => fireEvent.change(screen.getByLabelText("Property name"), { target: { value } });
++const submit = () => fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+ beforeEach(() => {
+-  vi.resetAllMocks();
++  vi.clearAllMocks();
+   createProperty.mockResolvedValue({ status: "ok", value: created });
+-  uploadPropertyPhoto.mockResolvedValue({ status: "ok", value: photo("cover") });
+ });
+ 
+-describe("adding a property", () => {
+-  it("opens over the page as a window, on the property's own questions", () => {
+-    renderDialog();
+-
+-    const dialog = screen.getByRole("dialog", { name: "Add a property" });
+-    expect(dialog).toHaveAttribute("aria-modal", "true");
+-    expect(within(dialog).getByText("Step 1 of 3")).toBeInTheDocument();
+-    expect(within(dialog).getByRole("heading", { name: "The property", level: 3 })).toBeInTheDocument();
+-
+-    // Everything the first step asks, and nothing from the steps after it.
+-    expect(screen.getByLabelText("Property name")).toBeInTheDocument();
+-    expect(screen.getByLabelText(/Where the property is/)).toBeInTheDocument();
+-    expect(screen.getByLabelText("Main photo: choose an image file")).toBeInTheDocument();
+-    expect(screen.getByLabelText("Cover photo: choose an image file")).toBeInTheDocument();
+-    expect(screen.queryByLabelText("Your names")).not.toBeInTheDocument();
+-  });
+-
+-  it("says nothing about the wall address while adding a property", () => {
+-    renderDialog();
+-
+-    expect(screen.queryByRole("textbox", { name: /wall address/i })).not.toBeInTheDocument();
+-    expect(screen.queryByText(/wall address/i)).not.toBeInTheDocument();
+-  });
+-
+-  it("asks what a guest reads on the second step, and the weekly questions on the third", () => {
++describe("name-first property creation", () => {
++  it("asks for just a name, with no wizard, photos or address", () => {
+     renderDialog();
+-
+-    type("Property name", "Seabreeze Cottage");
+-    next();
+-    expect(screen.getByText("Step 2 of 3")).toBeInTheDocument();
+-    // The note's own lines, under the names the property view gives them.
+-    expect(screen.getByLabelText("Arrival heading")).toBeInTheDocument();
+-    // The note arrives empty with an example shown in it, so a host is spared a
+-    // blank sheet without being given words they never wrote.
+-    expect(screen.getByLabelText("Arrival note")).toHaveValue("");
+-    expect(screen.getByLabelText("Arrival note")).toHaveAttribute("placeholder", exampleNote.welcome);
+-    expect(screen.getByLabelText("Arrival heading")).toHaveValue("");
+-    // The rest are offered where they would stand, not laid out empty.
+-    expect(screen.queryByLabelText("One local recommendation")).not.toBeInTheDocument();
+-    expect(screen.queryByLabelText("Your names")).not.toBeInTheDocument();
+-    expect(screen.getByRole("button", { name: "+ a local recommendation" })).toBeInTheDocument();
+-    expect(screen.getByRole("button", { name: "+ your names" })).toBeInTheDocument();
+-
+-    // Nothing the property view does not carry on this wall.
+-    expect(screen.queryByLabelText(/A welcome for the wall/)).not.toBeInTheDocument();
+-    expect(screen.queryByLabelText(/Hosting here since/)).not.toBeInTheDocument();
+-    expect(screen.queryByLabelText(/Your photograph/)).not.toBeInTheDocument();
+-
+-    next();
+-    expect(screen.getByText("Step 3 of 3")).toBeInTheDocument();
+-    expect(screen.getByRole("heading", { name: "House guidance", level: 4 })).toBeInTheDocument();
+-    expect(screen.getByLabelText(/^Your note/)).toBeInTheDocument();
+-    expect(screen.getByRole("button", { name: "Create property" })).toBeInTheDocument();
++    expect(screen.getAllByRole("textbox")).toHaveLength(1);
++    expect(screen.queryByText(/Step 1/)).not.toBeInTheDocument();
+     expect(screen.queryByRole("button", { name: "Next" })).not.toBeInTheDocument();
++    expect(screen.queryByLabelText(/Cover photo/)).not.toBeInTheDocument();
++    expect(screen.getByRole("dialog", { name: "Add a property" })).toHaveAttribute("aria-modal", "true");
+   });
+-
+-  it("writes one property carrying every answer, and the address derived from the name", async () => {
+-    renderDialog();
+-
+-    walk("Seabreeze Cottage", {
+-      location: "Porthleven, Cornwall",
+-      hosts: "Ana & Tom",
+-      tip: "The bakery behind the lighthouse."
+-    });
+-    create();
+-
+-    await waitFor(() => expect(createProperty).toHaveBeenCalledTimes(1));
+-    expect(createProperty).toHaveBeenCalledWith("host-a", {
+-      name: "Seabreeze Cottage",
+-      // The address is generated, so this pins its shape rather than its tail.
+-      slug: expect.stringMatching(/^seabreeze-cottage-[a-z0-9]{4}$/),
+-      profile: expect.objectContaining({
+-        location: "Porthleven, Cornwall",
+-        hosts: "Ana & Tom",
+-        stayTip: "The bakery behind the lighthouse.",
+-        // The example is never stored: a host who typed no note has none.
+-        stayWelcome: ""
+-      })
+-    });
++  it("creates one private property with only its name and empty sections", async () => {
++    renderDialog(); enterName("  Seabreeze Cottage  "); submit();
+     await waitFor(() => expect(onCreated).toHaveBeenCalledWith({ property: created, photoWarning: null }));
+-  });
+-
+-  it("holds the host on the first step until the property has a name", () => {
+-    renderDialog();
+-
+-    type("Property name", "A");
+-    next();
+-
+-    expect(screen.getByText(/at least 2 characters/i)).toBeInTheDocument();
+-    expect(screen.getByText("Step 1 of 3")).toBeInTheDocument();
+-    expect(createProperty).not.toHaveBeenCalled();
+-  });
+-
+-  it("keeps what was typed when a host steps back to change it", () => {
+-    renderDialog();
+-
+-    walk("Seabreeze Cottage", { hosts: "Ana & Tom" });
+-    back();
+-    expect(screen.getByLabelText("Your names")).toHaveValue("Ana & Tom");
+-    back();
+-    expect(screen.getByLabelText("Property name")).toHaveValue("Seabreeze Cottage");
+-  });
+-
+-  it("creates a property from the name alone, leaving the rest for later", async () => {
+-    renderDialog();
+-
+-    walk("Seabreeze Cottage");
+-    create();
+-
+-    await waitFor(() => expect(createProperty).toHaveBeenCalledTimes(1));
++    expect(createProperty).toHaveBeenCalledWith("host-a", { name: "Seabreeze Cottage", slug: expect.stringMatching(/^seabreeze-cottage-[a-z0-9]{4}$/), profile: emptyProfile() });
+     expect(uploadPropertyPhoto).not.toHaveBeenCalled();
+   });
+-
+-  it("creates from the first step with just a name, without walking the rest", async () => {
+-    renderDialog();
+-
+-    type("Property name", "Seabreeze Cottage");
+-    fireEvent.click(screen.getByRole("button", { name: "Create now" }));
+-
+-    await waitFor(() => expect(createProperty).toHaveBeenCalledTimes(1));
+-    expect(screen.queryByRole("button", { name: "Create property" })).not.toBeInTheDocument();
+-  });
+-
+-  it("will not create from the first step without a name", () => {
+-    renderDialog();
+-
+-    fireEvent.click(screen.getByRole("button", { name: "Create now" }));
+-
++  it.each(["", "A"])("refuses the required name %s", value => {
++    renderDialog(); enterName(value); submit();
++    expect(screen.getByRole("alert")).toHaveTextContent(/at least 2 characters/);
+     expect(createProperty).not.toHaveBeenCalled();
+   });
+-
+-  it("refuses a guidance line that would reach a guest as a dangling label", async () => {
+-    renderDialog();
+-
+-    walk("Seabreeze Cottage");
+-    fireEvent.click(screen.getByRole("button", { name: "+ Wi-Fi" }));
+-    create();
+-
+-    expect(screen.getByRole("alert")).toHaveTextContent(/Wi-Fi/);
+-    expect(createProperty).not.toHaveBeenCalled();
+-
+-    // Answering it is enough; the blank rows a form always carries are dropped.
+-    fireEvent.change(screen.getByLabelText("Line 1: answer"), { target: { value: "SEABREEZE-5G" } });
+-    create();
+-
+-    await waitFor(() => expect(createProperty).toHaveBeenCalledTimes(1));
+-    expect(createProperty.mock.calls[0][1].profile.facts).toEqual([
+-      { term: "Wi-Fi", detail: "SEABREEZE-5G", note: "" }
+-    ]);
+-  });
+-
+-  it("uploads every staged photograph only once the property they belong to exists", async () => {
+-    uploadPropertyPhoto
+-      .mockResolvedValueOnce({ status: "ok", value: photo("avatar") })
+-      .mockResolvedValueOnce({ status: "ok", value: photo("cover") })
+-      .mockResolvedValueOnce({ status: "ok", value: photo("hostNote") });
+-    renderDialog();
+-    const main = imageFile("door.jpg");
+-    const cover = imageFile("front.jpg");
+-    const note = imageFile("us.jpg");
+-
+-    type("Property name", "Seabreeze Cottage");
+-    choosePhoto("Main photo", main);
+-    choosePhoto("Cover photo", cover);
+-    next();
+-    next();
+-    choosePhoto("Photograph", note);
+-    // Nothing has left the device yet: the property has no id to store it under.
+-    expect(uploadPropertyPhoto).not.toHaveBeenCalled();
+-
+-    create();
+-
+-    await waitFor(() => expect(uploadPropertyPhoto).toHaveBeenCalledTimes(3));
+-    // The main photo is the property's own small one: the avatar slot.
+-    expect(uploadPropertyPhoto).toHaveBeenNthCalledWith(1, "prop-1", "avatar", main);
+-    expect(uploadPropertyPhoto).toHaveBeenNthCalledWith(2, "prop-1", "cover", cover);
+-    // A note's picture goes to the note's own slot, named for the note rather
+-    // than for a position in a list that moves when one above it is removed.
+-    expect(uploadPropertyPhoto).toHaveBeenNthCalledWith(
+-      3,
+-      "prop-1",
+-      expect.stringMatching(/^hostNote:[a-zA-Z0-9]+$/),
+-      note
+-    );
+-    await waitFor(() =>
+-      expect(onCreated).toHaveBeenCalledWith({
+-        property: {
+-          ...created,
+-          profile: {
+-            ...created.profile,
+-            avatar: photo("avatar"),
+-            hostPhoto: photo("avatar"),
+-            cover: photo("cover"),
+-            // The note was never written into, so it is stored as the picture
+-            // and nothing else — which is what the upload wrote.
+-            hostNotes: [
+-              { id: expect.any(String), message: "", style: "bordered", photo: photo("hostNote") }
+-            ]
+-          }
+-        },
+-        photoWarning: null
+-      })
+-    );
+-  });
+-
+-  it("never asks a host to describe the photograph they chose", () => {
+-    renderDialog();
+-
+-    choosePhoto("Cover photo");
+-
+-    // The description a screen reader is read comes from the slot, so there is
+-    // nothing between choosing a file and moving on.
+-    expect(screen.queryByLabelText(/Describe/i)).not.toBeInTheDocument();
+-    // The file it is holding is named, so a host can see which one they chose.
+-    expect(screen.getByText("cottage.jpg")).toBeInTheDocument();
+-  });
+-
+-  it("refuses a file that is not an image a phone can load", () => {
+-    renderDialog();
+-
+-    choosePhoto("Cover photo", imageFile("floorplan.pdf", "application/pdf"));
+-
+-    expect(screen.getByRole("alert")).toHaveTextContent(/JPEG, PNG or WebP/i);
+-    expect(screen.getAllByText("No photograph yet.")).toHaveLength(2);
+-  });
+-
+-  it("reports a failed write instead of pretending the property exists", async () => {
+-    createProperty.mockResolvedValue({ status: "error", message: "You do not have access to that property." });
+-    renderDialog();
+-
+-    walk("Seabreeze Cottage");
+-    create();
+-
+-    expect(await screen.findByText("You do not have access to that property.")).toBeInTheDocument();
+-    // The window stays open on the answers, so nothing typed is lost.
+-    expect(screen.getByRole("button", { name: "Create property" })).toBeInTheDocument();
+-    expect(onCreated).not.toHaveBeenCalled();
+-  });
+-
+-  it("keeps a property whose photograph failed, and says which one did not upload", async () => {
+-    uploadPropertyPhoto.mockResolvedValue({ status: "error", message: "The database did not respond in time." });
+-    renderDialog();
+-
+-    type("Property name", "Seabreeze Cottage");
+-    choosePhoto("Cover photo");
+-    next();
+-    next();
+-    create();
+-
+-    await waitFor(() =>
+-      expect(onCreated).toHaveBeenCalledWith({
+-        property: created,
+-        photoWarning: "The cover photo did not upload: The database did not respond in time."
+-      })
+-    );
+-  });
+-
+-  it("never reuses an address this host already holds", async () => {
+-    renderDialog(["seabreeze-cottage"]);
+-
+-    walk("Seabreeze Cottage");
+-    create();
+-
+-    await waitFor(() => expect(createProperty).toHaveBeenCalledTimes(1));
+-    expect(createProperty.mock.calls[0][1].slug).not.toBe("seabreeze-cottage");
+-  });
+-
+-  it("writes nothing when it is closed", () => {
+-    renderDialog();
+-
+-    type("Property name", "Seabreeze Cottage");
+-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+-
+-    expect(onCancel).toHaveBeenCalledTimes(1);
+-    expect(createProperty).not.toHaveBeenCalled();
+-  });
+-
+-  it("closes on Escape, the way a window over the page is expected to", () => {
+-    renderDialog();
+-
++  it("keeps the entered name and reuses the same reservation when retrying", async () => {
++    createProperty.mockResolvedValueOnce({ status: "error", message: "Connection lost." });
++    renderDialog(); enterName("Seabreeze Cottage"); submit();
++    expect(await screen.findByText("Connection lost.")).toBeInTheDocument();
++    expect(screen.getByLabelText("Property name")).toHaveValue("Seabreeze Cottage");
++    submit(); await waitFor(() => expect(onCreated).toHaveBeenCalledTimes(1));
++    expect(createProperty.mock.calls[0][1].slug).toBe(createProperty.mock.calls[1][1].slug);
++  });
++  it("prevents duplicate creation and cancellation while the request is pending", async () => {
++    let finish!: (value: unknown) => void;
++    createProperty.mockImplementationOnce(() => new Promise(resolve => { finish = resolve; }));
++    renderDialog(); enterName("Seabreeze Cottage"); submit();
++    fireEvent.submit(screen.getByLabelText("Property name").closest("form")!);
+     fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
+-
+-    expect(onCancel).toHaveBeenCalledTimes(1);
++    expect(createProperty).toHaveBeenCalledTimes(1);
++    expect(onCancel).not.toHaveBeenCalled();
++    finish({ status: "ok", value: created });
++    await waitFor(() => expect(onCreated).toHaveBeenCalledTimes(1));
++  });
++  it("allows cancelling before a property is created", () => {
++    renderDialog(); fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
++    expect(onCancel).toHaveBeenCalledTimes(1); expect(createProperty).not.toHaveBeenCalled();
++  });
++  it("does not create without a host session", () => {
++    renderDialog(null); enterName("Seabreeze Cottage");
++    expect(screen.getByRole("button", { name: "Continue" })).toBeDisabled();
+     expect(createProperty).not.toHaveBeenCalled();
+   });
+-});
++});
+\ No newline at end of file
+diff --git a/src/ui/host/PropertyDialog.tsx b/src/ui/host/PropertyDialog.tsx
+index e9de98d..42a9061 100644
+--- a/src/ui/host/PropertyDialog.tsx
++++ b/src/ui/host/PropertyDialog.tsx
+@@ -2,24 +2,19 @@ import {
+   useEffect,
+   useRef,
+   useState,
+-  type ChangeEvent,
+   type KeyboardEvent,
+   type MouseEvent,
+   type ReactNode
+ } from "react";
+ import { createPortal } from "react-dom";
+-import { generatePropertySlug } from "../../domain/property";
+-import { profileLimits, validatePhotoFile, type PropertyPhoto } from "../../domain/propertyProfile";
+-import { emptyWizardDraft, wizardProfile, type WizardDraft } from "../../domain/propertyWizard";
+-import { PhotoDropTarget, PhotoField } from "./PhotoField";
++import { generatePropertySlug, propertyIdentityLimits, validatePropertyName } from "../../domain/property";
++import { emptyProfile } from "../../domain/propertyProfile";
++import { PhotoField } from "./PhotoField";
+ import { photoCopy, PropertyWizard } from "./PropertyWizard";
+-import { createProperty, uploadPropertyPhoto, type HostProperty } from "./propertyStore";
++import { createProperty, type HostProperty } from "./propertyStore";
+ import {
+-  hostNoteOfSlot,
+-  hostNoteSlot,
+   photoInSlot,
+   withPhotoInSlot,
+-  type PhotoSlot
+ } from "./photoSlots";
+ import type { PropertyDraft } from "./usePropertyDraft";
+ 
+@@ -119,235 +114,46 @@ function PropertyDialogFrame({
+ 
+ /* ------------------------------ Adding one ------------------------------ */
+ 
+-/** A file waiting for a property to exist, and the preview shown meanwhile. */
+-type Staged = { file: File; preview: string };
++export type PropertyWizardResult = { property: HostProperty; photoWarning: string | null };
+ 
+-export type PropertyWizardResult = {
+-  property: HostProperty;
+-  /** Set when the property was created but a photograph did not upload. */
+-  photoWarning: string | null;
+-};
+-
+-type Phase = "editing" | "creating" | "uploading";
+-
+-/**
+- * The order photographs are uploaded in, which is the order they are asked
+- * for. The property's own three are fixed; the notes are however many the Host
+- * has written by the time they press the button, so they are read off the
+- * draft rather than listed here.
+- */
+-const photoSlotsOf = (draft: WizardDraft): PhotoSlot[] => [
+-  "avatar",
+-  "cover",
+-  "hostPhoto",
+-  ...draft.profile.hostNotes.map(hostNoteSlot)
+-];
+-
+-/**
+- * Adding a property.
+- *
+- * Nothing is written until the last step. The property is created in one
+- * write, from the answers, and the photographs are uploaded straight after it:
+- * a file can only be stored against a property that exists, so they are held
+- * on the device until there is somewhere to put them. That is also why a
+- * failed upload comes back as a warning rather than a failure — by then the
+- * property is real, and telling a Host it was not created would be a lie.
+- */
+-export function AddPropertyDialog({
+-  ownerUid,
+-  takenSlugs,
+-  onCancel,
+-  onCreated
+-}: {
++/** Creation asks only for a name. Everything else is reviewed on the sections page. */
++export function AddPropertyDialog({ ownerUid, takenSlugs, onCancel, onCreated }: {
+   ownerUid: string | null;
+-  /** The addresses this Host already holds, so two properties never collide. */
+   takenSlugs: readonly string[];
+   onCancel: () => void;
+   onCreated: (result: PropertyWizardResult) => void;
+ }) {
+-  const [draft, setDraft] = useState<WizardDraft>(emptyWizardDraft);
+-  const [staged, setStaged] = useState<Partial<Record<PhotoSlot, Staged>>>({});
+-  const [refused, setRefused] = useState<Partial<Record<PhotoSlot, string>>>({});
++  const [name, setName] = useState("");
+   const [failure, setFailure] = useState<string | null>(null);
+-  const [phase, setPhase] = useState<Phase>("editing");
+-
+-  const fileInputs = useRef<Partial<Record<PhotoSlot, HTMLInputElement | null>>>({});
+-  const busy = phase !== "editing";
+-
+-  // An object URL is a live handle on the file; releasing it keeps a Host who
+-  // tries several photographs from holding all of them in memory.
+-  useEffect(() => () => {
+-    Object.values(staged).forEach((entry) => entry && URL.revokeObjectURL(entry.preview));
+-  }, [staged]);
+-
+-  function pickFile(slot: PhotoSlot, event: ChangeEvent<HTMLInputElement>) {
+-    const file = event.target.files?.[0];
+-    // Reset the control so choosing the same file twice still fires a change.
+-    event.target.value = "";
+-    if (!file) return;
+-    const rejected = validatePhotoFile(file);
+-    if (rejected) {
+-      setRefused((current) => ({ ...current, [slot]: rejected }));
+-      return;
+-    }
+-    const previous = staged[slot];
+-    if (previous) URL.revokeObjectURL(previous.preview);
+-    setRefused((current) => ({ ...current, [slot]: undefined }));
+-    setStaged((current) => ({ ...current, [slot]: { file, preview: URL.createObjectURL(file) } }));
+-  }
+-
+-  function dropFile(slot: PhotoSlot) {
+-    const previous = staged[slot];
+-    if (previous) URL.revokeObjectURL(previous.preview);
+-    setRefused((current) => ({ ...current, [slot]: undefined }));
+-    setStaged((current) => ({ ...current, [slot]: undefined }));
+-  }
+-
+-  /**
+-   * Upload what was staged, once there is a property to store it against.
+-   * Each photograph is reported on by name: a Host who chose two and lost one
+-   * should be told which, rather than that "a photograph" did not upload.
+-   */
+-  async function uploadStaged(propertyId: string) {
+-    const uploaded: Partial<Record<PhotoSlot, PropertyPhoto>> = {};
+-    const warnings: string[] = [];
+-
+-    const slots = photoSlotsOf(draft);
+-    for (const [position, slot] of slots.entries()) {
+-      const entry = staged[slot];
+-      if (!entry) continue;
+-      const outcome = await uploadPropertyPhoto(propertyId, slot, entry.file);
+-      if (outcome.status === "error") {
+-        // Notes are numbered from one wherever they stand in the list, which
+-        // is what the form beside them calls them.
+-        const note = hostNoteOfSlot(slot) === null ? undefined : position - 2;
+-        warnings.push(`The ${photoCopy(slot, note).label.toLowerCase()} did not upload: ${outcome.message}`);
+-      } else {
+-        uploaded[slot] = outcome.value;
+-      }
+-    }
+-
+-    return { uploaded, warning: warnings.join(" ") || null };
+-  }
+-
++  const [busy, setBusy] = useState(false);
++  const inFlight = useRef(false);
++  // Retrying an interrupted response reuses the server's idempotent reservation.
++  const attempt = useRef<{ name: string; slug: string } | null>(null);
+   async function create() {
+-    if (busy || !ownerUid) return;
+-    setFailure(null);
+-
+-    // The wall address is derived here, at the one moment it is ever decided.
+-    const slug = generatePropertySlug(draft.name, { takenSlugs });
+-
+-    setPhase("creating");
+-    const outcome = await createProperty(ownerUid, {
+-      name: draft.name.trim(),
+-      slug,
+-      profile: wizardProfile(draft)
+-    });
+-    if (outcome.status === "error") {
+-      setPhase("editing");
+-      setFailure(outcome.message);
+-      return;
+-    }
+-
+-    let property = outcome.value;
+-    let photoWarning: string | null = null;
+-    if (photoSlotsOf(draft).some((slot) => staged[slot])) {
+-      setPhase("uploading");
+-      const { uploaded, warning } = await uploadStaged(property.id);
+-      photoWarning = warning;
+-      // Each photograph goes back where its slot says: the property's own on
+-      // the profile, a note's on the note it was chosen for.
+-      property = {
+-        ...property,
+-        profile: Object.entries(uploaded).reduce(
+-          (profile, [slot, photo]) => withPhotoInSlot(profile, slot as PhotoSlot, photo ?? null),
+-          property.profile
+-        )
+-      };
+-    }
+-
+-    setPhase("editing");
+-    onCreated({ property, photoWarning });
++    if (inFlight.current || !ownerUid) return;
++    const problem = validatePropertyName(name)[0]?.message;
++    setFailure(problem ?? null);
++    if (problem) return;
++    const trimmed = name.trim();
++    if (attempt.current?.name !== trimmed) attempt.current = { name: trimmed, slug: generatePropertySlug(trimmed, { takenSlugs }) };
++    inFlight.current = true; setBusy(true);
++    try {
++      const outcome = await createProperty(ownerUid, { name: trimmed, slug: attempt.current.slug, profile: emptyProfile() });
++      if (outcome.status === "error") { setFailure(outcome.message); return; }
++      onCreated({ property: outcome.value, photoWarning: null });
++    } catch { setFailure("Your property could not be created. Check your connection and try again."); }
++    finally { inFlight.current = false; setBusy(false); }
+   }
+-
+-  function renderPhoto(slot: PhotoSlot, position?: number) {
+-    const copy = photoCopy(slot, position);
+-    const chosen = staged[slot];
+-    const problem = refused[slot];
+-
+-    return (
+-      <div className="photo-field" key={slot}>
+-        <label htmlFor={`photo-input-${slot}`}>
+-          {copy.label}<span className="label-optional">Optional</span>
+-        </label>
+-        {copy.hint && <p className="field-hint">{copy.hint}</p>}
+-
+-        {chosen ? (
+-          <figure className="photo-preview">
+-            <img src={chosen.preview} alt="" />
+-            <figcaption>{chosen.file.name}</figcaption>
+-          </figure>
+-        ) : (
+-          <PhotoDropTarget
+-            label={copy.label}
+-            disabled={busy}
+-            onChoose={() => fileInputs.current[slot]?.click()}
+-          />
+-        )}
+-        {problem && <p className="form-feedback" role="alert">{problem}</p>}
+-
+-        {chosen && (
+-          <div className="actions">
+-            <button
+-              type="button"
+-              className="btn btn-secondary btn-sm"
+-              disabled={busy}
+-              onClick={() => fileInputs.current[slot]?.click()}
+-            >
+-              Choose a different photograph
+-            </button>
+-            <button type="button" className="btn btn-ghost btn-sm" disabled={busy} onClick={() => dropFile(slot)}>
+-              Remove
+-            </button>
+-          </div>
+-        )}
+-
+-        {/* Hidden because a bare file input cannot be styled or labelled well;
+-            the visible button above drives it. */}
+-        <input
+-          ref={(element) => {
+-            fileInputs.current[slot] = element;
+-          }}
+-          id={`photo-input-${slot}`}
+-          className="visually-hidden"
+-          type="file"
+-          accept={profileLimits.photoTypes.join(",")}
+-          aria-label={`${copy.label}: choose an image file`}
+-          onChange={(event) => pickFile(slot, event)}
+-        />
+-      </div>
+-    );
+-  }
+-
+-  return (
+-    <PropertyDialogFrame title="Add a property" onClose={onCancel}>
+-      <PropertyWizard
+-        draft={draft}
+-        onDraft={setDraft}
+-        renderPhoto={renderPhoto}
+-        submitLabel="Create property"
+-        finishEarlyLabel="Create now"
+-        busy={phase === "creating" ? "Creating property…" : phase === "uploading" ? "Uploading photographs…" : null}
+-        failure={failure}
+-        onSubmit={() => void create()}
+-        onCancel={onCancel}
+-      />
+-    </PropertyDialogFrame>
+-  );
++  return <PropertyDialogFrame title="Add a property" onClose={() => { if (!inFlight.current) onCancel(); }}>
++    <form className="property-name-form" onSubmit={event => { event.preventDefault(); void create(); }} noValidate>
++      <label>Property name<input value={name} maxLength={propertyIdentityLimits.nameMax} autoComplete="off" required disabled={busy} onChange={event => setName(event.target.value)} /></label>
++      <p className="field-hint">Next, review your sections and add the details you want. Your property starts private.</p>
++      {failure && <p className="form-feedback" role="alert">{failure}</p>}
++      <div className="actions"><button type="button" className="btn btn-secondary" disabled={busy} onClick={onCancel}>Cancel</button><button type="submit" className="btn btn-primary" disabled={busy || !ownerUid}>{busy ? "Creating property…" : "Continue"}</button></div>
++    </form>
++  </PropertyDialogFrame>;
+ }
+ 
+-/* ----------------------------- Changing one ----------------------------- */
+-
+ /**
+  * The settings of a property that already exists.
+  *
+diff --git a/src/ui/host/mobileWallEditor.css b/src/ui/host/mobileWallEditor.css
+index 6d45663..f2bddb3 100644
+--- a/src/ui/host/mobileWallEditor.css
++++ b/src/ui/host/mobileWallEditor.css
+@@ -1,5 +1,7 @@
+ /* Checklist first on a phone; the wall and its focused section forms share the saved profile. */
+ .phone-wall-heading[hidden] { display: none; }
++.phone-wall-review-hint { margin: 0 0 14px; color: var(--text-muted); font-size: .875rem; }
++.phone-wall-page { --checklist-red: #ad3d31; }
+ .phone-wall-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 18px 0; }
+ .phone-wall-heading h2 { margin: 0; font-family: var(--font-display); font-size: 1.65rem; }
+ .phone-wall-status { font-size: .8125rem; color: var(--text-muted); margin: 6px 0 0; }
+@@ -34,9 +36,9 @@
+ .phone-wall-sections > button:focus-visible { outline-offset: -3px; }
+ .phone-section-mark { display: grid; place-content: center; flex: none; width: 32px; height: 32px; box-sizing: border-box; border-radius: 50%; font-size: 1rem; font-weight: 600; }
+ .phone-wall-sections [data-state="done"] .phone-section-mark { background: var(--sage-050); color: var(--sage-700); }
+-.phone-wall-sections [data-state="todo"] { background: color-mix(in srgb, var(--accent-soft) 55%, transparent); }
+-.phone-wall-sections [data-state="todo"] .phone-section-mark { border: 2px solid var(--accent); color: var(--accent-strong); }
+-.phone-wall-sections [data-state="todo"] small { color: var(--accent-strong); }
++.phone-wall-sections [data-state="todo"] { background: color-mix(in srgb, var(--checklist-red) 9%, var(--surface-raised)); }
++.phone-wall-sections [data-state="todo"] .phone-section-mark { border: 2px solid var(--checklist-red); color: var(--checklist-red); }
++.phone-wall-sections [data-state="todo"] small { color: var(--checklist-red); }
+ .phone-wall-sections [data-state="optional"] .phone-section-mark { border: 2px dashed var(--rule-strong); color: var(--text-muted); }
+ .phone-wall-sections [data-state="off"] .phone-section-mark { background: var(--bg-alt); color: var(--text-muted); }
+ .phone-section-words { flex: 1; min-width: 0; }
+@@ -92,3 +94,16 @@ body:has(.phone-wall-dock) .ds-help { display: none; }
+   .phone-wall-section-head > button { font-size: .8125rem; padding-inline: 8px; }
+   .phone-section-fields { padding: 20px 16px; }
+ }
++@media (prefers-color-scheme: dark) { .phone-wall-page { --checklist-red: #ee978d; } }
++@media (min-width: 621px) {
++  .phone-wall-page .phone-wall-dock { position: sticky; inset: auto; margin-top: 24px; padding: 16px; border: 1px solid var(--rule); border-radius: 12px; }
++  .phone-wall-page .phone-wall-sections, .phone-wall-page .phone-wall-surface { max-width: 760px; }
++  .phone-wall-page { padding-bottom: 32px; }
++  .phone-section-dialog { width: min(680px, 100% - 32px); margin: 24px auto; max-height: calc(100dvh - 48px); border: 1px solid var(--rule); border-radius: 16px; }
++}
++.property-dialog:has(.property-name-form) { max-width: 480px; }
++.property-name-form { display: grid; gap: 18px; }
++.property-name-form > label { display: grid; gap: 8px; font-weight: 600; }
++.property-name-form input { width: 100%; min-height: 48px; font-size: 16px; }
++.property-name-form .actions { justify-content: end; }
++.property-name-form button { min-height: 48px; }
+diff --git a/src/ui/host/propertyStore.test.ts b/src/ui/host/propertyStore.test.ts
+index e632447..b9b49b9 100644
+--- a/src/ui/host/propertyStore.test.ts
++++ b/src/ui/host/propertyStore.test.ts
+@@ -48,6 +48,14 @@ it("writes theme and wall visibility without overwriting independently saved pho
+   expect(fields).not.toHaveProperty("profile");
+ });
+ 
++it("stores reviewed sections even when their optional content is blank", async () => {
++  await savePropertyProfile("p1", { ...emptyProfile(), reviewedSections: ["welcome", "links", "style"] });
++  const fields = updateDoc.mock.calls.at(-1)![1];
++  expect(fields["profile.reviewedSections"]).toEqual(["welcome", "links", "style"]);
++  expect(fields["profile.stayWelcome"]).toBe("");
++  expect(fields).not.toHaveProperty("profile.cover");
++});
++
+ it.each([
+   ["functions/already-exists", /address is already taken/],
+   ["functions/unauthenticated", /verify your session/],
+diff --git a/src/ui/host/propertyStore.ts b/src/ui/host/propertyStore.ts
+index 2c82e01..5e07bd8 100644
+--- a/src/ui/host/propertyStore.ts
++++ b/src/ui/host/propertyStore.ts
+@@ -335,6 +335,7 @@ const PROFILE_FIELDS = [
+   "facts",
+   "factsOff",
+   "stayAgainLinks",
++  "reviewedSections",
+   "guestPrompt"
+ ] as const;
+ 
+diff --git a/src/ui/pages/HostDashboardPage.test.tsx b/src/ui/pages/HostDashboardPage.test.tsx
+index efdbf4f..4c0e7df 100644
+--- a/src/ui/pages/HostDashboardPage.test.tsx
++++ b/src/ui/pages/HostDashboardPage.test.tsx
+@@ -61,26 +61,12 @@ beforeEach(() => {
+ 
+ const openWizard = () => fireEvent.click(screen.getByRole("button", { name: "Add property" }));
+ const nameField = () => screen.getByLabelText("Property name");
+-const next = () => fireEvent.click(screen.getByRole("button", { name: "Next" }));
+-
+-/** Walk the wizard end to end, answering only what a test cares about. */
+-function addProperty(name: string, answers: { location?: string; hosts?: string } = {}) {
++const next = () => fireEvent.click(screen.getByRole("button", { name: "Continue" }));
++function addProperty(name: string) {
+   openWizard();
+   fireEvent.change(nameField(), { target: { value: name } });
+-  if (answers.location) {
+-    fireEvent.change(screen.getByLabelText(/Where the property is/), { target: { value: answers.location } });
+-  }
+-  next();
+-  if (answers.hosts) {
+-    // The names are offered on the note rather than laid out empty, the same
+-    // way the property view offers them.
+-    fireEvent.click(screen.getByRole("button", { name: "+ your names" }));
+-    fireEvent.change(screen.getByLabelText("Your names"), { target: { value: answers.hosts } });
+-  }
+   next();
+-  fireEvent.click(screen.getByRole("button", { name: "Create property" }));
+ }
+-
+ describe("host dashboard", () => {
+   it("shows the known list immediately while refreshing it in the background", async () => {
+     rememberOwnedProperties("host-a", [hostProperty()]);
+@@ -159,7 +145,7 @@ describe("host dashboard", () => {
+     openWizard();
+     // It opens as a window over the dashboard rather than a panel within it.
+     expect(screen.getByRole("dialog", { name: "Add a property" })).toBeInTheDocument();
+-    expect(screen.getByText("Step 1 of 3")).toBeInTheDocument();
++    expect(screen.getAllByRole("textbox")).toHaveLength(1);
+   });
+ 
+   it("opens the wizard for the header link, which is a fragment on this page", async () => {
+@@ -190,21 +176,16 @@ describe("host dashboard", () => {
+     renderDashboard();
+     await screen.findByText(/No properties yet/i);
+ 
+-    addProperty("Seabreeze Cottage", { location: "Porthleven, Cornwall", hosts: "Ana & Tom" });
++    addProperty("Seabreeze Cottage");
+ 
+     await waitFor(() => expect(createProperty).toHaveBeenCalledTimes(1));
+     // The address is generated, so the test pins its shape rather than its tail.
+     expect(createProperty).toHaveBeenCalledWith("host-a", {
+       name: "Seabreeze Cottage",
+       slug: expect.stringMatching(/^seabreeze-cottage-[a-z0-9]{4}$/),
+-      profile: expect.objectContaining({ location: "Porthleven, Cornwall", hosts: "Ana & Tom" })
++      profile: emptyProfile()
+     });
+-    expect(await screen.findByText(/Seabreeze Cottage was added/i)).toBeInTheDocument();
+-    expect(screen.getByRole("link", { name: /Open Seabreeze Cottage/ })).toHaveAttribute(
+-      "href",
+-      "/host/property/prop-1"
+-    );
+-    expect(listOwnedProperties).toHaveBeenCalledTimes(2);
++    await waitFor(() => expect(window.location.pathname + window.location.search).toBe("/host/property/prop-1?setup=1"));
+     // The wizard closes behind the property it made.
+     expect(screen.queryByLabelText("Property name")).not.toBeInTheDocument();
+   });
+@@ -243,7 +224,7 @@ describe("host dashboard", () => {
+ 
+     expect(await screen.findByText("You do not have access to that property.")).toBeInTheDocument();
+     // The wizard stays open on the answers, so nothing typed is lost.
+-    expect(screen.getByRole("button", { name: "Create property" })).toBeInTheDocument();
++    expect(screen.getByRole("button", { name: "Continue" })).toBeInTheDocument();
+     expect(listOwnedProperties).toHaveBeenCalledTimes(1);
+   });
+ 
+diff --git a/src/ui/pages/HostDashboardPage.tsx b/src/ui/pages/HostDashboardPage.tsx
+index 36998d7..e4920b8 100644
+--- a/src/ui/pages/HostDashboardPage.tsx
++++ b/src/ui/pages/HostDashboardPage.tsx
+@@ -200,7 +200,7 @@ export function HostDashboardPage() {
+     rememberProperty(property);
+     setAdded({ id: property.id, name: property.name, photoWarning });
+     closeWizard();
+-    if (uid) void refresh(uid);
++    navigate(`/host/property/${property.id}?setup=1`);
+   }
+ 
+   if (!firebaseConfigured) {
+@@ -304,8 +304,7 @@ export function HostDashboardPage() {
+           <div className="empty-state">
+             <p><b>No properties yet.</b></p>
+             <p>
+-              Three short steps: what the property is, what it says to a guest, and the lines you answer every
+-              week. It starts private, so you can see the whole wall before any guest reaches it.
++              Start with a property name, then review your sections at your own pace. It stays private until you publish it.
+             </p>
+             {!adding && (
+               <div className="actions">
+diff --git a/src/ui/pages/HostWallDesignPage.test.tsx b/src/ui/pages/HostWallDesignPage.test.tsx
+index 08f91b7..60fd5d5 100644
+--- a/src/ui/pages/HostWallDesignPage.test.tsx
++++ b/src/ui/pages/HostWallDesignPage.test.tsx
+@@ -156,12 +156,57 @@ describe("switching the phone editor between Edit and Preview", () => {
+     fireEvent.click(await screen.findByRole("button", { name: "Edit the wall" }));
+   }
+ 
++  it("lets a host review empty recommended sections, retaining green checks when reopened", async () => {
++    const page = renderPage();
++    const rows = () => within(screen.getByRole("navigation", { name: "Guest wall sections" }));
++    await screen.findByRole("navigation", { name: "Guest wall sections" });
++    expect(rows().getAllByRole("button").every(button => button.dataset.state === "todo")).toBe(true);
++    for (const section of [/Property details/, /Welcome & hosts/, /Wi-Fi and essentials/, /More notes/, /Your links/, /Look & feel/]) {
++      fireEvent.click(rows().getByRole("button", { name: section }));
++      fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Save changes" }));
++      await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
++      expect(rows().getByRole("button", { name: section })).toHaveAttribute("data-state", "done");
++    }
++    const stored = normalizeProfile(savePropertyProfile.mock.calls.at(-1)![1]);
++    expect(stored.reviewedSections).toEqual(["property", "welcome", "essentials", "notes", "links", "style"]);
++    expect(stored.location).toBe(""); expect(stored.stayWelcome).toBe(""); expect(stored.facts).toEqual([]);
++    page.unmount();
++    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: stored }) });
++    renderPage();
++    await waitFor(() => expect(rows().getAllByRole("button").every(button => button.dataset.state === "done")).toBe(true));
++  });
++
++  it("does not mark a section reviewed when it is cancelled or the save fails", async () => {
++    renderPage();
++    const rows = within(await screen.findByRole("navigation", { name: "Guest wall sections" }));
++    fireEvent.click(rows.getByRole("button", { name: /Welcome & hosts/ }));
++    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Cancel" }));
++    expect(rows.getByRole("button", { name: /Welcome & hosts/ })).toHaveAttribute("data-state", "todo");
++    expect(savePropertyProfile).not.toHaveBeenCalled();
++    savePropertyProfile.mockResolvedValue({ status: "error", message: "Connection lost." });
++    fireEvent.click(rows.getByRole("button", { name: /Welcome & hosts/ }));
++    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Save changes" }));
++    expect(await screen.findByText("Connection lost.")).toBeInTheDocument();
++    expect(rows.getByRole("button", { name: /Welcome & hosts/ })).toHaveAttribute("data-state", "todo");
++    expect(screen.getByRole("dialog")).toBeInTheDocument();
++  });
++
++  it("opens sections on desktop immediately after property creation", async () => {
++    window.history.replaceState(null, "", "/host/property/prop-1?setup=1");
++    try {
++      act(() => resize(1200));
++      renderPage();
++      expect(await screen.findByRole("navigation", { name: "Guest wall sections" })).toBeInTheDocument();
++      expect(screen.queryByRole("form", { name: "Guest wall" })).not.toBeInTheDocument();
++    } finally { window.history.replaceState(null, "", "/"); }
++  });
++
+   it("opens Manage on the checklist and returns there after section editing or guest preview", async () => {
+     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
+     renderPage();
+     const sections = within(await screen.findByRole("navigation", { name: "Guest wall sections" }));
+     expect(screen.queryByRole("button", { name: "Edit details" })).not.toBeInTheDocument();
+-    expect(sections.getByRole("button", { name: /Property details/ })).toHaveAttribute("data-state", "done");
++    expect(sections.getByRole("button", { name: /Property details/ })).toHaveAttribute("data-state", "todo");
+     expect(sections.queryByRole("button", { name: /Your photo/ })).not.toBeInTheDocument();
+     expect(sections.queryByRole("button", { name: /^Cover photo/ })).not.toBeInTheDocument();
+     expect(sections.getByRole("button", { name: /Your links/ })).toBeInTheDocument();
+@@ -303,7 +348,7 @@ describe("switching the phone editor between Edit and Preview", () => {
+     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+     expect(uploadPropertyPhoto).toHaveBeenCalledTimes(1);
+     expect(document.querySelector(".phone-wall-cover img")).toHaveAttribute("src", coverPhoto.url);
+-    expect(savePropertyProfile).not.toHaveBeenCalled();
++    expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ reviewedSections: ["property"] }));
+   });
+ 
+   it("can retry a save after an unexpected connection rejection", async () => {
+diff --git a/src/ui/pages/HostWallDesignPage.tsx b/src/ui/pages/HostWallDesignPage.tsx
+index d2cd133..55e980f 100644
+--- a/src/ui/pages/HostWallDesignPage.tsx
++++ b/src/ui/pages/HostWallDesignPage.tsx
+@@ -461,7 +461,8 @@ export function HostWallDesignPage({
+   const property = (draft.load as { status: "ready"; property: HostProperty })
+     .property;
+   const profile = draft.profile;
+-  if ((mobileEditor || mobileFormOpen) && view === "stay" && !settings) {
++  const requestedSetup = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("setup") === "1";
++  if ((mobileEditor || mobileFormOpen || requestedSetup) && view === "stay" && !settings) {
+     return <MobileWallEditor property={property} draft={draft} onEditingChange={setMobileFormOpen} />;
+   }
+   // Which note the open photograph dialog belongs to, numbered the way the

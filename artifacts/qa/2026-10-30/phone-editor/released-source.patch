@@ -1,0 +1,766 @@
+diff --git a/src/ui/host/MobileWallEditor.tsx b/src/ui/host/MobileWallEditor.tsx
+new file mode 100644
+index 0000000..c7bdc0a
+--- /dev/null
++++ b/src/ui/host/MobileWallEditor.tsx
+@@ -0,0 +1,268 @@
++import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from "react";
++import { createPortal } from "react-dom";
++import { propertyIdentityLimits, validatePropertyName } from "../../domain/property";
++import {
++  emptyFact, emptyHostNote, hostInitials, profileLimits, validatePhotoFile, validateProfile,
++  writtenHostNotes, type PropertyProfile,
++} from "../../domain/propertyProfile";
++import { emptyStayAgainLink, stayAgainLimits, stayAgainProblems, wallStayAgainLinks } from "../../domain/stayAgain";
++import { isPostMvpFeatureEnabled } from "../../domain/featureFlags";
++import { PropertyShell } from "./PropertyShell";
++import { WallPreview } from "./WallPreview";
++import { WallThemePicker } from "./WallThemePicker";
++import { HostNoteStylePicker } from "./HostNoteStylePicker";
++import { PhotoField } from "./PhotoField";
++import { HostNotes } from "../wall/HostNotes";
++import { StayAgainLinks } from "../wall/WallHeader";
++import { withPhotoInSlot } from "./photoSlots";
++import { removePropertyPhoto, uploadPropertyPhoto, type HostProperty } from "./propertyStore";
++import type { PropertyDraft } from "./usePropertyDraft";
++import "./mobileWallEditor.css";
++
++type Section = "property" | "welcome" | "essentials" | "notes" | "links" | "style";
++const titles: Record<Section, string> = {
++  property: "Property details", welcome: "Welcome & hosts",
++  essentials: "Wi-Fi & essentials", notes: "More from your hosts", links: "Your links", style: "Look & feel",
++};
++
++function EditSection({ title, action, onEdit, children }: { title: string; action: string; onEdit: () => void; children: ReactNode }) {
++  return <section className="phone-wall-section">
++    <div className="phone-wall-section-head"><h3>{title}</h3><button type="button" className="btn btn-ghost" onClick={onEdit}>{action}</button></div>
++    {children}
++  </section>;
++}
++
++/** A phone opens on the wall. Each labelled action edits and saves one focused form. */
++export function MobileWallEditor({ property, draft, onEditingChange }: { property: HostProperty; draft: PropertyDraft; onEditingChange: (editing: boolean) => void }) {
++  const [mode, setMode] = useState<"wall" | "sections" | "preview">("wall");
++  const [editing, setEditing] = useState<Section | null>(null);
++  const [notice, setNotice] = useState("");
++  const opener = useRef<HTMLElement | null>(null);
++  const dock = useRef<HTMLElement>(null);
++  const profile = draft.profile;
++  const linksEnabled = isPostMvpFeatureEnabled("directBookingLinks");
++  const links = wallStayAgainLinks(profile.stayAgainLinks);
++  function edit(section: Section) { opener.current = document.activeElement as HTMLElement; setEditing(section); onEditingChange(true); }
++  function close() { setEditing(null); onEditingChange(false); requestAnimationFrame(() => opener.current?.focus()); }
++  useLayoutEffect(() => {
++    const footer = dock.current;
++    const page = footer?.closest<HTMLElement>(".phone-wall-page");
++    if (!footer || !page) return;
++    const measure = () => page.style.setProperty("--phone-wall-dock-height", `${footer.getBoundingClientRect().height}px`);
++    measure();
++    const observer = typeof ResizeObserver === "function" ? new ResizeObserver(measure) : null;
++    observer?.observe(footer);
++    return () => observer?.disconnect();
++  }, []);
++  const sections: { id: Section; detail: string }[] = [
++    { id: "property", detail: [draft.name, profile.location].filter(Boolean).join(" · ") },
++    { id: "welcome", detail: profile.hosts || "Your welcome, names and optional host photo" },
++    { id: "essentials", detail: profile.factsOff ? "Hidden from the wall" : profile.facts.map(f => f.term).filter(Boolean).join(", ") || "Wi-Fi, check-out, parking" },
++    { id: "notes", detail: `${writtenHostNotes(profile).length} notes · Optional` },
++    ...(linksEnabled ? [{ id: "links" as const, detail: links.length ? links.map(link => link.label).join(" · ") : "Book direct, mailing list or another useful link" }] : []),
++    { id: "style", detail: "Theme and colours · Optional" },
++  ];
++  return <PropertyShell property={property} current="design" name={draft.name} profile={profile} className="phone-wall-page">
++    <header className="phone-wall-heading">
++      <div><h2>{mode === "preview" ? "Guest preview" : mode === "sections" ? "Your sections" : "Guest wall"}</h2>
++        <p className="phone-wall-status" role="status">{draft.dirty ? "You have unsaved changes" : notice || "All changes saved"}</p></div>
++      {mode !== "preview" && <button type="button" className="btn btn-ghost" onClick={() => edit("style")}>Look & feel</button>}
++    </header>
++
++    {mode === "sections" ? <nav aria-label="Guest wall sections" className="phone-wall-sections">
++      {sections.map(section => <button key={section.id} type="button" onClick={() => edit(section.id)}>
++        <span><b>{titles[section.id]}</b><small>{section.detail}</small></span><span aria-hidden="true">›</span>
++      </button>)}
++    </nav> : mode === "preview" ? <section className="phone-wall-guest" aria-label="Guest preview">
++      <WallPreview name={draft.name} profile={profile} counts={draft.counts} view="stay" slug={property.slug} stayToken={property.stayToken} propertyId={property.id} />
++    </section> : <div className="phone-wall-surface" data-wall-theme={profile.theme} data-wall-colour={profile.colour}>
++      <section className="phone-wall-section phone-wall-property">
++        {profile.cover && <div className="phone-wall-cover"><img src={profile.cover.url} alt={profile.cover.alt || "Your property"} /></div>}
++        <div className="phone-wall-section-head"><h3>Property details</h3><button type="button" className="btn btn-ghost" onClick={() => edit("property")}>Edit details</button></div>
++        <div className="phone-wall-property-words"><h3>{draft.name}</h3>{profile.location && <p>{profile.location}</p>}</div>
++      </section>
++      <EditSection title="Your welcome" action="Edit welcome" onEdit={() => edit("welcome")}>
++        <div className="phone-wall-welcome">
++          <div className="phone-wall-hosts">
++            {profile.hostPhoto ? <img src={profile.hostPhoto.url} alt={profile.hostPhoto.alt || "Your hosts"} /> : <span className="phone-wall-initials" aria-hidden="true">{hostInitials(profile.hosts) || "+"}</span>}
++            <div><h3>{!profile.stayNoteOff && profile.stayHeading || "Your welcome"}</h3><p>{profile.hosts || "Add your names"}</p></div>
++          </div>
++          {profile.stayNoteOff ? <p className="field-hint">Your welcome note is hidden.</p> : <>
++            <p className="phone-wall-message">{profile.stayWelcome || "Write a personal welcome for arriving guests."}</p>
++            {profile.stayTip && <p className="phone-wall-tip">{profile.stayTip}</p>}
++          </>}
++        </div>
++      </EditSection>
++      <EditSection title="Wi-Fi & essentials" action="Edit essentials" onEdit={() => edit("essentials")}>
++        <div className="phone-wall-summary">{profile.factsOff ? "Hidden from the wall" : profile.facts.filter(f => f.term.trim()).map(f => f.term).join(" · ") || "Add Wi-Fi, check-out, parking and house information."}</div>
++      </EditSection>
++      <EditSection title="More from your hosts" action="Edit notes" onEdit={() => edit("notes")}>
++        <div className="phone-wall-summary">{writtenHostNotes(profile).length ? <HostNotes author={profile.hosts || "your hosts"} notes={writtenHostNotes(profile).map(note => ({ id: note.id, message: note.message, style: note.style, photo: note.photo ? { src: note.photo.url, alt: note.photo.alt } : undefined }))} /> : "Optional notes, recommendations or a personal touch."}</div>
++      </EditSection>
++      {linksEnabled && <EditSection title="Your links" action={links.length ? "Edit links" : "Add links"} onEdit={() => edit("links")}>
++        <div className="phone-wall-summary stay-wall">{links.length ? <StayAgainLinks id="phone-wall-links" links={links} headingLevel={4} /> : <p>Help guests book another stay or join your mailing list.</p>}</div>
++      </EditSection>}
++    </div>}
++
++    <footer className="phone-wall-dock" ref={dock}>
++      {draft.dirty && <button type="button" className="btn btn-primary" disabled={draft.saving} onClick={() => void draft.save()}>{draft.saving ? "Saving…" : "Save pending changes"}</button>}
++      {draft.problems.failure && <p className="form-feedback" role="alert">{draft.problems.failure}</p>}
++      <div><button type="button" className="btn btn-secondary" onClick={() => setMode(mode === "wall" ? "sections" : "wall")}>{mode === "wall" ? "Sections" : mode === "preview" ? "Back to editor" : "See your wall"}</button>
++        {mode !== "preview" && <button type="button" className="btn btn-primary" onClick={() => setMode("preview")}>View as guest</button>}</div>
++    </footer>
++    {editing && <SectionForm key={editing} section={editing} property={property} draft={draft} onClose={close} onSaved={() => { setNotice("Saved · Your guest wall is up to date"); close(); }} />}
++  </PropertyShell>;
++}
++
++function SectionForm({ section, property, draft, onClose, onSaved }: { section: Section; property: HostProperty; draft: PropertyDraft; onClose: () => void; onSaved: () => void }) {
++  const dialog = useRef<HTMLDialogElement>(null);
++  const latest = useRef(draft); latest.current = draft;
++  const id = useId();
++  const [name, setName] = useState(draft.name);
++  const [profile, setProfile] = useState(draft.profile);
++  const [photos, setPhotos] = useState<Partial<Record<"cover" | "hostPhoto", File | null>>>({});
++  const [previews, setPreviews] = useState<Partial<Record<"cover" | "hostPhoto", string>>>({});
++  const [busy, setBusy] = useState(false);
++  const [progress, setProgress] = useState<string | null>(null);
++  const [attempted, setAttempted] = useState(false);
++  const [failure, setFailure] = useState<string | null>(null);
++  const inFlight = useRef(false);
++
++  useEffect(() => {
++    const sheet = dialog.current!;
++    sheet.showModal();
++    const previousOverflow = document.body.style.overflow;
++    document.body.style.overflow = "hidden";
++    const viewport = window.visualViewport;
++    const resize = () => { sheet.style.height = `${viewport?.height ?? window.innerHeight}px`; sheet.style.top = `${viewport?.offsetTop ?? 0}px`; };
++    resize(); viewport?.addEventListener("resize", resize); viewport?.addEventListener("scroll", resize);
++    return () => { viewport?.removeEventListener("resize", resize); viewport?.removeEventListener("scroll", resize); document.body.style.overflow = previousOverflow; sheet.close(); };
++  }, []);
++  useEffect(() => {
++    const next: Partial<Record<"cover" | "hostPhoto", string>> = {};
++    for (const slot of ["cover", "hostPhoto"] as const) if (photos[slot]) next[slot] = URL.createObjectURL(photos[slot]);
++    setPreviews(next);
++    return () => Object.values(next).forEach(url => URL.revokeObjectURL(url));
++  }, [photos]);
++  useEffect(() => { if (attempted && draft.problems.failure) setFailure(draft.problems.failure); }, [attempted, draft.problems.failure]);
++
++  function set<K extends keyof PropertyProfile>(key: K, value: PropertyProfile[K]) { setProfile(previous => ({ ...previous, [key]: value })); }
++  const issues = attempted ? [...validatePropertyName(name).map(p => p.message), ...validateProfile(profile).filter(p => section !== "links" || p.field !== "stayAgainLinks").map(p => p.message)] : [];
++  const linkIssues = attempted ? stayAgainProblems(profile.stayAgainLinks) : [];
++  function text(key: "location" | "hosts" | "stayHeading" | "stayWelcome" | "stayTip" | "guestPrompt", label: string, max: number, multiline = false) {
++    const controlId = `${id}-${key}`;
++    return <label htmlFor={controlId}>{label}{multiline
++      ? <textarea id={controlId} value={profile[key]} maxLength={max} rows={key === "stayWelcome" ? 5 : 3} disabled={busy} onChange={e => set(key, e.target.value)} />
++      : <input id={controlId} value={profile[key]} maxLength={max} disabled={busy} onChange={e => set(key, e.target.value)} />}</label>;
++  }
++  function photo(slot: "cover" | "hostPhoto", label: string) {
++    const current = photos[slot] === null ? null : profile[slot];
++    return <div className="phone-section-photo">
++      {(previews[slot] || current) && <img src={previews[slot] || current!.url} alt={label} />}
++      <label>{label}<input type="file" accept={profileLimits.photoTypes.join(",")} disabled={busy} onChange={e => {
++        const file = e.target.files?.[0]; e.target.value = "";
++        if (!file) return;
++        const problem = validatePhotoFile(file); setFailure(problem);
++        if (!problem) setPhotos(previous => ({ ...previous, [slot]: file }));
++      }} /></label>
++      <p className="field-hint">{slot === "cover" ? "A landscape photo of your property." : "A photo of you, so guests know who is welcoming them. Optional."} JPEG, PNG or WebP, up to 8 MB.</p>
++      {photos[slot] && <p className="field-hint">{photos[slot].name} · Ready to save</p>}
++      {(current || photos[slot]) && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => setPhotos(previous => ({ ...previous, [slot]: null }))}>Remove {slot === "cover" ? "cover" : "host"} photo</button>}
++      {photos[slot] === null && <p className="field-hint">Photo will be removed when you save.</p>}
++    </div>;
++  }
++  async function save() {
++    if (inFlight.current) return;
++    setAttempted(true); setFailure(null);
++    if (validatePropertyName(name).length || validateProfile(profile).length) return;
++    inFlight.current = true; setBusy(true);
++    let next = profile;
++    try {
++      for (const slot of ["cover", "hostPhoto"] as const) {
++        const chosen = photos[slot];
++        if (chosen === undefined) continue;
++        const existing = latest.current.profile[slot];
++        if (!chosen && !existing) continue;
++        setProgress(chosen ? "Uploading photo…" : "Removing photo…");
++        const outcome = chosen ? await uploadPropertyPhoto(property.id, slot, chosen, amount => setProgress(`Uploading photo… ${Math.round(amount * 100)}%`)) : await removePropertyPhoto(property.id, slot, existing!.path);
++        if (outcome.status === "error") { setFailure(outcome.message); return; }
++        const stored = chosen ? outcome.value : null;
++        next = withPhotoInSlot(next, slot, stored);
++        latest.current.setProfile(withPhotoInSlot(latest.current.profile, slot, stored));
++        // A successfully uploaded photo is already stored, even if saving the words later fails.
++        setProfile(previous => withPhotoInSlot(previous, slot, stored));
++        setPhotos(previous => { const rest = { ...previous }; delete rest[slot]; return rest; });
++      }
++      setProgress(null);
++      if (await latest.current.saveValues({ name, profile: next })) onSaved();
++      else setFailure(latest.current.problems.failure || "Your changes could not be saved. Please try again.");
++    } catch { setFailure("Your changes could not be saved. Check your connection and try again."); }
++    finally { inFlight.current = false; setBusy(false); setProgress(null); }
++  }
++  return createPortal(<dialog ref={dialog} className="phone-section-dialog" aria-labelledby={`${id}-title`} onCancel={e => { e.preventDefault(); if (!inFlight.current) onClose(); }}>
++    <form onSubmit={e => { e.preventDefault(); void save(); }} noValidate>
++      <header><button type="button" className="btn btn-ghost" disabled={busy} onClick={onClose}>Cancel</button><h2 id={`${id}-title`}>{titles[section]}</h2></header>
++      <div className="phone-section-fields">
++        {section === "property" && <>
++          <label>Property name<input value={name} maxLength={propertyIdentityLimits.nameMax} disabled={busy} onChange={e => setName(e.target.value)} /></label>
++          {text("location", "Address", profileLimits.locationMax)}<p className="field-hint">Shown underneath your property name.</p>
++          {photo("cover", "Cover photo")}
++        </>}
++        {section === "welcome" && <>
++          {text("stayHeading", "Welcome heading", profileLimits.stayHeadingMax)}
++          {text("hosts", "Your names", profileLimits.hostsMax)}
++          {text("stayWelcome", "Welcome message", profileLimits.stayWelcomeMax, true)}
++          {text("stayTip", "A little tip (optional)", profileLimits.stayTipMax, true)}
++          <label className="phone-section-check"><input type="checkbox" checked={!profile.stayNoteOff} disabled={busy} onChange={e => set("stayNoteOff", !e.target.checked)} />Show the welcome note</label>
++          {photo("hostPhoto", "Host photo (optional)")}
++        </>}
++        {section === "essentials" && <>
++          <p className="field-hint">Add the details guests need during their stay.</p>
++          <label className="phone-section-check"><input type="checkbox" checked={!profile.factsOff} disabled={busy} onChange={e => set("factsOff", !e.target.checked)} />Show essentials on the guest wall</label>
++          {profile.facts.map((fact, index) => <fieldset key={index} className="phone-section-item"><legend>Essential {index + 1}</legend>
++            {([['term', 'Name', profileLimits.factTermMax], ['detail', 'Details', profileLimits.factDetailMax], ['note', 'Extra information (optional)', profileLimits.factNoteMax]] as const).map(([key, label, max]) => <label key={key}>{label}<input value={fact[key]} maxLength={max} disabled={busy} onChange={e => set("facts", profile.facts.map((row, i) => i === index ? { ...row, [key]: e.target.value } : row))} /></label>)}
++            <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => set("facts", profile.facts.filter((_, i) => i !== index))}>Remove essential {index + 1}</button>
++          </fieldset>)}
++          {profile.facts.length < profileLimits.factsMax && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => set("facts", [...profile.facts, emptyFact()])}>Add an essential</button>}
++        </>}
++        {section === "notes" && <>
++          {profile.hostNotes.map((note, index) => <fieldset key={note.id} className="phone-section-item"><legend>Note {index + 1}</legend>
++            <label>Message<textarea value={note.message} rows={4} maxLength={profileLimits.hostNoteMax} disabled={busy} onChange={e => set("hostNotes", profile.hostNotes.map(row => row.id === note.id ? { ...row, message: e.target.value } : row))} /></label>
++            <HostNoteStylePicker name={`phone-note-${note.id}`} theme={profile.theme} colour={profile.colour} value={note.style} disabled={busy} onChange={style => set("hostNotes", profile.hostNotes.map(row => row.id === note.id ? { ...row, style } : row))} />
++            <details><summary>Note photo</summary><PhotoField propertyId={property.id} slot={`hostNote:${note.id}`} photo={note.photo} label={`Note ${index + 1} photo`} hint="Note photos are saved separately when you choose Save photograph." onChange={value => {
++              setProfile(previous => withPhotoInSlot(previous, `hostNote:${note.id}`, value));
++              latest.current.setProfile(withPhotoInSlot(latest.current.profile, `hostNote:${note.id}`, value));
++            }} /></details>
++            <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => set("hostNotes", profile.hostNotes.filter(row => row.id !== note.id))}>Remove note {index + 1}</button>
++          </fieldset>)}
++          {profile.hostNotes.length < profileLimits.hostNotesMax && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => set("hostNotes", [...profile.hostNotes, emptyHostNote()])}>Add a note</button>}
++          {text("guestPrompt", "Guestbook prompt (optional)", 240, true)}
++        </>}
++        {section === "links" && <>
++          <p className="field-hint">Add up to two links to your own booking page, mailing-list sign-up or another useful page. Guests open your website; mailing-list sign-ups happen there.</p>
++          {profile.stayAgainLinks.map((link, index) => {
++            const kept = profile.stayAgainLinks.slice(0, index).filter(row => row.label.trim() || row.url.trim()).length;
++            const problem = linkIssues.find(issue => issue.index === kept)?.message;
++            return <fieldset key={index} className="phone-section-item"><legend>Link {index + 1}</legend>
++              <label>Button text<input value={link.label} maxLength={stayAgainLimits.labelMax} placeholder="Book direct" disabled={busy} onChange={e => set("stayAgainLinks", profile.stayAgainLinks.map((row, i) => i === index ? { ...row, label: e.target.value } : row))} /></label>
++              <label>Web address<input type="text" inputMode="url" autoComplete="url" autoCapitalize="none" spellCheck={false} value={link.url} maxLength={stayAgainLimits.urlMax} placeholder="yourwebsite.com/book" disabled={busy} aria-invalid={problem ? true : undefined} aria-describedby={problem ? `${id}-link-${index}` : undefined} onChange={e => set("stayAgainLinks", profile.stayAgainLinks.map((row, i) => i === index ? { ...row, url: e.target.value } : row))} /></label>
++              {problem && <p id={`${id}-link-${index}`} className="form-feedback" role="alert">{problem}</p>}
++              <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => set("stayAgainLinks", profile.stayAgainLinks.filter((_, i) => i !== index))}>Remove link {index + 1}</button>
++            </fieldset>;
++          })}
++          {profile.stayAgainLinks.length < stayAgainLimits.linksMax && <div className="phone-section-add-links">
++            {["Book direct", "Join our mailing list"].filter(label => !profile.stayAgainLinks.some(link => link.label === label)).map(label => <button type="button" className="btn btn-secondary" key={label} disabled={busy} onClick={() => set("stayAgainLinks", [...profile.stayAgainLinks, { label, url: "" }])}>+ {label}</button>)}
++            <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => set("stayAgainLinks", [...profile.stayAgainLinks, emptyStayAgainLink()])}>+ Custom link</button>
++          </div>}
++          <p className="field-hint">Links appear under your notes on the guest wall. Check your booking platform’s rules before adding links.</p>
++        </>}
++        {section === "style" && <WallThemePicker value={profile.theme} colour={profile.colour} disabled={busy} onChange={value => set("theme", value)} onColourChange={value => set("colour", value)} />}
++        {issues.length > 0 && <div className="form-feedback" role="alert">{Array.from(new Set(issues)).map(issue => <p key={issue}>{issue}</p>)}</div>}
++        {failure && <p className="form-feedback" role="alert">{failure}</p>}
++      </div>
++      <footer><p>{property.lifecycle === "draft" ? "Saved changes will appear when your property is published." : "Saving updates your guest wall immediately."}</p>
++        <button type="submit" className="btn btn-primary" disabled={busy}>{busy ? progress || "Saving…" : "Save changes"}</button>
++      </footer>
++    </form>
++  </dialog>, document.body);
++}
+diff --git a/src/ui/host/mobileWallEditor.css b/src/ui/host/mobileWallEditor.css
+new file mode 100644
+index 0000000..bfb8df6
+--- /dev/null
++++ b/src/ui/host/mobileWallEditor.css
+@@ -0,0 +1,80 @@
++/* Preview-led phone editor. The guest wall keeps its theme; controls use the host app's chrome. */
++.phone-wall-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 18px 0; }
++.phone-wall-heading h2 { margin: 0; font-family: var(--font-display); font-size: 1.65rem; }
++.phone-wall-status { font-size: .8125rem; color: var(--text-muted); margin: 6px 0 0; }
++.phone-wall-heading > .btn { flex: none; }
++.phone-wall-surface { display: grid; gap: 16px; padding-bottom: 20px; color: var(--wall-ink); }
++.phone-wall-section { overflow: hidden; border: 1px solid var(--rule); background: var(--surface); border-radius: 16px; }
++.phone-wall-section-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 10px 8px 16px; border-bottom: 1px solid var(--rule); color: var(--text); background: var(--surface); }
++.phone-wall-section-head > h3 { font: 500 .75rem/1.4 var(--font-sans); letter-spacing: .06em; text-transform: uppercase; margin: 0; }
++.phone-wall-section-head > button { flex: none; min-height: 44px; padding-inline: 10px; }
++.phone-wall-cover { position: relative; min-height: 160px; display: grid; place-content: center; background: var(--bg-alt); color: var(--text-muted); }
++.phone-wall-cover > img { display: block; width: 100%; height: 190px; object-fit: cover; }
++.phone-wall-cover > p { padding: 0 20px 60px; text-align: center; }
++.phone-wall-property-words, .phone-wall-welcome, .phone-wall-summary { padding: 18px 16px; background: var(--wall-paper, var(--surface)); }
++.phone-wall-property-words h3 { font: 500 1.8rem/1.2 var(--wall-prose-font, var(--font-display)); margin: 0 0 8px; overflow-wrap: anywhere; }
++.phone-wall-property-words p { margin: 0; font-size: .875rem; color: var(--wall-ink-soft, var(--text-muted)); overflow-wrap: anywhere; }
++.phone-wall-hosts { display: flex; gap: 12px; align-items: center; }
++.phone-wall-hosts > img, .phone-wall-initials { width: 48px; height: 48px; flex: none; border-radius: 50%; object-fit: cover; }
++.phone-wall-initials { display: grid; place-content: center; background: var(--accent-soft); color: var(--accent-strong); font-family: var(--font-display); }
++.phone-wall-hosts h3 { font-family: var(--wall-prose-font, var(--font-display)); font-size: 1.4rem; margin: 0; overflow-wrap: anywhere; }
++.phone-wall-hosts p { margin: 4px 0 0; font-size: .8125rem; }
++.phone-wall-message, .phone-wall-tip { white-space: pre-wrap; overflow-wrap: anywhere; }
++.phone-wall-tip { padding-top: 12px; border-top: 1px solid var(--rule); font-size: .875rem; }
++.phone-wall-message:last-child, .phone-wall-tip:last-child, .phone-wall-summary > p { margin-bottom: 0; }
++.phone-wall-summary { font-size: .9375rem; overflow-wrap: anywhere; }
++.phone-wall-summary > p:first-child { margin-top: 0; }
++.phone-wall-summary .stay-again { margin: 0; }
++.phone-wall-summary .stay-again .stay-section-title { display: none; }
++.phone-wall-sections { display: grid; padding-bottom: 20px; }
++.phone-wall-sections > button { display: flex; width: 100%; text-align: left; justify-content: space-between; border: 0; border-bottom: 1px solid var(--rule); background: transparent; color: var(--text); border-radius: 0; padding: 18px 8px; gap: 16px; min-height: 78px; }
++.phone-wall-sections b { display: block; font-weight: 600; }
++.phone-wall-sections small { display: block; font-size: .8125rem; color: var(--text-muted); margin-top: 4px; overflow-wrap: anywhere; }
++.phone-wall-dock { position: fixed; bottom: 0; left: 0; right: 0; z-index: 16; display: grid; gap: 8px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--rule); background: var(--bg); }
++.phone-wall-dock > div { display: flex; gap: 10px; }
++.phone-wall-dock .btn { flex: 1; min-height: 48px; }
++.phone-wall-dock p { margin: 0; font-size: .8125rem; }
++.phone-wall-guest .phone { padding: 0; background: transparent; box-shadow: none; border-radius: 12px; }
++.phone-wall-guest .phone-screen { height: auto; overflow: visible; border-radius: 12px; }
++.phone-wall-guest .phone-wall-content { zoom: 1; padding: 16px; }
++.phone-wall-page { padding-bottom: calc(var(--phone-wall-dock-height, 100px) + 24px); }
++.phone-wall-page .banner-thumb, .phone-wall-page .banner-location, .phone-wall-page .property-banner .eyebrow { display: none; }
++.phone-wall-page .property-banner { padding-bottom: 14px; }
++.phone-wall-page .banner-identity { grid-template-columns: 1fr; }
++body:has(.phone-wall-dock) .ds-help { display: none; }
++
++/* A native modal keeps the background inert, contains focus, and returns to the labelled section. */
++.phone-section-dialog { position: fixed; inset: 0; margin: 0; width: 100%; max-width: none; height: 100dvh; max-height: none; padding: 0; border: 0; background: var(--bg); color: var(--text); overflow: hidden; }
++.phone-section-dialog::backdrop { background: var(--bg); }
++.phone-section-dialog > form { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; }
++.phone-section-dialog form > header { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-bottom: 1px solid var(--rule); background: var(--surface); }
++.phone-section-dialog form > header h2 { font-family: var(--font-display); font-size: 1.35rem; margin: 0; }
++.phone-section-dialog form > header button { min-height: 44px; flex: none; }
++.phone-section-fields { overflow-y: auto; overscroll-behavior: contain; padding: 24px 20px; display: flex; flex-direction: column; gap: 22px; }
++.phone-section-fields label { display: grid; gap: 8px; font-weight: 600; }
++.phone-section-fields :is(input:not([type=checkbox]), textarea) { width: 100%; min-width: 0; box-sizing: border-box; font-size: 16px; padding: 12px; border-radius: 10px; }
++.phone-section-fields input:not([type=checkbox]) { min-height: 48px; }
++.phone-section-fields textarea { resize: vertical; }
++.phone-section-fields .field-hint { margin: 0; }
++.phone-section-fields .phone-section-check { display: flex; align-items: center; gap: 10px; min-height: 44px; }
++.phone-section-check input { width: 20px; height: 20px; }
++.phone-section-item { min-width: 0; display: grid; gap: 16px; border: 1px solid var(--rule); padding: 18px 14px; border-radius: 12px; }
++.phone-section-item legend { padding: 0 6px; font-weight: 600; }
++.phone-section-item summary { min-height: 44px; display: flex; align-items: center; }
++.phone-section-add-links { display: flex; flex-wrap: wrap; gap: 10px; }
++.phone-section-add-links .btn { min-height: 44px; }
++.phone-section-photo { display: grid; gap: 12px; }
++.phone-section-photo > img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 12px; }
++.phone-section-fields .form-feedback { margin: 0; }
++.phone-section-fields .form-feedback p { margin: 0 0 8px; }
++.phone-section-dialog form > footer { display: grid; gap: 10px; padding: 12px 20px calc(16px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--rule); background: var(--surface); }
++.phone-section-dialog form > footer p { margin: 0; font-size: .8125rem; color: var(--text-muted); text-align: center; }
++.phone-section-dialog form > footer button { min-height: 50px; width: 100%; }
++@media (max-width: 360px) {
++  .phone-wall-heading { align-items: start; }
++  .phone-wall-heading > .btn { padding-inline: 8px; font-size: .8125rem; }
++  .phone-wall-section-head { padding-left: 12px; gap: 6px; }
++  .phone-wall-section-head > h3 { font-size: .6875rem; letter-spacing: .02em; }
++  .phone-wall-section-head > button { font-size: .8125rem; padding-inline: 8px; }
++  .phone-section-fields { padding: 20px 16px; }
++}
+diff --git a/src/ui/host/usePropertyDraft.ts b/src/ui/host/usePropertyDraft.ts
+index b387df1..0e5a285 100644
+--- a/src/ui/host/usePropertyDraft.ts
++++ b/src/ui/host/usePropertyDraft.ts
+@@ -150,6 +150,8 @@ export type PropertyDraft = {
+    * nothing when the settings window's own button did.
+    */
+   save: (event?: FormEvent<HTMLFormElement>) => Promise<void>;
++  /** Commit a focused section's local form without first changing the wall draft. */
++  saveValues: (values: { name: string; profile: PropertyProfile }) => Promise<boolean>;
+ };
+ 
+ export function usePropertyDraft(propertyId: string): PropertyDraft {
+@@ -232,52 +234,71 @@ export function usePropertyDraft(propertyId: string): PropertyDraft {
+ 
+   async function save(event?: FormEvent<HTMLFormElement>) {
+     event?.preventDefault();
+-    if (saving || !property) return;
++    await saveValues({ name, profile: draft });
++  }
++
++  async function saveValues(values: { name: string; profile: PropertyProfile }): Promise<boolean> {
++    if (saving || !property) return false;
++    const name = values.name;
++    const draft = values.profile;
+     setSaved(false);
+ 
+     const identity = name === property.name ? [] : validatePropertyName(name);
+     const profileProblems = validateProfile(draft);
+     setProblems({ identity, profile: profileProblems, failure: null });
+-    if (identity.length > 0 || profileProblems.length > 0) return;
++    if (identity.length > 0 || profileProblems.length > 0) return false;
+ 
+     setSaving(true);
+-    let next = property;
++    // Photos are persisted separately. A focused form can finish its upload
++    // and save its text in the same turn, before React renders the new photo.
++    let next = { ...property, profile: {
++      ...property.profile, cover: draft.cover, hostPhoto: draft.hostPhoto,
++      avatar: draft.avatar, hostNotes: mergeNotePhotos(property.profile, draft),
++    } };
+ 
+-    if (name !== property.name) {
+-      const outcome = await savePropertyName(property.id, name);
+-      if (outcome.status === "error") {
+-        setSaving(false);
+-        setProblems({ ...NO_PROBLEMS, failure: outcome.message });
+-        return;
++    try {
++      if (name !== property.name) {
++        const outcome = await savePropertyName(property.id, name);
++        if (outcome.status === "error") {
++          setSaving(false);
++          setProblems({ ...NO_PROBLEMS, failure: outcome.message });
++          return false;
++        }
++        next = { ...next, name: outcome.value.name };
++        setName(outcome.value.name);
+       }
+-      next = { ...next, name: outcome.value.name };
+-      setName(outcome.value.name);
+-    }
+ 
+-    if (!sameProfileText(draft, property.profile)) {
+-      const outcome = await savePropertyProfile(property.id, draft);
+-      if (outcome.status === "error") {
+-        setSaving(false);
+-        // A rename that already landed is kept, so the page does not report a
+-        // change it made as still pending.
+-        setLoad({ status: "ready", property: next });
+-        setProblems({ ...NO_PROBLEMS, failure: outcome.message });
+-        return;
++      if (!sameProfileText(draft, property.profile)) {
++        const outcome = await savePropertyProfile(property.id, draft);
++        if (outcome.status === "error") {
++          setSaving(false);
++          // A rename that already landed is kept, so the page does not report a
++          // change it made as still pending.
++          setLoad({ status: "ready", property: next });
++          setProblems({ ...NO_PROBLEMS, failure: outcome.message });
++          return false;
++        }
++        // What comes back is what was written: trimmed, with blank rows dropped.
++        const stored = {
++          ...outcome.value,
++          cover: draft.cover,
++          hostPhoto: draft.hostPhoto
++        };
++        next = { ...next, profile: stored };
++        setDraft(stored);
+       }
+-      // What comes back is what was written: trimmed, with blank rows dropped.
+-      const stored = {
+-        ...outcome.value,
+-        cover: draft.cover,
+-        hostPhoto: draft.hostPhoto
+-      };
+-      next = { ...next, profile: stored };
+-      setDraft(stored);
+-    }
+ 
+-    setSaving(false);
+-    setLoad({ status: "ready", property: next });
+-    setProblems(NO_PROBLEMS);
+-    setSaved(true);
++      setSaving(false);
++      setLoad({ status: "ready", property: next });
++      setProblems(NO_PROBLEMS);
++      setSaved(true);
++      return true;
++    } catch {
++      setSaving(false);
++      setLoad({ status: "ready", property: next });
++      setProblems({ ...NO_PROBLEMS, failure: "Your changes could not be saved. Check your connection and try again." });
++      return false;
++    }
+   }
+ 
+   return {
+@@ -294,6 +315,7 @@ export function usePropertyDraft(propertyId: string): PropertyDraft {
+       setName(value);
+     },
+     setProfile,
+-    save
++    save,
++    saveValues
+   };
+ }
+diff --git a/src/ui/pages/HostWallDesignPage.test.tsx b/src/ui/pages/HostWallDesignPage.test.tsx
+index daf08d5..0eed4d3 100644
+--- a/src/ui/pages/HostWallDesignPage.test.tsx
++++ b/src/ui/pages/HostWallDesignPage.test.tsx
+@@ -152,107 +152,122 @@ describe("switching the phone editor between Edit and Preview", () => {
+   });
+   afterEach(() => vi.unstubAllGlobals());
+ 
+-  it("previews unsaved edits without saving or replacing the editor, then restores them", async () => {
++  it("opens on the wall and saves a focused section once", async () => {
+     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
+-    loadPreviewMemories.mockResolvedValue({ status: "ok", value: {
+-      posts: [{ id: "guest-1", message: "A lovely stay by the beach.", displayName: "Sam", photoCount: 0 }], nextCursor: null,
+-    } });
+     renderPage();
+-    const edit = await screen.findByRole("button", { name: "Edit" });
+-    fireEvent.click(edit);
+-    const preview = screen.getByRole("button", { name: "Preview" });
+-    const form = screen.getByRole("form", { name: "Guest wall" });
+-    expect(edit).toHaveAttribute("aria-pressed", "true");
+-    expect(screen.queryByRole("complementary", { name: "This wall on a phone" })).not.toBeInTheDocument();
+-    fireEvent.change(within(form).getByLabelText("Property name"), { target: { value: "Our beach cottage" } });
+-    fireEvent.change(within(form).getByLabelText("Arrival heading"), { target: { value: "Come on in" } });
+-
+-    fireEvent.click(preview);
+-    expect(preview).toHaveAttribute("aria-pressed", "true");
+-    expect(form).not.toBeVisible();
+-    expect(screen.queryByRole("button", { name: "Save changes" })).not.toBeInTheDocument();
+-    const wall = within(screen.getByRole("complementary", { name: "This wall on a phone" }));
+-    expect(wall.getByRole("heading", { name: "Our beach cottage" })).toBeInTheDocument();
+-    expect(wall.getByRole("heading", { name: "Come on in" })).toBeInTheDocument();
+-    expect(await wall.findByText("A lovely stay by the beach.")).toBeInTheDocument();
+-    expect(wall.queryByRole("textbox")).not.toBeInTheDocument();
+-    expect(screen.getByText("Preview includes your unsaved changes.")).toBeInTheDocument();
+-
+-    fireEvent.click(edit);
+-    expect(screen.getByRole("form", { name: "Guest wall" })).toBe(form);
+-    expect(within(form).getByLabelText("Property name")).toHaveValue("Our beach cottage");
+-    expect(within(form).getByLabelText("Arrival heading")).toHaveValue("Come on in");
+-    expect(within(form).getByRole("button", { name: "Save changes" })).toBeEnabled();
++    fireEvent.click(await screen.findByRole("button", { name: "Edit details" }));
++    const form = within(screen.getByRole("dialog", { name: "Property details" }));
++    fireEvent.change(form.getByLabelText("Property name"), { target: { value: "Our beach cottage" } });
++    fireEvent.change(form.getByLabelText("Address"), { target: { value: "12 Beach Road" } });
+     expect(savePropertyName).not.toHaveBeenCalled();
+-    expect(savePropertyProfile).not.toHaveBeenCalled();
+-    expect(loadProperty).toHaveBeenCalledTimes(1);
++    fireEvent.click(form.getByRole("button", { name: "Save changes" }));
++    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
++    expect(savePropertyName).toHaveBeenCalledTimes(1);
++    expect(savePropertyName).toHaveBeenCalledWith("prop-1", "Our beach cottage");
++    expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ location: "12 Beach Road", stayWelcome: filledProfile.stayWelcome }));
++    expect(screen.getByRole("status")).toHaveTextContent("up to date");
++    fireEvent.click(screen.getByRole("button", { name: "View as guest" }));
++    const preview = within(screen.getByRole("region", { name: "Guest preview" }));
++    expect(preview.getByRole("heading", { name: "Our beach cottage" })).toBeInTheDocument();
++    expect(screen.queryByRole("button", { name: "Edit details" })).not.toBeInTheDocument();
++    fireEvent.click(screen.getByRole("button", { name: "Back to editor" }));
++    expect(screen.getByRole("button", { name: "Edit details" })).toBeVisible();
+   });
+ 
+-  it("changes and saves the theme from the mobile dock while keeping Preview current", async () => {
++  it("cancels a section without changing the wall or writing anything", async () => {
+     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
+     renderPage();
+-    fireEvent.click(await screen.findByRole("button", { name: "Edit" }));
+-    fireEvent.click(screen.getByRole("button", { name: "Style" }));
+-    const theme = screen.getByRole("group", { name: "Wall theme" });
+-    expect(document.querySelector(".mobile-edit-dock")).toContainElement(theme);
+-    expect(document.querySelector(".property-side-tools")).not.toBeInTheDocument();
+-    fireEvent.click(within(theme).getByRole("button", { name: /Warm Linen/ }));
+-    fireEvent.click(within(theme).getByRole("radio", { name: "Playful" }));
+-    expect(within(theme).getByRole("button", { name: /Playful/ })).toHaveAttribute("aria-expanded", "false");
+-    fireEvent.click(screen.getByRole("radio", { name: "Berry" }));
+-    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "seaside");
+-    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-colour", "ocean");
++    fireEvent.click(await screen.findByRole("button", { name: "Edit welcome" }));
++    const form = within(screen.getByRole("dialog", { name: "Welcome & hosts" }));
++    fireEvent.change(form.getByLabelText("Welcome message"), { target: { value: "Discard this change" } });
++    fireEvent.click(form.getByRole("button", { name: "Cancel" }));
++    expect(screen.queryByText("Discard this change")).not.toBeInTheDocument();
++    expect(savePropertyProfile).not.toHaveBeenCalled();
++    fireEvent.click(screen.getByRole("button", { name: "Edit welcome" }));
++    expect(screen.getByLabelText("Welcome message")).toHaveValue(filledProfile.stayWelcome);
++  });
+ 
+-    fireEvent.click(screen.getByRole("button", { name: "Preview" }));
+-    expect(screen.queryByRole("group", { name: "Wall theme" })).not.toBeInTheDocument();
+-    expect(document.querySelector(".phone-screen")).toHaveAttribute("data-wall-theme", "seaside");
+-    expect(document.querySelector(".phone-screen")).toHaveAttribute("data-wall-colour", "ocean");
+-    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+-    fireEvent.click(screen.getByRole("button", { name: "Style" }));
+-    expect(screen.getByRole("radio", { name: "Berry" })).toBeChecked();
+-    fireEvent.click(save());
+-    await waitFor(() => expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ theme: "seaside", colour: "ocean" })));
++  it("validates links, saves booking and mailing-list destinations, and previews both", async () => {
++    renderPage();
++    fireEvent.click(await screen.findByRole("button", { name: "Add links" }));
++    const form = within(screen.getByRole("dialog", { name: "Your links" }));
++    fireEvent.click(form.getByRole("button", { name: "+ Book direct" }));
++    fireEvent.click(form.getByRole("button", { name: "Save changes" }));
++    expect(await form.findAllByText(/Add the web address/)).not.toHaveLength(0);
++    expect(savePropertyProfile).not.toHaveBeenCalled();
++    fireEvent.change(form.getByLabelText("Web address"), { target: { value: "seaview.example/book" } });
++    fireEvent.click(form.getByRole("button", { name: "+ Join our mailing list" }));
++    fireEvent.change(form.getAllByLabelText("Web address")[1]!, { target: { value: "https://seaview.example/newsletter" } });
++    fireEvent.click(form.getByRole("button", { name: "Save changes" }));
++    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
++    expect(savePropertyProfile).toHaveBeenCalledTimes(1);
++    expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ stayAgainLinks: [
++      { label: "Book direct", url: "seaview.example/book" },
++      { label: "Join our mailing list", url: "https://seaview.example/newsletter" },
++    ] }));
++    fireEvent.click(screen.getByRole("button", { name: "View as guest" }));
++    const preview = within(screen.getByRole("region", { name: "Guest preview" }));
++    expect(preview.getByRole("link", { name: /Book direct/ })).toHaveAttribute("href", "https://seaview.example/book");
++    expect(preview.getByRole("link", { name: /Join our mailing list/ })).toHaveAttribute("href", "https://seaview.example/newsletter");
+   });
+ 
+-  it("keeps the look of the wall behind the Style button without changing the draft", async () => {
++  it("keeps failed saves open with the entered links ready to retry", async () => {
++    savePropertyProfile.mockResolvedValueOnce({ status: "error", message: "Connection lost. Try again." });
+     renderPage();
+-    fireEvent.click(await screen.findByRole("button", { name: "Edit" }));
+-    expect(screen.queryByRole("group", { name: "Wall theme" })).not.toBeInTheDocument();
+-    const style = screen.getByRole("button", { name: "Style" });
+-    fireEvent.click(style);
+-    expect(style).toHaveAttribute("aria-expanded", "true");
+-    expect(screen.getByRole("group", { name: "Wall theme" })).toBeInTheDocument();
+-    fireEvent.click(screen.getByRole("button", { name: "Done" }));
+-    expect(style).toHaveAttribute("aria-expanded", "false");
+-    expect(screen.queryByRole("group", { name: "Wall theme" })).not.toBeInTheDocument();
+-    expect(save()).toBeDisabled();
++    fireEvent.click(await screen.findByRole("button", { name: "Add links" }));
++    const form = within(screen.getByRole("dialog", { name: "Your links" }));
++    fireEvent.click(form.getByRole("button", { name: "+ Book direct" }));
++    fireEvent.change(form.getByLabelText("Web address"), { target: { value: "https://seaview.example/book" } });
++    fireEvent.click(form.getByRole("button", { name: "Save changes" }));
++    expect(await form.findByText("Connection lost. Try again.")).toBeInTheDocument();
++    expect(form.getByLabelText("Web address")).toHaveValue("https://seaview.example/book");
++    fireEvent.click(form.getByRole("button", { name: "Save changes" }));
++    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+   });
+ 
+-  it("opens the guest wall on a list of its parts and lands on the one tapped", async () => {
++  it("opens a focused form from Sections and saves the look without a second save", async () => {
+     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
+     renderPage();
+-    const list = await screen.findByRole("region", { name: "Set up your guest wall" });
+-    expect(screen.queryByRole("form", { name: "Guest wall" })).not.toBeInTheDocument();
+-    expect(within(list).getByText(/of 5 done/)).toBeInTheDocument();
+-    const essentials = document.createElement("div");
+-    vi.spyOn(document, "getElementById").mockImplementation((id) => (id === "wall-section-essentials" ? essentials : null));
+-    vi.spyOn(essentials, "getBoundingClientRect").mockReturnValue({ top: 900 } as DOMRect);
+-    fireEvent.click(within(list).getByRole("button", { name: /Wi-Fi and essentials/ }));
+-    expect(screen.getByRole("form", { name: "Guest wall" })).toBeVisible();
+-    expect(screen.queryByRole("region", { name: "Set up your guest wall" })).not.toBeInTheDocument();
+-    expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 888, behavior: "instant" });
+-    vi.mocked(document.getElementById).mockRestore();
++    fireEvent.click(await screen.findByRole("button", { name: "Sections" }));
++    const sections = within(screen.getByRole("navigation", { name: "Guest wall sections" }));
++    expect(sections.getByRole("button", { name: /Your links/ })).toBeInTheDocument();
++    fireEvent.click(sections.getByRole("button", { name: /Look & feel/ }));
++    const form = within(screen.getByRole("dialog", { name: "Look & feel" }));
++    fireEvent.click(form.getByRole("button", { name: /Warm Linen/ }));
++    fireEvent.click(form.getByRole("radio", { name: "Playful" }));
++    fireEvent.click(form.getByRole("radio", { name: "Berry" }));
++    fireEvent.click(form.getByRole("button", { name: "Save changes" }));
++    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
++    expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ theme: "seaside", colour: "ocean" }));
++  });
++  it("uploads a selected cover only on save and retains it after the form closes", async () => {
++    renderPage();
++    fireEvent.click(await screen.findByRole("button", { name: "Edit details" }));
++    const file = new File(["photo"], "cottage.jpg", { type: "image/jpeg" });
++    fireEvent.change(screen.getByLabelText("Cover photo", { selector: "input" }), { target: { files: [file] } });
++    expect(uploadPropertyPhoto).not.toHaveBeenCalled();
++    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
++    expect(uploadPropertyPhoto).not.toHaveBeenCalled();
++    fireEvent.click(screen.getByRole("button", { name: "Edit details" }));
++    fireEvent.change(screen.getByLabelText("Cover photo", { selector: "input" }), { target: { files: [file] } });
++    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
++    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
++    expect(uploadPropertyPhoto).toHaveBeenCalledTimes(1);
++    expect(document.querySelector(".phone-wall-cover img")).toHaveAttribute("src", coverPhoto.url);
++    expect(savePropertyProfile).not.toHaveBeenCalled();
+   });
+ 
+-  it("takes the note's lines off from one menu on a phone", async () => {
+-    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
++  it("can retry a save after an unexpected connection rejection", async () => {
++    savePropertyProfile.mockRejectedValueOnce(new Error("network disconnected"));
+     renderPage();
+-    fireEvent.click(await screen.findByRole("button", { name: "Edit" }));
+-    expect(screen.queryByRole("button", { name: "Leave the whole note out" })).not.toBeInTheDocument();
+-    fireEvent.click(screen.getByText("Options for the note from your hosts"));
+-    fireEvent.click(screen.getByRole("button", { name: "Hide the heading" }));
+-    expect(canvas().queryByLabelText("Arrival heading")).not.toBeInTheDocument();
+-    expect(save()).toBeEnabled();
++    fireEvent.click(await screen.findByRole("button", { name: "Edit welcome" }));
++    fireEvent.change(screen.getByLabelText("Welcome message"), { target: { value: "The beach is a short walk away." } });
++    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
++    expect(await within(screen.getByRole("dialog")).findByText(/Check your connection and try again/)).toBeInTheDocument();
++    expect(screen.getByLabelText("Welcome message")).toHaveValue("The beach is a short walk away.");
++    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
++    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
++    expect(savePropertyProfile).toHaveBeenCalledTimes(2);
+   });
+ 
+   it("switches the public wall too, hiding its sharing controls in Preview", async () => {
+@@ -269,32 +284,16 @@ describe("switching the phone editor between Edit and Preview", () => {
+     expect(screen.getByRole("region", { name: "This wall" })).toBeVisible();
+   });
+ 
+-  it("restores each mode's scroll position when switching back", async () => {
++  it("returns to the desktop canvas when resized from the phone editor", async () => {
+     renderPage();
+-    const edit = await screen.findByRole("button", { name: "Edit" });
+-    fireEvent.click(edit);
+-    const preview = screen.getByRole("button", { name: "Preview" });
+-    vi.stubGlobal("scrollY", 1375);
+-    fireEvent.click(preview);
+-    vi.stubGlobal("scrollY", 480);
+-    fireEvent.click(edit);
+-    expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 1375, behavior: "instant" });
+-    fireEvent.click(preview);
+-    expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 480, behavior: "instant" });
+-  });
+-
+-  it("keeps both surfaces available on desktop when resized from mobile Preview", async () => {
+-    renderPage();
+-    await screen.findByRole("button", { name: "Edit" });
+-    fireEvent.click(screen.getByRole("button", { name: "Preview" }));
++    await screen.findByRole("button", { name: "Edit details" });
++    fireEvent.click(screen.getByRole("button", { name: "View as guest" }));
+     act(() => resize(1440));
+-    expect(screen.queryByRole("group", { name: "Wall editor mode" })).not.toBeInTheDocument();
+     expect(screen.getByRole("form", { name: "Guest wall" })).toBeVisible();
+     expect(screen.getByRole("complementary", { name: "This wall on a phone" })).toBeVisible();
+-    expect(document.querySelector(".mobile-edit-dock")).not.toBeInTheDocument();
+-    expect(document.querySelector(".property-side-tools")).toContainElement(screen.getByRole("group", { name: "Wall theme" }));
++    expect(document.querySelector(".phone-wall-dock")).not.toBeInTheDocument();
+     act(() => resize(393));
+-    expect(screen.getByRole("button", { name: "Preview" })).toHaveAttribute("aria-pressed", "true");
++    expect(screen.getByRole("button", { name: "Edit details" })).toBeVisible();
+     expect(screen.queryByRole("form", { name: "Guest wall" })).not.toBeInTheDocument();
+   });
+ });
+diff --git a/src/ui/pages/HostWallDesignPage.tsx b/src/ui/pages/HostWallDesignPage.tsx
+index 9c18d6f..d2cd133 100644
+--- a/src/ui/pages/HostWallDesignPage.tsx
++++ b/src/ui/pages/HostWallDesignPage.tsx
+@@ -42,6 +42,7 @@ import {
+   type PhotoSlot,
+ } from "../host/photoSlots";
+ import { propertyBlock, usePropertyDraft } from "../host/usePropertyDraft";
++import { MobileWallEditor } from "../host/MobileWallEditor";
+ import "./hostWallEditor.css";
+ 
+ /**
+@@ -363,6 +364,7 @@ export function HostWallDesignPage({
+   const phoneBelow = useMediaQuery(PHONE_BELOW_QUERY);
+   const showPhone = phoneWanted || phoneBelow;
+   const mobileEditor = useMediaQuery(MOBILE_EDITOR_QUERY);
++  const [mobileFormOpen, setMobileFormOpen] = useState(false);
+   // On a phone the guest wall opens on a list of its parts, so a Host sees
+   // what is done and what is left before they are dropped into the wall
+   // itself. The public wall is one header card and has no list to give.
+@@ -459,6 +461,9 @@ export function HostWallDesignPage({
+   const property = (draft.load as { status: "ready"; property: HostProperty })
+     .property;
+   const profile = draft.profile;
++  if ((mobileEditor || mobileFormOpen) && view === "stay" && !settings) {
++    return <MobileWallEditor property={property} draft={draft} onEditingChange={setMobileFormOpen} />;
++  }
+   // Which note the open photograph dialog belongs to, numbered the way the
+   // cards on the wall are numbered, so the window says which one it changes.
+ 

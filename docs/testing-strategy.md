@@ -219,7 +219,7 @@ environment faults, recorded as **BLOCKED**, not **FAIL**.
   while that property is live; a draft property's photographs are refused.
 - Only the owning Host may upload, replace or delete one, and an anonymous Guest session
   never counts as an owner.
-- Uploads are limited to JPEG, PNG and WebP under 8MB.
+- Hosts may choose JPEG, PNG or WebP photos up to 40MB; the photo is shrunk on the device (longest edge 1600px) and what is uploaded must be under 8MB, which `storage.rules` also enforces.
 - Every other path in the bucket, including elsewhere under a property, stays denied.
 
 ---

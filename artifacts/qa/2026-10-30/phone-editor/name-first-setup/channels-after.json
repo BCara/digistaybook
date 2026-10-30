@@ -1,0 +1,722 @@
+{
+  "status": "success",
+  "result": {
+    "channels": [
+      {
+        "name": "projects/digistaybook-cbert/sites/digistaybook-cbert/channels/live",
+        "url": "https://digistaybook-cbert.web.app",
+        "release": {
+          "name": "projects/digistaybook-cbert/sites/digistaybook-cbert/channels/live/releases/1793344508394000",
+          "version": {
+            "name": "projects/digistaybook-cbert/sites/digistaybook-cbert/versions/3441c25c0722d022",
+            "status": "FINALIZED",
+            "config": {
+              "headers": [
+                {
+                  "headers": {
+                    "X-Content-Type-Options": "nosniff",
+                    "Referrer-Policy": "strict-origin-when-cross-origin",
+                    "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+                  },
+                  "glob": "**"
+                },
+                {
+                  "headers": {
+                    "Cache-Control": "no-cache"
+                  },
+                  "glob": "**"
+                },
+                {
+                  "headers": {
+                    "Cache-Control": "public, max-age=31536000, immutable"
+                  },
+                  "glob": "/assets/**"
+                }
+              ],
+              "redirects": [
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=m1-01",
+                  "regex": "^/f/m1-01/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=m1-06",
+                  "regex": "^/f/m1-06/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=m1-08",
+                  "regex": "^/f/m1-08/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=m1-10",
+                  "regex": "^/f/m1-10/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=m1-15",
+                  "regex": "^/f/m1-15/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=m1-19",
+                  "regex": "^/f/m1-19/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=new-approval",
+                  "regex": "^/f/new-approval/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=new-neighbours",
+                  "regex": "^/f/new-neighbours/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=new-page-purposes",
+                  "regex": "^/f/new-page-purposes/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=new-setup",
+                  "regex": "^/f/new-setup/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=new-wet-weather",
+                  "regex": "^/f/new-wet-weather/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=r-04",
+                  "regex": "^/f/r-04/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=r-07",
+                  "regex": "^/f/r-07/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=r-18",
+                  "regex": "^/f/r-18/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-fb-01",
+                  "regex": "^/f/voice-fb-01/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-fb-02",
+                  "regex": "^/f/voice-fb-02/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-fb-03",
+                  "regex": "^/f/voice-fb-03/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-fb-05",
+                  "regex": "^/f/voice-fb-05/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-video-02",
+                  "regex": "^/f/voice-video-02/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=pin-pages",
+                  "regex": "^/p/pin-pages/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=pin-qr",
+                  "regex": "^/p/pin-qr/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=pin-setup",
+                  "regex": "^/p/pin-setup/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-pin-01",
+                  "regex": "^/p/voice-pin-01/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-pin-02",
+                  "regex": "^/p/voice-pin-02/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-pin-03",
+                  "regex": "^/p/voice-pin-03/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-pin-04",
+                  "regex": "^/p/voice-pin-04/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-pin-05",
+                  "regex": "^/p/voice-pin-05/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=coastal&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-coastal",
+                  "regex": "^/p/sign-coastal/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=farmhouse&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-farmhouse",
+                  "regex": "^/p/sign-farmhouse/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=modern&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-modern",
+                  "regex": "^/p/sign-modern/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=boho-arch&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-boho-arch",
+                  "regex": "^/p/sign-boho-arch/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=botanical&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-botanical",
+                  "regex": "^/p/sign-botanical/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=cabin&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-cabin",
+                  "regex": "^/p/sign-cabin/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=mid-century&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-mid-century",
+                  "regex": "^/p/sign-mid-century/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=letterpress&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-letterpress",
+                  "regex": "^/p/sign-letterpress/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=desert-sun&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-desert-sun",
+                  "regex": "^/p/sign-desert-sun/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=color-block&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-color-block",
+                  "regex": "^/p/sign-color-block/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=chalkboard&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-chalkboard",
+                  "regex": "^/p/sign-chalkboard/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=postcard&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-postcard",
+                  "regex": "^/p/sign-postcard/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=photo-header&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-photo-header",
+                  "regex": "^/p/sign-photo-header/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=polaroid&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-polaroid",
+                  "regex": "^/p/sign-polaroid/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=coast-photo&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-coast-photo",
+                  "regex": "^/p/sign-coast-photo/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=sunset-photo&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-sunset-photo",
+                  "regex": "^/p/sign-sunset-photo/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=collage&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-collage",
+                  "regex": "^/p/sign-collage/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=arch-photo&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-arch-photo",
+                  "regex": "^/p/sign-arch-photo/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-01",
+                  "regex": "^/s/voice-story-01/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-02",
+                  "regex": "^/s/voice-story-02/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-03",
+                  "regex": "^/s/voice-story-03/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-04",
+                  "regex": "^/s/voice-story-04/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-05",
+                  "regex": "^/s/voice-story-05/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-06",
+                  "regex": "^/s/voice-story-06/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-07",
+                  "regex": "^/s/voice-story-07/?$"
+                }
+              ],
+              "rewrites": [
+                {
+                  "glob": "/wall/**",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/stay/**",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/embed/wall/**",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/host",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/host/**",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/operations",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/operations/**",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/reset-password",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/verify-email",
+                  "path": "/app.html"
+                }
+              ],
+              "cleanUrls": true
+            },
+            "labels": {
+              "deployment-tool": "cli-firebase"
+            },
+            "createTime": "2026-10-30T07:14:08.419785Z",
+            "createUser": {
+              "email": "clb.bertram@gmail.com"
+            },
+            "finalizeTime": "2026-10-30T07:14:12.589488Z",
+            "finalizeUser": {
+              "email": "clb.bertram@gmail.com"
+            },
+            "fileCount": "104",
+            "versionBytes": "5844401"
+          },
+          "type": "DEPLOY",
+          "releaseTime": "2026-10-30T07:15:08.394Z",
+          "releaseUser": {
+            "email": "clb.bertram@gmail.com"
+          }
+        },
+        "createTime": "2026-08-11T01:43:30.294541861Z",
+        "updateTime": "2026-10-30T07:15:08.394Z",
+        "retainedReleaseCount": 2147483647
+      },
+      {
+        "name": "projects/digistaybook-cbert/sites/digistaybook-cbert/channels/phone-editor",
+        "url": "https://digistaybook-cbert--phone-editor-3tb5brbp.web.app",
+        "release": {
+          "name": "projects/digistaybook-cbert/sites/digistaybook-cbert/channels/phone-editor/releases/1793344453011000",
+          "version": {
+            "name": "projects/digistaybook-cbert/sites/digistaybook-cbert/versions/3441c25c0722d022",
+            "status": "FINALIZED",
+            "config": {
+              "headers": [
+                {
+                  "headers": {
+                    "X-Content-Type-Options": "nosniff",
+                    "Referrer-Policy": "strict-origin-when-cross-origin",
+                    "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+                  },
+                  "glob": "**"
+                },
+                {
+                  "headers": {
+                    "Cache-Control": "no-cache"
+                  },
+                  "glob": "**"
+                },
+                {
+                  "headers": {
+                    "Cache-Control": "public, max-age=31536000, immutable"
+                  },
+                  "glob": "/assets/**"
+                }
+              ],
+              "redirects": [
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=m1-01",
+                  "regex": "^/f/m1-01/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=m1-06",
+                  "regex": "^/f/m1-06/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=m1-08",
+                  "regex": "^/f/m1-08/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=m1-10",
+                  "regex": "^/f/m1-10/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=m1-15",
+                  "regex": "^/f/m1-15/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=m1-19",
+                  "regex": "^/f/m1-19/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=new-approval",
+                  "regex": "^/f/new-approval/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=new-neighbours",
+                  "regex": "^/f/new-neighbours/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=new-page-purposes",
+                  "regex": "^/f/new-page-purposes/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=new-setup",
+                  "regex": "^/f/new-setup/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=new-wet-weather",
+                  "regex": "^/f/new-wet-weather/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=r-04",
+                  "regex": "^/f/r-04/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=r-07",
+                  "regex": "^/f/r-07/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=r-18",
+                  "regex": "^/f/r-18/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-fb-01",
+                  "regex": "^/f/voice-fb-01/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-fb-02",
+                  "regex": "^/f/voice-fb-02/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-fb-03",
+                  "regex": "^/f/voice-fb-03/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-fb-05",
+                  "regex": "^/f/voice-fb-05/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-video-02",
+                  "regex": "^/f/voice-video-02/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=pin-pages",
+                  "regex": "^/p/pin-pages/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=pin-qr",
+                  "regex": "^/p/pin-qr/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=pin-setup",
+                  "regex": "^/p/pin-setup/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-pin-01",
+                  "regex": "^/p/voice-pin-01/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-pin-02",
+                  "regex": "^/p/voice-pin-02/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-pin-03",
+                  "regex": "^/p/voice-pin-03/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-pin-04",
+                  "regex": "^/p/voice-pin-04/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=pinterest&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-pin-05",
+                  "regex": "^/p/voice-pin-05/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=coastal&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-coastal",
+                  "regex": "^/p/sign-coastal/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=farmhouse&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-farmhouse",
+                  "regex": "^/p/sign-farmhouse/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=modern&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-modern",
+                  "regex": "^/p/sign-modern/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=boho-arch&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-boho-arch",
+                  "regex": "^/p/sign-boho-arch/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=botanical&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-botanical",
+                  "regex": "^/p/sign-botanical/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=cabin&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-cabin",
+                  "regex": "^/p/sign-cabin/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=mid-century&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-mid-century",
+                  "regex": "^/p/sign-mid-century/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=letterpress&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-letterpress",
+                  "regex": "^/p/sign-letterpress/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=desert-sun&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-desert-sun",
+                  "regex": "^/p/sign-desert-sun/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=color-block&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-color-block",
+                  "regex": "^/p/sign-color-block/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=chalkboard&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-chalkboard",
+                  "regex": "^/p/sign-chalkboard/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=postcard&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-postcard",
+                  "regex": "^/p/sign-postcard/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=photo-header&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-photo-header",
+                  "regex": "^/p/sign-photo-header/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=polaroid&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-polaroid",
+                  "regex": "^/p/sign-polaroid/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=coast-photo&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-coast-photo",
+                  "regex": "^/p/sign-coast-photo/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=sunset-photo&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-sunset-photo",
+                  "regex": "^/p/sign-sunset-photo/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=collage&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-collage",
+                  "regex": "^/p/sign-collage/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/qr-sign-maker?style=arch-photo&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-arch-photo",
+                  "regex": "^/p/sign-arch-photo/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-01",
+                  "regex": "^/s/voice-story-01/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-02",
+                  "regex": "^/s/voice-story-02/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-03",
+                  "regex": "^/s/voice-story-03/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-04",
+                  "regex": "^/s/voice-story-04/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-05",
+                  "regex": "^/s/voice-story-05/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-06",
+                  "regex": "^/s/voice-story-06/?$"
+                },
+                {
+                  "statusCode": 302,
+                  "location": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-07",
+                  "regex": "^/s/voice-story-07/?$"
+                }
+              ],
+              "rewrites": [
+                {
+                  "glob": "/wall/**",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/stay/**",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/embed/wall/**",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/host",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/host/**",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/operations",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/operations/**",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/reset-password",
+                  "path": "/app.html"
+                },
+                {
+                  "glob": "/verify-email",
+                  "path": "/app.html"
+                }
+              ],
+              "cleanUrls": true
+            },
+            "labels": {
+              "deployment-tool": "cli-firebase"
+            },
+            "createTime": "2026-10-30T07:14:08.419785Z",
+            "createUser": {
+              "email": "clb.bertram@gmail.com"
+            },
+            "finalizeTime": "2026-10-30T07:14:12.589488Z",
+            "finalizeUser": {
+              "email": "clb.bertram@gmail.com"
+            },
+            "fileCount": "104",
+            "versionBytes": "5844401"
+          },
+          "type": "DEPLOY",
+          "releaseTime": "2026-10-30T07:14:13.011Z",
+          "releaseUser": {
+            "email": "clb.bertram@gmail.com"
+          }
+        },
+        "createTime": "2026-10-30T02:45:07.943534312Z",
+        "updateTime": "2026-10-30T07:14:13.011Z",
+        "retainedReleaseCount": 10,
+        "expireTime": "2026-11-06T07:14:06.566077937Z"
+      }
+    ]
+  }
+}

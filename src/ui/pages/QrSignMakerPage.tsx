@@ -160,6 +160,10 @@ export function QrSignMakerPage() {
                 <p className="field-hint">
                   {network.trim() ? "Nothing you type here is sent to us." : "Enter the network name to add the code."}
                 </p>
+                <p className="field-hint sign-wifi-backup">
+                  Keep the password written somewhere guests can read it too, such as your welcome book or a card by the
+                  router. Not every phone can scan a Wi-Fi code, and a guest with no signal can't open your guide to look it up.
+                </p>
               </>
             )}
           </fieldset>

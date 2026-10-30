@@ -1,0 +1,119 @@
+diff --git a/src/ui/host/MobileWallEditor.tsx b/src/ui/host/MobileWallEditor.tsx
+index 0e889f0..b92cb53 100644
+--- a/src/ui/host/MobileWallEditor.tsx
++++ b/src/ui/host/MobileWallEditor.tsx
+@@ -22,7 +22,7 @@ import type { PropertyDraft } from "./usePropertyDraft";
+ import "./mobileWallEditor.css";
+ 
+ type Section = SetupSection;
+-type SectionRow = { id: Section; title?: string; detail: string; state: "done" | "todo" | "off" | "optional"; optional?: boolean };
++type SectionRow = { id: Section; title?: string; detail: string; state: "done" | "todo" };
+ const titles: Record<Section, string> = {
+   property: "Property details", welcome: "Welcome & hosts",
+   essentials: "Wi-Fi & essentials", notes: "More from your hosts", links: "Your links", style: "Look & feel",
+@@ -65,12 +65,12 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
+     return () => observer?.disconnect();
+   }, []);
+   const sections: SectionRow[] = [
+-    { id: "property", detail: [draft.name, profile.location].filter(Boolean).join(" · ") || "Name, address and optional cover photo", state: reviewedState("property") },
+-    { id: "welcome", detail: profile.stayNoteOff ? "Welcome hidden · Your names and optional photo" : profile.stayWelcome.trim() || "Your names, welcome note and optional host photo", state: reviewedState("welcome") },
++    { id: "property", detail: [draft.name, profile.location].filter(Boolean).join(" · ") || "Name, address and cover photo", state: reviewedState("property") },
++    { id: "welcome", detail: profile.stayNoteOff ? "Welcome hidden · Your names and host photo" : profile.stayWelcome.trim() || "Your names, welcome note and host photo", state: reviewedState("welcome") },
+     { id: "essentials", title: "Wi-Fi and essentials", detail: profile.factsOff ? "Hidden from the wall" : profile.facts.map(f => f.term).filter(Boolean).join(", ") || "Wi-Fi, check-out, parking", state: reviewedState("essentials") },
+-    { id: "notes", title: "More notes", detail: writtenHostNotes(profile).length ? `${writtenHostNotes(profile).length} notes from your hosts` : "Anything else you want guests to know", state: reviewedState("notes"), optional: true },
+-    ...(linksEnabled ? [{ id: "links" as const, detail: links.length ? links.map(link => link.label).join(" · ") : "Book direct, mailing list or another useful link", state: reviewedState("links"), optional: true }] : []),
+-    { id: "style", detail: `${wallTheme(profile.theme).name}, ${wallColourName(profile.theme, profile.colour)}`, state: reviewedState("style"), optional: true },
++    { id: "notes", title: "More notes", detail: writtenHostNotes(profile).length ? `${writtenHostNotes(profile).length} notes from your hosts` : "Anything else you want guests to know", state: reviewedState("notes") },
++    ...(linksEnabled ? [{ id: "links" as const, detail: links.length ? links.map(link => link.label).join(" · ") : "Book direct, mailing list or another useful link", state: reviewedState("links") }] : []),
++    { id: "style", detail: `${wallTheme(profile.theme).name}, ${wallColourName(profile.theme, profile.colour)}`, state: reviewedState("style") },
+   ];
+   return <PropertyShell property={property} current="design" name={draft.name} profile={profile} className="phone-wall-page">
+     <header className="phone-wall-heading" hidden={mode === "sections"}>
+@@ -80,11 +80,11 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
+     </header>
+ 
+     {mode === "sections" ? <>
+-      <p className="phone-wall-review-hint">Open each section and save when you’re happy. Recommended details can be left blank.</p>
++      <p className="phone-wall-review-hint">Only the property name is required to get started. Review and save each section at your own pace.</p>
+       <nav aria-label="Guest wall sections" className="phone-wall-sections">
+       {sections.map((section, index) => <button key={section.id} type="button" data-state={section.state} onClick={() => edit(section.id)}>
+         <span className="phone-section-mark" role="img" aria-label={section.state === "done" ? "Reviewed and saved" : "Not reviewed"}>{section.state === "done" ? "✓" : index + 1}</span>
+-        <span className="phone-section-words"><b>{section.title || titles[section.id]}{section.optional && <span className="phone-section-optional"> · optional</span>}</b><small>{section.detail}</small></span><span className="phone-section-chevron" aria-hidden="true">›</span>
++        <span className="phone-section-words"><b>{section.title || titles[section.id]}</b><small>{section.detail}</small></span><span className="phone-section-chevron" aria-hidden="true">›</span>
+       </button>)}
+     </nav></> : mode === "preview" ? <section className="phone-wall-guest" aria-label="Guest preview">
+       <WallPreview name={draft.name} profile={profile} counts={draft.counts} view="stay" slug={property.slug} stayToken={property.stayToken} propertyId={property.id} />
+@@ -184,7 +184,7 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section:
+         const problem = validatePhotoFile(file); setFailure(problem);
+         if (!problem) setPhotos(previous => ({ ...previous, [slot]: file }));
+       }} /></label>
+-      <p className="field-hint">{slot === "cover" ? "A landscape photo of your property." : "A photo of you, so guests know who is welcoming them. Optional."} JPEG, PNG or WebP, up to 8 MB.</p>
++      <p className="field-hint">{slot === "cover" ? "A landscape photo of your property." : "A photo of you, so guests know who is welcoming them."} JPEG, PNG or WebP, up to 8 MB.</p>
+       {photos[slot] && <p className="field-hint">{photos[slot].name} · Ready to save</p>}
+       {(current || photos[slot]) && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => setPhotos(previous => ({ ...previous, [slot]: null }))}>Remove {slot === "cover" ? "cover" : "host"} photo</button>}
+       {photos[slot] === null && <p className="field-hint">Photo will be removed when you save.</p>}
+@@ -231,9 +231,9 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section:
+           {text("stayHeading", "Welcome heading", profileLimits.stayHeadingMax)}
+           {text("hosts", "Your names", profileLimits.hostsMax)}
+           {text("stayWelcome", "Welcome message", profileLimits.stayWelcomeMax, true)}
+-          {text("stayTip", "A little tip (optional)", profileLimits.stayTipMax, true)}
++          {text("stayTip", "A little tip", profileLimits.stayTipMax, true)}
+           <label className="phone-section-check"><input type="checkbox" checked={!profile.stayNoteOff} disabled={busy} onChange={e => set("stayNoteOff", !e.target.checked)} />Show the welcome note</label>
+-          {photo("hostPhoto", "Host photo (optional)")}
++          {photo("hostPhoto", "Host photo")}
+         </>}
+         {section === "essentials" && <>
+           <p className="field-hint">Add the details guests need during their stay.</p>
+@@ -255,7 +255,7 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section:
+             <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => set("hostNotes", profile.hostNotes.filter(row => row.id !== note.id))}>Remove note {index + 1}</button>
+           </fieldset>)}
+           {profile.hostNotes.length < profileLimits.hostNotesMax && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => set("hostNotes", [...profile.hostNotes, emptyHostNote()])}>Add a note</button>}
+-          {text("guestPrompt", "Guestbook prompt (optional)", 240, true)}
++          {text("guestPrompt", "Guestbook prompt", 240, true)}
+         </>}
+         {section === "links" && <>
+           <p className="field-hint">Add up to two links to your own booking page, mailing-list sign-up or another useful page. Guests open your website; mailing-list sign-ups happen there.</p>
+diff --git a/src/ui/host/PropertyWizard.tsx b/src/ui/host/PropertyWizard.tsx
+index 049da08..f7f654a 100644
+--- a/src/ui/host/PropertyWizard.tsx
++++ b/src/ui/host/PropertyWizard.tsx
+@@ -356,7 +356,7 @@ export function PropertyWizard({
+           </p>
+ 
+           <label htmlFor="wizard-location">
+-            Where the property is<span className="label-optional">Optional</span>
++            Where the property is
+           </label>
+           <input
+             id="wizard-location"
+@@ -623,7 +623,7 @@ export function PropertyWizard({
+ 
+                   <div className="wizard-note-words">
+                     <label htmlFor={`wizard-host-note-${note.id}`}>
+-                      Your note<span className="label-optional">Optional</span>
++                      Your note
+                     </label>
+                     <textarea
+                       id={`wizard-host-note-${note.id}`}
+diff --git a/src/ui/pages/HostWallDesignPage.test.tsx b/src/ui/pages/HostWallDesignPage.test.tsx
+index 60fd5d5..25fe928 100644
+--- a/src/ui/pages/HostWallDesignPage.test.tsx
++++ b/src/ui/pages/HostWallDesignPage.test.tsx
+@@ -212,7 +212,7 @@ describe("switching the phone editor between Edit and Preview", () => {
+     expect(sections.getByRole("button", { name: /Your links/ })).toBeInTheDocument();
+     fireEvent.click(sections.getByRole("button", { name: /Welcome & hosts/ }));
+     expect(screen.getByRole("dialog", { name: "Welcome & hosts" })).toBeVisible();
+-    expect(within(screen.getByRole("dialog")).getByLabelText("Host photo (optional)")).toBeInTheDocument();
++    expect(within(screen.getByRole("dialog")).getByLabelText("Host photo")).toBeInTheDocument();
+     expect(screen.getByLabelText("Welcome message")).toHaveValue(filledProfile.stayWelcome);
+     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+     fireEvent.click(screen.getByRole("button", { name: "See guest view" }));
+@@ -230,7 +230,7 @@ describe("switching the phone editor between Edit and Preview", () => {
+     fireEvent.change(screen.getByLabelText("Your names"), { target: { value: "Ana & Tom" } });
+     fireEvent.change(screen.getByLabelText("Welcome message"), { target: { value: "Welcome to the cottage." } });
+     const photo = new File(["photo"], "hosts.jpg", { type: "image/jpeg" });
+-    fireEvent.change(screen.getByLabelText("Host photo (optional)"), { target: { files: [photo] } });
++    fireEvent.change(screen.getByLabelText("Host photo"), { target: { files: [photo] } });
+     fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+     expect(within(screen.getByRole("navigation", { name: "Guest wall sections" })).getByRole("button", { name: /Welcome & hosts/ })).toHaveAttribute("data-state", "done");

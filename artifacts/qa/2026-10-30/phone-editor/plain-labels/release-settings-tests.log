@@ -1,0 +1,13 @@
+
+> digistaybook@0.1.0 test
+> vitest run --exclude "tests/**/*.rules.test.ts" src/ui/pages/HostPropertySettingsPage.test.tsx
+
+
+ RUN  v4.1.10 C:/Users/clbbe/.codex/worktrees/phone-editor-release/DigiStayBook
+
+
+ Test Files  1 passed (1)
+      Tests  9 passed (9)
+   Start at  18:20:10
+   Duration  4.33s (transform 533ms, setup 291ms, import 624ms, tests 1.54s, environment 1.62s)
+

@@ -25,10 +25,12 @@ describe("first UI slices", () => {
   it("drops our own furniture from the wall a Host embeds, and keeps the attribution", () => {
     render(<GuestWallPage propertySlug="demo-cottage" embedded />);
 
-    // The demo ribbon is ours, and inside a Host's page it is furniture in
-    // someone else's room. The wall itself is unchanged.
+    // The demo ribbon and the cover-and-name header are ours, and inside a
+    // Host's page they are furniture in someone else's room: their site
+    // already says whose house it is. The memories are what is embedded.
     expect(screen.queryByText("Demo")).not.toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { level: 1 })).not.toBeInTheDocument();
+    expect(document.querySelector(".note-grid, .wall-memories")).toBeInTheDocument();
     // D-010: the attribution link is the point of an embed, so it stays.
     expect(screen.getByRole("link", { name: /Powered by DigiStayBook/i })).toHaveAttribute("href", "/");
   });

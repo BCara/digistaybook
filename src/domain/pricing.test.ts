@@ -1,6 +1,9 @@
 import * as server from "../../functions/src/billingPolicy";
 import {
   annualSaving,
+  baseCurrency,
+  billingCountries,
+  currencyForCountry,
   formatPrice,
   formatRate,
   monthsFreeOnAnnual,
@@ -45,6 +48,14 @@ describe("the published rate card matches the server's", () => {
     }
   });
 
+  // The server's map is its sales gate, so a country the pages quote but the
+  // server refuses — or the reverse — is a Host shown a price they cannot buy at.
+  it("sells in exactly the countries and currencies the server does", () => {
+    expect({ ...currencyForCountry }).toEqual(server.billingPolicy.currencyFor);
+    expect([...billingCountries]).toEqual([...server.billingCountries]);
+    expect(baseCurrency).toBe(server.billingPolicy.baseCurrency);
+  });
+
   it("states the same trial length", () => expect(trialDays).toBe(server.billingPolicy.trialDays));
 
   it("offers the same plans", () => expect([...plans]).toEqual([...server.billingPolicy.plans]));
@@ -56,6 +67,24 @@ describe("rates", () => {
     expect(formatRate(publishedRate("annual", "aud"), "aud")).toBe("A$150");
     expect(formatRate(publishedRate("monthly", "usd"), "usd")).toBe("US$10");
     expect(formatRate(publishedRate("annual", "usd"), "usd")).toBe("US$100");
+  });
+
+  // The ladder of 30 October 2026: US$10 converted at RBA rates and rounded.
+  it("quotes the ladder amounts in the handbook rate card", () => {
+    expect(formatRate(publishedRate("monthly", "nzd"), "nzd")).toBe("NZ$18");
+    expect(formatRate(publishedRate("annual", "nzd"), "nzd")).toBe("NZ$180");
+    expect(formatRate(publishedRate("monthly", "cad"), "cad")).toBe("CA$14");
+    expect(formatRate(publishedRate("annual", "cad"), "cad")).toBe("CA$140");
+    expect(formatRate(publishedRate("monthly", "gbp"), "gbp")).toBe("£8");
+    expect(formatRate(publishedRate("annual", "gbp"), "gbp")).toBe("£80");
+    expect(formatRate(publishedRate("monthly", "eur"), "eur")).toBe("€9");
+    expect(formatRate(publishedRate("annual", "eur"), "eur")).toBe("€90");
+  });
+
+  it("prices every annual plan at exactly ten months of the monthly one", () => {
+    for (const currency of posCurrencies) {
+      expect(publishedRate("annual", currency)).toBe(publishedRate("monthly", currency) * 10);
+    }
   });
 
   // Two dollar currencies are on sale, so a bare "$15" would not say which.

@@ -1,0 +1,95 @@
+{
+  "files": [
+    {
+      "file": "build_review.py",
+      "sha256": "55ffb54827ab6bb421913cd6925c96ef3f3642ad1742d399a675bb474e6e3b80"
+    },
+    {
+      "file": "CALENDAR_BEFORE.json",
+      "sha256": "60c01c28b968c6cf49b8f31e186bedcd4dd3f35bd844a44002bc9046ec88b142"
+    },
+    {
+      "file": "CAMPAIGN_REVIEW.html",
+      "sha256": "bd515c8373af3a1ecb484f553819339b9f70d632bc878842069033206cbd1d4e"
+    },
+    {
+      "file": "CAMPAIGN_REVIEW.md",
+      "sha256": "5b20e80c9af79f1a9c7e501927a7178fd8ee788269b10c1cf4151fc77c9756fb"
+    },
+    {
+      "file": "CLAUDE_BRIEF.md",
+      "sha256": "85c93e925b796e94ede134150a0727e4374554c0c59698c3ca070ad3e07f6514"
+    },
+    {
+      "file": "CLAUDE_RESPONSE.json",
+      "sha256": "9afe2f54ae2e1685875040317c6b63857af56eedcb0e07338b2dfc25f41b0f1f"
+    },
+    {
+      "file": "CLAUDE_REVIEW.html",
+      "sha256": "a2a9d857f4769467874f64f715d7c56ff9c4c93ff94f5e0b872f9909974d3da8"
+    },
+    {
+      "file": "CLAUDE_REVIEW.md",
+      "sha256": "065c4448e16d10af2a2c817579e71a956459d913d73da218e163ca5a3b94d969"
+    },
+    {
+      "file": "CLAUDE_REVIEW_AX.txt",
+      "sha256": "962da43ee83d2e5d5b2e60af682ba06a4716fe258779d913ebeefb40e73a1db2"
+    },
+    {
+      "file": "CLAUDE_REVIEW_CAPTURE.txt",
+      "sha256": "10ba828168bf48ec939cab8d5952e89df2b5c9d3ca3698413b07fecc33da59e8"
+    },
+    {
+      "file": "EVIDENCE_SUMMARY.json",
+      "sha256": "818bccd82cab8dfe1c4cff7f1725ff3bd1048995f669d4b236d760342ca42930"
+    },
+    {
+      "file": "facebook-group-1-initial.txt",
+      "sha256": "05f61f78942517fe9dabc01c6c2b518ce5fb0ce9a32d9c283a95895a785f46a3"
+    },
+    {
+      "file": "facebook-group-1-sample.txt",
+      "sha256": "be94172acbe0836fa18deba3ee8d968fc59c64e23cb1f76fe521bcb843825df2"
+    },
+    {
+      "file": "facebook-group-1-scroll.txt",
+      "sha256": "f8e3268bf0f14d3c17d1e79c8c482b9e6951efde7b79ba8df5d2a7e0e8d88c10"
+    },
+    {
+      "file": "facebook-group-2-sample.txt",
+      "sha256": "24cb1c127274f11076918a5829680914c31ed02f70a4d8c1108926cccb42e7b4"
+    },
+    {
+      "file": "finalize_review.py",
+      "sha256": "da69e0c52900b81b50a0dc61644eac7c53e49a07994f9034ef29d7b99f83a6cc"
+    },
+    {
+      "file": "integrate_review.py",
+      "sha256": "584745f929b9caa46a6ba11ae76917fe99d1672d60ac237755994f69f4e0a51b"
+    },
+    {
+      "file": "INTEGRATION_BEFORE.json",
+      "sha256": "d52092d109551d4dc2c2dbc1f0f6b38ba9efb0ad11c4210f6dc38a1f34f5af66"
+    },
+    {
+      "file": "PAGE_QA.json",
+      "sha256": "102193d28aace278f9606812157042162bbbdf4dd461563e9736b193131cfaf6"
+    },
+    {
+      "file": "review-1280.png",
+      "sha256": "0503f3b47560b2b808eac0e717df04c11f4f2f7e805c354c55e6d8b61cbac737"
+    },
+    {
+      "file": "review-390.png",
+      "sha256": "31bd03d5923bc456c27f5eb634265083dfbdc5c590aa23a791e310ca4d8f0a7b"
+    },
+    {
+      "file": "verify_review.mjs",
+      "sha256": "ef162821017ca81754fe77bab3a89542655bf3a23426fe86e469650885d2535d"
+    }
+  ],
+  "calendar_unchanged": true,
+  "hub_sha256": "88a10f9b14f8766d2072577ccd10772e29f15eb3fa530ddb1cb0054208f9e112",
+  "scope": "Review documents and hub links only; no external publication, account actions, app deployment or spending"
+}

@@ -20,4 +20,10 @@ describe("help request boundaries", () => {
     expect(() => helpContactInput({ ...input, message: " " })).toThrow();
     expect(() => helpContactInput({ ...input, requestId: "../escape" })).toThrow();
   });
+  it("records a custom options enquiry and treats anything else as general", () => {
+    const input = { email: "person@example.com", message: "Forty rooms", requestId: "a".repeat(32) };
+    expect(helpContactInput({ ...input, topic: "custom" })).toMatchObject({ topic: "custom" });
+    expect(helpContactInput(input)).toMatchObject({ topic: "general" });
+    expect(helpContactInput({ ...input, topic: "urgent<script>" })).toMatchObject({ topic: "general" });
+  });
 });

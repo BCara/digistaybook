@@ -1,18 +1,19 @@
 import {
   annualSaving,
-  countryNames,
-  currencyForCountry,
+  currencyCoverage,
+  currencyFor,
   currencyNames,
   formatRate,
   includedFeatures,
   publishedPlans,
-  taxCallout,
   trialCallout,
   trialDays,
   type PosCurrency
 } from "../../domain/pricing";
 import { useAuth } from "../auth/AuthProvider";
 import { detectBillingCountry } from "../host/billingCountry";
+import { customOptionsHref } from "./ContactPage";
+import { TaxCallout } from "./LandingPage";
 
 /**
  * BOP §6.3.4 — the pricing page.
@@ -27,20 +28,19 @@ import { detectBillingCountry } from "../host/billingCountry";
  *
  * One currency, the visitor's own. §4.1 quotes a Host in their own
  * point-of-sale currency, so the page shows only that one rather than a
- * switch between two dollars: AUD for a visitor in Australia, USD for everyone
- * else. Every rate still names its dollar (A$, US$), and the activation screen
- * asks the billing country before anything is charged.
+ * switch across the ladder: AUD, NZD, GBP, EUR or CAD where a country has its
+ * own price, and USD for everyone else. Every rate still names its currency
+ * (A$, NZ$, £, €, CA$, US$), and the activation screen asks the billing country
+ * before anything is charged.
  */
 export function PricingPage() {
   const { status } = useAuth();
   const signedIn = status === "host";
 
-  // One currency, the visitor's own: AUD in Australia and USD everywhere else.
-  // `detectBillingCountry` returns null outside the two countries we serve, so
-  // USD is also what anyone we cannot place reads, as the fine print says.
-  // Checkout asks the billing country again, so this is never the last word.
-  const detected = detectBillingCountry();
-  const currency: PosCurrency = detected ? currencyForCountry[detected] : "usd";
+  // One currency, the visitor's own: their country's price on the ladder, or
+  // USD — which is also what anyone we cannot place reads, as the fine print
+  // says. Checkout asks the billing country again, so this is never the last word.
+  const currency: PosCurrency = currencyFor(detectBillingCountry());
 
   const [monthly, annual] = publishedPlans(currency);
   const saving = formatRate(annualSaving(currency), currency);
@@ -90,6 +90,8 @@ export function PricingPage() {
           </article>
         </div>
 
+        <TaxCallout />
+
         <div className="included">
           <h2>Included in both plans</h2>
           <ul className="check-list">
@@ -100,11 +102,13 @@ export function PricingPage() {
         <div className="fine-print">
           <p>
             Prices are shown in {currencyNames[currency]} and charged in the currency of the country you are
-            billed in. DigiStayBook currently sells in {countryNames.AU} and {countryNames.US}; checkout
-            confirms the exact amount and date before you pay anything.
+            billed in. {currencyCoverage}; checkout confirms the exact amount and date before you pay anything.
           </p>
           <p>Billing is per property. Every property is managed from a single host dashboard.</p>
-          <p>{taxCallout}</p>
+          <p>
+            Running a hotel, resort or a larger portfolio?{" "}
+            <a className="text-link" href={customOptionsHref}>Ask us about custom options</a>.
+          </p>
           <p>
             Cancel anytime before your next billing cycle &mdash;{" "}
             <a className="text-link" href="/terms">read the Cancellation &amp; Billing Policy</a>. Canceling

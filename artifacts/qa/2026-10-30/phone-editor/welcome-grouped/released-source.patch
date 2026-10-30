@@ -1,0 +1,90 @@
+diff --git a/src/ui/host/MobileWallEditor.tsx b/src/ui/host/MobileWallEditor.tsx
+index c9abe25..ad0bdb2 100644
+--- a/src/ui/host/MobileWallEditor.tsx
++++ b/src/ui/host/MobileWallEditor.tsx
+@@ -20,10 +20,10 @@ import { removePropertyPhoto, uploadPropertyPhoto, type HostProperty } from "./p
+ import type { PropertyDraft } from "./usePropertyDraft";
+ import "./mobileWallEditor.css";
+ 
+-type Section = "property" | "portrait" | "welcome" | "essentials" | "notes" | "links" | "style";
++type Section = "property" | "welcome" | "essentials" | "notes" | "links" | "style";
+ type SectionRow = { id: Section; title?: string; detail: string; state: "done" | "todo" | "off" | "optional"; optional?: boolean };
+ const titles: Record<Section, string> = {
+-  property: "Property details", portrait: "Your photo", welcome: "Welcome & hosts",
++  property: "Property details", welcome: "Welcome & hosts",
+   essentials: "Wi-Fi & essentials", notes: "More from your hosts", links: "Your links", style: "Look & feel",
+ };
+ 
+@@ -59,8 +59,7 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
+   }, []);
+   const sections: SectionRow[] = [
+     { id: "property", detail: [draft.name, profile.location].filter(Boolean).join(" · ") || "Name, address and optional cover photo", state: draft.name.trim() && profile.location.trim() ? "done" : "todo" },
+-    { id: "portrait", detail: profile.hostPhoto ? "Your host photo is added" : "Add a photo so guests know who you are", state: profile.hostPhoto ? "done" : "optional", optional: true },
+-    { id: "welcome", title: "Welcome note", detail: profile.stayNoteOff ? "Hidden from the wall" : profile.stayWelcome.trim() || "Say hello to guests who have just arrived", state: profile.stayNoteOff ? "off" : profile.stayWelcome.trim() ? "done" : "todo" },
++    { id: "welcome", detail: profile.stayNoteOff ? "Welcome hidden · Your names and optional photo" : profile.stayWelcome.trim() || "Your names, welcome note and optional host photo", state: profile.stayNoteOff ? "off" : profile.stayWelcome.trim() ? "done" : "todo" },
+     { id: "essentials", title: "Wi-Fi and essentials", detail: profile.factsOff ? "Hidden from the wall" : profile.facts.map(f => f.term).filter(Boolean).join(", ") || "Wi-Fi, check-out, parking", state: profile.factsOff ? "off" : profile.facts.some(f => f.term.trim() && f.detail.trim()) ? "done" : "todo" },
+     { id: "notes", title: "More notes", detail: writtenHostNotes(profile).length ? `${writtenHostNotes(profile).length} notes from your hosts` : "Anything else you want guests to know", state: writtenHostNotes(profile).length ? "done" : "optional", optional: true },
+     ...(linksEnabled ? [{ id: "links" as const, detail: links.length ? links.map(link => link.label).join(" · ") : "Book direct, mailing list or another useful link", state: links.length ? "done" as const : "optional" as const, optional: true }] : []),
+@@ -219,13 +218,13 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section:
+           {text("location", "Address", profileLimits.locationMax)}<p className="field-hint">Shown underneath your property name.</p>
+           {photo("cover", "Cover photo")}
+         </>}
+-        {section === "portrait" && photo("hostPhoto", "Host photo (optional)")}
+         {section === "welcome" && <>
+           {text("stayHeading", "Welcome heading", profileLimits.stayHeadingMax)}
+           {text("hosts", "Your names", profileLimits.hostsMax)}
+           {text("stayWelcome", "Welcome message", profileLimits.stayWelcomeMax, true)}
+           {text("stayTip", "A little tip (optional)", profileLimits.stayTipMax, true)}
+           <label className="phone-section-check"><input type="checkbox" checked={!profile.stayNoteOff} disabled={busy} onChange={e => set("stayNoteOff", !e.target.checked)} />Show the welcome note</label>
++          {photo("hostPhoto", "Host photo (optional)")}
+         </>}
+         {section === "essentials" && <>
+           <p className="field-hint">Add the details guests need during their stay.</p>
+diff --git a/src/ui/pages/HostWallDesignPage.test.tsx b/src/ui/pages/HostWallDesignPage.test.tsx
+index 030dab8..08f91b7 100644
+--- a/src/ui/pages/HostWallDesignPage.test.tsx
++++ b/src/ui/pages/HostWallDesignPage.test.tsx
+@@ -162,16 +162,13 @@ describe("switching the phone editor between Edit and Preview", () => {
+     const sections = within(await screen.findByRole("navigation", { name: "Guest wall sections" }));
+     expect(screen.queryByRole("button", { name: "Edit details" })).not.toBeInTheDocument();
+     expect(sections.getByRole("button", { name: /Property details/ })).toHaveAttribute("data-state", "done");
+-    expect(sections.getByRole("button", { name: /Your photo/ })).toHaveAttribute("data-state", "optional");
++    expect(sections.queryByRole("button", { name: /Your photo/ })).not.toBeInTheDocument();
+     expect(sections.queryByRole("button", { name: /^Cover photo/ })).not.toBeInTheDocument();
+     expect(sections.getByRole("button", { name: /Your links/ })).toBeInTheDocument();
+-    fireEvent.click(sections.getByRole("button", { name: /Your photo/ }));
+-    const photoForm = within(screen.getByRole("dialog", { name: "Your photo" }));
+-    expect(photoForm.getByLabelText("Host photo (optional)")).toBeInTheDocument();
+-    expect(photoForm.queryByLabelText("Welcome message")).not.toBeInTheDocument();
+-    fireEvent.click(photoForm.getByRole("button", { name: "Cancel" }));
+-    fireEvent.click(sections.getByRole("button", { name: /Welcome note/ }));
++    fireEvent.click(sections.getByRole("button", { name: /Welcome & hosts/ }));
+     expect(screen.getByRole("dialog", { name: "Welcome & hosts" })).toBeVisible();
++    expect(within(screen.getByRole("dialog")).getByLabelText("Host photo (optional)")).toBeInTheDocument();
++    expect(screen.getByLabelText("Welcome message")).toHaveValue(filledProfile.stayWelcome);
+     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+     fireEvent.click(screen.getByRole("button", { name: "See guest view" }));
+     expect(screen.getByRole("region", { name: "Guest preview" })).toBeVisible();
+@@ -183,14 +180,19 @@ describe("switching the phone editor between Edit and Preview", () => {
+   it("saves from the checklist without switching to the wall and updates the section status", async () => {
+     renderPage();
+     const sections = within(await screen.findByRole("navigation", { name: "Guest wall sections" }));
+-    expect(sections.getByRole("button", { name: /Welcome note/ })).toHaveAttribute("data-state", "todo");
+-    fireEvent.click(sections.getByRole("button", { name: /Welcome note/ }));
++    expect(sections.getByRole("button", { name: /Welcome & hosts/ })).toHaveAttribute("data-state", "todo");
++    fireEvent.click(sections.getByRole("button", { name: /Welcome & hosts/ }));
++    fireEvent.change(screen.getByLabelText("Your names"), { target: { value: "Ana & Tom" } });
+     fireEvent.change(screen.getByLabelText("Welcome message"), { target: { value: "Welcome to the cottage." } });
++    const photo = new File(["photo"], "hosts.jpg", { type: "image/jpeg" });
++    fireEvent.change(screen.getByLabelText("Host photo (optional)"), { target: { files: [photo] } });
+     fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+-    expect(within(screen.getByRole("navigation", { name: "Guest wall sections" })).getByRole("button", { name: /Welcome note/ })).toHaveAttribute("data-state", "done");
++    expect(within(screen.getByRole("navigation", { name: "Guest wall sections" })).getByRole("button", { name: /Welcome & hosts/ })).toHaveAttribute("data-state", "done");
+     expect(screen.queryByRole("button", { name: "Edit details" })).not.toBeInTheDocument();
+     expect(savePropertyProfile).toHaveBeenCalledTimes(1);
++    expect(uploadPropertyPhoto).toHaveBeenCalledWith("prop-1", "hostPhoto", photo, expect.any(Function));
++    expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ hosts: "Ana & Tom", stayWelcome: "Welcome to the cottage.", hostPhoto: coverPhoto }));
+   });
+ 
+   it("saves a focused wall section once", async () => {

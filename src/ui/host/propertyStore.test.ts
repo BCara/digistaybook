@@ -48,6 +48,14 @@ it("writes theme and wall visibility without overwriting independently saved pho
   expect(fields).not.toHaveProperty("profile");
 });
 
+it("stores reviewed sections even when their optional content is blank", async () => {
+  await savePropertyProfile("p1", { ...emptyProfile(), reviewedSections: ["welcome", "links", "style"] });
+  const fields = updateDoc.mock.calls.at(-1)![1];
+  expect(fields["profile.reviewedSections"]).toEqual(["welcome", "links", "style"]);
+  expect(fields["profile.stayWelcome"]).toBe("");
+  expect(fields).not.toHaveProperty("profile.cover");
+});
+
 it.each([
   ["functions/already-exists", /address is already taken/],
   ["functions/unauthenticated", /verify your session/],
