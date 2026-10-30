@@ -18,11 +18,36 @@
   margin-bottom: 4px; padding: 0; font-size: var(--step--2); font-weight: 650; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted);
 }
 .sign-maker-form label { margin-top: 6px; }
+.sign-maker-form .sign-wifi-switch { margin-top: 0; min-height: 44px; }
 .sign-maker-form .field-hint { margin: 0; }
 .sign-maker-error { color: var(--accent-strong); }
 .sign-photo-field { display: grid; gap: 10px; }
 
-.sign-style-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 12px; }
+/* The style dropdown: the chosen style as one row, the rest in a panel that
+   opens over the form below it. */
+.sign-style-picker { position: relative; display: grid; gap: 8px; }
+.sign-style-label {
+  margin: 0; font-size: var(--step--2); font-weight: 650; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted);
+}
+.sign-style-current {
+  display: flex; align-items: center; gap: 14px; width: 100%; padding: 8px 14px 8px 8px; text-align: left;
+  background: var(--surface-raised); color: var(--text); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); font: inherit; cursor: pointer;
+}
+.sign-style-current:hover { border-color: var(--text); background: var(--surface-raised); }
+.sign-style-current[aria-expanded="true"] { border-color: var(--accent); }
+.sign-style-current-text { display: grid; gap: 2px; flex: 1; min-width: 0; }
+.sign-style-current-text b { font-weight: 650; }
+.sign-style-current-text span { font-size: var(--step--1); color: var(--text-muted); }
+.sign-style-chevron { flex: none; width: 16px; height: 16px; color: var(--text-muted); transition: transform .15s; }
+.sign-style-current[aria-expanded="true"] .sign-style-chevron { transform: rotate(180deg); }
+.sign-style-menu {
+  position: absolute; z-index: 20; top: 100%; left: 0; right: 0; margin-top: 6px; padding: 12px;
+  max-height: min(70vh, 640px); overflow-y: auto; overscroll-behavior: contain;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 12px;
+  background: var(--surface-raised); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm);
+  box-shadow: 0 18px 40px -18px rgba(20, 24, 27, .45);
+}
+@media (prefers-reduced-motion: reduce) { .sign-style-chevron { transition: none; } }
 .sign-style-option {
   display: grid; gap: 6px; justify-items: center; padding: 6px 6px 8px; min-height: 44px;
   background: transparent; color: var(--text); border: 1px solid var(--rule); border-radius: var(--radius-sm); cursor: pointer; font: inherit;
@@ -32,6 +57,8 @@
 /* A real sign at a fifth of its size: the same drawing the print uses. */
 .sign-style-thumb { display: block; width: 80px; height: 112px; overflow: hidden; pointer-events: none; }
 .sign-style-thumb .sign { zoom: .16; }
+.sign-style-thumb-small { flex: none; width: 50px; height: 70px; border: 1px solid var(--rule); }
+.sign-style-thumb-small .sign { zoom: .1; }
 .sign-style-name { font-size: var(--step--2); font-weight: 600; line-height: 1.25; text-align: center; }
 
 .sign-maker-pitch {

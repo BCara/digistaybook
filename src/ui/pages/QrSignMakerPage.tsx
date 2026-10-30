@@ -33,6 +33,7 @@ export function QrSignMakerPage() {
   const [name, setName] = useState("Seabreeze Cottage");
   const [linkInput, setLinkInput] = useState(DEMO_SIGN_LINK);
   const [message, setMessage] = useState(defaultMessage);
+  const [wifiOn, setWifiOn] = useState(true);
   const [network, setNetwork] = useState("SEABREEZE-5G");
   const [password, setPassword] = useState("sandcastle42");
   const [photo, setPhoto] = useState<string | null>(null);
@@ -62,7 +63,7 @@ export function QrSignMakerPage() {
     name: name.trim() || "Your place",
     link,
     message: message.trim(),
-    wifi: network.trim() ? { network: network.trim(), password } : null,
+    wifi: wifiOn && network.trim() ? { network: network.trim(), password } : null,
     photo
   };
 
@@ -104,18 +105,7 @@ export function QrSignMakerPage() {
         </div>
 
         <form className="sign-maker-form" onSubmit={event => event.preventDefault()}>
-          <fieldset>
-            <legend>Style</legend>
-            <div className="sign-style-grid">
-              {signStyles.map(option => (
-                <button key={option.id} type="button" className="sign-style-option" aria-pressed={option.id === style.id}
-                  onClick={() => chooseStyle(option)} title={option.note}>
-                  <span className="sign-style-thumb" aria-hidden="true"><QrSign style={option} content={content} thumb /></span>
-                  <span className="sign-style-name">{option.name}</span>
-                </button>
-              ))}
-            </div>
-          </fieldset>
+          <StylePicker style={style} content={content} onChoose={chooseStyle} />
 
           <fieldset>
             <legend>Your sign</legend>
@@ -152,12 +142,24 @@ export function QrSignMakerPage() {
           </fieldset>
 
           <fieldset>
-            <legend>Wi-Fi code <span className="label-optional">Optional</span></legend>
-            <label htmlFor="sign-network">Network name</label>
-            <input id="sign-network" value={network} maxLength={32} autoComplete="off" onChange={event => setNetwork(event.target.value)} />
-            <label htmlFor="sign-password">Password</label>
-            <input id="sign-password" value={password} maxLength={63} autoComplete="off" spellCheck={false} onChange={event => setPassword(event.target.value)} />
-            <p className="field-hint">Guests scan it to join without typing. Leave the network blank for no Wi-Fi code. Nothing you type here is sent to us.</p>
+            <legend>Wi-Fi code</legend>
+            <label className="switch sign-wifi-switch">
+              <input type="checkbox" checked={wifiOn} aria-describedby="sign-wifi-hint" onChange={event => setWifiOn(event.target.checked)} />
+              <span className="switch-track" aria-hidden="true"><span className="switch-knob" /></span>
+              <span className="switch-label">Add a Wi-Fi code</span>
+            </label>
+            <p id="sign-wifi-hint" className="field-hint">Guests scan it to join your Wi-Fi without typing the password.</p>
+            {wifiOn && (
+              <>
+                <label htmlFor="sign-network">Network name</label>
+                <input id="sign-network" value={network} maxLength={32} autoComplete="off" onChange={event => setNetwork(event.target.value)} />
+                <label htmlFor="sign-password">Password</label>
+                <input id="sign-password" value={password} maxLength={63} autoComplete="off" spellCheck={false} onChange={event => setPassword(event.target.value)} />
+                <p className="field-hint">
+                  {network.trim() ? "Nothing you type here is sent to us." : "Enter the network name to add the code."}
+                </p>
+              </>
+            )}
           </fieldset>
         </form>
       </div>
@@ -176,6 +178,65 @@ export function QrSignMakerPage() {
       </section>
 
       {printing && createPortal(<div className="sign-print-root"><QrSign style={style} content={content} /></div>, document.body)}
+    </div>
+  );
+}
+
+/**
+ * The style choice as a dropdown: one row showing the chosen style, opening
+ * onto every style drawn small. Shown as an open grid, eighteen thumbnails
+ * pushed the name, link and Wi-Fi fields a screen below the sign they change.
+ */
+function StylePicker({ style, content, onChoose }: { style: SignStyle; content: QrSignContent; onChoose: (style: SignStyle) => void }) {
+  const [open, setOpen] = useState(false);
+  const picker = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    picker.current?.querySelector<HTMLButtonElement>('[aria-pressed="true"]')?.focus();
+    const close = (event: PointerEvent | FocusEvent) => {
+      if (!picker.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const escape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      trigger.current?.focus();
+    };
+    document.addEventListener("pointerdown", close);
+    document.addEventListener("focusin", close);
+    document.addEventListener("keydown", escape);
+    return () => {
+      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("focusin", close);
+      document.removeEventListener("keydown", escape);
+    };
+  }, [open]);
+
+  return (
+    <div className="sign-style-picker" ref={picker}>
+      <p className="sign-style-label" id="sign-style-label">Style</p>
+      <button ref={trigger} type="button" className="sign-style-current" aria-expanded={open} aria-controls="sign-style-options"
+        aria-label={`Style: ${style.name}`} onClick={() => setOpen(current => !current)}>
+        <span className="sign-style-thumb sign-style-thumb-small" aria-hidden="true"><QrSign style={style} content={content} thumb /></span>
+        <span className="sign-style-current-text"><b>{style.name}</b><span>{style.note}</span></span>
+        <svg className="sign-style-chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="1.8" /></svg>
+      </button>
+      {open && (
+        <div id="sign-style-options" className="sign-style-menu" role="group" aria-labelledby="sign-style-label">
+          {signStyles.map(option => (
+            <button key={option.id} type="button" className="sign-style-option" aria-pressed={option.id === style.id} title={option.note}
+              onClick={() => {
+                onChoose(option);
+                setOpen(false);
+                trigger.current?.focus();
+              }}>
+              <span className="sign-style-thumb" aria-hidden="true"><QrSign style={option} content={content} thumb /></span>
+              <span className="sign-style-name">{option.name}</span>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
