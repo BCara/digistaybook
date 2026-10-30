@@ -142,12 +142,14 @@ export function QrSignMakerPage() {
           </fieldset>
 
           <fieldset>
-            <legend>Wi-Fi code</legend>
-            <label className="switch sign-wifi-switch">
-              <input type="checkbox" checked={wifiOn} aria-describedby="sign-wifi-hint" onChange={event => setWifiOn(event.target.checked)} />
-              <span className="switch-track" aria-hidden="true"><span className="switch-knob" /></span>
-              <span className="switch-label">Add a Wi-Fi code</span>
-            </label>
+            <legend className="sign-wifi-legend">
+              Wi-Fi code
+              <label className="switch sign-wifi-switch">
+                <input type="checkbox" checked={wifiOn} aria-label="Add a Wi-Fi code" aria-describedby="sign-wifi-hint" onChange={event => setWifiOn(event.target.checked)} />
+                <span className="switch-track" aria-hidden="true"><span className="switch-knob" /></span>
+                <span className="sign-wifi-state" aria-hidden="true">{wifiOn ? "On" : "Off"}</span>
+              </label>
+            </legend>
             <p id="sign-wifi-hint" className="field-hint">Guests scan it to join your Wi-Fi without typing the password.</p>
             {wifiOn && (
               <>
