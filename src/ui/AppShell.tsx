@@ -147,6 +147,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <a href="/#how-it-works">How it works</a>
               <a href="/#features">Features</a>
               <a href="/pricing">Pricing</a>
+              <a href="/qr-sign-maker">Free QR sign maker</a>
               <a href="/stay/demo-cottage">Guest wall demo</a>
               <a href="/wall/demo-cottage">Public page demo</a>
             </nav>

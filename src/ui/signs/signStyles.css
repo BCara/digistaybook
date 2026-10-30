@@ -1,0 +1,176 @@
+/* The eighteen QR sign styles (domain/signStyles.ts), drawn at 5 x 7 inches
+   on a 500 x 700 grid. The sign maker scales the card to fit the screen and
+   prints it at 96%, which is exactly 5 x 7 in.
+
+   Like the product's own placard, a sign keeps its own paper and ink in both
+   colour schemes: a printed card has no dark mode, and every code sits dark
+   on white with its quiet zone so it scans on every style, dark ones included.
+
+   Generated from marketing/campaigns/qr-placards-pinterest-2026-10-30/source/styles.mjs,
+   which renders the same designs for print files and Pins; keep the two in step. */
+
+.sign{position:relative;width:500px;height:700px;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;padding:44px 46px 0}
+.sign p,.sign .nm{margin:0}
+.sign .sign-qrbox{background:#fff;line-height:0}.sign-code{width:204px;height:204px;display:block}
+.sign .sign-wifi{display:flex;align-items:center;gap:12px;text-align:left;margin-top:16px}.sign-wcode{width:78px;height:78px;flex:none;display:block}
+.sign .sign-wifi p{font-size:11.5px;line-height:1.4;max-width:190px}.sign-wifi b{display:block;font-size:12.5px}
+.sign .sign-inv{font-size:13px;line-height:1.45;max-width:30ch;margin-top:14px!important}
+.sign .sign-addr{font:10.5px "Space Mono",monospace;margin-top:6px!important;opacity:.75}
+.sign .sign-mark{position:absolute;left:0;right:0;bottom:20px;font:500 9px Jost,sans-serif;letter-spacing:.24em;text-transform:uppercase;opacity:.6}
+
+.sign-coastal{background:#eaf2f5;color:#1d3a4f;font-family:Jost,sans-serif}
+.sign-coastal .sign-lead{font:italic 500 28px "Cormorant Garamond",serif}
+.sign-coastal .nm{font:600 42px/1.05 "Cormorant Garamond",serif;margin:2px 0 18px}
+.sign-coastal .sign-qrbox{padding:8px;border-radius:12px;box-shadow:0 0 0 2px #8db7c9}
+.sign-coastal .waves{position:absolute;left:0;bottom:0;width:100%;height:84px}
+.sign-coastal .sign-mark{color:#fff;opacity:.9;bottom:14px}.sign-coastal{padding-top:52px}.sign-coastal .sign-inv{margin-top:18px!important}.sign-coastal .sign-wifi{margin-top:20px}
+
+.sign-farmhouse{background:#f6f1e7;color:#222;font-family:"Libre Baskerville",serif;padding-top:52px}
+.sign-farmhouse::before{content:"";position:absolute;inset:16px;border:3px solid #222}
+.sign-farmhouse::after{content:"";position:absolute;inset:24px;border:1px solid #222}
+.sign-farmhouse .sign-big{font:66px/0.9 "Bebas Neue",sans-serif;letter-spacing:.16em;margin-left:.16em!important}
+.sign-farmhouse .nm{font:400 38px/1.1 Satisfy,cursive;margin-top:2px}
+.sign-farmhouse .sign-orn{font-size:14px;margin:6px 0 12px!important;letter-spacing:.3em}
+.sign-farmhouse .sign-qrbox{padding:6px;border:2px solid #222}.sign-farmhouse .sign-inv{font-size:12px}
+.sign-farmhouse .sign-mark{bottom:34px}
+
+.sign-modern{background:#fff;color:#111;font-family:Outfit,sans-serif;align-items:stretch;text-align:left;padding:56px 48px 0}
+.sign-modern .dot{position:absolute;top:56px;right:48px;width:22px;height:22px;background:#111}
+.sign-modern .sign-lead{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600}
+.sign-modern .nm{font:800 54px/.95 Outfit,sans-serif;letter-spacing:-.03em;margin:16px 0 24px}
+.sign-modern hr{border:0;border-top:2px solid #111;margin:0 0 26px;width:100%}
+.sign-modern .row{display:flex;gap:20px;align-items:flex-end}.sign-modern .sign-code{width:210px;height:210px}
+.sign-modern .row .sign-inv{margin:0!important;font-size:14px;max-width:none}
+.sign-modern .sign-wifi{margin-top:30px;padding-top:20px;border-top:1px solid #ccc}
+.sign-modern .sign-mark{text-align:left;left:48px;opacity:1;font-weight:700}
+
+.sign-boho-arch{background:#efe2d2;color:#5a2c1c;font-family:Jost,sans-serif;padding-top:34px}
+.sign-boho-arch .arch{width:350px;padding:40px 30px 26px;border-radius:175px 175px 6px 6px;background:#c4673f;color:#fbf1e6;display:flex;flex-direction:column;align-items:center}
+.sign-boho-arch .sign-lead{font:italic 400 24px Fraunces,serif}
+.sign-boho-arch .nm{font:500 34px/1.05 Fraunces,serif;margin:2px 0 16px}
+.sign-boho-arch .sign-qrbox{padding:8px;border-radius:8px}.sign-boho-arch .sign-code{width:180px;height:180px}
+.sign-boho-arch .sign-inv{font-size:12.5px}.sign-boho-arch .sign-addr{margin-top:12px!important}.sign-boho-arch .sign-wifi{margin-top:10px}
+.sign-boho-arch .sun{position:absolute;width:90px;height:45px;border-radius:90px 90px 0 0;background:#d99a6c;bottom:0}
+.sign-boho-arch .s1{left:-20px}.sign-boho-arch .s2{right:-20px;background:#b8553a;width:70px;height:35px}
+
+.sign-botanical{background:#e4ebe1;color:#2f4a3a;font-family:Jost,sans-serif;padding-top:26px}
+.sign-botanical .crest{width:300px;height:auto;display:block;margin-bottom:6px}
+.sign-botanical .corner{position:absolute;bottom:-6px;width:190px;height:auto}.sign-botanical .corner.l{left:-8px}.sign-botanical .corner.r{right:-8px;transform:scaleX(-1)}
+.sign-botanical .sign-lead{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase}
+.sign-botanical .nm{font:400 42px/1.05 "DM Serif Display",serif;margin:8px 0 18px}
+.sign-botanical .sign-qrbox{padding:10px;border-radius:12px;box-shadow:0 0 0 2px #6f9478}.sign-botanical .sign-inv{margin-top:18px!important}
+
+.sign-cabin{background:#1e3a2f;color:#f3ead8;font-family:"Josefin Sans",sans-serif;padding-top:50px}
+.sign-cabin .peaks{position:absolute;bottom:0;left:0;width:100%;height:120px}.sign-cabin .sign-mark{bottom:10px;opacity:.85}.sign-cabin .sign-wifi{margin-top:14px}
+.sign-cabin .sign-lead{font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+.sign-cabin .nm{font:600 38px/1.1 "Playfair Display",serif;margin:8px 0 16px}
+.sign-cabin .sign-qrbox{padding:8px;background:#fff;outline:2px solid #f3ead8;outline-offset:4px}
+.sign-cabin .sign-wifi .sign-wcode{outline:2px solid #f3ead8;outline-offset:2px}
+
+.sign-mid-century{background:#f4ead5;color:#23302f;font-family:Jost,sans-serif}
+.sign-mid-century i{position:absolute;border-radius:50%}
+.sign-mid-century .c1{width:220px;height:220px;background:#e0a526;top:-90px;right:-70px}
+.sign-mid-century .c2{width:180px;height:180px;background:#2a7c7a;bottom:-110px;left:-60px}
+.sign-mid-century .c3{width:44px;height:44px;background:#d9622b;top:120px;left:40px}
+.sign-mid-century .sign-lead{font-weight:300;font-size:22px;letter-spacing:.3em;text-transform:uppercase;position:relative}
+.sign-mid-century .nm{font:700 42px/1 Jost,sans-serif;text-transform:uppercase;letter-spacing:.04em;margin:8px 0 18px;position:relative}
+.sign-mid-century .sign-qrbox{padding:8px;border:4px solid #2a7c7a;position:relative}
+.sign-mid-century .sign-inv,.sign-mid-century .sign-addr,.sign-mid-century .sign-wifi{position:relative}
+
+.sign-letterpress{background:#fbf8f1;color:#1d1d1b;font-family:"Cormorant Garamond",serif;padding-top:58px}
+.sign-letterpress .frame{position:absolute;inset:18px;border:1px solid #7a2a26;outline:4px double #7a2a26;outline-offset:-10px}
+.sign-letterpress .frame span{position:absolute;color:#7a2a26;font-size:14px;background:#fbf8f1;padding:2px}
+.sign-letterpress .frame span:nth-child(1){top:-11px;left:-8px}.sign-letterpress .frame span:nth-child(2){top:-11px;right:-8px}
+.sign-letterpress .frame span:nth-child(3){bottom:-11px;left:-8px}.sign-letterpress .frame span:nth-child(4){bottom:-11px;right:-8px}
+.sign-letterpress .sign-lead{font-size:13px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:#7a2a26}
+.sign-letterpress .nm{font:italic 500 40px/1.1 "Playfair Display",serif;margin-top:8px}
+.sign-letterpress .sign-orn{font-size:24px;color:#7a2a26;margin:2px 0 10px!important}
+.sign-letterpress .sign-inv{font-size:16px;font-weight:500}.sign-letterpress .sign-wifi p{font-size:13px}
+.sign-letterpress .sign-mark{bottom:38px}
+
+.sign-desert-sun{background:#fbf1e6;color:#6b2c1e;font-family:Jost,sans-serif;padding-top:38px}
+.sign-desert-sun .sign-lead{font:italic 400 22px Fraunces,serif}
+.sign-desert-sun .nm{font:400 40px/1.05 "DM Serif Display",serif;margin-top:2px;position:relative;z-index:1}
+.sign-desert-sun .scene{width:calc(100% + 92px);height:120px;margin:-10px -46px 0;display:block}
+.sign-desert-sun .sign-qrbox{margin-top:-36px;padding:8px;border-radius:6px;box-shadow:0 0 0 3px #8e3d2c;position:relative}
+.sign-desert-sun .sign-code{width:184px;height:184px}.sign-desert-sun .sign-inv{margin-top:18px!important}
+
+.sign-color-block{background:#fff;color:#14181b;font-family:Outfit,sans-serif;padding:0}
+.sign-color-block .top{width:100%;height:290px;background:#b4472a;color:#fff;padding:52px 40px 0}
+.sign-color-block .sign-lead{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;opacity:.9}
+.sign-color-block .nm{font:700 52px/1 Fraunces,serif;margin-top:14px}
+.sign-color-block .sign-qrbox{margin-top:-80px;padding:10px;border:3px solid #14181b}
+.sign-color-block .sign-inv,.sign-color-block .sign-addr,.sign-color-block .sign-wifi{padding:0 46px}
+
+.sign-chalkboard{background:radial-gradient(ellipse at 30% 20%,#3a403e,#262a29 70%);color:#f1efe8;font-family:Caveat,cursive;border:18px solid #8a6240;padding-top:24px}
+.sign-chalkboard .sign-big{font:700 58px/1 Caveat,cursive}
+.sign-chalkboard .nm{font:500 36px/1 Caveat,cursive;margin:0 0 6px;border-bottom:2px solid rgba(241,239,232,.6);padding-bottom:4px}
+.sign-chalkboard .arrow{position:absolute;width:70px;left:46px;top:150px}
+.sign-chalkboard .sign-qrbox{padding:8px;border-radius:4px;margin-top:8px}.sign-chalkboard .sign-code{width:166px;height:166px}
+.sign-chalkboard .sign-inv{font-size:22px;line-height:1.1;margin-top:10px!important}
+.sign-chalkboard .sign-addr{color:#f1efe8}.sign-chalkboard .sign-wifi p{font-size:18px;line-height:1.1}.sign-chalkboard .sign-wifi b{font-size:21px}
+.sign-chalkboard .sign-mark{font-family:Jost,sans-serif;bottom:8px}
+
+.sign-postcard{background:#f6efe0;color:#22355e;font-family:Jost,sans-serif;border:14px solid;border-image:repeating-linear-gradient(-45deg,#c0392b 0 14px,#f6efe0 14px 24px,#2c4f8a 24px 38px,#f6efe0 38px 48px) 14;padding-top:40px}
+.sign-postcard .stamp{position:absolute;top:22px;right:22px;width:78px;height:78px;border:2px dashed #c0392b;border-radius:50%;color:#c0392b;display:flex;flex-direction:column;justify-content:center;transform:rotate(12deg);font-size:15px;line-height:1}
+.sign-postcard .stamp small{font-size:10px;letter-spacing:.1em}
+.sign-postcard .sign-big{font:400 40px Satisfy,cursive;color:#c0392b;margin-top:22px!important}
+.sign-postcard .nm{font:400 33px/1.05 "Alfa Slab One",serif;letter-spacing:.02em;margin:0 0 16px}
+.sign-postcard .sign-qrbox{padding:8px;border:2px solid #22355e}.sign-postcard .sign-code{width:166px;height:166px}
+
+.sign .sign-ph{display:block;object-fit:cover}
+.sign-photo-header{background:#fbf7ef;color:#1f2a2e;font-family:Jost,sans-serif;padding:0 46px}
+.sign-photo-header .hero{position:relative;width:calc(100% + 92px);height:268px;margin:0 -46px 22px}
+.sign-photo-header .hero .sign-ph{width:100%;height:100%;object-position:50% 60%}
+.sign-photo-header .over{position:absolute;inset:auto 0 0;padding:60px 20px 18px;background:linear-gradient(transparent,rgba(16,20,22,.78));color:#fff}
+.sign-photo-header .sign-lead{font:italic 400 22px Fraunces,serif}.sign-photo-header .nm{font:500 40px/1.05 Fraunces,serif}
+.sign-photo-header .sign-code{width:186px;height:186px}.sign-photo-header .sign-qrbox{padding:6px;border:2px solid #1f2a2e}
+
+.sign-polaroid{background:#f1ece3;color:#2a2622;font-family:Jost,sans-serif;padding-top:28px}
+.sign-polaroid .pola{background:#fff;padding:11px 11px 0;box-shadow:0 10px 18px -8px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.05);transform:rotate(-3deg);margin-bottom:16px}
+.sign-polaroid .pola .sign-ph{width:280px;height:190px}
+.sign-polaroid .pola p{font:700 30px/1 Caveat,cursive;padding:12px 0 14px;color:#2a2622}
+.sign-polaroid .sign-code{width:170px;height:170px}.sign-polaroid .sign-qrbox{padding:6px;border:2px solid #2a2622}
+.sign-polaroid .sign-inv{margin-top:12px!important}
+
+.sign-coast-photo{padding:0;justify-content:center;font-family:Jost,sans-serif;color:#1d3a4f}
+.sign-coast-photo>.sign-ph{position:absolute;inset:0;width:100%;height:100%}
+.sign-coast-photo .panel{position:relative;width:392px;padding:28px 26px 46px;background:rgba(255,255,255,.93);border-radius:6px;display:flex;flex-direction:column;align-items:center;box-shadow:0 18px 40px -16px rgba(0,0,0,.5)}
+.sign-coast-photo .sign-lead{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase}
+.sign-coast-photo .nm{font:600 36px/1.05 "Cormorant Garamond",serif;margin:6px 0 14px}
+.sign-coast-photo .sign-code{width:176px;height:176px}.sign-coast-photo .sign-mark{bottom:14px}
+
+.sign-sunset-photo{color:#fff;font-family:Jost,sans-serif;padding-top:44px}
+.sign-sunset-photo>.sign-ph{position:absolute;inset:0;width:100%;height:100%;object-position:40% 50%}
+.sign-sunset-photo::before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(20,12,20,.35),rgba(20,12,20,.1) 40%,rgba(20,12,20,.72) 72%)}
+.sign-sunset-photo>*{position:relative}
+.sign-sunset-photo .sign-lead{font:italic 400 26px "Cormorant Garamond",serif;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.sign-sunset-photo .nm{font:600 46px/1.02 "Cormorant Garamond",serif;margin-bottom:20px;text-shadow:0 2px 14px rgba(0,0,0,.45)}
+.sign-sunset-photo .sign-qrbox{padding:8px;border-radius:10px}.sign-sunset-photo .sign-code{width:184px;height:184px}
+.sign-sunset-photo .sign-inv{text-shadow:0 1px 6px rgba(0,0,0,.6)}.sign-sunset-photo .foot{display:flex;flex-direction:column;align-items:center}
+.sign-sunset-photo .sign-addr{opacity:.9}.sign-sunset-photo .sign-wcode{border-radius:4px}.sign-sunset-photo>.sign-mark{position:absolute;opacity:.85}
+.sign-sunset-photo>.sign-ph{position:absolute}
+
+.sign-collage{background:#fbf8f2;color:#1f2a2e;font-family:Outfit,sans-serif;padding:20px 20px 0}
+.sign-collage .grid4{display:grid;grid-template-columns:1.4fr 1fr;grid-template-rows:112px 112px;gap:6px;width:100%;height:230px;margin-bottom:18px}
+.sign-collage .grid4 .sign-ph{width:100%;height:112px}.sign-collage .grid4 .sign-ph:first-child{grid-row:span 2;height:230px}
+.sign-collage .sign-lead{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:#b4472a}
+.sign-collage .nm{font:700 34px/1.05 Fraunces,serif;margin:4px 0 14px}
+.sign-collage .row,.sign-arch-photo .row{display:flex;gap:18px;align-items:center;text-align:left;padding:0 26px}
+.sign-collage .sign-code{width:172px;height:172px}.sign-collage .sign-qrbox{padding:5px;border:2px solid #1f2a2e}
+.sign-collage .side .sign-inv{margin-top:0!important;font-size:13.5px}.sign-collage .sign-wifi{margin-top:18px}
+
+.sign-arch-photo{background:#eef0e6;color:#2f3d2f;font-family:Jost,sans-serif;padding-top:30px}
+.sign-arch-photo .archph{width:300px;height:250px;border-radius:150px 150px 0 0;overflow:hidden;border:6px solid #fff;box-shadow:0 0 0 1px #c9cfbd;margin-bottom:16px}
+.sign-arch-photo .archph .sign-ph{width:100%;height:100%;object-position:50% 70%}
+.sign-arch-photo .sign-lead{font:italic 400 22px "DM Serif Display",serif;opacity:.8}
+.sign-arch-photo .nm{font:400 38px/1.05 "DM Serif Display",serif;margin:0 0 16px}
+.sign-arch-photo .row{padding:0}.sign-arch-photo .sign-code{width:168px;height:168px}.sign-arch-photo .sign-qrbox{padding:6px;border-radius:6px;box-shadow:0 0 0 2px #7f9a7a}
+.sign-arch-photo .side .sign-inv{margin-top:0!important;font-size:12.5px}.sign-arch-photo .side .sign-wifi{margin-top:10px}.sign-arch-photo .sign-wcode{width:66px;height:66px}
+.sign-arch-photo .sign-wifi p{font-size:10.5px;max-width:150px}
+
+/* Additions for text a visitor types rather than our demo copy. */
+.sign { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.sign .nm { overflow-wrap: break-word; text-wrap: balance; }
+.sign .sign-addr, .sign .sign-wifi p { overflow-wrap: anywhere; }
+.sign-postcard .nm { text-transform: uppercase; }

@@ -183,7 +183,7 @@ async function start() {
   await cp('functions/lib','.local-test/functions/lib',{recursive:true});
   await cp('functions/package.json','.local-test/functions/package.json');
   if (!await exists('.local-test/functions/node_modules')) await symlink(resolve('functions/node_modules'),resolve('.local-test/functions/node_modules'),'junction');
-  await writeFile('.local-test/functions/.env.local','STRIPE_PRICE_MONTHLY=price_local_disabled\nSTRIPE_PRICE_ANNUAL=price_local_disabled\nAPP_URL=http://127.0.0.1:5181\nLOCAL_TEST_SCREENING=true\n');
+  await writeFile('.local-test/functions/.env.local','STRIPE_PRICE_MONTHLY=price_local_disabled\nSTRIPE_PRICE_ANNUAL=price_local_disabled\nAPP_URL=http://127.0.0.1:5181\nLOCAL_TEST_SCREENING=true\nHELP_SUPPORT_EMAIL=support@digistaybook.test\n');
   await writeFile('.local-test/functions/.secret.local','STRIPE_RESTRICTED_KEY=rk_test_local_disabled\nSTRIPE_WEBHOOK_SECRET=whsec_local_disabled\nREPORT_HASH_KEY=local-only-report-key\n');
   await cp('.env.emulator','.env.emulator.local');
   const args=[firebaseCli,'emulators:start','--project',project,'--config','firebase.test.json','--only','auth,firestore,storage,functions'];

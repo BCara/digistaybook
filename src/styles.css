@@ -266,19 +266,15 @@ button:disabled, .btn:disabled { cursor: not-allowed; opacity: .45; }
 .brand-mark {
   display: block;
   flex: none;
-  mix-blend-mode: darken;
 }
-/* Lift the cream image background to white before inversion, so screen
-   blending removes it completely on either dark surface. */
+/* The logo has a transparent background; on dark surfaces invert the dark ink
+   to light and rotate the hue back so the accent stays warm. */
 .site-footer .brand-mark {
-  filter: brightness(1.1) invert(1) hue-rotate(180deg);
-  mix-blend-mode: screen;
+  filter: invert(1) hue-rotate(180deg);
 }
 @media (prefers-color-scheme: dark) {
   .brand-mark {
-    /* Invert the logo and use screen to blend it in dark mode everywhere */
-    filter: brightness(1.1) invert(1) hue-rotate(180deg);
-    mix-blend-mode: screen;
+    filter: invert(1) hue-rotate(180deg);
   }
 }
 

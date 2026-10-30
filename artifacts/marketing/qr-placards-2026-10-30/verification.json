@@ -1,0 +1,74 @@
+{
+  "checks": [
+    {
+      "file": "pins/01-warm-welcome.png",
+      "width": 1000,
+      "height": 1500,
+      "dpi": 72,
+      "textClipping": []
+    },
+    {
+      "file": "print/01-warm-welcome.png",
+      "width": 1748,
+      "height": 2480,
+      "dpi": 300,
+      "textClipping": []
+    },
+    {
+      "file": "pins/02-botanical-stay.png",
+      "width": 1000,
+      "height": 1500,
+      "dpi": 72,
+      "textClipping": []
+    },
+    {
+      "file": "print/02-botanical-stay.png",
+      "width": 1748,
+      "height": 2480,
+      "dpi": 300,
+      "textClipping": []
+    },
+    {
+      "file": "pins/03-coastal-notes.png",
+      "width": 1000,
+      "height": 1500,
+      "dpi": 72,
+      "textClipping": []
+    },
+    {
+      "file": "print/03-coastal-notes.png",
+      "width": 1748,
+      "height": 2480,
+      "dpi": 300,
+      "textClipping": []
+    },
+    {
+      "file": "pins/04-the-house-edit.png",
+      "width": 1000,
+      "height": 1500,
+      "dpi": 72,
+      "textClipping": []
+    },
+    {
+      "file": "print/04-the-house-edit.png",
+      "width": 1748,
+      "height": 2480,
+      "dpi": 300,
+      "textClipping": []
+    }
+  ],
+  "review": [
+    {
+      "width": 390,
+      "overflow": false,
+      "brokenImages": 0
+    },
+    {
+      "width": 1280,
+      "overflow": false,
+      "brokenImages": 0
+    }
+  ],
+  "visualReview": "All four concepts inspected together in design-board.png. No clipping or overlapping text observed.",
+  "qr": "Deterministic qrcode-generator output; M correction and four-module quiet zone. Device scanning and physical print not tested."
+}

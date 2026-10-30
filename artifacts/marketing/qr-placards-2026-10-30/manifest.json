@@ -1,0 +1,58 @@
+[
+  {
+    "id": "01-warm-welcome",
+    "name": "Warm welcome",
+    "palette": "Terracotta / warm white / soft arch",
+    "pin": [
+      1000,
+      1500
+    ],
+    "print": "A5 portrait, 148 x 210 mm; PNG 1748 x 2480 at 300 dpi",
+    "qrDestination": "https://digistaybook.com/stay/demo-cottage",
+    "qrModules": 29,
+    "quietZoneModules": 4,
+    "status": "Concept draft; fictional demo property. Replace property name and QR together before actual guest use."
+  },
+  {
+    "id": "02-botanical-stay",
+    "name": "Botanical stay",
+    "palette": "Sage / forest ink / botanical linework",
+    "pin": [
+      1000,
+      1500
+    ],
+    "print": "A5 portrait, 148 x 210 mm; PNG 1748 x 2480 at 300 dpi",
+    "qrDestination": "https://digistaybook.com/stay/demo-cottage",
+    "qrModules": 29,
+    "quietZoneModules": 4,
+    "status": "Concept draft; fictional demo property. Replace property name and QR together before actual guest use."
+  },
+  {
+    "id": "03-coastal-notes",
+    "name": "Coastal notes",
+    "palette": "Ocean blue / ivory / hand-drawn waves",
+    "pin": [
+      1000,
+      1500
+    ],
+    "print": "A5 portrait, 148 x 210 mm; PNG 1748 x 2480 at 300 dpi",
+    "qrDestination": "https://digistaybook.com/stay/demo-cottage",
+    "qrModules": 29,
+    "quietZoneModules": 4,
+    "status": "Concept draft; fictional demo property. Replace property name and QR together before actual guest use."
+  },
+  {
+    "id": "04-the-house-edit",
+    "name": "The house edit",
+    "palette": "Ink / cream / editorial typography",
+    "pin": [
+      1000,
+      1500
+    ],
+    "print": "A5 portrait, 148 x 210 mm; PNG 1748 x 2480 at 300 dpi",
+    "qrDestination": "https://digistaybook.com/stay/demo-cottage",
+    "qrModules": 29,
+    "quietZoneModules": 4,
+    "status": "Concept draft; fictional demo property. Replace property name and QR together before actual guest use."
+  }
+]

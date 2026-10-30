@@ -1,0 +1,110 @@
+[
+  {
+    "id": "01-coastal",
+    "style": "Coastal",
+    "print": "styles\\print-5x7\\placard-01-coastal.png",
+    "pinterest": "styles\\pinterest\\pin-placard-01-coastal.png"
+  },
+  {
+    "id": "02-farmhouse",
+    "style": "Farmhouse",
+    "print": "styles\\print-5x7\\placard-02-farmhouse.png",
+    "pinterest": "styles\\pinterest\\pin-placard-02-farmhouse.png"
+  },
+  {
+    "id": "03-modern",
+    "style": "Modern minimal",
+    "print": "styles\\print-5x7\\placard-03-modern.png",
+    "pinterest": "styles\\pinterest\\pin-placard-03-modern.png"
+  },
+  {
+    "id": "04-boho-arch",
+    "style": "Boho arch",
+    "print": "styles\\print-5x7\\placard-04-boho-arch.png",
+    "pinterest": "styles\\pinterest\\pin-placard-04-boho-arch.png"
+  },
+  {
+    "id": "05-botanical",
+    "style": "Botanical",
+    "print": "styles\\print-5x7\\placard-05-botanical.png",
+    "pinterest": "styles\\pinterest\\pin-placard-05-botanical.png"
+  },
+  {
+    "id": "06-cabin",
+    "style": "Mountain cabin",
+    "print": "styles\\print-5x7\\placard-06-cabin.png",
+    "pinterest": "styles\\pinterest\\pin-placard-06-cabin.png"
+  },
+  {
+    "id": "07-mid-century",
+    "style": "Mid-century",
+    "print": "styles\\print-5x7\\placard-07-mid-century.png",
+    "pinterest": "styles\\pinterest\\pin-placard-07-mid-century.png"
+  },
+  {
+    "id": "08-letterpress",
+    "style": "Classic letterpress",
+    "print": "styles\\print-5x7\\placard-08-letterpress.png",
+    "pinterest": "styles\\pinterest\\pin-placard-08-letterpress.png"
+  },
+  {
+    "id": "09-desert-sun",
+    "style": "Desert sun",
+    "print": "styles\\print-5x7\\placard-09-desert-sun.png",
+    "pinterest": "styles\\pinterest\\pin-placard-09-desert-sun.png"
+  },
+  {
+    "id": "10-color-block",
+    "style": "Color block",
+    "print": "styles\\print-5x7\\placard-10-color-block.png",
+    "pinterest": "styles\\pinterest\\pin-placard-10-color-block.png"
+  },
+  {
+    "id": "11-chalkboard",
+    "style": "Chalkboard",
+    "print": "styles\\print-5x7\\placard-11-chalkboard.png",
+    "pinterest": "styles\\pinterest\\pin-placard-11-chalkboard.png"
+  },
+  {
+    "id": "12-postcard",
+    "style": "Retro postcard",
+    "print": "styles\\print-5x7\\placard-12-postcard.png",
+    "pinterest": "styles\\pinterest\\pin-placard-12-postcard.png"
+  },
+  {
+    "id": "13-photo-top",
+    "style": "Photo header",
+    "print": "styles\\print-5x7\\placard-13-photo-top.png",
+    "pinterest": "styles\\pinterest\\pin-placard-13-photo-top.png"
+  },
+  {
+    "id": "14-polaroid",
+    "style": "Polaroid",
+    "print": "styles\\print-5x7\\placard-14-polaroid.png",
+    "pinterest": "styles\\pinterest\\pin-placard-14-polaroid.png"
+  },
+  {
+    "id": "15-coast-panel",
+    "style": "Coastal photo",
+    "print": "styles\\print-5x7\\placard-15-coast-panel.png",
+    "pinterest": "styles\\pinterest\\pin-placard-15-coast-panel.png"
+  },
+  {
+    "id": "16-sunset",
+    "style": "Sunset photo",
+    "print": "styles\\print-5x7\\placard-16-sunset.png",
+    "pinterest": "styles\\pinterest\\pin-placard-16-sunset.png"
+  },
+  {
+    "id": "17-collage",
+    "style": "Photo collage",
+    "print": "styles\\print-5x7\\placard-17-collage.png",
+    "pinterest": "styles\\pinterest\\pin-placard-17-collage.png"
+  },
+  {
+    "id": "18-arch-window",
+    "style": "Arch photo",
+    "print": "styles\\print-5x7\\placard-18-arch-window.png",
+    "pinterest": "styles\\pinterest\\pin-placard-18-arch-window.png"
+  }
+]

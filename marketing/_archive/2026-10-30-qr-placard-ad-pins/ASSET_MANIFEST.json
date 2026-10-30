@@ -1,0 +1,38 @@
+[
+  {
+    "file": "pin-01-scan-connect.png",
+    "reason": "9. Guests get online first",
+    "width": 1000,
+    "height": 1500
+  },
+  {
+    "file": "pin-02-welcome-not-laminated.png",
+    "reason": "Core reason",
+    "width": 1000,
+    "height": 1500
+  },
+  {
+    "file": "pin-03-print-once.png",
+    "reason": "10. Update it once, every guest sees it",
+    "width": 1000,
+    "height": 1500
+  },
+  {
+    "file": "pin-04-where-to-put-it.png",
+    "reason": "1. Guests can find everything themselves",
+    "width": 1000,
+    "height": 1500
+  },
+  {
+    "file": "pin-05-answers-on-counter.png",
+    "reason": "1. Guests can find everything themselves",
+    "width": 1000,
+    "height": 1500
+  },
+  {
+    "file": "pin-06-story-of-your-place.png",
+    "reason": "3. A guestbook that builds up instead of filling up",
+    "width": 1000,
+    "height": 1500
+  }
+]

@@ -30,6 +30,7 @@ import { memoriesHeading } from "../wall/memoryHeading";
 import { EssentialMark, essentialMarkName } from "../wall/EssentialMark";
 import { StayEssentialLinks } from "../wall/WallHeader";
 import { WallThemePicker } from "../host/WallThemePicker";
+import { wallTheme } from "../../domain/wallTheme";
 import { PublicWallSettings } from "../host/PublicWallSettings";
 import type { HostProperty, WallCounts } from "../host/propertyStore";
 import { uploadPropertyPhoto } from "../host/propertyStore";
@@ -73,6 +74,19 @@ import "./hostWallEditor.css";
  */
 
 type View = "public" | "stay";
+
+/** What a phone shows: the list of the wall's parts, the wall to edit, or the guest's view. */
+type MobileMode = "sections" | "edit" | "preview";
+
+/** One row of the phone's list of the guest wall's parts. */
+type WallSection = {
+  /** The element on the wall the row lands on, or "style" for the look. */
+  id: string;
+  title: string;
+  detail: string;
+  state: "done" | "todo" | "off" | "optional";
+  optional?: boolean;
+};
 
 /** The profile's plain-text lines: the ones a Host can leave off the wall. */
 type TextField = "stayHeading" | "stayWelcome" | "stayTip";
@@ -349,16 +363,24 @@ export function HostWallDesignPage({
   const phoneBelow = useMediaQuery(PHONE_BELOW_QUERY);
   const showPhone = phoneWanted || phoneBelow;
   const mobileEditor = useMediaQuery(MOBILE_EDITOR_QUERY);
-  const [mobileMode, setMobileMode] = useState<"edit" | "preview">("edit");
+  // On a phone the guest wall opens on a list of its parts, so a Host sees
+  // what is done and what is left before they are dropped into the wall
+  // itself. The public wall is one header card and has no list to give.
+  const hasSections = view === "stay";
+  const [mobileMode, setMobileMode] = useState<MobileMode>(hasSections ? "sections" : "edit");
   const modeSwitch = useRef<HTMLDivElement>(null);
-  const modeScroll = useRef<Partial<Record<"edit" | "preview", number>>>({});
+  const modeScroll = useRef<Partial<Record<MobileMode, number>>>({});
   const modeChanged = useRef(false);
+  // The part of the wall a tapped row of the list should land on.
+  const pendingSection = useRef<string | null>(null);
   const mobilePreview = mobileEditor && mobileMode === "preview";
+  const mobileSections = mobileEditor && hasSections && mobileMode === "sections";
   const editDock = useRef<HTMLDivElement>(null);
+  const [styleOpen, setStyleOpen] = useState(false);
 
   useLayoutEffect(() => {
     const dock = editDock.current;
-    if (!mobileEditor || mobilePreview || !dock) return;
+    if (!mobileEditor || mobilePreview || mobileSections || !dock) return;
     const form = dock.closest("form");
     const update = () => {
       const height = Math.ceil(dock.getBoundingClientRect().height);
@@ -371,12 +393,14 @@ export function HostWallDesignPage({
       observer?.disconnect();
       form?.style.removeProperty("--mobile-edit-dock-height");
     };
-  }, [mobileEditor, mobilePreview, draft.load.status]);
+  }, [mobileEditor, mobilePreview, mobileSections, draft.load.status]);
 
-  function changeMobileMode(next: "edit" | "preview") {
-    if (next === mobileMode) return;
+  function changeMobileMode(next: MobileMode, section?: string) {
+    pendingSection.current = section ?? null;
+    if (next === mobileMode && !section) return;
     modeScroll.current[mobileMode] = window.scrollY;
     modeChanged.current = true;
+    setStyleOpen(false);
     setMobileMode(next);
   }
 
@@ -384,6 +408,13 @@ export function HostWallDesignPage({
     if (!mobileEditor || !modeChanged.current || !modeSwitch.current) return;
     modeChanged.current = false;
     const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0;
+    const section = pendingSection.current && document.getElementById(pendingSection.current);
+    pendingSection.current = null;
+    if (section) {
+      const top = section.getBoundingClientRect().top + window.scrollY - headerHeight - 12;
+      window.scrollTo({ top: Math.max(0, top), behavior: "instant" });
+      return;
+    }
     // The banner scrolls normally; the switch's sticky position is not its
     // original place in the document when a host switches far down the wall.
     const bannerBottom = modeSwitch.current.previousElementSibling?.getBoundingClientRect().bottom ?? 0;
@@ -634,7 +665,7 @@ export function HostWallDesignPage({
   );
 
   const hostNoteCards = (
-    <section className="host-notes canvas-note-panel" aria-label="Your own notes">
+    <section className="host-notes canvas-note-panel" id="wall-section-notes" aria-label="Your own notes">
       {profile.hostNotes.length > 0 && (
         <p className="host-note-eyebrow">More from your hosts</p>
       )}
@@ -923,26 +954,151 @@ export function HostWallDesignPage({
       value={profile.theme}
       colour={profile.colour}
       disabled={draft.saving}
-      compact={mobileEditor}
       onChange={(theme) => set("theme", theme)}
       onColourChange={(colour) => set("colour", colour)}
     />
   );
+  // The button sits outside the form on the phone's list of parts, so it
+  // names the form it submits.
+  const saveButton = (
+    <button type="submit" form="wall-edit-panel" disabled={draft.saving || !draft.dirty}>
+      {draft.saving ? "Saving…" : "Save changes"}
+    </button>
+  );
+  const saveNote = draft.problems.failure ? (
+    <span className="save-note failed" role="alert">{draft.problems.failure}</span>
+  ) : draft.saved ? (
+    <span className="save-note" role="status">Saved. Your walls read this immediately.</span>
+  ) : (
+    <span className="save-note">
+      {draft.dirty
+        ? mobileEditor ? "You have unsaved changes." : "Unsaved changes. This is what they will read."
+        : "Everything here is saved."}
+    </span>
+  );
   const saveBar = (
     <div className="save-bar canvas-savebar">
-      <button type="submit" disabled={draft.saving || !draft.dirty}>
-        {draft.saving ? "Saving…" : "Save changes"}
-      </button>
-      {draft.problems.failure ? (
-        <span className="save-note failed" role="alert">{draft.problems.failure}</span>
-      ) : draft.saved ? (
-        <span className="save-note" role="status">Saved. Your walls read this immediately.</span>
-      ) : (
-        <span className="save-note">
-          {draft.dirty ? "Unsaved changes. This is what they will read." : "Everything here is saved."}
-        </span>
-      )}
+      {saveButton}
+      {saveNote}
     </div>
+  );
+
+  // The phone's list of the guest wall's parts, each saying whether it is
+  // done, and landing on that part of the wall when tapped.
+  const currentTheme = wallTheme(profile.theme);
+  const currentColour = currentTheme.colourways.find((option) => option.id === profile.colour) ?? currentTheme.colourways[0]!;
+  const sections: WallSection[] = [
+    {
+      id: "wall-section-cover",
+      title: "Cover photo",
+      state: profile.cover ? "done" : "todo",
+      detail: profile.cover ? "Added" : "Add a wide photo of the property",
+    },
+    {
+      id: "wall-section-name",
+      title: "Name and address",
+      state: draft.name.trim() && profile.location.trim() ? "done" : "todo",
+      detail: [draft.name.trim(), profile.location.trim()].filter(Boolean).join(" · ") || "Add your property's name and address",
+    },
+    {
+      id: "wall-section-welcome",
+      title: "Your photo",
+      state: profile.hostPhoto ? "done" : "todo",
+      detail: profile.hostPhoto ? "Added" : "Add a photo so guests know who you are",
+    },
+    {
+      id: "wall-section-welcome",
+      title: "Welcome note",
+      state: profile.stayNoteOff ? "off" : profile.stayWelcome.trim() ? "done" : "todo",
+      detail: profile.stayNoteOff
+        ? "Hidden from the wall"
+        : profile.stayWelcome.trim() || "Say hello to guests who have just arrived",
+    },
+    {
+      id: "wall-section-essentials",
+      title: "Wi-Fi and essentials",
+      state: profile.factsOff ? "off" : profile.facts.length > 0 ? "done" : "todo",
+      detail: profile.factsOff
+        ? "Hidden from the wall"
+        : profile.facts.map((fact) => fact.term.trim()).filter(Boolean).join(", ") || "Wi-Fi, check-out, parking",
+    },
+    {
+      id: "wall-section-notes",
+      title: "More notes",
+      optional: true,
+      state: profile.hostNotes.length > 0 ? "done" : "optional",
+      detail: profile.hostNotes.length > 0
+        ? `${profile.hostNotes.length} ${profile.hostNotes.length === 1 ? "note" : "notes"}`
+        : "Anything else you want guests to know",
+    },
+    {
+      id: "style",
+      title: "Look and colors",
+      optional: true,
+      state: "optional",
+      detail: `${currentTheme.name}, ${currentColour.name}`,
+    },
+  ];
+  const required = sections.filter((section) => !section.optional);
+  const finished = required.filter((section) => section.state !== "todo").length;
+
+  const sectionList = (
+    <section className="wall-sections" aria-labelledby="wall-sections-title">
+      <p className="wall-sections-name">{draft.name.trim() || property.name}</p>
+      <h2 id="wall-sections-title">Set up your guest wall</h2>
+      <div className="wall-sections-progress">
+        <progress max={required.length} value={finished} aria-label="Parts of the wall done" />
+        <span>{finished} of {required.length} done</span>
+      </div>
+      <ul className="wall-sections-list">
+        {sections.map((section, index) => (
+          <li key={section.title}>
+            <button
+              type="button"
+              className="wall-section-row"
+              data-state={section.state}
+              onClick={() => {
+                if (section.id === "style") {
+                  changeMobileMode("edit");
+                  setStyleOpen(true);
+                } else {
+                  changeMobileMode("edit", section.id);
+                }
+              }}
+            >
+              <span className="wall-section-mark" aria-hidden="true">
+                {section.state === "done" ? (
+                  <svg viewBox="0 0 24 24" focusable="false"><path d="m5 12 5 5 9-10" /></svg>
+                ) : section.state === "off" ? (
+                  <svg viewBox="0 0 24 24" focusable="false"><path d="M6 12h12" /></svg>
+                ) : (
+                  index + 1
+                )}
+              </span>
+              <span className="wall-section-words">
+                <b>
+                  {section.title}
+                  {section.optional && <span className="wall-section-optional"> · optional</span>}
+                </b>
+                <span className="wall-section-detail">{section.detail}</span>
+              </span>
+              <svg className="wall-section-go" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 6 6 6-6 6" /></svg>
+            </button>
+          </li>
+        ))}
+      </ul>
+      <div className="wall-sections-dock">
+        {saveNote}
+        <div className="wall-sections-actions">
+          <button type="button" className="btn btn-secondary" onClick={() => changeMobileMode("preview")}>See guest view</button>
+          {draft.dirty ? (
+            <span className="mobile-save">{saveButton}</span>
+          ) : (
+            <button type="button" className="btn btn-primary" onClick={() => changeMobileMode("edit")}>Edit the wall</button>
+          )}
+        </div>
+      </div>
+    </section>
   );
 
   return (
@@ -963,9 +1119,14 @@ export function HostWallDesignPage({
       name={draft.name}
       profile={profile}
       onChangeAvatar={(photo) => draft.setProfile(withPhotoInSlot(draft.profile, "avatar", photo))}
-      className={`design-page${showPhone ? " has-phone" : ""}${mobilePreview ? " is-mobile-preview" : ""}`}
+      className={`design-page${showPhone ? " has-phone" : ""}${mobilePreview ? " is-mobile-preview" : ""}${mobileSections ? " is-mobile-sections" : ""}`}
       toolbar={mobileEditor && (
-        <div className="mobile-wall-switch" ref={modeSwitch} role="group" aria-label="Wall editor mode">
+        <div className="mobile-wall-switch" ref={modeSwitch} role="group" aria-label="Wall editor mode"
+          data-modes={hasSections ? 3 : 2}>
+          {hasSections && (
+            <button type="button" aria-pressed={mobileMode === "sections"}
+              onClick={() => changeMobileMode("sections")}>Overview</button>
+          )}
           <button type="button" aria-pressed={mobileMode === "edit"} aria-controls="wall-edit-panel"
             onClick={() => changeMobileMode("edit")}>Edit</button>
           <button type="button" aria-pressed={mobileMode === "preview"} aria-controls="wall-preview-panel"
@@ -982,7 +1143,18 @@ export function HostWallDesignPage({
           nav on the left instead: they are different walls, not two states of
           one screen, and a Host asks for one of them the way they ask for
           moderation or billing. */}
-      <header className="design-intro" hidden={mobilePreview}>
+      {mobileSections && sectionList}
+
+      {/* On a phone the guest wall's intro gives way to one line on how the
+          page works; the list of parts has already said what the wall is. */}
+      {mobileEditor && hasSections && mobileMode === "edit" && (
+        <p className="mobile-edit-hint">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h4L19 9l-4-4L4 16v4Z" /></svg>
+          Tap anything with a dotted outline to change it.
+        </p>
+      )}
+
+      <header className="design-intro" hidden={mobilePreview || (mobileEditor && hasSections)}>
         <div className="design-intro-head">
           <h2>{view === "public" ? "Public page" : "Guest wall"}</h2>
           {/* The wall as a visitor or a guest gets it, one click from the page
@@ -1045,7 +1217,7 @@ export function HostWallDesignPage({
         <form
           className="wall-canvas"
           id="wall-edit-panel"
-          hidden={mobilePreview}
+          hidden={mobilePreview || mobileSections}
           onSubmit={draft.save}
           noValidate
           aria-label={view === "public" ? "Public page" : "Guest wall"}
@@ -1090,9 +1262,9 @@ export function HostWallDesignPage({
                   </div>
                 </header>
               ) : (
-                <header className="stay-cover canvas-stay-cover">
+                <header className="stay-cover canvas-stay-cover" id="wall-section-cover">
                   {coverControl}
-                  <div className="stay-cover-titles canvas-stay-titles">
+                  <div className="stay-cover-titles canvas-stay-titles" id="wall-section-name">
                     <h1 className="canvas-name" aria-level={2}>{nameInput}</h1>
                     {nameFeedback}
                     <div className="stay-location">
@@ -1118,18 +1290,48 @@ export function HostWallDesignPage({
                     them. With the note off, the card still says whose house
                     this is, and the offer to put the note back stands in it. */}
                   {!profile.stayNoteOff ? (
-                    <section className="stay-welcome stay-card canvas-welcome-card" aria-label="A note from your hosts">
+                    <section className="stay-welcome stay-card canvas-welcome-card" id="wall-section-welcome" aria-label="A note from your hosts">
                       {portraitControl}
                       <div className="stay-welcome-words">
-                        <p className="canvas-eyebrow canvas-eyebrow-omit">
+                        <div className="canvas-eyebrow canvas-eyebrow-omit">
                           A note from your hosts
-                          <Omit
-                            label="Leave the whole note out"
-                            iconOnly
-                            disabled={draft.saving}
-                            onClick={omitStayNote}
-                          />
-                        </p>
+                          {/* A phone has no room for a remove button beside
+                            every line, so the note's lines are taken off from
+                            one menu at its head instead. */}
+                          {mobileEditor ? (
+                            <ActionDisclosure
+                              className="canvas-section-menu"
+                              title="Options for the note from your hosts"
+                              label={<>
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="5" cy="12" r="1.8" /><circle cx="12" cy="12" r="1.8" /><circle cx="19" cy="12" r="1.8" /></svg>
+                                <span className="visually-hidden">Options for the note from your hosts</span>
+                              </>}
+                            >
+                              <div className="cover-menu-actions">
+                                {shows("stayHeading") && (
+                                  <button type="button" disabled={draft.saving} onClick={() => omit("stayHeading")}>Hide the heading</button>
+                                )}
+                                {(profile.hosts.trim() || signing) && (
+                                  <button type="button" disabled={draft.saving} onClick={() => { set("hosts", ""); setSigning(false); }}>Hide your names</button>
+                                )}
+                                {shows("stayWelcome") && (
+                                  <button type="button" disabled={draft.saving} onClick={() => omit("stayWelcome")}>Hide the arrival note</button>
+                                )}
+                                {shows("stayTip") && (
+                                  <button type="button" disabled={draft.saving} onClick={() => omit("stayTip")}>Hide the local tip</button>
+                                )}
+                                <button type="button" disabled={draft.saving} onClick={omitStayNote}>Hide the whole note</button>
+                              </div>
+                            </ActionDisclosure>
+                          ) : (
+                            <Omit
+                              label="Leave the whole note out"
+                              iconOnly
+                              disabled={draft.saving}
+                              onClick={omitStayNote}
+                            />
+                          )}
+                        </div>
 
                         {shows("stayHeading") && (
                           <div className="canvas-optional canvas-heading-edit">
@@ -1225,7 +1427,7 @@ export function HostWallDesignPage({
                       )}
                     </section>
                   ) : (
-                    <section className="stay-welcome-plain stay-card canvas-welcome-card" aria-label="Your hosts">
+                    <section className="stay-welcome-plain stay-card canvas-welcome-card" id="wall-section-welcome" aria-label="Your hosts">
                       {portraitControl}
                       <p className="canvas-includes">
                         <Include
@@ -1276,7 +1478,7 @@ export function HostWallDesignPage({
                     when the section goes, so putting it back does not cost them
                     the Wi-Fi password twice. */}
                   {profile.factsOff ? (
-                    <p className="canvas-includes canvas-includes-lead">
+                    <p className="canvas-includes canvas-includes-lead" id="wall-section-essentials">
                       <Include
                         label="the essentials"
                         disabled={draft.saving}
@@ -1284,7 +1486,7 @@ export function HostWallDesignPage({
                       />
                     </p>
                   ) : (
-                    <div className="stay-wall canvas-stay-links">
+                    <div className="stay-wall canvas-stay-links" id="wall-section-essentials">
                       <StayEssentialLinks
                         id="canvas-stay-essentials"
                         headingLevel={3}
@@ -1500,10 +1702,29 @@ export function HostWallDesignPage({
             </div>
           </div>
 
+          {/* On a phone the look of the wall waits behind one button, so the
+            bar at the bottom is the save and nothing else a Host has to read. */}
           {mobileEditor ? (
             <div className="mobile-edit-dock" ref={editDock}>
-              {themePicker}
-              {saveBar}
+              {styleOpen && (
+                <div className="mobile-style-panel" role="group" aria-label="Look and colors">
+                  {themePicker}
+                  <button type="button" className="btn btn-secondary btn-sm" onClick={() => setStyleOpen(false)}>Done</button>
+                </div>
+              )}
+              {saveNote}
+              <div className="mobile-edit-actions">
+                <button
+                  type="button"
+                  className="btn btn-secondary mobile-style-toggle"
+                  aria-expanded={styleOpen}
+                  onClick={() => setStyleOpen((was) => !was)}
+                >
+                  <span className="mobile-style-dot" data-wall-theme={profile.theme} data-wall-colour={profile.colour} aria-hidden="true" />
+                  Style
+                </button>
+                <span className="mobile-save">{saveButton}</span>
+              </div>
             </div>
           ) : saveBar}
         </form>

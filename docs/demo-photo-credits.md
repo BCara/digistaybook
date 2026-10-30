@@ -44,3 +44,24 @@ photos come from Firestore and Cloud Storage. If the fictional framing ever
 becomes a problem, swap the files and update `wallPhotos` and
 `demoProperty.cover` in `src/ui/wall/demoWall.ts` — the alt text lives there too
 and must be rewritten to match any new image.
+
+## QR sign maker photos
+
+`public/signs/` holds print-weight copies of seven of the photos above, for the
+sample photos on the free QR sign maker (`/qr-sign-maker`). They were fetched at
+3200 px from the Unsplash CDN on October 30, 2026
+(`?w=3200&q=85&fm=jpg`), then resized to 2100 px on the long side and saved as
+WebP (quality 78), so a 5 x 7 print is 300 dpi. The full-size downloads are kept
+in `marketing/campaigns/qr-placards-pinterest-2026-10-30/reference/photos-full/`.
+
+| File | Same photo as |
+| --- | --- |
+| `signs/cover.webp` | `cover.webp` |
+| `signs/window.webp` | `memory-window.webp` |
+| `signs/coast.webp` | `memory-coast.webp` |
+| `signs/evening.webp` | `memory-evening.webp` |
+| `signs/fire.webp` | `memory-fire.webp` |
+| `signs/table.webp` | `memory-table.webp` |
+| `signs/garden.webp` | `memory-garden.webp` |
+
+A visitor's own photo on the sign maker is read in their browser and never uploaded.

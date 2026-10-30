@@ -47,11 +47,11 @@
   align-self: end;
   padding: clamp(48px, 12vw, 96px) clamp(16px, 4vw, 28px) clamp(16px, 4vw, 24px);
   border-radius: 0 0 var(--stay-radius) var(--stay-radius);
-  background: linear-gradient(180deg, transparent, rgba(16, 14, 10, .62) 55%, rgba(16, 14, 10, .78));
+  background: linear-gradient(180deg, transparent, rgba(16, 14, 10, .7) 45%, rgba(16, 14, 10, .85));
   color: #fff;
 }
-[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo) .stay-cover-titles h1 { color: #fff; text-shadow: 0 1px 12px rgba(0, 0, 0, .35); }
-[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo) .stay-location { color: rgba(255, 255, 255, .92); }
+[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo) .stay-cover-titles h1 { color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, .6), 0 1px 12px rgba(0, 0, 0, .45); }
+[data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo) .stay-location { color: rgba(255, 255, 255, .92); text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
 [data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover:has(> .wall-cover-photo) .stay-location svg { stroke: currentColor; }
 [data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-location { letter-spacing: .04em; text-transform: none; font-size: .95rem; }
 [data-wall-theme="linen"][data-wall-theme] .stay-wall .stay-cover-titles h1 { font-weight: 500; }
@@ -799,11 +799,13 @@
   align-self: end;
   padding: clamp(48px, 9vw, 80px) clamp(16px, 4vw, 28px) clamp(16px, 4vw, 24px);
   border-radius: 0 0 var(--stay-radius) var(--stay-radius);
-  background: linear-gradient(180deg, transparent, rgba(16, 14, 10, .62) 55%, rgba(16, 14, 10, .78));
+  background: linear-gradient(180deg, transparent, rgba(16, 14, 10, .7) 45%, rgba(16, 14, 10, .85));
   color: #fff;
 }
-[data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) .stay-cover-titles h1 { color: #fff; text-shadow: 0 1px 12px rgba(0, 0, 0, .35); }
-[data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) .stay-location { color: rgba(255, 255, 255, .92); }
+[data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) .stay-cover-titles h1 { color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, .6), 0 1px 12px rgba(0, 0, 0, .45); }
+[data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) .stay-location { color: rgba(255, 255, 255, .92); text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
+/* The fields carry the canvas's muted ink; on the photograph they take the white above. */
+[data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) .stay-cover-titles :is(.canvas-field, .canvas-line, .canvas-area) { color: inherit; }
 [data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) .stay-location svg { stroke: currentColor; }
 /* Fields on the photograph keep white type while they are typed into. */
 [data-wall-theme="linen"][data-wall-theme] .canvas-stay .stay-cover:has(.canvas-cover-photo) .stay-cover-titles :is(.canvas-line, .canvas-area)::placeholder { color: rgba(255, 255, 255, .72); }

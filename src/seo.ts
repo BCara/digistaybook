@@ -31,7 +31,7 @@ const defaultDescription =
 const titled = (title: string) => `${title} | ${SITE_NAME}`;
 
 /** The pages listed in the sitemap, in the order they are listed. */
-export const indexedPaths = ["/", "/pricing", `/stay/${DEMO_SLUG}`, `/wall/${DEMO_SLUG}`, "/contact", "/privacy-safety", "/terms", "/guest-terms", "/privacy"] as const;
+export const indexedPaths = ["/", "/pricing", "/qr-sign-maker", `/stay/${DEMO_SLUG}`, `/wall/${DEMO_SLUG}`, "/contact", "/privacy-safety", "/terms", "/guest-terms", "/privacy"] as const;
 
 /** Both demos use bundled example data, so every indexed page can ship as static HTML. */
 export const prerenderedPaths = indexedPaths;
@@ -44,6 +44,10 @@ const pages: Record<(typeof indexedPaths)[number], Omit<PageSeo, "canonical">> =
   "/pricing": {
     title: titled("Pricing"),
     description: "One price per property, billed monthly or annually, with a 28-day free trial. Every DigiStayBook plan includes the QR kit, guest wall, screening and moderation."
+  },
+  "/qr-sign-maker": {
+    title: titled("Free QR welcome sign maker for vacation rentals"),
+    description: "Make a printable 5 x 7 QR welcome sign for your vacation rental in 18 styles, with a Wi-Fi code guests scan to connect. Free, no account needed."
   },
   [`/stay/${DEMO_SLUG}`]: {
     title: titled("Live guest wall demo"),

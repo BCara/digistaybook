@@ -159,6 +159,7 @@ describe("switching the phone editor between Edit and Preview", () => {
     } });
     renderPage();
     const edit = await screen.findByRole("button", { name: "Edit" });
+    fireEvent.click(edit);
     const preview = screen.getByRole("button", { name: "Preview" });
     const form = screen.getByRole("form", { name: "Guest wall" });
     expect(edit).toHaveAttribute("aria-pressed", "true");
@@ -190,7 +191,8 @@ describe("switching the phone editor between Edit and Preview", () => {
   it("changes and saves the theme from the mobile dock while keeping Preview current", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
     renderPage();
-    await screen.findByRole("button", { name: "Edit" });
+    fireEvent.click(await screen.findByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("button", { name: "Style" }));
     const theme = screen.getByRole("group", { name: "Wall theme" });
     expect(document.querySelector(".mobile-edit-dock")).toContainElement(theme);
     expect(document.querySelector(".property-side-tools")).not.toBeInTheDocument();
@@ -206,25 +208,51 @@ describe("switching the phone editor between Edit and Preview", () => {
     expect(document.querySelector(".phone-screen")).toHaveAttribute("data-wall-theme", "seaside");
     expect(document.querySelector(".phone-screen")).toHaveAttribute("data-wall-colour", "ocean");
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("button", { name: "Style" }));
     expect(screen.getByRole("radio", { name: "Berry" })).toBeChecked();
     fireEvent.click(save());
     await waitFor(() => expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ theme: "seaside", colour: "ocean" })));
   });
 
-  it("closes the mobile theme choices with Escape or an outside tap without changing the draft", async () => {
+  it("keeps the look of the wall behind the Style button without changing the draft", async () => {
     renderPage();
-    await screen.findByRole("button", { name: "Edit" });
-    const theme = within(screen.getByRole("group", { name: "Wall theme" }));
-    const toggle = theme.getByRole("button", { name: /Warm Linen/ });
-    fireEvent.click(toggle);
-    expect(toggle).toHaveAttribute("aria-expanded", "true");
-    fireEvent.keyDown(document, { key: "Escape" });
-    expect(toggle).toHaveAttribute("aria-expanded", "false");
-    expect(toggle).toHaveFocus();
-    fireEvent.click(toggle);
-    fireEvent.click(canvas().getByLabelText("Arrival heading"));
-    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(await screen.findByRole("button", { name: "Edit" }));
+    expect(screen.queryByRole("group", { name: "Wall theme" })).not.toBeInTheDocument();
+    const style = screen.getByRole("button", { name: "Style" });
+    fireEvent.click(style);
+    expect(style).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("group", { name: "Wall theme" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Done" }));
+    expect(style).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByRole("group", { name: "Wall theme" })).not.toBeInTheDocument();
     expect(save()).toBeDisabled();
+  });
+
+  it("opens the guest wall on a list of its parts and lands on the one tapped", async () => {
+    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
+    renderPage();
+    const list = await screen.findByRole("region", { name: "Set up your guest wall" });
+    expect(screen.queryByRole("form", { name: "Guest wall" })).not.toBeInTheDocument();
+    expect(within(list).getByText(/of 5 done/)).toBeInTheDocument();
+    const essentials = document.createElement("div");
+    vi.spyOn(document, "getElementById").mockImplementation((id) => (id === "wall-section-essentials" ? essentials : null));
+    vi.spyOn(essentials, "getBoundingClientRect").mockReturnValue({ top: 900 } as DOMRect);
+    fireEvent.click(within(list).getByRole("button", { name: /Wi-Fi and essentials/ }));
+    expect(screen.getByRole("form", { name: "Guest wall" })).toBeVisible();
+    expect(screen.queryByRole("region", { name: "Set up your guest wall" })).not.toBeInTheDocument();
+    expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 888, behavior: "instant" });
+    vi.mocked(document.getElementById).mockRestore();
+  });
+
+  it("takes the note's lines off from one menu on a phone", async () => {
+    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
+    renderPage();
+    fireEvent.click(await screen.findByRole("button", { name: "Edit" }));
+    expect(screen.queryByRole("button", { name: "Leave the whole note out" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByText("Options for the note from your hosts"));
+    fireEvent.click(screen.getByRole("button", { name: "Hide the heading" }));
+    expect(canvas().queryByLabelText("Arrival heading")).not.toBeInTheDocument();
+    expect(save()).toBeEnabled();
   });
 
   it("switches the public wall too, hiding its sharing controls in Preview", async () => {
@@ -244,6 +272,7 @@ describe("switching the phone editor between Edit and Preview", () => {
   it("restores each mode's scroll position when switching back", async () => {
     renderPage();
     const edit = await screen.findByRole("button", { name: "Edit" });
+    fireEvent.click(edit);
     const preview = screen.getByRole("button", { name: "Preview" });
     vi.stubGlobal("scrollY", 1375);
     fireEvent.click(preview);

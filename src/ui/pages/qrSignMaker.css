@@ -1,0 +1,60 @@
+/* The free QR sign maker (/qr-sign-maker). The sign itself is styled in
+   ui/signs/signStyles.css; this is only the page around it. */
+
+.sign-maker-layout {
+  display: grid; grid-template-columns: minmax(0, 500px) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: start;
+}
+.sign-maker-preview { position: sticky; top: 96px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; min-width: 0; }
+.sign-stage { width: 100%; max-width: 500px; }
+/* The card is drawn at 500 x 700 and zoomed to the column, so its own
+   measurements stay the print measurements. */
+.sign-stage-card { width: 500px; box-shadow: 0 1px 0 var(--rule), 0 24px 40px -28px rgba(20, 24, 27, .55); }
+.sign-maker-print { display: grid; gap: 10px; justify-items: start; }
+.sign-maker-print .field-hint { margin: 0; }
+
+.sign-maker-form { display: grid; gap: 28px; min-width: 0; }
+.sign-maker-form fieldset { display: grid; gap: 10px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.sign-maker-form legend {
+  margin-bottom: 4px; padding: 0; font-size: var(--step--2); font-weight: 650; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted);
+}
+.sign-maker-form label { margin-top: 6px; }
+.sign-maker-form .field-hint { margin: 0; }
+.sign-maker-error { color: var(--accent-strong); }
+.sign-photo-field { display: grid; gap: 10px; }
+
+.sign-style-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 12px; }
+.sign-style-option {
+  display: grid; gap: 6px; justify-items: center; padding: 6px 6px 8px; min-height: 44px;
+  background: transparent; color: var(--text); border: 1px solid var(--rule); border-radius: var(--radius-sm); cursor: pointer; font: inherit;
+}
+.sign-style-option:hover { border-color: var(--rule-strong); background: transparent; }
+.sign-style-option[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+/* A real sign at a fifth of its size: the same drawing the print uses. */
+.sign-style-thumb { display: block; width: 80px; height: 112px; overflow: hidden; pointer-events: none; }
+.sign-style-thumb .sign { zoom: .16; }
+.sign-style-name { font-size: var(--step--2); font-weight: 600; line-height: 1.25; text-align: center; }
+
+.sign-maker-pitch {
+  margin-top: clamp(48px, 7vw, 88px); padding: clamp(22px, 3vw, 32px); max-width: 52rem;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-sm);
+}
+.sign-maker-pitch h2 { font-size: var(--step-2); }
+.sign-maker-pitch .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+@media (max-width: 860px) {
+  .sign-maker-layout { grid-template-columns: minmax(0, 1fr); }
+  .sign-maker-preview { position: static; justify-items: center; }
+  .sign-maker-print { justify-items: center; text-align: center; }
+}
+
+/* The print copy is a direct child of body, mounted only while the print
+   dialog is open, and is the only thing printed: one 5 x 7 page, no margins.
+   The card is 500 CSS px wide; at 96 px to the inch, 96% is exactly 5 in. */
+.sign-print-root { display: none; }
+@page sign { size: 5in 7in; margin: 0; }
+@media print {
+  body:has(> .sign-print-root) > :not(.sign-print-root) { display: none !important; }
+  .sign-print-root { display: block; page: sign; }
+  .sign-print-root, .sign-print-root * { visibility: visible; }
+  .sign-print-root .sign { zoom: .96; }
+}

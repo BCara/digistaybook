@@ -7,6 +7,7 @@ import { AuthProvider } from "./ui/auth/AuthProvider";
 import { RequireHost } from "./ui/auth/RequireHost";
 import { LandingPage } from "./ui/pages/LandingPage";
 import { PricingPage } from "./ui/pages/PricingPage";
+import { QrSignMakerPage } from "./ui/pages/QrSignMakerPage";
 import { GuestWallPage } from "./ui/pages/GuestWallPage";
 import { StayWallPage } from "./ui/pages/StayWallPage";
 import { HostSignInPage } from "./ui/pages/HostSignInPage";
@@ -34,6 +35,7 @@ function resolvePage(pathname: string) {
   if (pathname === "/verify-email") return <AccountActionPage kind="verifyEmail" />;
   if (pathname === "/") return <LandingPage />;
   if (pathname === "/pricing") return <PricingPage />;
+  if (pathname === "/qr-sign-maker") return <QrSignMakerPage />;
   if (pathname.startsWith("/wall/")) return <GuestWallPage propertySlug={pathname.slice("/wall/".length) || "property"} />;
   if (pathname.startsWith("/stay/")) {
     // The guestbook link carries the token as its own segment, so the address
