@@ -52,7 +52,8 @@ export function helpContactInput(data: Record<string, unknown> | undefined) {
   const message = typeof data?.message === "string" ? data.message.trim() : "";
   if (email.length > 200 || !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email) || name.length > 100 || !message || message.length > 4000)
     throw new HttpsError("invalid-argument", "Enter a valid email and a message under 4,000 characters.");
-  return { email, name, message, transcript: helpTranscript(data?.transcript ?? [], false), requestId: idOf(data?.requestId) };
+  const topic = data?.topic === "custom" ? "custom" : "general";
+  return { email, name, message, topic, transcript: helpTranscript(data?.transcript ?? [], false), requestId: idOf(data?.requestId) };
 }
 
 export const helpContact = onCall({ ...options, secrets: emulator ? [] : [resendKey, hashKey] }, async request => {
@@ -74,7 +75,7 @@ export const helpContact = onCall({ ...options, secrets: emulator ? [] : [resend
       method: "POST", signal: AbortSignal.timeout(15000),
       headers: { Authorization: `Bearer ${resendKey.value()}`, "Content-Type": "application/json", "Idempotency-Key": `help-${requestId}` },
       body: JSON.stringify({ from: "DigiStayBook <noreply@digistaybook.com>", to: [recipient.value()], reply_to: record.email,
-        subject: "DigiStayBook support request", text: `Name: ${record.name || "Not supplied"}\nEmail: ${record.email}\n\n${record.message}\n\nChat supplied by visitor:\n${(record.transcript as HelpMessage[]).map(m => `${m.role}: ${m.text}`).join("\n\n")}` })
+        subject: record.topic === "custom" ? "DigiStayBook custom options enquiry" : "DigiStayBook support request", text: `Name: ${record.name || "Not supplied"}\nEmail: ${record.email}\n\n${record.message}\n\nChat supplied by visitor:\n${(record.transcript as HelpMessage[]).map(m => `${m.role}: ${m.text}`).join("\n\n")}` })
     });
     if (!response.ok) throw new Error("Email unavailable");
     await ref.update({ status: "sent" });

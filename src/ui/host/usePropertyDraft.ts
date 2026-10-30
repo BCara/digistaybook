@@ -150,6 +150,8 @@ export type PropertyDraft = {
    * nothing when the settings window's own button did.
    */
   save: (event?: FormEvent<HTMLFormElement>) => Promise<void>;
+  /** Commit a focused section's local form without first changing the wall draft. */
+  saveValues: (values: { name: string; profile: PropertyProfile }) => Promise<boolean>;
 };
 
 export function usePropertyDraft(propertyId: string): PropertyDraft {
@@ -232,13 +234,19 @@ export function usePropertyDraft(propertyId: string): PropertyDraft {
 
   async function save(event?: FormEvent<HTMLFormElement>) {
     event?.preventDefault();
-    if (saving || !property) return;
+    await saveValues({ name, profile: draft });
+  }
+
+  async function saveValues(values: { name: string; profile: PropertyProfile }): Promise<boolean> {
+    if (saving || !property) return false;
+    const name = values.name;
+    const draft = values.profile;
     setSaved(false);
 
     const identity = name === property.name ? [] : validatePropertyName(name);
     const profileProblems = validateProfile(draft);
     setProblems({ identity, profile: profileProblems, failure: null });
-    if (identity.length > 0 || profileProblems.length > 0) return;
+    if (identity.length > 0 || profileProblems.length > 0) return false;
 
     setSaving(true);
     let next = property;
@@ -248,7 +256,7 @@ export function usePropertyDraft(propertyId: string): PropertyDraft {
       if (outcome.status === "error") {
         setSaving(false);
         setProblems({ ...NO_PROBLEMS, failure: outcome.message });
-        return;
+        return false;
       }
       next = { ...next, name: outcome.value.name };
       setName(outcome.value.name);
@@ -262,7 +270,7 @@ export function usePropertyDraft(propertyId: string): PropertyDraft {
         // change it made as still pending.
         setLoad({ status: "ready", property: next });
         setProblems({ ...NO_PROBLEMS, failure: outcome.message });
-        return;
+        return false;
       }
       // What comes back is what was written: trimmed, with blank rows dropped.
       const stored = {
@@ -278,6 +286,7 @@ export function usePropertyDraft(propertyId: string): PropertyDraft {
     setLoad({ status: "ready", property: next });
     setProblems(NO_PROBLEMS);
     setSaved(true);
+    return true;
   }
 
   return {
@@ -294,6 +303,7 @@ export function usePropertyDraft(propertyId: string): PropertyDraft {
       setName(value);
     },
     setProfile,
-    save
+    save,
+    saveValues
   };
 }

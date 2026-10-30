@@ -1,0 +1,81 @@
+/* Preview-led phone editor. The guest wall keeps its theme; controls use the host app's chrome. */
+.phone-wall-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 18px 0; }
+.phone-wall-heading h2 { margin: 0; font-family: var(--font-display); font-size: 1.65rem; }
+.phone-wall-status { font-size: .8125rem; color: var(--text-muted); margin: 6px 0 0; }
+.phone-wall-heading > .btn { flex: none; }
+.phone-wall-surface { display: grid; gap: 16px; padding-bottom: 20px; color: var(--wall-ink); }
+.phone-wall-section { overflow: hidden; border: 1px solid var(--rule); background: var(--surface); border-radius: 16px; }
+.phone-wall-section-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 10px 8px 16px; border-bottom: 1px solid var(--rule); color: var(--text); background: var(--surface); }
+.phone-wall-section-head > h3 { font: 500 .75rem/1.4 var(--font-sans); letter-spacing: .06em; text-transform: uppercase; margin: 0; }
+.phone-wall-section-head > button { flex: none; min-height: 44px; padding-inline: 10px; }
+.phone-wall-cover { position: relative; min-height: 160px; display: grid; place-content: center; background: var(--bg-alt); color: var(--text-muted); }
+.phone-wall-cover > img { display: block; width: 100%; height: 190px; object-fit: cover; }
+.phone-wall-cover > p { padding: 0 20px 60px; text-align: center; }
+.phone-wall-cover > button { position: absolute; right: 12px; bottom: 12px; min-height: 44px; background: var(--surface); color: var(--text); }
+.phone-wall-property-words, .phone-wall-welcome, .phone-wall-summary { padding: 18px 16px; background: var(--wall-paper, var(--surface)); }
+.phone-wall-property-words h3 { font: var(--wall-title-weight, 500) 1.8rem/1.2 var(--wall-display, var(--font-display)); margin: 0 0 8px; overflow-wrap: anywhere; }
+.phone-wall-property-words p { margin: 0; font-size: .875rem; color: var(--wall-ink-soft, var(--text-muted)); overflow-wrap: anywhere; }
+.phone-wall-hosts { display: flex; gap: 12px; align-items: center; }
+.phone-wall-hosts > img, .phone-wall-initials { width: 48px; height: 48px; flex: none; border-radius: 50%; object-fit: cover; }
+.phone-wall-initials { display: grid; place-content: center; background: var(--accent-soft); color: var(--accent-strong); font-family: var(--font-display); }
+.phone-wall-hosts h3 { font-family: var(--wall-display, var(--font-display)); font-size: 1.4rem; margin: 0; overflow-wrap: anywhere; }
+.phone-wall-hosts p { margin: 4px 0 0; font-size: .8125rem; }
+.phone-wall-message, .phone-wall-tip { white-space: pre-wrap; overflow-wrap: anywhere; }
+.phone-wall-tip { padding-top: 12px; border-top: 1px solid var(--rule); font-size: .875rem; }
+.phone-wall-message:last-child, .phone-wall-tip:last-child, .phone-wall-summary > p { margin-bottom: 0; }
+.phone-wall-summary { font-size: .9375rem; overflow-wrap: anywhere; }
+.phone-wall-summary > p:first-child { margin-top: 0; }
+.phone-wall-summary .stay-again { margin: 0; }
+.phone-wall-summary .stay-again .stay-section-title { display: none; }
+.phone-wall-sections { display: grid; padding-bottom: 20px; }
+.phone-wall-sections > button { display: flex; width: 100%; text-align: left; justify-content: space-between; border: 0; border-bottom: 1px solid var(--rule); background: transparent; color: var(--text); border-radius: 0; padding: 18px 8px; gap: 16px; min-height: 78px; }
+.phone-wall-sections b { display: block; font-weight: 600; }
+.phone-wall-sections small { display: block; font-size: .8125rem; color: var(--text-muted); margin-top: 4px; overflow-wrap: anywhere; }
+.phone-wall-dock { position: fixed; bottom: 0; left: 0; right: 0; z-index: 16; display: grid; gap: 8px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--rule); background: var(--bg); }
+.phone-wall-dock > div { display: flex; gap: 10px; }
+.phone-wall-dock .btn { flex: 1; min-height: 48px; }
+.phone-wall-dock p { margin: 0; font-size: .8125rem; }
+.phone-wall-guest .phone { padding: 0; background: transparent; box-shadow: none; border-radius: 12px; }
+.phone-wall-guest .phone-screen { height: auto; overflow: visible; border-radius: 12px; }
+.phone-wall-guest .phone-wall-content { zoom: 1; padding: 16px; }
+.phone-wall-page { padding-bottom: calc(150px + env(safe-area-inset-bottom, 0px)); }
+.phone-wall-page .banner-thumb, .phone-wall-page .banner-location, .phone-wall-page .property-banner .eyebrow { display: none; }
+.phone-wall-page .property-banner { padding-bottom: 14px; }
+.phone-wall-page .banner-identity { grid-template-columns: 1fr; }
+body:has(.phone-wall-dock) .ds-help { display: none; }
+
+/* A native modal keeps the background inert, contains focus, and returns to the labelled section. */
+.phone-section-dialog { position: fixed; inset: 0; margin: 0; width: 100%; max-width: none; height: 100dvh; max-height: none; padding: 0; border: 0; background: var(--bg); color: var(--text); overflow: hidden; }
+.phone-section-dialog::backdrop { background: var(--bg); }
+.phone-section-dialog > form { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; }
+.phone-section-dialog form > header { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-bottom: 1px solid var(--rule); background: var(--surface); }
+.phone-section-dialog form > header h2 { font-family: var(--font-display); font-size: 1.35rem; margin: 0; }
+.phone-section-dialog form > header button { min-height: 44px; flex: none; }
+.phone-section-fields { overflow-y: auto; overscroll-behavior: contain; padding: 24px 20px; display: flex; flex-direction: column; gap: 22px; }
+.phone-section-fields label { display: grid; gap: 8px; font-weight: 600; }
+.phone-section-fields :is(input:not([type=checkbox]), textarea) { width: 100%; min-width: 0; box-sizing: border-box; font-size: 16px; padding: 12px; border-radius: 10px; }
+.phone-section-fields input:not([type=checkbox]) { min-height: 48px; }
+.phone-section-fields textarea { resize: vertical; }
+.phone-section-fields .field-hint { margin: 0; }
+.phone-section-fields .phone-section-check { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+.phone-section-check input { width: 20px; height: 20px; }
+.phone-section-item { min-width: 0; display: grid; gap: 16px; border: 1px solid var(--rule); padding: 18px 14px; border-radius: 12px; }
+.phone-section-item legend { padding: 0 6px; font-weight: 600; }
+.phone-section-item summary { min-height: 44px; display: flex; align-items: center; }
+.phone-section-add-links { display: flex; flex-wrap: wrap; gap: 10px; }
+.phone-section-add-links .btn { min-height: 44px; }
+.phone-section-photo { display: grid; gap: 12px; }
+.phone-section-photo > img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 12px; }
+.phone-section-fields .form-feedback { margin: 0; }
+.phone-section-fields .form-feedback p { margin: 0 0 8px; }
+.phone-section-dialog form > footer { display: grid; gap: 10px; padding: 12px 20px calc(16px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--rule); background: var(--surface); }
+.phone-section-dialog form > footer p { margin: 0; font-size: .8125rem; color: var(--text-muted); text-align: center; }
+.phone-section-dialog form > footer button { min-height: 50px; width: 100%; }
+@media (max-width: 360px) {
+  .phone-wall-heading { align-items: start; }
+  .phone-wall-heading > .btn { padding-inline: 8px; font-size: .8125rem; }
+  .phone-wall-section-head { padding-left: 12px; gap: 6px; }
+  .phone-wall-section-head > h3 { font-size: .6875rem; letter-spacing: .02em; }
+  .phone-wall-section-head > button { font-size: .8125rem; padding-inline: 8px; }
+  .phone-section-fields { padding: 20px 16px; }
+}

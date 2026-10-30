@@ -1,3 +1,4 @@
+import type { BillingCountry } from "../../domain/pricing";
 import { getFirebaseServices } from "../../lib/firebase";
 import { navigate } from "../routing";
 import type { StoreOutcome } from "./propertyStore";
@@ -33,7 +34,8 @@ function withDeadline<T>(work: Promise<T>, ms: number): Promise<T> {
   });
 }
 
-export type BillingCountry = "AU" | "US";
+/** Defined beside the rate card it picks a currency from. */
+export type { BillingCountry } from "../../domain/pricing";
 
 /** One plan as the server quotes it: a price, the §6.3.4 disclosure, the checkbox sentence. */
 export type ActivationPlanOffer = {

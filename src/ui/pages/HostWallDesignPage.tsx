@@ -42,6 +42,7 @@ import {
   type PhotoSlot,
 } from "../host/photoSlots";
 import { propertyBlock, usePropertyDraft } from "../host/usePropertyDraft";
+import { MobileWallEditor } from "../host/MobileWallEditor";
 import "./hostWallEditor.css";
 
 /**
@@ -459,6 +460,9 @@ export function HostWallDesignPage({
   const property = (draft.load as { status: "ready"; property: HostProperty })
     .property;
   const profile = draft.profile;
+  if (mobileEditor && view === "stay" && !settings) {
+    return <MobileWallEditor property={property} draft={draft} />;
+  }
   // Which note the open photograph dialog belongs to, numbered the way the
   // cards on the wall are numbered, so the window says which one it changes.
 

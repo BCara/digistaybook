@@ -152,109 +152,94 @@ describe("switching the phone editor between Edit and Preview", () => {
   });
   afterEach(() => vi.unstubAllGlobals());
 
-  it("previews unsaved edits without saving or replacing the editor, then restores them", async () => {
+  it("opens on the wall and saves a focused section once", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
-    loadPreviewMemories.mockResolvedValue({ status: "ok", value: {
-      posts: [{ id: "guest-1", message: "A lovely stay by the beach.", displayName: "Sam", photoCount: 0 }], nextCursor: null,
-    } });
     renderPage();
-    const edit = await screen.findByRole("button", { name: "Edit" });
-    fireEvent.click(edit);
-    const preview = screen.getByRole("button", { name: "Preview" });
-    const form = screen.getByRole("form", { name: "Guest wall" });
-    expect(edit).toHaveAttribute("aria-pressed", "true");
-    expect(screen.queryByRole("complementary", { name: "This wall on a phone" })).not.toBeInTheDocument();
-    fireEvent.change(within(form).getByLabelText("Property name"), { target: { value: "Our beach cottage" } });
-    fireEvent.change(within(form).getByLabelText("Arrival heading"), { target: { value: "Come on in" } });
-
-    fireEvent.click(preview);
-    expect(preview).toHaveAttribute("aria-pressed", "true");
-    expect(form).not.toBeVisible();
-    expect(screen.queryByRole("button", { name: "Save changes" })).not.toBeInTheDocument();
-    const wall = within(screen.getByRole("complementary", { name: "This wall on a phone" }));
-    expect(wall.getByRole("heading", { name: "Our beach cottage" })).toBeInTheDocument();
-    expect(wall.getByRole("heading", { name: "Come on in" })).toBeInTheDocument();
-    expect(await wall.findByText("A lovely stay by the beach.")).toBeInTheDocument();
-    expect(wall.queryByRole("textbox")).not.toBeInTheDocument();
-    expect(screen.getByText("Preview includes your unsaved changes.")).toBeInTheDocument();
-
-    fireEvent.click(edit);
-    expect(screen.getByRole("form", { name: "Guest wall" })).toBe(form);
-    expect(within(form).getByLabelText("Property name")).toHaveValue("Our beach cottage");
-    expect(within(form).getByLabelText("Arrival heading")).toHaveValue("Come on in");
-    expect(within(form).getByRole("button", { name: "Save changes" })).toBeEnabled();
+    fireEvent.click(await screen.findByRole("button", { name: "Edit details" }));
+    const form = within(screen.getByRole("dialog", { name: "Property details" }));
+    fireEvent.change(form.getByLabelText("Property name"), { target: { value: "Our beach cottage" } });
+    fireEvent.change(form.getByLabelText("Address"), { target: { value: "12 Beach Road" } });
     expect(savePropertyName).not.toHaveBeenCalled();
+    fireEvent.click(form.getByRole("button", { name: "Save changes" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(savePropertyName).toHaveBeenCalledTimes(1);
+    expect(savePropertyName).toHaveBeenCalledWith("prop-1", "Our beach cottage");
+    expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ location: "12 Beach Road", stayWelcome: filledProfile.stayWelcome }));
+    expect(screen.getByRole("status")).toHaveTextContent("up to date");
+    fireEvent.click(screen.getByRole("button", { name: "View as guest" }));
+    const preview = within(screen.getByRole("region", { name: "Guest preview" }));
+    expect(preview.getByRole("heading", { name: "Our beach cottage" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Edit details" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Back to editor" }));
+    expect(screen.getByRole("button", { name: "Edit details" })).toBeVisible();
+  });
+
+  it("cancels a section without changing the wall or writing anything", async () => {
+    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
+    renderPage();
+    fireEvent.click(await screen.findByRole("button", { name: "Edit welcome" }));
+    const form = within(screen.getByRole("dialog", { name: "Welcome & hosts" }));
+    fireEvent.change(form.getByLabelText("Welcome message"), { target: { value: "Discard this change" } });
+    fireEvent.click(form.getByRole("button", { name: "Cancel" }));
+    expect(screen.queryByText("Discard this change")).not.toBeInTheDocument();
     expect(savePropertyProfile).not.toHaveBeenCalled();
-    expect(loadProperty).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole("button", { name: "Edit welcome" }));
+    expect(screen.getByLabelText("Welcome message")).toHaveValue(filledProfile.stayWelcome);
   });
 
-  it("changes and saves the theme from the mobile dock while keeping Preview current", async () => {
+  it("validates links, saves booking and mailing-list destinations, and previews both", async () => {
+    renderPage();
+    fireEvent.click(await screen.findByRole("button", { name: "Add links" }));
+    const form = within(screen.getByRole("dialog", { name: "Your links" }));
+    fireEvent.click(form.getByRole("button", { name: "+ Book direct" }));
+    fireEvent.click(form.getByRole("button", { name: "Save changes" }));
+    expect(await form.findAllByText(/Add the web address/)).not.toHaveLength(0);
+    expect(savePropertyProfile).not.toHaveBeenCalled();
+    fireEvent.change(form.getByLabelText("Web address"), { target: { value: "seaview.example/book" } });
+    fireEvent.click(form.getByRole("button", { name: "+ Join our mailing list" }));
+    fireEvent.change(form.getAllByLabelText("Web address")[1]!, { target: { value: "https://seaview.example/newsletter" } });
+    fireEvent.click(form.getByRole("button", { name: "Save changes" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(savePropertyProfile).toHaveBeenCalledTimes(1);
+    expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ stayAgainLinks: [
+      { label: "Book direct", url: "seaview.example/book" },
+      { label: "Join our mailing list", url: "https://seaview.example/newsletter" },
+    ] }));
+    fireEvent.click(screen.getByRole("button", { name: "View as guest" }));
+    const preview = within(screen.getByRole("region", { name: "Guest preview" }));
+    expect(preview.getByRole("link", { name: /Book direct/ })).toHaveAttribute("href", "https://seaview.example/book");
+    expect(preview.getByRole("link", { name: /Join our mailing list/ })).toHaveAttribute("href", "https://seaview.example/newsletter");
+  });
+
+  it("keeps failed saves open with the entered links ready to retry", async () => {
+    savePropertyProfile.mockResolvedValueOnce({ status: "error", message: "Connection lost. Try again." });
+    renderPage();
+    fireEvent.click(await screen.findByRole("button", { name: "Add links" }));
+    const form = within(screen.getByRole("dialog", { name: "Your links" }));
+    fireEvent.click(form.getByRole("button", { name: "+ Book direct" }));
+    fireEvent.change(form.getByLabelText("Web address"), { target: { value: "https://seaview.example/book" } });
+    fireEvent.click(form.getByRole("button", { name: "Save changes" }));
+    expect(await form.findByText("Connection lost. Try again.")).toBeInTheDocument();
+    expect(form.getByLabelText("Web address")).toHaveValue("https://seaview.example/book");
+    fireEvent.click(form.getByRole("button", { name: "Save changes" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+  });
+
+  it("opens a focused form from Sections and saves the look without a second save", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
     renderPage();
-    fireEvent.click(await screen.findByRole("button", { name: "Edit" }));
-    fireEvent.click(screen.getByRole("button", { name: "Style" }));
-    const theme = screen.getByRole("group", { name: "Wall theme" });
-    expect(document.querySelector(".mobile-edit-dock")).toContainElement(theme);
-    expect(document.querySelector(".property-side-tools")).not.toBeInTheDocument();
-    fireEvent.click(within(theme).getByRole("button", { name: /Warm Linen/ }));
-    fireEvent.click(within(theme).getByRole("radio", { name: "Playful" }));
-    expect(within(theme).getByRole("button", { name: /Playful/ })).toHaveAttribute("aria-expanded", "false");
-    fireEvent.click(screen.getByRole("radio", { name: "Berry" }));
-    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-theme", "seaside");
-    expect(document.querySelector(".canvas-sheet")).toHaveAttribute("data-wall-colour", "ocean");
-
-    fireEvent.click(screen.getByRole("button", { name: "Preview" }));
-    expect(screen.queryByRole("group", { name: "Wall theme" })).not.toBeInTheDocument();
-    expect(document.querySelector(".phone-screen")).toHaveAttribute("data-wall-theme", "seaside");
-    expect(document.querySelector(".phone-screen")).toHaveAttribute("data-wall-colour", "ocean");
-    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
-    fireEvent.click(screen.getByRole("button", { name: "Style" }));
-    expect(screen.getByRole("radio", { name: "Berry" })).toBeChecked();
-    fireEvent.click(save());
-    await waitFor(() => expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ theme: "seaside", colour: "ocean" })));
+    fireEvent.click(await screen.findByRole("button", { name: "Sections", exact: true }));
+    const sections = within(screen.getByRole("navigation", { name: "Guest wall sections" }));
+    expect(sections.getByRole("button", { name: /Your links/ })).toBeInTheDocument();
+    fireEvent.click(sections.getByRole("button", { name: /Look & feel/ }));
+    const form = within(screen.getByRole("dialog", { name: "Look & feel" }));
+    fireEvent.click(form.getByRole("button", { name: /Warm Linen/ }));
+    fireEvent.click(form.getByRole("radio", { name: "Playful" }));
+    fireEvent.click(form.getByRole("radio", { name: "Berry" }));
+    fireEvent.click(form.getByRole("button", { name: "Save changes" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ theme: "seaside", colour: "ocean" }));
   });
-
-  it("keeps the look of the wall behind the Style button without changing the draft", async () => {
-    renderPage();
-    fireEvent.click(await screen.findByRole("button", { name: "Edit" }));
-    expect(screen.queryByRole("group", { name: "Wall theme" })).not.toBeInTheDocument();
-    const style = screen.getByRole("button", { name: "Style" });
-    fireEvent.click(style);
-    expect(style).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByRole("group", { name: "Wall theme" })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Done" }));
-    expect(style).toHaveAttribute("aria-expanded", "false");
-    expect(screen.queryByRole("group", { name: "Wall theme" })).not.toBeInTheDocument();
-    expect(save()).toBeDisabled();
-  });
-
-  it("opens the guest wall on a list of its parts and lands on the one tapped", async () => {
-    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
-    renderPage();
-    const list = await screen.findByRole("region", { name: "Set up your guest wall" });
-    expect(screen.queryByRole("form", { name: "Guest wall" })).not.toBeInTheDocument();
-    expect(within(list).getByText(/of 5 done/)).toBeInTheDocument();
-    const essentials = document.createElement("div");
-    vi.spyOn(document, "getElementById").mockImplementation((id) => (id === "wall-section-essentials" ? essentials : null));
-    vi.spyOn(essentials, "getBoundingClientRect").mockReturnValue({ top: 900 } as DOMRect);
-    fireEvent.click(within(list).getByRole("button", { name: /Wi-Fi and essentials/ }));
-    expect(screen.getByRole("form", { name: "Guest wall" })).toBeVisible();
-    expect(screen.queryByRole("region", { name: "Set up your guest wall" })).not.toBeInTheDocument();
-    expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 888, behavior: "instant" });
-    vi.mocked(document.getElementById).mockRestore();
-  });
-
-  it("takes the note's lines off from one menu on a phone", async () => {
-    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
-    renderPage();
-    fireEvent.click(await screen.findByRole("button", { name: "Edit" }));
-    expect(screen.queryByRole("button", { name: "Leave the whole note out" })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByText("Options for the note from your hosts"));
-    fireEvent.click(screen.getByRole("button", { name: "Hide the heading" }));
-    expect(canvas().queryByLabelText("Arrival heading")).not.toBeInTheDocument();
-    expect(save()).toBeEnabled();
-  });
-
   it("switches the public wall too, hiding its sharing controls in Preview", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: filledProfile }) });
     renderPublic();
@@ -269,32 +254,16 @@ describe("switching the phone editor between Edit and Preview", () => {
     expect(screen.getByRole("region", { name: "This wall" })).toBeVisible();
   });
 
-  it("restores each mode's scroll position when switching back", async () => {
+  it("returns to the desktop canvas when resized from the phone editor", async () => {
     renderPage();
-    const edit = await screen.findByRole("button", { name: "Edit" });
-    fireEvent.click(edit);
-    const preview = screen.getByRole("button", { name: "Preview" });
-    vi.stubGlobal("scrollY", 1375);
-    fireEvent.click(preview);
-    vi.stubGlobal("scrollY", 480);
-    fireEvent.click(edit);
-    expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 1375, behavior: "instant" });
-    fireEvent.click(preview);
-    expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 480, behavior: "instant" });
-  });
-
-  it("keeps both surfaces available on desktop when resized from mobile Preview", async () => {
-    renderPage();
-    await screen.findByRole("button", { name: "Edit" });
-    fireEvent.click(screen.getByRole("button", { name: "Preview" }));
+    await screen.findByRole("button", { name: "Edit details" });
+    fireEvent.click(screen.getByRole("button", { name: "View as guest" }));
     act(() => resize(1440));
-    expect(screen.queryByRole("group", { name: "Wall editor mode" })).not.toBeInTheDocument();
     expect(screen.getByRole("form", { name: "Guest wall" })).toBeVisible();
     expect(screen.getByRole("complementary", { name: "This wall on a phone" })).toBeVisible();
-    expect(document.querySelector(".mobile-edit-dock")).not.toBeInTheDocument();
-    expect(document.querySelector(".property-side-tools")).toContainElement(screen.getByRole("group", { name: "Wall theme" }));
+    expect(document.querySelector(".phone-wall-dock")).not.toBeInTheDocument();
     act(() => resize(393));
-    expect(screen.getByRole("button", { name: "Preview" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "Edit details" })).toBeVisible();
     expect(screen.queryByRole("form", { name: "Guest wall" })).not.toBeInTheDocument();
   });
 });

@@ -281,12 +281,16 @@ export const emptyProfile = (): PropertyProfile => ({
  * It is a placeholder and nothing more: it is never stored, so a Host who
  * types nothing has a property with no arrival note on it, and what a guest
  * reads is only ever what a Host wrote.
+ *
+ * It points a guest at the essentials, never at the Host's inbox: the wall is
+ * there so a guest can answer their own question, and a note that invites a
+ * message hands the Host back the admin the wall was meant to take away.
  */
 export const exampleNote = {
   heading: "Welcome, make yourself at home",
   welcome: [
-    "We are glad you found the place. Everything you need should be to hand, we have added some essential information below but if you get stuck feel free to message.",
-    "Before you go, we would appreciate if you would add a memory to the wall."
+    "We are glad you found the place. Everything you need should be to hand, and the essentials, from the Wi-Fi to checkout, are just below.",
+    "Before you go, we would appreciate it if you would add a memory to the wall."
   ].join("\n\n")
 } as const;
 
@@ -637,7 +641,10 @@ export const factSuggestions: readonly FactSuggestion[] = [
   { term: "Heating", detail: "Dial in the hall", note: "It takes an hour to come through" },
   { term: "Hot water", detail: "On all day", note: "The shower runs hot after a minute" },
   { term: "Parking", detail: "Two cars, on the gravel", note: "Please leave the lane clear" },
-  { term: "If something breaks", detail: "Message us first", note: "We would rather fix it than have you go without" }
+  // A report, not a conversation: the wall's one route to the Host is the
+  // private feedback at its foot (ui/wall/MemoryNote.tsx), which Hosts read
+  // but cannot reply to, so the line names that and invites nothing more.
+  { term: "If something breaks", detail: "Please report it", note: "Use Private feedback at the bottom of this page so we can put it right" }
 ];
 
 /** The suggestions a property has not used yet, matched on the label. */

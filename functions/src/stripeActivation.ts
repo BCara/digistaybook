@@ -5,6 +5,7 @@ import type Stripe from "stripe";
 import {
   acknowledgement,
   billingPolicy,
+  currencyForCountry,
   chargedTodayDisclosure,
   discountedAmount,
   discountedChargedTodayDisclosure,
@@ -83,7 +84,7 @@ function permittedCountry(value: unknown): string {
   if (!countryIsPermitted(value)) {
     throw new HttpsError(
       "failed-precondition",
-      "DigiStayBook is not available in your country yet. We currently serve Australia and the United States."
+      "Choose the country you are billed in. DigiStayBook cannot take payments from that country."
     );
   }
   return (value as string).trim().toUpperCase();
@@ -260,7 +261,7 @@ function planOffer(
 export const activationOptions = onCall(options, async request => {
   const uid = hostUid(request);
   const country = permittedCountry(request.data?.country);
-  const currency = billingPolicy.currencyFor[country];
+  const currency = currencyForCountry(country);
 
   // Two reads of two different documents, asked for together. Trial
   // eligibility is a fact about the Host, keyed by the uid on the request,
@@ -312,7 +313,7 @@ export const createActivationCheckout = onCall(options, async request => {
   const uid = hostUid(request);
   const property = await ownedProperty(request.data?.propertyId, uid);
   const country = permittedCountry(request.data?.country);
-  const currency = billingPolicy.currencyFor[country];
+  const currency = currencyForCountry(country);
   const plan = request.data?.plan;
 
   if (!isPlan(plan)) throw new HttpsError("invalid-argument", "Choose a monthly or annual plan.");

@@ -1,0 +1,25 @@
+{
+  "checks": [
+    {
+      "filename": "CAMPAIGN_REVIEW.html",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "filename": "CAMPAIGN_REVIEW.html",
+      "width": 1280,
+      "overflow": false
+    },
+    {
+      "filename": "CLAUDE_REVIEW.html",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "filename": "CLAUDE_REVIEW.html",
+      "width": 1280,
+      "overflow": false
+    }
+  ],
+  "errors": []
+}

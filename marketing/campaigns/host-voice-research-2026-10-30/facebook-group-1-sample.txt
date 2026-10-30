@@ -1,0 +1,557 @@
+Window: "(13) AirBnB Hosts - Tips & Tricks | Facebook - Google Chrome", App: chrome.exe.
+	0 window (13) AirBnB Hosts - Tips & Tricks | Facebook - Google Chrome Secondary Actions: Raise
+		1 pane (disabled)
+		2 region (13) AirBnB Hosts - Tips & Tricks | Facebook - Google Chrome – Cara
+			3 region
+				4 region
+					5 region
+						6 button Minimise ID: view_1
+						7 button Maximise ID: view_2
+						8 button Close ID: view_4
+					9 region
+						10 region
+							11 tool bar ID: view_1000
+								12 button Back ID: view_1001
+								13 button (disabled) Forward ID: view_1002
+								14 button Reload ID: view_1003
+								15 button Home ID: view_1004
+								16 group
+									17 button View site information ID: view_1011
+									18 edit (settable, string) Address and search bar Description: Ask Google or type a URL Value: facebook.com/groups/3215918995319204/ ID: view_1012
+									19 region
+										437 button Install Facebook
+										438 button Bookmark this tab
+								21 region
+									22 button ChatGPT Has access to this site ID: view_1009
+									23 button Extensions ID: view_1006
+								24 region
+								25 button Cara ID: view_1018
+								26 button Chrome ID: view_1007
+							27 tool bar Bookmarks ID: view_1025
+								28 tool bar Saved tab groups
+									29 Saved tab group button ✅Facebook posts keepsake promo group – Opened ID: view_1028
+									30 Saved tab group button ✅Printed QR placards for Pinterest group – Opened ID: view_1028
+									31 Saved tab group button 📌 Pinterest profile group – Opened ID: view_1028
+									32 Saved tab group button ✅Git zero views group – Closed ID: view_1028
+									33 Saved tab group button ✅Chrome Web Store extension details group – Closed ID: view_1028
+									34 button Tab groups
+								35 separator Separator
+								36 Bookmark folder button Apps ID: view_1028
+								37 Bookmark folder button Admin ID: view_1028
+								38 Bookmark folder button Siemens ID: view_1028
+								39 Bookmark folder button Resources ID: view_1028
+								40 Bookmark folder button Career ID: view_1028
+								41 Bookmark folder button To DO ID: view_1028
+								42 Bookmark button Unnamed bookmark for https://automechbiz-my.sharepoint.com/:o:/g/personal/jean-michel_henri_automech_biz/EsIvJ1WL2AZFswgDKT1k2z0BjVRdgIdwHCD7hB6_jLj1jg?e=5%3apqtUu9&at=9 ID: view_1028
+								43 Bookmark button TeamsNotebook(Shared) ID: view_1028
+								44 Bookmark folder button All Bookmarks ID: view_1026
+								45 separator Separator
+							46 region
+						47 region
+							48 region
+								49 region
+								439 document (13) AirBnB Hosts - Tips & Tricks | Facebook Value: https://www.facebook.com/groups/3215918995319204/ ID: RootWebArea
+									442 group ID: mount_0_0_Ue
+										443 banner
+											444 link Facebook Value: https://www.facebook.com/
+												445 graphic
+											446 group
+												447 text 
+												448 combo box (settable, string) Search Facebook Description: Search Facebook
+											449 group
+												450 navigation Facebook
+													451 list
+														452 list item
+															453 link Home Value: https://www.facebook.com/
+																454 graphic
+														455 list item
+															456 link Reels Value: https://www.facebook.com/reel/?s=tab
+																457 graphic
+														458 list item
+															459 link Marketplace Value: https://www.facebook.com/marketplace/?ref=app_tab
+																460 graphic
+														461 list item
+															462 link Groups Value: https://www.facebook.com/groups/
+																463 graphic
+														464 list item
+															465 link Gaming Value: https://www.facebook.com/gaming/play/?store_visit_source=gaming_tab
+																466 graphic
+											467 navigation Account controls and settings
+												468 button Facebook menu
+												469 button Messenger, 2 unread
+												470 button Notifications, 11 unread
+												471 button Account, your profile
+													472 graphic Your profile
+											473 group
+										474 main
+											475 link Cover photo Value: https://www.facebook.com/photo/?fbid=2053103648591088&set=p.2053103648591088
+											476 text Group by
+											477 link Tyler Coon Value: https://www.facebook.com/avl.tyler
+											478 heading AirBnB Hosts - Tips & Tricks
+											479 text Public group
+											480 text 
+											481 link 135.9K members Value: https://www.facebook.com/groups/3215918995319204/members/
+											482 list
+												483 list item
+													484 link Joe Dunleavy Value: https://www.facebook.com/groups/3215918995319204/user/745555463/
+														485 graphic Joe Dunleavy
+												486 list item
+													487 link Carol Lidstone Value: https://www.facebook.com/groups/3215918995319204/user/1491865074/
+														488 graphic Carol Lidstone
+												489 list item
+													490 link Michelle P Arry Value: https://www.facebook.com/groups/3215918995319204/user/100095743533619/
+														491 graphic Michelle P Arry
+												492 list item
+													493 link Daft Stoopud Value: https://www.facebook.com/groups/3215918995319204/user/100095720703533/
+														494 graphic Daft Stoopud
+												495 list item
+													496 link Rahim Haider Value: https://www.facebook.com/groups/3215918995319204/user/100095550360783/
+														497 graphic Rahim Haider
+												498 list item
+													499 link Angie Ro Value: https://www.facebook.com/groups/3215918995319204/user/100095508970814/
+														500 graphic Angie Ro
+												501 list item
+													502 link Renee Lashbrooks Value: https://www.facebook.com/groups/3215918995319204/user/100095237900805/
+														503 graphic Renee Lashbrooks
+												504 list item
+													505 link Sara Marsanich Value: https://www.facebook.com/groups/3215918995319204/user/100095068901585/
+														506 graphic Sara Marsanich
+												507 list item
+													508 link Saifa Lavender Tazrin Value: https://www.facebook.com/groups/3215918995319204/user/100094975984104/
+														509 graphic Saifa Lavender Tazrin
+												510 list item
+													511 link Sonya Davis Value: https://www.facebook.com/groups/3215918995319204/user/100094900698423/
+														512 graphic Sonya Davis
+												513 list item
+													514 link Leafar Rodama Value: https://www.facebook.com/groups/3215918995319204/user/100094701126574/
+														515 graphic Leafar Rodama
+												516 list item
+													517 link Mary Clayton Value: https://www.facebook.com/groups/3215918995319204/user/100094664257533/
+														518 graphic Mary Clayton
+												519 list item
+													520 link Henry Wright Value: https://www.facebook.com/groups/3215918995319204/user/100094616055091/
+														521 graphic Henry Wright
+												522 list item
+													523 link Stacey Lynn Moss Value: https://www.facebook.com/groups/3215918995319204/user/100094610934096/
+														524 graphic Stacey Lynn Moss
+												525 list item
+													526 link Alton King Value: https://www.facebook.com/groups/3215918995319204/user/100094524664986/
+														527 graphic Alton King
+												528 list item
+													529 link Susan Andy Julian Value: https://www.facebook.com/groups/3215918995319204/user/100094456516639/
+														530 graphic Susan Andy Julian
+												531 list item
+													532 link Milani Aileen Value: https://www.facebook.com/groups/3215918995319204/user/100094424687556/
+														533 graphic Milani Aileen
+												534 list item
+													535 link Spencer Jessee Value: https://www.facebook.com/groups/3215918995319204/user/100094416381471/
+														536 graphic Spencer Jessee
+												537 list item
+													538 link El Nick Value: https://www.facebook.com/groups/3215918995319204/user/100094312666814/
+														539 graphic El Nick
+												540 list item
+													541 link Ofa Lotu Value: https://www.facebook.com/groups/3215918995319204/user/100094108206622/
+														542 graphic Ofa Lotu
+												543 list item
+													544 link See everyone Value: https://www.facebook.com/groups/3215918995319204/members/
+											545 button Invite
+											546 button Share group
+											547 button Joined
+											548 button See Recommended Groups
+											549 tab
+											823 link AirBnB Hosts - Tips & Tricks Value: https://www.facebook.com/groups/3215918995319204/
+											824 button Invite
+											825 button Share group
+											826 button Joined
+											558 button Search within this group
+											559 button More
+											560 link Cara Bertram's profile Value: https://www.facebook.com/groups/3215918995319204/user/502252377/
+											561 button Write something...
+											562 button Poll
+											563 text Featured
+											564 text 5 new
+											565 text Featured content badge
+											566 button About featured section
+											567 button Expand/Collapse featured section
+											568 feed
+												569 button sort group feed by Recent activity
+													570 heading Recent activity
+												571 button filter group feed by topic All topics
+													572 heading All topics
+												573 group
+												640 group
+													641 heading Deb Whitney Follow
+														642 link Deb Whitney Value: https://www.facebook.com/groups/3215918995319204/user/100002872173880/?__cft__[0]=AZgMFx8Rdz4EtA5alXSyzAyqEuipuyl1bA2lPcQkSCuQCefhbQN3O8KnEdy3ts3cDcVp4Rhu34wjTtpMdLXciTDg8r8x9eRXU2eTypg75eynh-zmY3cmIB56qyov-gWksGzZmFMvOU880ExuZpTURuIgWH3fCd-TtRgHQ5JUnQ5-KSzaG5mO14BFmesTVA&__tn__=-UC%2CP-R
+														643 button Follow
+													644 link 3 hours ago Value: https://www.facebook.com/groups/3215918995319204/?__cft__[0]=AZgMFx8Rdz4EtA5alXSyzAyqEuipuyl1bA2lPcQkSCuQCefhbQN3O8KnEdy3ts3cDcVp4Rhu34wjTtpMdLXciTDg8r8x9eRXU2eTypg75eynh-zmY3cmIB56qyov-gWksGzZmFMvOU880ExuZpTURuIgWH3fCd-TtRgHQ5JUnQ5-KSzaG5mO14BFmesTVA&__tn__=%2CO%2CP-R#?fka
+														737 group 3 hours ago
+															645 graphic
+													646 text 
+													647 graphic Shared with Public group Description: Shared with Public group
+													648 button Actions for this post by Deb Whitney
+													649 text So I just started using the official Airbnb site. In 4 months Fees went from 3% to 15.5%, they didn’t collect correct taxes that I need to pay, now new rules with less control over MY property. Thinking of changing platforms. Who should I switch to?
+													650 button React with Like to Deb Whitney's post
+													651 button React to Deb Whitney's post
+													652 button Comment on Deb Whitney's post
+													653 button Share, send this to friends or post it on your profile.
+													654 tool bar See who reacted to this
+														655 button Like: 3 people
+													656 button View more answers
+													657 article Comment by Teresa Walton 2 hours ago
+														658 link Teresa Walton Value: https://www.facebook.com/groups/3215918995319204/user/100002821974159/?__cft__[0]=AZgMFx8Rdz4EtA5alXSyzAyqEuipuyl1bA2lPcQkSCuQCefhbQN3O8KnEdy3ts3cDcVp4Rhu34wjTtpMdLXciTDg8r8x9eRXU2eTypg75eynh-zmY3cmIB56qyov-gWksGzZmFMvOU880ExuZpTURuIgWH3fCd-TtRgHQ5JUnQ5-KSzaG5mO14BFmesTVA&__tn__=R-R
+														659 text 
+														660 link Friday 30 October 2026 at 11:23 Value: https://www.facebook.com/groups/3215918995319204/posts/4710325212545234/?comment_id=4710379319206490&__cft__[0]=AZgMFx8Rdz4EtA5alXSyzAyqEuipuyl1bA2lPcQkSCuQCefhbQN3O8KnEdy3ts3cDcVp4Rhu34wjTtpMdLXciTDg8r8x9eRXU2eTypg75eynh-zmY3cmIB56qyov-gWksGzZmFMvOU880ExuZpTURuIgWH3fCd-TtRgHQ5JUnQ5-KSzaG5mO14BFmesTVA&__tn__=R-R
+														661 text I switched to VRBO. Their host commission is 12%. They allow hosts the right to make reasonable rules such as guests putting d
+														662 text …
+														663 text 
+														664 button See more
+														665 group
+															666 button Hide or report this
+														667 button Like
+															668 graphic Like Description: Like
+														669 button React
+														670 list item Reply
+															671 button Reply
+														672 list item Share
+															673 button Share
+														674 button 4 reactions; see who reacted to this
+													675 button View 2 replies
+													676 article Comment by Sandy Howlett 2 hours ago
+														677 link Sandy Howlett Value: https://www.facebook.com/groups/3215918995319204/user/100000481160933/?__cft__[0]=AZgMFx8Rdz4EtA5alXSyzAyqEuipuyl1bA2lPcQkSCuQCefhbQN3O8KnEdy3ts3cDcVp4Rhu34wjTtpMdLXciTDg8r8x9eRXU2eTypg75eynh-zmY3cmIB56qyov-gWksGzZmFMvOU880ExuZpTURuIgWH3fCd-TtRgHQ5JUnQ5-KSzaG5mO14BFmesTVA&__tn__=R-R
+														678 text 
+														679 link Friday 30 October 2026 at 11:19 Value: https://www.facebook.com/groups/3215918995319204/posts/4710325212545234/?comment_id=4710376095873479&__cft__[0]=AZgMFx8Rdz4EtA5alXSyzAyqEuipuyl1bA2lPcQkSCuQCefhbQN3O8KnEdy3ts3cDcVp4Rhu34wjTtpMdLXciTDg8r8x9eRXU2eTypg75eynh-zmY3cmIB56qyov-gWksGzZmFMvOU880ExuZpTURuIgWH3fCd-TtRgHQ5JUnQ5-KSzaG5mO14BFmesTVA&__tn__=R-R
+														680 text Vrbo just as bad
+														681 group
+															682 button Hide or report this
+														683 button Like
+															684 graphic Like Description: Like
+														685 button React
+														686 list item Reply
+															687 button Reply
+														688 list item Share
+															689 button Share
+														690 button 1 reaction; see who reacted to this
+													691 edit (settable, string) Answer as Cara Description: Answer as Cara Value: 
+														692 text 
+													693 list
+														694 list item
+															695 button Comment with an avatar sticker
+														696 list item
+															697 button Insert an emoji
+														698 list item
+															699 button Attach a photo or video
+														700 list item
+															701 button Comment with a GIF
+														702 list item
+															703 button Comment with a sticker
+												704 group
+													743 heading Liliana Villanua Follow
+														744 link Liliana Villanua Value: https://www.facebook.com/groups/3215918995319204/user/1311270817/?__cft__[0]=AZh1wT02siVA2p-szxDYcG9tzw9FFGBfsM4jKQZNzff19Xm0fHcF57UuRujz-8OAygmp3YJTrwr0FYbf-LAgtMpHBxTKHUsOiJ4cBqmlDbWgUVSF3Jkmmif5pfeKt_-ZjJxcRv2rcl-l4u9QS18QFByYrta6rR92k5dx9aZJXlSMRxhpFlsZEvzEP3y1A5A&__tn__=-UC%2CP-R
+														745 button Follow
+													746 link 4 days ago Value: https://www.facebook.com/groups/3215918995319204/?__cft__[0]=AZh1wT02siVA2p-szxDYcG9tzw9FFGBfsM4jKQZNzff19Xm0fHcF57UuRujz-8OAygmp3YJTrwr0FYbf-LAgtMpHBxTKHUsOiJ4cBqmlDbWgUVSF3Jkmmif5pfeKt_-ZjJxcRv2rcl-l4u9QS18QFByYrta6rR92k5dx9aZJXlSMRxhpFlsZEvzEP3y1A5A&__tn__=%2CO%2CP-R#?had
+														905 group 4 days ago
+															747 graphic
+													748 text 
+													749 graphic Shared with Public group Description: Shared with Public group
+													750 button Actions for this post by Liliana Villanua
+													751 group
+														752 heading I have a client checking in today at three and it’s 1:05 PM.
+													753 group
+														754 text I told her today that her dog cannot be left alone and they have to take her when they leave and this is her response. What would you do?
+													755 group
+													756 group
+														757 text I guess she travels with her dog and goes away and leave the dogs alone in the room. I don’t think so. They’re gonna be all day gone.
+													758 group
+													759 button See more
+													760 link May be an image of text Value: https://www.facebook.com/photo/?fbid=10246998707723755&set=gm.4704617023116053&idorvanity=3215918995319204&__cft__[0]=AZh1wT02siVA2p-szxDYcG9tzw9FFGBfsM4jKQZNzff19Xm0fHcF57UuRujz-8OAygmp3YJTrwr0FYbf-LAgtMpHBxTKHUsOiJ4cBqmlDbWgUVSF3Jkmmif5pfeKt_-ZjJxcRv2rcl-l4u9QS18QFByYrta6rR92k5dx9aZJXlSMRxhpFlsZEvzEP3y1A5A&__tn__=EH-R
+														761 graphic May be an image of text
+													762 button React with Like to Liliana Villanua's post
+													763 button React to Liliana Villanua's post
+													764 button Comment on Liliana Villanua's post
+													765 button Share, send this to friends or post it on your profile.
+													766 tool bar See who reacted to this
+														767 button Like: 62 people
+														768 button Haha: 48 people
+													769 button View more answers
+													770 article Comment by Sylvia Horton Presswood 3 days ago
+														771 link Sylvia Horton Presswood Value: https://www.facebook.com/groups/3215918995319204/user/723448625/?__cft__[0]=AZh1wT02siVA2p-szxDYcG9tzw9FFGBfsM4jKQZNzff19Xm0fHcF57UuRujz-8OAygmp3YJTrwr0FYbf-LAgtMpHBxTKHUsOiJ4cBqmlDbWgUVSF3Jkmmif5pfeKt_-ZjJxcRv2rcl-l4u9QS18QFByYrta6rR92k5dx9aZJXlSMRxhpFlsZEvzEP3y1A5A&__tn__=R-R
+														772 text 
+														773 link Monday 26 October 2026 at 14:30 Value: https://www.facebook.com/groups/3215918995319204/posts/4704617023116053/?comment_id=4704993983078357&__cft__[0]=AZh1wT02siVA2p-szxDYcG9tzw9FFGBfsM4jKQZNzff19Xm0fHcF57UuRujz-8OAygmp3YJTrwr0FYbf-LAgtMpHBxTKHUsOiJ4cBqmlDbWgUVSF3Jkmmif5pfeKt_-ZjJxcRv2rcl-l4u9QS18QFByYrta6rR92k5dx9aZJXlSMRxhpFlsZEvzEP3y1A5A&__tn__=R-R
+														774 text If your property says “pets allowed” you need to disclose any restrictions before you rent the property out. This one’s on you
+														775 text …
+														776 text 
+														777 button See more
+														778 group
+															779 button Hide or report this
+														780 button Like
+															781 graphic Like Description: Like
+														782 button React
+														783 list item Reply
+															784 button Reply
+														785 list item Share
+															786 button Share
+														787 button 70 reactions; see who reacted to this
+													788 button View 4 replies
+													789 article Comment by Liliana Aguilar 4 days ago
+														790 link Liliana Aguilar Value: https://www.facebook.com/groups/3215918995319204/user/100003178969577/?__cft__[0]=AZh1wT02siVA2p-szxDYcG9tzw9FFGBfsM4jKQZNzff19Xm0fHcF57UuRujz-8OAygmp3YJTrwr0FYbf-LAgtMpHBxTKHUsOiJ4cBqmlDbWgUVSF3Jkmmif5pfeKt_-ZjJxcRv2rcl-l4u9QS18QFByYrta6rR92k5dx9aZJXlSMRxhpFlsZEvzEP3y1A5A&__tn__=R-R
+														791 text 
+														792 link Monday 26 October 2026 at 13:40 Value: https://www.facebook.com/groups/3215918995319204/posts/4704617023116053/?comment_id=4704948413082914&__cft__[0]=AZh1wT02siVA2p-szxDYcG9tzw9FFGBfsM4jKQZNzff19Xm0fHcF57UuRujz-8OAygmp3YJTrwr0FYbf-LAgtMpHBxTKHUsOiJ4cBqmlDbWgUVSF3Jkmmif5pfeKt_-ZjJxcRv2rcl-l4u9QS18QFByYrta6rR92k5dx9aZJXlSMRxhpFlsZEvzEP3y1A5A&__tn__=R-R
+														793 text I don't think that's fair of you to say. You don't want them to urinate in the grass which doesn't make sense because they are
+														794 text …
+														795 text 
+														796 button See more
+														797 group
+															798 button Hide or report this
+														799 button Like
+															800 graphic Like Description: Like
+														801 button React
+														802 list item Reply
+															803 button Reply
+														804 list item Share
+															805 button Share
+														806 list item Edited
+															807 button Edited
+														808 button 64 reactions; see who reacted to this
+													809 button View 7 replies
+													810 edit (settable, string) Answer as Cara Description: Answer as Cara Value: 
+														811 text 
+													812 list
+														813 list item
+															814 button Comment with an avatar sticker
+														815 list item
+															816 button Insert an emoji
+														817 list item
+															818 button Attach a photo or video
+														819 list item
+															820 button Comment with a GIF
+														821 list item
+															822 button Comment with a sticker
+												827 group
+													906 heading Max Kober
+														907 link Max Kober Value: https://www.facebook.com/groups/3215918995319204/user/100006674029118/?__cft__[0]=AZhR5M_rbiPi-c2ai40Pv9DJLcFlwDAqiuyDkF0kd48lJKXaRtggtRr_UuRlwIiZKHRluZ5HK88R1_JM0w5lXLHKJMgKD6ebfTECuDEH33A259JCLBijgH7QnkPq7B07S_BpZdELDYPmbXfVCLUhnQY8S6e_S9TJanLuQVkRNP5-quDzqLQCA-NYCA&__tn__=-UC%2CP-R
+													908 link 22 hours ago Value: https://www.facebook.com/groups/3215918995319204/?__cft__[0]=AZhR5M_rbiPi-c2ai40Pv9DJLcFlwDAqiuyDkF0kd48lJKXaRtggtRr_UuRlwIiZKHRluZ5HK88R1_JM0w5lXLHKJMgKD6ebfTECuDEH33A259JCLBijgH7QnkPq7B07S_BpZdELDYPmbXfVCLUhnQY8S6e_S9TJanLuQVkRNP5-quDzqLQCA-NYCA&__tn__=%2CO%2CP-R#?bhk
+														909 graphic
+													910 text 
+													911 graphic Shared with Public group Description: Shared with Public group
+													912 button Actions for this post by Max Kober
+													913 text Trying to rate a guest who left all ceiling fans on upon check out. The system does not let me to raye anything els but 5 stars withour selecting at least from the peovided options. None of them is related to the issue.
+													914 text When did this change happened? Previously it worked differently.
+													915 button React with Like to Max Kober's post
+													916 button React to Max Kober's post
+													917 button Comment on Max Kober's post
+													918 button Share, send this to friends or post it on your profile.
+													919 tool bar See who reacted to this
+														920 button Haha: 26 people
+														921 button Like: 5 people
+													922 button View more answers
+													923 article Comment by Anne Tyner 17 hours ago
+														924 link Anne Tyner Value: https://www.facebook.com/groups/3215918995319204/user/1201659357/?__cft__[0]=AZhR5M_rbiPi-c2ai40Pv9DJLcFlwDAqiuyDkF0kd48lJKXaRtggtRr_UuRlwIiZKHRluZ5HK88R1_JM0w5lXLHKJMgKD6ebfTECuDEH33A259JCLBijgH7QnkPq7B07S_BpZdELDYPmbXfVCLUhnQY8S6e_S9TJanLuQVkRNP5-quDzqLQCA-NYCA&__tn__=R-R
+														925 text 
+														926 link Thursday 29 October 2026 at 20:14 Value: https://www.facebook.com/groups/3215918995319204/posts/4709083382669417/?comment_id=4709452979299124&__cft__[0]=AZhR5M_rbiPi-c2ai40Pv9DJLcFlwDAqiuyDkF0kd48lJKXaRtggtRr_UuRlwIiZKHRluZ5HK88R1_JM0w5lXLHKJMgKD6ebfTECuDEH33A259JCLBijgH7QnkPq7B07S_BpZdELDYPmbXfVCLUhnQY8S6e_S9TJanLuQVkRNP5-quDzqLQCA-NYCA&__tn__=R-R
+														927 text Leaving ceiling fans on at checkout is not a problem. Whomever cleans can turn them off when they leave. This must be a joke
+														928 text …
+														929 text 
+														930 button See more
+														931 group
+															932 button Hide or report this
+														933 button Like
+															934 graphic Like Description: Like
+														935 button React
+														936 list item Reply
+															937 button Reply
+														938 list item Share
+															939 button Share
+														940 button 13 reactions; see who reacted to this
+													941 button View 5 replies
+													942 article Comment by Jonathan David Andree 21 hours ago
+														943 link Jonathan David Andree Value: https://www.facebook.com/groups/3215918995319204/user/508341834/?__cft__[0]=AZhR5M_rbiPi-c2ai40Pv9DJLcFlwDAqiuyDkF0kd48lJKXaRtggtRr_UuRlwIiZKHRluZ5HK88R1_JM0w5lXLHKJMgKD6ebfTECuDEH33A259JCLBijgH7QnkPq7B07S_BpZdELDYPmbXfVCLUhnQY8S6e_S9TJanLuQVkRNP5-quDzqLQCA-NYCA&__tn__=R-R
+														944 text 
+														945 link Thursday 29 October 2026 at 16:13 Value: https://www.facebook.com/groups/3215918995319204/posts/4709083382669417/?comment_id=4709225222655233&__cft__[0]=AZhR5M_rbiPi-c2ai40Pv9DJLcFlwDAqiuyDkF0kd48lJKXaRtggtRr_UuRlwIiZKHRluZ5HK88R1_JM0w5lXLHKJMgKD6ebfTECuDEH33A259JCLBijgH7QnkPq7B07S_BpZdELDYPmbXfVCLUhnQY8S6e_S9TJanLuQVkRNP5-quDzqLQCA-NYCA&__tn__=R-R
+														946 text Giving someone less than 5 stars just because they helped circulate the air is crazy
+														947 group
+															948 button Hide or report this
+														949 button Like
+															950 graphic Like Description: Like
+														951 button React
+														952 list item Reply
+															953 button Reply
+														954 list item Share
+															955 button Share
+														956 button 26 reactions; see who reacted to this
+													957 edit (settable, string) Answer as Cara Description: Answer as Cara Value: 
+														958 text 
+													959 list
+														960 list item
+															961 button Comment with an avatar sticker
+														962 list item
+															963 button Insert an emoji
+														964 list item
+															965 button Attach a photo or video
+														966 list item
+															967 button Comment with a GIF
+														968 list item
+															969 button Comment with a sticker
+												828 group
+													1116 heading Chrissy Rinehart
+														1117 link Chrissy Rinehart Value: https://www.facebook.com/groups/3215918995319204/user/1335980320/?__cft__[0]=AZimJTx7jNydcr5upB2S1HKHMnJB5nez4rIZyjgLFyrfmAUPnMhrt-ecEgHNEAJf0UODx-cHt3BIyl9CrHxKoYih6-oO23z7errjiXc1WJOKxgEVQgTb-ybWPr0tJ3rl0xWxvwo94TuNnH0hA_-gyOBGInl7rm4eRr-PntggZ0gD4Kd1NLi9KPQ&__tn__=-UC%2CP-R
+													1118 link 4 days ago Value: https://www.facebook.com/groups/3215918995319204/?__cft__[0]=AZimJTx7jNydcr5upB2S1HKHMnJB5nez4rIZyjgLFyrfmAUPnMhrt-ecEgHNEAJf0UODx-cHt3BIyl9CrHxKoYih6-oO23z7errjiXc1WJOKxgEVQgTb-ybWPr0tJ3rl0xWxvwo94TuNnH0hA_-gyOBGInl7rm4eRr-PntggZ0gD4Kd1NLi9KPQ&__tn__=%2CO%2CP-R#?gga
+														1119 graphic
+													1120 text 
+													1121 graphic Shared with Public group Description: Shared with Public group
+													1122 button Actions for this post by Chrissy Rinehart
+													1123 group
+														1124 heading Airbnb hosts share your direct booking tips
+													1125 group
+														1126 text Airbnb Hosts: Let’s Stop Complaining and Start Brainstorming Solutions Together!
+														1127 Unlabelled graphic 🏡
+													1128 group
+													1129 group
+														1130 text We’ve all heard the complaints and concerns about the changes Airbnb is making. Many of us are frustrated and worried about what this means for our businesses. But instead of just talking about the problems, I’d love for us to start taking action and sharing ideas to help more of us keep our homes profitable and build a stronger direct-booking business.
+													1131 group
+													1132 button See more
+													1133 button React with Like to Chrissy Rinehart's post
+													1134 button React to Chrissy Rinehart's post
+													1135 button Comment on Chrissy Rinehart's post
+													1136 button Share, send this to friends or post it on your profile.
+													1137 tool bar See who reacted to this
+														1138 button Like: 122 people
+														1139 button Love: 11 people
+													1140 button View more comments
+													1141 article Comment by Charles Akinmade 4 days ago
+														1142 link Charles Akinmade Value: https://www.facebook.com/groups/3215918995319204/user/100009716359375/?__cft__[0]=AZimJTx7jNydcr5upB2S1HKHMnJB5nez4rIZyjgLFyrfmAUPnMhrt-ecEgHNEAJf0UODx-cHt3BIyl9CrHxKoYih6-oO23z7errjiXc1WJOKxgEVQgTb-ybWPr0tJ3rl0xWxvwo94TuNnH0hA_-gyOBGInl7rm4eRr-PntggZ0gD4Kd1NLi9KPQ&__tn__=R-R
+														1143 text 
+														1144 link Monday 26 October 2026 at 01:30 Value: https://www.facebook.com/groups/3215918995319204/posts/4704145236496565/?comment_id=4704248629819559&__cft__[0]=AZimJTx7jNydcr5upB2S1HKHMnJB5nez4rIZyjgLFyrfmAUPnMhrt-ecEgHNEAJf0UODx-cHt3BIyl9CrHxKoYih6-oO23z7errjiXc1WJOKxgEVQgTb-ybWPr0tJ3rl0xWxvwo94TuNnH0hA_-gyOBGInl7rm4eRr-PntggZ0gD4Kd1NLi9KPQ&__tn__=R-R
+														1145 text The best chance, currently, to get guests to even see the site is to put a QR code in a physical welcome letter at the propert
+														1146 text …
+														1147 text 
+														1148 button See more
+														1149 group
+															1150 button Hide or report this
+														1151 button Like
+															1152 graphic Like Description: Like
+														1153 button React
+														1154 list item Reply
+															1155 button Reply
+														1156 list item Share
+															1157 button Share
+														1158 button 4 reactions; see who reacted to this
+													1159 button View 2 replies
+													1160 article Comment by Angelique Dijkhuizen 4 days ago
+														1161 link Angelique Dijkhuizen Value: https://www.facebook.com/groups/3215918995319204/user/100001407580439/?__cft__[0]=AZimJTx7jNydcr5upB2S1HKHMnJB5nez4rIZyjgLFyrfmAUPnMhrt-ecEgHNEAJf0UODx-cHt3BIyl9CrHxKoYih6-oO23z7errjiXc1WJOKxgEVQgTb-ybWPr0tJ3rl0xWxvwo94TuNnH0hA_-gyOBGInl7rm4eRr-PntggZ0gD4Kd1NLi9KPQ&__tn__=R-R
+														1162 text 
+														1163 link Monday 26 October 2026 at 03:49 Value: https://www.facebook.com/groups/3215918995319204/posts/4704145236496565/?comment_id=4704410626470026&__cft__[0]=AZimJTx7jNydcr5upB2S1HKHMnJB5nez4rIZyjgLFyrfmAUPnMhrt-ecEgHNEAJf0UODx-cHt3BIyl9CrHxKoYih6-oO23z7errjiXc1WJOKxgEVQgTb-ybWPr0tJ3rl0xWxvwo94TuNnH0hA_-gyOBGInl7rm4eRr-PntggZ0gD4Kd1NLi9KPQ&__tn__=R-R
+														1164 text I leave a note on the table, leave your e-mailadress here, so we can keep you posted. And so far all my guests left their e-ma
+														1165 text …
+														1166 text 
+														1167 button See more
+														1168 group
+															1169 button Hide or report this
+														1170 button Like
+															1171 graphic Like Description: Like
+														1172 button React
+														1173 list item Reply
+															1174 button Reply
+														1175 list item Share
+															1176 button Share
+														1177 button 7 reactions; see who reacted to this
+													1178 button View 4 replies
+													1179 edit (settable, string) Comment as Cara Description: Comment as Cara Value: 
+														1180 text 
+													1181 list
+														1182 list item
+															1183 button Comment with an avatar sticker
+														1184 list item
+															1185 button Insert an emoji
+														1186 list item
+															1187 button Attach a photo or video
+														1188 list item
+															1189 button Comment with a GIF
+														1190 list item
+															1191 button Comment with a sticker
+												970 group
+												1042 group
+												705 article
+													706 status Loading...
+												707 article
+													708 status Loading...
+											709 heading About
+											710 group
+												711 text This is where serious Airbnb hosts come to sharpen the edge.
+												712 text Whether you manage one property or fifty, this group is built for operators who ca
+												713 text …
+												714 button See more
+											715 group
+												716 text Public
+												717 text Anyone can see who's in the group and what they post.
+											718 group
+												719 text Visible
+												720 text Anyone can find this group.
+											721 group
+												722 text United States
+											723 heading Recent media
+											724 link May be an image of text Value: https://www.facebook.com/photo/?fbid=1667768381352011&set=g.3215918995319204
+												725 graphic May be an image of text
+											726 link No photo description available. Value: https://www.facebook.com/photo/?fbid=28829286320014963&set=g.3215918995319204
+												727 graphic No photo description available.
+											728 link May be an image of television and text Value: https://www.facebook.com/photo/?fbid=29586794980917655&set=g.3215918995319204
+												729 graphic May be an image of television and text
+											730 link May be an image of text Value: https://www.facebook.com/photo/?fbid=1149638944155455&set=g.3215918995319204
+												731 graphic May be an image of text
+											732 link See all recent media Value: https://www.facebook.com/groups/3215918995319204/media/
+										733 button New message
+										734 group
+									735 button Choose files: No file chosen Value: No file chosen
+						63 group Infobar Container ID: view_1039
+							64 alert Infobar Secondary Actions: Raise
+								65 region
+								66 region
+								67 region
+									68 text Google Chrome isn't your default browser
+									69 button Set as default
+								70 region
+								71 region
+									72 button Close
+							73 region
+						74 region
+							75 region
+								76 button Tab search
+							77 region ID: view_21
+								78 tab
+									79 tab item (selectable) Welcome back | Slack, Home ID: view_20
+										80 button Close
+									81 tab item (selectable) digistaybook-bop (Channel) - DigiGuestbook - Slack ID: view_20
+										82 button Close
+									83 tab item (selectable) Live guest wall demo | DigiStayBook ID: view_20
+										84 button Close
+									85 tab item (selectable) Extensions - ChatGPT ID: view_20
+										86 button Close
+									87 tab group ✅Printed QR placards for Pinterest – 1 tab, • Pinterest – Expanded
+									88 tab item (selectable) Pinterest – Part of group ✅Printed QR placards for Pinterest ID: view_20
+										89 button Close
+									90 tab item (selectable) Wedding Upload Advice ID: view_20
+										91 button Close
+									92 tab group ✅Facebook posts keepsake promo – 1 tab, • Meta Business Suite – Expanded
+									93 tab item (selectable) Meta Business Suite – Part of group ✅Facebook posts keepsake promo ID: view_20
+										94 button Close
+									95 tab item (selectable) (13) AirBnB Hosts - Tips & Tricks | Facebook ID: view_20
+										96 button Close
+									97 region
+									98 region
+								99 region
+							100 button New tab
+							101 region
+							102 region
+								103 button Open Gemini in Chrome
+								104 region
+						105 region
+			1111 pane
+				1112 pane (disabled)
+				1113 region
+					1114 region
+						1115 text https://www.facebook.com/photo/?fbid=10246998707723755&set=gm.4704617023116053&idorvanity=3215918995319204&__cft__[0]=AZh1wT02siVA2p-szxDYcG9tzw9FFGBfsM4jKQZNzff19Xm0fHcF57UuRujz-8OAygmp3YJTrwr0FYbf-LAgtMpHBxTKHUsOiJ4cBqmlDbWgUVSF3Jkmmif5pfeKt_-ZjJxcRv2rcl-l4u9QS18QFB…
+
+Selected text: ```
+facebook.com/groups/3215918995319204/
+```
+
+Note: Pay special attention to the content selected by the user. If the user asks a question or refers to the content they are looking at on-screen, they might be referring to the selected content (but they might be referring to something else that's visible, too).

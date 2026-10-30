@@ -1,0 +1,334 @@
+Window: "(13) Hosts Helping Hosts - Airbnb, Vrbo, Booking.com, & STR Discussion | Facebook - Google Chrome", App: chrome.exe.
+	0 window (13) Hosts Helping Hosts - Airbnb, Vrbo, Booking.com, & STR Discussion | Facebook - Google Chrome Secondary Actions: Raise
+		1 pane (disabled)
+		2 region (13) Hosts Helping Hosts - Airbnb, Vrbo, Booking.com, & STR Discussion | Facebook - Google Chrome – Cara
+			3 region
+				4 region
+					5 region
+						6 button Minimise ID: view_1
+						7 button Maximise ID: view_2
+						8 button Close ID: view_4
+					9 region
+						10 region
+							11 tool bar ID: view_1000
+								12 button Back ID: view_1001
+								13 button (disabled) Forward ID: view_1002
+								14 button Reload ID: view_1003
+								15 button Home ID: view_1004
+								16 group
+									17 button View site information ID: view_1011
+									18 edit (settable, string) Address and search bar Description: Ask Google or type a URL Value: facebook.com/groups/545990332638815/ ID: view_1012
+									19 region
+										1209 button Install Facebook
+										1210 button Bookmark this tab
+								21 region
+									22 button ChatGPT Has access to this site ID: view_1009
+									23 button Extensions ID: view_1006
+								24 region
+								25 button Cara ID: view_1018
+								26 button Chrome ID: view_1007
+							27 tool bar Bookmarks ID: view_1025
+								28 tool bar Saved tab groups
+									29 Saved tab group button ✅Facebook posts keepsake promo group – Opened ID: view_1028
+									30 Saved tab group button ✅Printed QR placards for Pinterest group – Opened ID: view_1028
+									31 Saved tab group button 📌 Pinterest profile group – Opened ID: view_1028
+									32 Saved tab group button ✅Git zero views group – Closed ID: view_1028
+									33 Saved tab group button ✅Chrome Web Store extension details group – Closed ID: view_1028
+									34 button Tab groups
+								35 separator Separator
+								36 Bookmark folder button Apps ID: view_1028
+								37 Bookmark folder button Admin ID: view_1028
+								38 Bookmark folder button Siemens ID: view_1028
+								39 Bookmark folder button Resources ID: view_1028
+								40 Bookmark folder button Career ID: view_1028
+								41 Bookmark folder button To DO ID: view_1028
+								42 Bookmark button Unnamed bookmark for https://automechbiz-my.sharepoint.com/:o:/g/personal/jean-michel_henri_automech_biz/EsIvJ1WL2AZFswgDKT1k2z0BjVRdgIdwHCD7hB6_jLj1jg?e=5%3apqtUu9&at=9 ID: view_1028
+								43 Bookmark button TeamsNotebook(Shared) ID: view_1028
+								44 Bookmark folder button All Bookmarks ID: view_1026
+								45 separator Separator
+							46 region
+						47 region
+							48 region
+								49 region
+								1211 document (13) Hosts Helping Hosts - Airbnb, Vrbo, Booking.com, & STR Discussion | Facebook Value: https://www.facebook.com/groups/545990332638815/ ID: RootWebArea
+									1212 group ID: mount_0_0_qe
+										1213 banner
+											1214 link Facebook Value: https://www.facebook.com/
+												1215 graphic
+											1216 group
+												1217 text 
+												1218 combo box (settable, string) Search Facebook Description: Search Facebook
+											1219 group
+												1220 navigation Facebook
+													1221 list
+														1222 list item
+															1223 link Home Value: https://www.facebook.com/
+																1224 graphic
+														1225 list item
+															1226 link Reels Value: https://www.facebook.com/reel/?s=tab
+																1227 graphic
+														1228 list item
+															1229 link Marketplace Value: https://www.facebook.com/marketplace/?ref=app_tab
+																1230 graphic
+														1231 list item
+															1232 link Groups Value: https://www.facebook.com/groups/
+																1233 graphic
+														1234 list item
+															1235 link Gaming Value: https://www.facebook.com/gaming/play/?store_visit_source=gaming_tab
+																1236 graphic
+											1237 navigation Account controls and settings
+												1238 button Facebook menu
+												1239 button Messenger, 2 unread
+												1240 button Notifications, 11 unread
+												1241 button Account, your profile
+													1242 graphic Your profile
+											1243 group
+										1244 main
+											1245 link Cover photo Value: https://www.facebook.com/photo/?fbid=10115910626459038&set=p.10115910626459038
+											1246 text Group by
+											1247 link Hosts Helping Hosts Value: https://www.facebook.com/HostsHelpingHosts
+											1248 heading Hosts Helping Hosts - Airbnb, Vrbo, Booking.com, & STR Discussion
+											1249 text Public group
+											1250 text 
+											1251 link 86.6K members Value: https://www.facebook.com/groups/545990332638815/members/
+											1252 list
+												1253 list item
+													1254 link Joe Dunleavy Value: https://www.facebook.com/groups/545990332638815/user/745555463/
+														1255 graphic Joe Dunleavy
+												1256 list item
+													1257 link 607 Guest House Value: https://www.facebook.com/groups/545990332638815/user/100095564830440/
+														1258 graphic 607 Guest House
+												1259 list item
+													1260 link Fabiel Leon Value: https://www.facebook.com/groups/545990332638815/user/100095485481500/
+														1261 graphic Fabiel Leon
+												1262 list item
+													1263 link Samuel Eboigbe Value: https://www.facebook.com/groups/545990332638815/user/100095439699134/
+														1264 graphic Samuel Eboigbe
+												1265 list item
+													1266 link Steven Tivi Value: https://www.facebook.com/groups/545990332638815/user/100095350741994/
+														1267 graphic Steven Tivi
+												1268 list item
+													1269 link Mary Kellen Gates Value: https://www.facebook.com/groups/545990332638815/user/100095323521397/
+														1270 graphic Mary Kellen Gates
+												1271 list item
+													1272 link Shishir Sarkar Value: https://www.facebook.com/groups/545990332638815/user/100095224966451/
+														1273 graphic Shishir Sarkar
+												1274 list item
+													1275 link Tøn Heron Value: https://www.facebook.com/groups/545990332638815/user/100095190381538/
+														1276 graphic Tøn Heron
+												1277 list item
+													1278 link Cleanlinace Value: https://www.facebook.com/groups/545990332638815/user/100095141545882/
+														1279 graphic Cleanlinace
+												1280 list item
+													1281 link Nathan DM Value: https://www.facebook.com/groups/545990332638815/user/100095117086545/
+														1282 graphic Nathan DM
+												1283 list item
+													1284 link Shawna McCollam-Floyd Value: https://www.facebook.com/groups/545990332638815/user/100095059185153/
+														1285 graphic Shawna McCollam-Floyd
+												1286 list item
+													1287 link Humza Khan Value: https://www.facebook.com/groups/545990332638815/user/100095041260277/
+														1288 graphic Humza Khan
+												1289 list item
+													1290 link Janet Berger Value: https://www.facebook.com/groups/545990332638815/user/100095031957855/
+														1291 graphic Janet Berger
+												1292 list item
+													1293 link Alana Mcarthur Value: https://www.facebook.com/groups/545990332638815/user/100095025625156/
+														1294 graphic Alana Mcarthur
+												1295 list item
+													1296 link Warner Independent Insurance Agent Value: https://www.facebook.com/groups/545990332638815/user/100094957623196/
+														1297 graphic Warner Independent Insurance Agent
+												1298 list item
+													1299 link Amor Patrio Value: https://www.facebook.com/groups/545990332638815/user/100094838010457/
+														1300 graphic Amor Patrio
+												1301 list item
+													1302 link Marie Lori Value: https://www.facebook.com/groups/545990332638815/user/100094678581868/
+														1303 graphic Marie Lori
+												1304 list item
+													1305 link Mahrukh Khan Value: https://www.facebook.com/groups/545990332638815/user/100094530835600/
+														1306 graphic Mahrukh Khan
+												1307 list item
+													1308 link Simbarashe Madimutsa Value: https://www.facebook.com/groups/545990332638815/user/100094514448151/
+														1309 graphic Simbarashe Madimutsa
+												1310 list item
+													1311 link Madison Window Guy Value: https://www.facebook.com/groups/545990332638815/user/100094462171542/
+														1312 graphic Madison Window Guy
+												1313 list item
+													1314 link See everyone Value: https://www.facebook.com/groups/545990332638815/members/
+											1315 button Invite
+											1316 button Share group
+											1317 button Joined
+											1318 button See Recommended Groups
+											1319 tab
+												1320 tab item (selectable) About ID: about
+												1321 tab item (selectable) Discussion ID: posts
+												1322 tab item (selectable) Featured ID: announcements
+												1323 tab item (selectable) People ID: info
+												1324 tab item (selectable) Events ID: events
+												1325 tab item (selectable) Media ID: photos
+												1326 tab item (selectable) Files ID: files
+											1327 button Search within this group
+											1328 button More
+											1329 link Cara Bertram's profile Value: https://www.facebook.com/groups/545990332638815/user/502252377/
+											1330 button Write something...
+											1331 button Anonymous post
+											1332 button Feeling/activity
+											1333 button Poll
+											1334 text Featured
+											1335 text 3 new
+											1336 text Featured content badge
+											1337 button About featured section
+											1338 button Expand/Collapse featured section
+											1339 feed
+												1340 button sort group feed by Most relevant
+													1341 heading Most relevant
+												1342 group
+													1343 heading Savannah Ulrich
+														1344 link Savannah Ulrich Value: https://www.facebook.com/groups/545990332638815/user/1075629225/?__cft__[0]=AZgNEH_e06rS5eltr-ZlCOHmqmEH61DDFx2Jv1dgHPKZm77DZkKiGZ8aPpk52BZR37C_yx8q2LJh4cIgWKkp6-rMHouct7RWXdjNUV2KS83N0LlbfbubdOHTMQbqprDi4NlWppassFNShYPI9XfdTBpu6lH5O2drcDi680NebtJuukNHc1MRdcyqsrZsjQ&__tn__=-UC%2CP-R
+													1345 link 22 October at 03:26 Value: https://www.facebook.com/groups/545990332638815/?__cft__[0]=AZgNEH_e06rS5eltr-ZlCOHmqmEH61DDFx2Jv1dgHPKZm77DZkKiGZ8aPpk52BZR37C_yx8q2LJh4cIgWKkp6-rMHouct7RWXdjNUV2KS83N0LlbfbubdOHTMQbqprDi4NlWppassFNShYPI9XfdTBpu6lH5O2drcDi680NebtJuukNHc1MRdcyqsrZsjQ&__tn__=%2CO%2CP-R#?jid
+														1438 group 22 October at 03:26
+													1346 text 
+													1347 graphic Shared with Public group Description: Shared with Public group
+													1348 button Actions for this post by Savannah Ulrich
+													1349 text What do you think of these new rules? Asking guests to wash dishes after their use is unreasonable. What about bbq grill? Also unreasonable? No contracts other than rental contract?
+													1350 link May be an image of text Value: https://www.facebook.com/photo/?fbid=10240020393342402&set=gm.2273297609908070&idorvanity=545990332638815&__cft__[0]=AZgNEH_e06rS5eltr-ZlCOHmqmEH61DDFx2Jv1dgHPKZm77DZkKiGZ8aPpk52BZR37C_yx8q2LJh4cIgWKkp6-rMHouct7RWXdjNUV2KS83N0LlbfbubdOHTMQbqprDi4NlWppassFNShYPI9XfdTBpu6lH5O2drcDi680NebtJuukNHc1MRdcyqsrZsjQ&__tn__=EH-R
+														1351 graphic May be an image of text
+													1352 button React with Like to Savannah Ulrich's post
+													1353 button React to Savannah Ulrich's post
+													1354 button Comment on Savannah Ulrich's post
+													1355 button Share, send this to friends or post it on your profile.
+													1356 tool bar See who reacted to this
+														1357 button Haha: 71 people
+														1358 button Like: 37 people
+														1359 button Angry: 19 people
+													1360 button View more answers
+													1361 article Comment by Alex Dalgleish a week ago
+														1362 link Alex Dalgleish Value: https://www.facebook.com/groups/545990332638815/user/663504198/?__cft__[0]=AZgNEH_e06rS5eltr-ZlCOHmqmEH61DDFx2Jv1dgHPKZm77DZkKiGZ8aPpk52BZR37C_yx8q2LJh4cIgWKkp6-rMHouct7RWXdjNUV2KS83N0LlbfbubdOHTMQbqprDi4NlWppassFNShYPI9XfdTBpu6lH5O2drcDi680NebtJuukNHc1MRdcyqsrZsjQ&__tn__=R-R
+														1363 text 
+														1364 link Wednesday 21 October 2026 at 13:48 Value: https://www.facebook.com/groups/545990332638815/posts/2273297609908070/?comment_id=2273470276557470&__cft__[0]=AZgNEH_e06rS5eltr-ZlCOHmqmEH61DDFx2Jv1dgHPKZm77DZkKiGZ8aPpk52BZR37C_yx8q2LJh4cIgWKkp6-rMHouct7RWXdjNUV2KS83N0LlbfbubdOHTMQbqprDi4NlWppassFNShYPI9XfdTBpu6lH5O2drcDi680NebtJuukNHc1MRdcyqsrZsjQ&__tn__=R-R
+														1365 text I go away at least once a month and the massive cleaning fees and then the little cute handbook of all the cleaning I need to
+														1366 text …
+														1367 button See more
+														1368 group
+															1369 button Hide or report this
+														1370 button Like
+															1371 graphic Like Description: Like
+														1372 button React
+														1373 list item Reply
+															1374 button Reply
+														1375 list item Share
+															1376 button Share
+														1377 button 140 reactions; see who reacted to this
+													1378 button View 24 replies
+													1379 article Comment by Efrain Cortez 3 days ago
+														1380 link Efrain Cortez Value: https://www.facebook.com/groups/545990332638815/user/100080672355346/?__cft__[0]=AZgNEH_e06rS5eltr-ZlCOHmqmEH61DDFx2Jv1dgHPKZm77DZkKiGZ8aPpk52BZR37C_yx8q2LJh4cIgWKkp6-rMHouct7RWXdjNUV2KS83N0LlbfbubdOHTMQbqprDi4NlWppassFNShYPI9XfdTBpu6lH5O2drcDi680NebtJuukNHc1MRdcyqsrZsjQ&__tn__=R-R
+														1381 text 
+														1382 link Monday 26 October 2026 at 05:33 Value: https://www.facebook.com/groups/545990332638815/posts/2273297609908070/?comment_id=2277837396120758&__cft__[0]=AZgNEH_e06rS5eltr-ZlCOHmqmEH61DDFx2Jv1dgHPKZm77DZkKiGZ8aPpk52BZR37C_yx8q2LJh4cIgWKkp6-rMHouct7RWXdjNUV2KS83N0LlbfbubdOHTMQbqprDi4NlWppassFNShYPI9XfdTBpu6lH5O2drcDi680NebtJuukNHc1MRdcyqsrZsjQ&__tn__=R-R
+														1383 text Guests ask for late checkouts ALL THE TIME, and we do our best to accommodate them! Sometimes that means asking our cleaners t
+														1384 text …
+														1385 button See more
+														1386 group
+															1387 button Hide or report this
+														1388 button Like
+															1389 graphic Like Description: Like
+														1390 button React
+														1391 list item Reply
+															1392 button Reply
+														1393 list item Share
+															1394 button Share
+														1395 button 4 reactions; see who reacted to this
+													1396 button View 2 replies
+													1397 edit (settable, string) Answer as Cara Description: Answer as Cara Value: 
+														1398 text 
+													1399 list
+														1400 list item
+															1401 button Comment with an avatar sticker
+														1402 list item
+															1403 button Insert an emoji
+														1404 list item
+															1405 button Attach a photo or video
+														1406 list item
+															1407 button Comment with a GIF
+														1408 list item
+															1409 button Comment with a sticker
+												1410 article
+													1411 status Loading...
+												1412 article
+													1413 status Loading...
+											1414 heading About
+											1415 group
+												1416 text All things Airbnb, Vrbo, & Short-Term Rentals! Learn, network, share tips, & optimize your Airbnb profits! Join the fastest growing STR communit
+												1417 text …
+												1418 button See more
+											1419 group
+												1420 text Public
+												1421 text Anyone can see who's in the group and what they post.
+											1422 group
+												1423 text Visible
+												1424 text Anyone can find this group.
+											1425 heading Recent media
+											1426 link May be an image of living room, indoors and text Value: https://www.facebook.com/photo/?fbid=4684184438567450&set=g.545990332638815
+												1427 graphic May be an image of living room, indoors and text
+											1428 link May be an image of text Value: https://www.facebook.com/photo/?fbid=29543916578528035&set=g.545990332638815
+												1429 graphic May be an image of text
+											1430 link May be an image of text Value: https://www.facebook.com/photo/?fbid=10169897311134616&set=g.545990332638815
+												1431 graphic May be an image of text
+											1432 link May be a graphic of phone and text Value: https://www.facebook.com/photo/?fbid=10169897311104616&set=g.545990332638815
+												1433 graphic May be a graphic of phone and text
+											1434 link See all recent media Value: https://www.facebook.com/groups/545990332638815/media/
+										1437 button New message
+										1435 group
+									1436 button Choose files: No file chosen Value: No file chosen
+						63 group Infobar Container ID: view_1039
+							64 alert Infobar Secondary Actions: Raise
+								65 region
+								66 region
+								67 region
+									68 text Google Chrome isn't your default browser
+									69 button Set as default
+								70 region
+								71 region
+									72 button Close
+							73 region
+						74 region
+							75 region
+								76 button Tab search
+							77 region ID: view_21
+								78 tab
+									79 tab item (selectable) Welcome back | Slack, Home ID: view_20
+										80 button Close
+									81 tab item (selectable) digistaybook-bop (Channel) - DigiGuestbook - Slack ID: view_20
+										82 button Close
+									83 tab item (selectable) Live guest wall demo | DigiStayBook ID: view_20
+										84 button Close
+									85 tab item (selectable) Extensions - ChatGPT ID: view_20
+										86 button Close
+									87 tab group ✅Printed QR placards for Pinterest – 1 tab, • Pinterest – Expanded
+									88 tab item (selectable) Pinterest – Part of group ✅Printed QR placards for Pinterest ID: view_20
+										89 button Close
+									90 tab item (selectable) Wedding Upload Advice ID: view_20
+										91 button Close
+									92 tab group ✅Facebook posts keepsake promo – 1 tab, • Meta Business Suite – Expanded
+									93 tab item (selectable) Meta Business Suite – Part of group ✅Facebook posts keepsake promo ID: view_20
+										94 button Close
+									95 tab item (selectable) (13) Hosts Helping Hosts - Airbnb, Vrbo, Booking.com, & STR Discussion | Facebook ID: view_20
+										96 button Close
+									97 region
+									98 region
+								99 region
+							100 button New tab
+							101 region
+							102 region
+								103 button Open Gemini in Chrome
+								104 region
+						105 region
+			1439 pane
+				1440 pane (disabled)
+				1441 region
+					1442 region
+						1443 text https://www.facebook.com/photo/?fbid=10240020393342402&set=gm.2273297609908070&idorvanity=5…
+
+Selected text: ```
+facebook.com/groups/545990332638815/
+```
+
+Note: Pay special attention to the content selected by the user. If the user asks a question or refers to the content they are looking at on-screen, they might be referring to the selected content (but they might be referring to something else that's visible, too).

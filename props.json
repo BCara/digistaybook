@@ -1,0 +1,342 @@
+[{
+  "document": {
+    "name": "projects/digistaybook-cbert/databases/(default)/documents/properties/2SwUrltev5VcxQYpJ8oM",
+    "fields": {
+      "lifecycle": {
+        "stringValue": "draft"
+      },
+      "createdAt": {
+        "timestampValue": "2026-10-29T10:50:00.551Z"
+      },
+      "profile": {
+        "mapValue": {
+          "fields": {
+            "cover": {
+              "mapValue": {
+                "fields": {
+                  "path": {
+                    "stringValue": "properties/2SwUrltev5VcxQYpJ8oM/media/cover-1793331836980.webp"
+                  },
+                  "url": {
+                    "stringValue": "https://firebasestorage.googleapis.com/v0/b/digistaybook-cbert.firebasestorage.app/o/properties%2F2SwUrltev5VcxQYpJ8oM%2Fmedia%2Fcover-1793331836980.webp?alt=media&token=0d2a8d10-4993-4554-b41b-3545eaf0a91b"
+                  },
+                  "alt": {
+                    "stringValue": "The property"
+                  },
+                  "width": {
+                    "integerValue": "1205"
+                  },
+                  "height": {
+                    "integerValue": "1600"
+                  }
+                }
+              }
+            },
+            "avatar": {
+              "mapValue": {
+                "fields": {
+                  "path": {
+                    "stringValue": "properties/2SwUrltev5VcxQYpJ8oM/media/hostPhoto-1793331899870.webp"
+                  },
+                  "url": {
+                    "stringValue": "https://firebasestorage.googleapis.com/v0/b/digistaybook-cbert.firebasestorage.app/o/properties%2F2SwUrltev5VcxQYpJ8oM%2Fmedia%2FhostPhoto-1793331899870.webp?alt=media&token=aafdd858-5c97-4820-b09b-51730314e677"
+                  },
+                  "alt": {
+                    "stringValue": "Your hosts"
+                  },
+                  "width": {
+                    "integerValue": "1600"
+                  },
+                  "height": {
+                    "integerValue": "1200"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "stringValue": "Bonbeach test"
+      },
+      "ownerUid": {
+        "stringValue": "UYCvdX9TuNOU16LbzG4ObcbV7eG3"
+      }
+    },
+    "createTime": "2026-10-29T10:50:00.579836Z",
+    "updateTime": "2026-10-30T03:45:05.459668Z"
+  },
+  "readTime": "2026-10-30T03:47:47.185676Z"
+}
+,
+{
+  "document": {
+    "name": "projects/digistaybook-cbert/databases/(default)/documents/properties/9dylQ4JQgMOw6oUvQYnw",
+    "fields": {
+      "lifecycle": {
+        "stringValue": "draft"
+      },
+      "createdAt": {
+        "timestampValue": "2026-10-17T00:10:32.887Z"
+      },
+      "profile": {
+        "mapValue": {
+          "fields": {
+            "cover": {
+              "nullValue": null
+            },
+            "avatar": {
+              "nullValue": null
+            }
+          }
+        }
+      },
+      "name": {
+        "stringValue": "My Property Name"
+      },
+      "ownerUid": {
+        "stringValue": "03gp08VCzSWfWSXLg9AbhZ4rFzx2"
+      }
+    },
+    "createTime": "2026-10-17T00:10:32.913583Z",
+    "updateTime": "2026-10-17T00:10:32.913583Z"
+  },
+  "readTime": "2026-10-30T03:47:47.185676Z"
+}
+,
+{
+  "document": {
+    "name": "projects/digistaybook-cbert/databases/(default)/documents/properties/cSqqnZBgHqJFgoeU24qi",
+    "fields": {
+      "lifecycle": {
+        "stringValue": "draft"
+      },
+      "createdAt": {
+        "timestampValue": "2026-09-06T00:15:37.707Z"
+      },
+      "profile": {
+        "mapValue": {
+          "fields": {
+            "cover": {
+              "mapValue": {
+                "fields": {
+                  "path": {
+                    "stringValue": "properties/cSqqnZBgHqJFgoeU24qi/media/cover-1789354755575.webp"
+                  },
+                  "url": {
+                    "stringValue": "https://firebasestorage.googleapis.com/v0/b/digistaybook-cbert.firebasestorage.app/o/properties%2FcSqqnZBgHqJFgoeU24qi%2Fmedia%2Fcover-1789354755575.webp?alt=media&token=92081889-483b-4fe7-b374-4b6059a76618"
+                  },
+                  "alt": {
+                    "stringValue": "The property"
+                  },
+                  "width": {
+                    "integerValue": "1600"
+                  },
+                  "height": {
+                    "integerValue": "800"
+                  }
+                }
+              }
+            },
+            "avatar": {
+              "mapValue": {
+                "fields": {
+                  "path": {
+                    "stringValue": "properties/cSqqnZBgHqJFgoeU24qi/media/hostPhoto-1789354744896.webp"
+                  },
+                  "url": {
+                    "stringValue": "https://firebasestorage.googleapis.com/v0/b/digistaybook-cbert.firebasestorage.app/o/properties%2FcSqqnZBgHqJFgoeU24qi%2Fmedia%2FhostPhoto-1789354744896.webp?alt=media&token=1e5edb0f-86ef-412a-ac6c-af09195a39bb"
+                  },
+                  "alt": {
+                    "stringValue": "Your hosts"
+                  },
+                  "width": {
+                    "integerValue": "1254"
+                  },
+                  "height": {
+                    "integerValue": "1254"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "stringValue": "sdssds"
+      },
+      "ownerUid": {
+        "stringValue": "beP94aRnkbedOvX1cqVJTD4Ix0l1"
+      }
+    },
+    "createTime": "2026-09-06T00:15:37.787310Z",
+    "updateTime": "2026-09-14T02:59:17.865267Z"
+  },
+  "readTime": "2026-10-30T03:47:47.185676Z"
+}
+,
+{
+  "document": {
+    "name": "projects/digistaybook-cbert/databases/(default)/documents/properties/chpLFZnSbGBPpoPRNBlb",
+    "fields": {
+      "lifecycle": {
+        "stringValue": "dormant"
+      },
+      "createdAt": {
+        "timestampValue": "2026-09-14T03:25:17.273Z"
+      },
+      "profile": {
+        "mapValue": {
+          "fields": {
+            "cover": {
+              "mapValue": {
+                "fields": {
+                  "path": {
+                    "stringValue": "properties/chpLFZnSbGBPpoPRNBlb/media/cover-1789365657330.webp"
+                  },
+                  "url": {
+                    "stringValue": "https://firebasestorage.googleapis.com/v0/b/digistaybook-cbert.firebasestorage.app/o/properties%2FchpLFZnSbGBPpoPRNBlb%2Fmedia%2Fcover-1789365657330.webp?alt=media&token=d839b290-150b-45a6-be0b-125d99e7aa0e"
+                  },
+                  "alt": {
+                    "stringValue": "The property"
+                  },
+                  "width": {
+                    "integerValue": "1600"
+                  },
+                  "height": {
+                    "integerValue": "490"
+                  }
+                }
+              }
+            },
+            "avatar": {
+              "mapValue": {
+                "fields": {
+                  "path": {
+                    "stringValue": "properties/chpLFZnSbGBPpoPRNBlb/media/hostPhoto-1789357256675.webp"
+                  },
+                  "url": {
+                    "stringValue": "https://firebasestorage.googleapis.com/v0/b/digistaybook-cbert.firebasestorage.app/o/properties%2FchpLFZnSbGBPpoPRNBlb%2Fmedia%2FhostPhoto-1789357256675.webp?alt=media&token=528963c2-a0e9-457c-a036-02d4c467b4a5"
+                  },
+                  "alt": {
+                    "stringValue": "Your hosts"
+                  },
+                  "width": {
+                    "integerValue": "1254"
+                  },
+                  "height": {
+                    "integerValue": "1254"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "stringValue": "My Property Name"
+      },
+      "ownerUid": {
+        "stringValue": "beP94aRnkbedOvX1cqVJTD4Ix0l1"
+      }
+    },
+    "createTime": "2026-09-14T03:25:17.298094Z",
+    "updateTime": "2026-10-16T10:38:47.066854Z"
+  },
+  "readTime": "2026-10-30T03:47:47.185676Z"
+}
+,
+{
+  "document": {
+    "name": "projects/digistaybook-cbert/databases/(default)/documents/properties/vzXLBJRAvgMZOTNUAb7U",
+    "fields": {
+      "lifecycle": {
+        "stringValue": "draft"
+      },
+      "createdAt": {
+        "timestampValue": "2026-10-16T23:51:16.138Z"
+      },
+      "profile": {
+        "mapValue": {
+          "fields": {
+            "cover": {
+              "mapValue": {
+                "fields": {
+                  "path": {
+                    "stringValue": "properties/vzXLBJRAvgMZOTNUAb7U/media/cover-1792194782649.png"
+                  },
+                  "url": {
+                    "stringValue": "https://firebasestorage.googleapis.com/v0/b/digistaybook-cbert.firebasestorage.app/o/properties%2FvzXLBJRAvgMZOTNUAb7U%2Fmedia%2Fcover-1792194782649.png?alt=media&token=7666e247-25b0-4a29-b5c4-f787c20255b3"
+                  },
+                  "alt": {
+                    "stringValue": "The property"
+                  },
+                  "width": {
+                    "integerValue": "512"
+                  },
+                  "height": {
+                    "integerValue": "512"
+                  }
+                }
+              }
+            },
+            "avatar": {
+              "mapValue": {
+                "fields": {
+                  "path": {
+                    "stringValue": "properties/vzXLBJRAvgMZOTNUAb7U/media/hostPhoto-1792194809319.jpg"
+                  },
+                  "url": {
+                    "stringValue": "https://firebasestorage.googleapis.com/v0/b/digistaybook-cbert.firebasestorage.app/o/properties%2FvzXLBJRAvgMZOTNUAb7U%2Fmedia%2FhostPhoto-1792194809319.jpg?alt=media&token=94f13d44-77ab-4bd9-b83a-84803d1567c2"
+                  },
+                  "alt": {
+                    "stringValue": "Your hosts"
+                  },
+                  "width": {
+                    "integerValue": "120"
+                  },
+                  "height": {
+                    "integerValue": "120"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "stringValue": "AI QA Cottage 2026-10-17"
+      },
+      "ownerUid": {
+        "stringValue": "hVYaTsKVQdUG7qvty7u1iKwLBf12"
+      }
+    },
+    "createTime": "2026-10-16T23:51:16.163931Z",
+    "updateTime": "2026-10-16T23:53:35.656671Z"
+  },
+  "readTime": "2026-10-30T03:47:47.185676Z"
+}
+,
+{
+  "document": {
+    "name": "projects/digistaybook-cbert/databases/(default)/documents/properties/z1BHYINs2ziNoOViHUbT",
+    "fields": {
+      "lifecycle": {
+        "stringValue": "draft"
+      },
+      "createdAt": {
+        "timestampValue": "2026-09-01T22:46:28.696Z"
+      },
+      "name": {
+        "stringValue": "test"
+      },
+      "ownerUid": {
+        "stringValue": "beP94aRnkbedOvX1cqVJTD4Ix0l1"
+      }
+    },
+    "createTime": "2026-09-01T22:46:29.095084Z",
+    "updateTime": "2026-09-04T20:27:27.120105Z"
+  },
+  "readTime": "2026-10-30T03:47:47.185676Z"
+}
+]

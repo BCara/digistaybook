@@ -1096,6 +1096,13 @@ textarea { min-height: 132px; resize: vertical; }
 .password-toggle:disabled { color: var(--text-muted); cursor: not-allowed; }
 .check-row { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; font-weight: 400; font-size: .99rem; line-height: 1.55; color: var(--text-muted); }
 .check-row input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); }
+/* Contact: the enquiry for hotels and larger portfolios, set apart from the
+   two notices above it that send people elsewhere. */
+.contact-custom { margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--rule); }
+.contact-custom h2 { margin: 0 0 10px; font-size: var(--step-2); }
+.contact-custom p { margin: 0 0 16px; color: var(--text-muted); }
+.contact-topic { display: grid; gap: 10px; margin: 0; padding: 0; border: 0; }
+.contact-topic legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: .99rem; }
 .form-feedback { margin: 0; padding: 12px 15px; background: var(--bg-alt); border-left: 2px solid var(--accent); color: var(--text-muted); font-size: .99rem; }
 
 .notice { border-left: 2px solid var(--accent); }

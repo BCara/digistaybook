@@ -129,7 +129,7 @@ describe("shell and landing presentation", () => {
     expect(
       screen.getAllByText(/may encourage guests to share more positive feedback on their official booking platform/i)
     ).not.toHaveLength(0);
-    expect(screen.getByText(/never asks guests for a rating/i)).toBeInTheDocument();
+    expect(screen.getByText(/helpful information that booking platforms may restrict/i)).toBeInTheDocument();
     expect(screen.getByText(/Create your account and add your first property to activate your 28-day free trial\./i)).toBeInTheDocument();
   });
 

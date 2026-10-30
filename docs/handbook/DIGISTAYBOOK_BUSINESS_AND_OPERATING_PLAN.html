@@ -962,22 +962,36 @@
               </tr>
               <tr>
                 <td>Monthly subscription</td>
-                <td>Approximately USD $10 per property per month, shown in the host&rsquo;s local currency</td>
+                <td>US$10 per property per month, or the local-currency price in the rate card below</td>
                 <td>Guest Wall, house-manual pinning, themes and layouts, unlimited guest uploads, QR kit, dashboard moderation, private feedback inbox, takedown queue.</td>
                 <td>Renews monthly at the locked-in localised rate. Cancel any time in the dashboard; access runs to the end of the paid cycle.</td>
               </tr>
               <tr>
                 <td>Annual subscription</td>
-                <td>Approximately USD $100 per property per year, shown in the host&rsquo;s local currency</td>
+                <td>US$100 per property per year, or the local-currency price in the rate card below</td>
                 <td>Identical to the monthly plan.</td>
-                <td>Equivalent to two months free against the monthly rate. Charged in full at the end of the trial, then annually. A renewal notice is sent 14 days before each annual renewal.</td>
+                <td>Exactly ten times the monthly price in every currency &mdash; two months free. Charged in full at the end of the trial, then annually. A renewal notice is sent 14 days before each annual renewal.</td>
               </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Rate card by currency (set 30 October 2026).</strong> USD is the base price. Each other currency is US$10 converted at the reference rate and rounded to the nearest whole unit, and the annual price is always exactly ten times the monthly price, so every annual plan gives two months free. Reference rates used: 1 USD &asymp; A$1.43, &pound;0.76, &euro;0.87 (June 2026). AUD keeps the approved A$15, which is GST-inclusive (ST-D1). Re-check the rates on the day the live Stripe prices are created, and change this table, the Stripe catalogue and the app rate card together.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Currency</th><th>Monthly, per property</th><th>Annual, per property</th><th>12 months on monthly</th><th>Annual saving</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>USD (base)</td><td>US$10</td><td>US$100</td><td>US$120</td><td>US$20 &mdash; two months free</td><td>Approved (ST-D1). In the Stripe catalogue and the app.</td></tr>
+              <tr><td>AUD</td><td>A$15</td><td>A$150</td><td>A$180</td><td>A$30 &mdash; two months free</td><td>Approved (ST-D1), GST-inclusive. In the Stripe catalogue and the app.</td></tr>
+              <tr><td>GBP</td><td>&pound;8</td><td>&pound;80</td><td>&pound;96</td><td>&pound;16 &mdash; two months free</td><td>Approved 30 October 2026 (ST-D4 reopened, D-027). In the app for the UK. Not purchasable until the Stripe prices carry a GBP option; UK VAT treatment still to confirm with the tax adviser.</td></tr>
+              <tr><td>EUR</td><td>&euro;9</td><td>&euro;90</td><td>&euro;108</td><td>&euro;18 &mdash; two months free</td><td>Approved 30 October 2026 (ST-D4 reopened, D-027). In the app for the 21 euro-area countries. Not purchasable until the Stripe prices carry a EUR option; EU VAT treatment still to confirm with the tax adviser.</td></tr>
             </tbody>
           </table>
         </div>
         <p>Prices render in the host&rsquo;s point-of-sale currency (AUD, GBP, EUR, USD) and are rounded cleanly to the nearest whole unit. Stripe promotional codes are supported at checkout. They are not marketed at launch, but the field must exist &mdash; among other things it allows a 100% discount code to activate a property in production for internal verification without taking a real payment.</p>
         <div class="annotation" data-annotation="confirm">
-          <p><span class="annotation-label">Confirm</span>The prices are written as &ldquo;approximately USD $10 and $100&rdquo;. Confirm the exact rounded amount in each supported currency, the Stripe price objects that hold them, and whether displayed prices include or exclude GST for Australian hosts. Everything downstream &mdash; checkout microcopy, receipts, the pricing page and the annual renewal notice &mdash; must show the same figure.</p>
+          <p><span class="annotation-label">Confirm</span>The rate card above sets the amount in all four currencies. Still open: GBP and EUR options on the Stripe prices, and whether GBP and EUR prices include VAT. Until the Stripe prices carry them, UK and euro-area hosts are told billing is not yet configured for their currency and nothing is charged. Everything downstream &mdash; checkout microcopy, receipts, the pricing page and the annual renewal notice &mdash; must show the same figure as this table.</p>
         </div>
         <div class="annotation" data-annotation="confirm">
           <p><span class="annotation-label">Confirm</span>&ldquo;Unlimited guest uploads&rdquo; appears on the pricing page. No storage ceiling, per-property cap or fair-use boundary has been set, and Cloud Storage is charged per gigabyte stored and transferred. Confirm a stated limit, or accept that a single heavily used property can consume margin without bound. Section 4.3 forbids promising unlimited storage that has not been costed.</p>

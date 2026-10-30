@@ -1,4 +1,4 @@
-import { formatRate, publishedRates, trialDays } from "../../domain/pricing";
+import { currencyRegions, formatRate, posCurrencies, publishedRates, trialDays } from "../../domain/pricing";
 
 /** Curated answers run entirely in the browser. Unknown questions go to a person. */
 export function helpAnswer(question: string): string {
@@ -9,9 +9,12 @@ export function helpAnswer(question: string): string {
     return "You can cancel in your host dashboard before the next billing date. Access continues until the end of your current paid billing cycle or trial. Chat and email requests cannot cancel your subscription.";
   if (/\b(refund|charged|charge|payment failed|card declined|invoice|bug|broken|not working|error)\b/.test(text))
     return "Please use Message us below so a person can help with your specific issue by email. Include what you were trying to do and what happened, but never include passwords or payment details. This helper cannot inspect accounts, payments or property records.";
+  if (/\b(hotels?|resorts?|motels?|bespoke|custom options?|customi[sz]ed|enterprise|hotel chains?|portfolio|property managers?|kids club|meal plans?)\b/.test(text))
+    return "For a hotel, resort or a larger portfolio, use Ask about custom options on the Contact page and tell us what you would like guests to see. A person will reply by email about what we can set up.";
   if (/\b(price|pricing|cost|much|free|trial|plan|subscription|pay|billing)\b/.test(text)) {
-    const rates = Object.entries(publishedRates).map(([currency, rate]) => `${formatRate(rate.monthly, currency as keyof typeof publishedRates)} a month or ${formatRate(rate.annual, currency as keyof typeof publishedRates)} a year`).join("; ");
-    return `Plans are per property: ${rates}. Your first activated property is eligible for a ${trialDays}-day trial, with a payment method required; plans renew automatically. See the Pricing page for full terms and current offers.`;
+    // The chat cannot know where the reader is, so every rate says where it applies.
+    const rates = posCurrencies.map(currency => `${formatRate(publishedRates[currency].monthly, currency)} a month or ${formatRate(publishedRates[currency].annual, currency)} a year ${currencyRegions[currency]}`).join("; ");
+    return `Plans are per property, and the annual plan is two months free: ${rates}. Your first activated property is eligible for a ${trialDays}-day trial, with a payment method required; plans renew automatically. See the Pricing page for full terms and current offers.`;
   }
   if (/\b(password|log.?in|sign.?in|account|verification|verify|reset)\b/.test(text))
     return "Hosts sign in through Host sign in. If you have forgotten your password, use Forgot password on that page to request a reset email. Account settings are in your host dashboard; use Message us for account-specific help.";

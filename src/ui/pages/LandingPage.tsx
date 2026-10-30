@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { QrPlaceholder } from "../Brand";
 import { navigate } from "../routing";
 import {
-  currencyForCountry,
+  currencyFor,
   publishedPlans,
   trialCallout,
   trialDays
@@ -64,9 +64,8 @@ function VisitorLandingPage() {
 
   // A price has to be in some currency, and with two dollar currencies on sale
   // an unlabelled "$10" is not a price. The visitor's own region picks it, the
-  // same way /pricing does: AUD in Australia, USD everywhere else.
-  const detected = detectBillingCountry();
-  const currency = detected ? currencyForCountry[detected] : "usd";
+  // same way /pricing does: the country's own price on the ladder, else USD.
+  const currency = currencyFor(detectBillingCountry());
   const [monthly, annual] = publishedPlans(currency);
 
   return (
@@ -215,10 +214,10 @@ function VisitorLandingPage() {
               Create a more memorable guest experience&mdash;one that may encourage guests to share more
               positive feedback on their official booking platform.
             </p>
-            <p className="band-note">
-              DigiStayBook never asks guests for a rating, never pre-fills a review and never links into a
-              booking provider&rsquo;s review form. Improved feedback is a possible indirect benefit of a better
-              stay, not a guaranteed outcome.
+            <p>
+              Your wall can also give guests helpful information that booking platforms may restrict in their
+              messages: your own local recommendations, useful links and the house details that make a stay
+              easier.
             </p>
           </div>
         </div>

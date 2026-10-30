@@ -1,4 +1,5 @@
 import type Stripe from "stripe";
+import { billingCountries } from "./billingPolicy.js";
 
 /* ===========================================================================
    stripeBilling — what a Stripe subscription means for a property.
@@ -118,16 +119,17 @@ export function wallIsServed(lifecycle: PropertyLifecycle | null): boolean {
 }
 
 /* ------------------------------- Sales gate -------------------------------
-   BOP §2 and ST-D4: Australia and the United States only at launch. Dropping
-   GBP and EUR from the catalogue is a display choice and stops nobody — a UK
-   host pays in USD like anyone else — and Stripe Checkout has no billing
-   country restriction to lean on. So the gate is ours, and it is checked twice:
-   once before a Checkout Session is created, and again against the billing
-   country Stripe captured, before any entitlement is granted.             */
+   DigiStayBook sells worldwide since 30 October 2026 (D-028, replacing the
+   Australia-and-US allowlist of ST-D4). The gate is kept, and still checked
+   twice — before a Checkout Session is created and against the billing
+   country Stripe captured — but what it now refuses is anything that is not a
+   country we can bill: an unparseable code, or one of the countries Stripe
+   cannot take payments from. The currency is a separate question, answered by
+   `currencyForCountry`.                                                   */
 
-export const salesAllowlist = ["AU", "US"] as const;
+export const salesAllowlist: readonly string[] = billingCountries;
 
-export type PermittedCountry = (typeof salesAllowlist)[number];
+export type PermittedCountry = string;
 
 /**
  * Case-insensitive because the declared country comes from our own form while
@@ -136,7 +138,7 @@ export type PermittedCountry = (typeof salesAllowlist)[number];
  */
 export function countryIsPermitted(country: unknown): country is PermittedCountry {
   return typeof country === "string"
-    && (salesAllowlist as readonly string[]).includes(country.trim().toUpperCase());
+    && salesAllowlist.includes(country.trim().toUpperCase());
 }
 
 /* ---------------------------- Handled webhooks ----------------------------
