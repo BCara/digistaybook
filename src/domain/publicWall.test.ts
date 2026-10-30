@@ -40,6 +40,21 @@ describe("server public wall projection", () => {
     expect(publicProperty({ profile }).houseInformation).toBeNull();
   });
 
+  it("serves up to three useful links with the notes, checked the same way", () => {
+    const profile = { noteLinks: [
+      { label: "Our favourite walks", url: "https://walks.com.au" },
+      { label: "Sneaky", url: "javascript:alert(1)" },
+      { label: "Winery", url: "https://winery.com.au" },
+      { label: "Bakery", url: "https://bakery.com.au" },
+      { label: "Fourth", url: "https://fourth.com.au" }
+    ] };
+    expect(publicProperty({ profile }, "stay").houseInformation?.noteLinks).toEqual([
+      { label: "Our favourite walks", url: "https://walks.com.au/" },
+      { label: "Winery", url: "https://winery.com.au/" }
+    ]);
+    expect(publicProperty({ profile }).houseInformation).toBeNull();
+  });
+
   it("requires an open property and a future cancellation deadline", () => {
     expect(wallIsOpen({ mode: "live", lifecycle: "active" })).toBe(true);
     // `wallIsOpen` defaults to the in-stay wall, which a Host switching the
@@ -52,9 +67,9 @@ describe("server public wall projection", () => {
   });
   it("shares house information on the in-stay wall only, and respects hidden sections", () => {
     const profile = { stayHeading: "Welcome", stayWelcome: "Arrival note", facts: [{ term: "Checkout", detail: "10 am", note: "Leave keys", secret: "excluded" }], guestPrompt: "Your favourite memory?" };
-    expect(publicProperty({ profile }, "stay").houseInformation).toEqual({ heading: "Welcome", welcome: "Arrival note", tip: "", facts: [{ term: "Checkout", detail: "10 am", note: "Leave keys" }], links: [] });
+    expect(publicProperty({ profile }, "stay").houseInformation).toEqual({ heading: "Welcome", welcome: "Arrival note", tip: "", facts: [{ term: "Checkout", detail: "10 am", note: "Leave keys" }], links: [], noteLinks: [] });
     // The shared link is the public wall, and the public wall carries none of it.
     expect(publicProperty({ profile }).houseInformation).toBeNull();
-    expect(publicProperty({ profile: { ...profile, stayNoteOff: true, factsOff: true } }, "stay").houseInformation).toEqual({ heading: "", welcome: "", tip: "", facts: [], links: [] });
+    expect(publicProperty({ profile: { ...profile, stayNoteOff: true, factsOff: true } }, "stay").houseInformation).toEqual({ heading: "", welcome: "", tip: "", facts: [], links: [], noteLinks: [] });
   });
 });

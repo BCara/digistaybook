@@ -1,7 +1,7 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { defaultCover, markInitials } from "../../domain/propertyProfile";
 import { readWifiLine, type WifiLogin } from "../../domain/wifi";
-import { displayWebAddress, wallStayAgainLinks, type StayAgainLink } from "../../domain/stayAgain";
+import { displayWebAddress, noteLinkLimits, wallStayAgainLinks, type StayAgainLink } from "../../domain/stayAgain";
 import { EssentialMark, essentialMarkName, type EssentialMarkName } from "./EssentialMark";
 import "./stayWall.css";
 import "./wallThemes.css";
@@ -10,9 +10,9 @@ export type WallHeaderProperty = {
   name: string; location: string; welcome: string; hosts: string;
   cover?: { url: string; alt: string } | null;
   hostPhoto?: { url: string; alt: string } | null;
-  /* `links` is optional: a wall served by a build from before it existed has
-     none, and reads as a wall with nothing to book. */
-  houseInformation?: { heading: string; welcome: string; tip: string; facts: { term: string; detail: string; note: string }[]; links?: StayAgainLink[] } | null;
+  /* `links` and `noteLinks` are optional: a wall served by a build from
+     before they existed has none, and reads as a wall with nothing to open. */
+  houseInformation?: { heading: string; welcome: string; tip: string; facts: { term: string; detail: string; note: string }[]; links?: StayAgainLink[]; noteLinks?: StayAgainLink[] } | null;
 };
 type WallProperty = WallHeaderProperty;
 
@@ -79,6 +79,7 @@ export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes 
   const quickLinks = facts.map(fact => ({ label: fact.term, mark: essentialMarkName(fact.term) }));
   /* Checked again here, so a draft preview never offers a link that goes nowhere. */
   const againLinks = wallStayAgainLinks(house?.links ?? []);
+  const noteLinks = wallStayAgainLinks(house?.noteLinks ?? [], noteLinkLimits.linksMax);
   /* A tapped essential opens over the page, growing out of its button. */
   const [opened, setOpened] = useState<{ index: number; from: DOMRect } | null>(null);
 
@@ -129,6 +130,8 @@ export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes 
     {facts.length === 0 && preview && <p className="wall-ghost">No house essentials. Wi-Fi, checkout and the bins go here.</p>}
 
     {hostNotes}
+
+    {noteLinks.length > 0 && <NoteLinks id={`${baseId}-useful`} links={noteLinks} headingLevel={headingLevel + 1} />}
 
     {againLinks.length > 0 && <StayAgainLinks id={`${baseId}-again`} links={againLinks} headingLevel={headingLevel + 1} />}
 
@@ -214,6 +217,31 @@ export function StayAgainLinks({ id, links, headingLevel }: { id: string; links:
         <a className="stay-link" href={link.url} target="_blank" rel="noopener noreferrer nofollow">
           <span className="stay-icon">
             <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3.4 9.2 10 3.6l6.6 5.6M5.2 7.8v8.6h9.6V7.8M8.4 16.4v-4.6h3.2v4.6" /></svg>
+          </span>
+          <span className="stay-again-words">
+            <span className="stay-link-label">{link.label}</span>
+            <span className="stay-again-address">{displayWebAddress(link.url)}</span>
+          </span>
+          <svg className="stay-chevron" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M8 4.6h7.4V12M15 5 5.4 14.6" /></svg>
+        </a>
+      </li>)}
+    </ul>
+  </nav>;
+}
+
+/**
+ * Any other pages the Host wants guests to have, under their notes: the same
+ * tiles as the links back, with a plain link mark rather than a house, since
+ * these are things to read during the stay rather than a way to return.
+ */
+export function NoteLinks({ id, links, headingLevel }: { id: string; links: readonly StayAgainLink[]; headingLevel: number }) {
+  return <nav className="stay-links stay-again stay-note-links" aria-labelledby={id}>
+    <h2 className="stay-section-title" id={id} aria-level={headingLevel}>Useful links</h2>
+    <ul>
+      {links.map((link, index) => <li key={index}>
+        <a className="stay-link" href={link.url} target="_blank" rel="noopener noreferrer nofollow">
+          <span className="stay-icon">
+            <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M8.6 11.4a3.2 3.2 0 0 0 4.6 0l2.6-2.6a3.2 3.2 0 0 0-4.6-4.6l-1 1M11.4 8.6a3.2 3.2 0 0 0-4.6 0l-2.6 2.6a3.2 3.2 0 0 0 4.6 4.6l1-1" /></svg>
           </span>
           <span className="stay-again-words">
             <span className="stay-link-label">{link.label}</span>

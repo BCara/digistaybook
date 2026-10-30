@@ -49,7 +49,8 @@ export function WallPreview({ name, profile, counts = null, view: fixed, slug, s
       welcome: profile.stayNoteOff ? "" : profile.stayWelcome,
       tip: profile.stayNoteOff ? "" : profile.stayTip,
       facts: profile.factsOff ? [] : profile.facts,
-      links: profile.stayAgainLinks
+      links: profile.stayAgainLinks,
+      noteLinks: profile.noteLinks
     }
   };
   return <div className="wall-preview">

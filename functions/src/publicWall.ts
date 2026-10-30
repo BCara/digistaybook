@@ -95,9 +95,9 @@ function webAddress(value: unknown): string | null {
     return null;
   }
 }
-function stayAgainLinks(profile: Record<string, any>) {
-  if (!Array.isArray(profile.stayAgainLinks)) return [];
-  return profile.stayAgainLinks.slice(0, 2)
+function webLinks(value: unknown, max: number) {
+  if (!Array.isArray(value)) return [];
+  return value.slice(0, max)
     .map((link: any) => ({ label: text(link?.label, 40).trim(), url: webAddress(link?.url) }))
     .filter((link: { label: string; url: string | null }) => link.label && link.url);
 }
@@ -120,7 +120,9 @@ export function publicProperty(data: Record<string, any>, view: "public" | "stay
       welcome: profile.stayNoteOff ? "" : text(profile.stayWelcome),
       tip: profile.stayNoteOff ? "" : text(profile.stayTip, 240),
       facts: profile.factsOff || !Array.isArray(profile.facts) ? [] : profile.facts.slice(0, 8).map((fact: any) => ({ term: text(fact?.term, 32), detail: text(fact?.detail, 60), note: text(fact?.note, 140) })),
-      links: stayAgainLinks(profile)
+      links: webLinks(profile.stayAgainLinks, 2),
+      /* Any other pages the Host wants guests to have, drawn under their notes. */
+      noteLinks: webLinks(profile.noteLinks, 3)
     } : null
   };
 }

@@ -15,7 +15,7 @@
    ========================================================================= */
 
 import { defaultWallTheme, defaultWallColour, readWallTheme, readWallColour, type WallThemeId, type WallColourId } from "./wallTheme";
-import { normalizeStayAgainLinks, stayAgainLimits, stayAgainProblems, type StayAgainLink } from "./stayAgain";
+import { noteLinkLimits, normalizeStayAgainLinks, stayAgainLimits, stayAgainProblems, type StayAgainLink } from "./stayAgain";
 import { readReviewedSections, type SetupSection } from "./setupSections";
 
 /** One line of house guidance: what it is, the answer, and the detail. */
@@ -194,6 +194,11 @@ export type PropertyProfile = {
    * `stayAgain.ts`.
    */
   stayAgainLinks: StayAgainLink[];
+  /**
+   * In-stay only. Any other pages the Host wants guests to have, drawn under
+   * their notes. Empty is the ordinary state, as with the notes themselves.
+   */
+  noteLinks: StayAgainLink[];
   /** Owner-only review choices, excluded from the guest wall projection. */
   reviewedSections: SetupSection[];
   guestPrompt: string;
@@ -273,6 +278,7 @@ export const emptyProfile = (): PropertyProfile => ({
   facts: [],
   factsOff: false,
   stayAgainLinks: [],
+  noteLinks: [],
   reviewedSections: [],
   guestPrompt: "",
   cover: null,
@@ -380,6 +386,14 @@ function readFacts(value: unknown): HouseFact[] {
   });
 }
 
+function readLinks(value: unknown, max: number): StayAgainLink[] {
+  if (!Array.isArray(value)) return [];
+  return value.slice(0, max).map((entry) => {
+    const link = (typeof entry === "object" && entry !== null ? entry : {}) as Record<string, unknown>;
+    return { label: text(link.label, stayAgainLimits.labelMax), url: text(link.url, stayAgainLimits.urlMax) };
+  });
+}
+
 /**
  * Documents are validated on read rather than trusted: a profile written by an
  * older build, or half written, must render as a partly filled form rather
@@ -409,12 +423,8 @@ export function readProfile(value: unknown): PropertyProfile {
     // Only an explicit `true` turns the guidance off, so anything else — a
     // missing field, an older document, a corrupted one — leaves it on.
     factsOff: data.factsOff === true,
-    stayAgainLinks: Array.isArray(data.stayAgainLinks)
-      ? data.stayAgainLinks.slice(0, stayAgainLimits.linksMax).map((entry) => {
-          const link = (typeof entry === "object" && entry !== null ? entry : {}) as Record<string, unknown>;
-          return { label: text(link.label, stayAgainLimits.labelMax), url: text(link.url, stayAgainLimits.urlMax) };
-        })
-      : [],
+    stayAgainLinks: readLinks(data.stayAgainLinks, stayAgainLimits.linksMax),
+    noteLinks: readLinks(data.noteLinks, noteLinkLimits.linksMax),
     guestPrompt: text(data.guestPrompt, 240),
     reviewedSections: readReviewedSections(data.reviewedSections),
     cover: readPhoto(data.cover),
@@ -434,7 +444,8 @@ export type ProfileField =
   | "stayWelcome"
   | "stayTip"
   | "facts"
-  | "stayAgainLinks";
+  | "stayAgainLinks"
+  | "noteLinks";
 
 export type ProfileProblem = { field: ProfileField; index?: number; message: string };
 
@@ -485,6 +496,7 @@ export function normalizeProfile(profile: PropertyProfile): PropertyProfile {
       })),
     factsOff: profile.factsOff,
     stayAgainLinks: normalizeStayAgainLinks(profile.stayAgainLinks),
+    noteLinks: normalizeStayAgainLinks(profile.noteLinks, noteLinkLimits.linksMax),
     guestPrompt: profile.guestPrompt.trim().slice(0, 240),
     reviewedSections: readReviewedSections(profile.reviewedSections),
     cover: profile.cover,
@@ -501,8 +513,12 @@ export function normalizeProfile(profile: PropertyProfile): PropertyProfile {
  */
 export function validateProfile(profile: PropertyProfile): ProfileProblem[] {
   // A link a guest would tap and land nowhere is the same dangling line.
-  const links: ProfileProblem[] = stayAgainProblems(profile.stayAgainLinks)
-    .map(({ index, message }) => ({ field: "stayAgainLinks", index, message }));
+  const links: ProfileProblem[] = [
+    ...stayAgainProblems(profile.stayAgainLinks)
+      .map(({ index, message }) => ({ field: "stayAgainLinks" as const, index, message })),
+    ...stayAgainProblems(profile.noteLinks, { max: noteLinkLimits.linksMax, example: "Our favourite walks" })
+      .map(({ index, message }) => ({ field: "noteLinks" as const, index, message })),
+  ];
   // Guidance that is off the wall is read by nobody, so a half-written line in
   // it cannot strand a Host on a page they are trying to leave. It is checked
   // again the moment they put the guidance back.

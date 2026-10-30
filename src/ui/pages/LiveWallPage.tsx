@@ -21,7 +21,7 @@ import "../guest/guest.css";
 // can say why it is closed and what opens it.
 type Wall = { status: "open" | "preview"; owner?: WallOwner; contributionsEnabled?: boolean; property: { name: string; location: string; welcome: string; hosts: string; hostNotes?: { id: string; message: string; style?: string; photo?: { url: string; alt: string } | null }[];
   theme?: string; colour?: string; guestPrompt?: string; hostPhoto?: { url: string; alt: string } | null;
-  cover?: { url: string; alt: string } | null; houseInformation?: { heading: string; welcome: string; tip: string; facts: { term: string; detail: string; note: string }[]; links?: { label: string; url: string }[] } | null };
+  cover?: { url: string; alt: string } | null; houseInformation?: { heading: string; welcome: string; tip: string; facts: { term: string; detail: string; note: string }[]; links?: { label: string; url: string }[]; noteLinks?: { label: string; url: string }[] } | null };
   posts: { id: string; message: string; displayName: string; photoCount?: number; pinned?: boolean }[]; nextCursor: string | null };
 
 const LOADING = "Loading this guestbook…";

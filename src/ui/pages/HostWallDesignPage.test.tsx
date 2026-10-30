@@ -291,6 +291,29 @@ describe("switching the phone editor between Edit and Preview", () => {
     expect(preview.getByRole("link", { name: /Join our mailing list/ })).toHaveAttribute("href", "https://seaview.example/newsletter");
   });
 
+  it("keeps general links with the notes, apart from the ways back", async () => {
+    renderPage();
+    await editWall();
+    fireEvent.click(await screen.findByRole("button", { name: "Add links" }));
+    expect(within(screen.getByRole("dialog", { name: "Stay with us again" })).queryByRole("button", { name: /Custom link/ })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Edit notes" }));
+    const form = within(screen.getByRole("dialog", { name: "More from your hosts" }));
+    fireEvent.click(form.getByRole("button", { name: "Add a link" }));
+    fireEvent.change(form.getByLabelText("Button text"), { target: { value: "Our favourite walks" } });
+    fireEvent.change(form.getByLabelText("Web address"), { target: { value: "walks.example/coast" } });
+    fireEvent.click(form.getByRole("button", { name: "Save changes" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({
+      noteLinks: [{ label: "Our favourite walks", url: "walks.example/coast" }],
+      stayAgainLinks: [],
+    }));
+    fireEvent.click(screen.getByRole("button", { name: "View as guest" }));
+    const preview = within(screen.getByRole("region", { name: "Guest preview" }));
+    expect(preview.getByRole("navigation", { name: "Useful links" })).toBeInTheDocument();
+    expect(preview.getByRole("link", { name: /Our favourite walks/ })).toHaveAttribute("href", "https://walks.example/coast");
+  });
+
   it("keeps failed saves open with the entered links ready to retry", async () => {
     savePropertyProfile.mockResolvedValueOnce({ status: "error", message: "Connection lost. Try again." });
     renderPage();

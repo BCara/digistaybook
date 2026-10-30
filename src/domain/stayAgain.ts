@@ -34,6 +34,14 @@ export const stayAgainSuggestions: readonly StayAgainLink[] = [
 export const emptyStayAgainLink = (): StayAgainLink => ({ label: "", url: "" });
 
 /**
+ * Any other page a Host wants guests to have — the walking trails, the
+ * winery down the road — goes with their notes rather than here, because it
+ * is something to read during the stay, not a way back. Same shape and same
+ * checks as the links above; there can be a few more of them.
+ */
+export const noteLinkLimits = { ...stayAgainLimits, linksMax: 3 } as const;
+
+/**
  * The address a link opens, or null when it is not one a guest's phone should
  * be sent to. Hosts type addresses the way they say them — "seabreeze.com.au"
  * — so a missing scheme is taken as https. Only https is accepted: a booking
@@ -67,10 +75,10 @@ const linkIsEmpty = (link: StayAgainLink) => !link.label.trim() && !link.url.tri
  * its full form, so the wall never has to guess at a scheme; one that is not
  * valid is kept as typed, so the Host can see and fix it.
  */
-export function normalizeStayAgainLinks(links: readonly StayAgainLink[]): StayAgainLink[] {
+export function normalizeStayAgainLinks(links: readonly StayAgainLink[], max: number = stayAgainLimits.linksMax): StayAgainLink[] {
   return links
     .filter((link) => !linkIsEmpty(link))
-    .slice(0, stayAgainLimits.linksMax)
+    .slice(0, max)
     .map((link) => {
       const url = link.url.trim().slice(0, stayAgainLimits.urlMax);
       return { label: link.label.trim().slice(0, stayAgainLimits.labelMax), url: readWebAddress(url) ?? url };
@@ -78,11 +86,14 @@ export function normalizeStayAgainLinks(links: readonly StayAgainLink[]): StayAg
 }
 
 /** What is wrong with each kept row, by its position among the kept rows. */
-export function stayAgainProblems(links: readonly StayAgainLink[]): { index: number; message: string }[] {
+export function stayAgainProblems(
+  links: readonly StayAgainLink[],
+  { max = stayAgainLimits.linksMax as number, example = "Book your next stay with us" } = {},
+): { index: number; message: string }[] {
   const problems: { index: number; message: string }[] = [];
-  links.filter((link) => !linkIsEmpty(link)).slice(0, stayAgainLimits.linksMax).forEach((link, index) => {
+  links.filter((link) => !linkIsEmpty(link)).slice(0, max).forEach((link, index) => {
     if (!link.label.trim()) {
-      problems.push({ index, message: "Say what the link is for, such as Book your next stay with us." });
+      problems.push({ index, message: `Say what the link is for, such as ${example}.` });
     } else if (!link.url.trim()) {
       problems.push({ index, message: `Add the web address for ${link.label.trim()}.` });
     } else if (/^http:\/\//i.test(link.url.trim())) {
@@ -95,8 +106,8 @@ export function stayAgainProblems(links: readonly StayAgainLink[]): { index: num
 }
 
 /** The links worth drawing on a wall: labelled, with an address that opens. */
-export const wallStayAgainLinks = (links: readonly StayAgainLink[]): StayAgainLink[] =>
+export const wallStayAgainLinks = (links: readonly StayAgainLink[], max: number = stayAgainLimits.linksMax): StayAgainLink[] =>
   links
     .filter((link) => link.label.trim() && readWebAddress(link.url))
-    .slice(0, stayAgainLimits.linksMax)
+    .slice(0, max)
     .map((link) => ({ label: link.label.trim(), url: readWebAddress(link.url)! }));

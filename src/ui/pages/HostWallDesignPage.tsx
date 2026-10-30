@@ -14,7 +14,7 @@ import {
   type HouseFact,
   type PropertyProfile,
 } from "../../domain/propertyProfile";
-import { emptyStayAgainLink, stayAgainLimits, stayAgainSuggestions, type StayAgainLink } from "../../domain/stayAgain";
+import { emptyStayAgainLink, noteLinkLimits, stayAgainLimits, stayAgainSuggestions, type StayAgainLink } from "../../domain/stayAgain";
 import { isPostMvpFeatureEnabled } from "../../domain/featureFlags";
 import { useAuth } from "../auth/AuthProvider";
 import { CameraMark } from "../host/CameraMark";
@@ -579,15 +579,56 @@ export function HostWallDesignPage({
    * The platforms' rules are said beside the fields, because the Host is the
    * one who knows which platform their guests came from.
    */
-  const setLink = (index: number, change: Partial<StayAgainLink>) =>
-    set("stayAgainLinks", profile.stayAgainLinks.map((link, position) => (position === index ? { ...link, ...change } : link)));
+  type LinkList = "stayAgainLinks" | "noteLinks";
+  const setLink = (key: LinkList, index: number, change: Partial<StayAgainLink>) =>
+    set(key, profile[key].map((link, position) => (position === index ? { ...link, ...change } : link)));
   /* Save-time problems are numbered among the rows with something in them. */
-  const linkProblem = (index: number) => {
-    const link = profile.stayAgainLinks[index];
+  const linkProblem = (key: LinkList, index: number) => {
+    const link = profile[key][index];
     if (!link || (!link.label.trim() && !link.url.trim())) return undefined;
-    const kept = profile.stayAgainLinks.slice(0, index).filter((row) => row.label.trim() || row.url.trim()).length;
-    return draft.problems.profile.find((problem) => problem.field === "stayAgainLinks" && problem.index === kept)?.message;
+    const kept = profile[key].slice(0, index).filter((row) => row.label.trim() || row.url.trim()).length;
+    return draft.problems.profile.find((problem) => problem.field === key && problem.index === kept)?.message;
   };
+  const linkRows = (key: LinkList, placeholder: string) =>
+    profile[key].map((link, index) => (
+      <div className="stacked-form stay-card canvas-again-link" key={index}>
+        <label>Link {index + 1}: what it says
+          <input
+            value={link.label}
+            maxLength={stayAgainLimits.labelMax}
+            placeholder={placeholder}
+            disabled={draft.saving}
+            aria-invalid={linkProblem(key, index) ? true : undefined}
+            onChange={(event) => setLink(key, index, { label: event.target.value })}
+          />
+        </label>
+        <label>Link {index + 1}: web address
+          <input
+            type="text"
+            inputMode="url"
+            autoComplete="url"
+            spellCheck={false}
+            value={link.url}
+            maxLength={stayAgainLimits.urlMax}
+            placeholder="seabreezecottage.com.au/book"
+            disabled={draft.saving}
+            aria-invalid={linkProblem(key, index) ? true : undefined}
+            onChange={(event) => setLink(key, index, { url: event.target.value })}
+          />
+        </label>
+        {linkProblem(key, index) && <p className="form-feedback" role="alert">{linkProblem(key, index)}</p>}
+        <p>
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
+            disabled={draft.saving}
+            onClick={() => set(key, profile[key].filter((_, position) => position !== index))}
+          >
+            Remove link {index + 1}
+          </button>
+        </p>
+      </div>
+    ));
   const stayAgainCard = isPostMvpFeatureEnabled("directBookingLinks") && (
     <div className="stay-wall canvas-stay-again">
       <section className="stay-links stay-again" aria-labelledby="canvas-stay-again">
@@ -595,46 +636,9 @@ export function HostWallDesignPage({
         <p className="field-hint">
           Your own booking site, or a page where guests can join your list for a
           future stay. Guests see them here, under your notes, and nowhere else.
+          Any other useful page goes with your notes above.
         </p>
-        {profile.stayAgainLinks.map((link, index) => (
-          <div className="stacked-form stay-card canvas-again-link" key={index}>
-            <label>Link {index + 1}: what it says
-              <input
-                value={link.label}
-                maxLength={stayAgainLimits.labelMax}
-                placeholder="Book your next stay with us"
-                disabled={draft.saving}
-                aria-invalid={linkProblem(index) ? true : undefined}
-                onChange={(event) => setLink(index, { label: event.target.value })}
-              />
-            </label>
-            <label>Link {index + 1}: web address
-              <input
-                type="text"
-                inputMode="url"
-                autoComplete="url"
-                spellCheck={false}
-                value={link.url}
-                maxLength={stayAgainLimits.urlMax}
-                placeholder="seabreezecottage.com.au/book"
-                disabled={draft.saving}
-                aria-invalid={linkProblem(index) ? true : undefined}
-                onChange={(event) => setLink(index, { url: event.target.value })}
-              />
-            </label>
-            {linkProblem(index) && <p className="form-feedback" role="alert">{linkProblem(index)}</p>}
-            <p>
-              <button
-                type="button"
-                className="btn btn-ghost btn-sm"
-                disabled={draft.saving}
-                onClick={() => set("stayAgainLinks", profile.stayAgainLinks.filter((_, position) => position !== index))}
-              >
-                Remove link {index + 1}
-              </button>
-            </p>
-          </div>
-        ))}
+        {linkRows("stayAgainLinks", "Book your next stay with us")}
         {profile.stayAgainLinks.length < stayAgainLimits.linksMax && (
           <p className="canvas-includes">
             {stayAgainSuggestions
@@ -647,11 +651,6 @@ export function HostWallDesignPage({
                   onClick={() => set("stayAgainLinks", [...profile.stayAgainLinks, { ...suggestion }])}
                 />
               ))}
-            <Include
-              label="Custom link"
-              disabled={draft.saving}
-              onClick={() => set("stayAgainLinks", [...profile.stayAgainLinks, emptyStayAgainLink()])}
-            />
           </p>
         )}
         <p className="field-hint canvas-again-rules">
@@ -660,6 +659,30 @@ export function HostWallDesignPage({
           outside Airbnb. Check the rules of the platforms you list on before you
           add a link. What it says and what your page offers are up to you.
         </p>
+      </section>
+    </div>
+  );
+
+  /* Any other page a Host wants guests to have goes with their notes, where
+     the wall draws it: something to read during the stay, not a way back. */
+  const noteLinksCard = (
+    <div className="stay-wall canvas-stay-again canvas-note-links">
+      <section className="stay-links stay-again" aria-labelledby="canvas-note-links">
+        <h2 className="stay-section-title" id="canvas-note-links" aria-level={3}>Useful links</h2>
+        <p className="field-hint">
+          Pages guests might want during their stay: local walks, a favourite
+          restaurant, the house manual. They appear under your notes.
+        </p>
+        {linkRows("noteLinks", "Our favourite walks")}
+        {profile.noteLinks.length < noteLinkLimits.linksMax && (
+          <p className="canvas-includes">
+            <Include
+              label={profile.noteLinks.length === 0 ? "a useful link" : "another link"}
+              disabled={draft.saving}
+              onClick={() => set("noteLinks", [...profile.noteLinks, emptyStayAgainLink()])}
+            />
+          </p>
+        )}
       </section>
     </div>
   );
@@ -1582,6 +1605,8 @@ export function HostWallDesignPage({
                 )}
 
                 {hostNoteCards}
+
+                {noteLinksCard}
 
                 {stayAgainCard}
 

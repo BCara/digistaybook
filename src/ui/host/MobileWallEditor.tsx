@@ -5,7 +5,7 @@ import {
   emptyFact, emptyHostNote, defaultCover, markInitials, profileLimits, validatePhotoFile, validateProfile,
   writtenHostNotes, type PropertyProfile,
 } from "../../domain/propertyProfile";
-import { emptyStayAgainLink, stayAgainLimits, stayAgainProblems, wallStayAgainLinks } from "../../domain/stayAgain";
+import { emptyStayAgainLink, noteLinkLimits, stayAgainLimits, stayAgainProblems, wallStayAgainLinks, type StayAgainLink } from "../../domain/stayAgain";
 import { isPostMvpFeatureEnabled } from "../../domain/featureFlags";
 import { wallColourName, wallTheme } from "../../domain/wallTheme";
 import { setupSectionIds, type SetupSection } from "../../domain/setupSections";
@@ -15,7 +15,7 @@ import { WallThemePicker } from "./WallThemePicker";
 import { HostNoteStylePicker } from "./HostNoteStylePicker";
 import { PhotoField } from "./PhotoField";
 import { HostNotes } from "../wall/HostNotes";
-import { StayAgainLinks } from "../wall/WallHeader";
+import { NoteLinks, StayAgainLinks } from "../wall/WallHeader";
 import { withPhotoInSlot } from "./photoSlots";
 import { removePropertyPhoto, uploadPropertyPhoto, type HostProperty } from "./propertyStore";
 import type { PropertyDraft } from "./usePropertyDraft";
@@ -46,10 +46,11 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
   const profile = draft.profile;
   const linksEnabled = isPostMvpFeatureEnabled("directBookingLinks");
   const links = wallStayAgainLinks(profile.stayAgainLinks);
+  const usefulLinks = wallStayAgainLinks(profile.noteLinks, noteLinkLimits.linksMax);
   const problems = validateProfile(profile);
   function reviewedState(section: Section): "done" | "todo" {
     const invalid = section === "property" ? validatePropertyName(draft.name).length > 0
-      : problems.some(problem => section === "essentials" ? problem.field === "facts" : section === "links" && problem.field === "stayAgainLinks");
+      : problems.some(problem => section === "essentials" ? problem.field === "facts" : section === "notes" ? problem.field === "noteLinks" : section === "links" && problem.field === "stayAgainLinks");
     return !invalid && profile.reviewedSections.includes(section) ? "done" : "todo";
   }
   function edit(section: Section) { opener.current = document.activeElement as HTMLElement; setEditing(section); onEditingChange(true); }
@@ -68,8 +69,8 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
     { id: "property", detail: [draft.name, profile.location].filter(Boolean).join(" · ") || "Name, address and cover photo", state: reviewedState("property") },
     { id: "welcome", detail: profile.stayNoteOff ? "Welcome hidden · Your names and host photo" : profile.stayWelcome.trim() || "Your names, welcome note and host photo", state: reviewedState("welcome") },
     { id: "essentials", title: "Wi-Fi and essentials", detail: profile.factsOff ? "Hidden from the wall" : profile.facts.map(f => f.term).filter(Boolean).join(", ") || "Wi-Fi, check-out, parking", state: reviewedState("essentials") },
-    { id: "notes", title: "More notes", detail: writtenHostNotes(profile).length ? `${writtenHostNotes(profile).length} notes from your hosts` : "Anything else you want guests to know", state: reviewedState("notes") },
-    ...(linksEnabled ? [{ id: "links" as const, detail: links.length ? links.map(link => link.label).join(" · ") : "Book direct, mailing list or another useful link", state: reviewedState("links") }] : []),
+    { id: "notes", title: "More notes", detail: [writtenHostNotes(profile).length && `${writtenHostNotes(profile).length} notes from your hosts`, usefulLinks.length && `${usefulLinks.length} ${usefulLinks.length === 1 ? "link" : "links"}`].filter(Boolean).join(" · ") || "Anything else you want guests to know, and useful links", state: reviewedState("notes") },
+    ...(linksEnabled ? [{ id: "links" as const, detail: links.length ? links.map(link => link.label).join(" · ") : "Book direct or join your mailing list", state: reviewedState("links") }] : []),
     { id: "style", detail: `${wallTheme(profile.theme).name}, ${wallColourName(profile.theme, profile.colour)}`, state: reviewedState("style") },
   ];
   return <PropertyShell property={property} current="design" name={draft.name} profile={profile} className="phone-wall-page">
@@ -110,7 +111,8 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
         <div className="phone-wall-summary">{profile.factsOff ? "Hidden from the wall" : profile.facts.filter(f => f.term.trim()).map(f => f.term).join(" · ") || "Add Wi-Fi, check-out, parking and house information."}</div>
       </EditSection>
       <EditSection title="More from your hosts" action="Edit notes" onEdit={() => edit("notes")}>
-        <div className="phone-wall-summary">{writtenHostNotes(profile).length ? <HostNotes author={profile.hosts || "your hosts"} notes={writtenHostNotes(profile).map(note => ({ id: note.id, message: note.message, style: note.style, photo: note.photo ? { src: note.photo.url, alt: note.photo.alt } : undefined }))} /> : "Optional notes, recommendations or a personal touch."}</div>
+        <div className="phone-wall-summary">{writtenHostNotes(profile).length ? <HostNotes author={profile.hosts || "your hosts"} notes={writtenHostNotes(profile).map(note => ({ id: note.id, message: note.message, style: note.style, photo: note.photo ? { src: note.photo.url, alt: note.photo.alt } : undefined }))} /> : "Optional notes, recommendations or a personal touch."}
+          {usefulLinks.length > 0 && <div className="stay-wall"><NoteLinks id="phone-wall-useful" links={usefulLinks} headingLevel={4} /></div>}</div>
       </EditSection>
       {linksEnabled && <EditSection title="Stay with us again" action={links.length ? "Edit links" : "Add links"} onEdit={() => edit("links")}>
         <div className="phone-wall-summary stay-wall">{links.length ? <StayAgainLinks id="phone-wall-links" links={links} headingLevel={4} /> : <p>Help guests book another stay or join your mailing list.</p>}</div>
@@ -166,8 +168,25 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
   useEffect(() => { if (attempted && draft.problems.failure) setFailure(draft.problems.failure); }, [attempted, draft.problems.failure]);
 
   function set<K extends keyof PropertyProfile>(key: K, value: PropertyProfile[K]) { setProfile(previous => ({ ...previous, [key]: value })); }
-  const issues = attempted ? [...validatePropertyName(name).map(p => p.message), ...validateProfile(profile).filter(p => section !== "links" || p.field !== "stayAgainLinks").map(p => p.message)] : [];
+  const issues = attempted ? [...validatePropertyName(name).map(p => p.message), ...validateProfile(profile).filter(p => !(section === "links" && p.field === "stayAgainLinks") && !(section === "notes" && p.field === "noteLinks")).map(p => p.message)] : [];
   const linkIssues = attempted ? stayAgainProblems(profile.stayAgainLinks) : [];
+  const noteLinkIssues = attempted ? stayAgainProblems(profile.noteLinks, { max: noteLinkLimits.linksMax, example: "Our favourite walks" }) : [];
+  /** One link's fields; the two lists differ only in where they are kept and what they suggest. */
+  function linkFields(key: "stayAgainLinks" | "noteLinks", issues: { index: number; message: string }[], placeholder: string) {
+    const rows: StayAgainLink[] = profile[key];
+    const setRow = (index: number, change: Partial<StayAgainLink>) => set(key, rows.map((row, i) => i === index ? { ...row, ...change } : row));
+    return rows.map((link, index) => {
+      const kept = rows.slice(0, index).filter(row => row.label.trim() || row.url.trim()).length;
+      const problem = issues.find(issue => issue.index === kept)?.message;
+      const problemId = `${id}-${key}-${index}`;
+      return <fieldset key={index} className="phone-section-item"><legend>Link {index + 1}</legend>
+        <label>Button text<input value={link.label} maxLength={stayAgainLimits.labelMax} placeholder={placeholder} disabled={busy} onChange={e => setRow(index, { label: e.target.value })} /></label>
+        <label>Web address<input type="text" inputMode="url" autoComplete="url" autoCapitalize="none" spellCheck={false} value={link.url} maxLength={stayAgainLimits.urlMax} placeholder="yourwebsite.com/book" disabled={busy} aria-invalid={problem ? true : undefined} aria-describedby={problem ? problemId : undefined} onChange={e => setRow(index, { url: e.target.value })} /></label>
+        {problem && <p id={problemId} className="form-feedback" role="alert">{problem}</p>}
+        <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => set(key, rows.filter((_, i) => i !== index))}>Remove link {index + 1}</button>
+      </fieldset>;
+    });
+  }
   function text(key: "location" | "hosts" | "stayHeading" | "stayWelcome" | "stayTip" | "guestPrompt", label: string, max: number, multiline = false) {
     const controlId = `${id}-${key}`;
     return <label htmlFor={controlId}>{label}{multiline
@@ -255,25 +274,19 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
             <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => set("hostNotes", profile.hostNotes.filter(row => row.id !== note.id))}>Remove note {index + 1}</button>
           </fieldset>)}
           {profile.hostNotes.length < profileLimits.hostNotesMax && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => set("hostNotes", [...profile.hostNotes, emptyHostNote()])}>Add a note</button>}
+          <h3 className="phone-section-subhead">Useful links</h3>
+          <p className="field-hint">Pages guests might want during their stay: local walks, a favourite restaurant, the house manual. They appear under your notes.</p>
+          {linkFields("noteLinks", noteLinkIssues, "Our favourite walks")}
+          {profile.noteLinks.length < noteLinkLimits.linksMax && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => set("noteLinks", [...profile.noteLinks, emptyStayAgainLink()])}>Add a link</button>}
           {text("guestPrompt", "Guestbook prompt", 240, true)}
         </>}
         {section === "links" && <>
-          <p className="field-hint">Add up to two links to your own booking page, mailing-list sign-up or another useful page. Guests open your website; mailing-list sign-ups happen there.</p>
-          {profile.stayAgainLinks.map((link, index) => {
-            const kept = profile.stayAgainLinks.slice(0, index).filter(row => row.label.trim() || row.url.trim()).length;
-            const problem = linkIssues.find(issue => issue.index === kept)?.message;
-            return <fieldset key={index} className="phone-section-item"><legend>Link {index + 1}</legend>
-              <label>Button text<input value={link.label} maxLength={stayAgainLimits.labelMax} placeholder="Book direct" disabled={busy} onChange={e => set("stayAgainLinks", profile.stayAgainLinks.map((row, i) => i === index ? { ...row, label: e.target.value } : row))} /></label>
-              <label>Web address<input type="text" inputMode="url" autoComplete="url" autoCapitalize="none" spellCheck={false} value={link.url} maxLength={stayAgainLimits.urlMax} placeholder="yourwebsite.com/book" disabled={busy} aria-invalid={problem ? true : undefined} aria-describedby={problem ? `${id}-link-${index}` : undefined} onChange={e => set("stayAgainLinks", profile.stayAgainLinks.map((row, i) => i === index ? { ...row, url: e.target.value } : row))} /></label>
-              {problem && <p id={`${id}-link-${index}`} className="form-feedback" role="alert">{problem}</p>}
-              <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => set("stayAgainLinks", profile.stayAgainLinks.filter((_, i) => i !== index))}>Remove link {index + 1}</button>
-            </fieldset>;
-          })}
+          <p className="field-hint">Add up to two links so guests can book another stay or join your mailing list. Guests open your website; mailing-list sign-ups happen there.</p>
+          {linkFields("stayAgainLinks", linkIssues, "Book direct")}
           {profile.stayAgainLinks.length < stayAgainLimits.linksMax && <div className="phone-section-add-links">
             {["Book direct", "Join our mailing list"].filter(label => !profile.stayAgainLinks.some(link => link.label === label)).map(label => <button type="button" className="btn btn-secondary" key={label} disabled={busy} onClick={() => set("stayAgainLinks", [...profile.stayAgainLinks, { label, url: "" }])}>+ {label}</button>)}
-            <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => set("stayAgainLinks", [...profile.stayAgainLinks, emptyStayAgainLink()])}>+ Custom link</button>
           </div>}
-          <p className="field-hint">Links appear under your notes on the guest wall. Check your booking platform’s rules before adding links.</p>
+          <p className="field-hint">Links appear under your notes on the guest wall. Check your booking platform’s rules before adding links. Other useful links go in More notes.</p>
         </>}
         {section === "style" && <WallThemePicker value={profile.theme} colour={profile.colour} disabled={busy} onChange={value => set("theme", value)} onColourChange={value => set("colour", value)} />}
         {issues.length > 0 && <div className="form-feedback" role="alert">{Array.from(new Set(issues)).map(issue => <p key={issue}>{issue}</p>)}</div>}
