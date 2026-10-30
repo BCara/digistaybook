@@ -9,6 +9,8 @@ vi.mock("../auth/hostAccount", async original => ({
 }));
 vi.mock("../auth/hostAuth", () => ({ passwordMinimumLength: 8, sendHostPasswordReset: mocks.reset }));
 vi.mock("../auth/reviewerMfa", () => ({ completeMfa: mocks.complete, mfaError: () => "Code not accepted." }));
+// The email settings panel calls the server on mount; its own alert is not what these tests are about.
+vi.mock("../host/HostEmailSettings", () => ({ HostEmailSettings: () => null }));
 import { HostAccountPage } from "./HostAccountPage";
 const host = { uid: "host-a", email: "host@example.test", displayName: "Host", emailVerified: true, providerData: [{ providerId: "password" }] } as AuthState["user"];
 const refreshUser = vi.fn();

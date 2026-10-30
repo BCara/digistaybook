@@ -68,8 +68,8 @@ body:has(.phone-wall-dock) .ds-help { display: none; }
 .phone-section-dialog form > header button { min-height: 44px; flex: none; }
 .phone-section-fields { overflow-y: auto; overscroll-behavior: contain; padding: 24px 20px; display: flex; flex-direction: column; gap: 22px; }
 .phone-section-fields label { display: grid; gap: 8px; font-weight: 600; }
-.phone-section-fields :is(input:not([type=checkbox]), textarea) { width: 100%; min-width: 0; box-sizing: border-box; font-size: 16px; padding: 12px; border-radius: 10px; }
-.phone-section-fields input:not([type=checkbox]) { min-height: 48px; }
+.phone-section-fields :is(input:not([type=checkbox], [type=file]), textarea) { width: 100%; min-width: 0; box-sizing: border-box; font-size: 16px; padding: 12px; border-radius: 10px; }
+.phone-section-fields input:not([type=checkbox], [type=file]) { min-height: 48px; }
 .phone-section-fields textarea { resize: vertical; }
 .phone-section-fields .field-hint { margin: 0; }
 .phone-section-line { display: grid; gap: 4px; justify-items: start; }

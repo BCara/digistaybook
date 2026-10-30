@@ -293,7 +293,7 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
       <div className="phone-section-fields">
         {section === "property" && <>
           <label>Property name<input value={name} maxLength={propertyIdentityLimits.nameMax} disabled={busy} onChange={e => setName(e.target.value)} /></label>
-          {text("location", "Address", profileLimits.locationMax)}<p className="field-hint">Shown underneath your property name.</p>
+          {text("location", "Address", profileLimits.locationMax)}
           {photo("cover", "Cover photo")}
         </>}
         {section === "welcome" && <>
