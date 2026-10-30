@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { trialDays } from "../../domain/pricing";
-import { DEMO_SIGN_LINK, signLink, signStyleFor, signStyles, type SignStyle } from "../../domain/signStyles";
+import { DEMO_SIGN_LINK, defaultSignStyle, signLink, signStyleFor, signStyles, type SignStyle } from "../../domain/signStyles";
 import { QrSign, type QrSignContent } from "../signs/QrSign";
 import "./qrSignMaker.css";
 
@@ -24,7 +24,12 @@ const defaultMessage = "Scan to read the house guidance and to leave a memory be
  * the look they showed.
  */
 export function QrSignMakerPage() {
-  const [style, setStyle] = useState<SignStyle>(() => signStyleFor(readStyleParam()));
+  // The page is prerendered on the first style, so the client starts there
+  // too and moves to the linked style before the first paint. Reading the
+  // address during render would draw a different sign from the static HTML
+  // and make React throw that HTML away.
+  const [style, setStyle] = useState<SignStyle>(defaultSignStyle);
+  useLayoutEffect(() => setStyle(signStyleFor(readStyleParam())), []);
   const [name, setName] = useState("Seabreeze Cottage");
   const [linkInput, setLinkInput] = useState(DEMO_SIGN_LINK);
   const [message, setMessage] = useState(defaultMessage);
