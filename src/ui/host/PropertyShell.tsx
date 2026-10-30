@@ -192,30 +192,33 @@ export function PropertyShell({
                 </div>
               </div>
               {location ? <p className="banner-location">{location}</p> : null}
-              <StatePills lifecycle={property.lifecycle} mode={property.mode} billingHref={`/host/property/${property.id}/billing`} />
+              {/* The state, and the one thing a draft property is waiting for,
+                  share a line: the button answers the Draft pill beside it,
+                  and on a phone a row of its own cost the band a third of
+                  its height. It is a primary control rather than another
+                  quiet one because until it is done nothing on this screen
+                  reaches a guest, and it is here rather than only on the
+                  billing screen because that is the screen a Host has to
+                  already know to look for. */}
+              <div className="banner-state-row">
+                <StatePills lifecycle={property.lifecycle} mode={property.mode} billingHref={`/host/property/${property.id}/billing`} />
+                {draft && (
+                  <a
+                    className="btn btn-primary btn-sm banner-action banner-publish"
+                    href={`/host/property/${property.id}/billing`}
+                    aria-label="Publish this property"
+                  >
+                    <ActionMark>
+                      <path d="M10 15.5V4.5m0 0L5.8 8.7M10 4.5l4.2 4.2" />
+                      <path d="M3.5 13v3.5h13V13" />
+                    </ActionMark>
+                    <span>Publish<span className="banner-publish-more"> this property</span></span>
+                  </a>
+                )}
+              </div>
               {problem && <p className="form-feedback banner-photo-problem" role="alert">{problem}</p>}
             </div>
           </div>
-
-          {draft && (
-            <div className="banner-actions">
-              {/* The one thing a draft property is waiting for. It is a primary
-                control rather than another quiet one because until it is done
-                nothing on this screen reaches a guest, and it is here rather
-                than only on the billing screen because that is the screen a
-                Host has to already know to look for. */}
-              <a
-                className="btn btn-primary btn-sm banner-action"
-                href={`/host/property/${property.id}/billing`}
-              >
-                <ActionMark>
-                  <path d="M10 15.5V4.5m0 0L5.8 8.7M10 4.5l4.2 4.2" />
-                  <path d="M3.5 13v3.5h13V13" />
-                </ActionMark>
-                Publish this property
-              </a>
-            </div>
-          )}
         </div>
       </header>
 
