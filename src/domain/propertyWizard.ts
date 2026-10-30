@@ -29,6 +29,7 @@
 import { validatePropertyName } from "./property";
 import {
   emptyProfile,
+  exampleNote,
   normalizeProfile,
   validateProfile,
   type ProfileField,
@@ -87,8 +88,14 @@ const stepOfField: Record<WizardField, WizardStepId> = {
 
 export const stepOfProblem = (problem: WizardProblem): WizardStepId => stepOfField[problem.field];
 
-/** A new property: nothing named yet and nothing written on it. */
-export const emptyWizardDraft = (): WizardDraft => ({ name: "", profile: emptyProfile() });
+/**
+ * A new property: nothing named yet, and the example arrival note already
+ * written in, so the wall is never blank. The Host can change it or remove it.
+ */
+export const emptyWizardDraft = (): WizardDraft => ({
+  name: "",
+  profile: { ...emptyProfile(), stayHeading: exampleNote.heading, stayWelcome: exampleNote.welcome }
+});
 
 /** An existing property, opened for changing. */
 export const draftOfProperty = (name: string, profile: PropertyProfile): WizardDraft => ({ name, profile });

@@ -1,4 +1,4 @@
-import { emptyProfile, profileLimits } from "./propertyProfile";
+import { emptyProfile, exampleNote, profileLimits } from "./propertyProfile";
 import {
   draftOfProperty,
   emptyWizardDraft,
@@ -22,8 +22,11 @@ describe("the shape of the sequence", () => {
     expect(stepCount).toBe(3);
   });
 
-  it("starts a new property blank: the example note is shown, never stored", () => {
-    expect(emptyWizardDraft()).toEqual({ name: "", profile: emptyProfile() });
+  it("starts a new property with the example arrival note written in", () => {
+    expect(emptyWizardDraft()).toEqual({
+      name: "",
+      profile: { ...emptyProfile(), stayHeading: exampleNote.heading, stayWelcome: exampleNote.welcome }
+    });
   });
 
   it("opens an existing property on what it already says", () => {

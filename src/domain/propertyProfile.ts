@@ -271,16 +271,13 @@ export const emptyProfile = (): PropertyProfile => ({
 });
 
 /**
- * The arrival note shown as an example, not as text a property is created with.
+ * The arrival note a new property starts with.
  *
- * A wall with nothing written on it is the hardest thing to start: a Host
- * opens the property view, meets a blank sheet, and has to invent both what to
- * say and the voice to say it in. So the fields show a note already written —
- * plain, true of nearly every property, and short enough to be worth copying.
- *
- * It is a placeholder and nothing more: it is never stored, so a Host who
- * types nothing has a property with no arrival note on it, and what a guest
- * reads is only ever what a Host wrote.
+ * A wall with nothing written on it is the hardest thing to start, and a blank
+ * first wall looks unfinished. So "Add a property" fills the heading and note
+ * in with this — plain, true of nearly every property — and the Host changes
+ * or removes it. The wall editor still shows it as a placeholder, for an
+ * existing property whose note was cleared on purpose.
  */
 export const exampleNote = {
   heading: "Welcome, make yourself at home",

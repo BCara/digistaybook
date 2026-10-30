@@ -112,11 +112,11 @@ describe("adding a property", () => {
     expect(screen.getByText("Step 2 of 3")).toBeInTheDocument();
     // The note's own lines, under the names the property view gives them.
     expect(screen.getByLabelText("Arrival heading")).toBeInTheDocument();
-    // The note arrives empty with an example shown in it, so a host is spared a
-    // blank sheet without being given words they never wrote.
-    expect(screen.getByLabelText("Arrival note")).toHaveValue("");
-    expect(screen.getByLabelText("Arrival note")).toHaveAttribute("placeholder", exampleNote.welcome);
-    expect(screen.getByLabelText("Arrival heading")).toHaveValue("");
+    // The note arrives already written, so the first wall is never blank; the
+    // host can change it or remove it.
+    expect(screen.getByLabelText("Arrival note")).toHaveValue(exampleNote.welcome);
+    expect(screen.getByLabelText("Arrival heading")).toHaveValue(exampleNote.heading);
+    expect(screen.getByRole("button", { name: "Remove heading" })).toBeInTheDocument();
     // The rest are offered where they would stand, not laid out empty.
     expect(screen.queryByLabelText("One local recommendation")).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Your names")).not.toBeInTheDocument();
@@ -155,8 +155,9 @@ describe("adding a property", () => {
         location: "Porthleven, Cornwall",
         hosts: "Ana & Tom",
         stayTip: "The bakery behind the lighthouse.",
-        // The example is never stored: a host who typed no note has none.
-        stayWelcome: ""
+        // The note a host left as it came is stored as written.
+        stayHeading: exampleNote.heading,
+        stayWelcome: exampleNote.welcome
       })
     });
     await waitFor(() => expect(onCreated).toHaveBeenCalledWith({ property: created, photoWarning: null }));

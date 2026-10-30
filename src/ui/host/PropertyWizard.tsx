@@ -48,13 +48,26 @@ import {
  * the note it is on, because a Host with three notes open would otherwise be
  * offered "The photograph on your note" three times over.
  */
-export function photoCopy(slot: PhotoSlot, position?: number): { label: string; hint?: string } {
-  if (slot === "avatar") return { label: "Main photo", hint: "For your dashboard only. Guests never see it." };
-  if (slot === "cover") return { label: "Cover photo", hint: "Across the top of both walls. Wide works best." };
-  if (slot === "hostPhoto") {
-    return { label: "Your photograph", hint: "Beside your names on every note. Without one, your initials." };
+export function photoCopy(
+  slot: PhotoSlot,
+  position?: number
+): { label: string; hint?: string; recommended: boolean } {
+  // Only the dashboard photo is merely optional: every other one is on the
+  // wall a guest sees, and a wall looks its best the first time with them.
+  if (slot === "avatar") {
+    return { label: "Main photo", hint: "For your dashboard only. Guests never see it.", recommended: false };
   }
-  return { label: "Photograph" };
+  if (slot === "cover") {
+    return { label: "Cover photo", hint: "Across the top of both walls. Wide works best.", recommended: true };
+  }
+  if (slot === "hostPhoto") {
+    return {
+      label: "Your photograph",
+      hint: "Beside your names on every note. Without one, your initials.",
+      recommended: true
+    };
+  }
+  return { label: "Photograph", recommended: true };
 }
 
 /**
@@ -190,7 +203,7 @@ export function PropertyWizard({
   const removeLineButton = (field: WelcomeLine, label: string) => (
     <p className="wizard-line-remove">
       <button type="button" className="btn btn-ghost btn-sm" disabled={working} onClick={() => removeLine(field)}>
-        Leave {label} out
+        Remove {label}
       </button>
     </p>
   );
@@ -356,7 +369,7 @@ export function PropertyWizard({
           </p>
 
           <label htmlFor="wizard-location">
-            Where the property is<span className="label-optional">Optional</span>
+            Where the property is<span className="label-optional">Recommended</span>
           </label>
           <input
             id="wizard-location"
@@ -406,11 +419,10 @@ export function PropertyWizard({
                 data-field="stayHeading"
                 value={profile.stayHeading}
                 maxLength={profileLimits.stayHeadingMax}
-                placeholder={exampleNote.heading}
                 disabled={working}
                 onChange={(event) => set("stayHeading", event.target.value)}
               />
-              {removeLineButton("stayHeading", "a heading")}
+              {removeLineButton("stayHeading", "heading")}
             </>
           )}
 
@@ -423,7 +435,6 @@ export function PropertyWizard({
                 value={profile.stayWelcome}
                 maxLength={profileLimits.stayWelcomeMax}
                 rows={6}
-                placeholder={exampleNote.welcome}
                 aria-describedby="wizard-stay-welcome-hint"
                 disabled={working}
                 onChange={(event) => set("stayWelcome", event.target.value)}
@@ -431,7 +442,7 @@ export function PropertyWizard({
               <p className="field-hint" id="wizard-stay-welcome-hint">
                 Leave a blank line between paragraphs.
               </p>
-              {removeLineButton("stayWelcome", "an arrival note")}
+              {removeLineButton("stayWelcome", "arrival note")}
             </>
           )}
 
@@ -447,7 +458,7 @@ export function PropertyWizard({
                 disabled={working}
                 onChange={(event) => set("stayTip", event.target.value)}
               />
-              {removeLineButton("stayTip", "a local recommendation")}
+              {removeLineButton("stayTip", "recommendation")}
             </>
           )}
 
@@ -467,7 +478,7 @@ export function PropertyWizard({
               <p className="field-hint" id="wizard-hosts-hint">
                 Signed at the foot of the note, however you&rsquo;d like your guests to know you.
               </p>
-              {removeLineButton("hosts", "your names")}
+              {removeLineButton("hosts", "names")}
             </>
           )}
 
@@ -623,7 +634,7 @@ export function PropertyWizard({
 
                   <div className="wizard-note-words">
                     <label htmlFor={`wizard-host-note-${note.id}`}>
-                      Your note<span className="label-optional">Optional</span>
+                      Your note<span className="label-optional">Recommended</span>
                     </label>
                     <textarea
                       id={`wizard-host-note-${note.id}`}

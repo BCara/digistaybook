@@ -278,7 +278,7 @@ export function AddPropertyDialog({
     return (
       <div className="photo-field" key={slot}>
         <label htmlFor={`photo-input-${slot}`}>
-          {copy.label}<span className="label-optional">Optional</span>
+          {copy.label}<span className="label-optional">{copy.recommended ? "Recommended" : "Optional"}</span>
         </label>
         {copy.hint && <p className="field-hint">{copy.hint}</p>}
 
