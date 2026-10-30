@@ -20,6 +20,8 @@ async function base64(file: File) {
 }
 
 export type ContributionMode = "memory" | "feedback";
+/** A byte limit as the whole megabytes a guest reads on the form: 5 MiB is "5". */
+const megabytes = (bytes: number) => Math.round(bytes / (1024 * 1024));
 const OWN_FAILED = "Your previous memories could not be loaded. Use Refresh my memories to try again.";
 
 export function GuestContribution({ slug, stayToken = null, onChanged, mode: requestedMode, onModeChange, prompt = "", demo = false }: {
@@ -91,8 +93,8 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
     if (!files) return;
     const selected = Array.from(files);
     if (photos.length + selected.length > guestPolicy.maxPhotos) { setNotice("Choose no more than ten photos."); return; }
-    if (selected.some(file => !["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > guestPolicy.maxImageBytes)) { setNotice("Choose JPEG, PNG or WebP photos up to 5 MB each. Videos and animated images are not supported."); return; }
-    if ([...photos.map(photo => photo.file), ...selected].reduce((sum, file) => sum + file.size, 0) > guestPolicy.maxPostBytes) { setNotice("Keep the total photo size under 25 MB."); return; }
+    if (selected.some(file => !["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > guestPolicy.maxImageBytes)) { setNotice(`Choose JPEG, PNG or WebP photos up to ${megabytes(guestPolicy.maxImageBytes)} MB each. Videos and animated images are not supported.`); return; }
+    if ([...photos.map(photo => photo.file), ...selected].reduce((sum, file) => sum + file.size, 0) > guestPolicy.maxPostBytes) { setNotice(`Keep the total photo size under ${megabytes(guestPolicy.maxPostBytes)} MB.`); return; }
     setPhotos(previous => [...previous, ...selected.map(file => ({ file, preview: URL.createObjectURL(file) }))]);
     setNotice("");
   }
@@ -160,11 +162,12 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
         <label className="guest-mode-secondary"><input type="radio" name="guest-mode" checked={mode === "feedback"} onChange={() => setMode("feedback")} /><span>Private feedback for your host</span></label>
       </fieldset>
       {mode === "memory" ? <>
-      <label>Your message<textarea value={message} aria-describedby={prompt.trim() ? "guest-contribution-prompt" : undefined} placeholder="What made your stay memorable?" maxLength={guestPolicy.maxMessage} disabled={locked} onChange={event => setMessage(event.target.value)} /></label>
+      <label>Your message<textarea value={message} aria-describedby={prompt.trim() ? "guest-contribution-prompt guest-message-limit" : "guest-message-limit"} placeholder="What made your stay memorable?" maxLength={guestPolicy.maxMessage} disabled={locked} onChange={event => setMessage(event.target.value)} /></label>
+      <p id="guest-message-limit" className="guest-limit">{message.length.toLocaleString("en-AU")} of {guestPolicy.maxMessage.toLocaleString("en-AU")} characters</p>
       <label><span>Guest name <span className="guest-field-optional">(optional)</span></span><input type="text" value={displayName} maxLength={guestPolicy.maxName} disabled={locked} onChange={event => setDisplayName(event.target.value)} placeholder="e.g. Mia & Sam" autoComplete="off" /></label>
       <div className="guest-photo-picker">
         <label className="guest-photo-trigger" data-disabled={locked}>
-          <input aria-label="Choose photos" aria-describedby="guest-photo-count" type="file" accept="image/jpeg,image/png,image/webp" multiple disabled={locked} onChange={event => { pick(event.target.files); event.target.value = ""; }} />
+          <input aria-label="Choose photos" aria-describedby="guest-photo-count guest-photo-limit" type="file" accept="image/jpeg,image/png,image/webp" multiple disabled={locked} onChange={event => { pick(event.target.files); event.target.value = ""; }} />
           <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="m21 15-5-5L5 21" />
           </svg>
@@ -174,6 +177,7 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
           {photos.length ? `${photos.length} of ${guestPolicy.maxPhotos} photos selected` : "Up to 10 photos"}
         </span>
       </div>
+      <p id="guest-photo-limit" className="guest-limit">JPEG, PNG or WebP, up to {megabytes(guestPolicy.maxImageBytes)} MB and {guestPolicy.maxPixels / 1_000_000} megapixels each, {megabytes(guestPolicy.maxPostBytes)} MB in total. No videos or animated images.</p>
       <div className="guest-photo-previews">{photos.map((photo, index) => <figure key={photo.preview}>
         <img src={photo.preview} alt={`Selected photo ${index + 1}`} /><figcaption>{photo.file.name}</figcaption>
         <button type="button" className="guest-photo-remove" aria-label={`Remove photo ${index + 1}`} title="Remove photo" disabled={locked} onClick={() => { URL.revokeObjectURL(photo.preview); setPhotos(previous => previous.filter((_, i) => i !== index)); }}>
@@ -188,7 +192,8 @@ export function GuestContribution({ slug, stayToken = null, onChanged, mode: req
           : part
       )}</span></label>
       </> : <>
-      <label>Private feedback<textarea value={feedback} placeholder="What could your host improve for future stays?" maxLength={guestPolicy.maxFeedback} disabled={locked} onChange={event => setFeedback(event.target.value)} aria-describedby="feedback-boundary" /></label>
+      <label>Private feedback<textarea value={feedback} placeholder="What could your host improve for future stays?" maxLength={guestPolicy.maxFeedback} disabled={locked} onChange={event => setFeedback(event.target.value)} aria-describedby="feedback-limit feedback-boundary" /></label>
+      <p id="feedback-limit" className="guest-limit">{feedback.length.toLocaleString("en-AU")} of {guestPolicy.maxFeedback.toLocaleString("en-AU")} characters</p>
       <p id="feedback-boundary" className="guest-feedback-note"><small>Only for your host, never shown on the wall. {feedbackBoundary}</small></p>
       <p className="guest-legal-links"><a href="/guest-terms" target="_blank" rel="noreferrer">Guest Terms</a> · <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a></p>
       </>}

@@ -267,6 +267,9 @@ export function ActivatePanel({ property }: { property: HostProperty }) {
             <p className="field-hint">
               Both plans are the same complete platform. The only difference is how often you are billed.
             </p>
+            {/* Handbook §4.1 (ST-D1): the Australian price is GST-inclusive, and
+                a Host is told so beside the price rather than on another page. */}
+            {currency === "aud" && <p className="field-hint activate-gst">Prices in Australian dollars include GST.</p>}
             <div className="plan-cards">
               {offer.plans.map((option) => (
                 <label

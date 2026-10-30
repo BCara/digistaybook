@@ -306,6 +306,19 @@ describe("activating a draft property", () => {
     expect(screen.queryByRole("textbox", { name: "Welcome message" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Start free trial" })).toBeDisabled();
   });
+  it("says beside an Australian price that it includes GST", async () => {
+    loadProperty.mockResolvedValue({ status: "ok", value: draft() });
+    loadActivationOffer.mockResolvedValue({ status: "ok", value: offer });
+    renderPage();
+    expect(await screen.findByText("Prices in Australian dollars include GST.")).toBeInTheDocument();
+  });
+  it("makes no GST statement about a price in another currency", async () => {
+    loadProperty.mockResolvedValue({ status: "ok", value: draft() });
+    loadActivationOffer.mockResolvedValue({ status: "ok", value: { ...offer, currency: "usd" } });
+    renderPage();
+    await screen.findByRole("radio", { name: /per month/ });
+    expect(screen.queryByText(/GST/)).not.toBeInTheDocument();
+  });
   it("quotes against the country it detected, then goes to Stripe on a ticked acknowledgement", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: draft({ foundationalPostCount: 0 }) });
     loadActivationOffer.mockResolvedValue({ status: "ok", value: offer });

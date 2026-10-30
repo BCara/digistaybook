@@ -23,6 +23,15 @@ it("loads later memories without duplicating existing ones and keeps the cursor 
   expect(screen.queryByRole("button", { name: "Load more memories" })).not.toBeInTheDocument();
 });
 
+it("states the length and photo limits before a guest runs into them", async () => {
+  render(<GuestContribution slug="cottage" onChanged={() => {}} />);
+  await waitFor(() => expect(call).toHaveBeenCalledWith("cottage", "listGuestContributions", expect.anything()));
+  expect(screen.getByLabelText("Your message")).toHaveAccessibleDescription("0 of 1,200 characters");
+  fireEvent.change(screen.getByLabelText("Your message"), { target: { value: "A lovely stay" } });
+  expect(screen.getByText("13 of 1,200 characters")).toBeInTheDocument();
+  expect(screen.getByLabelText("Choose photos")).toHaveAccessibleDescription(/Up to 10 photos JPEG, PNG or WebP, up to 5 MB and 40 megapixels each, 25 MB in total/);
+});
+
 it("requires consent, offers an optional guest name and does not collect email", async () => {
   render(<GuestContribution slug="cottage" onChanged={() => {}} />);
   await waitFor(() => expect(call).toHaveBeenCalledWith("cottage", "listGuestContributions", expect.anything()));
