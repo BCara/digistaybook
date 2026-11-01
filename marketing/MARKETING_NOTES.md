@@ -63,6 +63,28 @@ they need it, and lets them leave something for the next guest. Guidebooks only 
 doing nothing is the real competitor.
 - Line: "Give your guests a welcome, not a laminated sheet."
 
+### Priority and share of marketing
+Agreed 1 November 2026. The reasons keep their numbers; this sets the order, and roughly what share of posts, ads and
+pages each one gets. It's weighted by how much each reason matters to hosts, going by the host conversations we've read
+(directional, not a survey) and the direct-booking threads in host groups. Revisit it once the scorecard has real results.
+- **1. The core reason (home, not a business): 20%.** The headline everywhere. Reason 3 and reason 11 lines can ride along.
+- **2. Reason 1, guests find everything themselves: 15%.** Covers the house manual and "no app, no account".
+- **3. Reasons 6 and 8, repeat guests find you directly: 15%** (reason 6 about 10%, reason 8 about 5%). Lead with it
+  for hosts who have, or want, their own booking site. Until reason 6 is confirmed live, post reason 8 pieces only.
+- **4. Reason 7, hear about problems while you can fix them: 10%.** The honest answer to hosts' worries about reviews.
+- **5. Reason 3, a guestbook that builds up: 8%.**
+- **6. Reason 4, you stay in control: 8%.** Reassurance more than a hook.
+- **7. Reason 2, guests help because they feel welcome: 6%.** Around November 20, 2026, the house-rules change makes this timely.
+- **8. Reason 10, update it once: 6%.**
+- **9. Reason 5, a small cost that could be a business expense: 6%.** Double it to 12% in US tax season (January to
+  April), taking the extra evenly from ranks 5 to 8.
+- **10. Reason 9, guests get online first: 4%.**
+- **11. Reason 11, no guest accounts: 2%.** Mostly a line inside other posts, not a post of its own.
+- In practice, every 20 main Facebook posts: 4 core, 3 reason 1, 3 direct booking, 2 reason 7, 2 reason 3, 2 reason 4,
+  and 1 each for reasons 2, 10, 5 and 9. The calendar for October 29 to November 29 leans heavily on the core reason and
+  reason 1 and has nothing yet for reasons 5, 6 or 10. Use the drafts in campaigns/priorities-2026-11-01 to rebalance from December.
+- Paid ads and the landing page follow the same order: the core reason first, then reason 1, then direct booking.
+
 ### 1. Guests can find everything themselves
 Wi-Fi, trash days, heating and checkout are answered on the counter, on their phone, without messaging you. No app, no account,
 under a minute in a browser tab.
@@ -102,7 +124,10 @@ Officeworks does ("could be tax deductible"), and qualify in the small print.
 Guests already have the wall open for the Wi-Fi, so a "Stay with us again" link to the host's own booking page or guest
 list is right there. Posters and business cards don't get that reach.
 - Line: "Your next booking, one tap from the Wi-Fi."
-- Status: built on 29 October 2026, **not deployed yet. Don't market it until it is live.**
+- Status: built on 29 October 2026 and switched on in the app's code. **Confirm it is live on
+  digistaybook.com before posting.** The drafts are ready in campaigns/priorities-2026-11-01. The demo property
+  has no sample links yet, so screenshots need them added first.
+- Ranked third with reason 8 (see "Priority and share of marketing"): a common goal for hosts with their own booking site.
 - Guardrail: our copy never says "book direct and save" or offers a discount for booking off a platform (Airbnb bans this),
   and never promises repeat bookings or lower commission. What each host's link says and offers is up to them.
 

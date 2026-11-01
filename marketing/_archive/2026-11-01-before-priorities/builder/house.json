@@ -1,0 +1,60 @@
+{
+ "project": "DigiStayBook",
+ "purpose": "The one page for all DigiStayBook marketing: the plan at a glance, one working calendar, every post with its artwork and review status, and the campaigns behind it.",
+ "nas": "\\\\192.168.1.71\\nas\\projects\\DigiStayBook\\marketing",
+ "quick": [
+  [
+   "Posts",
+   "#posts"
+  ],
+  [
+   "Post details",
+   "#details"
+  ],
+  [
+   "Videos needed",
+   "MARKETING_PRODUCTION.html#production"
+  ],
+  [
+   "Where things are",
+   "#files"
+  ]
+ ],
+ "brand": {
+  "head": "#18272a",
+  "head-ink": "#fff9ef",
+  "head-soft": "#d5dcd9",
+  "head-line": "rgba(255,249,239,.28)",
+  "paper": "#f7f2e8",
+  "card": "#fffdf8",
+  "ink": "#18272a",
+  "soft": "#5c6b6d",
+  "line": "#e2dccf",
+  "accent": "#9b3b23",
+  "accent-2": "#e2a93b",
+  "tint": "#efe7d8"
+ },
+ "section_ids": {
+  "overview": "strategy",
+  "posts": "posts",
+  "details": "details"
+ },
+ "title_detail": {
+  "overview": "the plan at a glance",
+  "details": "finished artwork"
+ },
+ "campaign_notes": {
+  "merged-2026-10-28": "the active merged plan (29 Oct to 29 Nov) and its builder files",
+  "home-2026-11-02": "home campaign from 2 Nov",
+  "reels-people-2026-10-29": "reels with real people",
+  "people-2026-10-28": "photo-led posts and Stories",
+  "respect-host-voice-2026-10-28": "host-voice campaign (merged)",
+  "month-2026-10-23": "October month plan (merged)",
+  "prelaunch-week-2026-10-16": "pre-launch week 1 (history)"
+ },
+ "folder_notes": {
+  "MARKETING_PLAN.html": "Companion pages: MARKETING_PRODUCTION.html (videos and shot lists), MARKETING_STRATEGY.html (traffic review and measurement), MARKETING_REFERENCE.html (source decisions, preserved records, files).",
+  "builder/": "Here: build_marketing_plan.py, marketing-review.js and house.py. The merged plan's own sources (content.json, plan.css, review sections) are in campaigns/merged-2026-10-28/.",
+  "reference/": "Here: logos, plan.css/plan.js and the pre-launch week 1 record."
+ }
+}

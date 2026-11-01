@@ -111,9 +111,15 @@ page=f'''<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta nam
 <section id="details"><h2>Post details &amp; finished artwork</h2><p>Expand an item for its caption, actual files, tracked destination and production notes. Calendar filters also filter these cards.</p>{''.join(cards)}</section>
 <section id="more"><h2>More information</h2>{more_links}</section>
 </main></div><nav class="mobile-jump" aria-label="Quick navigation"><a href="#posts">↑ Post overview</a><a href="#top">↑ Top</a></nav><div class="bar"><span id="count" role="status">Local reviews</span><button id="copy">Copy my review</button><button id="download">Download review</button><button id="print">Print plan</button></div><script id="marketing-content" type="application/json">{json.dumps(data,ensure_ascii=False).replace('<',chr(92)+'u003c')}</script><script>{(BUILDER/'marketing-review.js').read_text(encoding='utf-8')}</script></body></html>'''
+campaign_links=[]
+priorities='campaigns/priorities-2026-11-01/CAMPAIGN_BRIEF.md'
+if (ROOT/priorities).is_file():
+    campaign_links.append(f'<p><a href="{priorities}"><b>November 1 · Priorities: 20 draft posts in proportion to "Why hosts choose us" →</b></a></p><p class="small">Undated drafts to rebalance the calendar from December. The two reason 6 posts wait until direct-booking links are confirmed live.</p>')
 research='campaigns/host-voice-research-2026-10-30/CAMPAIGN_REVIEW.html'
 if (ROOT/research).is_file():
-    campaign_section=f'<section id="campaigns"><h2>Campaigns</h2><p><a href="{research}"><b>October 30 · Host voice: research, Claude review and five campaign drafts →</b></a></p><p class="small">New policy research and a proposed message test. Draft alternatives; the dated calendar is unchanged.</p></section>'
+    campaign_links.append(f'<p><a href="{research}"><b>October 30 · Host voice: research, Claude review and five campaign drafts →</b></a></p><p class="small">New policy research and a proposed message test. Draft alternatives; the dated calendar is unchanged.</p>')
+if campaign_links:
+    campaign_section='<section id="campaigns"><h2>Campaigns</h2>'+''.join(campaign_links)+'</section>'
     page=page.replace('<section id="more">',campaign_section+'<section id="more">',1)
 (ROOT/'MARKETING_PLAN.html').write_text(page,encoding='utf-8')
 fields=['id','date','channel','role','format','title','destination','published_url','reach','outbound_clicks','tagged_landing_sessions','verified_signups','attributed_first_properties','saves','useful_host_replies','production_minutes','notes']

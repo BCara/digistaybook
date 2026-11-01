@@ -39,6 +39,12 @@ Cara and Joe each have their own approval status (`Approved – Cara`, `Approved
 
 ## Changes log
 
+- 2026-11-01 · Claude · "Why choose DigiStayBook" gained a "Priority and share of marketing" card: the reasons in order,
+  with a share of posts for each, and direct booking (reasons 6 and 8) ranked third. Reason 6 is now built and switched on
+  in the code, but stays on hold until someone confirms it is live. New undated content bank
+  `campaigns/priorities-2026-11-01/CAMPAIGN_BRIEF.md`: 20 draft Facebook posts in those proportions, linked from the plan's
+  Campaigns section. The calendar is unchanged. Before-copies are in `_archive/2026-11-01-before-priorities/`.
+
 - 2026-10-29 · Claude · "Why choose DigiStayBook" gained reasons 7-11 from a review of current host conversations: private
   feedback, memories on the host's own website, Wi-Fi QR on the placard, update once, no guest accounts; plus timely hooks
   and "careful with" notes (local posting laws, translation). The app no longer tells hosts to put the public-page link in
