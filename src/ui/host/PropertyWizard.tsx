@@ -56,7 +56,7 @@ export function photoCopy(
   // The cover is the one a wall really wants: it is the first thing a guest
   // sees. The welcome photo is a nice touch, and initials stand in without it.
   if (slot === "avatar") {
-    return { label: "Main photo", hint: "For your dashboard only. Guests never see it.", recommended: false };
+    return { label: "Dashboard photo", hint: "The small picture that marks this property in your dashboard. Any photo of the place works. Guests never see it.", recommended: false };
   }
   if (slot === "cover") {
     return {

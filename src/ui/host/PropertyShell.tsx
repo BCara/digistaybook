@@ -155,7 +155,7 @@ export function PropertyShell({
               className={avatar ? "banner-thumb" : "banner-thumb is-empty"}
               onClick={() => file.current?.click()}
               disabled={busy}
-              aria-label={avatar ? "Change the main photo of this property" : "Add a main photo of this property"}
+              aria-label={avatar ? "Change the dashboard photo for this property" : "Add a dashboard photo for this property"}
             >
               {/* Decorative: the name sits beside it and says the same thing. */}
               {avatar && <img src={avatar.url} alt="" width={avatar.width} height={avatar.height} />}
@@ -172,7 +172,7 @@ export function PropertyShell({
               className="visually-hidden"
               type="file"
               accept={profileLimits.photoTypes.join(",")}
-              aria-label="Choose the main photo of this property"
+              aria-label="Choose the dashboard photo for this property"
               onChange={(event) => void choose(event)}
             />
             <div className="banner-titles">

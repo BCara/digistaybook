@@ -193,7 +193,7 @@ describe("the settings of one property", () => {
     await settled();
 
     const file = new File(["x"], "door.jpg", { type: "image/jpeg" });
-    fireEvent.change(dialog().getByLabelText("Main photo: choose an image file"), { target: { files: [file] } });
+    fireEvent.change(dialog().getByLabelText("Dashboard photo: choose an image file"), { target: { files: [file] } });
     // The description a screen reader is read comes from the slot, so choosing
     // the file is the whole of what is asked.
     expect(dialog().queryByLabelText(/Describe/i)).not.toBeInTheDocument();
