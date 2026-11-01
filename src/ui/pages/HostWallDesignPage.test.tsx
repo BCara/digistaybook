@@ -878,17 +878,17 @@ describe("the guest view of a property", () => {
     };
     uploadPropertyPhoto.mockResolvedValue({ status: "ok", value: avatar });
     renderPage();
-    const add = await screen.findByRole("button", { name: "Add a main photo of this property" });
+    const add = await screen.findByRole("button", { name: "Add a dashboard photo for this property" });
     // An empty square says what it wants rather than sitting there blank.
     expect(within(add).getByText("Add a photo")).toBeInTheDocument();
 
     const chosen = new File(["photograph"], "cottage.jpg", { type: "image/jpeg" });
-    fireEvent.change(screen.getByLabelText("Choose the main photo of this property"), {
+    fireEvent.change(screen.getByLabelText("Choose the dashboard photo for this property"), {
       target: { files: [chosen] }
     });
 
     await waitFor(() =>
-      expect(screen.getByRole("button", { name: "Change the main photo of this property" })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Change the dashboard photo for this property" })).toBeInTheDocument()
     );
     // The photograph is the property's own, not the cover across the walls.
     expect(uploadPropertyPhoto).toHaveBeenCalledWith("prop-1", "avatar", chosen);
@@ -896,9 +896,9 @@ describe("the guest view of a property", () => {
 
   it("says why a file was refused, and does not upload it", async () => {
     renderPage();
-    await screen.findByRole("button", { name: "Add a main photo of this property" });
+    await screen.findByRole("button", { name: "Add a dashboard photo for this property" });
 
-    fireEvent.change(screen.getByLabelText("Choose the main photo of this property"), {
+    fireEvent.change(screen.getByLabelText("Choose the dashboard photo for this property"), {
       target: { files: [new File(["not a photograph"], "handbook.pdf", { type: "application/pdf" })] }
     });
 
