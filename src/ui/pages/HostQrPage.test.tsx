@@ -264,7 +264,7 @@ describe("walls and QR display", () => {
     expect(main().getByRole("img", { name: "QR code to join the Wi-Fi network cottage-guest" })).toBeInTheDocument();
     expect(main().queryByText(/write your Wi-Fi line as network \/ password/)).not.toBeInTheDocument();
     // The code is a shortcut, not the only way in: the password stays written down.
-    expect(main().getByText(/Keep the Wi-Fi password written somewhere guests can read it too/)).toBeInTheDocument();
+    expect(main().getByText(/Keep the password written in the house too/)).toBeInTheDocument();
   });
 
   it("says how to get a Wi-Fi code when the line gives only a network", async () => {
@@ -274,7 +274,7 @@ describe("walls and QR display", () => {
 
     expect(main().queryByRole("img", { name: /join the Wi-Fi/ })).not.toBeInTheDocument();
     expect(main().getByText(/write your Wi-Fi line as network \/ password/)).toBeInTheDocument();
-    expect(main().queryByText(/Keep the Wi-Fi password written somewhere/)).not.toBeInTheDocument();
+    expect(main().queryByText(/Keep the password written in the house/)).not.toBeInTheDocument();
   });
 
   it("stops saying a scan reaches nobody once the wall is served", async () => {

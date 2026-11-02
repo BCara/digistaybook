@@ -13,6 +13,8 @@ import { PropertyShell } from "./PropertyShell";
 import { WallPreview } from "./WallPreview";
 import { WallThemePicker } from "./WallThemePicker";
 import { PhotoDropTarget, PhotoField } from "./PhotoField";
+import { wifiBackupAdvice } from "../../domain/wifi";
+import { essentialMarkName } from "../wall/EssentialMark";
 import { HostNotes } from "../wall/HostNotes";
 import { NoteLinks, StayAgainLinks } from "../wall/WallHeader";
 import { withPhotoInSlot } from "./photoSlots";
@@ -308,6 +310,7 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
           <p className="field-hint">Add the details guests need during their stay.</p>
           {profile.facts.map((fact, index) => <fieldset key={index} className="phone-section-item"><legend>Essential {index + 1}</legend>
             {([['term', 'Name', profileLimits.factTermMax], ['detail', 'Details', profileLimits.factDetailMax], ['note', 'Extra information (optional)', profileLimits.factNoteMax]] as const).map(([key, label, max]) => <label key={key}>{label}<input value={fact[key]} maxLength={max} disabled={busy} onChange={e => set("facts", profile.facts.map((row, i) => i === index ? { ...row, [key]: e.target.value } : row))} /></label>)}
+            {essentialMarkName(fact.term) === "wifi" && <p className="field-hint">Write it as network / password, such as Seabreeze / sandcastle42. {wifiBackupAdvice}</p>}
             {removeButton(`Remove essential ${index + 1}`, () => set("facts", profile.facts.filter((_, i) => i !== index)))}
           </fieldset>)}
           {profile.facts.length < profileLimits.factsMax && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => set("facts", [...profile.facts, emptyFact()])}>Add an essential</button>}

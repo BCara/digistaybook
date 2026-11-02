@@ -27,6 +27,7 @@ import { CanvasLine, CanvasParagraph } from "../host/CanvasFields";
 import { HostNoteStylePicker } from "../host/HostNoteStylePicker";
 import { PropertyShell } from "../host/PropertyShell";
 import { stayWallPath } from "../../domain/wallAddress";
+import { wifiBackupAdvice } from "../../domain/wifi";
 import { WallPreview } from "../host/WallPreview";
 import { memoriesHeading } from "../wall/memoryHeading";
 import { EssentialMark, essentialMarkName } from "../wall/EssentialMark";
@@ -1574,6 +1575,14 @@ export function HostWallDesignPage({
                               setFact(index, "note", value)
                             }
                           />
+                          {essentialMarkName(fact.term) === "wifi" && (
+                            <p className="field-hint canvas-wifi-hint">
+                              Write it as network / password, such as{" "}
+                              <code>Seabreeze / sandcastle42</code>, so guests
+                              can copy the password and your placard can carry
+                              a join code. {wifiBackupAdvice}
+                            </p>
+                          )}
                           {factProblem(index) && (
                             <p className="form-feedback" role="alert">
                               {factProblem(index)}

@@ -2,7 +2,7 @@ import { wallUnavailableReason } from "../../domain/wallAvailability";
 import { useEffect, useState, type ReactNode } from "react";
 import { canDownloadQrKit, isPubliclyReadable } from "../../domain/property";
 import { stayWallUrl } from "../../domain/qrCode";
-import { readWifiLine } from "../../domain/wifi";
+import { readWifiLine, wifiBackupAdvice } from "../../domain/wifi";
 import { essentialMarkName } from "../wall/EssentialMark";
 import { publicWallPath, publicWallUrl, stayWallPath, wallEmbedCode } from "../../domain/wallAddress";
 import { useAuth } from "../auth/AuthProvider";
@@ -268,12 +268,7 @@ export function HostQrPage({ propertyId }: { propertyId: string }) {
               To add a code that joins your Wi-Fi, write your {wifiLine.term} line as network / password, such as <code>Seabreeze / sandcastle42</code>.
             </p>
           )}
-          {wifi && (
-            <p className="field-hint qr-wifi-hint">
-              Keep the Wi-Fi password written somewhere guests can read it too, such as a card by the router. Not every
-              phone can scan a Wi-Fi code, and a guest with no signal can’t open your guest wall to look it up.
-            </p>
-          )}
+          {wifi && <p className="field-hint qr-wifi-hint">{wifiBackupAdvice}</p>}
 
           <div className="qr-guest-link">
             <strong>Guest link</strong>
