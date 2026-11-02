@@ -28,6 +28,8 @@ import { ReviewerSetupPage } from "./ui/pages/ReviewerSetupPage";
 import { RequireReviewer } from "./ui/auth/RequireReviewer";
 import { LegalDraftPage } from "./ui/pages/LegalDraftPage";
 import { NotFoundPage } from "./ui/pages/NotFoundPage";
+import { BlogIndexPage, BlogPostPage } from "./ui/pages/BlogPage";
+import { findBlogPost } from "./domain/blog";
 import { DEMO_SLUG } from "./ui/wall/demoWall";
 
 function resolvePage(pathname: string) {
@@ -36,6 +38,11 @@ function resolvePage(pathname: string) {
   if (pathname === "/") return <LandingPage />;
   if (pathname === "/pricing") return <PricingPage />;
   if (pathname === "/qr-sign-maker") return <QrSignMakerPage />;
+  if (pathname === "/blog" || pathname === "/blog/") return <BlogIndexPage />;
+  if (pathname.startsWith("/blog/")) {
+    const post = findBlogPost(pathname);
+    return post ? <BlogPostPage post={post} /> : <NotFoundPage />;
+  }
   if (pathname.startsWith("/wall/")) return <GuestWallPage propertySlug={pathname.slice("/wall/".length) || "property"} />;
   if (pathname.startsWith("/stay/")) {
     // The guestbook link carries the token as its own segment, so the address

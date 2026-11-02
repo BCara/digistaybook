@@ -1,5 +1,6 @@
 import { guestTerms, hostTerms, privacyPolicy } from "./ui/pages/legal/documents";
 import { DEMO_SLUG } from "./ui/wall/demoWall";
+import { blogPath, blogPosts, findBlogPost } from "./domain/blog";
 
 /**
  * What each address tells a search engine and a link preview.
@@ -30,13 +31,16 @@ const defaultDescription =
 
 const titled = (title: string) => `${title} | ${SITE_NAME}`;
 
-/** The pages listed in the sitemap, in the order they are listed. */
-export const indexedPaths = ["/", "/pricing", "/qr-sign-maker", `/stay/${DEMO_SLUG}`, `/wall/${DEMO_SLUG}`, "/contact", "/privacy-safety", "/terms", "/guest-terms", "/privacy"] as const;
+/** The fixed marketing pages, each with its own entry below. */
+const staticPaths = ["/", "/pricing", "/qr-sign-maker", `/stay/${DEMO_SLUG}`, `/wall/${DEMO_SLUG}`, "/contact", "/privacy-safety", "/terms", "/guest-terms", "/privacy", "/blog"] as const;
 
-/** Both demos use bundled example data, so every indexed page can ship as static HTML. */
+/** The pages listed in the sitemap, in the order they are listed: the fixed pages, then each blog post. */
+export const indexedPaths: readonly string[] = [...staticPaths, ...blogPosts.map(blogPath)];
+
+/** Both demos use bundled example data and posts are bundled Markdown, so every indexed page can ship as static HTML. */
 export const prerenderedPaths = indexedPaths;
 
-const pages: Record<(typeof indexedPaths)[number], Omit<PageSeo, "canonical">> = {
+const pages: Record<(typeof staticPaths)[number], Omit<PageSeo, "canonical">> = {
   "/": {
     title: "DigiStayBook: a digital guestbook for short-term rental hosts",
     description: defaultDescription
@@ -76,15 +80,21 @@ const pages: Record<(typeof indexedPaths)[number], Omit<PageSeo, "canonical">> =
   "/privacy": {
     title: titled(privacyPolicy.title),
     description: "How DigiStayBook collects, uses, stores and deletes personal information for Hosts and guests."
+  },
+  "/blog": {
+    title: titled("Blog"),
+    description: "Practical writing for vacation rental hosts on welcoming guests, digital guidebooks and guestbooks, from the team that makes DigiStayBook."
   }
 };
 
-const isIndexed = (pathname: string): pathname is (typeof indexedPaths)[number] =>
-  (indexedPaths as readonly string[]).includes(pathname);
+const isStatic = (pathname: string): pathname is (typeof staticPaths)[number] =>
+  (staticPaths as readonly string[]).includes(pathname);
 
 export function pageSeo(pathname: string): PageSeo {
   const path = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
-  if (isIndexed(path)) return { ...pages[path], canonical: path };
+  if (isStatic(path)) return { ...pages[path], canonical: path };
+  const post = findBlogPost(path);
+  if (post) return { title: titled(post.seoTitle), description: post.description, canonical: blogPath(post) };
   if (path === "/host/sign-in") return { title: titled("Host sign in"), description: defaultDescription, canonical: null };
   if (path === "/host/sign-up") return { title: titled("Create a host account"), description: defaultDescription, canonical: null };
   return { title: pages["/"].title, description: defaultDescription, canonical: null };
