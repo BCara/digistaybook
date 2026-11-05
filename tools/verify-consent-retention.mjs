@@ -38,16 +38,20 @@ assert.equal((await reviewConsent("photo-proof", now.getTime())).status, "due");
 await db.doc("guestConsent/orphan-proof").set({ propertyId: "consent-proof", postId: "orphan-proof", sessionUid: "orphan-proof" });
 assert.equal((await reviewConsent("orphan-proof", now.getTime())).status, "needs_attention");
 const privileged = { uid: "operations-proof", token: { admin: true, firebase: { sign_in_second_factor: "totp" } } };
+const auditCountBefore = (await db.collection("moderationAudit").where("action", "==", "check_consent_deletion_review").get()).size;
 await assert.rejects(readConsentDeletionReview.run({ data: { id: "due-proof" }, auth: { uid: "host", token: {} }, rawRequest: {} }));
 await assert.rejects(readConsentDeletionReview.run({ data: { id: "due-proof" }, auth: { uid: "ops", token: { admin: true, firebase: {} } }, rawRequest: {} }));
 assert.equal((await readConsentDeletionReview.run({ data: { id: "due-proof" }, auth: privileged, rawRequest: {} })).status, "due");
 await db.doc("guestConsent/due-proof").delete(); // Explicit manual removal in emulator only.
 assert.equal((await readConsentDeletionReview.run({ data: { id: "due-proof" }, auth: privileged, rawRequest: {} })).status, "completed");
-assert.equal((await db.collection("moderationAudit").where("action", "==", "check_consent_deletion_review").get()).size, 2);
+assert.equal((await db.collection("moderationAudit").where("action", "==", "check_consent_deletion_review").get()).size - auditCountBefore, 2);
 // Verify that a full first page advances, and a second run reaches later records.
 const batch = db.batch();
 for (let index = 0; index < 105; index++) batch.set(db.doc(`guestConsent/a-page-${String(index).padStart(3, "0")}`), { propertyId: "consent-proof", postId: `a-page-${String(index).padStart(3, "0")}`, sessionUid: "synthetic" });
 await batch.commit();
+// Other local journeys may already have consent records. Start immediately
+// before this test's contiguous fixture range rather than assuming an empty DB.
+await db.doc("retentionReminderState/guestConsent").set({ consentCursor: "a-page-", reviewCursor: null, notifiedDay: null }, { merge: true });
 await scanConsentReviews(now);
 assert.equal((await db.doc("retentionReminderState/guestConsent").get()).get("consentCursor"), "a-page-099");
 await scanConsentReviews(now);

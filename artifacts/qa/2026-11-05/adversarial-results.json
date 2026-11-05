@@ -1,0 +1,211 @@
+{
+  "scope": "local emulators; simulated screening",
+  "propertyId": "6r1ELykfnLvv5Ftm8QNt",
+  "prefix": "qa-077d60a6",
+  "results": [
+    {
+      "name": "concurrent property creation is idempotent",
+      "status": "pass"
+    },
+    {
+      "name": "property creation rejects signed-out users",
+      "status": "pass"
+    },
+    {
+      "name": "property creation rejects anonymous guests",
+      "status": "pass"
+    },
+    {
+      "name": "property address cannot be taken by another host",
+      "status": "pass"
+    },
+    {
+      "name": "different content cannot reuse a creation attempt",
+      "status": "pass"
+    },
+    {
+      "name": "property creation refuses the hardcoded demo address",
+      "status": "pass"
+    },
+    {
+      "name": "property creation rejects duplicate note identities",
+      "status": "pass"
+    },
+    {
+      "name": "property creation rejects too many facts",
+      "status": "pass"
+    },
+    {
+      "name": "property creation rejects malformed facts",
+      "status": "pass"
+    },
+    {
+      "name": "ensureStayToken rejects invalid reference \"a/b\"",
+      "status": "pass"
+    },
+    {
+      "name": "ensureStayToken rejects invalid reference \"a/b/c\"",
+      "status": "pass"
+    },
+    {
+      "name": "ensureStayToken rejects invalid reference \"\"",
+      "status": "pass"
+    },
+    {
+      "name": "ensureStayToken rejects invalid reference 123",
+      "status": "pass"
+    },
+    {
+      "name": "ensureStayToken denies another host",
+      "status": "pass"
+    },
+    {
+      "name": "ensureStayToken denies anonymous users",
+      "status": "pass"
+    },
+    {
+      "name": "deleteHostProperty rejects invalid reference \"a/b\"",
+      "status": "pass"
+    },
+    {
+      "name": "deleteHostProperty rejects invalid reference \"a/b/c\"",
+      "status": "pass"
+    },
+    {
+      "name": "deleteHostProperty rejects invalid reference \"\"",
+      "status": "pass"
+    },
+    {
+      "name": "deleteHostProperty rejects invalid reference 123",
+      "status": "pass"
+    },
+    {
+      "name": "deleteHostProperty denies another host",
+      "status": "pass"
+    },
+    {
+      "name": "deleteHostProperty denies anonymous users",
+      "status": "pass"
+    },
+    {
+      "name": "concurrent legacy-token requests mint exactly one persistent token",
+      "status": "pass"
+    },
+    {
+      "name": "public projection withholds all house guidance and the stay token",
+      "status": "pass"
+    },
+    {
+      "name": "correct stay token reveals house guidance",
+      "status": "pass"
+    },
+    {
+      "name": "guest intake rejects missing stay token",
+      "status": "pass"
+    },
+    {
+      "name": "guest intake rejects forged stay token",
+      "status": "pass"
+    },
+    {
+      "name": "guest intake rejects empty content",
+      "status": "pass"
+    },
+    {
+      "name": "guest intake rejects negative photo count",
+      "status": "pass"
+    },
+    {
+      "name": "guest intake rejects fractional photo count",
+      "status": "pass"
+    },
+    {
+      "name": "guest intake rejects eleven photos",
+      "status": "pass"
+    },
+    {
+      "name": "guest intake rejects wrong consent version",
+      "status": "pass"
+    },
+    {
+      "name": "guest intake rejects false consent",
+      "status": "pass"
+    },
+    {
+      "name": "guest intake rejects string consent",
+      "status": "pass"
+    },
+    {
+      "name": "guest intake rejects 1201-character message",
+      "status": "pass"
+    },
+    {
+      "name": "guest intake rejects overlong guest name",
+      "status": "pass"
+    },
+    {
+      "name": "guest intake rejects memory plus private feedback",
+      "status": "pass"
+    },
+    {
+      "name": "simultaneous guest retries create one memory and one consent record",
+      "status": "pass"
+    },
+    {
+      "name": "changed guest retry cannot silently replace accepted text",
+      "status": "pass"
+    },
+    {
+      "name": "another anonymous session cannot finish a memory",
+      "status": "pass"
+    },
+    {
+      "name": "another anonymous session cannot edit a memory",
+      "status": "pass"
+    },
+    {
+      "name": "host sessions cannot impersonate guest submission sessions",
+      "status": "pass"
+    },
+    {
+      "name": "guest memory finishes once even when requests overlap",
+      "status": "pass"
+    },
+    {
+      "name": "stale edit revision is rejected",
+      "status": "pass"
+    },
+    {
+      "name": "clear text edit is rescreened and advances its revision",
+      "status": "pass"
+    },
+    {
+      "name": "host review policy keeps clear new memories private until approval",
+      "status": "pass"
+    },
+    {
+      "name": "missing image slots cannot be submitted",
+      "status": "pass"
+    },
+    {
+      "name": "private feedback is delivered only to the owner inbox",
+      "status": "pass"
+    },
+    {
+      "name": "critical and outage fixtures never reach host review or public walls",
+      "status": "pass"
+    },
+    {
+      "name": "ordinary host cannot read operations queues",
+      "status": "pass"
+    },
+    {
+      "name": "public wall switch preserves in-stay access",
+      "status": "pass"
+    },
+    {
+      "name": "cancellation expiry closes the wall and further intake",
+      "status": "pass"
+    }
+  ]
+}

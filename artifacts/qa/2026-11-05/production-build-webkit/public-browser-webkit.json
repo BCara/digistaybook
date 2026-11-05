@@ -1,0 +1,272 @@
+{
+  "browser": "27.2",
+  "origin": "http://127.0.0.1:5182",
+  "scope": "public routes, resized browser, automated accessibility, QR decoder; no physical devices or paper scans",
+  "results": [
+    {
+      "name": "320px /: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /pricing: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /wall/demo-cottage: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /stay/demo-cottage: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /host/sign-in: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /host/sign-up: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /qr-sign-maker: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /blog: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /privacy-safety: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /contact: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /terms: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /privacy: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /guest-terms: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /not-a-real-route: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /reset-password?oobCode=invalid: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "320px /operations: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /pricing: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /wall/demo-cottage: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /stay/demo-cottage: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /host/sign-in: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /host/sign-up: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /qr-sign-maker: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /blog: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /privacy-safety: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /contact: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /terms: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /privacy: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /guest-terms: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /not-a-real-route: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /reset-password?oobCode=invalid: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "390px /operations: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /pricing: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /wall/demo-cottage: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /stay/demo-cottage: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /host/sign-in: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /host/sign-up: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /qr-sign-maker: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /blog: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /privacy-safety: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /contact: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /terms: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /privacy: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /guest-terms: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /not-a-real-route: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /reset-password?oobCode=invalid: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "1440px /operations: renders, fits, and has no serious accessibility violations",
+      "status": "pass"
+    },
+    {
+      "name": "Coastal: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Farmhouse: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Modern minimal: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Boho arch: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Botanical: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Mountain cabin: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Mid-century: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Classic letterpress: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Desert sun: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Color block: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Chalkboard: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Retro postcard: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Photo header: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Polaroid: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Coastal photo: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Sunset photo: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Photo collage: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    },
+    {
+      "name": "Arch photo: rendered guest and escaped Wi-Fi QR codes decode correctly",
+      "status": "pass"
+    }
+  ],
+  "errors": []
+}

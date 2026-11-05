@@ -38,7 +38,11 @@
 .design-page .canvas-sheet[data-wall-theme] .canvas-includes { gap: 10px; margin-top: 4px; }
 .design-page .canvas-sheet[data-wall-theme] .canvas-include { min-height: 44px; padding: 8px 12px; border-radius: 8px; }
 .design-page .canvas-sheet[data-wall-theme] .canvas-note .wizard-note-header { gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--wall-rule); }
-.design-page .canvas-sheet[data-wall-theme] .canvas-note-settings > summary { padding-inline: 8px; }
+.design-page .canvas-sheet[data-wall-theme] .canvas-note-settings > summary {
+  border-color: var(--wall-rule-strong, var(--rule-strong)); background: var(--wall-paper, var(--surface-raised)); color: var(--wall-ink, var(--text));
+}
+.design-page .canvas-sheet[data-wall-theme] .canvas-note-settings > summary:hover,
+.design-page .canvas-sheet[data-wall-theme] .canvas-note-settings[open] > summary { background: var(--wall-sheet, var(--wall-paper)); }
 .design-page .canvas-sheet[data-wall-theme] .canvas-note .canvas-omit { margin-top: 8px; }
 .design-page .canvas-sheet[data-wall-theme] .canvas-note-offer { margin-top: 16px; }
 /* The Host's own links: the wall's tile heading, then a plain form per link. */

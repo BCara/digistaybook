@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { propertyIdentityLimits, validatePropertyName } from "../../domain/property";
 import {
   emptyFact, emptyHostNote, defaultCover, exampleNote, guestPromptSamples, markInitials, profileLimits, validatePhotoFile, validateProfile,
-  writtenHostNotes, type PropertyProfile,
+  writtenHostNotes, type PropertyPhoto, type PropertyProfile,
 } from "../../domain/propertyProfile";
 import { emptyStayAgainLink, noteLinkLimits, stayAgainLimits, stayAgainProblems, wallStayAgainLinks, type StayAgainLink } from "../../domain/stayAgain";
 import { isPostMvpFeatureEnabled } from "../../domain/featureFlags";
@@ -12,13 +12,13 @@ import { setupSectionIds, type SetupSection } from "../../domain/setupSections";
 import { PropertyShell } from "./PropertyShell";
 import { WallPreview } from "./WallPreview";
 import { WallThemePicker } from "./WallThemePicker";
-import { PhotoDropTarget, PhotoField } from "./PhotoField";
+import { PhotoDropTarget } from "./PhotoField";
 import { wifiBackupAdvice } from "../../domain/wifi";
 import { essentialMarkName } from "../wall/EssentialMark";
 import { HostNotes } from "../wall/HostNotes";
 import { NoteLinks, StayAgainLinks } from "../wall/WallHeader";
-import { withPhotoInSlot } from "./photoSlots";
-import { removePropertyPhoto, uploadPropertyPhoto, type HostProperty } from "./propertyStore";
+import { hostNoteOfSlot, photoInSlot, withPhotoInSlot } from "./photoSlots";
+import { removePropertyPhoto, uploadPropertyPhoto, type HostProperty, type PhotoSlot } from "./propertyStore";
 import type { PropertyDraft } from "./usePropertyDraft";
 import "./mobileWallEditor.css";
 
@@ -29,6 +29,80 @@ const titles: Record<Section, string> = {
   property: "Property details", welcome: "Welcome & hosts",
   essentials: "Wi-Fi & essentials", notes: "More from your hosts", links: "Stay with us again", style: "Look & feel",
 };
+
+/** A photograph a section asked for: a file to upload, or null to take the stored one off. */
+type PhotoJob = { slot: PhotoSlot; file: File | null; existing: PropertyPhoto | null };
+/** A photograph still on its way, kept by the editor so it outlives the sheet it was chosen in. */
+type PendingPhoto = { removing: boolean; progress: number; preview: string | null; failed: string | null };
+type PendingPhotos = Partial<Record<PhotoSlot, PendingPhoto>>;
+
+const photoNoun = (slot: PhotoSlot) => slot === "cover" ? "cover photo" : hostNoteOfSlot(slot) ? "note photo" : "welcome photo";
+
+/**
+ * Sends photographs after their section has saved and closed.
+ *
+ * A Host who chose a photograph used to watch the sheet sit locked on
+ * "Uploading photo…" before they could get on with the rest of the wall. The
+ * words save first and the sheet closes; the upload carries on here, where it
+ * outlives the sheet, and lands in the draft the moment it is stored.
+ */
+function usePhotoUploads(propertyId: string, draft: PropertyDraft) {
+  const [pending, setPending] = useState<PendingPhotos>({});
+  const [landed, setLanded] = useState<{ slot: PhotoSlot; photo: PropertyPhoto | null }[]>([]);
+  const busy = Object.values(pending).some(job => job && !job.failed);
+
+  // Closing the tab would abandon the upload, so the browser is asked to warn.
+  useEffect(() => {
+    if (!busy) return;
+    const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = ""; };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [busy]);
+
+  // A stored photo goes onto the draft a render after it lands, one at a
+  // time, so it is laid on the draft the section's save just wrote rather
+  // than the copy from before it.
+  useEffect(() => {
+    const [first] = landed;
+    if (!first) return;
+    draft.setProfile(withPhotoInSlot(draft.profile, first.slot, first.photo));
+    drop(first.slot);
+    setLanded(was => was.slice(1));
+  }, [landed]);
+
+  function update(slot: PhotoSlot, change: Partial<PendingPhoto>) {
+    setPending(was => { const job = was[slot]; return job ? { ...was, [slot]: { ...job, ...change } } : was; });
+  }
+  function drop(slot: PhotoSlot) {
+    setPending(was => {
+      const preview = was[slot]?.preview;
+      if (preview) URL.revokeObjectURL(preview);
+      const rest = { ...was }; delete rest[slot]; return rest;
+    });
+  }
+
+  async function send(jobs: PhotoJob[]) {
+    for (const job of jobs) { const old = pending[job.slot]?.preview; if (old) URL.revokeObjectURL(old); }
+    const started = jobs.map(job => [job.slot, { removing: !job.file, progress: 0, preview: job.file ? URL.createObjectURL(job.file) : null, failed: null }] as const);
+    setPending(was => ({ ...was, ...Object.fromEntries(started) }));
+    // One at a time, so a slow connection is not split between them.
+    for (const job of jobs) {
+      let outcome;
+      try {
+        outcome = job.file
+          ? await uploadPropertyPhoto(propertyId, job.slot, job.file, progress => update(job.slot, { progress }))
+          : await removePropertyPhoto(propertyId, job.slot, job.existing!.path);
+      } catch {
+        outcome = { status: "error" as const, message: "Check your connection and try again." };
+      }
+      if (outcome.status === "error") { update(job.slot, { failed: outcome.message }); continue; }
+      const photo = job.file ? outcome.value : null;
+      setLanded(was => [...was, { slot: job.slot, photo }]);
+    }
+  }
+
+  return { pending, busy, send, dismiss: drop };
+}
 
 function EditSection({ title, action, onEdit, children }: { title: string; action: string; onEdit: () => void; children: ReactNode }) {
   return <section className="phone-wall-section">
@@ -43,6 +117,7 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
   const previewFrom = useRef<"wall" | "sections">("sections");
   const [editing, setEditing] = useState<Section | null>(null);
   const [notice, setNotice] = useState("");
+  const uploads = usePhotoUploads(property.id, draft);
   const opener = useRef<HTMLElement | null>(null);
   const dock = useRef<HTMLElement>(null);
   const profile = draft.profile;
@@ -78,7 +153,7 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
   return <PropertyShell property={property} current="design" name={draft.name} profile={profile} className="phone-wall-page">
     <header className="phone-wall-heading" hidden={mode === "sections"}>
       <div><h2>{mode === "preview" ? "Guest preview" : mode === "sections" ? "Your sections" : "Guest wall"}</h2>
-        <p className="phone-wall-status" role="status">{draft.dirty ? "You have unsaved changes" : notice || "All changes saved"}</p></div>
+        <p className="phone-wall-status" role="status">{draft.dirty ? "You have unsaved changes" : uploads.busy ? "Saved · A photo is still uploading" : notice || "All changes saved"}</p></div>
       {mode !== "preview" && <button type="button" className="btn btn-ghost" onClick={() => edit("style")}>Look & feel</button>}
     </header>
 
@@ -122,9 +197,18 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
     </div>}
 
     <footer className="phone-wall-dock" ref={dock}>
-      {mode === "sections" && <p className="phone-wall-status" role="status">{draft.dirty ? "You have unsaved changes" : notice || "Everything here is saved."}</p>}
+      {mode === "sections" && <p className="phone-wall-status" role="status">{draft.dirty ? "You have unsaved changes" : uploads.busy ? "Saved · A photo is still uploading" : notice || "Everything here is saved."}</p>}
       {draft.dirty && <button type="button" className="btn btn-primary" disabled={draft.saving} onClick={() => void draft.save()}>{draft.saving ? "Saving…" : "Save pending changes"}</button>}
       {draft.problems.failure && <p className="form-feedback" role="alert">{draft.problems.failure}</p>}
+      {(Object.entries(uploads.pending) as [PhotoSlot, PendingPhoto][]).map(([slot, job]) => job.failed
+        ? <p key={slot} className="form-feedback phone-wall-upload" role="alert">
+            <span>Your {photoNoun(slot)} could not {job.removing ? "be removed" : "upload"}. {job.failed} Open the section to try again.</span>
+            <button type="button" className="btn btn-ghost btn-sm" onClick={() => uploads.dismiss(slot)}>Dismiss</button>
+          </p>
+        : <p key={slot} className="phone-wall-upload" role="status">
+            <progress value={job.progress} max={1} aria-label={`${photoNoun(slot)} upload progress`} hidden={job.removing} />
+            <span>{job.removing ? `Removing ${photoNoun(slot)}…` : job.progress >= 1 ? `Saving ${photoNoun(slot)}…` : `Uploading ${photoNoun(slot)}… ${Math.round(job.progress * 100)}%`}</span>
+          </p>)}
       {/* The way between the two editors always on the left, the guest view
           always on the right, so the buttons never trade places under a thumb. */}
       <div>{(() => {
@@ -134,7 +218,11 @@ export function MobileWallEditor({ property, draft, onEditingChange }: { propert
         {mode !== "preview" && <button type="button" className="btn btn-primary" onClick={() => { previewFrom.current = mode as "sections" | "wall"; setMode("preview"); }}>See guest view</button>}
       </div>
     </footer>
-    {editing && <SectionForm key={editing} section={editing} property={property} draft={draft} onClose={close} onSaved={() => { setNotice("Saved · Your guest wall is up to date"); close(); }} />}
+    {editing && <SectionForm key={editing} section={editing} property={property} draft={draft} pending={uploads.pending} onClose={close} onSaved={jobs => {
+      setNotice("Saved · Your guest wall is up to date");
+      close();
+      if (jobs.length) void uploads.send(jobs);
+    }} />}
   </PropertyShell>;
 }
 
@@ -151,16 +239,16 @@ function shownAsFilled(profile: PropertyProfile): PropertyProfile {
   };
 }
 
-function SectionForm({ section, property, draft, onClose, onSaved }: { section: Section; property: HostProperty; draft: PropertyDraft; onClose: () => void; onSaved: () => void }) {
+function SectionForm({ section, property, draft, pending, onClose, onSaved }: { section: Section; property: HostProperty; draft: PropertyDraft; pending: PendingPhotos; onClose: () => void; onSaved: (photos: PhotoJob[]) => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const latest = useRef(draft); latest.current = draft;
   const id = useId();
   const [name, setName] = useState(draft.name);
   const [profile, setProfile] = useState(draft.profile);
-  const [photos, setPhotos] = useState<Partial<Record<"cover" | "hostPhoto", File | null>>>({});
-  const [previews, setPreviews] = useState<Partial<Record<"cover" | "hostPhoto", string>>>({});
+  // Chosen here and sent once the words have saved: a file, or null to take the stored one off.
+  const [photos, setPhotos] = useState<Partial<Record<PhotoSlot, File | null>>>({});
+  const [previews, setPreviews] = useState<Partial<Record<PhotoSlot, string>>>({});
   const [busy, setBusy] = useState(false);
-  const [progress, setProgress] = useState<string | null>(null);
   const [attempted, setAttempted] = useState(false);
   const [failure, setFailure] = useState<string | null>(null);
   const [openLines, setOpenLines] = useState<ReadonlySet<WelcomeLine>>(new Set());
@@ -177,10 +265,10 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
     return () => { viewport?.removeEventListener("resize", resize); viewport?.removeEventListener("scroll", resize); document.body.style.overflow = previousOverflow; sheet.close(); };
   }, []);
   useEffect(() => {
-    const next: Partial<Record<"cover" | "hostPhoto", string>> = {};
-    for (const slot of ["cover", "hostPhoto"] as const) if (photos[slot]) next[slot] = URL.createObjectURL(photos[slot]);
+    const next: Partial<Record<PhotoSlot, string>> = {};
+    for (const [slot, file] of Object.entries(photos) as [PhotoSlot, File | null][]) if (file) next[slot] = URL.createObjectURL(file);
     setPreviews(next);
-    return () => Object.values(next).forEach(url => URL.revokeObjectURL(url));
+    return () => Object.values(next).forEach(url => url && URL.revokeObjectURL(url));
   }, [photos]);
   useEffect(() => { if (attempted && draft.problems.failure) setFailure(draft.problems.failure); }, [attempted, draft.problems.failure]);
 
@@ -192,8 +280,8 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
   // One bin for everything a section can take away, at the right of the
   // thing's name (on an item's border, beside its legend), rather than a
   // full-width button that read as one more thing to fill in.
-  function removeButton(label: string, onClick: () => void) {
-    return <button type="button" className="phone-section-remove" aria-label={label} title={label} disabled={busy} onClick={onClick}>
+  function removeButton(label: string, onClick: () => void, disabled = false) {
+    return <button type="button" className="phone-section-remove" aria-label={label} title={label} disabled={busy || disabled} onClick={onClick}>
       <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3.5 5.5h13M8 5.5V3.8h4v1.7M5.2 5.5l.8 10.7h8l.8-10.7M8.4 8.6v4.8M11.6 8.6v4.8" /></svg>
     </button>;
   }
@@ -237,27 +325,33 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
       })}
     </div>;
   }
-  function photo(slot: "cover" | "hostPhoto", label: string) {
-    const current = photos[slot] === null ? null : profile[slot];
-    const shown = previews[slot] || current?.url;
+  function photo(slot: PhotoSlot, label: string, removeLabel: string) {
+    // A photo still uploading from an earlier save is shown as it will be,
+    // and left alone until it lands.
+    const sending = pending[slot] && !pending[slot].failed ? pending[slot] : undefined;
+    const locked = busy || sending !== undefined;
+    const current = photos[slot] === null ? null : photoInSlot(profile, slot);
+    const shown = previews[slot] || (sending ? sending.preview : current?.url);
     const controlId = `${id}-${slot}`;
     const choose = () => (document.getElementById(controlId) as HTMLInputElement | null)?.click();
-    return <div className="phone-section-photo">
+    return <div className={slot === "hostPhoto" ? "phone-section-photo phone-section-portrait" : "phone-section-photo"}>
       <label htmlFor={controlId}>{label}</label>
-      {shown ? <img src={shown} alt={label} /> : <PhotoDropTarget label={label} disabled={busy} onChoose={choose} />}
-      {/* Hidden because a bare file input cannot be styled; the frame and buttons drive it. */}
-      <input id={controlId} className="visually-hidden" type="file" accept={profileLimits.photoTypes.join(",")} disabled={busy} onChange={e => {
+      {/* The photograph is pressed to replace it, as the empty frame is pressed to fill it. */}
+      {shown ? <button type="button" className="phone-section-photo-replace" aria-label={`${label}: choose a different photograph`} disabled={locked} onClick={choose}>
+        <img src={shown} alt={label} />
+        {!sending && <span className="phone-section-photo-hint" aria-hidden="true">Tap to replace</span>}
+      </button> : <PhotoDropTarget label={label} disabled={locked} onChoose={choose} />}
+      {/* Hidden because a bare file input cannot be styled; the frame or the photograph drives it. */}
+      <input id={controlId} className="visually-hidden" type="file" accept={profileLimits.photoTypes.join(",")} disabled={locked} onChange={e => {
         const file = e.target.files?.[0]; e.target.value = "";
         if (!file) return;
         const problem = validatePhotoFile(file); setFailure(problem);
         if (!problem) setPhotos(previous => ({ ...previous, [slot]: file }));
       }} />
       {slot === "cover" && <p className="field-hint">Show off the property's best feature: the beach nearby, the fireplace, the open-plan kitchen. Landscape works best.</p>}
-      {photos[slot] && <p className="field-hint">{photos[slot].name} · Ready to save</p>}
-      {shown && removeButton(`Remove ${slot === "cover" ? "cover" : "welcome"} photo`, () => setPhotos(previous => ({ ...previous, [slot]: null })))}
-      {shown && <div className="actions">
-        <button type="button" className="btn btn-secondary btn-sm" disabled={busy} onClick={choose}>Replace photo</button>
-      </div>}
+      {photos[slot] && <p className="field-hint">{photos[slot].name} · Uploads when you save. You can keep editing while it does.</p>}
+      {sending && <p className="field-hint" role="status">{sending.removing ? "Removing this photo…" : "Still uploading from your last save…"}</p>}
+      {shown && !sending && removeButton(removeLabel, () => setPhotos(previous => ({ ...previous, [slot]: null })))}
       {photos[slot] === null && <p className="field-hint">Photo will be removed when you save.</p>}
     </div>;
   }
@@ -266,42 +360,48 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
     setAttempted(true); setFailure(null);
     if (validatePropertyName(name).length || validateProfile(shownAsFilled(profile)).length) return;
     inFlight.current = true; setBusy(true);
-    let next = { ...shownAsFilled(profile), reviewedSections: setupSectionIds.filter(id => id === section || profile.reviewedSections.includes(id)) };
+    // The words go first, carrying the photos the property has now; anything
+    // chosen here is sent after the sheet closes and lands in the draft when
+    // it is stored. Photos come from the live draft rather than this sheet's
+    // copy, so a save made while an earlier upload finished cannot undo it.
+    const stored = latest.current.profile;
+    const filled = shownAsFilled(profile);
+    const next: PropertyProfile = {
+      ...filled,
+      reviewedSections: setupSectionIds.filter(id => id === section || profile.reviewedSections.includes(id)),
+      cover: stored.cover, hostPhoto: stored.hostPhoto, avatar: stored.avatar,
+      hostNotes: filled.hostNotes.map(note => ({ ...note, photo: photoInSlot(stored, `hostNote:${note.id}`) })),
+    };
+    const jobs: PhotoJob[] = (Object.entries(photos) as [PhotoSlot, File | null][])
+      .map(([slot, file]) => ({ slot, file, existing: photoInSlot(stored, slot) }))
+      // A note taken off in this save takes its photo with it.
+      .filter(job => (job.file || job.existing) && (hostNoteOfSlot(job.slot) === null || next.hostNotes.some(note => `hostNote:${note.id}` === job.slot)));
     try {
-      for (const slot of ["cover", "hostPhoto"] as const) {
-        const chosen = photos[slot];
-        if (chosen === undefined) continue;
-        const existing = latest.current.profile[slot];
-        if (!chosen && !existing) continue;
-        setProgress(chosen ? "Uploading photo…" : "Removing photo…");
-        const outcome = chosen ? await uploadPropertyPhoto(property.id, slot, chosen, amount => setProgress(`Uploading photo… ${Math.round(amount * 100)}%`)) : await removePropertyPhoto(property.id, slot, existing!.path);
-        if (outcome.status === "error") { setFailure(outcome.message); return; }
-        const stored = chosen ? outcome.value : null;
-        next = withPhotoInSlot(next, slot, stored);
-        latest.current.setProfile(withPhotoInSlot(latest.current.profile, slot, stored));
-        // A successfully uploaded photo is already stored, even if saving the words later fails.
-        setProfile(previous => withPhotoInSlot(previous, slot, stored));
-        setPhotos(previous => { const rest = { ...previous }; delete rest[slot]; return rest; });
-      }
-      setProgress(null);
-      if (await latest.current.saveValues({ name, profile: next })) onSaved();
+      if (await latest.current.saveValues({ name, profile: next })) onSaved(jobs);
       else setFailure(latest.current.problems.failure || "Your changes could not be saved. Please try again.");
     } catch { setFailure("Your changes could not be saved. Check your connection and try again."); }
-    finally { inFlight.current = false; setBusy(false); setProgress(null); }
+    finally { inFlight.current = false; setBusy(false); }
   }
-  return createPortal(<dialog ref={dialog} className="phone-section-dialog" aria-labelledby={`${id}-title`} onCancel={e => { e.preventDefault(); if (!inFlight.current) onClose(); }}>
+  // Going back is the way out of a section, so it asks before dropping anything typed or chosen here.
+  function back() {
+    if (inFlight.current) return;
+    const changed = name !== draft.name || JSON.stringify(profile) !== JSON.stringify(draft.profile) || Object.keys(photos).length > 0;
+    if (changed && !window.confirm("Discard your changes to this section?")) return;
+    onClose();
+  }
+  return createPortal(<dialog ref={dialog} className="phone-section-dialog" aria-labelledby={`${id}-title`} onCancel={e => { e.preventDefault(); back(); }}>
     <form onSubmit={e => { e.preventDefault(); void save(); }} noValidate>
-      <header><button type="button" className="btn btn-ghost" disabled={busy} onClick={onClose}>Cancel</button><h2 id={`${id}-title`}>{titles[section]}</h2></header>
+      <header><button type="button" className="btn btn-ghost phone-section-back" disabled={busy} onClick={back}><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>Back</button><h2 id={`${id}-title`}>{titles[section]}</h2></header>
       <div className="phone-section-fields">
         {section === "property" && <>
           <label>Property name<input value={name} maxLength={propertyIdentityLimits.nameMax} disabled={busy} onChange={e => setName(e.target.value)} /></label>
           {text("location", "Address", profileLimits.locationMax)}
-          {photo("cover", "Cover photo")}
+          {photo("cover", "Cover photo", "Remove cover photo")}
         </>}
         {section === "welcome" && <>
           <p className="field-hint">Everything here is recommended, nothing is required. Fill in what suits you.</p>
           {optionalText("hosts", "Your names", "your names", profileLimits.hostsMax, false, "Ana & Tom")}
-          {photo("hostPhoto", "Welcome photo")}
+          {photo("hostPhoto", "Welcome photo", "Remove welcome photo")}
           {optionalText("stayHeading", "Welcome heading", "a heading", profileLimits.stayHeadingMax, false, exampleNote.heading)}
           {optionalText("stayWelcome", "Welcome message", "a welcome message", profileLimits.stayWelcomeMax, true, exampleNote.welcome)}
           {optionalText("stayTip", "A little tip", "a little tip", profileLimits.stayTipMax, true, "The bakery behind the lighthouse. Go before 9am.")}
@@ -318,21 +418,25 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
         {section === "notes" && <>
           {profile.hostNotes.map((note, index) => <fieldset key={note.id} className="phone-section-item"><legend>Note {index + 1}</legend>
             <label>Message<textarea value={note.message} rows={4} maxLength={profileLimits.hostNoteMax} disabled={busy} onChange={e => set("hostNotes", profile.hostNotes.map(row => row.id === note.id ? { ...row, message: e.target.value } : row))} /></label>
-            <PhotoField propertyId={property.id} slot={`hostNote:${note.id}`} photo={note.photo} label="Photo (optional)" onChange={value => {
-              setProfile(previous => withPhotoInSlot(previous, `hostNote:${note.id}`, value));
-              latest.current.setProfile(withPhotoInSlot(latest.current.profile, `hostNote:${note.id}`, value));
-            }} />
+            {photo(`hostNote:${note.id}`, "Photo", `Remove note ${index + 1} photo`)}
             {removeButton(`Remove note ${index + 1}`, () => set("hostNotes", profile.hostNotes.filter(row => row.id !== note.id)))}
           </fieldset>)}
           {profile.hostNotes.length < profileLimits.hostNotesMax && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => set("hostNotes", [...profile.hostNotes, emptyHostNote()])}>Add a note</button>}
           <h3 className="phone-section-subhead">Useful links</h3>
-          <p className="field-hint">Pages guests might want during their stay: local walks, a favourite restaurant, the house manual. They appear under your notes.</p>
+          <p className="field-hint">Pages for guests: local walks, favourite restaurants, the house manual.</p>
           {linkFields("noteLinks", noteLinkIssues, "Our favourite walks")}
           {profile.noteLinks.length < noteLinkLimits.linksMax && <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => set("noteLinks", [...profile.noteLinks, emptyStayAgainLink()])}>Add a link</button>}
-          {text("guestPrompt", "Guestbook prompt", 240, true)}
-          <div className="phone-prompt-samples" role="group" aria-label="Sample guestbook prompts">
-            {guestPromptSamples.map(sample => <button type="button" className="btn btn-secondary" key={sample} aria-pressed={profile.guestPrompt.trim() === sample} disabled={busy} onClick={() => set("guestPrompt", sample)}>{sample}</button>)}
-          </div>
+          {/* A heading, the box, and the samples only when asked for: laid out
+              under the box, five sample buttons read as five more things to do. */}
+          <h3 className="phone-section-subhead" id={`${id}-guestPrompt-title`}>Guestbook prompt</h3>
+          <p className="field-hint">The question guests see when they sign your guestbook.</p>
+          <details className="phone-prompt-suggest">
+            <summary>Need a suggestion?</summary>
+            <div className="phone-prompt-samples" role="group" aria-label="Sample guestbook prompts">
+              {guestPromptSamples.map(sample => <button type="button" className="btn btn-secondary" key={sample} aria-pressed={profile.guestPrompt.trim() === sample} disabled={busy} onClick={e => { set("guestPrompt", sample); e.currentTarget.closest("details")?.removeAttribute("open"); }}>{sample}</button>)}
+            </div>
+          </details>
+          <textarea id={`${id}-guestPrompt`} aria-labelledby={`${id}-guestPrompt-title`} value={profile.guestPrompt} maxLength={240} rows={3} disabled={busy} onChange={e => set("guestPrompt", e.target.value)} />
         </>}
         {section === "links" && <>
           <p className="field-hint">Add up to two links so guests can book another stay or join your mailing list.</p>
@@ -347,7 +451,7 @@ function SectionForm({ section, property, draft, onClose, onSaved }: { section: 
         {failure && <p className="form-feedback" role="alert">{failure}</p>}
       </div>
       <footer><p>{property.lifecycle === "draft" ? "Saved changes will appear when your property is published." : "Saving updates your guest wall immediately."}</p>
-        <button type="submit" className="btn btn-primary" disabled={busy}>{busy ? progress || "Saving…" : "Save changes"}</button>
+        <button type="submit" className="btn btn-primary" disabled={busy}>{busy ? "Saving…" : "Save changes"}</button>
       </footer>
     </form>
   </dialog>, document.body);

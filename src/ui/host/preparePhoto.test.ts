@@ -21,6 +21,11 @@ describe("fitWithin", () => {
 });
 
 describe("preparePhoto", () => {
+  it("rejects a file the image decoder cannot read instead of storing broken image bytes", async () => {
+    vi.stubGlobal("createImageBitmap", vi.fn().mockRejectedValue(new Error("Invalid image data")));
+    try { await expect(preparePhoto(file(9))).rejects.toMatchObject({ code: "photo/unreadable" }); }
+    finally { vi.unstubAllGlobals(); }
+  });
   it("uploads the original when the browser cannot decode images here", async () => {
     // jsdom implements no `createImageBitmap`, which is the case this stands
     // in for: a slow upload is better than a refused one.

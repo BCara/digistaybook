@@ -57,7 +57,9 @@
       { "regex": "^/s/voice-story-04/?$", "destination": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-04", "type": 302 },
       { "regex": "^/s/voice-story-05/?$", "destination": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-05", "type": 302 },
       { "regex": "^/s/voice-story-06/?$", "destination": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-06", "type": 302 },
-      { "regex": "^/s/voice-story-07/?$", "destination": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-07", "type": 302 }
+      { "regex": "^/s/voice-story-07/?$", "destination": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-07", "type": 302 },
+      { "regex": "^/i/demo/?$", "destination": "/stay/demo-cottage?utm_source=instagram&utm_medium=social_profile&utm_campaign=instagram_profile&utm_content=bio-demo", "type": 302 },
+      { "regex": "^/i/trial/?$", "destination": "/pricing?utm_source=instagram&utm_medium=social_profile&utm_campaign=instagram_profile&utm_content=bio-trial", "type": 302 }
     ],
     "rewrites": [
       { "source": "/api/admin/portfolio-summary", "function": { "functionId": "portfolioSummary", "region": "australia-southeast1" } },

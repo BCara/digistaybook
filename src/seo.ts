@@ -1,5 +1,6 @@
 import { guestTerms, hostTerms, privacyPolicy } from "./ui/pages/legal/documents";
 import { DEMO_SLUG } from "./ui/wall/demoWall";
+import { blogIndexedPaths, blogPath, blogPosts } from "./domain/blog";
 
 /**
  * What each address tells a search engine and a link preview.
@@ -9,7 +10,7 @@ import { DEMO_SLUG } from "./ui/wall/demoWall";
  * of the marketing pages, so a crawler that never runs our script still gets
  * the right title, description and canonical address.
  *
- * Only the acquisition pages and the demo wall are indexed. A Host's console,
+ * Only the acquisition pages, the demo wall and published blog posts are indexed. A Host's console,
  * the operations desk and the account-action pages are nobody's search result,
  * and a real wall is a Host's guests' memories: it is shared by link, not
  * listed by Google.
@@ -30,13 +31,18 @@ const defaultDescription =
 
 const titled = (title: string) => `${title} | ${SITE_NAME}`;
 
-/** The pages listed in the sitemap, in the order they are listed. */
-export const indexedPaths = ["/", "/pricing", "/qr-sign-maker", `/stay/${DEMO_SLUG}`, `/wall/${DEMO_SLUG}`, "/contact", "/privacy-safety", "/terms", "/guest-terms", "/privacy"] as const;
+const staticIndexedPaths = ["/", "/pricing", "/qr-sign-maker", `/stay/${DEMO_SLUG}`, `/wall/${DEMO_SLUG}`, "/contact", "/privacy-safety", "/terms", "/guest-terms", "/privacy"] as const;
+
+/**
+ * The pages listed in the sitemap, in the order they are listed. The blog
+ * joins once a post is published (domain/blog); a draft is never listed.
+ */
+export const indexedPaths: readonly string[] = [...staticIndexedPaths, ...blogIndexedPaths()];
 
 /** Both demos use bundled example data, so every indexed page can ship as static HTML. */
 export const prerenderedPaths = indexedPaths;
 
-const pages: Record<(typeof indexedPaths)[number], Omit<PageSeo, "canonical">> = {
+const pages: Record<(typeof staticIndexedPaths)[number], Omit<PageSeo, "canonical">> = {
   "/": {
     title: "DigiStayBook: a digital guestbook for short-term rental hosts",
     description: defaultDescription
@@ -79,12 +85,22 @@ const pages: Record<(typeof indexedPaths)[number], Omit<PageSeo, "canonical">> =
   }
 };
 
-const isIndexed = (pathname: string): pathname is (typeof indexedPaths)[number] =>
-  (indexedPaths as readonly string[]).includes(pathname);
+const isStaticIndexed = (pathname: string): pathname is (typeof staticIndexedPaths)[number] =>
+  (staticIndexedPaths as readonly string[]).includes(pathname);
+
+/** A post's own entry; a draft keeps its title for review but is never canonical. */
+function blogSeo(path: string): PageSeo | null {
+  const canonical = indexedPaths.includes(path) ? path : null;
+  if (path === "/blog") return { title: titled("Blog"), description: "Practical notes for vacation rental hosts from DigiStayBook: welcoming guests, house guidance and digital guestbooks.", canonical };
+  const post = blogPosts.find(entry => blogPath(entry.slug) === path);
+  return post ? { title: titled(post.seoTitle), description: post.description, canonical } : null;
+}
 
 export function pageSeo(pathname: string): PageSeo {
   const path = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
-  if (isIndexed(path)) return { ...pages[path], canonical: path };
+  if (isStaticIndexed(path)) return { ...pages[path], canonical: path };
+  const blog = blogSeo(path);
+  if (blog) return blog;
   if (path === "/host/sign-in") return { title: titled("Host sign in"), description: defaultDescription, canonical: null };
   if (path === "/host/sign-up") return { title: titled("Create a host account"), description: defaultDescription, canonical: null };
   return { title: pages["/"].title, description: defaultDescription, canonical: null };

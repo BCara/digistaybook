@@ -10,7 +10,7 @@ vi.mock("firebase-admin/firestore", () => {
     set: (r: any, data: any) => mock.records.set(r.path, data), create: (r: any, data: any) => mock.records.set(r.path, data)
   }) }) };
 });
-import { authEmailContent, brandedActionLink, sendAccountVerification, sendPasswordReset } from "./authEmails";
+import { authEmailContent, brandedActionLink, localActionLink, sendAccountVerification, sendPasswordReset } from "./authEmails";
 const request = (data: any, auth?: any, ip = "127.0.0.1") => ({ data: { requestId: "request-0000000001", ...data }, auth, rawRequest: { ip } }) as any;
 const user = { uid: "host-a", email: "host@example.test", emailVerified: false, disabled: false };
 beforeEach(() => {
@@ -28,6 +28,13 @@ it.each(["resetPassword", "verifyEmail"] as const)("uses only our domain and a s
   expect(content.html).not.toContain("firebaseapp.com"); expect(content.html).not.toContain(">https://digistaybook.com/reset-password?");
   expect(content.html).toContain(kind === "resetPassword" ? ">Reset your password</a>" : ">Verify your email</a>");
   expect(content.text).toContain(link);
+});
+
+it("points emulator actions at the configured Test site while preserving the one-use code", () => {
+  const action = "https://digistaybook.com/reset-password?oobCode=local-only-code";
+  expect(localActionLink(action, "http://127.0.0.1:5181")).toBe("http://127.0.0.1:5181/reset-password?oobCode=local-only-code");
+  expect(localActionLink(action, "http://localhost:15181")).toContain("http://localhost:15181/reset-password");
+  expect(() => localActionLink(action, "https://external.example")).toThrow();
 });
 it("rejects missing codes or mismatched action modes", () => {
   expect(() => brandedActionLink("https://example.test?mode=resetPassword", "resetPassword")).toThrow();

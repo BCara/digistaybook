@@ -1132,7 +1132,7 @@ textarea { min-height: 132px; resize: vertical; }
 .contact-custom p { margin: 0 0 16px; color: var(--text-muted); }
 .contact-topic { display: grid; gap: 10px; margin: 0; padding: 0; border: 0; }
 .contact-topic legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: .99rem; }
-.form-feedback { margin: 0; padding: 12px 15px; background: var(--bg-alt); border-left: 2px solid var(--accent); color: var(--text-muted); font-size: .99rem; }
+.form-feedback { margin: 0; padding: 12px 15px; background: var(--bg-alt); border-left: 2px solid var(--accent); color: var(--text); font-size: .99rem; }
 
 .notice { border-left: 2px solid var(--accent); }
 .notice strong { display: block; margin-bottom: 6px; }
@@ -2632,36 +2632,6 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 .settings-photos > h3, .settings-photos > .field-hint { grid-column: 1 / -1; }
 .settings-photos > .field-hint { margin: 0 0 4px; }
 
-/* The placard is one of the few things in this product that is physically
-   real, so it is drawn as the card it will be printed as rather than
-   described. It keeps its own paper and ink in both colour schemes: a printed
-   card does not have a dark mode, and an inverted QR code is a code that will
-   not scan. */
-.placard { margin: clamp(18px, 2.5vw, 24px) 0 0; }
-.placard-card {
-  width: min(340px, 100%); padding: 26px 24px 18px; text-align: center;
-  background: #fff; color: #14181b;
-  border: 1px solid rgba(20, 24, 27, .16); border-radius: var(--radius-sm);
-  box-shadow: var(--lift-md);
-}
-.placard-lead {
-  margin: 0; font-size: var(--step--2); letter-spacing: .12em; text-transform: uppercase; color: #5d6d78;
-}
-.placard-name {
-  margin: 6px 0 18px; font-family: var(--font-display); font-size: var(--step-1);
-  font-weight: 600; line-height: 1.2;
-}
-.placard-code { display: block; width: min(210px, 68%); height: auto; margin: 0 auto; }
-.placard-invite { margin: 16px auto 0; max-width: 26ch; font-size: var(--step--1); line-height: 1.5; color: #33404a; }
-.placard-address {
-  margin: 10px 0 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: var(--step--2); color: #5d6d78; overflow-wrap: anywhere;
-}
-.placard-mark {
-  margin: 16px 0 0; padding-top: 12px; border-top: 1px solid rgba(20, 24, 27, .12);
-  font-size: var(--step--2); letter-spacing: .14em; text-transform: uppercase; color: #7d8c96;
-}
-
 .queue-section { margin-top: clamp(34px, 4vw, 48px); }
 .queue-section h2 {
   display: flex; align-items: baseline; gap: 10px;
@@ -3727,25 +3697,6 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
   font-size: var(--step--2); font-weight: 650; letter-spacing: .06em; text-transform: uppercase;
 }
 
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  .placard, .placard * {
-    visibility: visible;
-  }
-  .placard {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-}
-
 /* Keep billing focused on the next payment and subscription controls. */
 .billing-summary {
   padding: clamp(20px, 4vw, 28px);
@@ -3933,7 +3884,22 @@ a.nav-item:hover { color: var(--text); background: color-mix(in srgb, var(--text
 .canvas-note .wizard-note-header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; }
 .canvas-note .wizard-note-title { margin: 0; flex: 1; }
 .canvas-note-settings { margin-left: auto; }
-.canvas-note-settings > summary { cursor: pointer; min-height: 44px; padding: 10px 0; font-size: .875rem; }
+.canvas-note-settings > summary {
+  display: flex; align-items: center; gap: 8px; width: fit-content; margin-left: auto;
+  min-height: 40px; padding: 0 14px; list-style: none; cursor: pointer;
+  border: 1px solid var(--rule); border-radius: 999px; background: var(--surface-raised);
+  color: var(--text); font-size: .875rem; font-weight: 600;
+  transition: background-color .15s, border-color .15s;
+}
+.canvas-note-settings > summary::-webkit-details-marker { display: none; }
+.canvas-note-settings > summary::after {
+  content: ''; width: 7px; height: 7px; margin-top: -3px;
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg); transition: transform .2s, margin-top .2s;
+}
+.canvas-note-settings[open] > summary::after { margin-top: 3px; transform: rotate(-135deg); }
+.canvas-note-settings > summary:hover, .canvas-note-settings[open] > summary { background: var(--bg-alt); border-color: var(--rule-strong); }
+.canvas-note-settings[open] > summary { margin-bottom: 12px; }
 .canvas-note-settings[open] { flex-basis: 100%; border-top: 1px solid var(--rule); }
 .canvas-note-settings .note-style-options { flex-wrap: wrap; }
 .canvas-note .host-note-body { display: flex; flex-direction: column; gap: 16px; }

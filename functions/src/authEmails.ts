@@ -23,6 +23,16 @@ export function brandedActionLink(firebaseLink: string, kind: AuthEmailKind) {
   return link.href;
 }
 
+/** Local outbox links must open the actual Test site, never another app's dev port. */
+export function localActionLink(link: string, origin = process.env.APP_URL ?? "http://127.0.0.1:5181") {
+  const site = new URL(origin);
+  if (site.protocol !== "http:" || !["127.0.0.1", "localhost", "[::1]"].includes(site.hostname)) throw new Error("Invalid local Test origin");
+  const action = new URL(link);
+  action.protocol = site.protocol;
+  action.host = site.host;
+  return action.href;
+}
+
 const escape = (value: string) => value.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
 export function authEmailContent(kind: AuthEmailKind, link: string) {
   const reset = kind === "resetPassword";
@@ -83,8 +93,7 @@ async function deliver(kind: AuthEmailKind, email: string, request: CallableRequ
     const link = brandedActionLink(firebaseLink, kind);
     // The emulator records only the local link and never contacts a mail provider.
     if (emulator) {
-      const local = new URL(link); local.host = "127.0.0.1:5173"; local.protocol = "http:";
-      await claim.ref.update({ status: "emulated", link: local.href });
+      await claim.ref.update({ status: "emulated", link: localActionLink(link) });
       return ACK;
     }
     const response = await fetch("https://api.resend.com/emails", {

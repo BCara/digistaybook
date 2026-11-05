@@ -12,6 +12,8 @@
     "test:local:reset": "node tools/local-test.mjs reset",
     "test:local:seed": "node tools/local-test.mjs seed",
     "test:local:workers": "node tools/local-test.mjs workers",
+    "test:adversarial": "node tools/verify-adversarial.mjs",
+    "test:browser": "node tools/verify-browser.mjs",
     "dev": "npm run test:local",
     "dev:emulator": "vite --host --mode emulator --port 5173 --strictPort",
     "emulators": "node tools/emulators.mjs",
@@ -49,6 +51,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@firebase/rules-unit-testing": "^5.0.1",
     "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.3.2",
@@ -58,6 +61,8 @@
     "@vitest/coverage-v8": "^4.1.10",
     "firebase-tools": "^15.25.1",
     "jsdom": "^29.1.1",
+    "jsqr": "^1.4.0",
+    "playwright": "^1.64.1",
     "typescript": "^7.0.2",
     "vite": "^8.2.0",
     "vitest": "^4.1.10"
