@@ -26,7 +26,12 @@ async function test(name, run) {
 }
 async function goto(route) { await page.goto(base + route, { waitUntil: 'domcontentloaded', timeout: 60000 }); await page.locator('main').first().waitFor(); }
 async function qr(selector) {
-  const image = await page.locator(selector).first().screenshot();
+  const target = page.locator(selector).first();
+  await page.evaluate(() => document.fonts.ready);
+  await target.evaluate(element => element.scrollIntoView({ block: 'center' }));
+  // Photo/font layout and scrolling can still settle after the SVG exists.
+  await page.waitForTimeout(500);
+  const image = await target.screenshot({ animations: 'disabled' });
   const { data, info } = await sharp(image).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   return jsQR(new Uint8ClampedArray(data), info.width, info.height)?.data;
 }

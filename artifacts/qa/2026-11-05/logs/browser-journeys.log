@@ -1,0 +1,24 @@
+PASS real keyboard skip link reaches main content past the local test banner
+PASS invalid credentials show a recoverable error, then valid host sign-in succeeds
+(node:67984) MetadataLookupWarning: received unexpected error = All promises were rejected code = ENETUNREACH, EAI_AGAIN
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS new-property dialog validates, traps keyboard focus and creates a private property
+PASS all six phone editor sections save and retain their review checks after reload
+PASS unsafe host links are rejected without discarding the draft
+PASS a cover upload completing while another section is open retains both photo and words
+PASS corrupt host image fails visibly and the editor remains usable
+PASS downloaded QR PNG decodes to the complete token-bearing guest link
+PASS host placard handoff contains the property and full stay URL; reload keeps it
+PASS public view withholds arrival guidance; the private guest link reveals it
+PASS guest cannot submit without consent, then a named memory with a real photo publishes
+PASS lost finish response can be retried without publishing duplicate memories
+PASS ZIP export contains the real messages and local photos, without house guidance
+PASS signed-in ordinary host is refused operations access
+PASS host editor, QR and live guest wall fit a 320px viewport
+PASS host editor, QR and live guest wall fit a 390px viewport
+PASS host editor, QR and live guest wall fit a 768px viewport
+PASS host editor, QR and live guest wall fit a 1024px viewport
+PASS host editor, QR and live guest wall fit a 1440px viewport
+PASS light accessibility scan on host, guest and privacy forms
+PASS dark accessibility scan on host, guest and privacy forms
+21/21 browser journeys passed; 0 uncaught application errors

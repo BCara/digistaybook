@@ -1,0 +1,6 @@
+(node:72556) MetadataLookupWarning: received unexpected error = All promises were rejected code = ENETUNREACH, EAI_AGAIN
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS signup still reaches the dashboard when optional Auth display-name saving fails
+PASS verification outbox link opens the local action page, verifies the account and cannot be reused
+PASS password-reset journey rejects mismatch, updates the synthetic password and consumes its code
+3/3 browser account journeys passed

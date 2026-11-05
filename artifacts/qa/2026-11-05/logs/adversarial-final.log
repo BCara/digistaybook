@@ -1,0 +1,54 @@
+PASS concurrent property creation is idempotent
+PASS property creation rejects signed-out users
+PASS property creation rejects anonymous guests
+PASS property address cannot be taken by another host
+PASS different content cannot reuse a creation attempt
+PASS property creation refuses the hardcoded demo address
+PASS property creation rejects duplicate note identities
+PASS property creation rejects too many facts
+PASS property creation rejects malformed facts
+PASS ensureStayToken rejects invalid reference "a/b"
+PASS ensureStayToken rejects invalid reference "a/b/c"
+PASS ensureStayToken rejects invalid reference ""
+PASS ensureStayToken rejects invalid reference 123
+PASS ensureStayToken denies another host
+PASS ensureStayToken denies anonymous users
+PASS deleteHostProperty rejects invalid reference "a/b"
+PASS deleteHostProperty rejects invalid reference "a/b/c"
+PASS deleteHostProperty rejects invalid reference ""
+PASS deleteHostProperty rejects invalid reference 123
+PASS deleteHostProperty denies another host
+PASS deleteHostProperty denies anonymous users
+(node:40800) MetadataLookupWarning: received unexpected error = All promises were rejected code = ENETUNREACH, EAI_AGAIN
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS concurrent legacy-token requests mint exactly one persistent token
+PASS public projection withholds all house guidance and the stay token
+PASS correct stay token reveals house guidance
+PASS guest intake rejects missing stay token
+PASS guest intake rejects forged stay token
+PASS guest intake rejects empty content
+PASS guest intake rejects negative photo count
+PASS guest intake rejects fractional photo count
+PASS guest intake rejects eleven photos
+PASS guest intake rejects wrong consent version
+PASS guest intake rejects false consent
+PASS guest intake rejects string consent
+PASS guest intake rejects 1201-character message
+PASS guest intake rejects overlong guest name
+PASS guest intake rejects memory plus private feedback
+PASS simultaneous guest retries create one memory and one consent record
+PASS changed guest retry cannot silently replace accepted text
+PASS another anonymous session cannot finish a memory
+PASS another anonymous session cannot edit a memory
+PASS host sessions cannot impersonate guest submission sessions
+PASS guest memory finishes once even when requests overlap
+PASS stale edit revision is rejected
+PASS clear text edit is rescreened and advances its revision
+PASS host review policy keeps clear new memories private until approval
+PASS missing image slots cannot be submitted
+PASS private feedback is delivered only to the owner inbox
+PASS critical and outage fixtures never reach host review or public walls
+PASS ordinary host cannot read operations queues
+PASS public wall switch preserves in-stay access
+PASS cancellation expiry closes the wall and further intake
+51/51 checks passed

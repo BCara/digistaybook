@@ -1,0 +1,67 @@
+PASS 320px /: renders, fits, and has no serious accessibility violations
+PASS 320px /pricing: renders, fits, and has no serious accessibility violations
+PASS 320px /wall/demo-cottage: renders, fits, and has no serious accessibility violations
+PASS 320px /stay/demo-cottage: renders, fits, and has no serious accessibility violations
+PASS 320px /host/sign-in: renders, fits, and has no serious accessibility violations
+PASS 320px /host/sign-up: renders, fits, and has no serious accessibility violations
+PASS 320px /qr-sign-maker: renders, fits, and has no serious accessibility violations
+PASS 320px /blog: renders, fits, and has no serious accessibility violations
+PASS 320px /privacy-safety: renders, fits, and has no serious accessibility violations
+PASS 320px /contact: renders, fits, and has no serious accessibility violations
+PASS 320px /terms: renders, fits, and has no serious accessibility violations
+PASS 320px /privacy: renders, fits, and has no serious accessibility violations
+PASS 320px /guest-terms: renders, fits, and has no serious accessibility violations
+PASS 320px /not-a-real-route: renders, fits, and has no serious accessibility violations
+PASS 320px /reset-password?oobCode=invalid: renders, fits, and has no serious accessibility violations
+PASS 320px /operations: renders, fits, and has no serious accessibility violations
+PASS 390px /: renders, fits, and has no serious accessibility violations
+PASS 390px /pricing: renders, fits, and has no serious accessibility violations
+PASS 390px /wall/demo-cottage: renders, fits, and has no serious accessibility violations
+PASS 390px /stay/demo-cottage: renders, fits, and has no serious accessibility violations
+PASS 390px /host/sign-in: renders, fits, and has no serious accessibility violations
+PASS 390px /host/sign-up: renders, fits, and has no serious accessibility violations
+PASS 390px /qr-sign-maker: renders, fits, and has no serious accessibility violations
+PASS 390px /blog: renders, fits, and has no serious accessibility violations
+PASS 390px /privacy-safety: renders, fits, and has no serious accessibility violations
+PASS 390px /contact: renders, fits, and has no serious accessibility violations
+PASS 390px /terms: renders, fits, and has no serious accessibility violations
+PASS 390px /privacy: renders, fits, and has no serious accessibility violations
+PASS 390px /guest-terms: renders, fits, and has no serious accessibility violations
+PASS 390px /not-a-real-route: renders, fits, and has no serious accessibility violations
+PASS 390px /reset-password?oobCode=invalid: renders, fits, and has no serious accessibility violations
+PASS 390px /operations: renders, fits, and has no serious accessibility violations
+PASS 1440px /: renders, fits, and has no serious accessibility violations
+PASS 1440px /pricing: renders, fits, and has no serious accessibility violations
+PASS 1440px /wall/demo-cottage: renders, fits, and has no serious accessibility violations
+PASS 1440px /stay/demo-cottage: renders, fits, and has no serious accessibility violations
+PASS 1440px /host/sign-in: renders, fits, and has no serious accessibility violations
+PASS 1440px /host/sign-up: renders, fits, and has no serious accessibility violations
+PASS 1440px /qr-sign-maker: renders, fits, and has no serious accessibility violations
+PASS 1440px /blog: renders, fits, and has no serious accessibility violations
+PASS 1440px /privacy-safety: renders, fits, and has no serious accessibility violations
+PASS 1440px /contact: renders, fits, and has no serious accessibility violations
+PASS 1440px /terms: renders, fits, and has no serious accessibility violations
+PASS 1440px /privacy: renders, fits, and has no serious accessibility violations
+PASS 1440px /guest-terms: renders, fits, and has no serious accessibility violations
+PASS 1440px /not-a-real-route: renders, fits, and has no serious accessibility violations
+PASS 1440px /reset-password?oobCode=invalid: renders, fits, and has no serious accessibility violations
+PASS 1440px /operations: renders, fits, and has no serious accessibility violations
+PASS Coastal: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Farmhouse: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Modern minimal: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Boho arch: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Botanical: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Mountain cabin: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Mid-century: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Classic letterpress: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Desert sun: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Color block: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Chalkboard: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Retro postcard: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Photo header: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Polaroid: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Coastal photo: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Sunset photo: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Photo collage: rendered guest and escaped Wi-Fi QR codes decode correctly
+PASS Arch photo: rendered guest and escaped Wi-Fi QR codes decode correctly
+66/66 public browser checks passed; 0 uncaught errors

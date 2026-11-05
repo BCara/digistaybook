@@ -43,3 +43,7 @@ This repository begins from the consolidated product and operational plan suppli
 Regenerate the readable artifacts with the bundled Python runtime by running `tools/build_bop_artifacts.py --outdir artifacts` from the repository root.
 
 Validate the restart/status ledger with `node tools/verify-implementation-status.mjs`.
+
+## Product QA
+
+See [the 5 November 2026 adversarial QA report](docs/product-qa-2026-11-05.md) for fixes, executable browser/API suites, evidence and the remaining real-provider/device checks.

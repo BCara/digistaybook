@@ -1,5 +1,7 @@
 # DigiStayBook — Manual & Automated Testing Strategy
 
+> Historical strategy. See [5 November 2026 product QA and expanded coverage](product-qa-2026-11-05.md) for current evidence, commands and remaining checks.
+
 **Version:** 1.0
 **Branch under test:** `codex/implementation-foundation`
 **Date:** 2026-08-12
