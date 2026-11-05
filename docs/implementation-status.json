@@ -229,7 +229,7 @@
             "src/ui/pages/HostDashboardPage.tsx",
             "src/ui/pages/HostWallDesignPage.tsx",
             "src/ui/pages/HostQrPage.tsx",
-            "src/ui/host/QrPlacard.tsx",
+            "src/ui/signs/QrSign.tsx",
             "src/domain/qrCode.ts",
             "src/domain/qrCode.test.ts",
             "src/ui/host/PropertyNav.tsx",

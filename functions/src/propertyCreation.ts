@@ -13,11 +13,19 @@ import { stripe, stripeSecrets } from "./stripeConfig.js";
  */
 export const mintStayToken = () => randomBytes(16).toString("base64url");
 
+function requirePropertyId(value: unknown): string {
+  if (typeof value !== "string" || !/^[A-Za-z0-9_-]{1,160}$/.test(value)) {
+    throw new HttpsError("invalid-argument", "Invalid property reference.");
+  }
+  return value;
+}
+
 const limits: Record<string, number> = { location: 80, welcome: 400, hosts: 60, hostSince: 60, stayHeading: 80, stayWelcome: 1200, stayTip: 240, guestPrompt: 240 };
 export const createHostProperty = onCall({ region: "australia-southeast1", maxInstances: 5, enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true" }, async request => {
   if (!request.auth || request.auth.token.firebase?.sign_in_provider === "anonymous") throw new HttpsError("permission-denied", "Sign in with your host account.");
   const ownerUid = request.auth.uid, name = request.data?.name, slug = request.data?.slug;
   if (typeof name !== "string" || name.trim().length < 2 || name.trim().length > 60 || typeof slug !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || slug.length > 40) throw new HttpsError("invalid-argument", "Check the property name and address.");
+  if (slug === "demo-cottage") throw new HttpsError("invalid-argument", "That address is reserved for the demo. Choose another.");
   const incoming = request.data?.profile ?? {}, profile: Record<string, any> = {};
   for (const [key, max] of Object.entries(limits)) {
     if (incoming[key] !== undefined && (typeof incoming[key] !== "string" || incoming[key].length > max)) throw new HttpsError("invalid-argument", "Check the property details.");
@@ -32,10 +40,14 @@ export const createHostProperty = onCall({ region: "australia-southeast1", maxIn
   // the wall. Photographs are not among them: a file can only be stored
   // against a property that exists, so they are uploaded after this returns.
   if (incoming.hostNotes !== undefined && (!Array.isArray(incoming.hostNotes) || incoming.hostNotes.length > 4)) throw new HttpsError("invalid-argument", "Use up to four notes of your own.");
+  const noteIds = new Set<string>();
   profile.hostNotes = (incoming.hostNotes ?? []).map((note: any, index: number) => {
     if (typeof note?.message !== "string" || note.message.length > 600) throw new HttpsError("invalid-argument", "Check your notes for the wall.");
     const id = typeof note?.id === "string" ? note.id.replace(/[^a-zA-Z0-9]/g, "").slice(0, 24) : "";
-    return { id: id || `note${index + 1}`, message: note.message.trim(), style: note?.style === "pinned" ? "pinned" : "bordered", photo: null };
+    const noteId = id || `note${index + 1}`;
+    if (noteIds.has(noteId)) throw new HttpsError("invalid-argument", "Each note needs its own reference.");
+    noteIds.add(noteId);
+    return { id: noteId, message: note.message.trim(), style: note?.style === "pinned" ? "pinned" : "bordered", photo: null };
   });
   if (incoming.facts !== undefined && (!Array.isArray(incoming.facts) || incoming.facts.length > 8)) throw new HttpsError("invalid-argument", "Use up to eight house essentials.");
   profile.facts = (incoming.facts ?? []).map((fact: any) => {
@@ -78,8 +90,7 @@ export const createHostProperty = onCall({ region: "australia-southeast1", maxIn
  */
 export const ensureStayToken = onCall({ region: "australia-southeast1", maxInstances: 5, enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true" }, async request => {
   if (!request.auth || request.auth.token.firebase?.sign_in_provider === "anonymous") throw new HttpsError("permission-denied", "Sign in with your host account.");
-  const ownerUid = request.auth.uid, propertyId = request.data?.propertyId;
-  if (typeof propertyId !== "string" || !propertyId) throw new HttpsError("invalid-argument", "Property ID is required.");
+  const ownerUid = request.auth.uid, propertyId = requirePropertyId(request.data?.propertyId);
   const db = getFirestore(), ref = db.collection("properties").doc(propertyId);
   const stayToken = await db.runTransaction(async tx => {
     const property = await tx.get(ref);
@@ -101,8 +112,7 @@ const BILLABLE = ["trialing", "active", "past_due", "unpaid", "incomplete"];
 export const deleteHostProperty = onCall({ region: "australia-southeast1", maxInstances: 5, enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true", secrets: stripeSecrets }, async request => {
   if (!request.auth || request.auth.token.firebase?.sign_in_provider === "anonymous") throw new HttpsError("permission-denied", "Sign in with your host account.");
   const ownerUid = request.auth.uid;
-  const propertyId = request.data?.propertyId;
-  if (typeof propertyId !== "string" || !propertyId) throw new HttpsError("invalid-argument", "Property ID is required.");
+  const propertyId = requirePropertyId(request.data?.propertyId);
 
   const db = getFirestore();
   const propertyRef = db.collection("properties").doc(propertyId);

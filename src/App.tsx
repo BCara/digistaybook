@@ -23,6 +23,7 @@ import { HostQrPage } from "./ui/pages/HostQrPage";
 import { HostWallDesignPage } from "./ui/pages/HostWallDesignPage";
 import { PrivacySafetyPage } from "./ui/pages/PrivacySafetyPage";
 import { ContactPage } from "./ui/pages/ContactPage";
+import { BlogIndexPage, BlogPostPage } from "./ui/pages/BlogPage";
 import { SafetyOperationsPage } from "./ui/pages/SafetyOperationsPage";
 import { ReviewerSetupPage } from "./ui/pages/ReviewerSetupPage";
 import { RequireReviewer } from "./ui/auth/RequireReviewer";
@@ -118,6 +119,8 @@ function resolvePage(pathname: string) {
   }
   if (pathname === "/privacy-safety") return <PrivacySafetyPage />;
   if (pathname === "/contact") return <ContactPage />;
+  if (pathname === "/blog") return <BlogIndexPage />;
+  if (pathname.startsWith("/blog/")) return <BlogPostPage slug={pathname.slice("/blog/".length).replace(/\/+$/, "")} />;
   if (pathname === "/operations/setup") return <RequireHost signInPath="/host/sign-in?returnTo=operations"><ReviewerSetupPage /></RequireHost>;
   if (pathname === "/operations") return <RequireHost signInPath="/host/sign-in?returnTo=operations"><RequireReviewer><SafetyOperationsPage /></RequireReviewer></RequireHost>;
   if (pathname === "/terms") return <LegalDraftPage kind="terms" />;

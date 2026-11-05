@@ -35,8 +35,6 @@ export const isPubliclyReadable = (property: PropertySummary, now = Date.now()) 
 export const hasGuestInbox = (property: PropertySummary) =>
   property.lifecycle !== "draft" && property.lifecycle !== "deleted";
 
-export const canDownloadQrKit =(property: PropertySummary, now = Date.now()) => isPubliclyReadable(property, now);
-
 /* --------------------------- Property identity ---------------------------
    A Host names a property; the wall address is derived from that name and is
    never typed. Guests reach a wall by scanning the QR display, so the address

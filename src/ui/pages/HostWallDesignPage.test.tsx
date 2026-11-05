@@ -169,7 +169,7 @@ describe("switching the phone editor between Edit and Preview", () => {
     renderPage();
     const rows = within(await screen.findByRole("navigation", { name: "Guest wall sections" }));
     fireEvent.click(rows.getByRole("button", { name: /Welcome & hosts/ }));
-    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Cancel" }));
+    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Back" }));
     expect(rows.getByRole("button", { name: /Welcome & hosts/ })).toHaveAttribute("data-state", "todo");
     expect(savePropertyProfile).not.toHaveBeenCalled();
     savePropertyProfile.mockResolvedValue({ status: "error", message: "Connection lost." });
@@ -203,7 +203,7 @@ describe("switching the phone editor between Edit and Preview", () => {
     expect(screen.getByRole("dialog", { name: "Welcome & hosts" })).toBeVisible();
     expect(within(screen.getByRole("dialog")).getByLabelText("Welcome photo")).toBeInTheDocument();
     expect(screen.getByLabelText("Welcome message")).toHaveValue(filledProfile.stayWelcome);
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByRole("button", { name: "Back" }));
     fireEvent.click(screen.getByRole("button", { name: "See guest view" }));
     expect(screen.getByRole("region", { name: "Guest preview" })).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Sections" }));
@@ -226,8 +226,9 @@ describe("switching the phone editor between Edit and Preview", () => {
     expect(within(screen.getByRole("navigation", { name: "Guest wall sections" })).getByRole("button", { name: /Welcome & hosts/ })).toHaveAttribute("data-state", "done");
     expect(screen.queryByRole("button", { name: "Edit details" })).not.toBeInTheDocument();
     expect(savePropertyProfile).toHaveBeenCalledTimes(1);
-    expect(uploadPropertyPhoto).toHaveBeenCalledWith("prop-1", "hostPhoto", photo, expect.any(Function));
-    expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ hosts: "Ana & Tom", stayWelcome: "Welcome to the cottage.", hostPhoto: coverPhoto }));
+    // The words save first; the photo follows once the sheet has closed.
+    expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ hosts: "Ana & Tom", stayWelcome: "Welcome to the cottage." }));
+    await waitFor(() => expect(uploadPropertyPhoto).toHaveBeenCalledWith("prop-1", "hostPhoto", photo, expect.any(Function)));
   });
 
   it("saves a focused wall section once", async () => {
@@ -260,7 +261,13 @@ describe("switching the phone editor between Edit and Preview", () => {
     fireEvent.click(await screen.findByRole("button", { name: "Edit welcome" }));
     const form = within(screen.getByRole("dialog", { name: "Welcome & hosts" }));
     fireEvent.change(form.getByLabelText("Welcome message"), { target: { value: "Discard this change" } });
-    fireEvent.click(form.getByRole("button", { name: "Cancel" }));
+    const confirm = vi.fn().mockReturnValueOnce(false).mockReturnValueOnce(true);
+    vi.stubGlobal("confirm", confirm);
+    // Saying no keeps the host in the section with what they typed.
+    fireEvent.click(form.getByRole("button", { name: "Back" }));
+    expect(confirm).toHaveBeenCalledWith("Discard your changes to this section?");
+    expect(form.getByLabelText("Welcome message")).toHaveValue("Discard this change");
+    fireEvent.click(form.getByRole("button", { name: "Back" }));
     expect(screen.queryByText("Discard this change")).not.toBeInTheDocument();
     expect(savePropertyProfile).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "Edit welcome" }));
@@ -297,7 +304,7 @@ describe("switching the phone editor between Edit and Preview", () => {
     await editWall();
     fireEvent.click(await screen.findByRole("button", { name: "Add links" }));
     expect(within(screen.getByRole("dialog", { name: "Stay with us again" })).queryByRole("button", { name: /Custom link/ })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByRole("button", { name: "Back" }));
     fireEvent.click(await screen.findByRole("button", { name: "Edit notes" }));
     const form = within(screen.getByRole("dialog", { name: "More from your hosts" }));
     fireEvent.click(form.getByRole("button", { name: "Add a link" }));
@@ -371,15 +378,55 @@ describe("switching the phone editor between Edit and Preview", () => {
     const file = new File(["photo"], "cottage.jpg", { type: "image/jpeg" });
     fireEvent.change(screen.getByLabelText("Cover photo", { selector: "input" }), { target: { files: [file] } });
     expect(uploadPropertyPhoto).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    vi.stubGlobal("confirm", vi.fn(() => true));
+    fireEvent.click(screen.getByRole("button", { name: "Back" }));
     expect(uploadPropertyPhoto).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "Edit details" }));
     fireEvent.change(screen.getByLabelText("Cover photo", { selector: "input" }), { target: { files: [file] } });
     fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     expect(uploadPropertyPhoto).toHaveBeenCalledTimes(1);
-    expect(document.querySelector(".phone-wall-cover img")).toHaveAttribute("src", coverPhoto.url);
+    await waitFor(() => expect(document.querySelector(".phone-wall-cover img")).toHaveAttribute("src", coverPhoto.url));
     expect(savePropertyProfile).toHaveBeenCalledWith("prop-1", expect.objectContaining({ reviewedSections: ["property"] }));
+  });
+
+  it("closes the sheet while a photo is still uploading, so the rest of the wall can be edited", async () => {
+    let finish!: (value: unknown) => void;
+    uploadPropertyPhoto.mockImplementationOnce((_id: string, _slot: string, _file: File, progress: (amount: number) => void) => {
+      progress(0.4);
+      return new Promise(resolve => { finish = resolve; });
+    });
+    renderPage();
+    await editWall();
+    fireEvent.click(await screen.findByRole("button", { name: "Edit details" }));
+    const file = new File(["photo"], "cottage.jpg", { type: "image/jpeg" });
+    fireEvent.change(screen.getByLabelText("Cover photo", { selector: "input" }), { target: { files: [file] } });
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(await screen.findByText("Uploading cover photo… 40%")).toBeInTheDocument();
+
+    // Another section opens, edits and saves while the cover is still on its way.
+    fireEvent.click(screen.getByRole("button", { name: "Edit welcome" }));
+    fireEvent.change(screen.getByLabelText("Welcome message"), { target: { value: "The beach is a short walk away." } });
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+
+    finish({ status: "ok", value: coverPhoto });
+    await waitFor(() => expect(document.querySelector(".phone-wall-cover img")).toHaveAttribute("src", coverPhoto.url));
+    expect(screen.queryByText(/Uploading cover photo/)).not.toBeInTheDocument();
+    expect(screen.getByText("The beach is a short walk away.")).toBeInTheDocument();
+  });
+
+  it("says when a background photo upload fails", async () => {
+    uploadPropertyPhoto.mockResolvedValueOnce({ status: "error", message: "The upload was interrupted." });
+    renderPage();
+    await editWall();
+    fireEvent.click(await screen.findByRole("button", { name: "Edit details" }));
+    fireEvent.change(screen.getByLabelText("Cover photo", { selector: "input" }), { target: { files: [new File(["photo"], "cottage.jpg", { type: "image/jpeg" })] } });
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+    expect(await screen.findByText(/Your cover photo could not upload\. The upload was interrupted\./)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Dismiss" }));
+    expect(screen.queryByText(/could not upload/)).not.toBeInTheDocument();
   });
 
   it("can retry a save after an unexpected connection rejection", async () => {

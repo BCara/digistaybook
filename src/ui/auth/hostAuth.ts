@@ -1,5 +1,6 @@
 import { getFirebaseAuth, getFirebaseServices } from "../../lib/firebase";
 import { forgetProperties } from "../host/propertyCache";
+import { clearSignPrefill } from "../signs/signPrefill";
 import { mfaChallenge, type MfaChallenge } from "./reviewerMfa";
 import { requestAuthEmail } from "./authEmails";
 
@@ -183,7 +184,14 @@ export async function createHostAccount(
     const { createUserWithEmailAndPassword, updateProfile } = await import("firebase/auth");
     const credential = await createUserWithEmailAndPassword(services.auth, email.trim(), password);
     const name = displayName?.trim();
-    if (name) await updateProfile(credential.user, { displayName: name });
+    if (name) {
+      try { await updateProfile(credential.user, { displayName: name }); }
+      catch {
+        // The identity already exists. Its optional name must not turn a
+        // successful sign-up into an error that invites a duplicate sign-up.
+        // The profile document below can still retain the supplied name.
+      }
+    }
     await ensureHostProfile(credential.user, name);
     return { status: "success" };
   } catch (error) {
@@ -206,6 +214,7 @@ export async function signOutHost(): Promise<void> {
   // Whatever was read of this account's properties goes with the session: the
   // next Host on this browser must not open on the last one's property.
   forgetProperties();
+  clearSignPrefill();
   const services = await getFirebaseAuth();
   if (!services) return;
   const { signOut } = await import("firebase/auth");

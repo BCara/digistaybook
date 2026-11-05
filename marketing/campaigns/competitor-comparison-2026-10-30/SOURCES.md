@@ -1,89 +1,80 @@
 # Sources: competitor comparison blog post
 
-All pages checked **October 30, 2026** (Sydney date) by reading each company's own public website with an automated page fetch
-(text extraction, not a visual screenshot). No accounts were created, no trials started, no one contacted. Quotations below are
-as returned by that extraction; re-open each page before publishing. Prices were seen on some pages and are deliberately
-**not** recorded here (no-currency rule).
+Re-checked **November 1, 2026** (Sydney date) for the revised draft, by reading each company's own public website with an automated
+page fetch (text extraction, not a visual screenshot). First checked October 30, 2026; the earlier record is in
+`_archive/2026-11-01-before-comparison-revision/SOURCES.md`. No accounts were created, no trials started, no one contacted.
+Prices were seen on some pages and are deliberately **not** recorded (no-currency rule). Re-open each page before publishing.
 
 ## Touch Stay
 
-| Claim in the post | URL | What was seen |
+| Claim in the post | URL | What was seen (November 1) |
 |---|---|---|
-| Guidebook is mobile-first, no app required | https://touchstay.com/ | "Beautiful, branded, and mobile-first, with no app required." |
-| Shared by direct link, QR code or automated messaging via PMS | https://touchstay.com/ | "You can share your guidebook using a direct link, QR code, or automated guest messaging through your PMS integration." |
-| Auto-translation into 30+ languages | https://touchstay.com/ | "Auto-translated in 30+ languages"; "30+ languages, on every device". Individual languages not listed. |
-| 40+ integrations | https://touchstay.com/ | "40+ integrations with property management systems, channel managers, and hospitality tools" (named examples included Guesty, OwnerRez, Lodgify, Cloudbeds, Mews). |
-| Free plan, 20 guest views per guidebook per month | https://touchstay.com/ | Free plan "forever"; limits "20 guest views / guidebook / month", "1 team seat", a store commission, "Self-service support"; "Limits reset monthly per guidebook." |
-| 14-day free trial | https://touchstay.com/ | "14-day free trial · No credit card · Live in under 3 minutes" |
-| Built-in store for extras | https://touchstay.com/ | A built-in upsell store and a "Store commission" on the free plan. |
-| Private guest feedback capture | https://touchstay.com/ | "Capture private guest feedback to understand what worked and where the experience can improve." Growth plan lists "Reviews and feedback collection". |
-| No guest photos/notes seen | https://touchstay.com/ | Guestbook or guest-uploaded photos not mentioned on the homepage. Stated in the post as "not listed on the pages we checked", not as "doesn't exist". |
-| Homepage headline (context only, not quoted in post) | https://touchstay.com/ | "Digital guidebooks that reduce questions" |
+| "mobile-first, with no app required" | https://touchstay.com/ | "mobile-first, with no app required." |
+| Shared by direct link, QR code or automated messages via a PMS | https://touchstay.com/ | "a direct link, QR code, or automated guest messaging through your PMS integration." |
+| Auto-translation in 30+ languages | https://touchstay.com/ | "Auto-translated in 30+ languages" (listed on the Free plan). |
+| 40+ integrations | https://touchstay.com/ | "40+ integrations" with property management systems, channel managers and hospitality tools. |
+| Free plan, 20 guest views per guidebook per month | https://touchstay.com/ | "20 guest views / guidebook / month"; "Limits reset monthly per guidebook." |
+| 14-day free trial | https://touchstay.com/ | "14-day free trial." |
+| Built-in upsell store | https://touchstay.com/ | "Built-in upsell store" (Free plan carries a store commission). |
+| Private guest feedback | https://touchstay.com/ | "Capture private guest feedback" to learn what worked and what to improve. |
+| Guest photos/notes "not mentioned on its site" | https://touchstay.com/ | Guestbook or guest-uploaded content not mentioned. |
+| Wi-Fi join code "not mentioned on its site" | https://touchstay.com/ | Not mentioned. |
 
-Not verified: offline access (not mentioned); whether pricing is strictly per property (https://touchstay.com/pricing shows a calculator
-asking "Number of homes" but returned no plan names or rates in the extraction; the homepage says "per property / per month" while its FAQ
-says pricing depends on "the number of guidebooks and features"). The post says only "Plans; see Touch Stay's site".
-Also seen but not used: AI chatbot for guests, guest analytics, CRM, scheduled messages, custom domain.
+Seen but deliberately not used: the page says guests' emails, phone numbers and preferences can be collected when they open the
+guidebook. Left out to avoid a negative comparison; the post says only what DigiStayBook doesn't ask guests for. Homepage headline
+is about reducing questions; not quoted (our "never promise fewer messages" guardrail). Pricing model not stated in the post.
 
 ## Hostfully Digital Guidebooks
 
-| Claim in the post | URL | What was seen |
+| Claim in the post | URL | What was seen (November 1) |
 |---|---|---|
-| First guidebook free, no credit card | https://www.hostfully.com/digital-guidebooks/ | "Did you know your first Hostfully Digital Guidebook is free?"; "No credit cards. No strings attached."; FAQ: "Yes! You can create a single guidebook for free." |
-| Auto-translation into 16+ languages | https://www.hostfully.com/digital-guidebooks/ | "instant, multi-lingual auto-translation (16+ languages!)" |
-| Pulls recommendations and maps from Google | https://www.hostfully.com/digital-guidebooks/ | "Automatically pull in recommendations and maps from Google" |
-| Shared as link or downloadable PDF | https://www.hostfully.com/digital-guidebooks/ and https://www.hostfully.com/digital-guidebooks/features/mobile-desktop-print | "When sharing, you can either provide a simple private link to your guest or send a downloadable PDF version." |
-| QR code from the share dialog | https://help.hostfully.com/en/articles/2108793-share-your-hostfully-guidebook-with-guests | "This option allows you to download the QR code and share the guidebook with your guests."; Print button gives a QR code per section. |
-| Guidebook Marketplace for paid extras (early check-in, late checkout) | https://www.hostfully.com/digital-guidebooks/ | "Earn extra money by offering guests early check-ins, late checkouts, and commonly requested items." Marketplace carries a payment processing fee. |
-| Integrates with Hostfully's PMS | https://www.hostfully.com/digital-guidebooks/ | "Digital Guidebooks integrate with Hostfully's Property Management Software (PMS)" |
-| Content comes from the host; no guest contributions seen | https://www.hostfully.com/digital-guidebooks/ and https://hostfully.com/digital-guidebooks/features/ | Guest-contributed content not mentioned; content described is host-added (recommendations, photos, house tour videos). |
-| Private feedback not seen | same pages | Not mentioned. Post says "not listed on the pages we checked". |
+| First guidebook free, "no credit cards" | https://www.hostfully.com/digital-guidebooks/ | "your first Hostfully Digital Guidebook is free"; "No credit cards. No strings attached."; FAQ "a single guidebook for free". |
+| Auto-translation in 16+ languages | same | "instant, multi-lingual auto-translation (16+ languages!)" |
+| Pulls recommendations and maps from Google | same | "Automatically pull in recommendations and maps from Google" |
+| Shared as a private link or PDF | same | FAQ: "provide a simple private link to your guest or send a downloadable PDF version." |
+| QR code, "according to Hostfully's help center" | https://help.hostfully.com/en/articles/2108793-share-your-hostfully-guidebook-with-guests | "This option allows you to download the QR code and share the guidebook with your guests." (The marketing page doesn't mention QR.) |
+| Guidebook Marketplace for paid extras | https://www.hostfully.com/digital-guidebooks/ | Add-ons such as early check-ins and late checkouts; "The only additional fee is if you decide to use our Guidebook Marketplace." |
+| Integrates with Hostfully's PMS | same | "Digital Guidebooks integrate with Hostfully's Property Management Software (PMS)" |
+| Guest content and private feedback "not mentioned on its site" | same | Neither mentioned. |
 
-Not verified: "no app required" for guests. A search-result summary attributed "No download required" to Hostfully's mobile/desktop/print
-page, but a direct fetch of that page did not show the phrase. The post's table therefore says "Shared by link, QR code or PDF" and
-does not claim "no app". Offline access not mentioned. A free trial of the paid plan was not found.
+Not verified: whether guests need an app. Neither the marketing page nor the help article says; the table says "app not mentioned".
 
 ## StayPage
 
-| Claim in the post | URL | What was seen |
+| Claim in the post | URL | What was seen (November 1) |
 |---|---|---|
-| Describes itself as a digital guest journal | https://www.producthunt.com/products/staypage (listing) and https://staypage.co | Listing: "StayPage is a digital guest journal for vacation rentals listed on Airbnb, Vrbo, or independently." Site headline: "Every stay leaves a story worth keeping." |
-| Guests leave stories, photos and local finds | https://staypage.co | Guests "leave stories, photos, and local finds." |
-| No app, account or password; QR card | https://staypage.co | "No app for guests"; "no app, account, or password"; "Set the card by the door, the welcome book, or the kitchen counter." |
-| Publish instantly or hold for approval; hide any page | https://staypage.co | "Publish pages instantly or hold each one for approval, one home at a time."; "Hide a page whenever you need to." |
-| Not a guidebook | https://staypage.co | FAQ: "No. A guidebook tells guests what to do." / "StayPage gives them somewhere to leave what they discovered and how the stay felt." |
-| "Homeowner-only private pages" | https://staypage.co | Listed as a Host/Enterprise feature with no further explanation. Post quotes it and says "not described further". |
-| Free Starter tier; 14-day free trial of Host plan; Enterprise per home | https://staypage.co | Starter free; Host plan "14-day free trial", billed monthly or annually; Enterprise billed per home (2 to 500 homes). |
+| "a guest journal for your vacation home" | https://staypage.co | "A guest journal for your vacation home." |
+| Guests leave stories, photos and local finds via QR | same | Guests "scan a QR code to leave stories, photos, and local finds." |
+| "with no app, account, or password" | same | FAQ: from their phone browser "with no app, account, or password." |
+| Publish instantly or hold for approval; hide any page | same | "Publish pages instantly or hold each one for approval, one home at a time."; "Hide a page whenever you need to." |
+| Not a guidebook | same | FAQ: "No. A guidebook tells guests what to do." |
+| "Homeowner-only private pages" | same | Listed as a Host plan feature, not described further. |
+| Free Starter plan; 14-day trial of Host plan | same | Starter free (one home, no card); Host plan "14-day free trial"; Enterprise plan also listed. |
 
-Not verified: automated content screening (not mentioned), translation (not mentioned), house information features (FAQ says it isn't a guidebook).
-Note: the Product Hunt listing is third-party; the site itself is the primary source.
-
-## Enso Connect (mentioned briefly for larger operators)
-
-| Claim in the post | URL | What was seen |
-|---|---|---|
-| Guest experience platform for vacation rental brands from 20 listings up | https://ensoconnect.com/what-is-enso-connect | "AI-native guest experience platform for vacation rentals and boutique hotels"; segments "20–200 listings" and 200+, "from 20 to 2,000+ listings". |
-| No-download guest web app | https://ensoconnect.com/what-is-enso-connect | Boarding Pass: "One link, no downloads." |
-| Check-in, ID verification, upsells, guidebooks, AI messaging | https://ensoconnect.com/what-is-enso-connect | Lists identity verification, check-in/checkout instructions, upsells, digital guidebooks, EnsoAI (CoPilot / AutoPilot), unified inbox. |
-
-Not verified: pricing (demo-led, no pricing on that page). Guest photo sharing not mentioned. The homepage https://www.enso-connect.com/ returned empty in the fetch.
+Not verified: content screening (only "Per-home branding and moderation" is listed, without detail), translation, Wi-Fi code.
 
 ## Paper binder and guestbook
 
-No external source. The section describes general, self-evident properties (paper needs reprinting, fills up, can be lost) rather than
-factual claims about a product. Reword if any of it reads as a claim.
+No external source. The section describes general, self-evident properties (reprinting, filling up, getting lost). Reword if any of
+it reads as a factual claim about a product.
 
-## DigiStayBook (product truth, local source)
+## DigiStayBook (product truth, checked in `src/` on November 1, 2026)
 
 | Claim | Where checked |
 |---|---|
-| One price per property, everything included; monthly or annual; 28-day free trial on first property | `src/seo.ts` (/pricing description), `src/ui/pages/PricingPage.tsx`, `src/domain/pricing.ts` (`trialCallout`) |
-| No app download, no guest accounts | `src/ui/pages/LandingPage.tsx` (masthead facts) |
-| House guidance pinned (Wi-Fi, trash, appliances, checkout) and local favorites | `LandingPage.tsx` capabilities; `src/domain/propertyProfile.ts` (`facts`, `stayTip`, `hostNotes`) |
-| Automated screening; borderline waits for host; host can hide/delete | `LandingPage.tsx` steps and ledger; `pricing.ts` `includedFeatures` |
-| Private guest feedback inbox | `pricing.ts` `includedFeatures` |
-| QR placard carries Wi-Fi join code | `src/ui/pages/HostQrPage.tsx` (wifi passed to `QrPlacard`); MARKETING_NOTES reason 9 |
-| Public page of memories, no house details, share or embed | `src/seo.ts` (/wall/demo-cottage description); `HostQrPage.tsx` copy |
-| Free QR welcome sign maker, no account | `src/seo.ts` (/qr-sign-maker) |
-| No guest contact details collected | MARKETING_NOTES reason 11 (not independently checked in code) |
-| No translation, no PMS integration, no upsell store | MARKETING_NOTES ("Translation: not built"); search of `src/` found no PMS/translation code |
+| One price per property, everything included; 28-day free trial on first property | `src/domain/pricing.ts` (`trialDays = 28`, `trialCallout`, `includedFeatures`); `src/seo.ts` /pricing description |
+| Opens in the browser, no app, no guest account | `src/ui/pages/LandingPage.tsx`; guest posting in `src/ui/guest/GuestContribution.tsx` has no sign-in |
+| Guest name optional; no email or phone asked | `GuestContribution.tsx`: fields are message, "Guest name (optional)", photos, consent, private feedback |
+| House guidance pinned at the top, local favorites | `pricing.ts` "Pinned host posts and house guidance"; `src/seo.ts` /stay/demo-cottage description |
+| Automated screening; borderline waits for host; host can remove | `LandingPage.tsx` ("Anything borderline waits for you"); `pricing.ts` "Automated content screening plus host approval", "Dashboard moderation, pinning and deletion" |
+| Private feedback, never published | `GuestContribution.tsx` "Private feedback for your host"; `src/ui/pages/HostModerationPage.tsx` private feedback tab; `pricing.ts` "Private guest feedback inbox" |
+| Optional Wi-Fi join code on the QR placard | `src/ui/pages/HostQrPage.tsx` (Wi-Fi line read as network / password and passed to the sign maker); `src/ui/signs/QrSign.tsx`; `src/seo.ts` /qr-sign-maker "with a Wi-Fi code guests scan to connect" |
+| Wall copies the Wi-Fi password in a tap | `src/ui/wall/WallHeader.tsx` (clipboard copy of the password) |
+| Public page without house details, share or embed | `src/ui/pages/GuestWallPage.tsx` (`/embed/wall/{slug}`); `src/seo.ts` /wall/demo-cottage description |
+| Free QR welcome sign maker, no account | `src/seo.ts` /qr-sign-maker |
+| No translation | `src/domain/featureFlags.ts` `clientAutoTranslation: false`; MARKETING_NOTES "Translation: not built" |
+| No PMS integration, no upsell store | Search of `src/` found no PMS or store code |
+
+Note: the QR placard code is being reworked by another session (uncommitted changes to `HostQrPage.tsx`, `QrSignMakerPage.tsx`,
+`QrPlacard.tsx` deleted, new `src/ui/signs/signPrefill.ts`). The Wi-Fi code still reaches the sign in that working copy. Re-check
+before publishing.

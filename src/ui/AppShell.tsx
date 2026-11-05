@@ -4,6 +4,10 @@ import { useAuth } from "./auth/AuthProvider";
 import { signOutHost } from "./auth/hostAuth";
 import { navigate, useLocation } from "./routing";
 import { HelpWidget } from "./help/HelpWidget";
+import { readablePosts } from "../domain/blog";
+
+/** The footer links the blog only once a post is published; drafts are reviewed by address. */
+const hasPublishedPosts = readablePosts(false).length > 0;
 
 /** Acquisition navigation: what a visitor without a host session needs. */
 const visitorLinks = [
@@ -170,6 +174,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <a href="/qr-sign-maker">Free QR sign maker</a>
               <a href="/stay/demo-cottage">Guest wall demo</a>
               <a href="/wall/demo-cottage">Public page demo</a>
+              {hasPublishedPosts && <a href="/blog">Blog</a>}
             </nav>
           </div>
           <div className="footer-col">

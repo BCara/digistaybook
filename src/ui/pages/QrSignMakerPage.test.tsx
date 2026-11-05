@@ -1,5 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { QrSignMakerPage } from "./QrSignMakerPage";
+import { AuthContext, type AuthState } from "../auth/AuthProvider";
+import { handOffToSignMaker } from "../signs/signPrefill";
 import { signStyles } from "../../domain/signStyles";
 
 const preview = () => document.querySelector<HTMLElement>(".sign-stage")!;
@@ -11,6 +13,19 @@ function chooseStyle(name: string) {
 
 describe("QR sign maker", () => {
   afterEach(() => window.history.replaceState(null, "", "/"));
+
+  it("shows property print details only to their host and removes them when the session changes", () => {
+    window.history.replaceState(null, "", "/qr-sign-maker?from=property");
+    handOffToSignMaker({ ownerUid: "host-a", name: "Private property", link: "https://example.test/stay/private/secret", wifi: { network: "Private network", password: "secret-password" }, backHref: "/host/property/private/qr" });
+    const host = { status: "host", user: { uid: "host-a" } } as AuthState;
+    const { rerender } = render(<AuthContext.Provider value={host}><QrSignMakerPage /></AuthContext.Provider>);
+    expect(screen.getByLabelText("Password")).toHaveValue("secret-password");
+    rerender(<AuthContext.Provider value={{ status: "signed-out", user: null }}><QrSignMakerPage /></AuthContext.Provider>);
+    expect(screen.queryByLabelText("Name of your place")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Password")).not.toBeInTheDocument();
+    rerender(<AuthContext.Provider value={{ status: "host", user: { uid: "host-b" } } as AuthState}><QrSignMakerPage /></AuthContext.Provider>);
+    expect(screen.queryByLabelText("Password")).not.toBeInTheDocument();
+  });
 
   it("opens on the style a link names, and records a new choice in the address", () => {
     window.history.replaceState(null, "", "/qr-sign-maker?style=chalkboard");
