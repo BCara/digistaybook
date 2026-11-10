@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("firebase-functions/logger", () => ({ error: vi.fn(), info: vi.fn() }));
-vi.mock("firebase-functions/params", () => ({ defineSecret: (name: string) => ({ value: () => `test-${name}` }), defineString: () => ({ value: () => "" }) }));
+vi.mock("firebase-functions/params", () => ({ defineSecret: (name: string) => ({ value: () => `test-${name}` }), }));
 import { buildSummary, handleSummaryRequest, isTestEmail, keyMatches, sydneyMidnight, windowsFor, type Snapshot, type SummaryDeps } from "./portfolioSummary";
 
 const HOUR = 3_600_000;

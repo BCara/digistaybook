@@ -1,6 +1,6 @@
 import { FieldValue, getFirestore, Timestamp } from "firebase-admin/firestore";
 import { error, info } from "firebase-functions/logger";
-import { defineSecret, defineString } from "firebase-functions/params";
+import { defineSecret } from "firebase-functions/params";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { addDays, buildSummary, extraTestEmails, loadSnapshot, portfolioTestEmails, sydneyDate, TIMEZONE, type PortfolioSummary, type Snapshot } from "./portfolioSummary.js";
 
@@ -16,8 +16,8 @@ import { addDays, buildSummary, extraTestEmails, loadSnapshot, portfolioTestEmai
    ========================================================================= */
 
 const resendKey = defineSecret("RESEND_API_KEY");
-/** Set to an empty value to stop the email. */
-export const ownerReportEmail = defineString("OWNER_REPORT_EMAIL", { default: "codebertcreations@gmail.com" });
+/** From functions/.env.<project>; the operations address when unset, nothing sent when set empty. */
+export const ownerReportEmail = () => process.env.OWNER_REPORT_EMAIL ?? "codebertcreations@gmail.com";
 const emulator = process.env.FUNCTIONS_EMULATOR === "true";
 /** A claim older than this is taken to be a run that died; the provider key still stops a double send. */
 const CLAIM_MS = 15 * 60_000;
@@ -96,5 +96,5 @@ async function resend(message: { to: string; subject: string; text: string; html
 
 export const sendOwnerDailyReportJob = onSchedule({ schedule: "30 0 * * *", timeZone: TIMEZONE, region: "australia-southeast1", maxInstances: 1,
   retryCount: 2, minBackoffSeconds: 300, secrets: emulator ? [] : [resendKey] },
-  async () => { await sendOwnerDailyReport(Date.now(), { to: () => ownerReportEmail.value(), load: loadSnapshot, deliver: resend,
-    extra: () => extraTestEmails(portfolioTestEmails.value()) }); });
+  async () => { await sendOwnerDailyReport(Date.now(), { to: ownerReportEmail, load: loadSnapshot, deliver: resend,
+    extra: () => extraTestEmails(portfolioTestEmails()) }); });

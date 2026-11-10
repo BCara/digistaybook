@@ -2,7 +2,7 @@ import { createHash, timingSafeEqual } from "node:crypto";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore, type Timestamp } from "firebase-admin/firestore";
 import { error } from "firebase-functions/logger";
-import { defineSecret, defineString } from "firebase-functions/params";
+import { defineSecret } from "firebase-functions/params";
 import { onRequest } from "firebase-functions/v2/https";
 import { OUTSTANDING } from "./reporting.js";
 
@@ -23,8 +23,12 @@ import { OUTSTANDING } from "./reporting.js";
    ========================================================================= */
 
 export const portfolioReportKey = defineSecret("PORTFOLIO_REPORT_KEY");
-/** Extra addresses or "@domain" entries to treat as test accounts, comma separated. */
-export const portfolioTestEmails = defineString("PORTFOLIO_TEST_EMAILS", { default: "" });
+/**
+ * Extra addresses or "@domain" entries to treat as test accounts, comma
+ * separated, from functions/.env.<project>. A plain environment variable, not
+ * a param: an empty param stops the emulator waiting for a value.
+ */
+export const portfolioTestEmails = () => process.env.PORTFOLIO_TEST_EMAILS ?? "";
 const emulator = process.env.FUNCTIONS_EMULATOR === "true";
 
 export const TIMEZONE = "Australia/Sydney";
@@ -306,5 +310,5 @@ export async function handleSummaryRequest(request: Request, response: Response,
 export const portfolioSummary = onRequest({ region: "australia-southeast1", maxInstances: 2, timeoutSeconds: 60, secrets: emulator ? [] : [portfolioReportKey] },
   (request, response) => handleSummaryRequest(request as unknown as Request, response as unknown as Response, {
     key: () => emulator ? process.env.PORTFOLIO_REPORT_KEY ?? "" : portfolioReportKey.value(),
-    load: loadSnapshot, now: Date.now, extra: () => extraTestEmails(portfolioTestEmails.value())
+    load: loadSnapshot, now: Date.now, extra: () => extraTestEmails(portfolioTestEmails())
   }));

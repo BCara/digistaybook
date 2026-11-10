@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 const mock = vi.hoisted(() => ({ records: new Map<string, any>() }));
 vi.mock("firebase-functions/logger", () => ({ error: vi.fn(), info: vi.fn() }));
-vi.mock("firebase-functions/params", () => ({ defineSecret: (name: string) => ({ value: () => `test-${name}` }), defineString: () => ({ value: () => "" }) }));
+vi.mock("firebase-functions/params", () => ({ defineSecret: (name: string) => ({ value: () => `test-${name}` }), }));
 vi.mock("firebase-admin/firestore", () => {
   const ref = (path: string) => ({ path, set: async (data: any) => mock.records.set(path, { ...mock.records.get(path), ...data }) });
   return { FieldValue: { serverTimestamp: () => "now" }, Timestamp: { fromMillis: (millis: number) => ({ toMillis: () => millis }) },
