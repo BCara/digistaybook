@@ -251,6 +251,8 @@ async function commit(
       "billing.trialEndsAt": trialEnd,
       "billing.currentPeriodEndsAt": at(periodEnd),
       "billing.lastEventCreated": event.created,
+      // Live or sandbox Stripe. The owner's report counts only live ones.
+      "billing.livemode": event.livemode === true,
       updatedAt: Timestamp.now()
     };
 
@@ -310,6 +312,7 @@ async function commit(
       created: event.created,
       propertyId,
       lifecycle: lifecycle ?? null,
+      livemode: event.livemode === true,
       processedAt: Timestamp.now()
     });
 
@@ -332,6 +335,7 @@ async function record(event: Stripe.Event): Promise<Outcome> {
       type: event.type,
       created: event.created,
       needsReview: event.type === "charge.dispute.created",
+      livemode: event.livemode === true,
       processedAt: Timestamp.now()
     });
     return { applied: true, reason: "recorded" };
