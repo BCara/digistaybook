@@ -11,6 +11,21 @@ const LEASE_MS = 10 * 60_000;
 const MAX_ATTEMPTS = 8;
 const ms = (value: any) => value?.toMillis?.() ?? 0;
 
+/**
+ * The bucket a Host's own photographs live in (`properties/{id}/media/...`):
+ * the project's default bucket, which is not one of the guest buckets. It is
+ * read from the runtime's own configuration rather than guessed, and
+ * `HOST_MEDIA_BUCKET` overrides it for a project that keeps them elsewhere.
+ */
+export function hostMediaBucket(): string | null {
+  if (process.env.FUNCTIONS_EMULATOR === "true") return "demo-digistaybook.firebasestorage.app";
+  if (process.env.HOST_MEDIA_BUCKET) return process.env.HOST_MEDIA_BUCKET;
+  try {
+    const bucket = JSON.parse(process.env.FIREBASE_CONFIG ?? "{}").storageBucket;
+    return typeof bucket === "string" && bucket ? bucket : null;
+  } catch { return null; }
+}
+
 function targets(data: any): Target[] {
   const allowed = new Set(process.env.FUNCTIONS_EMULATOR === "true"
     ? ["demo-digistaybook.firebasestorage.app", "demo-digistaybook-published.firebasestorage.app"]
@@ -18,7 +33,9 @@ function targets(data: any): Target[] {
   const items = data.objects ?? (Array.isArray(data.paths) ? data.paths.map((path: string) => ({ bucket: data.bucket ?? process.env.LEGACY_MEDIA_BUCKET, path })) : null);
   if (!Array.isArray(items) || items.length > 100 || typeof data.propertyId !== "string" || !/^[A-Za-z0-9_-]+$/.test(data.propertyId)) throw new Error("invalid_manifest");
   for (const item of items) {
-    if (!allowed.has(item?.bucket) || typeof item.path !== "string" || !item.path.startsWith(`properties/${data.propertyId}/`)
+    // The Host-photo bucket is allowed for a property's own media folder and nothing else in it.
+    const hostMedia = typeof item?.path === "string" && item.bucket === hostMediaBucket() && item.path.startsWith(`properties/${data.propertyId}/media/`);
+    if ((!allowed.has(item?.bucket) && !hostMedia) || typeof item.path !== "string" || !item.path.startsWith(`properties/${data.propertyId}/`)
       || item.path.split("/").some((part: string) => !part || part === "." || part === "..")) throw new Error("invalid_manifest");
   }
   return items;
