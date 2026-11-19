@@ -1140,6 +1140,26 @@ textarea { min-height: 132px; resize: vertical; }
 .legal-version { color: var(--text-muted); font-size: .875rem; }
 .legal-added { color: var(--text-muted); font-size: .8em; font-weight: 400; }
 .legal-page aside.notice { margin-block: 2rem; }
+
+/* Blog: long-form reading at the narrow measure, with headings set smaller
+   than the marketing pages' and comparison tables that scroll on a phone. */
+.blog-page h1 { font-size: var(--step-3); line-height: 1.1; }
+.blog-page h2 { font-size: var(--step-2, 1.5rem); margin-block: 2.25rem .75rem; }
+.blog-page h3 { font-size: var(--step-1, 1.25rem); margin-block: 1.75rem .5rem; }
+.blog-page ul { padding-left: 1.25rem; margin: 0 0 1rem; }
+.blog-page li { margin-bottom: .5rem; }
+.blog-page hr { border: 0; border-top: 1px solid var(--rule); margin-block: 2rem; }
+.blog-page .eyebrow a { text-decoration: none; }
+.blog-date { color: var(--text-muted); font-size: var(--step--1); }
+.blog-table { contain: inline-size; overflow-x: auto; margin: 0 0 1rem; border: 1px solid var(--rule); border-radius: var(--radius-xs); }
+.blog-table table { border-collapse: collapse; min-width: 760px; font-size: var(--step--1); }
+.blog-table th, .blog-table td { padding: .5rem .65rem; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+.blog-table thead th { position: sticky; top: 0; background: var(--surface, var(--bg, #fff)); }
+.blog-table tbody th { font-weight: 600; }
+.blog-list { list-style: none; padding: 0 !important; margin-top: 2rem; }
+.blog-list li { padding-block: 1.25rem; border-top: 1px solid var(--rule); }
+.blog-list a { text-decoration: none; }
+.blog-list h2 { margin: 0 0 .25rem; }
 .notice p { margin: 0; color: var(--text-muted); }
 
 .guest-wall-powered-by { margin: clamp(32px, 5vw, 48px) auto 0; max-width: 46ch; text-align: center; color: var(--text-muted); font-size: var(--step--1); }
