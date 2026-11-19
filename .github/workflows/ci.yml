@@ -30,6 +30,7 @@ jobs:
           STRIPE_PRICE_MONTHLY=price_local_disabled
           STRIPE_PRICE_ANNUAL=price_local_disabled
           APP_URL=http://127.0.0.1:5181
+          HELP_SUPPORT_EMAIL=support@digistaybook.test
           EOF
           cat > functions/.secret.local <<'EOF'
           STRIPE_RESTRICTED_KEY=rk_test_local_disabled

@@ -60,6 +60,7 @@
       { "regex": "^/s/voice-story-07/?$", "destination": "/stay/demo-cottage?utm_source=facebook_stories&utm_medium=organic_social&utm_campaign=host_welcome_202611&utm_content=voice-story-07", "type": 302 }
     ],
     "rewrites": [
+      { "source": "/api/admin/portfolio-summary", "function": { "functionId": "portfolioSummary", "region": "australia-southeast1" } },
       { "source": "/wall/**", "destination": "/app.html" },
       { "source": "/stay/**", "destination": "/app.html" },
       { "source": "/embed/wall/**", "destination": "/app.html" },
