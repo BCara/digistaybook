@@ -43,7 +43,8 @@ function postData(pathname: string): string {
 
 /** Organization and product markup, priced from the same rate card the pricing page uses. */
 function structuredData(): string {
-  const offers = posCurrencies.flatMap(currency => plans.map(plan => ({
+  // Only USD: it is what the prerendered pricing page shows, and markup must match visible text.
+  const offers = posCurrencies.filter(currency => currency === "usd").flatMap(currency => plans.map(plan => ({
     "@type": "Offer",
     name: plan === "monthly" ? "Monthly, per property" : "Annual, per property",
     price: (publishedRates[currency][plan] / 100).toFixed(2),
