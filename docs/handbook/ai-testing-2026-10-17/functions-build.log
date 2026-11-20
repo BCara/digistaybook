@@ -1,8 +1,0 @@
-
-> digistaybook@0.1.0 functions:build
-> npm --prefix functions run build
-
-
-> build
-> tsc
-

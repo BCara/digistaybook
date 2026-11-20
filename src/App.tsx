@@ -16,6 +16,7 @@ import { HostAccountPage } from "./ui/pages/HostAccountPage";
 import { HostDashboardPage } from "./ui/pages/HostDashboardPage";
 import { HostModerationPage } from "./ui/pages/HostModerationPage";
 import { HostExportPage } from "./ui/pages/HostExportPage";
+import { HostGuestsPage } from "./ui/pages/HostGuestsPage";
 import { HostBillingPage } from "./ui/pages/HostBillingPage";
 import { HostBillingOverviewPage } from "./ui/pages/HostBillingOverviewPage";
 import { HostPropertySettingsPage } from "./ui/pages/HostPropertySettingsPage";
@@ -77,6 +78,7 @@ function resolvePage(pathname: string) {
     // billing, which decides whether any of it is served at all, and the
     // settings, which change what the property is rather than what its walls say.
     const [propertyId, section] = pathname.slice("/host/property/".length).split("/");
+    if (propertyId && section === "guests") return <RequireHost><HostGuestsPage key={propertyId} propertyId={propertyId} /></RequireHost>;
     if (propertyId && section === "export") return <RequireHost><HostExportPage key={propertyId} propertyId={propertyId} /></RequireHost>;
     // Moderation and private feedback moved to the account-level inbox; an old
     // link lands on it narrowed to the property it named.

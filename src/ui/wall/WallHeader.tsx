@@ -1,6 +1,7 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { defaultCover, markInitials } from "../../domain/propertyProfile";
 import { readWifiLine, type WifiLogin } from "../../domain/wifi";
+import { currentStay, greetingFor, type ServedStay } from "../../domain/guestStays";
 import { displayWebAddress, noteLinkLimits, wallStayAgainLinks, type StayAgainLink } from "../../domain/stayAgain";
 import { EssentialMark, essentialMarkName, type EssentialMarkName } from "./EssentialMark";
 import "./stayWall.css";
@@ -12,7 +13,10 @@ export type WallHeaderProperty = {
   hostPhoto?: { url: string; alt: string } | null;
   /* `links` and `noteLinks` are optional: a wall served by a build from
      before they existed has none, and reads as a wall with nothing to open. */
-  houseInformation?: { heading: string; welcome: string; tip: string; facts: { term: string; detail: string; note: string }[]; links?: StayAgainLink[]; noteLinks?: StayAgainLink[] } | null;
+  houseInformation?: { heading: string; welcome: string; tip: string; facts: { term: string; detail: string; note: string }[]; links?: StayAgainLink[]; noteLinks?: StayAgainLink[];
+    /* Who the Host says is staying around now; the wall picks who is in the
+       house by its own clock. Optional for the same reason the links are. */
+    guests?: ServedStay[] } | null;
 };
 type WallProperty = WallHeaderProperty;
 
@@ -68,7 +72,12 @@ export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes,
   const house = property.houseInformation;
   const paragraphs = (house?.welcome ?? "").split("\n").map(line => line.trim()).filter(Boolean);
   const facts = house?.facts.filter(fact => fact.term.trim() && fact.detail.trim()) ?? [];
-  const heading = house?.heading.trim() ?? "";
+  /* Guests the Host has named are greeted by name, in place of the standing
+     heading: "Welcome, Sarah & Tom" over "Welcome, make yourself at home"
+     is the same welcome said twice. Their own line leads the note. */
+  const guests = currentStay(house?.guests);
+  const heading = guests ? greetingFor(guests.names) : house?.heading.trim() ?? "";
+  const personal = guests?.note.trim() ?? "";
   const tip = house?.tip.trim() ?? "";
   const hosts = property.hosts.trim();
   const location = property.location.trim();
@@ -104,7 +113,8 @@ export function StayWallHeader({ property, preview, headingLevel = 1, hostNotes,
         {heading && <h2 aria-level={headingLevel + 1}>{heading}</h2>}
         {hosts && <p className="stay-hosts"><span className="stay-eyebrow">Your hosts,</span> <b>{hosts}</b></p>}
       </div>
-      {paragraphs.length > 0 && <div className="stay-welcome-body">
+      {(personal || paragraphs.length > 0) && <div className="stay-welcome-body">
+        {personal && <p className="stay-welcome-personal">{personal}</p>}
         {paragraphs.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
       </div>}
     </section>}

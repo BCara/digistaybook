@@ -67,9 +67,25 @@ describe("server public wall projection", () => {
   });
   it("shares house information on the in-stay wall only, and respects hidden sections", () => {
     const profile = { stayHeading: "Welcome", stayWelcome: "Arrival note", facts: [{ term: "Checkout", detail: "10 am", note: "Leave keys", secret: "excluded" }], guestPrompt: "Your favourite memory?" };
-    expect(publicProperty({ profile }, "stay").houseInformation).toEqual({ heading: "Welcome", welcome: "Arrival note", tip: "", facts: [{ term: "Checkout", detail: "10 am", note: "Leave keys" }], links: [], noteLinks: [] });
+    expect(publicProperty({ profile }, "stay").houseInformation).toEqual({ heading: "Welcome", welcome: "Arrival note", tip: "", facts: [{ term: "Checkout", detail: "10 am", note: "Leave keys" }], links: [], noteLinks: [], guests: [] });
     // The shared link is the public wall, and the public wall carries none of it.
     expect(publicProperty({ profile }).houseInformation).toBeNull();
-    expect(publicProperty({ profile: { ...profile, stayNoteOff: true, factsOff: true } }, "stay").houseInformation).toEqual({ heading: "", welcome: "", tip: "", facts: [], links: [], noteLinks: [] });
+    expect(publicProperty({ profile: { ...profile, stayNoteOff: true, factsOff: true } }, "stay").houseInformation).toEqual({ heading: "", welcome: "", tip: "", facts: [], links: [], noteLinks: [], guests: [] });
+  });
+  it("names only the guests staying within a day of now, on the in-stay wall alone", () => {
+    const now = Date.parse("2026-11-21T03:00:00Z");
+    const profile = { guestStays: [
+      { id: "past", names: "Old Guests", arrives: "2026-11-10", leaves: "2026-11-14", note: "" },
+      { id: "now", names: " Sarah & Tom ", arrives: "2026-11-20", leaves: "2026-11-23", note: "Happy anniversary", secret: "excluded" },
+      { id: "next", names: "Mia", arrives: "2026-11-22", leaves: "2026-11-25", note: "" },
+      { id: "later", names: "Future Guests", arrives: "2026-12-01", leaves: "2026-12-05", note: "" },
+      { id: "bad", names: "No Dates", arrives: "soon", leaves: "2026-11-23", note: "" },
+      { id: "blank", names: "  ", arrives: "2026-11-20", leaves: "2026-11-23", note: "" }
+    ] };
+    expect(publicProperty({ profile }, "stay", now).houseInformation?.guests).toEqual([
+      { names: "Sarah & Tom", note: "Happy anniversary", arrives: "2026-11-20", leaves: "2026-11-23" },
+      { names: "Mia", note: "", arrives: "2026-11-22", leaves: "2026-11-25" }
+    ]);
+    expect(JSON.stringify(publicProperty({ profile }, "public", now))).not.toContain("Sarah");
   });
 });

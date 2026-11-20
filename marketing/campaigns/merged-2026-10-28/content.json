@@ -265,9 +265,11 @@
       "format": "Reel",
       "topic": "wifi",
       "title": "Bags down. Where is the Wi-Fi?",
-      "caption": "The bags are inside. The next question is practical.\n\nShow guests where to find the Wi-Fi details alongside the rest of their stay information. No guest app or account is needed.\n\nThe recording will use the demo; never show a real property password. Explore it yourself: digistaybook.com/f/m1-01",
-      "assets": [],
-      "visual": "New 12–15 second actual screen recording. Start with the question, open the demo essentials, tap Wi-Fi and hold the answer. Use demo data only. Do not substitute another slow slideshow.",
+      "caption": "The bags are inside. The next question is practical.\n\nShow guests where to find the Wi-Fi details alongside the rest of their stay information. No guest app or account is needed.\n\nRecorded using our fictional guest demo, with demo-only Wi-Fi details. Explore it yourself: digistaybook.com/f/m1-01",
+      "assets": [
+        "campaigns/merged-2026-10-28/assets/2026-11-06_wifi-demo.mp4"
+      ],
+      "visual": "15-second actual guest-demo screen recording: open Wi-Fi, hold the demo details, then invite viewers to explore. Burned-in captions; silent master.",
       "alt": "Bags down. Where is the Wi-Fi?",
       "source_ids": [
         "m1-01",
@@ -283,9 +285,9 @@
         "5–10s: Tap the actual Wi-Fi essential; show demo-only information.",
         "10–15s: Hold the answer, then “Explore the guest demo”."
       ],
-      "production": "NEEDS VIDEO V1 · due 4 Nov · actual tap recording",
-      "status": "Planned",
-      "revision": "merge-20261028-v1",
+      "production": "Ready video · November 5 · actual demo interaction · needs review",
+      "status": "Drafted",
+      "revision": "wifi-demo-20261105-v1",
       "week": 2,
       "first_comment": ""
     },

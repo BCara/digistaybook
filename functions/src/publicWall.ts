@@ -102,7 +102,24 @@ function webLinks(value: unknown, max: number) {
     .filter((link: { label: string; url: string | null }) => link.label && link.url);
 }
 
-export function publicProperty(data: Record<string, any>, view: "public" | "stay" = "public") {
+/* Who is staying, as the Host named them. A wall is handed only the stays
+   within a day of now: the guest's phone decides which of those is in the
+   house, because the calendar days are the property's and the server does not
+   know its time zone, and a day either side covers every zone there is. A stay
+   that ended last week, or begins next month, is never sent to anybody. The
+   shape is a second copy of `src/domain/guestStays.ts`, like the token above. */
+const dayPattern = /^\d{4}-\d{2}-\d{2}$/;
+function guestStays(profile: Record<string, any>, now: number) {
+  if (!Array.isArray(profile.guestStays)) return [];
+  const day = (offset: number) => new Date(now + offset * 86400000).toISOString().slice(0, 10);
+  const from = day(-1), to = day(1);
+  return profile.guestStays.slice(0, 20)
+    .map((stay: any) => ({ names: text(stay?.names, 60).trim(), note: text(stay?.note, 240).trim(), arrives: text(stay?.arrives, 10), leaves: text(stay?.leaves, 10) }))
+    .filter((stay: { names: string; arrives: string; leaves: string }) => stay.names && dayPattern.test(stay.arrives) && dayPattern.test(stay.leaves)
+      && stay.arrives <= to && stay.leaves >= from);
+}
+
+export function publicProperty(data: Record<string, any>, view: "public" | "stay" = "public", now = Date.now()) {
   const profile = data.profile ?? {};
   return {
     name: text(data.name, 60), location: text(profile.location, 200),
@@ -122,7 +139,10 @@ export function publicProperty(data: Record<string, any>, view: "public" | "stay
       facts: profile.factsOff || !Array.isArray(profile.facts) ? [] : profile.facts.slice(0, 8).map((fact: any) => ({ term: text(fact?.term, 32), detail: text(fact?.detail, 60), note: text(fact?.note, 140) })),
       links: webLinks(profile.stayAgainLinks, 2),
       /* Any other pages the Host wants guests to have, drawn under their notes. */
-      noteLinks: webLinks(profile.noteLinks, 3)
+      noteLinks: webLinks(profile.noteLinks, 3),
+      /* Names are for the people in the house, so they travel with the house
+         information and never with the public wall. */
+      guests: guestStays(profile, now)
     } : null
   };
 }

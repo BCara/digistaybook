@@ -122,6 +122,8 @@
 /* The hosts' words run the full width of the card under the portrait row. */
 [data-wall-theme] .stay-wall .stay-welcome-body { grid-column: 1 / -1; display: grid; gap: 10px; }
 [data-wall-theme] .stay-wall .stay-welcome-body p { margin: 0; max-width: 62ch; color: var(--text-muted); line-height: 1.6; }
+/* The line a Host wrote for the guests in the house now, ahead of the standing note. */
+[data-wall-theme] .stay-wall .stay-welcome-body p.stay-welcome-personal { font-weight: 600; }
 [data-wall-theme] .stay-wall .stay-hosts { display: grid; gap: 2px; margin: 0; color: var(--text); }
 [data-wall-theme] .stay-wall .stay-welcome-words .stay-hosts { margin-bottom: 4px; color: var(--text); }
 [data-wall-theme] .stay-wall .stay-hosts b {

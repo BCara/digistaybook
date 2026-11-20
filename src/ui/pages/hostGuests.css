@@ -1,0 +1,32 @@
+/* Who's staying: one card per stay, the quick-add box above them. */
+.guests-page .guests-quick,
+.guests-page .guests-stay {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+}
+.guests-page .guests-quick { margin: 22px 0; }
+.guests-page .guests-quick .field-hint,
+.guests-page .guests-privacy { margin: 0; }
+.guests-page .guests-quick textarea { min-height: 84px; }
+.guests-page .guests-quick .btn { justify-self: start; }
+.guests-page .guests-list { list-style: none; display: grid; gap: 14px; margin: 0 0 18px; padding: 0; }
+.guests-page .guests-stay-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.guests-page .guests-stay-head .btn { margin-left: auto; }
+.guests-page .guests-when { color: var(--text-muted); font-size: var(--step--1); }
+.guests-page .guests-state-now { border-color: var(--accent); color: var(--accent-strong); }
+.guests-page .guests-state-ended,
+.guests-page .guests-state-unset { color: var(--text-muted); }
+.guests-page .guests-dates { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.guests-page .guests-dates > div { display: grid; gap: 8px; min-width: 0; }
+.guests-page .guests-dates input { width: 100%; min-width: 0; }
+.guests-page .guests-error { margin: 0; color: var(--danger, #a3312a); font-size: var(--step--1); }
+.guests-page .guests-empty { color: var(--text-muted); }
+.guests-page .guests-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.guests-page .form-feedback { margin-bottom: 14px; }
+@media (max-width: 420px) {
+  .guests-page .guests-dates { grid-template-columns: 1fr; }
+}

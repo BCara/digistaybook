@@ -34,7 +34,7 @@ import { ActionDisclosure } from "../ActionDisclosure";
  */
 
 /** A row in this column: one of the ways of looking at the property. */
-export type NavSection = "design" | "qr" | "billing" | "export";
+export type NavSection = "design" | "guests" | "qr" | "billing" | "export";
 
 /**
  * Where in the property a screen is standing. Settings is one of these and is
@@ -57,6 +57,7 @@ export type PropertySection = NavSection | "settings";
 const marks: Record<NavSection, ReactElement> = {
   export: <path d="M10 2v11m-4-4 4 4 4-4M3 14v4h14v-4" />,
   design: <path d="m12.6 3.4 4 4L7.2 16.8H3.2v-4Zm-1.5 1.5 4 4" />,
+  guests: <path d="M7.4 9.2a2.9 2.9 0 1 0 0-5.8 2.9 2.9 0 0 0 0 5.8Zm-5 7.4c0-2.7 2.2-4.6 5-4.6s5 1.9 5 4.6M13.6 9a2.4 2.4 0 1 0 0-4.8M14.8 12.2c1.8.5 3 2 3 4.2" />,
   qr: <path d="M3.2 3.2h4.6v4.6H3.2Zm9 0h4.6v4.6h-4.6Zm-9 9h4.6v4.6H3.2Zm9 0h1.8m3 0h-1.2m-3.6 3.4h1.8m1.8 0h1.8" />,
   billing: <path d="M5 2.8h5.8L15 6.9v10.3H5Zm5.8 0v4.1H15M7.6 10.6h4.8m-4.8 3h4.8" />
 };
@@ -90,6 +91,9 @@ export function PropertyNav({
   const base = `/host/property/${propertyId}`;
   const sections: { key: NavSection; label: string; href: string }[] = [
     { key: "design", label: "Guest wall", href: base },
+    /* Second because it is the one row a Host comes back to every week:
+       the wall is written once, and who is behind the door keeps changing. */
+    { key: "guests", label: "Who's staying", href: `${base}/guests` },
     { key: "qr", label: "QR code and sharing", href: `${base}/qr` },
     { key: "export", label: "Export guestbook", href: `${base}/export` },
     { key: "billing", label: draft ? "Publish" : "Billing", href: `${base}/billing` }

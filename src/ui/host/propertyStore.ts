@@ -13,6 +13,7 @@ import {
 } from "../../domain/propertyProfile";
 import { hostNoteOfSlot, photoAlt, photoInSlot, type PhotoSlot } from "./photoSlots";
 import { isStayToken } from "../../domain/wallAddress";
+import { guestStayProblems, normalizeGuestStays, readGuestStays, type GuestStay } from "../../domain/guestStays";
 
 /**
  * Firestore access for the Host control centre.
@@ -55,6 +56,12 @@ export type HostProperty = PropertySummary & {
   reviewContent?: boolean;
   /** Everything the Host writes about the property; see domain/propertyProfile. */
   profile: PropertyProfile;
+  /**
+   * Who is staying and when; see domain/guestStays. Stored inside `profile`,
+   * read apart from it. Optional because a property built by hand in a test
+   * or an older cache entry has none, which reads as nobody named.
+   */
+  guestStays?: GuestStay[];
 };
 
 export type WallCounts = { visible: number; hidden: number };
@@ -161,6 +168,7 @@ function toHostProperty(id: string, data: Record<string, unknown>): HostProperty
     stayToken: isStayToken(data.stayToken) ? data.stayToken : null,
     reviewContent: data.reviewContent === true,
     profile: readProfile(data.profile),
+    guestStays: readGuestStays((data.profile as Record<string, unknown> | undefined)?.guestStays),
     billing: billing && {
       trialEndsAt: isoOrNull(billing.trialEndsAt),
       currentPeriodEndsAt: isoOrNull(billing.currentPeriodEndsAt),
@@ -353,6 +361,25 @@ export async function savePropertyProfile(
     const update: Record<string, unknown> = { updatedAt: serverTimestamp() };
     for (const field of PROFILE_FIELDS) update[`profile.${field}`] = normalized[field];
     await withDeadline(updateDoc(doc(database, "properties", propertyId), update));
+    return { status: "ok", value: normalized };
+  } catch (error) {
+    return describeStoreError(error, "write");
+  }
+}
+
+/**
+ * Who is staying, written as its own field so it never crosses a save from
+ * the wall editor. What is stored is what `normalizeGuestStays` leaves: the
+ * stays that are over are gone from the document the moment this lands.
+ */
+export async function saveGuestStays(propertyId: string, stays: readonly GuestStay[]): Promise<StoreOutcome<GuestStay[]>> {
+  const database = await firestore();
+  if (!database) return { status: "error", message: UNCONFIGURED };
+  const normalized = normalizeGuestStays(stays);
+  if (guestStayProblems(normalized).length) return { status: "error", message: "Check the names and dates, then try again." };
+  try {
+    const { doc, serverTimestamp, updateDoc } = await import("firebase/firestore");
+    await withDeadline(updateDoc(doc(database, "properties", propertyId), { "profile.guestStays": normalized, updatedAt: serverTimestamp() }));
     return { status: "ok", value: normalized };
   } catch (error) {
     return describeStoreError(error, "write");
