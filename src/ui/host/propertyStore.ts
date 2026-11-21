@@ -63,6 +63,7 @@ const UNCONFIGURED =
   "Your property is temporarily unavailable. Please try again later. If this continues, contact support.";
 
 const MESSAGES: Record<string, string> = {
+  "photo/unreadable": "This photo could not be read. Choose a different JPEG, PNG or WebP image.",
   "functions/already-exists": "That guestbook address is already taken. Try a different property name.",
   "functions/invalid-argument": "Check your property name and details, then try again.",
   "functions/unauthenticated": "We couldn’t verify your session. Refresh the page and sign in again. If this continues, contact support.",

@@ -1,0 +1,17 @@
+{
+  "scope": "local Auth emulator; synthetic account; local outbox action links, not inbox delivery",
+  "results": [
+    {
+      "name": "signup still reaches the dashboard when optional Auth display-name saving fails",
+      "status": "pass"
+    },
+    {
+      "name": "verification outbox link opens the local action page, verifies the account and cannot be reused",
+      "status": "pass"
+    },
+    {
+      "name": "password-reset journey rejects mismatch, updates the synthetic password and consumes its code",
+      "status": "pass"
+    }
+  ]
+}

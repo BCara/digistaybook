@@ -34,6 +34,9 @@ import { isBillingCountry, type BillingCountry } from "../../domain/pricing";
  * `en-GB` is still found by the clock.
  */
 export function detectBillingCountry(): BillingCountry | null {
+  // The prerender runs on the build machine, whose clock says nothing about a visitor: the static
+  // page must always carry the USD fallback (and the structured data says USD), not the builder's country.
+  if (typeof document === "undefined") return null;
   return billingCountryFrom(browserLocales(), resolvedTimeZone());
 }
 

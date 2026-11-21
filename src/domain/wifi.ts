@@ -49,6 +49,14 @@ export function readWifiLine(line: string): WifiLogin | null {
   return network ? { network, password: parts[1] } : null;
 }
 
+/**
+ * What a Host is told wherever they write or print the Wi-Fi. The wall and the
+ * join code are both a phone away from the password, and a phone that cannot
+ * read the code, or a guest with no signal yet, still needs it on paper.
+ */
+export const wifiBackupAdvice =
+  "Keep the password written in the house too, such as on a card by the router or in your welcome book. Not every phone can scan a Wi-Fi code, and a guest with no signal can't open your wall to look it up.";
+
 /** Characters the Wi-Fi QR format reserves, escaped with a backslash. */
 const escapeField = (value: string): string => value.replace(/([\\;,":])/g, "\\$1");
 

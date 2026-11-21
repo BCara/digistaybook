@@ -1,0 +1,92 @@
+{
+  "propertyId": "6PPunUQJ3dtZimWC4PMb",
+  "slug": "browser-qa-d4203a14-3vn6",
+  "scope": "local demo emulators; simulated screening and entitlement; resized Chromium is not a physical phone",
+  "results": [
+    {
+      "name": "real keyboard skip link reaches main content past the local test banner",
+      "status": "pass"
+    },
+    {
+      "name": "invalid credentials show a recoverable error, then valid host sign-in succeeds",
+      "status": "pass"
+    },
+    {
+      "name": "new-property dialog validates, traps keyboard focus and creates a private property",
+      "status": "pass"
+    },
+    {
+      "name": "all six phone editor sections save and retain their review checks after reload",
+      "status": "pass"
+    },
+    {
+      "name": "unsafe host links are rejected without discarding the draft",
+      "status": "pass"
+    },
+    {
+      "name": "a cover upload completing while another section is open retains both photo and words",
+      "status": "pass"
+    },
+    {
+      "name": "corrupt host image fails visibly and the editor remains usable",
+      "status": "pass"
+    },
+    {
+      "name": "downloaded QR PNG decodes to the complete token-bearing guest link",
+      "status": "pass"
+    },
+    {
+      "name": "host placard handoff contains the property and full stay URL; reload keeps it",
+      "status": "pass"
+    },
+    {
+      "name": "public view withholds arrival guidance; the private guest link reveals it",
+      "status": "pass"
+    },
+    {
+      "name": "guest cannot submit without consent, then a named memory with a real photo publishes",
+      "status": "pass"
+    },
+    {
+      "name": "lost finish response can be retried without publishing duplicate memories",
+      "status": "pass"
+    },
+    {
+      "name": "ZIP export contains the real messages and local photos, without house guidance",
+      "status": "pass"
+    },
+    {
+      "name": "signed-in ordinary host is refused operations access",
+      "status": "pass"
+    },
+    {
+      "name": "host editor, QR and live guest wall fit a 320px viewport",
+      "status": "pass"
+    },
+    {
+      "name": "host editor, QR and live guest wall fit a 390px viewport",
+      "status": "pass"
+    },
+    {
+      "name": "host editor, QR and live guest wall fit a 768px viewport",
+      "status": "pass"
+    },
+    {
+      "name": "host editor, QR and live guest wall fit a 1024px viewport",
+      "status": "pass"
+    },
+    {
+      "name": "host editor, QR and live guest wall fit a 1440px viewport",
+      "status": "pass"
+    },
+    {
+      "name": "light accessibility scan on host, guest and privacy forms",
+      "status": "pass"
+    },
+    {
+      "name": "dark accessibility scan on host, guest and privacy forms",
+      "status": "pass"
+    }
+  ],
+  "faults": []
+}

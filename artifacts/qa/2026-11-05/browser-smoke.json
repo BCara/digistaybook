@@ -1,0 +1,440 @@
+[
+  {
+    "route": "/",
+    "width": 1440,
+    "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5181/\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "route": "/pricing",
+    "width": 1440,
+    "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5181/pricing\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "route": "/wall/demo-cottage",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "h1": "Seabreeze Cottage",
+    "text": "DemoThe public page: memories only, ready to share or embed on your own site.See what guests see →St Anthony's Head, CornwallSeabreeze Cotta",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/stay/demo-cottage",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "h1": "Seabreeze Cottage",
+    "text": "DemoThe guest wall: what guests open when they scan the QR display.See the public page →Seabreeze CottageSt Anthony's Head, CornwallATWelcom",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/host/sign-in",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "h1": "Sign in to manage your properties",
+    "text": "Host accessSign in to manage your propertiesOne dashboard for every property you host: walls, pinned house guidance, moderation and billing ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/host/sign-up",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "h1": "Create your host account",
+    "text": "Host accessCreate your host accountOne account covers every property you host. You are not asked to name a property or to pay at this stage.",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/qr-sign-maker",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "h1": "QR welcome sign maker",
+    "text": "Free toolQR welcome sign makerMake a printable 5 × 7 sign for your vacation rental: your place's name, a QR code for your guest guide and a ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/blog",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "h1": "Notes for vacation rental hosts",
+    "text": "BlogNotes for vacation rental hostsPaper guestbook, digital guidebook or guest journal? An honest comparison for vacation rental hostsPaper ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/privacy-safety",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "h1": "Privacy & Safety",
+    "text": "Public support routePrivacy & SafetyUse this route for a personal-data request, content takedown request or urgent platform safety concern. ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/contact",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "h1": "Get in touch",
+    "text": "Contact usGet in touchQuestions about DigiStayBook, your host account, billing or setting up your guestbook? Send us a message and we’ll rep",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/terms",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "h1": "Terms and Conditions",
+    "text": "LegalTerms and ConditionsVersion draft-2026-10-29 · last updated 29 October 2026These Terms and Conditions govern access to and use of the D",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/privacy",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "h1": "Privacy Policy",
+    "text": "LegalPrivacy PolicyVersion draft-2026-10-23 · last updated 23 October 20261. Information collectedFrom Hosts: account information (email add",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/guest-terms",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "h1": "Guest Terms",
+    "text": "LegalGuest TermsVersion draft-2026-10-06 · last updated 6 October 2026These terms apply when you use a property’s DigiStayBook guestbook as ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/not-a-real-route",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "h1": "Page not found",
+    "text": "404Page not foundThe page you requested is unavailable. It may have moved, or the link may be incomplete.Return homeSee the guest demo",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/reset-password?oobCode=invalid",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "h1": "This link is no longer valid",
+    "text": "Your DigiStayBook accountThis link is no longer validThe link may have expired or already been used. Request a new one to continue.EmailRequ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/operations",
+    "width": 1440,
+    "scrollWidth": 1440,
+    "h1": "Sign in to manage your properties",
+    "text": "Host accessSign in to manage your propertiesOne dashboard for every property you host: walls, pinned house guidance, moderation and billing ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "The guestbook your rental never had.",
+    "text": "The guestbook your rental never had.One QR display on the counter opens your house guidance, your local favorites, and every note left by th",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/pricing",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "One price per property. Everything included.",
+    "text": "PricingOne price per property. Everything included.There is no feature tier to decode. Monthly and annual buy the same complete platform; th",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/wall/demo-cottage",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "Seabreeze Cottage",
+    "text": "DemoThe public page: memories only, ready to share or embed on your own site.See what guests see →St Anthony's Head, CornwallSeabreeze Cotta",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/stay/demo-cottage",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "Seabreeze Cottage",
+    "text": "DemoThe guest wall: what guests open when they scan the QR display.See the public page →Seabreeze CottageSt Anthony's Head, CornwallATWelcom",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/host/sign-in",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "Sign in to manage your properties",
+    "text": "Host accessSign in to manage your propertiesOne dashboard for every property you host: walls, pinned house guidance, moderation and billing ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/host/sign-up",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "Create your host account",
+    "text": "Host accessCreate your host accountOne account covers every property you host. You are not asked to name a property or to pay at this stage.",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/qr-sign-maker",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "QR welcome sign maker",
+    "text": "Free toolQR welcome sign makerMake a printable 5 × 7 sign for your vacation rental: your place's name, a QR code for your guest guide and a ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/blog",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "Notes for vacation rental hosts",
+    "text": "BlogNotes for vacation rental hostsPaper guestbook, digital guidebook or guest journal? An honest comparison for vacation rental hostsPaper ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/privacy-safety",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "Privacy & Safety",
+    "text": "Public support routePrivacy & SafetyUse this route for a personal-data request, content takedown request or urgent platform safety concern. ",
+    "errors": [],
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": [
+              ".form-feedback"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.38 (foreground color: #5d6d78, background color: #efe8da, font size: 11.9pt (15.84px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "route": "/contact",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "Get in touch",
+    "text": "Contact usGet in touchQuestions about DigiStayBook, your host account, billing or setting up your guestbook? Send us a message and we’ll rep",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/terms",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "Terms and Conditions",
+    "text": "LegalTerms and ConditionsVersion draft-2026-10-29 · last updated 29 October 2026These Terms and Conditions govern access to and use of the D",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/privacy",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "Privacy Policy",
+    "text": "LegalPrivacy PolicyVersion draft-2026-10-23 · last updated 23 October 20261. Information collectedFrom Hosts: account information (email add",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/guest-terms",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "Guest Terms",
+    "text": "LegalGuest TermsVersion draft-2026-10-06 · last updated 6 October 2026These terms apply when you use a property’s DigiStayBook guestbook as ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/not-a-real-route",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "Page not found",
+    "text": "404Page not foundThe page you requested is unavailable. It may have moved, or the link may be incomplete.Return homeSee the guest demo",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/reset-password?oobCode=invalid",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "This link is no longer valid",
+    "text": "Your DigiStayBook accountThis link is no longer validThe link may have expired or already been used. Request a new one to continue.EmailRequ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/operations",
+    "width": 390,
+    "scrollWidth": 390,
+    "h1": "Sign in to manage your properties",
+    "text": "Host accessSign in to manage your propertiesOne dashboard for every property you host: walls, pinned house guidance, moderation and billing ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "The guestbook your rental never had.",
+    "text": "The guestbook your rental never had.One QR display on the counter opens your house guidance, your local favorites, and every note left by th",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/pricing",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "One price per property. Everything included.",
+    "text": "PricingOne price per property. Everything included.There is no feature tier to decode. Monthly and annual buy the same complete platform; th",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/wall/demo-cottage",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "Seabreeze Cottage",
+    "text": "DemoThe public page: memories only, ready to share or embed on your own site.See what guests see →St Anthony's Head, CornwallSeabreeze Cotta",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/stay/demo-cottage",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "Seabreeze Cottage",
+    "text": "DemoThe guest wall: what guests open when they scan the QR display.See the public page →Seabreeze CottageSt Anthony's Head, CornwallATWelcom",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/host/sign-in",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "Sign in to manage your properties",
+    "text": "Host accessSign in to manage your propertiesOne dashboard for every property you host: walls, pinned house guidance, moderation and billing ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/host/sign-up",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "Create your host account",
+    "text": "Host accessCreate your host accountOne account covers every property you host. You are not asked to name a property or to pay at this stage.",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/qr-sign-maker",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "QR welcome sign maker",
+    "text": "Free toolQR welcome sign makerMake a printable 5 × 7 sign for your vacation rental: your place's name, a QR code for your guest guide and a ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/blog",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "Notes for vacation rental hosts",
+    "text": "BlogNotes for vacation rental hostsPaper guestbook, digital guidebook or guest journal? An honest comparison for vacation rental hostsPaper ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/privacy-safety",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "Privacy & Safety",
+    "text": "Public support routePrivacy & SafetyUse this route for a personal-data request, content takedown request or urgent platform safety concern. ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/contact",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "Get in touch",
+    "text": "Contact usGet in touchQuestions about DigiStayBook, your host account, billing or setting up your guestbook? Send us a message and we’ll rep",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/terms",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "Terms and Conditions",
+    "text": "LegalTerms and ConditionsVersion draft-2026-10-29 · last updated 29 October 2026These Terms and Conditions govern access to and use of the D",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/privacy",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "Privacy Policy",
+    "text": "LegalPrivacy PolicyVersion draft-2026-10-23 · last updated 23 October 20261. Information collectedFrom Hosts: account information (email add",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/guest-terms",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "Guest Terms",
+    "text": "LegalGuest TermsVersion draft-2026-10-06 · last updated 6 October 2026These terms apply when you use a property’s DigiStayBook guestbook as ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/not-a-real-route",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "Page not found",
+    "text": "404Page not foundThe page you requested is unavailable. It may have moved, or the link may be incomplete.Return homeSee the guest demo",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/reset-password?oobCode=invalid",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "This link is no longer valid",
+    "text": "Your DigiStayBook accountThis link is no longer validThe link may have expired or already been used. Request a new one to continue.EmailRequ",
+    "errors": [],
+    "violations": []
+  },
+  {
+    "route": "/operations",
+    "width": 320,
+    "scrollWidth": 320,
+    "h1": "Sign in to manage your properties",
+    "text": "Host accessSign in to manage your propertiesOne dashboard for every property you host: walls, pinned house guidance, moderation and billing ",
+    "errors": [],
+    "violations": []
+  }
+]

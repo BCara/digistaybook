@@ -73,8 +73,8 @@ describe("walls and QR display", () => {
     Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText } });
     renderPage();
     const copy = await screen.findByRole("button", { name: "Copy link to the guest wall" });
-    fireEvent.click(copy);
-    await waitFor(() => expect(copy).toHaveTextContent("Copied"));
+    await act(async () => { fireEvent.click(copy); });
+    expect(copy).toHaveTextContent("Copied");
     expect(writeText).toHaveBeenCalledWith(`${window.location.origin}/stay/seabreeze-cottage/${TOKEN}`);
     writeText.mockRejectedValue(new Error("Clipboard unavailable"));
     fireEvent.click(screen.getByRole("button", { name: "Copy link to the public page" }));
@@ -205,6 +205,19 @@ describe("walls and QR display", () => {
     );
   });
 
+  it.each([null, "invalid"])("does not print a guest code when its token %s cannot be prepared", async stayToken => {
+    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ stayToken }) });
+    ensureStayToken.mockResolvedValueOnce({ status: "error", message: "Connection lost" });
+    renderPage();
+    expect(await screen.findByText("Your guest link could not be prepared. Try again before printing or sharing it.")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Download QR code" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Design a placard" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Copy link to the guest wall" })).not.toBeInTheDocument();
+    ensureStayToken.mockResolvedValueOnce({ status: "ok", value: TOKEN });
+    fireEvent.click(screen.getByRole("button", { name: "Try guest link again" }));
+    expect(await screen.findByRole("button", { name: "Download QR code" })).toBeInTheDocument();
+  });
+
   it("keeps an unpublished property's addresses in view with a way to view each", async () => {
     loadProperty.mockResolvedValue({
       status: "ok",
@@ -222,24 +235,20 @@ describe("walls and QR display", () => {
     expect(main().getByRole("link", { name: "Configure the guest wall" })).toBeInTheDocument();
   });
 
-  it("locks printing until the subscription is running, and says so either way", async () => {
+  it("offers the download and placard whether or not the subscription is running", async () => {
     loadProperty.mockResolvedValue({
       status: "ok",
       value: hostProperty({ lifecycle: "draft", mode: "sandbox" })
     });
-    const { unmount } = renderPage();
-    expect(await screen.findByText(/Printing unlocks with an active trial or subscription/i)).toBeInTheDocument();
-    unmount();
-
-    loadProperty.mockResolvedValue({ status: "ok", value: hostProperty() });
     renderPage();
-    expect(await screen.findByRole("button", { name: "Print placard" })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "Download QR code" })).toBeInTheDocument();
+    expect(main().getByRole("link", { name: "Design a placard" })).toHaveAttribute("href", "/qr-sign-maker?from=property");
+    expect(main().queryByText(/unlock with an active trial or subscription/i)).not.toBeInTheDocument();
   });
 
-  // A Host deciding whether to pay for a property is deciding whether to hang
-  // this card in their hallway, so the card is on the screen before the
-  // subscription is, and it carries the real code rather than a stand-in.
-  it("draws the placard, and its real code, before the kit is printable", async () => {
+  // A Host deciding whether to pay is deciding whether to put this code in
+  // their hallway, so the real code is on the screen before the subscription is.
+  it("draws the real code before the wall is live", async () => {
     loadProperty.mockResolvedValue({
       status: "ok",
       value: hostProperty({ lifecycle: "draft", mode: "sandbox" })
@@ -249,22 +258,26 @@ describe("walls and QR display", () => {
 
     const address = `${window.location.host}/stay/seabreeze-cottage/${TOKEN}`;
     expect(main().getByRole("img", { name: `QR code for ${address}` })).toBeInTheDocument();
-    // Printed under the code for a guest whose camera will not focus.
-    expect(main().getByText(address)).toBeInTheDocument();
-    expect(main().getByText("Seabreeze Cottage", { selector: ".placard-name" })).toBeInTheDocument();
     // ...and it is honest about where a scan lands while nothing is served.
     expect(main().getByText(/This QR code leads to an offline wall/i)).toBeInTheDocument();
   });
 
-  it("adds a code that joins the house Wi-Fi when the line names network and password", async () => {
+  it("hands the name, guest link and Wi-Fi to the placard designer", async () => {
     loadProperty.mockResolvedValue({ status: "ok", value: hostProperty({ profile: { ...emptyProfile(), facts: [{ term: "Wi-Fi", detail: "cottage-guest / seaside42", note: "" }] } }) });
     renderPage();
-    await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
+    const design = await screen.findByRole("link", { name: "Design a placard" });
+    design.addEventListener("click", event => event.preventDefault());
+    fireEvent.click(design);
 
-    expect(main().getByRole("img", { name: "QR code to join the Wi-Fi network cottage-guest" })).toBeInTheDocument();
+    const handed = JSON.parse(window.sessionStorage.getItem("digistaybook.signPrefill") ?? "null");
+    expect(handed).toMatchObject({
+      name: "Seabreeze Cottage",
+      link: expect.stringContaining(`/stay/seabreeze-cottage/${TOKEN}`),
+      wifi: { network: "cottage-guest", password: "seaside42" }
+    });
     expect(main().queryByText(/write your Wi-Fi line as network \/ password/)).not.toBeInTheDocument();
     // The code is a shortcut, not the only way in: the password stays written down.
-    expect(main().getByText(/Keep the Wi-Fi password written somewhere guests can read it too/)).toBeInTheDocument();
+    expect(main().getByText(/Keep the password written in the house too/)).toBeInTheDocument();
   });
 
   it("says how to get a Wi-Fi code when the line gives only a network", async () => {
@@ -272,9 +285,7 @@ describe("walls and QR display", () => {
     renderPage();
     await screen.findByRole("heading", { name: "QR code and sharing", level: 2 });
 
-    expect(main().queryByRole("img", { name: /join the Wi-Fi/ })).not.toBeInTheDocument();
     expect(main().getByText(/write your Wi-Fi line as network \/ password/)).toBeInTheDocument();
-    expect(main().queryByText(/Keep the Wi-Fi password written somewhere/)).not.toBeInTheDocument();
   });
 
   it("stops saying a scan reaches nobody once the wall is served", async () => {

@@ -7,13 +7,17 @@
  * the size it will actually be seen at before it is sent, which is nearly all
  * of the wait.
  *
- * A browser that cannot do this — no `createImageBitmap`, no canvas, an image
- * it will not decode — uploads the original untouched. A slow upload is worse
- * than a fast one; a refused upload is worse than both.
+ * A browser without image resizing support uploads the original. A file
+ * the decoder rejects must fail before it replaces a working photograph.
  */
 
 /** The longest edge any wall draws, with room to spare for a retina screen. */
 export const photoLongEdgeMax = 1600;
+
+export class UnreadablePhoto extends Error {
+  readonly code = "photo/unreadable";
+  constructor() { super("This photo could not be read. Choose a different JPEG, PNG or WebP image."); }
+}
 
 /**
  * Below this a file is left exactly as it is. Re-encoding a small photograph
@@ -96,7 +100,7 @@ export async function preparePhoto(
     // without this every photograph taken sideways would upload sideways.
     bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
   } catch {
-    return original;
+    throw new UnreadablePhoto();
   }
 
   const size = fitWithin(bitmap.width, bitmap.height, longEdge);

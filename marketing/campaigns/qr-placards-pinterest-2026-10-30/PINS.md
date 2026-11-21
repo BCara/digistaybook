@@ -1,16 +1,20 @@
-# QR sign maker Pins: drafts for review
+# QR sign maker Pins: scheduling on Pinterest
 
 Prepared October 30, 2026. Eighteen Pins, one per sign style. Each shows the printed 5 x 7 sign and links to the free
 sign maker (`digistaybook.com/qr-sign-maker`) with that style already open, so what a pinner taps is what they get.
 
-Nothing is scheduled or posted. Each Pin needs its own approval (Cara, Joe, or both) before it goes out.
+**Approved November 1, 2026** in chat by the owner: schedule all eighteen as written here, on a board named
+QR Placard Examples. **Pins 1-12 are scheduled** (November 2). Pins 13-18 are not yet: Pinterest only schedules
+about 30 days ahead, so each can be added once its date is in range (Pin 13 from about November 4).
 
-## Before the first Pin
+## Setup (done)
 
-1. **Deploy the site.** The sign maker page and the 18 `/p/sign-…` redirects are in the repo, not live yet.
-2. Open two or three short links on a phone after the deploy and check they land on the right style.
-3. Pinterest board: create **Vacation Rental Welcome Signs** (description: "Printable QR welcome signs for vacation
-   rentals: a code for your house guide and one that joins the Wi-Fi. Make yours free at digistaybook.com/qr-sign-maker").
+1. Site deployed: the sign maker and all 18 `/p/sign-…` redirects were checked live on November 1.
+2. Pinterest board **QR Placard Examples** (public) on the DigiStayBook business account, with the description
+   "Printable QR welcome signs for vacation rentals: a code for your house guide and one that joins the Wi-Fi. Make
+   yours free at digistaybook.com/qr-sign-maker".
+3. Scheduling in Pinterest uses the browser's Sydney time: pick **12:00 PM** on the **Sydney** date below, which
+   is 8:00 pm Eastern the evening before. Pinterest's own date picker blocks dates more than about 30 days out.
 
 ## Rules these follow
 
@@ -23,26 +27,29 @@ Nothing is scheduled or posted. Each Pin needs its own approval (Cara, Joe, or b
 Three a week (Mon, Wed, Fri) at **8:00 pm Eastern / 12:00 pm Sydney the next day**, starting Wednesday, November 4
 (November 3 is US Election Day). Photo styles and the most "Pinterest" looks go first. Ends Monday, December 14.
 
-| # | Date (Eastern) | Image | Short link |
-|---|---|---|---|
-| 1 | Wed Nov 4 | pin-placard-13-photo-top.png | digistaybook.com/p/sign-photo-header |
-| 2 | Fri Nov 6 | pin-placard-04-boho-arch.png | digistaybook.com/p/sign-boho-arch |
-| 3 | Mon Nov 9 | pin-placard-05-botanical.png | digistaybook.com/p/sign-botanical |
-| 4 | Wed Nov 11 | pin-placard-16-sunset.png | digistaybook.com/p/sign-sunset-photo |
-| 5 | Fri Nov 13 | pin-placard-02-farmhouse.png | digistaybook.com/p/sign-farmhouse |
-| 6 | Mon Nov 16 | pin-placard-01-coastal.png | digistaybook.com/p/sign-coastal |
-| 7 | Wed Nov 18 | pin-placard-14-polaroid.png | digistaybook.com/p/sign-polaroid |
-| 8 | Fri Nov 20 | pin-placard-06-cabin.png | digistaybook.com/p/sign-cabin |
-| 9 | Mon Nov 23 | pin-placard-03-modern.png | digistaybook.com/p/sign-modern |
-| 10 | Wed Nov 25 | pin-placard-17-collage.png | digistaybook.com/p/sign-collage |
-| 11 | Fri Nov 27 | pin-placard-07-mid-century.png | digistaybook.com/p/sign-mid-century |
-| 12 | Mon Nov 30 | pin-placard-18-arch-window.png | digistaybook.com/p/sign-arch-photo |
-| 13 | Wed Dec 2 | pin-placard-08-letterpress.png | digistaybook.com/p/sign-letterpress |
-| 14 | Fri Dec 4 | pin-placard-15-coast-panel.png | digistaybook.com/p/sign-coast-photo |
-| 15 | Mon Dec 7 | pin-placard-09-desert-sun.png | digistaybook.com/p/sign-desert-sun |
-| 16 | Wed Dec 9 | pin-placard-11-chalkboard.png | digistaybook.com/p/sign-chalkboard |
-| 17 | Fri Dec 11 | pin-placard-10-color-block.png | digistaybook.com/p/sign-color-block |
-| 18 | Mon Dec 14 | pin-placard-12-postcard.png | digistaybook.com/p/sign-postcard |
+| # | Date (Eastern) | Sydney, 12:00 pm | Image | Short link | Status |
+|---|---|---|---|---|---|
+| 1 | Wed Nov 4 | Thu Nov 5 | pin-placard-13-photo-top.png | digistaybook.com/p/sign-photo-header | Scheduled |
+| 2 | Fri Nov 6 | Sat Nov 7 | pin-placard-04-boho-arch.png | digistaybook.com/p/sign-boho-arch | Scheduled |
+| 3 | Mon Nov 9 | Tue Nov 10 | pin-placard-05-botanical.png | digistaybook.com/p/sign-botanical | Scheduled |
+| 4 | Wed Nov 11 | Thu Nov 12 | pin-placard-16-sunset.png | digistaybook.com/p/sign-sunset-photo | Scheduled |
+| 5 | Fri Nov 13 | Sat Nov 14 | pin-placard-02-farmhouse.png | digistaybook.com/p/sign-farmhouse | Scheduled |
+| 6 | Mon Nov 16 | Tue Nov 17 | pin-placard-01-coastal.png | digistaybook.com/p/sign-coastal | Scheduled |
+| 7 | Wed Nov 18 | Thu Nov 19 | pin-placard-14-polaroid.png | digistaybook.com/p/sign-polaroid | Scheduled |
+| 8 | Fri Nov 20 | Sat Nov 21 | pin-placard-06-cabin.png | digistaybook.com/p/sign-cabin | Scheduled |
+| 9 | Mon Nov 23 | Tue Nov 24 | pin-placard-03-modern.png | digistaybook.com/p/sign-modern | Scheduled |
+| 10 | Wed Nov 25 | Thu Nov 26 | pin-placard-17-collage.png | digistaybook.com/p/sign-collage | Scheduled |
+| 11 | Fri Nov 27 | Sat Nov 28 | pin-placard-07-mid-century.png | digistaybook.com/p/sign-mid-century | Scheduled |
+| 12 | Mon Nov 30 | Tue Dec 1 | pin-placard-18-arch-window.png | digistaybook.com/p/sign-arch-photo | Scheduled |
+| 13 | Wed Dec 2 | Thu Dec 3 | pin-placard-08-letterpress.png | digistaybook.com/p/sign-letterpress | Approved, not yet in range |
+| 14 | Fri Dec 4 | Sat Dec 5 | pin-placard-15-coast-panel.png | digistaybook.com/p/sign-coast-photo | Approved, not yet in range |
+| 15 | Mon Dec 7 | Tue Dec 8 | pin-placard-09-desert-sun.png | digistaybook.com/p/sign-desert-sun | Approved, not yet in range |
+| 16 | Wed Dec 9 | Thu Dec 10 | pin-placard-11-chalkboard.png | digistaybook.com/p/sign-chalkboard | Approved, not yet in range |
+| 17 | Fri Dec 11 | Sat Dec 12 | pin-placard-10-color-block.png | digistaybook.com/p/sign-color-block | Approved, not yet in range |
+| 18 | Mon Dec 14 | Tue Dec 15 | pin-placard-12-postcard.png | digistaybook.com/p/sign-postcard | Approved, not yet in range |
+
+The plan page's eight "how-to" Pins (November, demo-cottage links) are on hold while this series runs, so Pinterest
+stays at three a week rather than five.
 
 Images are in `styles/pinterest/` (1000 x 1500). In Pinterest, paste the short link as the Pin's destination link.
 Each redirects to `/qr-sign-maker?style=<id>&utm_source=pinterest&utm_medium=organic_social&utm_campaign=qr_sign_maker_202611&utm_content=sign-<id>`.

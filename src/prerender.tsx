@@ -3,6 +3,7 @@ import { renderToString } from "react-dom/server";
 import { App } from "./App";
 import { setServerPathname } from "./ui/routing";
 import { publishedRates, posCurrencies, plans } from "./domain/pricing";
+import { blogPath, readablePosts } from "./domain/blog";
 import { indexedPaths, notFoundSeo, pageSeo, prerenderedPaths, seoHeadMarkup, SITE_NAME, SITE_ORIGIN, SOCIAL_IMAGE } from "./seo";
 
 /**
@@ -16,13 +17,34 @@ export function renderPage(pathname: string): { body: string; head: string } {
   setServerPathname(pathname);
   const body = renderToString(<StrictMode><App /></StrictMode>);
   const seo = pathname === "/404" ? notFoundSeo : pageSeo(pathname);
-  const structured = pathname === "/" || pathname === "/pricing" ? structuredData() : "";
+  const structured = pathname === "/" || pathname === "/pricing" ? structuredData() : postData(pathname);
   return { body, head: seoHeadMarkup(seo) + structured };
+}
+
+/** A published post's article markup, so an engine quoting it can name its source and date. */
+function postData(pathname: string): string {
+  const post = readablePosts(false).find(entry => blogPath(entry.slug) === pathname);
+  if (!post) return "";
+  const article = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    dateModified: post.date,
+    url: `${SITE_ORIGIN}${pathname}`,
+    mainEntityOfPage: `${SITE_ORIGIN}${pathname}`,
+    image: SOCIAL_IMAGE,
+    author: { "@type": "Organization", name: SITE_NAME, url: SITE_ORIGIN },
+    publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_ORIGIN, logo: `${SITE_ORIGIN}/logo.jpg` }
+  };
+  return `\n    <script type="application/ld+json">${JSON.stringify(article).replace(/</g, "\\u003c")}</script>`;
 }
 
 /** Organization and product markup, priced from the same rate card the pricing page uses. */
 function structuredData(): string {
-  const offers = posCurrencies.flatMap(currency => plans.map(plan => ({
+  // Only USD: it is what the prerendered pricing page shows, and markup must match visible text.
+  const offers = posCurrencies.filter(currency => currency === "usd").flatMap(currency => plans.map(plan => ({
     "@type": "Offer",
     name: plan === "monthly" ? "Monthly, per property" : "Annual, per property",
     price: (publishedRates[currency][plan] / 100).toFixed(2),

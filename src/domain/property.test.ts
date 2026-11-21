@@ -1,5 +1,4 @@
 import {
-  canDownloadQrKit,
   generatePropertySlug,
   isPubliclyReadable,
   lifecycleLabels,
@@ -20,11 +19,11 @@ describe("property exposure", () => {
     expect(isPubliclyReadable(cancelled, now)).toBe(false);
     expect(isPubliclyReadable({ ...cancelled, serviceEndsAt: "invalid" }, now)).toBe(false);
     expect(isPubliclyReadable({ ...cancelled, serviceEndsAt: "2026-09-07T00:00:00Z" }, now)).toBe(false);
-    expect(canDownloadQrKit({ ...cancelled, serviceEndsAt: "2026-09-08T00:00:00Z" }, now)).toBe(true);
+    expect(isPubliclyReadable({ ...cancelled, serviceEndsAt: "2026-09-08T00:00:00Z" }, now)).toBe(true);
   });
   it("allows active live walls", () => expect(isPubliclyReadable(property)).toBe(true));
   it("keeps sandbox properties private", () => expect(isPubliclyReadable({ ...property, mode: "sandbox" })).toBe(false));
-  it("locks QR kits when suspended", () => expect(canDownloadQrKit({ ...property, lifecycle: "suspended" })).toBe(false));
+  it("takes suspended walls offline", () => expect(isPubliclyReadable({ ...property, lifecycle: "suspended" })).toBe(false));
 });
 
 describe("property identity", () => {

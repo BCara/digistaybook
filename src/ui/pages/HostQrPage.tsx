@@ -1,18 +1,18 @@
 import { wallUnavailableReason } from "../../domain/wallAvailability";
-import { useEffect, useState, type ReactNode } from "react";
-import { canDownloadQrKit, isPubliclyReadable } from "../../domain/property";
-import { stayWallUrl } from "../../domain/qrCode";
-import { readWifiLine } from "../../domain/wifi";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { isPubliclyReadable } from "../../domain/property";
+import { qrCanvasSize, qrMatrix, qrPath, stayWallUrl, type QrMatrix } from "../../domain/qrCode";
+import { readWifiLine, wifiBackupAdvice } from "../../domain/wifi";
 import { essentialMarkName } from "../wall/EssentialMark";
-import { publicWallPath, publicWallUrl, stayWallPath, wallEmbedCode } from "../../domain/wallAddress";
+import { isStayToken, publicWallPath, publicWallUrl, stayWallPath, wallEmbedCode } from "../../domain/wallAddress";
 import { useAuth } from "../auth/AuthProvider";
 import { PropertyShell } from "../host/PropertyShell";
-import { QrPlacard } from "../host/QrPlacard";
 import { Copyable } from "../host/Copyable";
 import { GuestReviewPanel } from "../host/GuestReviewPanel";
 import { ensureStayToken, saveDisplayWallOff, type HostProperty } from "../host/propertyStore";
 import { useProperty } from "../host/useProperty";
 import { propertyBlock } from "../host/usePropertyDraft";
+import { handOffToSignMaker, signMakerForPropertyHref } from "../signs/signPrefill";
 import "./hostQr.css";
 
 /**
@@ -72,21 +72,19 @@ function Wall({
   control?: ReactNode;
   children: ReactNode;
 }) {
-  const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
-  useEffect(() => {
-    setCopyState("idle");
-  }, [address]);
+  const [copyResult, setCopyResult] = useState<{ address: string; status: "idle" | "copied" | "error" }>({ address, status: "idle" });
+  const copyState = copyResult.address === address ? copyResult.status : "idle";
   useEffect(() => {
     if (copyState !== "copied") return;
-    const timer = window.setTimeout(() => setCopyState("idle"), 2500);
+    const timer = window.setTimeout(() => setCopyResult({ address, status: "idle" }), 2500);
     return () => window.clearTimeout(timer);
-  }, [copyState]);
+  }, [copyState, address]);
   async function copyLink() {
     try {
       await navigator.clipboard.writeText(address);
-      setCopyState("copied");
+      setCopyResult({ address, status: "copied" });
     } catch {
-      setCopyState("error");
+      setCopyResult({ address, status: "error" });
     }
   }
   return (
@@ -150,24 +148,29 @@ function PublicWallSwitch({ property, onSaved }: { property: HostProperty; onSav
 export function HostQrPage({ propertyId }: { propertyId: string }) {
   const { user } = useAuth();
   const [load, setLoad] = useProperty(propertyId);
+  const [tokenFailed, setTokenFailed] = useState(false);
+  const [tokenAttempt, setTokenAttempt] = useState(0);
+  const [handoffFailed, setHandoffFailed] = useState(false);
   const block = propertyBlock(load, user?.uid);
   // A property made before guestbook links carried a token has none to print.
   // This is the only screen that needs the link, so it is the one that asks
   // for it; the server mints once and hands back the same token thereafter.
-  // A failure is left as it is — the page then shows the address without its
-  // token, which is honestly the public wall, and opening it again asks again.
-  const untokened = load.status === "ready" && !load.property.stayToken;
+  // Printing waits for a valid token: a tokenless code opens the public wall
+  // and would leave a guest without house guidance or a contribution form.
+  const untokened = load.status === "ready" && !isStayToken(load.property.stayToken);
   useEffect(() => {
     if (!untokened) return;
     let live = true;
+    setTokenFailed(false);
     void ensureStayToken(propertyId).then(result => {
-      if (!live || result.status !== "ok") return;
-      setLoad(current => current.status === "ready"
+      if (!live) return;
+      if (result.status !== "ok" || !isStayToken(result.value)) { setTokenFailed(true); return; }
+      setLoad(current => current.status === "ready" && current.property.id === propertyId
         ? { status: "ready", property: { ...current.property, stayToken: result.value } }
         : current);
-    });
+    }).catch(() => { if (live) setTokenFailed(true); });
     return () => { live = false; };
-  }, [untokened, propertyId, setLoad]);
+  }, [untokened, propertyId, setLoad, tokenAttempt]);
 
   if (block) {
     return (
@@ -196,7 +199,6 @@ export function HostQrPage({ propertyId }: { propertyId: string }) {
   const availability = { ...property, publicWallOff: property.profile.displayWallOff };
   const stayReason = wallUnavailableReason(availability, "stay");
   const publicReason = wallUnavailableReason(availability, "public");
-  const qrReady = canDownloadQrKit(property);
   // The placard carries an absolute address, and the honest one is the site
   // the Host is standing on: a preview showing a production URL from a local
   // build would be a code that scans to the wrong place.
@@ -223,9 +225,12 @@ export function HostQrPage({ propertyId }: { propertyId: string }) {
           )}
           <div className="qr-wall-list">
             <div className="qr-in-stay-wall">
-              <Wall reason={stayReason} title="The guest wall" address={stayUrl} live={live} href={stayWallPath(property.slug, property.stayToken)} configureHref={`/host/property/${property.id}`}>
+              {untokened ? <div className="notice" role="status">
+                <p>{tokenFailed ? "Your guest link could not be prepared. Try again before printing or sharing it." : "Preparing your guest link…"}</p>
+                {tokenFailed && <button type="button" className="btn btn-secondary" onClick={() => setTokenAttempt(value => value + 1)}>Try guest link again</button>}
+              </div> : <Wall reason={stayReason} title="The guest wall" address={stayUrl} live={live} href={stayWallPath(property.slug, property.stayToken)} configureHref={`/host/property/${property.id}`}>
                 The page guests open from your QR code.
-              </Wall>
+              </Wall>}
               <GuestReviewPanel key={propertyId} propertyId={propertyId} settingsOnly reviewContent={property.reviewContent === true}
                 onReviewContentSaved={reviewContent => setLoad(current => current.status === "ready" && current.property.id === propertyId
                   ? { status: "ready", property: { ...current.property, reviewContent } }
@@ -236,7 +241,7 @@ export function HostQrPage({ propertyId }: { propertyId: string }) {
                 ? { status: "ready", property: { ...current.property, profile: { ...current.property.profile, displayWallOff } } }
                 : current)} />}
               after={!property.profile.displayWallOff && (
-                <details className="wall-embed-details">
+                <details className="wall-embed-details" id="wall-embed">
                   <summary>Put your memories on your own website</summary>
                   <div className="wall-embed-content">
                     <Copyable
@@ -254,59 +259,49 @@ export function HostQrPage({ propertyId }: { propertyId: string }) {
                   </div>
                 </details>
               )}>
-              A page of your guests’ memories under your cover photo and name, made from your guest wall. No house rules, Wi-Fi or check-out details. Post the link on your social pages or send it to past guests. Booking platforms limit outside links in listings and messages, so check their rules first.
+              Your guests’ memories under your cover photo and name. Share the link on social media or with past guests
+              {property.profile.displayWallOff ? "." : <>, or <a href="#wall-embed" onClick={() => {
+                const embed = document.getElementById("wall-embed");
+                if (embed instanceof HTMLDetailsElement) embed.open = true;
+              }}>put it on your own website</a>.</>}
             </Wall>
           </div>
         </div>
 
-        <div className="qr-page-kit">
-          <h3>QR display</h3>
+        {!untokened && <div className="qr-page-kit">
+          <h3>QR code</h3>
 
-          <QrPlacard name={property.name} url={stayUrl} wifi={wifi} />
+          <QrCode url={stayUrl} />
+          <p className="qr-guest-link"><a className="wall-address" href={stayUrl}>{stayUrl}</a></p>
+
+          <div className="qr-kit-actions">
+            <button type="button" className="btn btn-primary" onClick={() => downloadQrPng(stayUrl, `${property.slug}-qr-code.png`)}>
+              Download QR code
+            </button>
+            <a className="btn btn-secondary" href={signMakerForPropertyHref}
+              onClick={event => {
+                if (!handOffToSignMaker({ ownerUid: property.ownerUid, name: property.name, link: stayUrl, wifi, backHref: `/host/property/${property.id}/qr` })) {
+                  event.preventDefault(); setHandoffFailed(true);
+                }
+              }}>
+              Design a placard
+            </a>
+          </div>
+          {handoffFailed && <p className="form-feedback" role="alert">Your browser could not pass your property details to the placard designer. Allow session storage and try again.</p>}
+          {!live && <p className="field-hint">This QR code leads to an offline wall.</p>}
           {wifiLine && !wifi && (
             <p className="field-hint qr-wifi-hint">
-              To add a code that joins your Wi-Fi, write your {wifiLine.term} line as network / password, such as <code>Seabreeze / sandcastle42</code>.
+              To add a code that joins your Wi-Fi to the placard, write your {wifiLine.term} line as network / password, such as <code>Seabreeze / sandcastle42</code>.
             </p>
           )}
-          {wifi && (
-            <p className="field-hint qr-wifi-hint">
-              Keep the Wi-Fi password written somewhere guests can read it too, such as a card by the router. Not every
-              phone can scan a Wi-Fi code, and a guest with no signal can’t open your guest wall to look it up.
-            </p>
-          )}
-
-          <div className="qr-guest-link">
-            <strong>Guest link</strong>
-            <a className="wall-address" href={stayUrl}>{stayUrl}</a>
-          </div>
-
-          <div className="consequences">
-            {qrReady ? (
-              <div className="consequence">
-                <p>Print and display where guests can scan it.</p>
-                <button className="btn btn-primary" onClick={() => window.print()}>Print placard</button>
-              </div>
-            ) : (
-              <div className="consequence consequence-off">
-                <strong>Printing is locked</strong>
-                <p>
-                  Printing unlocks with an active trial or subscription.
-                </p>
-                {live ? null : (
-                  <p className="field-hint">
-                    This QR code leads to an offline wall.
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
+          {wifi && <p className="field-hint qr-wifi-hint">{wifiBackupAdvice}</p>}
 
           <div className="fine-print">
             <p>
               Your QR code stays the same if you rename the property.
             </p>
           </div>
-        </div>
+        </div>}
       </div>
 
       <div className="actions">
@@ -314,4 +309,48 @@ export function HostQrPage({ propertyId }: { propertyId: string }) {
       </div>
     </PropertyShell>
   );
+}
+
+/**
+ * The guest wall's code on its own, paper-white in both colour schemes: a
+ * scanner needs dark modules on a light ground, so it is not themed. The
+ * placard around it is designed in the sign maker.
+ */
+function QrCode({ url }: { url: string }) {
+  const matrix = useMemo(() => qrMatrix(url), [url]);
+  const side = qrCanvasSize(matrix);
+  return (
+    <svg className="qr-kit-code" viewBox={`0 0 ${side} ${side}`} role="img"
+      aria-label={`QR code for ${url.replace(/^https?:\/\//, "")}`} shapeRendering="crispEdges">
+      <rect width={side} height={side} fill="#ffffff" />
+      <path d={qrPath(matrix)} fill="#14181b" />
+    </svg>
+  );
+}
+
+/**
+ * The code as a PNG, large enough to print sharp at a few centimetres on
+ * anything a Host lays out themselves.
+ */
+function downloadQrPng(url: string, filename: string) {
+  const matrix: QrMatrix = qrMatrix(url);
+  const side = qrCanvasSize(matrix);
+  const scale = Math.ceil(1200 / side);
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = side * scale;
+  const context = canvas.getContext("2d");
+  if (!context) return;
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.scale(scale, scale);
+  context.fillStyle = "#14181b";
+  context.fill(new Path2D(qrPath(matrix)));
+  canvas.toBlob(blob => {
+    if (!blob) return;
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    window.setTimeout(() => URL.revokeObjectURL(link.href), 0);
+  }, "image/png");
 }

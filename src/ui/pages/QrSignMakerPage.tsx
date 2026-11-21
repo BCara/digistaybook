@@ -3,6 +3,8 @@ import { createPortal } from "react-dom";
 import { trialDays } from "../../domain/pricing";
 import { DEMO_SIGN_LINK, defaultSignStyle, signLink, signStyleFor, signStyles, type SignStyle } from "../../domain/signStyles";
 import { QrSign, type QrSignContent } from "../signs/QrSign";
+import { takeSignPrefill, type SignPrefill } from "../signs/signPrefill";
+import { useAuth } from "../auth/AuthProvider";
 import "./qrSignMaker.css";
 
 const defaultMessage = "Scan to read the house guidance and to leave a memory behind.";
@@ -22,14 +24,23 @@ const defaultMessage = "Scan to read the house guidance and to leave a memory be
  *
  * `?style=<id>` opens on a style, which is how Pins and shared links land on
  * the look they showed.
+ *
+ * A Host also arrives here from their property's QR page, with its name,
+ * guest link and Wi-Fi already filled in. They are a customer, not a visitor
+ * to win, so the page drops its pitch and leads back to the property instead.
  */
 export function QrSignMakerPage() {
+  const auth = useAuth();
   // The page is prerendered on the first style, so the client starts there
   // too and moves to the linked style before the first paint. Reading the
   // address during render would draw a different sign from the static HTML
   // and make React throw that HTML away.
   const [style, setStyle] = useState<SignStyle>(defaultSignStyle);
-  useLayoutEffect(() => setStyle(signStyleFor(readStyleParam())), []);
+  const [fromProperty, setFromProperty] = useState(false);
+  useLayoutEffect(() => {
+    setStyle(signStyleFor(readStyleParam()));
+    setFromProperty(new URLSearchParams(window.location.search).get("from") === "property");
+  }, []);
   const [name, setName] = useState("Seabreeze Cottage");
   const [linkInput, setLinkInput] = useState(DEMO_SIGN_LINK);
   const [message, setMessage] = useState(defaultMessage);
@@ -39,11 +50,28 @@ export function QrSignMakerPage() {
   const [photo, setPhoto] = useState<string | null>(null);
   const photoInput = useRef<HTMLInputElement>(null);
   const [printing, setPrinting] = useState(false);
+  const [host, setHost] = useState<SignPrefill | null>(null);
 
   const checkedLink = signLink(linkInput);
   // The card keeps the last good address while someone is mid-way through
   // typing a new one, rather than flashing to an empty square.
   const [link, setLink] = useState(DEMO_SIGN_LINK);
+  // Read after the prerendered first paint, for the same reason as the style.
+  useLayoutEffect(() => {
+    const prefill = auth.status === "host" && auth.user ? takeSignPrefill(auth.user.uid) : null;
+    if (host && !prefill && auth.status !== "loading") {
+      setHost(null); setName("Seabreeze Cottage"); setLinkInput(DEMO_SIGN_LINK); setLink(DEMO_SIGN_LINK);
+      setWifiOn(true); setNetwork("SEABREEZE-5G"); setPassword("sandcastle42");
+    }
+    if (!prefill) return;
+    setHost(prefill);
+    setName(prefill.name);
+    setLinkInput(prefill.link);
+    setLink(prefill.link);
+    setWifiOn(prefill.wifi !== null);
+    setNetwork(prefill.wifi?.network ?? "");
+    setPassword(prefill.wifi?.password ?? "");
+  }, [auth.status, auth.user?.uid]);
   useEffect(() => {
     if (checkedLink) setLink(checkedLink);
   }, [checkedLink]);
@@ -85,16 +113,35 @@ export function QrSignMakerPage() {
     };
   }, [printing]);
 
+  if (fromProperty && !host) {
+    return <div className="page narrow-page">
+      <h1>{auth.status === "loading" ? "Preparing your placard…" : "Open the designer from your property"}</h1>
+      <p role="status">{auth.status === "loading" ? "Checking your host session and property details." : "Sign in and choose Design a placard on your property's QR code and sharing page."}</p>
+      {auth.status !== "loading" && <a className="btn btn-primary" href="/host">Go to your dashboard</a>}
+    </div>;
+  }
+
   return (
     <div className="page qr-sign-maker">
-      <section className="section-head sign-maker-head" aria-labelledby="sign-maker-heading">
-        <p className="eyebrow">Free tool</p>
-        <h1 id="sign-maker-heading">QR welcome sign maker</h1>
-        <p className="lede">
-          Make a printable 5 × 7 sign for your vacation rental: your place's name, a QR code for your guest guide and a
-          second code that joins your Wi-Fi. Pick from {signStyles.length} styles. Free, no account needed.
-        </p>
-      </section>
+      {host ? (
+        <section className="section-head sign-maker-head" aria-labelledby="sign-maker-heading">
+          <p className="eyebrow"><a href={host.backHref}>Back to the property</a></p>
+          <h1 id="sign-maker-heading">Design your placard</h1>
+          <p className="lede">
+            Your place's name, guest wall link and Wi-Fi are filled in. Pick from {signStyles.length} styles, then print
+            it at 5 × 7 or save it as a PDF.
+          </p>
+        </section>
+      ) : (
+        <section className="section-head sign-maker-head" aria-labelledby="sign-maker-heading">
+          <p className="eyebrow">Free tool</p>
+          <h1 id="sign-maker-heading">QR welcome sign maker</h1>
+          <p className="lede">
+            Make a printable 5 × 7 sign for your vacation rental: your place's name, a QR code for your guest guide and a
+            second code that joins your Wi-Fi. Pick from {signStyles.length} styles. Free, no account needed.
+          </p>
+        </section>
+      )}
 
       <div className="sign-maker-layout">
         <div className="sign-maker-preview">
@@ -121,7 +168,9 @@ export function QrSignMakerPage() {
                 ? "Enter a web address, like yourplace.com/guide."
                 : link === DEMO_SIGN_LINK
                   ? "This opens our demo guest wall. Paste the link to your own guest guide."
-                  : "Scan it with your phone before you print."}
+                  : host && link === host.link
+                    ? "This opens your guest wall. Scan it with your phone before you print."
+                    : "Scan it with your phone before you print."}
             </p>
 
             <label htmlFor="sign-message">Line under the code</label>
@@ -179,7 +228,7 @@ export function QrSignMakerPage() {
         </form>
       </div>
 
-      <section className="sign-maker-pitch" aria-labelledby="sign-maker-pitch-heading">
+      {!host && <section className="sign-maker-pitch" aria-labelledby="sign-maker-pitch-heading">
         <h2 id="sign-maker-pitch-heading">Give the code something worth opening</h2>
         <p>
           With DigiStayBook, the code on your sign opens your own guest wall: the Wi-Fi password guests can copy in one tap,
@@ -190,7 +239,7 @@ export function QrSignMakerPage() {
           <a className="btn btn-primary" href="/host/sign-up">Start your {trialDays}-day free trial</a>
           <a className="btn btn-secondary" href="/stay/demo-cottage">See what guests see</a>
         </div>
-      </section>
+      </section>}
 
       {printing && createPortal(<div className="sign-print-root"><QrSign style={style} content={content} /></div>, document.body)}
     </div>
